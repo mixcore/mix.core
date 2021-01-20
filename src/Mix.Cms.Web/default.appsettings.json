@@ -2,7 +2,13 @@
   "ConnectionStrings": {
     "MixAccountConnection": null,
     "MixCmsConnection": null,
-    "DefaultConnection": null
+    "MixMessengerConnection": null
+  },
+  "MixConfigurations": {
+    "IsCache": true,
+    "MixCacheFolder": "MixContent/cache",
+    "JsonDataFolder": "MixContent/data",
+    "MixLogsFolder": "MixContent/logs"
   },
   "Authentication": {
     "ClockSkew": 20,
@@ -42,9 +48,7 @@
     "From": "support@mixcore.org",
     "FromName": "mix-core"
   },
-  "Translator": {
-
-  },
+  "Translator": {},
   "LocalSettings": {
     "en-us": {
       "ContactAddress": "",
@@ -70,7 +74,7 @@
     "IsRegistration": true,
     "MaxPageSize": 100,
     "ImageSize": 2000,
-    "DefaultAvatar": "/assets/img/user.png",
+    "DefaultAvatar": "/mix-app/assets/img/user.png",
     "DefaultCulture": "en-us",
     "DefaultTemplate": "_Blank",
     "DefaultTemplateContent": "<div></div>",
@@ -130,5 +134,8 @@
     "ExcelPackage": {
       "LicenseContext": "NonCommercial" //The license context used
     }
+  },
+  "Quartz": {
+    "quartz.scheduler.instanceName": "Mixcore Cms Scheduler"
   }
 }

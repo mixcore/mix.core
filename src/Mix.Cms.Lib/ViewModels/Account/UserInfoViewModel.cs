@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -70,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public List<UserRoleViewModel> UserRoles { get; set; } = new List<UserRoleViewModel>();
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl
@@ -126,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
             if (MediaFile.FileStream != null)
             {
                 MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixConstants.Folder.UploadFolder,
+                    MixFolders.SiteContentUploadsFolder,
                     DateTime.UtcNow.ToString("MMM-yyyy")
                 }); ;
                 var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
@@ -144,7 +145,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UserRoles = UserRoleViewModel.Repository.GetModelListBy(ur => ur.UserId == Id).Data;
             ResetPassword = new ResetPasswordViewModel();
         }
 

@@ -16,6 +16,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -24,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiConfigurationController :
          BaseGenericApiController<MixCmsContext, MixConfiguration>
     {
-        public ApiConfigurationController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) 
+        public ApiConfigurationController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext)
             : base(context, memoryCache, hubContext)
         {
         }
@@ -67,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             Specificulture = _lang,
                             Category = "Site",
-                            Status = MixService.GetConfig<MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                            Status = MixService.GetConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 

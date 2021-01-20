@@ -264,3 +264,8 @@ src/portal-app/
 src/Mix.Cms.Webbk
 src/ref
 src/Mix.Cms.Web/wwwroot/css/app-vendor-scss.min.css
+/src/Mix.Cms.Web/MixContent/cache
+/src/Mix.Cms.Web/MixContent/logs
+/src/Mix.Cms.Web/wwwroot/mix-content/content
+/src/Mix.Cms.Web/wwwroot/mix-content/assets
+/src/Mix.Cms.Web/MixContent/mix-cms.db

@@ -96,8 +96,8 @@ namespace Mix.Heart.NetCore.Controllers
             FileViewModel file = null;
             if (getData.IsSucceed)
             {
-                string exportPath = $"Exports/Structures/{typeof(TModel).Name}";
-                string filename = $"{type.ToString()}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+                string exportPath = $"Export/Structures/{typeof(TModel).Name}";
+                string filename = $"{type}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
                 var objContent = new JObject(
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))

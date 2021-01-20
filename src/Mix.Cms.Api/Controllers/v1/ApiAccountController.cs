@@ -19,6 +19,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -85,6 +86,10 @@ namespace Mix.Cms.Api.Controllers.v1
                         if (!info.IsSucceed)
                         {
                             info.Data = new UserInfoViewModel();
+                        }
+                        else
+                        {
+                            info.Data.UserRoles = UserRoleViewModel.Repository.GetModelListBy(ur => ur.UserId == info.Data.Id).Data;
                         }
                         token.UserData = info.Data;
 
@@ -297,12 +302,12 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
-
+                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        data.ExpandView();
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
                             IsSucceed = true,
-                            Data = await Lib.ViewModels.Account.MixUsers.UpdateViewModel.InitViewAsync(model)
+                            Data = data
                         };
                         return JObject.FromObject(result);
                     }
@@ -315,12 +320,13 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var model = new MixCmsUser() { Status = MixUserStatus.Actived.ToString() };
+                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        data.ExpandView();
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
                         {
                             IsSucceed = true,
-                            Data = await UserInfoViewModel.InitViewAsync(model)
+                            Data = data
                         };
                         return JObject.FromObject(result);
                     }
@@ -456,7 +462,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
             var getEdmTemplate = await Lib.ViewModels.MixTemplates.ReadViewModel.Repository.GetSingleModelAsync(
-                m => m.FolderType == MixConstants.TemplateFolder.Edms && m.FileName == "ForgotPassword");
+                m => m.FolderType == MixTemplateFolders.Edms && m.FileName == "ForgotPassword");
             string content = callbackurl;
             if (getEdmTemplate.IsSucceed)
             {

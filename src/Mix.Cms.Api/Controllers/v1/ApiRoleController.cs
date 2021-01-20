@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -77,7 +78,6 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-        [Authorize]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet, HttpOptions]
         [Route("permissions")]
@@ -89,13 +89,19 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = new List<ReadViewModel>()
             };
             var roles = User.Claims.Where(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").ToList();
-            foreach (var item in roles)
+            if (!roles.Any(role => role.Value.ToUpper() == "SUPERADMIN"))
             {
-                var role = await _roleManager.FindByNameAsync(item.Value);
-                var temp = await ReadViewModel.Repository.GetModelListByAsync(r => r.Id == role.Id, "Priority", 0, null, null, null, null);
-                if (temp.IsSucceed)
+                foreach (var item in roles)
                 {
-                    permissions.Data.AddRange(temp.Data.Items);
+                    var role = await _roleManager.FindByNameAsync(item.Value);
+                    var temp = await ReadViewModel.Repository.GetSingleModelAsync(r => r.Id == role.Id);
+                    if (temp.IsSucceed)
+                    {
+                        temp.Data.Permissions = Lib.ViewModels.MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
+                        && (p.MixPortalPageRole.Any(r => r.RoleId == temp.Data.Id))
+                        ).Data;
+                        permissions.Data.Add(temp.Data);
+                    }
                 }
             }
             return JObject.FromObject(permissions);

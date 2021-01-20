@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
@@ -154,18 +155,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultContentStatus)) : Status;
+                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>
+                    (MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
 
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(f => f.Id == AttributeFieldId).Data;
+                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
+                    f => f.Id == AttributeFieldId
+                    , _context, _transaction).Data;
                 if (Field != null && DataType == MixEnums.MixDataType.Reference)
                 {
                     AttributeSetName = _context.MixAttributeSet.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
                 }
             }
-            else // addictional field for page / post / module => id = 0
+            else // additional field for page / post / module => id = 0
             {
                 Field = new MixAttributeFields.UpdateViewModel()
                 {

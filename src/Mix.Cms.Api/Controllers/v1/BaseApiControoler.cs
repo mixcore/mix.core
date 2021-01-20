@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -69,11 +70,11 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (_memoryCache != null)
             {
-                foreach (var item in MixConstants.cachedKeys)
-                {
-                    _memoryCache.Remove(item);
-                }
-                MixConstants.cachedKeys = new List<string>();
+                //foreach (var item in MixConstants.cachedKeys)
+                //{
+                //    _memoryCache.Remove(item);
+                //}
+                //MixConstants.cachedKeys = new List<string>();
                 AlertAsync("Empty Cache", 200);
             }
         }

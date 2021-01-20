@@ -1,4 +1,3 @@
-//using GraphiQl;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,10 +12,13 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
-//using Mix.Cms.Service.Gprc;
+using Mix.Cms.Schedule;
+using Mix.Cms.Schedule.Jobs;
 using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Converters;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Web
 {
@@ -36,9 +38,9 @@ namespace Mix.Cms.Web
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); });
 
-            #region Addictionals Config for Mixcore Cms
+            #region Additionals Config for Mixcore Cms
 
-            /* Addictional Config for Mixcore Cms  */
+            /* Additional Config for Mixcore Cms  */
 
             /* Mix: Add db contexts */
             services.AddDbContext<MixCmsContext>();
@@ -52,17 +54,15 @@ namespace Mix.Cms.Web
             services.AddMixRestApi();
             services.AddMixSignalR();
             //services.AddMixGprc();
-
-
+            services.AddMixScheduler(Configuration);
             /* Mix: End Inject Services */
 
             VerifyInitData(services);
 
             services.AddMixAuthorize(Configuration);
+            /* End Additional Config for Mixcore Cms  */
 
-            /* End Addictional Config for Mixcore Cms  */
-
-            #endregion Addictionals Config for Mixcore Cms
+            #endregion Additionals Config for Mixcore Cms
 
         }
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            #region Addictionals Config for Mixcore Cms
+            #region Additionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))
             {
@@ -116,10 +116,12 @@ namespace Mix.Cms.Web
             app.UseMixSignalR();
 
             app.UseMixRoutes();
+            app.UseMixScheduler();
+            #endregion Additionals Config for Mixcore Cms
 
-            #endregion Addictionals Config for Mixcore Cms
         }
 
+        
         // Mix: Check custom cms config
         private void VerifyInitData(IServiceCollection services)
         {

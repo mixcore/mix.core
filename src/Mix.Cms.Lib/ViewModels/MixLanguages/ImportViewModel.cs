@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
@@ -68,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain, Specificulture); } }
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }
@@ -112,21 +113,6 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         }
 
         #region Async
-
-        public override Task<ImportViewModel> ParseViewAsync(bool isExpand = true, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
-            return base.ParseViewAsync(isExpand, _context, _transaction);
-        }
-
-        public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            Cultures = LoadCultures(Specificulture, _context, _transaction);
-            Property = new DataValueViewModel() { DataType = DataType, Value = Value, Name = Keyword };
-            this.Cultures.ForEach(c => c.IsSupported = true);
-
-            return base.ExpandViewAsync(_context, _transaction);
-        }
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(ImportViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

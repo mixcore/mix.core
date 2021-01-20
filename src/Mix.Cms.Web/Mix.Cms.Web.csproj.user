@@ -5,13 +5,16 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>Mix.Cms.Web</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>mixcore-demo - Web Deploy</NameOfLastUsedPublishProfile>
-    <ShowAllFiles>true</ShowAllFiles>
+    <NameOfLastUsedPublishProfile>Linux</NameOfLastUsedPublishProfile>
+    <ShowAllFiles>false</ShowAllFiles>
     <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
     <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
     <WebStackScaffolding_IsPartialViewSelected>True</WebStackScaffolding_IsPartialViewSelected>
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

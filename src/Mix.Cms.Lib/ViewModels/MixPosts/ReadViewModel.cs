@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -103,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -250,8 +251,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     && ac.Status == MixContentStatus.Published).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
-                    , direction,
-                    pageSize, pageIndex, context, transaction
+                    , direction
+                    , pageSize, pageIndex
+                    , null, null
+                    , context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
                 {
@@ -300,8 +303,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     && (ac.Status == MixContentStatus.Published || ac.Status == MixContentStatus.Preview)).Select(ac => ac.MixPost);
                 PaginationModel<ReadViewModel> result = Repository.ParsePagingQuery(
                     query, orderByPropertyName
-                    , direction,
-                    pageSize, pageIndex, context, transaction
+                    , direction
+                    , pageSize, pageIndex
+                    , null, null
+                    , context, transaction
                     );
                 return new RepositoryResponse<PaginationModel<ReadViewModel>>()
                 {

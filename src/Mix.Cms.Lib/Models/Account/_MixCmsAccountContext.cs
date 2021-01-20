@@ -4,9 +4,10 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace Mix.Cms.Lib.Models.Account
 {
@@ -40,17 +41,17 @@ namespace Mix.Cms.Lib.Models.Account
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+                var provider = System.Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
                 switch (provider)
                 {
-                    case MixEnums.DatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
-                    case MixEnums.DatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn);
+                    case MixDatabaseProvider.MySQL:
+                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
-                    case MixEnums.DatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
+                    case MixDatabaseProvider.SQLITE:
+                        optionsBuilder.UseSqlite(cnn);
                         break;
                     default:
                         break;
@@ -61,19 +62,15 @@ namespace Mix.Cms.Lib.Models.Account
         public override void Dispose()
         {
 
-            var provider = System.Enum.Parse<MixEnums.DatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
+            var provider = System.Enum.Parse<MixDatabaseProvider>(MixService.GetConfig<string>(MixConstants.CONST_SETTING_DATABASE_PROVIDER));
             switch (provider)
             {
-                case MixEnums.DatabaseProvider.MSSQL:
+                case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.MySQL:
+                case MixDatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
-                case MixEnums.DatabaseProvider.PostgreSQL:
-                    Npgsql.NpgsqlConnection.ClearPool((Npgsql.NpgsqlConnection)Database.GetDbConnection());
-                    break;
-
             }
             base.Dispose();
         }
@@ -101,7 +98,7 @@ namespace Mix.Cms.Lib.Models.Account
             modelBuilder.Entity<AspNetRoles>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedName)
-                    .HasName("RoleNameIndex")
+                    .HasDatabaseName("RoleNameIndex")
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
@@ -218,10 +215,10 @@ namespace Mix.Cms.Lib.Models.Account
             modelBuilder.Entity<AspNetUsers>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedEmail)
-                    .HasName("EmailIndex");
+                    .HasDatabaseName("EmailIndex");
 
                 entity.HasIndex(e => e.NormalizedUserName)
-                    .HasName("UserNameIndex")
+                    .HasDatabaseName("UserNameIndex")
                     .IsUnique()
                     .HasFilter("([NormalizedUserName] IS NOT NULL)");
 

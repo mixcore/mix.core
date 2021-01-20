@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -118,7 +119,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         ModuleId = getModule.Data.Id,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     });
                 return Ok(ModuleData);
             }

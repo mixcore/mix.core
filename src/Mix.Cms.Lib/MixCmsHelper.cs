@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -36,15 +37,17 @@ namespace Mix.Cms.Lib
 
         public static string GetAssetFolder(string culture)
         {
-            return $"{MixService.GetConfig<string>("Domain")}/{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}/assets";
+            return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
+                $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
         public static string GetTemplateFolder(string culture)
         {
-            return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, culture)}";
+            return $"/{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
         }
-        public static T Property<T>(JObject obj,  string fieldName)
+        public static T Property<T>(JObject obj, string fieldName)
         {
-            if (obj != null  && obj.ContainsKey(fieldName)  && obj[fieldName] != null)
+            if (obj != null && obj.ContainsKey(fieldName) && obj[fieldName] != null)
             {
                 return obj.Value<T>(fieldName);
             }
@@ -313,7 +316,7 @@ namespace Mix.Cms.Lib
             return nav;
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAddictionalField<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAdditionalField<TView>(
             string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
             , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
@@ -512,7 +515,7 @@ namespace Mix.Cms.Lib
                 culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
         }
 
-        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAddictionalField<TView>(
+        public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(
 
             string fieldName, string value, string culture
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Asc
@@ -525,7 +528,7 @@ namespace Mix.Cms.Lib
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             pageIndex = (pageIndex >= 0) ? pageIndex : 0;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAddictionalField<TView>(
+            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAdditionalField<TView>(
                 fieldName, value,
                 culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
         }
@@ -542,7 +545,7 @@ namespace Mix.Cms.Lib
                 culture, attributeSetName,
                 parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixPagePosts.ReadViewModel>>> GetPostListByPageId(
             HttpContext context
             , int pageId
@@ -557,12 +560,12 @@ namespace Mix.Cms.Lib
             int.TryParse(context.Request.Query["pageSize"], out int pageSize);
             page = (page > 0) ? page : 1;
             var result = await ViewModels.MixPosts.Helper.GetPostListByPageId<Lib.ViewModels.MixPagePosts.ReadViewModel>(
-                pageId, keyword, culture, 
-                orderBy, direction, pageSize, page -  1, _context, _transaction);
+                pageId, keyword, culture,
+                orderBy, direction, pageSize, page - 1, _context, _transaction);
             result.Data.Items.ForEach(m => m.LoadPost(_context, _transaction));
             return result;
         }
-        
+
         public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
             HttpContext context
             , string attributeSetName
@@ -570,7 +573,7 @@ namespace Mix.Cms.Lib
             , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null
             )
-        {            
+        {
             var result = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
                     context.Request, culture, attributeSetName);
             return result;

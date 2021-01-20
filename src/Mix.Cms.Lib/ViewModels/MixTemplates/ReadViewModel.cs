@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -78,8 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.SiteContentAssetsFolder,
                     ThemeName });
             }
         }
@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
+                    MixFolders.TemplatesFolder,
                     ThemeName
                     });
             }
@@ -147,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
+                    MixFolders.TemplatesFolder
                     , ThemeName
                     , FolderType
                 });
@@ -233,7 +233,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             else
             {
                 int activeThemeId = MixService.GetConfig<int>(
-                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+                    MixAppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
                 result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
@@ -259,7 +259,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             else
             {
                 int activeThemeId = MixService.GetConfig<int>(
-                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+                    MixAppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
                 result = await Repository.GetSingleModelAsync(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
@@ -281,7 +281,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return new ReadViewModel(new MixTemplate()
             {
                 Extension = MixService.GetConfig<string>("TemplateExtension"),
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
+                ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
                 ThemeName = activedTemplate,
                 FolderType = folderType,
                 FileFolder = folder,

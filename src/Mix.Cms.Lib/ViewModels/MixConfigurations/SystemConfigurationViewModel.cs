@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixConfigurations
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain", Specificulture); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain, Specificulture); } }
 
         [JsonProperty("property")]
         public DataValueViewModel Property { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -107,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<ViewModels.MixModules.ReadMvcViewModel> Modules { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -148,7 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                return $"/{ MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture) ?? "Default"}/{Template}";
+                return $"/{ MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/{Template}";
             }
         }
 
@@ -287,9 +288,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data ?? new MixRelatedAttributeDatas.ReadMvcViewModel();
-                AttributeData.Data?.LoadReferenceData(
-                        Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
-
             }
         }
 

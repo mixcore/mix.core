@@ -10,9 +10,11 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         public void Configure(EntityTypeBuilder<MixAttributeSetValue> builder)
         {
             builder
-           .Property(e => e.DataType)
-           .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
-           .HasColumnType("varchar(50)");
+            .Property(e => e.DataType)
+            .HasConversion(new EnumToStringConverter<MixEnums.MixDataType>())
+            .HasColumnType("varchar(50)")
+            .HasCharSet("utf8")
+            .HasCollation("Vietnamese_CI_AS");
         }
     }
 }

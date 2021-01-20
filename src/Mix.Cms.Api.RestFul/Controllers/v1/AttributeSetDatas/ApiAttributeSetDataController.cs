@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -47,7 +48,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
-                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                 };
                 result.ExpandView();
                 return Ok(result);

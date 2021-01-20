@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -103,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string DetailsUrl { get => Id > 0 ? $"/post/{Specificulture}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -180,11 +181,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Expands
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            string type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
+            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
+                m => m.Name == type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture
+                    && a.AttributeSetId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
         }
@@ -215,7 +219,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (AttributeData != null)
             {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
+                var field = AttributeData.Data.Obj?.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

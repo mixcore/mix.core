@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -80,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return $"{MixService.GetConfig<string>("Domain")}/{Image}";
+                    return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Image}";
                 }
                 else
                 {
@@ -96,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return $"{MixService.GetConfig<string>("Domain")}/{Thumbnail}";
+                    return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Thumbnail}";
                 }
                 else
                 {
@@ -125,11 +126,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-        }
-
-        public override Task<bool> ExpandViewAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            return base.ExpandViewAsync(_context, _transaction);
         }
 
         #endregion Overrides
