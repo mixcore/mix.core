@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -118,7 +119,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public FileStreamViewModel ImageFileStream { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -175,7 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, Specificulture);
+                return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
@@ -195,8 +196,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 return CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, Specificulture)
+                    MixFolders.TemplatesFolder
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
                     , TemplateFolderType
                 }
             );
@@ -243,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            GenerateSEO();
+            GenerateSEO(_context, _transaction);
 
             //var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
 
@@ -490,16 +491,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                             AttributeSetId = AttributeSet.Id,
                             AttributeSetName = AttributeSet.Name
                         }
-                        )
+                        , _context, _transaction)
                     {
                         Data = new MixAttributeSetDatas.UpdateViewModel(
-                    new MixAttributeSetData()
-                    {
-                        Specificulture = Specificulture,
-                        AttributeSetId = AttributeSet.Id,
-                        AttributeSetName = AttributeSet.Name
-                    }
-                    )
+                        new MixAttributeSetData()
+                        {
+                            Specificulture = Specificulture,
+                            AttributeSetId = AttributeSet.Id,
+                            AttributeSetName = AttributeSet.Name
+                        }
+                        , _context, _transaction)
                     };
                 }
                 foreach (var field in AttributeSet.Fields.OrderBy(f => f.Priority))
@@ -542,7 +543,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 , _context, _transaction).Data;
         }
 
-        private void GenerateSEO()
+        private void GenerateSEO(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(this.SeoName))
             {
@@ -550,7 +551,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
             int i = 1;
             string name = SeoName;
-            while (Repository.CheckIsExists(a => a.SeoName == name && a.Specificulture == Specificulture && a.Id != Id))
+            while (Repository.CheckIsExists(a => a.SeoName == name && a.Specificulture == Specificulture && a.Id != Id
+                , _context, _transaction))
             {
                 name = SeoName + "_" + i;
                 i++;
@@ -590,14 +592,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixPageModules.ReadMvcViewModel> GetModuleNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             // Load Actived Modules
-            var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture).Data;
+            var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture
+            , context, transaction).Data;
             result.ForEach(nav =>
             {
                 nav.IsActived = true;
             });
             var moduleids = result.Select(m => m.ModuleId);
             // Load inactived modules
-            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture && !moduleids.Any(r => r == m.Id)).Data;
+            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
+                m => m.Specificulture == Specificulture && !moduleids.Any(r => r == m.Id)
+                , context, transaction).Data;
             foreach (var item in otherModules)
             {
                 result.Add(new MixPageModules.ReadMvcViewModel()

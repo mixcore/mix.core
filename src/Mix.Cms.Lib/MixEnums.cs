@@ -7,13 +7,6 @@ namespace Mix.Cms.Lib
     {
         #region Common
 
-        public enum DatabaseProvider
-        {
-            MSSQL,
-            MySQL,
-            PostgreSQL
-        }
-
         public enum CatePosition
         {
             Nav = 1,
@@ -103,7 +96,7 @@ namespace Mix.Cms.Lib
 
         #region Types
 
-        public enum MixAddictionalType
+        public enum MixAdditionalType
         {
             Page,
             Post,

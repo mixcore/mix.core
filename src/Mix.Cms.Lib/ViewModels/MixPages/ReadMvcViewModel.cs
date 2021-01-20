@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -111,7 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>("Domain"); } }
+        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -162,7 +163,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return $"/{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, Specificulture)}/{Template}";
+                return $"/{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture)}/{Template}";
             }
         }
 
@@ -233,7 +234,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPagePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -392,7 +393,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
                 n => n.PageId == Id && n.Specificulture == Specificulture,
-                MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.OrderBy), 0
+                MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
                 , 4, 0
                , _context: _context, _transaction: _transaction
                );

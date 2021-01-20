@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -83,8 +84,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.SiteContentAssetsFolder,
                      SeoHelper.GetSEOString(ThemeName) });
             }
         }
@@ -95,7 +95,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
+                    MixFolders.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
             }
         }
 
@@ -172,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
+                    MixFolders.TemplatesFolder
                     , ThemeName
                     , FolderType
                 });
@@ -269,7 +269,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             else
             {
                 int activeThemeId = MixService.GetConfig<int>(
-                    MixConstants.ConfigurationKeyword.ThemeId, culture);
+                    MixAppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
                 result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
                     , _context, _transaction);
@@ -280,8 +280,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public static ImportViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = path?.Split('/')[1];
-            int themeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture);
-            string themeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeName, specificulture);
+            int themeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture);
+            string themeName = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, specificulture);
             var getView = ImportViewModel.Repository.GetSingleModel(t =>
                     t.ThemeId == themeId && t.FolderType == folderType.ToString()
                     && !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"), _context, _transaction);
@@ -290,11 +290,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public static ImportViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
         {
-            string activedTheme = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture)
-                    ?? MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTheme);
+            string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
+                    ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);
             string folder = CommonHelper.GetFullPath(new string[]
                     {
-                    MixConstants.Folder.TemplatesFolder
+                    MixFolders.TemplatesFolder
                     , activedTheme
                     , folderType.ToString()
                     });
@@ -302,11 +302,11 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
             return defaulTemplate ?? new ImportViewModel(new MixTemplate()
             {
-                ThemeId = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, specificulture),
-                ThemeName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, specificulture),
-                FileName = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplate),
-                Extension = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.TemplateExtension),
-                Content = MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.DefaultTemplateContent),
+                ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
+                ThemeName = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture),
+                FileName = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplate),
+                Extension = MixService.GetConfig<string>(MixAppSettingKeywords.TemplateExtension),
+                Content = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplateContent),
                 FolderType = folderType.ToString(),
                 FileFolder = folder.ToString()
             });

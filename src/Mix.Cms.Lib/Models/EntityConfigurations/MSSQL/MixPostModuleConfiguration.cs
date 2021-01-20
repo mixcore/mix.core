@@ -10,9 +10,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
         public void Configure(EntityTypeBuilder<MixPostModule> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PRIMARY");
+                    .HasName("PK_mix_post_module");
 
             entity.ToTable("mix_post_module");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever();
 
             entity.HasIndex(e => new { e.ModuleId, e.Specificulture });
 
@@ -21,38 +24,38 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Image)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixEnums.MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasCollation("Vietnamese_CI_AS");
 
             entity.HasOne(d => d.MixModule)
                 .WithMany(p => p.MixPostModule)

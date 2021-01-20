@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using System.Text.RegularExpressions;
@@ -51,7 +52,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (CheckIsVueRoute(seoName))
                     {
-                        var staticFile = FileRepository.Instance.GetFile(seoName, MixConstants.Folder.WebRootPath);
+                        var staticFile = FileRepository.Instance.GetFile(seoName, MixFolders.WebRootPath);
                         if (staticFile != null)
                         {
                             return Ok(staticFile.Content);

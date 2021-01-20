@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -98,7 +99,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         if (portalResult.IsSucceed)
                         {
-                            portalResult.Data.IsActived = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang) == portalResult.Data.Id;
+                            portalResult.Data.IsActived = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang) == portalResult.Data.Id;
                         }
                         return Ok(JObject.FromObject(portalResult));
                     }
@@ -106,7 +107,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+                            Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus))
                             ,
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -121,7 +122,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         if (result.IsSucceed)
                         {
-                            result.Data.IsActived = MixService.GetConfig<int>(MixConstants.ConfigurationKeyword.ThemeId, _lang) == result.Data.Id;
+                            result.Data.IsActived = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang) == result.Data.Id;
                         }
                         return Ok(JObject.FromObject(result));
                     }
@@ -129,7 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = MixService.GetConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus)
+                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -170,8 +171,8 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 if (data.IsCloneFromCurrentTheme)
                 {
-                    var currentThemeFolder = $"{MixConstants.Folder.TemplatesFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}";
-                    var assetFolder = $"{MixConstants.Folder.FileFolder}/{MixConstants.Folder.TemplatesAssetFolder}/{MixService.GetConfig<string>(MixConstants.ConfigurationKeyword.ThemeFolder, _lang)}/assets";
+                    var currentThemeFolder = $"{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}";
+                    var assetFolder = $"{MixFolders.SiteContentAssetsFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
                     FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
                     FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }
@@ -180,8 +181,8 @@ namespace Mix.Cms.Api.Controllers.v1
                     data.TemplateAsset = new Lib.ViewModels.FileViewModel()
                     {
                         Filename = "default_blank",
-                        Extension = ".zip",
-                        FileFolder = "Imports/Themes"
+                        Extension = MixFileExtensions.Zip,
+                        FileFolder = MixFolders.ImportFolder
                     };
                 }
             }

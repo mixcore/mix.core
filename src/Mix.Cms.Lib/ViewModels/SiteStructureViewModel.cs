@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels
             try
             {
                 Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
-                    m => !m.Keyword.Contains("sys_") && m.Specificulture == Specificulture, context, transaction).Data;
+                    m => m.Specificulture == Specificulture, context, transaction).Data;
                 Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
                     m => m.Specificulture == Specificulture, context, transaction).Data;
 
@@ -152,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     ExportPageModuleNav(item, context, transaction);
                     ExportPagePostNav(item, context, transaction);
-                    ExportAddictionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
+                    ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
                     item.UrlAliases = item.GetAliases(context, transaction);
                 }
             }
@@ -197,7 +197,7 @@ namespace Mix.Cms.Lib.ViewModels
                     ExportModuleDatas(item, context, transaction);
                     ExportModulePostNavs(item, context, transaction);
                 }
-                ExportAddictionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
+                ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
             }
         }
 
@@ -228,7 +228,7 @@ namespace Mix.Cms.Lib.ViewModels
         #endregion
 
 
-        private void ExportAddictionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
@@ -634,7 +634,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
-                //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
+                //var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
                 foreach (var item in Pages)

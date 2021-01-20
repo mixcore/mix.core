@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -58,12 +59,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             using (MixCmsContext context = new MixCmsContext())
             {
                 var transaction = context.Database.BeginTransaction();
+                string template = !string.IsNullOrEmpty(Request.Query["template"].ToString())
+                        ? $"{Request.Query["template"]}.cshtml"
+                        : null;
                 var model = new MixPost()
                 {
                     Specificulture = _lang,
-                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixConstants.ConfigurationKeyword.DefaultContentStatus),
+                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     Type = Request.Query["type"].ToString(),
-                    Template = Request.Query["template"].ToString()
+                    Template = template
 
                 };
                 var result = new UpdateViewModel(model, context, transaction);

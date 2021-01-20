@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -35,17 +36,14 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
-            MixChatServiceContext messengerContext = null;
             try
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     context = MixService.GetDbContext();
                     accountContext = new MixCmsAccountContext();
-                    messengerContext = new MixChatServiceContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-                    await messengerContext.Database.MigrateAsync();
 
                     var countCulture = context.MixCulture.Count();
                     var pendingMigration = context.Database.GetPendingMigrations().Count();
@@ -66,10 +64,9 @@ namespace Mix.Cms.Lib.Services
             {
                 context?.Dispose();
                 accountContext?.Dispose();
-                messengerContext?.Dispose();
             }
         }
-        
+
         public static async Task<RepositoryResponse<bool>> InitSiteData(string siteName, InitCulture culture)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
@@ -85,27 +82,27 @@ namespace Mix.Cms.Lib.Services
 
                     var countCulture = context.MixCulture.Count();
 
-                    
-                        /**
-                         * Init Selected Language as default
-                         */
-                        isSucceed = InitCultures(culture, context, transaction);
 
-                        /**
-                         * Init System Configurations
-                         */
-                        if (isSucceed && context.MixConfiguration.Count() == 0)
-                        {
-                            var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
-                            result.IsSucceed = saveResult.IsSucceed;
-                            result.Errors = saveResult.Errors;
-                            result.Exception = saveResult.Exception;
-                        }
-                        else
-                        {
-                            result.IsSucceed = false;
-                            result.Errors.Add("Cannot init cultures");
-                        }
+                    /**
+                     * Init Selected Language as default
+                     */
+                    isSucceed = InitCultures(culture, context, transaction);
+
+                    /**
+                     * Init System Configurations
+                     */
+                    if (isSucceed && context.MixConfiguration.Count() == 0)
+                    {
+                        var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
+                        result.IsSucceed = saveResult.IsSucceed;
+                        result.Errors = saveResult.Errors;
+                        result.Exception = saveResult.Exception;
+                    }
+                    else
+                    {
+                        result.IsSucceed = false;
+                        result.Errors.Add("Cannot init cultures");
+                    }
                     if (result.IsSucceed)
                     {
                         transaction.Commit();
@@ -146,15 +143,16 @@ namespace Mix.Cms.Lib.Services
             /* Init Configs */
 
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var getConfigs = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_CONFIGURATIONS, "data", true, "{}");
+            var getConfigs = FileRepository.Instance.GetFile(
+                MixConstants.CONST_FILE_CONFIGURATIONS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getConfigs.Content);
             var configurations = obj["data"].ToObject<List<MixConfiguration>>();
-            var cnfSiteName = configurations.Find(c => c.Keyword == "SiteName");
+            var cnfSiteName = configurations.Find(c => c.Keyword == MixAppSettingKeywords.SiteName);
             cnfSiteName.Value = siteName;
             if (!string.IsNullOrEmpty(cnfSiteName.Value))
             {
-                configurations.Find(c => c.Keyword == "ThemeName").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
-                configurations.Find(c => c.Keyword == "ThemeFolder").Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
+                configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeName).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
+                configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeFolder).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
             var result = await ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
@@ -178,7 +176,7 @@ namespace Mix.Cms.Lib.Services
 
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getData = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, "data", true, "{}");
+            var getData = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getData.Content);
             var data = obj["data"].ToObject<List<ViewModels.MixAttributeSets.UpdateViewModel>>();
             foreach (var item in data)
@@ -287,7 +285,7 @@ namespace Mix.Cms.Lib.Services
         protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Pages */
-            var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, "data", true, "{}");
+            var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(pages.Content);
             var arrPage = obj["data"].ToObject<List<MixPage>>();
             foreach (var page in arrPage)

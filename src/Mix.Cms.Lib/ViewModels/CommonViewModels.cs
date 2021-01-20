@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -158,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             get
             {
-                _webPath = FullPath.Replace("wwwroot", MixService.GetConfig<string>("Domain"));
+                _webPath = FullPath.Replace(MixFolders.WebRootPath, MixService.GetConfig<string>(MixAppSettingKeywords.Domain));
                 return _webPath;
             }
             set

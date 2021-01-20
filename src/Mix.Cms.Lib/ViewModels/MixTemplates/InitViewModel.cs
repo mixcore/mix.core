@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Common.Helper;
@@ -81,8 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.FileFolder,
-                    MixConstants.Folder.TemplatesAssetFolder,
+                    MixFolders.SiteContentAssetsFolder,
                     ThemeName });
             }
         }
@@ -93,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             get
             {
                 return CommonHelper.GetFullPath(new string[] {
-                    MixConstants.Folder.TemplatesFolder,
+                    MixFolders.TemplatesFolder,
                     ThemeName });
             }
         }
@@ -136,7 +136,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             }
             FileFolder = CommonHelper.GetFullPath(new string[]
                 {
-                    MixConstants.Folder.TemplatesFolder
+                    MixFolders.TemplatesFolder
                     , ThemeName
                     , FolderType
                 });

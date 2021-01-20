@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.Controllers
                 predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
                 getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
                             predicate,
-                            request.OrderBy, request.Direction, 
+                            request.OrderBy, request.Direction,
                             request.PageSize, request.PageIndex, null, null)
                     .ConfigureAwait(false);
             }
@@ -371,8 +372,8 @@ namespace Mix.Cms.Lib.Controllers
             Lib.ViewModels.FileViewModel file = null;
             if (getData.IsSucceed)
             {
-                string exportPath = $"Exports/Structures/{typeof(TModel).Name}";
-                string filename = $"{type.ToString()}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+                string exportPath = $"{MixFolders.ExportFolder}/Structures/{typeof(TModel).Name}";
+                string filename = $"{type}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
                 var objContent = new JObject(
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))
@@ -380,7 +381,7 @@ namespace Mix.Cms.Lib.Controllers
                 file = new Lib.ViewModels.FileViewModel()
                 {
                     Filename = filename,
-                    Extension = ".json",
+                    Extension = MixFileExtensions.Json,
                     FileFolder = exportPath,
                     Content = objContent.ToString()
                 };
