@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Models.Account;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -104,7 +105,6 @@ namespace Mix.Cms.Lib.Services
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             jsonSettings = JObject.Parse(content);
-            //var cultures = CommonRepository.Instance.LoadCultures();
 
             instance.ConnectionStrings = JObject.FromObject(jsonSettings["ConnectionStrings"]);
             instance.MixConfigurations = jsonSettings["MixConfigurations"] != null ? JObject.FromObject(jsonSettings["MixConfigurations"]) : new JObject();
@@ -114,7 +114,6 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
-            //instance.Cultures = cultures.Select(c=>c.Specificulture).ToList();
             CommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -503,6 +502,23 @@ namespace Mix.Cms.Lib.Services
                     return new MySqlMixCmsContext();
                 case MixDatabaseProvider.PostgreSQL:
                     return new PostgresqlMixCmsContext();
+                default:
+                    return null;
+            }
+
+        }
+
+        public static MixCmsAccountContext GetAccountDbContext()
+        {
+            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            switch (provider)
+            {
+                case MixDatabaseProvider.MSSQL:
+                case MixDatabaseProvider.MySQL:
+                case MixDatabaseProvider.SQLITE:
+                    return new SQLAccountContext();
+                case MixDatabaseProvider.PostgreSQL:
+                    return new PostgresSQLAccountContext();
                 default:
                     return null;
             }
