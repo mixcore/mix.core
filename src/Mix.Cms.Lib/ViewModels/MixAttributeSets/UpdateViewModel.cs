@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -102,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             if (Id > 0)
             {
                 Fields = MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList() 
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id).Data?.OrderBy(a => a.Priority).ToList() 
                 ?? new List<MixAttributeFields.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
                 //EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
@@ -149,8 +150,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                     {
                         item.AttributeSetId = parent.Id;
                         item.AttributeSetName = parent.Name;
-                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+                        //var saveResult = await item.SaveModelAsync(false, _context, _transaction);
+                        //ViewModelHelper.HandleResult(saveResult, ref result);
+                        item.ParseModel(_context, _transaction);
+                        _context.Update(item.Model);
+                        _context.SaveChanges();
+                        _ = CacheService.RemoveCacheAsync(typeof(MixAttributeFields.UpdateViewModel), $"_{item.Id}");
                     }
                     else
                     {
