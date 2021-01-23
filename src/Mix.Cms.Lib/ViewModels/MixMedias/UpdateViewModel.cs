@@ -140,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             if (CreatedDateTime == default)
             {
-                Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
+                Id = Id > 0 ? Id : UpdateViewModel.Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             if (string.IsNullOrEmpty(TargetUrl))
