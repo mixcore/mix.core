@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
         {
             if (Id == 0)
             {
-                Id = Repository.Max(m => m.Id).Data + 1;
+                Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);

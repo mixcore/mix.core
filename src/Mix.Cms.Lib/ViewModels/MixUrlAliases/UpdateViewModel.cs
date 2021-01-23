@@ -73,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         {
             if (Id == 0)
             {
-                Id = UpdateViewModel.Repository.Max(c => c.Id).Data + 1;
+                Id = UpdateViewModel.Repository.Max(c => c.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
                 Cultures = Cultures ?? LoadCultures(Specificulture, _context, _transaction);
                 Cultures.ForEach(c => c.IsSupported = true);
