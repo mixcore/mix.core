@@ -27,11 +27,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public MixEnums.MixContentStatus Status { get; set; }
 
-        [NotMapped]
         public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationPage { get; set; }
-        [NotMapped]
         public virtual ICollection<MixPortalPageNavigation> MixPortalPageNavigationParent { get; set; }
-        [NotMapped]
         public virtual ICollection<MixPortalPageRole> MixPortalPageRole { get; set; }
     }
 }
