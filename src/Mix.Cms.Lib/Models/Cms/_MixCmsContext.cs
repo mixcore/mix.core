@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
 using MySqlConnector;
 using System;
@@ -65,11 +66,20 @@ namespace Mix.Cms.Lib.Models.Cms
                     case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
+
                     case MixDatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
+
                     case MixDatabaseProvider.SQLITE:
                         optionsBuilder.UseSqlite(cnn);
+                        break;
+
+                    case MixDatabaseProvider.PostgreSQL:
+                        optionsBuilder.UseNpgsql(cnn);
+                        break;
+
+                    default:
                         break;
                 }
             }
@@ -90,11 +100,36 @@ namespace Mix.Cms.Lib.Models.Cms
             }
             base.Dispose();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            string ns = string.Empty;
+            switch (provider)
+            {
+                case MixDatabaseProvider.MSSQL:
+                    ns = "Mix.Cms.Lib.Models.EntityConfigurations.MSSQL";
+                    break;
+
+                case MixDatabaseProvider.MySQL:
+                    ns = "Mix.Cms.Lib.Models.EntityConfigurations.MySQL";
+                    break;
+
+                case MixDatabaseProvider.SQLITE:
+                    ns = "Mix.Cms.Lib.Models.EntityConfigurations.SQLITE";
+                    break;
+
+                case MixDatabaseProvider.PostgreSQL:
+                    ns = "Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL";
+                    break;
+
+                default:
+                    break;
+            }
+            modelBuilder.ApplyAllConfigurationsFromNamespace(this.GetType().Assembly, ns);
             OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

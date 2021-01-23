@@ -5,6 +5,7 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixPortalPageRole
     {
+        public int Id { get; set; }
         public int PageId { get; set; }
         public string RoleId { get; set; }
         public string CreatedBy { get; set; }
