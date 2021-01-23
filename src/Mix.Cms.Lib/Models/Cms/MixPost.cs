@@ -45,19 +45,12 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixEnums.MixContentStatus Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
-        [NotMapped]
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }
-        [NotMapped]
         public virtual ICollection<MixModulePost> MixModulePost { get; set; }
-        [NotMapped]
         public virtual ICollection<MixPagePost> MixPagePost { get; set; }
-        [NotMapped]
         public virtual ICollection<MixPostMedia> MixPostMedia { get; set; }
-        [NotMapped]
         public virtual ICollection<MixPostModule> MixPostModule { get; set; }
-        [NotMapped]
         public virtual ICollection<MixRelatedPost> MixRelatedPostMixPost { get; set; }
-        [NotMapped]
         public virtual ICollection<MixRelatedPost> MixRelatedPostS { get; set; }
     }
 }
