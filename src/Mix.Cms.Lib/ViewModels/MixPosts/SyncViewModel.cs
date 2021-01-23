@@ -655,7 +655,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 if (result.IsSucceed)
                 {
-                    var startMediaId = MixMedias.UpdateViewModel.Repository.Max(c => c.Id).Data;
+                    var startMediaId = MixMedias.UpdateViewModel.Repository.Max(c => c.Id, _context, _transaction).Data;
                     foreach (var navMedia in MediaNavs)
                     {
                         if (navMedia.Media != null)
