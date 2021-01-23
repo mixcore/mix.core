@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -70,9 +71,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
-        [JsonProperty("removeAttributes")]
-        public List<MixAttributeFields.DeleteViewModel> RemoveAttributes { get; set; } = new List<MixAttributeFields.DeleteViewModel>();
-
         [JsonProperty("formView")]
         public MixTemplates.UpdateViewModel FormView { get; set; }
 
@@ -101,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
             if (Id > 0)
             {
-                Fields = MixAttributeFields.UpdateViewModel
+                Fields ??= MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList() 
                 ?? new List<MixAttributeFields.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
@@ -151,21 +149,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
                         item.AttributeSetName = parent.Name;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            if (result.IsSucceed)
-            {
-                foreach (var item in RemoveAttributes)
-                {
-                    if (result.IsSucceed)
-                    {
-                        var removeResult = await item.RemoveModelAsync(false, _context, _transaction);
-                        ViewModelHelper.HandleResult(removeResult, ref result);
                     }
                     else
                     {

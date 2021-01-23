@@ -4,6 +4,7 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
@@ -111,8 +112,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 if (AttributeSetName != "sys_additional_field")
                 {
                     // Check if there is field name in the same attribute set
-                    IsValid = !Repository.CheckIsExists(
-                        f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId, _context, _transaction);
+                    IsValid = !_context.MixAttributeField.Any(
+                        f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
                     if (!IsValid)
                     {
                         Errors.Add($"Field {Name} Existed");
