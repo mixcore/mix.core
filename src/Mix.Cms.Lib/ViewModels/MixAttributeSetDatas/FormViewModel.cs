@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -336,14 +337,30 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         item.Specificulture = parent.Specificulture;
                         item.Priority = item.Field.Priority;
                         item.Status = MixEnums.MixContentStatus.Published;
-                        var saveResult = await item.SaveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+
+                        item.ParseModel(context, transaction);
+                        item.Validate(context, transaction);
+                        if (MixAttributeSetValues.UpdateViewModel.Repository.CheckIsExists(item.Model, context, transaction))
+                        {
+                            context.Entry(item.Model).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            item.Id = Guid.NewGuid().ToString();
+                            item.CreatedDateTime = DateTime.UtcNow;
+                            context.Entry(item.Model).State = EntityState.Added;
+                        }
+
+
+                        //var saveResult = await item.SaveModelAsync(false, context, transaction);
+                        //ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
                     {
-                        var delResult = await item.RemoveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(delResult, ref result);
+                        item.ParseModel(context, transaction);
+                        context.Entry(item.Model).State = EntityState.Deleted;
                     }
+                    result.IsSucceed = await context.SaveChangesAsync() > 0;
                 }
                 else
                 {
