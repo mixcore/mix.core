@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/related-attribute-set/portal")]
     public class ApiRelatedAttributeSetPortalController :
-        BaseRestApiController<MixCmsContext, MixRelatedAttributeSet, UpdateViewModel, ReadMvcViewModel, DeleteViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixRelatedAttributeSet, UpdateViewModel, ReadMvcViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/{culture}/related-attribute-set
         [HttpGet]

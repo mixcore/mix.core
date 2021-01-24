@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/configuration")]
     public class ApiConfigurationPortalController :
-        BaseRestApiController<MixCmsContext, MixConfiguration, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixConfiguration, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
 
         // GET: api/s
