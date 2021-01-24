@@ -23,7 +23,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/module-data/portal")]
     public class ApiModuleDataDataController :
-        BaseRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
     {
 
         // GET: api/s
