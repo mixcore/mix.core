@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -20,8 +22,9 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    public class BaseRestApiController<TDbContext, TModel, TView, TRead> : Controller
+    public class BaseAuthorizedRestApiController<TDbContext, TModel, TView, TRead> : Controller
         where TDbContext : DbContext
         where TModel : class
         where TView : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, TView>
