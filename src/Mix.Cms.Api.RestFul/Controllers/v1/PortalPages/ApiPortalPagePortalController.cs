@@ -20,7 +20,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/permission")]
     public class ApiPortalPageController :
-        BaseRestApiController<MixCmsContext, MixPortalPage, UpdateViewModel, ReadViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixPortalPage, UpdateViewModel, ReadViewModel>
     {
 
         // GET: api/s

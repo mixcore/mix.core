@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/language")]
     public class ApiLanguageController :
-        BaseRestApiController<MixCmsContext, MixLanguage, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixLanguage, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
 
         // GET: api/s
