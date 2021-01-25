@@ -13,13 +13,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/mvc")]
     public class AttributeSetDataMvcController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetData, UpdateViewModel, ReadMvcViewModel>
+        BaseReadOnlyApiController<MixCmsContext, MixAttributeSetData, ReadMvcViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
+            var getData = await Helper.FilterByKeywordAsync<ReadMvcViewModel>(Request, _lang);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
