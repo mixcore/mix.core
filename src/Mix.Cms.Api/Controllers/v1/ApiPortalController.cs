@@ -437,7 +437,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (FileRepository.Instance.SaveFile(settings))
                 {
                     MixService.Reload();
-                    if (!MixService.GetConfig<bool>("IsCache"))
+                    if (!MixService.GetMixConfig<bool>("IsCache"))
                     {
                         Services.CacheService.RemoveCacheAsync();
                     }
