@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.Services
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     context = MixService.GetDbContext();
-                    accountContext = new MixCmsAccountContext();
+                    accountContext = MixService.GetAccountDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
 
