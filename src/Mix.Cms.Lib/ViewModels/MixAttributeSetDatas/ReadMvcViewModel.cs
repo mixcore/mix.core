@@ -52,10 +52,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("obj")]
         public JObject Obj { get; set; }
 
-        [JsonProperty("detailsUrl")]
-        public string DetailsUrl { 
+        [JsonProperty("previewUrl")]
+        public string PreviewUrl { 
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
                     ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
+                    : null; 
+        }
+        
+        [JsonProperty("detailApiUrl")]
+        public string DetailApiUrl { 
+            get => !string.IsNullOrEmpty(Id)
+                    ? $"/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
                     : null; 
         }
 
