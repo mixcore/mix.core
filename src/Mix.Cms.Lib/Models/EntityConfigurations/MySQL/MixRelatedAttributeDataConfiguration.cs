@@ -56,14 +56,14 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                 .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.ParentId)
-                .IsRequired()
-                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
+                .IsRequired()                
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.ParentType)
                 .IsRequired()
+                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");

@@ -31,7 +31,7 @@ namespace Mix.Cms.Web.Controllers
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
                     // allow localhost
-                    //remoteIp != "::1" &&
+                    remoteIp != "::1" &&
                     (
                         allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp)

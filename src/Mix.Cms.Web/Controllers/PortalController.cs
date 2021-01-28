@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Services;
 
@@ -12,6 +13,13 @@ namespace Mix.Cms.Web.Controllers
 
         protected override void ValidateRequest()
         {
+            // If IP retricted in appsettings
+            if (_forbiddenPortal)
+            {
+                isValid = false;
+                _redirectUrl = $"/error/403";
+            }
+
             base.ValidateRequest();
 
             // If this site has not been inited yet
@@ -35,7 +43,7 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [Route("portal")]
         [Route("admin")]
         [Route("portal/page/{type}")]
