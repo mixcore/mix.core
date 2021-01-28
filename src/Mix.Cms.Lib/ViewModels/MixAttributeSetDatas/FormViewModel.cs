@@ -6,6 +6,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -106,7 +107,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixAttributeSetData ParseModel(
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -220,7 +222,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     FileFolder = "edms",
                     Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
                 };
-                if (FileRepository.Instance.SaveWebFile(edmFile))
+                if (Repositories.FileRepository.Instance.SaveWebFile(edmFile))
                 {
                     Obj["edm"] = edmFile.WebPath;
                     edmField.StringValue = edmFile.WebPath;
@@ -232,9 +234,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         #region Async
 
-        public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(
+            bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                _context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
 
@@ -265,6 +269,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         }
                     }
                 }
+                if (result.IsSucceed)
+                {
+                    if (result.IsSucceed)
+                    {
+                        CleanCache(context);
+                    }
+                }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 if (result.IsSucceed)
@@ -286,6 +297,20 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
 
+        }
+
+        private void CleanCache(MixCmsContext context)
+        {
+            var tasks = new List<Task>();
+            // Get Parent Ids
+            var relatedModels = context.MixRelatedAttributeData.Where(p => p.DataId == Id && p.Specificulture == Specificulture)
+                    .Select(m => m.Id);
+            foreach (var model in relatedModels)
+            {
+                var key = $"_{ParentId}_{Specificulture}";
+                tasks.Add(CacheService.RemoveCacheAsync(typeof(FormViewModel), key));
+            }
+            Task.WhenAll(tasks);
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

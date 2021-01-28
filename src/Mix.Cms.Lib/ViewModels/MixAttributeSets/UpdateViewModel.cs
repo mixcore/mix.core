@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public int? ReferenceId { get; set; }
 
         [JsonProperty("type")]
-        public MixDatabaseParentType Type { get; set; }
+        public MixDatabaseType Type { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
