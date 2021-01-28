@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mix.Cms.Lib.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
@@ -29,7 +30,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Tags { get; set; }
         public string Template { get; set; }
         public string Title { get; set; }
-        public string Type { get; set; }
+        public MixPageType Type { get; set; }
         public string PostType { get; set; }
         public int? Views { get; set; }
         public int? PageSize { get; set; }
@@ -39,7 +40,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
         public virtual ICollection<MixModuleData> MixModuleData { get; set; }

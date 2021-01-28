@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
@@ -69,7 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -277,7 +278,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return result;
         }
 
-        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType
+        public static UpdateViewModel GetTemplateByPath(string path, string specificulture, string folderType
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = !string.IsNullOrEmpty(path) ? path.Substring(path.LastIndexOf('/') + 1) : null;
@@ -292,7 +293,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return getView.Data ?? GetDefault(folderType, specificulture, _context, _transaction);
         }
 
-        public static UpdateViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture
+        public static UpdateViewModel GetDefault(string folderType, string specificulture
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
@@ -301,7 +302,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     {
                     MixFolders.TemplatesFolder
                     , activedTheme
-                    , folderType.ToString()
+                    , folderType
                     });
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()

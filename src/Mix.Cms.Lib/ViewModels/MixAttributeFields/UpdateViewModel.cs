@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -40,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public string Title { get; set; }
 
         [JsonProperty("dataType")]
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
@@ -78,7 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views

@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -62,7 +63,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixPagePost()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -128,7 +129,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         model.Specificulture == _lang
                         && (!isPage || model.PageId == pageId)
                         && (!isPost || model.PostId == postId)
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Description.Contains(request.Keyword)
                             ))

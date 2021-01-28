@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         public string Regex { get; set; }
 
         [JsonProperty("dataType")]
-        public MixEnums.MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; }
 
         [JsonProperty("attributeFieldName")]
         public string AttributeFieldName { get; set; }
@@ -71,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -106,10 +107,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (DataType == MixEnums.MixDataType.Reference)
+            if (DataType == MixDataType.Reference)
             {
                 DataNavs = MixRelatedAttributeDatas.NavigationViewModel.Repository.GetModelListBy(d =>
-                    d.ParentId == DataId && d.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && d.Specificulture == Specificulture
+                    d.ParentId == DataId && d.ParentType == MixDatabaseParentType.Set && d.Specificulture == Specificulture
                     , _context, _transaction).Data?.OrderBy(m => m.Priority).ToList();
 
             }

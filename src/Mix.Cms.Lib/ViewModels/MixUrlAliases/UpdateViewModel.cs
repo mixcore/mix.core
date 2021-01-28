@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.Models;
@@ -30,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         public string SourceId { get; set; }
 
         [JsonProperty("type")]
-        public MixEnums.UrlAliasType Type { get; set; }
+        public MixUrlAliasType Type { get; set; }
 
         [JsonProperty("description")]
         public string Description { get; set; }
@@ -49,7 +50,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #endregion Properties
