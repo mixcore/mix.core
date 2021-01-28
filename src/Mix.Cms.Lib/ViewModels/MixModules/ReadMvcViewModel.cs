@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -75,7 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
         #region Views
 
@@ -267,15 +267,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                         dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
                         //postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
                         //productExp = m => m.ModuleId == Id && m.Specificulture == Specificulture;
-                        break;
-
-                    case MixModuleType.SubPage:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PageId == pageId);
-                        postExp = n => n.ModuleId == Id && n.Specificulture == Specificulture;
-                        break;
-
-                    case MixModuleType.SubPost:
-                        dataExp = m => m.ModuleId == Id && m.Specificulture == Specificulture && (m.PostId == postId);
                         break;
 
                     case MixModuleType.ListPost:

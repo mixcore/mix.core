@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Service.SignalR;
 using Mix.Cms.Service.SignalR.Models;
 using Newtonsoft.Json.Linq;
@@ -31,7 +32,7 @@ namespace Mix.Cms.Lib.Hubs
             if (result.IsSucceed)
             {
                 //  Send success msg to caller
-                var getAvailableUsers = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == MixEnums.MixContentStatus.Published.ToString());
+                var getAvailableUsers = Service.SignalR.ViewModels.MixMessengerUsers.DefaultViewModel.Repository.GetModelListBy(u => u.Status == MixContentStatus.Published.ToString());
                 SendToCaller(getAvailableUsers.Data, MessageReponseKey.ConnectSuccess);
                 // Announce every one there's new member
                 SendToAll(user, MessageReponseKey.NewMember, false);

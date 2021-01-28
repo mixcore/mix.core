@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
@@ -20,7 +21,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
     public class AttributeSetDataPortalController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel, FormViewModel, FormViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel, FormViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
@@ -41,7 +42,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("additional-data")]
         public async Task<ActionResult<PaginationModel<AdditionalViewModel>>> GetAdditionalData()
         {
-            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixEnums.MixAttributeSetDataType parentType)
+            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
                 && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
             {
                 var getData = await Helper.GetAdditionalData(parentType, parentId, Request, _lang);
@@ -65,7 +66,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         Specificulture = _lang,
                         AttributeSetId = getAttrSet.Data.Id,
                         AttributeSetName = getAttrSet.Data.Name,
-                        Status = MixEnums.MixContentStatus.Published,
+                        Status = MixContentStatus.Published,
                         Fields = getAttrSet.Data.Fields,
                         ParentType = parentType
                     };
@@ -124,7 +125,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Specificulture = _lang,
                     AttributeSetId = getAttrSet.Data.Id,
                     AttributeSetName = getAttrSet.Data.Name,
-                    Status = MixEnums.MixContentStatus.Published,
+                    Status = MixContentStatus.Published,
                     Fields = getAttrSet.Data.Fields
                 };
                 result.ExpandView();

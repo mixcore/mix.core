@@ -12,7 +12,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Web.Controllers
 {
@@ -137,14 +137,14 @@ namespace Mix.Cms.Web.Controllers
                 {
                     switch (getAlias.Data.Type)
                     {
-                        case UrlAliasType.Page:
+                        case MixUrlAliasType.Page:
                             return await Page(int.Parse(getAlias.Data.SourceId));
 
-                        case UrlAliasType.Post:
+                        case MixUrlAliasType.Post:
                             return await Post(int.Parse(getAlias.Data.SourceId));
 
-                        case UrlAliasType.Module: // TODO: Create view for module
-                        case UrlAliasType.ModuleData: // TODO: Create view for module data
+                        case MixUrlAliasType.Module: // TODO: Create view for module
+                        case MixUrlAliasType.ModuleData: // TODO: Create view for module data
                         default:
                             return await Page(0);
                     }
@@ -172,7 +172,7 @@ namespace Mix.Cms.Web.Controllers
             if (string.IsNullOrEmpty(seoName))
             {
                 predicate = p =>
-                p.Type == MixPageType.Home.ToString()
+                p.Type == MixPageType.Home
                 && p.Status == MixContentStatus.Published && p.Specificulture == culture;
             }
             else

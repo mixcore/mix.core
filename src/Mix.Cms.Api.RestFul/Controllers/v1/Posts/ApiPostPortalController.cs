@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixPosts;
@@ -27,7 +28,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
+            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             string type = Request.Query["type"];
@@ -65,7 +66,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 var model = new MixPost()
                 {
                     Specificulture = _lang,
-                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                    Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     Type = Request.Query["type"].ToString(),
                     Template = template
 
