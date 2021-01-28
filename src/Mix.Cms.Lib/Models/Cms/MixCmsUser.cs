@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mix.Cms.Lib.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
@@ -19,6 +20,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
+        public MixUserStatus Status { get; set; }
     }
 }
