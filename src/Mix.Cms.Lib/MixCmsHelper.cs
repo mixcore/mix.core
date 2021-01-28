@@ -20,7 +20,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib
 {
@@ -89,8 +89,7 @@ namespace Mix.Cms.Lib
         public static List<ViewModels.MixPages.ReadListItemViewModel> GetCategory(IUrlHelper Url, string culture, MixPageType cateType, string activePath = "")
         {
             var getTopCates = ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelListBy
-            (c => c.Specificulture == culture && c.Type == cateType.ToString()
-            );
+            (c => c.Specificulture == culture && c.Type == cateType            );
             var cates = getTopCates.Data ?? new List<ViewModels.MixPages.ReadListItemViewModel>();
             activePath = activePath.ToLower();
             foreach (var cate in cates)
@@ -317,8 +316,8 @@ namespace Mix.Cms.Lib
         }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAdditionalField<TView>(
-            string fieldName, object fieldValue, string culture, MixEnums.MixDataType dataType
-            , MixEnums.CompareType filterType = MixEnums.CompareType.Eq
+            string fieldName, object fieldValue, string culture, MixDataType dataType
+            , MixCompareOperatorKind filterType = MixCompareOperatorKind.Equal
             , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -348,7 +347,7 @@ namespace Mix.Cms.Lib
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
                 var relatedQuery = context.MixRelatedAttributeData.Where(
-                         m => m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString() && m.Specificulture == culture
+                         m => m.ParentType == MixDatabaseParentType.Post && m.Specificulture == culture
                             && dataIds.Any(d => d == m.DataId));
                 var postIds = relatedQuery.Select(m => int.Parse(m.ParentId)).Distinct().AsEnumerable().ToList();
                 result = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
@@ -374,57 +373,57 @@ namespace Mix.Cms.Lib
         }
 
         private static Expression<Func<MixAttributeSetValue, bool>> GetValuePredicate(string fieldValue
-            , MixEnums.CompareType filterType, MixEnums.MixDataType dataType)
+            , MixCompareOperatorKind filterType, MixDataType dataType)
         {
             Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
             switch (dataType)
             {
-                case MixEnums.MixDataType.Date:
-                case MixEnums.MixDataType.Time:
+                case MixDataType.Date:
+                case MixDataType.Time:
                     if (DateTime.TryParse(fieldValue, out DateTime dtValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, DateTime>("DateTimeValue", dtValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     if (double.TryParse(fieldValue, out double dbValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, double>("DoubleValue", dbValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     if (bool.TryParse(fieldValue, out bool boolValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, bool>("BooleanValue", boolValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     if (int.TryParse(fieldValue, out int intValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, int>("IntegerValue", intValue, filterType);
                     }
                     break;
-                case MixEnums.MixDataType.Reference:
+                case MixDataType.Reference:
                     break;
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.DateTime:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
-                case MixEnums.MixDataType.QRCode:
+                case MixDataType.Duration:
+                case MixDataType.Custom:
+                case MixDataType.DateTime:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Upload:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
+                case MixDataType.QRCode:
                 default:
                     valPredicate = FilterObjectSet<MixAttributeSetValue, string>("StringValue", fieldValue, filterType);
                     break;
@@ -433,7 +432,7 @@ namespace Mix.Cms.Lib
             return valPredicate;
         }
 
-        public static Expression<Func<TModel, bool>> FilterObjectSet<TModel, T>(string propName, T data2, MixEnums.CompareType filterType)
+        public static Expression<Func<TModel, bool>> FilterObjectSet<TModel, T>(string propName, T data2, MixCompareOperatorKind filterType)
         {
             Type type = typeof(TModel);
             var par = Expression.Parameter(type, "model");
@@ -464,27 +463,27 @@ namespace Mix.Cms.Lib
             BinaryExpression eq = null;
             switch (filterType)
             {
-                case MixEnums.CompareType.Eq:
+                case MixCompareOperatorKind.Equal:
                     eq = Expression.Equal(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Lt:
+                case MixCompareOperatorKind.LessThan:
                     eq = Expression.LessThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Gt:
+                case MixCompareOperatorKind.GreaterThan:
                     eq = Expression.GreaterThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Lte:
+                case MixCompareOperatorKind.LessThanOrEqual:
                     eq = Expression.LessThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.Gte:
+                case MixCompareOperatorKind.GreaterThanOrEqual:
                     eq = Expression.GreaterThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
-                case MixEnums.CompareType.In:
+                case MixCompareOperatorKind.InRange:
                     var method = typeof(string).GetMethod("Contains");
                     var call = Expression.Call(par, method, Expression.Constant(data2, typeof(string)));
                     return Expression.Lambda<Func<TModel, bool>>(call, par);
@@ -535,7 +534,7 @@ namespace Mix.Cms.Lib
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string attributeSetName,
-            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string parentId, MixDatabaseParentType parentType,
             string orderBy = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc,
             int? pageSize = null, int? pageIndex = 0,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)

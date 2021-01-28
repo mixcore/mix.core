@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
@@ -337,7 +338,7 @@ namespace Mix.Cms.Lib.Controllers
             var data = await GetListAsync<TView>(predicate);
             foreach (var item in data.Data.Items)
             {
-                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixEnums.MixContentStatus.Published));
+                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
             }
             return await SaveListAsync(data.Data.Items, false);
         }

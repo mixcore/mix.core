@@ -20,7 +20,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
@@ -66,7 +66,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         var model = new MixModule()
                         {
                             Specificulture = _lang,
-                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -173,7 +173,7 @@ namespace Mix.Cms.Api.Controllers.v1
             ParseRequestPagingDate(request);
             Expression<Func<MixModule, bool>> predicate = model =>
                         model.Specificulture == _lang
-                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        && (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (!isType || model.Type == moduleType)
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))

@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
@@ -199,7 +199,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
-                    model.Status = MixUserStatus.Actived;
+                    model.Status = MixUserStatus.Active;
                     model.LastModified = DateTime.UtcNow;
                     model.CreatedBy = User.Identity.Name;
                     model.ModifiedBy = User.Identity.Name;
@@ -302,7 +302,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Active.ToString() });
                         data.ExpandView();
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
@@ -320,7 +320,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Active.ToString() });
                         data.ExpandView();
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()

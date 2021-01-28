@@ -497,7 +497,7 @@ namespace Mix.Cms.Lib.Repositories
             return result;
         }
 
-        public List<FileViewModel> GetFiles(MixEnums.FileFolder FileFolder)
+        public List<FileViewModel> GetFiles(MixFolders FileFolder)
         {
             string folder = FileFolder.ToString();
             return GetUploadFiles(folder);
