@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -246,8 +247,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(
-                    m => m.Specificulture == Specificulture && m.Status == MixEnums.MixContentStatus.Published
-                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                    m => m.Specificulture == Specificulture && m.Status == MixContentStatus.Published
+                   && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
@@ -258,7 +259,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                   && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Post.ToString()
+                   && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
                    && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
             {

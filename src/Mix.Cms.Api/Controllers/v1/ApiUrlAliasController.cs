@@ -16,6 +16,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -56,8 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 var model = new MixUrlAlias()
                 {
-                    Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
-                    ,
+                    Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                 };
 
@@ -92,7 +92,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             ParseRequestPagingDate(request);
             Expression<Func<MixUrlAlias, bool>> predicate = model =>
-                        (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixEnums.MixContentStatus>(request.Status))
+                        (string.IsNullOrEmpty(request.Status) || model.Status == Enum.Parse<MixContentStatus>(request.Status))
                         && (string.IsNullOrWhiteSpace(request.Keyword)
                             || (model.Alias.Contains(request.Keyword))
                             )

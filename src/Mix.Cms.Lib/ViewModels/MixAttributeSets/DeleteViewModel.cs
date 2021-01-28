@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -64,7 +65,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             if (result.IsSucceed)
             {
                 var removeRelated = await MixRelatedAttributeSets.DeleteViewModel.Repository.RemoveListModelAsync(false,
-                    f => f.Id == Id || (f.AttributeSetId == Id && f.ParentType == MixEnums.MixAttributeSetDataType.Service.ToString())
+                    f => f.Id == Id || (f.AttributeSetId == Id && f.ParentType == MixDatabaseType.Service)
                     , _context, _transaction);
                 ViewModelHelper.HandleResult(removeRelated, ref result);
             }

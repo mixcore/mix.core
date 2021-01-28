@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -112,7 +113,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         model.CreatedDateTime = DateTime.UtcNow;
                         model.Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar");
                         model.CreatedDateTime = DateTime.UtcNow;
-                        model.Status = Lib.MixEnums.MixUserStatus.Actived;
+                        model.Status = MixUserStatus.Active;
                         model.LastModified = DateTime.UtcNow;
                         model.CreatedBy = User.Identity.Name;
                         model.ModifiedBy = User.Identity.Name;

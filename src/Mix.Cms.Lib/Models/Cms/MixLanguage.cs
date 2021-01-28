@@ -1,5 +1,5 @@
 ﻿using System;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -18,7 +18,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string ModifiedBy { get; set; }
         public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         public virtual MixCulture SpecificultureNavigation { get; set; }
     }

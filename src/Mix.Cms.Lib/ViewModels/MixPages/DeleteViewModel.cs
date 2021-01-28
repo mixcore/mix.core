@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public MixPageType Type { get; set; }
 
         [JsonProperty("status")]
-        public MixEnums.PageStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -195,7 +195,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Pages.ToString();
+                return MixTemplateFolders.Pages.ToString();
             }
         }
 
@@ -260,7 +260,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
-                    Id.ToString(), MixEnums.MixAttributeSetDataType.Page
+                    Id.ToString(), MixDatabaseParentType.Page
                     , Specificulture
                     , _context, _transaction);
             ViewModelHelper.HandleResult(removeRelatedData, ref result);

@@ -18,6 +18,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -49,7 +50,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         ModuleId = moduleId,
                         Specificulture = _lang,
                         Fields = getModule.Data.Fields,
-                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
+                        Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                     };
                     RepositoryResponse<UpdateViewModel> result = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_default", null, model);
 

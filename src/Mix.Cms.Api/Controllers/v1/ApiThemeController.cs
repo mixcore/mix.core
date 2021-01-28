@@ -23,6 +23,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -107,8 +108,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus))
-                            ,
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -130,7 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };

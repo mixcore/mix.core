@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -45,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -66,7 +67,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("parentId")]
         public string ParentId { get; set; }
         [JsonProperty("parentType")]
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseParentType ParentType { get; set; }
 
         #endregion Views
 
@@ -90,11 +91,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)) : Status;
+                Status = Status == default ? MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus) : Status;
             }
             // Related Datas
             DataNavs = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(
-                n => n.ParentId == Id && n.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString() && n.Specificulture == Specificulture,
+                n => n.ParentId == Id && n.ParentType == MixDatabaseParentType.Set && n.Specificulture == Specificulture,
                 _context, _transaction).Data;
 
             Values = MixAttributeSetValues.UpdateViewModel
@@ -262,7 +263,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 if (result.IsSucceed)
                 {
-                    if (string.IsNullOrEmpty(item.ParentId) && item.ParentType == MixEnums.MixAttributeSetDataType.Set)
+                    if (string.IsNullOrEmpty(item.ParentId) && item.ParentType == MixDatabaseParentType.Set)
                     {
                         var set = context.MixAttributeSet.First(s => s.Name == item.ParentName);
                         item.ParentId = set.Id.ToString();
@@ -287,45 +288,45 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             switch (item.DataType)
             {
-                case MixEnums.MixDataType.DateTime:
+                case MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
 
-                case MixEnums.MixDataType.Date:
+                case MixDataType.Date:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Time:
+                case MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
 
-                case MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
-                case MixEnums.MixDataType.Reference:
+                case MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
                     return (new JProperty(item.AttributeFieldName, new JArray()));
 
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
+                case MixDataType.Custom:
+                case MixDataType.Duration:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Upload:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }

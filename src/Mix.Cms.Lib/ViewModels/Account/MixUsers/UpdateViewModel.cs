@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
@@ -63,7 +64,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         public int Priority { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
-        public MixEnums.MixUserStatus Status { get; set; }
+        public MixUserStatus Status { get; set; }
         #endregion Models
 
         #region Views

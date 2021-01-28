@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
@@ -84,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -142,12 +143,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Overrides
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            GetAdditionalData(Id.ToString(), MixEnums.MixAttributeSetDataType.Post, _context, _transaction);
+            GetAdditionalData(Id.ToString(), MixDatabaseParentType.Post, _context, _transaction);
         }
-        private void GetAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
-                        m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
+                        m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)
             {
