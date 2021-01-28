@@ -113,6 +113,25 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
 
+            if (result.IsSucceed)
+            {
+                var navs = await _context.MixRelatedPost.Where(n => (n.Id == Id || n.DestinationId == Id) && n.Specificulture == Specificulture).ToListAsync();
+                foreach (var item in navs)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+            if (result.IsSucceed)
+            {
+                var navs = await _context.MixRelatedAttributeData.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post  && n.Specificulture == Specificulture).ToListAsync();
+                foreach (var item in navs)
+                {
+                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                }
+            }
+
+
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
                     Id.ToString(), MixDatabaseParentType.Post

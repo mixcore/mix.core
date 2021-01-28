@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
 
         public int Id { get; set; }
-        public string Type { get; set; }
+        public MixDatabaseType Type { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

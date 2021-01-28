@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
@@ -60,6 +61,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 
             entity.Property(e => e.Status)
                 .IsRequired()
+                .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
@@ -72,6 +74,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 
             entity.Property(e => e.Type)
                 .IsRequired()
+                .HasConversion(new EnumToStringConverter<MixDatabaseType>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
