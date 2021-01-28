@@ -302,7 +302,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Active.ToString() });
+                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
@@ -320,7 +320,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Active.ToString() });
+                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
@@ -403,8 +403,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
+            var status = Enum.Parse<MixUserStatus>(request.Status);
             Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                (string.IsNullOrEmpty(request.Status) || model.Status == status)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))
