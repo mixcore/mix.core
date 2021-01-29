@@ -180,11 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var item in valueIds)
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
-
-                    predicate = ReflectionHelper.CombineExpression(
-                        predicate
-                        , pre
-                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    predicate = predicate.AndAlso(pre);
                 }
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetModelListByAsync(predicate, context, transaction);
                 if (getVal.IsSucceed)
@@ -345,11 +341,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 foreach (var id in dataIds)
                 {
                     Expression<Func<MixRelatedAttributeData, bool>> pre = m => m.DataId == id;
-
-                    predicate = ReflectionHelper.CombineExpression(
-                        predicate
-                        , pre
-                        , Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    predicate = predicate.AndAlso(pre);
                 }
                 var getRelatedData = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetModelListByAsync(
                             predicate

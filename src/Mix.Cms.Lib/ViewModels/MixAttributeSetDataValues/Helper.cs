@@ -39,7 +39,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues
                 foreach (var fieldQuery in queries)
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = GetValueFilter(filterType, fieldQuery.Key, fieldQuery.Value);
-                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    valPredicate = valPredicate.AndAlso(pre);
                 }
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();

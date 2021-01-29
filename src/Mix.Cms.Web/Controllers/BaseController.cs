@@ -30,12 +30,9 @@ namespace Mix.Cms.Web.Controllers
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
-                    // allow localhost
-                    remoteIp != "::1" &&
-                    (
+                        // add in allowedIps "::1" to allow localhost
                         allowedIps.Count > 0 &&
                         !allowedIps.Any(t => t["text"].Value<string>() == remoteIp)
-                    )
                 );
             }
         }
@@ -265,7 +262,7 @@ namespace Mix.Cms.Web.Controllers
             && p.Status == MixContentStatus.Published
             && p.Specificulture == culture;
 
-            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost = 
+            RepositoryResponse<Lib.ViewModels.MixPosts.ReadMvcViewModel> getPost =
                 await Lib.ViewModels.MixPosts.ReadMvcViewModel.Repository.GetFirstModelAsync(predicate);
 
             if (getPost.IsSucceed)
@@ -287,7 +284,7 @@ namespace Mix.Cms.Web.Controllers
         {
             var getData = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
                 culture, attributeSetName, "equal", "seo_url", seoName);
-            
+
             if (getData.IsSucceed && getData.Data.Count > 0)
             {
                 getData.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");

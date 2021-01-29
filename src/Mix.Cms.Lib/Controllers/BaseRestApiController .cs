@@ -267,7 +267,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
@@ -279,7 +279,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync(predicate);
