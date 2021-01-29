@@ -21,6 +21,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
+using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Lib
 {
@@ -341,7 +342,7 @@ namespace Mix.Cms.Lib
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);
                 if (pre != null)
                 {
-                    valPredicate = Mix.Heart.Helpers.ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    valPredicate = valPredicate.AndAlso(pre);
                 }
 
                 var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();

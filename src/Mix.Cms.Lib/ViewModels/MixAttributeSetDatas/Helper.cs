@@ -20,6 +20,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -200,41 +201,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             {
                                 Expression<Func<MixAttributeSetValue, bool>> pre = m =>
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
+                                valPredicate = valPredicate == null 
+                                    ? pre
+                                    : valPredicate = valPredicate.AndAlso(pre);
                             }
                             else
                             {
                                 Expression<Func<MixAttributeSetValue, bool>> pre =
                                     m => m.AttributeFieldName == q.Key &&
-                                    (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
+                                    (EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
+                                valPredicate = valPredicate == null
+                                    ? pre
+                                    : valPredicate = valPredicate.AndAlso(pre);
                             }
                         }
                     }
                     if (valPredicate != null)
                     {
-                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                        attrPredicate = valPredicate.AndAlso(attrPredicate);
                     }
                 }
                 // Loop queries string => predicate
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
-                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    attrPredicate = attrPredicate.AndAlso(pre);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -400,30 +391,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (filterType == "equal")
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue == keyword;
-                    if (valPredicate != null)
-                    {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                    else
-                    {
-                        valPredicate = pre;
-                    }
+
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
                 }
                 else
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue.Contains(keyword);
-                    if (valPredicate != null)
-                    {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                    else
-                    {
-                        valPredicate = pre;
-                    }
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
                 }
                 if (valPredicate != null)
                 {
-                    attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    attrPredicate = valPredicate.AndAlso(attrPredicate);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();

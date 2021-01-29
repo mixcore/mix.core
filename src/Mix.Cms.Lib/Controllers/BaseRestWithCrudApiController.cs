@@ -266,12 +266,14 @@ namespace Mix.Cms.Lib.Controllers
             foreach (var id in data.Data)
             {
                 var temp = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                idPre = idPre != null ? ReflectionHelper.CombineExpression(idPre, temp, Heart.Enums.MixHeartEnums.ExpressionMethod.Or)
+
+                idPre = idPre != null 
+                    ? idPre.AndAlso(temp)
                     : temp;
             }
             if (idPre != null)
             {
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
 
                 switch (data.Action)
                 {
@@ -350,7 +352,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
@@ -362,7 +364,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync(predicate);
