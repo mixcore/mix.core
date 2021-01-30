@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public MixPageType Type { get; set; }
+        public MixPageType Type { get; set; } = MixPageType.ListPost;
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
