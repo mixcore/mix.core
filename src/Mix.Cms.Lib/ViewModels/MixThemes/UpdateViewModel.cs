@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -168,7 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 //Import From existing Theme (zip)
                 if (string.IsNullOrEmpty(TemplateAsset.Filename))
                 {
-                    TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    TemplateAsset = new FileViewModel()
                     {
                         Filename = "default_blank",
                         Extension = MixFileExtensions.Zip,

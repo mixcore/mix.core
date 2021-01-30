@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
 using Mix.Cms.Lib.Constants;
+using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -72,7 +73,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (ModelState.IsValid)
             {
-                var result = FileRepository.Instance.SaveFile(file, file.FileName, folder);
+                var result = FileRepository.Instance.SaveFile(file, $"{folder}/{file.FileName}");
                 return Ok(result);
             }
             return BadRequest();

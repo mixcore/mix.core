@@ -1,18 +1,30 @@
-﻿using Mix.Cms.Lib.Enums;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Common.Helper;
 using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.Extensions
 {
     public static class MixAttributeValueModelExtensions
     {
-        public static JProperty ToJProperty(this MixAttributeSetValue item)
+        public static JProperty ToJProperty(
+            this MixAttributeSetValue item, 
+            MixCmsContext _context, 
+            IDbContextTransaction _transaction)
         {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                   _context, _transaction,
+                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             switch (item.DataType)
             {
                 case MixDataType.DateTime:
@@ -46,7 +58,12 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue ?? 0));
 
                 case MixDataType.Reference:
-                    return (new JProperty(item.AttributeFieldName, null));
+                    return (new JProperty(item.AttributeFieldName, 
+                        GetRelatedData(
+                            item.IntegerValue.HasValue 
+                            ? item.IntegerValue.Value 
+                            : context.MixAttributeField.FirstOrDefault(f=> f.Id == item.AttributeFieldId).ReferenceId.Value
+                            , item.DataId, item.Specificulture, context, transaction)));
 
                 case MixDataType.Custom:
                 case MixDataType.Duration:
@@ -67,6 +84,11 @@ namespace Mix.Cms.Lib.Extensions
                 case MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
             }
         }
 
@@ -167,6 +189,63 @@ namespace Mix.Cms.Lib.Extensions
                 }
             }
 
+        }
+        
+        public static void LoadAllReferenceData(this JObject obj
+           , string dataId, int attributeSetId, string culture
+           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var refFields = context.MixAttributeField.Where(
+                   m => m.AttributeSetId == attributeSetId
+                    && m.DataType == MixDataType.Reference).ToList();
+
+            foreach (var item in refFields)
+            {
+                JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, _context, _transaction);
+                
+                if (obj.ContainsKey(item.Name))
+                {
+                    obj[item.Name] = arr;
+                }
+                else
+                {
+                    obj.Add(new JProperty(item.Name, arr));
+                }
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+        }
+
+        private static JArray GetRelatedData(int referenceId, string dataId, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == referenceId)
+                    && (model.ParentId == dataId && model.ParentType == MixDatabaseParentType.Set)
+                    && model.Specificulture == culture
+                    ;
+            var getData = ViewModels.MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
+
+            JArray arr = new JArray();
+            foreach (var nav in getData.Data.OrderBy(v => v.Priority))
+            {
+                arr.Add(nav.Data.Obj);
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+            return arr;
         }
     }
 }

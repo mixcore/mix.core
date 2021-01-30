@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             {
                 foreach (var item in removeDataIds)
                 {
-                    _ = Mix.Services.CacheService.RemoveCacheAsync(typeof(MixAttributeSetDatas.DeleteViewModel), item);
+                    _ = MixService.RemoveCacheAsync(typeof(MixAttributeSetData), item);
                 }
             }
             return result;

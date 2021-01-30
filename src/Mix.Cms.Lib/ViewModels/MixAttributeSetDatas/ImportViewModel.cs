@@ -185,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 else
                 {
-                    Obj.Add(val.Model.ToJProperty());
+                    Obj.Add(val.Model.ToJProperty(_context, _transaction));
                 }
             }
 

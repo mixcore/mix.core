@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     string key = $"_{id}";
                     key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-                    await CacheService.RemoveCacheAsync(typeof(TView), key);
+                    await MixService.RemoveCacheAsync(typeof(TModel), key);
                     return Ok(saveResult.Data);
                 }
                 else
@@ -147,14 +147,14 @@ namespace Mix.Cms.Lib.Controllers
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-            await CacheService.RemoveCacheAsync(typeof(TView), key);
+            await MixService.RemoveCacheAsync(typeof(TModel), key);
             return NoContent();
         }
 
         [HttpGet("remove-cache")]
         public virtual async Task<ActionResult> ClearCacheAsync()
         {
-            await CacheService.RemoveCacheAsync(typeof(TView));
+            await MixService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
 
@@ -451,7 +451,7 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<ViewModels.FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
             string type = typeof(TModel).Name;
             var getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListByAsync(predicate, _context);
@@ -471,7 +471,7 @@ namespace Mix.Cms.Lib.Controllers
             }
             else
             {
-                return new RepositoryResponse<ViewModels.FileViewModel>()
+                return new RepositoryResponse<FileViewModel>()
                 {
                     Errors = getData.Errors
                 };

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -562,7 +563,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var values = context.MixAttributeSetValue.Where(
                 m => m.DataId == dataId && m.Specificulture == culture
                     && !string.IsNullOrEmpty(m.AttributeFieldName));
-            var properties = values.Select(m => m.ToJProperty());
+            var properties = values.Select(m => m.ToJProperty(_context, _transaction));
 
             var obj = new JObject(
                 new JProperty("id", dataId),
@@ -577,47 +578,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             return obj;
         }
-
-        public static void LoadReferenceData(this JObject obj
-            , string dataId, int attributeSetId, string culture
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                    _context, _transaction,
-                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var refFields = context.MixAttributeField.Where(
-                   m => m.AttributeSetId == attributeSetId
-                    && m.DataType == MixDataType.Reference).ToList();
-
-            foreach (var item in refFields)
-            {
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == item.ReferenceId)
-                    && (model.ParentId == dataId && model.ParentType == MixDatabaseParentType.Set)
-                    && model.Specificulture == culture
-                    ;
-                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
-
-                JArray arr = new JArray();
-                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
-                {
-                    arr.Add(nav.Data.Obj);
-                }
-                if (obj.ContainsKey(item.Name))
-                {
-                    obj[item.Name] = arr;
-                }
-                else
-                {
-                    obj.Add(new JProperty(item.Name, arr));
-                }
-            }
-            if (isRoot)
-            {
-                transaction.Dispose();
-                context.Dispose();
-            }
-        }
-
     }
 }

@@ -10,6 +10,7 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -181,11 +182,11 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                     FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
                     FileName = SeoHelper.GetSEOString(File.FileName.Substring(0, File.FileName.LastIndexOf('.'))) + DateTime.UtcNow.Ticks;
                     Extension = File.FileName.Substring(File.FileName.LastIndexOf('.'));
-                    var saveFile = FileRepository.Instance.SaveWebFile(File, $"{FileName}{Extension}", FileFolder);
-                    if (saveFile.IsSucceed)
+                    var saveFile = FileRepository.Instance.SaveWebFile(File, $"{FileFolder}/{FileName}{Extension}");
+                    if (saveFile != null)
                     {
                         IsValid = false;
-                        Errors.AddRange(saveFile.Errors);
+                        Errors.Add("Cannot save file");
                     }
                     if (string.IsNullOrEmpty(Title))
                     {

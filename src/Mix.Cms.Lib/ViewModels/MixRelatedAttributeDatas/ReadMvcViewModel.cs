@@ -76,19 +76,18 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (Data == null)
+            // Should not get Data from cache (if Data == null) because of multilevel data, 
+            // already handle cached data in attribute set data
+            var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModel(p => p.Id == DataId && p.Specificulture == Specificulture
+                , _context: _context, _transaction: _transaction
+            );
+            if (getData.IsSucceed)
             {
-                var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModel(p => p.Id == DataId && p.Specificulture == Specificulture
-                    , _context: _context, _transaction: _transaction
-                );
-                if (getData.IsSucceed)
-                {
-                    Data = getData.Data;
-                }
-                else
-                {
-                    Data = new MixAttributeSetDatas.ReadMvcViewModel();
-                }
+                Data = getData.Data;
+            }
+            else
+            {
+                Data = new MixAttributeSetDatas.ReadMvcViewModel();
             }
         }
 
