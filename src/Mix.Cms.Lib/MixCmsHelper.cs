@@ -22,6 +22,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
 using Mix.Heart.Extensions;
+using Mix.Services;
 
 namespace Mix.Cms.Lib
 {

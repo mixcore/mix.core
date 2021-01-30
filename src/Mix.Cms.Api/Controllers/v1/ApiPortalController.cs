@@ -26,6 +26,7 @@ using System.Xml.Linq;
 using Mix.Common.Helper;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
+using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -492,10 +493,11 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var saveFile = FileRepository.Instance.SaveWebFile(assets, assets.FileName, importFolder);
-            if (saveFile.IsSucceed)
+            var saveFile = FileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
+            if (saveFile != null)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Data.Filename}{saveFile.Data.Extension}", saveFile.Data.FileFolder);
+                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
+                    saveFile.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())
                 {

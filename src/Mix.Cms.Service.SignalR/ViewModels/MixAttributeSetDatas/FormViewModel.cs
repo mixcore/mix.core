@@ -5,6 +5,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -212,7 +213,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 {
                     body = body.Replace($"[[{prop.Name}]]", Data[prop.Name].Value<string>());
                 }
-                var edmFile = new Lib.ViewModels.FileViewModel()
+                var edmFile = new FileViewModel()
                 {
                     Content = body,
                     Extension = ".html",
@@ -474,7 +475,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                         {
                             Specificulture = Specificulture,
                             Status = MixContentStatus.Published,
-                            MediaFile = new Lib.ViewModels.FileViewModel()
+                            MediaFile = new FileViewModel()
                             {
                                 FileStream = mediaData,
                                 Extension = ".png",

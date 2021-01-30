@@ -13,6 +13,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("export")]
-        public async Task<ActionResult<Lib.ViewModels.FileViewModel>> Export()
+        public async Task<ActionResult<FileViewModel>> Export()
         {
             bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
             bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);

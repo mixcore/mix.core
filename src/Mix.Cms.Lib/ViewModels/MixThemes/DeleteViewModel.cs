@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {

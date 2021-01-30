@@ -163,6 +163,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     if (val.Field.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.AttributeFieldName].Value<JArray>();
+                        val.IntegerValue = val.Field.ReferenceId;
+                        val.StringValue = val.Field.ReferenceId.ToString();
                         if (arr != null)
                         {
 
@@ -198,7 +200,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 else
                 {
-                    Obj.Add(val.Model.ToJProperty());
+                    Obj.Add(val.Model.ToJProperty(_context, _transaction));
                 }
             }
 
@@ -222,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     FileFolder = "edms",
                     Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
                 };
-                if (Repositories.FileRepository.Instance.SaveWebFile(edmFile))
+                if (FileRepository.Instance.SaveWebFile(edmFile))
                 {
                     Obj["edm"] = edmFile.WebPath;
                     edmField.StringValue = edmFile.WebPath;
@@ -271,10 +273,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 if (result.IsSucceed)
                 {
-                    if (result.IsSucceed)
-                    {
-                        CleanCache(context);
-                    }
+                    CleanCache(context);
                 }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
@@ -303,12 +302,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             var tasks = new List<Task>();
             // Get Parent Ids
-            var relatedModels = context.MixRelatedAttributeData.Where(p => p.DataId == Id && p.Specificulture == Specificulture)
+            var relatedModels = context.MixRelatedAttributeData.Where(
+                p => p.DataId == Id && p.Specificulture == Specificulture)
                     .Select(m => m.Id);
             foreach (var model in relatedModels)
             {
-                var key = $"_{ParentId}_{Specificulture}";
-                tasks.Add(CacheService.RemoveCacheAsync(typeof(FormViewModel), key));
+                var parentKey = $"_{ParentId}_{Specificulture}";
+                var navKey = $"_{model}_{Specificulture}";
+                tasks.Add(CacheService.RemoveCacheAsync(typeof(FormViewModel), parentKey));
+                tasks.Add(CacheService.RemoveCacheAsync(typeof(MixRelatedAttributeDatas.FormViewModel), navKey));
             }
             Task.WhenAll(tasks);
         }

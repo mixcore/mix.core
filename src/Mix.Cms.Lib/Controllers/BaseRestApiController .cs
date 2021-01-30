@@ -114,14 +114,14 @@ namespace Mix.Cms.Lib.Controllers
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-            await CacheService.RemoveCacheAsync(typeof(TView), key);
+            await MixService.RemoveCacheAsync(typeof(TModel), key);
             return NoContent();
         }
 
         [HttpGet("remove-cache")]
         public virtual async Task<ActionResult> ClearCacheAsync()
         {
-            await CacheService.RemoveCacheAsync(typeof(TView));
+            await MixService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
 
@@ -365,11 +365,11 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<Lib.ViewModels.FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
         {
 
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
-            Lib.ViewModels.FileViewModel file = null;
+            FileViewModel file = null;
             if (getData.IsSucceed)
             {
                 string exportPath = $"{MixFolders.ExportFolder}/Structures/{typeof(TModel).Name}";
@@ -378,7 +378,7 @@ namespace Mix.Cms.Lib.Controllers
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))
                     );
-                file = new Lib.ViewModels.FileViewModel()
+                file = new FileViewModel()
                 {
                     Filename = filename,
                     Extension = MixFileExtensions.Json,
@@ -386,11 +386,11 @@ namespace Mix.Cms.Lib.Controllers
                     Content = objContent.ToString()
                 };
                 // Copy current templates file
-                Lib.Repositories.FileRepository.Instance.SaveWebFile(file);
+                FileRepository.Instance.SaveWebFile(file);
 
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
-            return new RepositoryResponse<Lib.ViewModels.FileViewModel>()
+            return new RepositoryResponse<FileViewModel>()
             {
                 IsSucceed = true,
                 Data = file,
