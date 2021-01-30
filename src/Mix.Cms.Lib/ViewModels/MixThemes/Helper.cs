@@ -84,10 +84,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
             if (data != null)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}/{theme.FileName}";
+                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 if (theme != null)
                 {
-                    FileRepository.Instance.SaveWebFile(theme, importFolder);
+                    FileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else
