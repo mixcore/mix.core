@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
@@ -57,14 +59,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("previewUrl")]
         public string PreviewUrl { 
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
-                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
                     : null; 
         }
         
         [JsonProperty("detailApiUrl")]
         public string DetailApiUrl { 
             get => !string.IsNullOrEmpty(Id)
-                    ? $"/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
                     : null; 
         }
 
