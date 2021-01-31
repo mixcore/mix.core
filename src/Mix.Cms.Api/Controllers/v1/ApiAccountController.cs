@@ -20,6 +20,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
+using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -385,6 +386,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             // Remove other token if change password success
                             var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
                             await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                            
                         }
                     }
                     else
@@ -392,6 +394,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         Request.HttpContext.Response.StatusCode = 401;
                     }
                 }
+                FileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
                 return result;
             }
             return new RepositoryResponse<UserInfoViewModel>();
