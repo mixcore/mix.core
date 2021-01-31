@@ -196,7 +196,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (createResult.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
+                    user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
                     model.Status = MixUserStatus.Active;
