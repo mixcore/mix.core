@@ -403,9 +403,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
-            var status = Enum.Parse<MixUserStatus>(request.Status);
+            var isStatus = Enum.TryParse<MixUserStatus>(request.Status, out MixUserStatus status);
             Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (string.IsNullOrEmpty(request.Status) || model.Status == status)
+                (!isStatus || model.Status == status)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))
