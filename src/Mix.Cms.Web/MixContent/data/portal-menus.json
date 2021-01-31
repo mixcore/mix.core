@@ -174,7 +174,7 @@
           "icon": "mi mi-List"
         },
         {
-          "path": "/portal/file/list?folder=logs",
+          "path": "/portal/file/list?folder=MixContent/logs",
           "title": "Logs",
           "icon": "mi mi-Error"
         }
