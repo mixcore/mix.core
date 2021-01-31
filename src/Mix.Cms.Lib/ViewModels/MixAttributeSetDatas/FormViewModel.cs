@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -274,13 +275,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (result.IsSucceed)
                 {
                     CleanCache(context);
+                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
                 }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
-                if (result.IsSucceed)
-                {
-                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
-                }
                 return result;
             }
             catch (Exception ex)
@@ -309,8 +307,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 var parentKey = $"_{ParentId}_{Specificulture}";
                 var navKey = $"_{model}_{Specificulture}";
-                tasks.Add(CacheService.RemoveCacheAsync(typeof(FormViewModel), parentKey));
-                tasks.Add(CacheService.RemoveCacheAsync(typeof(MixRelatedAttributeDatas.FormViewModel), navKey));
+                tasks.Add(MixService.RemoveCacheAsync(typeof(MixAttributeSetData), parentKey));
+                tasks.Add(MixService.RemoveCacheAsync(typeof(MixRelatedAttributeData), navKey));
             }
             Task.WhenAll(tasks);
         }

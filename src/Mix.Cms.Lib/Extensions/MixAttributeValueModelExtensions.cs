@@ -58,13 +58,7 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue ?? 0));
 
                 case MixDataType.Reference:
-                    return (new JProperty(item.AttributeFieldName, 
-                        GetRelatedData(
-                            item.IntegerValue.HasValue 
-                            ? item.IntegerValue.Value 
-                            : context.MixAttributeField.FirstOrDefault(f=> f.Id == item.AttributeFieldId).ReferenceId.Value
-                            , item.DataId, item.Specificulture, context, transaction)));
-
+                    return (new JProperty(item.AttributeFieldName, new JArray()));
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
