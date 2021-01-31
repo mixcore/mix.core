@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Cms.Api.RestFul;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
@@ -16,6 +17,7 @@ using Mix.Cms.Schedule;
 using Mix.Cms.Schedule.Jobs;
 using Mix.Cms.Service.SignalR;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,14 +31,31 @@ namespace Mix.Cms.Web
             Configuration = configuration;
         }
 
+        readonly string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string[] allowedHosts = MixService.GetConfig<JArray>(MixAppSettingKeywords.AllowedHosts)
+                                        .Select(m => m.Value<string>("text")).ToArray();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MixcoreAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins(allowedHosts);
+                                      builder.AllowAnyHeader();
+                                      builder.AllowAnyMethod();
+                                  });
+            });
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson(options => { options.SerializerSettings.Converters.Add(new StringEnumConverter()); });
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                });
 
             #region Additionals Config for Mixcore Cms
 
@@ -89,6 +108,8 @@ namespace Mix.Cms.Web
                 }
             }
 
+            app.UseCors(MixcoreAllowSpecificOrigins);
+
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
             provider.Mappings[".vue"] = "application/text";
@@ -121,19 +142,19 @@ namespace Mix.Cms.Web
 
         }
 
-        
+
         // Mix: Check custom cms config
         private void VerifyInitData(IServiceCollection services)
         {
             // Mix: Migrate db if already inited
 
-            //if (!MixService.GetConfig<bool>("IsInit"))
-            //{
-            //    using (var ctx = new MixCmsContext())
-            //    {
-            //        ctx.Database.Migrate();
-            //    }
-            //}
+            if (!MixService.GetConfig<bool>("IsInit"))
+            {
+                using (var ctx = new MixCmsContext())
+                {
+                    ctx.Database.Migrate();
+                }
+            }
 
             // Mix: Check if require ssl
             if (MixService.GetConfig<bool>("IsHttps"))
