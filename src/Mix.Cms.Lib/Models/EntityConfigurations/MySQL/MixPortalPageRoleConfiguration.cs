@@ -6,66 +6,40 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
-    public class MixPortalPageRoleConfiguration : IEntityTypeConfiguration<MixRelatedPost>
+    public class MixPortalPageRoleConfiguration : IEntityTypeConfiguration<MixPortalPageRole>
     {
-        public void Configure(EntityTypeBuilder<MixRelatedPost> entity)
+        public void Configure(EntityTypeBuilder<MixPortalPageRole> entity)
         {
-            entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id })
+                    .HasName("PK_mix_portal_page_role");
 
-            entity.ToTable("mix_related_post");
+            entity.ToTable("mix_portal_page_role");
 
-            entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
-
-            entity.HasIndex(e => new { e.SourceId, e.Specificulture });
-
-            entity.Property(e => e.Specificulture)
-                .HasColumnType("varchar(10)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+            entity.Property(e => e.RoleId).HasMaxLength(50);
 
             entity.Property(e => e.CreatedBy)
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
-
-            entity.Property(e => e.Description)
-                .HasColumnType("varchar(450)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
-
-            entity.Property(e => e.Image)
-                .HasColumnType("varchar(450)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .HasMaxLength(50)
+                .IsUnicode(false);
 
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixRelatedPostMixPost)
-                .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_related_post_mix_post1");
+            entity.HasOne(d => d.Page)
+                .WithMany(p => p.MixPortalPageRole)
+                .HasForeignKey(d => d.PageId)
+                .HasConstraintName("FK_mix_portal_page_role_mix_portal_page");
 
-            entity.HasOne(d => d.S)
-                .WithMany(p => p.MixRelatedPostS)
-                .HasForeignKey(d => new { d.SourceId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_related_post_mix_post");
         }
     }
 }

@@ -6,19 +6,21 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
-    public class MixRelatedPostConfiguration : IEntityTypeConfiguration<MixPortalPageRole>
+    public class MixRelatedPostConfiguration : IEntityTypeConfiguration<MixRelatedPost>
     {
-        public void Configure(EntityTypeBuilder<MixPortalPageRole> entity)
+        public void Configure(EntityTypeBuilder<MixRelatedPost> entity)
         {
-            entity.HasKey(e => new { e.RoleId, e.PageId })
-                    .HasName("PK_mix_portal_page_role");
+            entity.HasKey(e => new { e.Id, e.Specificulture })
+                    .HasName("PK_mix_related_post");
 
-            entity.ToTable("mix_portal_page_role");
+            entity.ToTable("mix_related_post");
 
-            entity.HasIndex(e => e.PageId);
+            entity.HasIndex(e => new { e.DestinationId, e.Specificulture });
 
-            entity.Property(e => e.RoleId)
-                .HasColumnType("varchar(50)")
+            entity.HasIndex(e => new { e.SourceId, e.Specificulture });
+
+            entity.Property(e => e.Specificulture)
+                .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
                 .HasCollation("und-x-icu");
 
@@ -28,6 +30,16 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
                 .HasCollation("und-x-icu");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
+
+            entity.Property(e => e.Description)
+                .HasColumnType("varchar(450)")
+                .HasCharSet("utf8")
+                .HasCollation("und-x-icu");
+
+            entity.Property(e => e.Image)
+                .HasColumnType("varchar(450)")
+                .HasCharSet("utf8")
+                .HasCollation("und-x-icu");
 
             entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
@@ -43,10 +55,17 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
                 .HasCharSet("utf8")
                 .HasCollation("und-x-icu");
 
-            entity.HasOne(d => d.Page)
-                .WithMany(p => p.MixPortalPageRole)
-                .HasForeignKey(d => d.PageId)
-                .HasConstraintName("FK_mix_portal_page_role_mix_portal_page");
+            entity.HasOne(d => d.MixPost)
+                .WithMany(p => p.MixRelatedPostMixPost)
+                .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_mix_related_post_mix_post1");
+
+            entity.HasOne(d => d.S)
+                .WithMany(p => p.MixRelatedPostS)
+                .HasForeignKey(d => new { d.SourceId, d.Specificulture })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_mix_related_post_mix_post");
         }
     }
 }

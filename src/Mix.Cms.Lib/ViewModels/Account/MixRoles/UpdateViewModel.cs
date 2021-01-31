@@ -78,53 +78,62 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
             };
         }
 
-        public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
+        public async Task LoadPermissions(MixCmsContext _context = null
+            , IDbContextTransaction _transaction = null)
         {
-            Permissions = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0).Data;
-            foreach (var item in Permissions)
+            var getPermissions = await MixPortalPages.UpdateRolePermissionViewModel.Repository.GetModelListByAsync(
+                p => p.Level == 0, _context, _transaction);
+            if (getPermissions.IsSucceed)
             {
-                item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == item.Id && n.RoleId == Id).Data;
-                if (item.NavPermission == null)
+                Permissions = getPermissions.Data;
+                foreach (var item in Permissions)
                 {
-                    var nav = new MixPortalPageRole()
-                    {
-                        PageId = item.Id,
-                        RoleId = Id,
-                        Status = MixContentStatus.Published
-                    };
-                    item.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
-                }
-                else
-                {
-                    item.NavPermission.IsActived = true;
-                }
-
-                foreach (var child in item.ChildPages)
-                {
-                    child.PortalPage.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.PortalPage.Id && n.RoleId == Id).Data;
-                    if (child.PortalPage.NavPermission == null)
+                    item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(
+                        n => n.PageId == item.Id && n.RoleId == Id, _context, _transaction)
+                        .Data;
+                    if (item.NavPermission == null)
                     {
                         var nav = new MixPortalPageRole()
                         {
-                            PageId = child.PortalPage.Id,
+                            PageId = item.Id,
                             RoleId = Id,
                             Status = MixContentStatus.Published
                         };
-                        child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
+                        item.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
                     }
                     else
                     {
-                        child.PortalPage.NavPermission.IsActived = true;
+                        item.NavPermission.IsActived = true;
+                    }
+
+                    foreach (var child in item.ChildPages)
+                    {
+                        child.PortalPage.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(
+                            n => n.PageId == child.PortalPage.Id && n.RoleId == Id, _context, _transaction)
+                            .Data;
+                        if (child.PortalPage.NavPermission == null)
+                        {
+                            var nav = new MixPortalPageRole()
+                            {
+                                PageId = child.PortalPage.Id,
+                                RoleId = Id,
+                                Status = MixContentStatus.Published
+                            };
+                            child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
+                        }
+                        else
+                        {
+                            child.PortalPage.NavPermission.IsActived = true;
+                        }
                     }
                 }
             }
         }
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(AspNetRoles parent, MixCmsAccountContext _context, IDbContextTransaction _transaction)
+        public async Task<RepositoryResponse<bool>> SavePermissionsAsync(AspNetRoles parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixCmsContext context = new MixCmsContext();
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var transaction = context.Database.BeginTransaction();
             try
             {
                 foreach (var item in Permissions)
@@ -138,22 +147,12 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                         break;
                     }
                 }
-                if (result.IsSucceed)
-                {
-                    transaction.Commit();
-                }
-                else
-                {
-                    transaction.Rollback();
-                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 return result;
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
-                result.IsSucceed = false;
-                result.Exception = ex;
-                return result;
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
             }
             finally
             {

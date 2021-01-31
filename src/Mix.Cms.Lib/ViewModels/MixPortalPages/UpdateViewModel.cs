@@ -209,7 +209,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public List<MixPortalPagePortalPages.UpdateViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
-                m => m.PageId == Id).Data;
+                m => m.PageId == Id, context, transaction).Data;
             result.ForEach(nav =>
             {
                 nav.IsActived = true;
@@ -242,7 +242,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public List<MixPortalPagePortalPages.UpdateViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
-               m => m.ParentId == Id).Data;
+               m => m.ParentId == Id, context, transaction).Data;
             result.ForEach(nav =>
             {
                 nav.IsActived = true;
