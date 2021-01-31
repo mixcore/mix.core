@@ -85,7 +85,7 @@
     "DefaultTemplateLayout": "_Layout",
     "DefaultPostAttr": "[]",
     "OrderBy": "Priority",
-    "OrderDirection": "0",
+    "OrderDirection": "Asc",
     "Language": "en-us",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
@@ -95,8 +95,8 @@
     "SearchPageSize": "20",
     "IsEncryptApi": true,
     "LastUpdateConfiguration": null,
-    "IsMysql": false,
     "DatabaseProvider": "MSSQL",
+    "AllowedHosts": [],
     "PortalThemeSettings": {
       "primaryColorHue": 211,
       "primaryColorSaturation": 100,
@@ -128,7 +128,6 @@
     "Issuer": "sw-cms",
     "Audience": "sw-client"
   },
-  "AllowedHosts": "*",
   "Language": "en-us",
   "EPPlus": {
     "ExcelPackage": {
