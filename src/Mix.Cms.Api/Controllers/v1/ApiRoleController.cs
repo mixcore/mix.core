@@ -70,6 +70,10 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 case "portal":
                     var beResult = await UpdateViewModel.Repository.GetSingleModelAsync(r => r.Id == id);
+                    if (beResult.IsSucceed)
+                    {
+                        await beResult.Data.LoadPermissions();
+                    }
                     return JObject.FromObject(beResult);
 
                 default:
@@ -145,6 +149,10 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 var result = await model.SaveModelAsync(true).ConfigureAwait(false);
+                if (result.IsSucceed)
+                {
+                    await result.Data.SavePermissionsAsync(result.Data.Model);
+                }
                 return result;
             }
             return new RepositoryResponse<UpdateViewModel>();

@@ -618,6 +618,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -629,7 +630,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_portal_page_role", x => new { x.RoleId, x.PageId });
+                    table.PrimaryKey("PK_mix_portal_page_role", x => x.Id);
                     table.ForeignKey(
                         name: "FK_mix_portal_page_role_mix_portal_page",
                         column: x => x.PageId,
