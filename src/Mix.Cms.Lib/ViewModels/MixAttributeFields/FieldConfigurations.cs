@@ -1,4 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
@@ -10,6 +13,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
     public class UploadConfigurations
     {
+        [JsonProperty("arrayAccepts")]
+        public JArray ArrayAccepts { get; set; } = new JArray();
+        [JsonProperty("accepts")]
+        public string Accepts { get => string.Join(",", ArrayAccepts.Select(m => m.Value<string>("text")).ToArray()); }
         [JsonProperty("width")]
         public int? Width { get; set; }
         [JsonProperty("height")]

@@ -85,7 +85,7 @@
     "DefaultTemplateLayout": "_Layout",
     "DefaultPostAttr": "[]",
     "OrderBy": "Priority",
-    "OrderDirection": "Asc",
+    "OrderDirection": "0",
     "Language": "en-us",
     "UploadFolder": "Content/Uploads",
     "ThemeId": "1",
