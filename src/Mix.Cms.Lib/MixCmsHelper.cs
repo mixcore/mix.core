@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Mix.Cms.Lib.Enums;
 using Mix.Heart.Extensions;
 using Mix.Services;
+using Mix.Cms.Lib.Models.Common;
 
 namespace Mix.Cms.Lib
 {
@@ -268,7 +269,7 @@ namespace Mix.Cms.Lib
             return getData.Data;
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixAttributeSetDatas.Navigation> GetNavigation(
+        public static async System.Threading.Tasks.Task<MixNavigation> GetNavigation(
             string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<ViewModels.MixAttributeSetDatas.NavigationViewModel>(culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
