@@ -27,6 +27,7 @@ using Mix.Common.Helper;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
 using Mix.Services;
+using Mix.Cms.Lib.ViewModels.Common;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -221,86 +222,9 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("sitemap")]
-        public RepositoryResponse<FileViewModel> SiteMap()
+        public async Task<RepositoryResponse<FileViewModel>> SiteMapAsync()
         {
-            try
-            {
-                XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
-                var root = new XElement(aw + "urlset");
-                var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
-                List<int> handledPageId = new List<int>();
-                foreach (var page in pages.Data)
-                {
-                    page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { culture = page.Specificulture, seoName = page.SeoName }, Request, Url);
-                    var otherLanguages = pages.Data.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
-                    var lstOther = new List<SitemapLanguage>();
-                    foreach (var item in otherLanguages)
-                    {
-                        lstOther.Add(new SitemapLanguage()
-                        {
-                            HrefLang = item.Specificulture,
-                            Href = MixCmsHelper.GetRouterUrl(
-                                       new { culture = item.Specificulture, seoName = page.SeoName }, Request, Url)
-                        });
-                    }
-
-                    var sitemap = new SiteMap()
-                    {
-                        ChangeFreq = "monthly",
-                        LastMod = DateTime.UtcNow,
-                        Loc = page.DetailsUrl,
-                        Priority = 0.3,
-                        OtherLanguages = lstOther
-                    };
-                    root.Add(sitemap.ParseXElement());
-                }
-
-                var posts = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
-                foreach (var post in posts.Data)
-                {
-                    var otherLanguages = pages.Data.Where(p => p.Id == post.Id && p.Specificulture != post.Specificulture);
-                    var lstOther = new List<SitemapLanguage>();
-                    foreach (var item in otherLanguages)
-                    {
-                        lstOther.Add(new SitemapLanguage()
-                        {
-                            HrefLang = item.Specificulture,
-                            Href = MixCmsHelper.GetRouterUrl(
-                                        new { culture = item.Specificulture, seoName = post.SeoName }, Request, Url)
-                        });
-                    }
-                    var sitemap = new SiteMap()
-                    {
-                        ChangeFreq = "monthly",
-                        LastMod = DateTime.UtcNow,
-                        Loc = post.DetailsUrl,
-                        OtherLanguages = lstOther,
-                        Priority = 0.3
-                    };
-                    root.Add(sitemap.ParseXElement());
-                }
-
-                string folder = $"Sitemaps";
-                FileRepository.Instance.CreateDirectoryIfNotExist(folder);
-                string filename = $"sitemap";
-                string filePath = $"wwwroot/{folder}/{filename}.xml";
-                root.Save(filePath);
-                return new RepositoryResponse<FileViewModel>()
-                {
-                    IsSucceed = true,
-                    Data = new FileViewModel()
-                    {
-                        Extension = ".xml",
-                        Filename = filename,
-                        FileFolder = folder
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                return new RepositoryResponse<FileViewModel>() { Exception = ex };
-            }
+            return await SitemapService.ParseSitemapAsync();
         }
 
         // GET
