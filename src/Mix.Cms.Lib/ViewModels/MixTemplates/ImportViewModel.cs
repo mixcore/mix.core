@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -69,7 +71,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
         #endregion Models
 
@@ -277,7 +279,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return result;
         }
 
-        public static ImportViewModel GetTemplateByPath(string path, string specificulture, MixEnums.EnumTemplateFolder folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static ImportViewModel GetTemplateByPath(
+            string path, string specificulture, string folderType, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string templateName = path?.Split('/')[1];
             int themeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture);
@@ -288,7 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             return getView.Data ?? GetDefault(folderType, specificulture);
         }
 
-        public static ImportViewModel GetDefault(MixEnums.EnumTemplateFolder folderType, string specificulture)
+        public static ImportViewModel GetDefault(string folderType, string specificulture)
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
                     ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);

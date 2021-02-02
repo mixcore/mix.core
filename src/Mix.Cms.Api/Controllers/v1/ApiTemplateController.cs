@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
@@ -51,7 +51,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     var model = new MixTemplate()
                     {
-                        Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                        Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                         ThemeId = themeId,
                         ThemeName = getTheme.Data.Name,
                         Extension = MixService.GetConfig<string>("TemplateExtension"),

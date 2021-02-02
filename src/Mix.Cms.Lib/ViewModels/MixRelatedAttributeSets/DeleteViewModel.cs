@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
 using System;
@@ -15,7 +16,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public int Id { get; set; }
         public int AttributeSetId { get; set; }
         public int ParentId { get; set; }
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseParentType ParentType { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }

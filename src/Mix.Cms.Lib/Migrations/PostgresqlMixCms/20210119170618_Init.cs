@@ -626,9 +626,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(type: "integer", nullable: false),
                     RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Id = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
@@ -638,7 +638,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_portal_page_role", x => new { x.RoleId, x.PageId });
+                    table.PrimaryKey("PK_mix_portal_page_role", x => x.Id);
                     table.ForeignKey(
                         name: "FK_mix_portal_page_role_mix_portal_page",
                         column: x => x.PageId,

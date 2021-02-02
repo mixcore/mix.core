@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -22,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             try
             {
                 var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == MixEnums.MixPageType.ListPost.ToString())
+                    && (a.Type == MixPageType.ListPost)
                     )
                     .AsEnumerable()
                     .Select(p => new MixPagePosts.ReadViewModel(

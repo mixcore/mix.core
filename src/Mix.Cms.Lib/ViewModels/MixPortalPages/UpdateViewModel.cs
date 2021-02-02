@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -52,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -208,7 +209,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public List<MixPortalPagePortalPages.UpdateViewModel> GetParentNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
-                m => m.PageId == Id).Data;
+                m => m.PageId == Id, context, transaction).Data;
             result.ForEach(nav =>
             {
                 nav.IsActived = true;
@@ -241,7 +242,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         public List<MixPortalPagePortalPages.UpdateViewModel> GetChildNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixPortalPagePortalPages.UpdateViewModel.Repository.GetModelListBy(
-               m => m.ParentId == Id).Data;
+               m => m.ParentId == Id, context, transaction).Data;
             result.ForEach(nav =>
             {
                 nav.IsActived = true;

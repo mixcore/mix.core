@@ -1,23 +1,36 @@
-﻿using Mix.Cms.Lib.Models.Cms;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
+using Mix.Common.Helper;
 using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.Extensions
 {
     public static class MixAttributeValueModelExtensions
     {
-        public static JProperty ToJProperty(this MixAttributeSetValue item)
+        public static JProperty ToJProperty(
+            this MixAttributeSetValue item, 
+            MixCmsContext _context, 
+            IDbContextTransaction _transaction)
         {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                   _context, _transaction,
+                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             switch (item.DataType)
             {
-                case MixEnums.MixDataType.DateTime:
+                case MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
 
-                case MixEnums.MixDataType.Date:
+                case MixDataType.Date:
                     if (!item.DateTimeValue.HasValue)
                     {
                         if (DateTime.TryParseExact(
@@ -32,41 +45,44 @@ namespace Mix.Cms.Lib.Extensions
                     }
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Time:
+                case MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue ?? 0));
 
-                case MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue ?? 0));
 
-                case MixEnums.MixDataType.Reference:
-                    //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
-                    return (new JProperty(item.AttributeFieldName, null));
-
-                case MixEnums.MixDataType.Custom:
-                case MixEnums.MixDataType.Duration:
-                case MixEnums.MixDataType.PhoneNumber:
-                case MixEnums.MixDataType.Text:
-                case MixEnums.MixDataType.Html:
-                case MixEnums.MixDataType.MultilineText:
-                case MixEnums.MixDataType.EmailAddress:
-                case MixEnums.MixDataType.Password:
-                case MixEnums.MixDataType.Url:
-                case MixEnums.MixDataType.ImageUrl:
-                case MixEnums.MixDataType.CreditCard:
-                case MixEnums.MixDataType.PostalCode:
-                case MixEnums.MixDataType.Upload:
-                case MixEnums.MixDataType.Color:
-                case MixEnums.MixDataType.Icon:
-                case MixEnums.MixDataType.VideoYoutube:
-                case MixEnums.MixDataType.TuiEditor:
+                case MixDataType.Reference:
+                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                case MixDataType.Custom:
+                case MixDataType.Duration:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Upload:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
             }
         }
 
@@ -83,48 +99,48 @@ namespace Mix.Cms.Lib.Extensions
             {
                 switch (item.Field.DataType)
                 {
-                    case MixEnums.MixDataType.DateTime:
+                    case MixDataType.DateTime:
                         item.DateTimeValue = property.Value<DateTime?>();
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Date:
+                    case MixDataType.Date:
                         item.DateTimeValue = property.Value<DateTime?>();
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Time:
+                    case MixDataType.Time:
                         item.DateTimeValue = property.Value<DateTime?>();
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Double:
+                    case MixDataType.Double:
                         item.DoubleValue = property.Value<double?>();
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Boolean:
+                    case MixDataType.Boolean:
                         item.BooleanValue = property.Value<bool?>();
                         item.StringValue = property.Value<string>()?.ToLower();
                         break;
 
-                    case MixEnums.MixDataType.Integer:
+                    case MixDataType.Integer:
                         item.IntegerValue = property.Value<int?>();
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Reference:
+                    case MixDataType.Reference:
                         item.StringValue = property.Value<string>();
                         break;
 
-                    case MixEnums.MixDataType.Upload:
+                    case MixDataType.Upload:
                         string mediaData = property.Value<string>();
                         if (mediaData.IsBase64())
                         {
                             ViewModels.MixMedias.UpdateViewModel media = new ViewModels.MixMedias.UpdateViewModel()
                             {
                                 Specificulture = item.Specificulture,
-                                Status = MixEnums.MixContentStatus.Published,
+                                Status = MixContentStatus.Published,
                                 MediaFile = new FileViewModel()
                                 {
                                     FileStream = mediaData,
@@ -145,28 +161,85 @@ namespace Mix.Cms.Lib.Extensions
                         }
                         break;
 
-                    case MixEnums.MixDataType.Custom:
-                    case MixEnums.MixDataType.Duration:
-                    case MixEnums.MixDataType.PhoneNumber:
-                    case MixEnums.MixDataType.Text:
-                    case MixEnums.MixDataType.Html:
-                    case MixEnums.MixDataType.MultilineText:
-                    case MixEnums.MixDataType.EmailAddress:
-                    case MixEnums.MixDataType.Password:
-                    case MixEnums.MixDataType.Url:
-                    case MixEnums.MixDataType.ImageUrl:
-                    case MixEnums.MixDataType.CreditCard:
-                    case MixEnums.MixDataType.PostalCode:
-                    case MixEnums.MixDataType.Color:
-                    case MixEnums.MixDataType.Icon:
-                    case MixEnums.MixDataType.VideoYoutube:
-                    case MixEnums.MixDataType.TuiEditor:
+                    case MixDataType.Custom:
+                    case MixDataType.Duration:
+                    case MixDataType.PhoneNumber:
+                    case MixDataType.Text:
+                    case MixDataType.Html:
+                    case MixDataType.MultilineText:
+                    case MixDataType.EmailAddress:
+                    case MixDataType.Password:
+                    case MixDataType.Url:
+                    case MixDataType.ImageUrl:
+                    case MixDataType.CreditCard:
+                    case MixDataType.PostalCode:
+                    case MixDataType.Color:
+                    case MixDataType.Icon:
+                    case MixDataType.VideoYoutube:
+                    case MixDataType.TuiEditor:
                     default:
                         item.StringValue = property.Value<string>();
                         break;
                 }
             }
 
+        }
+        
+        public static void LoadAllReferenceData(this JObject obj
+           , string dataId, int attributeSetId, string culture
+           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var refFields = context.MixAttributeField.Where(
+                   m => m.AttributeSetId == attributeSetId
+                    && m.DataType == MixDataType.Reference).ToList();
+
+            foreach (var item in refFields)
+            {
+                JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, _context, _transaction);
+                
+                if (obj.ContainsKey(item.Name))
+                {
+                    obj[item.Name] = arr;
+                }
+                else
+                {
+                    obj.Add(new JProperty(item.Name, arr));
+                }
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+        }
+
+        private static JArray GetRelatedData(int referenceId, string dataId, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
+                    _context, _transaction,
+                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
+                    (model.AttributeSetId == referenceId)
+                    && (model.ParentId == dataId && model.ParentType == MixDatabaseParentType.Set)
+                    && model.Specificulture == culture
+                    ;
+            var getData = ViewModels.MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
+
+            JArray arr = new JArray();
+            foreach (var nav in getData.Data.OrderBy(v => v.Priority))
+            {
+                arr.Add(nav.Data.Obj);
+            }
+            if (isRoot)
+            {
+                transaction.Dispose();
+                context.Dispose();
+            }
+            return arr;
         }
     }
 }

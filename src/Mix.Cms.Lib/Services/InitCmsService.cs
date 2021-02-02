@@ -13,7 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -267,7 +268,7 @@ namespace Mix.Cms.Lib.Services
                         Description = culture.Description,
                         Icon = culture.Icon,
                         Alias = culture.Alias,
-                        Status = MixEnums.MixContentStatus.Published,
+                        Status = MixContentStatus.Published,
                         CreatedDateTime = DateTime.UtcNow
                     };
                     context.Entry(enCulture).State = EntityState.Added;
@@ -302,7 +303,7 @@ namespace Mix.Cms.Lib.Services
                 {
                     Id = page.Id,
                     SourceId = page.Id.ToString(),
-                    Type = (int)UrlAliasType.Page,
+                    Type = (int)MixUrlAliasType.Page,
                     Specificulture = culture,
                     CreatedDateTime = DateTime.UtcNow,
                     Alias = page.Title.ToLower(),

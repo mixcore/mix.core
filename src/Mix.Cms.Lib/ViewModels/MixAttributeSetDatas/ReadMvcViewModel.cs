@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
@@ -42,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -55,7 +59,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("previewUrl")]
         public string PreviewUrl { 
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
-                    ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
+                    : null; 
+        }
+        
+        [JsonProperty("detailApiUrl")]
+        public string DetailApiUrl { 
+            get => !string.IsNullOrEmpty(Id)
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
                     : null; 
         }
         
@@ -98,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
             
-            Obj.LoadReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
+            Obj.LoadAllReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
             {

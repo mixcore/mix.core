@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -19,6 +20,8 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -42,7 +45,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         var isCreateNew = string.IsNullOrEmpty(item.Id);
                         item.Fields = fields;
                         item.AttributeSetName = attributeSet.Name;
-                        item.Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus));
+                        item.Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus);
                         var saveResult = await item.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
@@ -65,7 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
-            MixEnums.MixAttributeSetDataType parentType, int parentId,
+            MixDatabaseParentType parentType, int parentId,
             HttpRequest request, string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -76,7 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var databaseName = request.Query["databaseName"].ToString();
                 var dataId = (await context.MixRelatedAttributeData.FirstOrDefaultAsync(
-                    m => m.AttributeSetName == databaseName && m.ParentType == parentType.ToString() && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
+                    m => m.AttributeSetName == databaseName && m.ParentType == parentType && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
                     return await AdditionalViewModel.Repository.GetSingleModelAsync(
@@ -96,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             Specificulture = culture,
                             AttributeSetId = getAttrSet.Data.Id,
                             AttributeSetName = getAttrSet.Data.Name,
-                            Status = MixEnums.MixContentStatus.Published,
+                            Status = MixContentStatus.Published,
                             Fields = getAttrSet.Data.Fields,
                             ParentType = parentType
                         };
@@ -199,41 +202,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             {
                                 Expression<Func<MixAttributeSetValue, bool>> pre = m =>
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
+                                valPredicate = valPredicate == null 
+                                    ? pre
+                                    : valPredicate = valPredicate.AndAlso(pre);
                             }
                             else
                             {
                                 Expression<Func<MixAttributeSetValue, bool>> pre =
                                     m => m.AttributeFieldName == q.Key &&
-                                    (EF.Functions.Like(m.StringValue, $"%{q.Value.ToString()}%"));
-                                if (valPredicate != null)
-                                {
-                                    valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                                }
-                                else
-                                {
-                                    valPredicate = pre;
-                                }
+                                    (EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
+                                valPredicate = valPredicate == null
+                                    ? pre
+                                    : valPredicate = valPredicate.AndAlso(pre);
                             }
                         }
                     }
                     if (valPredicate != null)
                     {
-                        attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                        attrPredicate = valPredicate.AndAlso(attrPredicate);
                     }
                 }
                 // Loop queries string => predicate
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeSetName == attributeSetName && m.Specificulture == culture && m.StringValue.Contains(keyword);
-                    attrPredicate = ReflectionHelper.CombineExpression(attrPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    attrPredicate = attrPredicate.AndAlso(pre);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -278,7 +271,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
                 bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
-                bool isStatus = Enum.TryParse(request.Query["status"], out MixEnums.MixContentStatus status);
+                bool isStatus = Enum.TryParse(request.Query["status"], out MixContentStatus status);
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);
@@ -399,30 +392,21 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (filterType == "equal")
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue == keyword;
-                    if (valPredicate != null)
-                    {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                    else
-                    {
-                        valPredicate = pre;
-                    }
+
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
                 }
                 else
                 {
                     Expression<Func<MixAttributeSetValue, bool>> pre = m => m.AttributeFieldName == fieldName && m.StringValue.Contains(keyword);
-                    if (valPredicate != null)
-                    {
-                        valPredicate = ReflectionHelper.CombineExpression(valPredicate, pre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
-                    }
-                    else
-                    {
-                        valPredicate = pre;
-                    }
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
                 }
                 if (valPredicate != null)
                 {
-                    attrPredicate = ReflectionHelper.CombineExpression(valPredicate, attrPredicate, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                    attrPredicate = valPredicate.AndAlso(attrPredicate);
                 }
 
                 var query = context.MixAttributeSetValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
@@ -451,7 +435,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string attributeSetName,
-            string parentId, MixEnums.MixAttributeSetDataType parentType,
+            string parentId, MixDatabaseParentType parentType,
             string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction,
             int? pageSize, int? pageIndex,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -464,9 +448,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
                 Expression<Func<MixRelatedAttributeData, bool>> predicate = m => m.Specificulture == culture
                     && (m.AttributeSetName == attributeSetName)
-                    && (m.Status == MixEnums.MixContentStatus.Published)
+                    && (m.Status == MixContentStatus.Published)
                     && (string.IsNullOrEmpty(parentId)
-                         || (m.ParentId == parentId && m.ParentType == parentType.ToString())
+                         || (m.ParentId == parentId && m.ParentType == parentType)
                          );
                 ;
                 var query = context.MixRelatedAttributeData.Where(predicate).Select(m => m.DataId).Distinct();
@@ -579,7 +563,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             var values = context.MixAttributeSetValue.Where(
                 m => m.DataId == dataId && m.Specificulture == culture
                     && !string.IsNullOrEmpty(m.AttributeFieldName));
-            var properties = values.Select(m => m.ToJProperty());
+            var properties = values.Select(m => m.ToJProperty(_context, _transaction));
 
             var obj = new JObject(
                 new JProperty("id", dataId),
@@ -594,47 +578,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
             return obj;
         }
-
-        public static void LoadReferenceData(this JObject obj
-            , string dataId, int attributeSetId, string culture
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                    _context, _transaction,
-                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var refFields = context.MixAttributeField.Where(
-                   m => m.AttributeSetId == attributeSetId
-                    && m.DataType == MixEnums.MixDataType.Reference).ToList();
-
-            foreach (var item in refFields)
-            {
-                Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == item.ReferenceId)
-                    && (model.ParentId == dataId && model.ParentType == MixEnums.MixAttributeSetDataType.Set.ToString())
-                    && model.Specificulture == culture
-                    ;
-                var getData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
-
-                JArray arr = new JArray();
-                foreach (var nav in getData.Data.OrderBy(v => v.Priority))
-                {
-                    arr.Add(nav.Data.Obj);
-                }
-                if (obj.ContainsKey(item.Name))
-                {
-                    obj[item.Name] = arr;
-                }
-                else
-                {
-                    obj.Add(new JProperty(item.Name, arr));
-                }
-            }
-            if (isRoot)
-            {
-                transaction.Dispose();
-                context.Dispose();
-            }
-        }
-
     }
 }

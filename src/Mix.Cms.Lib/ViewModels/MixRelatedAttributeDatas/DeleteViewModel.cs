@@ -1,7 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
+using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -16,7 +23,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
         public string Specificulture { get; set; }
         public string DataId { get; set; }
         public string ParentId { get; set; }
-        public MixEnums.MixAttributeSetDataType ParentType { get; set; }
+        public MixDatabaseParentType ParentType { get; set; }
         public int AttributeSetId { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string Status { get; set; }
@@ -48,7 +55,6 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             }
             return base.ParseModel(_context, _transaction);
         }
-
         #endregion Overrides
     }
 }

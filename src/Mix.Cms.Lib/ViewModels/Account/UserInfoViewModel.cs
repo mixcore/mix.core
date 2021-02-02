@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -59,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public int Priority { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
-        public MixEnums.MixUserStatus Status { get; set; }
+        public MixUserStatus Status { get; set; }
         #endregion Models
 
         #region Views

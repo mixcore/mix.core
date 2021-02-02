@@ -23,6 +23,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -107,8 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = Enum.Parse<MixEnums.MixContentStatus>(MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus))
-                            ,
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -130,7 +131,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         var model = new MixTheme()
                         {
-                            Status = MixService.GetEnumConfig<MixEnums.MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
+                            Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
                             Priority = ReadViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
@@ -156,14 +157,14 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (assets != null)
             {
-                data.Asset = new Lib.ViewModels.FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveFile(assets, assets.FileName, $"wwwroot/{data.AssetFolder}");
+                data.Asset = new FileViewModel(assets, data.AssetFolder);
+                FileRepository.Instance.SaveFile(assets, $"wwwroot/{data.AssetFolder}/{assets.FileName}");
             }
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
-                data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveFile(theme, theme.FileName, $"wwwroot/{importFolder}");
+                data.TemplateAsset = new FileViewModel(theme, importFolder);
+                FileRepository.Instance.SaveFile(theme, $"wwwroot/{importFolder}/{theme.FileName}");
             }
 
             // Load default blank if created new without upload theme
@@ -178,7 +179,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 else
                 {
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    data.TemplateAsset = new FileViewModel()
                     {
                         Filename = "default_blank",
                         Extension = MixFileExtensions.Zip,

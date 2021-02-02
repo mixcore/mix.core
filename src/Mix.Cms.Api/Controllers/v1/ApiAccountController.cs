@@ -18,8 +18,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
+using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -196,10 +197,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (createResult.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
+                    user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
                     model.Id = user.Id;
                     model.CreatedDateTime = DateTime.UtcNow;
-                    model.Status = MixUserStatus.Actived;
+                    model.Status = MixUserStatus.Active;
                     model.LastModified = DateTime.UtcNow;
                     model.CreatedBy = User.Identity.Name;
                     model.ModifiedBy = User.Identity.Name;
@@ -302,7 +303,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new Lib.ViewModels.Account.MixUsers.UpdateViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
                         RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel> result = new RepositoryResponse<Lib.ViewModels.Account.MixUsers.UpdateViewModel>()
                         {
@@ -320,7 +321,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     }
                     else
                     {
-                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Actived.ToString() });
+                        var data = new UserInfoViewModel(new MixCmsUser() { Status = MixUserStatus.Active });
                         data.ExpandView();
 
                         RepositoryResponse<UserInfoViewModel> result = new RepositoryResponse<UserInfoViewModel>()
@@ -385,6 +386,7 @@ namespace Mix.Cms.Api.Controllers.v1
                             // Remove other token if change password success
                             var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
                             await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                            
                         }
                     }
                     else
@@ -392,6 +394,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         Request.HttpContext.Response.StatusCode = 401;
                     }
                 }
+                FileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
                 return result;
             }
             return new RepositoryResponse<UserInfoViewModel>();
@@ -403,8 +406,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
+            var isStatus = Enum.TryParse<MixUserStatus>(request.Status, out MixUserStatus status);
             Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (string.IsNullOrEmpty(request.Status) || model.Status == request.Status)
+                (!isStatus || model.Status == status)
                 && (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))

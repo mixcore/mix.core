@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
@@ -112,7 +113,7 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     string key = $"_{id}";
                     key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-                    await CacheService.RemoveCacheAsync(typeof(TView), key);
+                    await MixService.RemoveCacheAsync(typeof(TModel), key);
                     return Ok(saveResult.Data);
                 }
                 else
@@ -146,14 +147,14 @@ namespace Mix.Cms.Lib.Controllers
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-            await CacheService.RemoveCacheAsync(typeof(TView), key);
+            await MixService.RemoveCacheAsync(typeof(TModel), key);
             return NoContent();
         }
 
         [HttpGet("remove-cache")]
         public virtual async Task<ActionResult> ClearCacheAsync()
         {
-            await CacheService.RemoveCacheAsync(typeof(TView));
+            await MixService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
 
@@ -163,7 +164,8 @@ namespace Mix.Cms.Lib.Controllers
         [HttpPost]
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
-            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Identity.Name));
+            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
@@ -183,7 +185,8 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
                 if (id != currentId)
@@ -221,7 +224,8 @@ namespace Mix.Cms.Lib.Controllers
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
             {
-                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
                 ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
                 if (saveResult.IsSucceed)
@@ -265,12 +269,14 @@ namespace Mix.Cms.Lib.Controllers
             foreach (var id in data.Data)
             {
                 var temp = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                idPre = idPre != null ? ReflectionHelper.CombineExpression(idPre, temp, Heart.Enums.MixHeartEnums.ExpressionMethod.Or)
+
+                idPre = idPre != null
+                    ? idPre.AndAlso(temp)
                     : temp;
             }
             if (idPre != null)
             {
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
 
                 switch (data.Action)
                 {
@@ -337,7 +343,7 @@ namespace Mix.Cms.Lib.Controllers
             var data = await GetListAsync<TView>(predicate);
             foreach (var item in data.Data.Items)
             {
-                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixEnums.MixContentStatus.Published));
+                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
             }
             return await SaveListAsync(data.Data.Items, false);
         }
@@ -349,7 +355,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
@@ -361,7 +367,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync(predicate);
@@ -448,7 +454,7 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<ViewModels.FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
             string type = typeof(TModel).Name;
             var getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListByAsync(predicate, _context);
@@ -468,7 +474,7 @@ namespace Mix.Cms.Lib.Controllers
             }
             else
             {
-                return new RepositoryResponse<ViewModels.FileViewModel>()
+                return new RepositoryResponse<FileViewModel>()
                 {
                     Errors = getData.Errors
                 };
