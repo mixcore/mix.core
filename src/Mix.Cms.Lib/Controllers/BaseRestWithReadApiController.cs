@@ -118,14 +118,14 @@ namespace Mix.Cms.Lib.Controllers
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-            await CacheService.RemoveCacheAsync(typeof(TView), key);
+            await MixService.RemoveCacheAsync(typeof(TModel), key);
             return NoContent();
         }
 
         [HttpGet("remove-cache")]
         public virtual async Task<ActionResult> ClearCacheAsync()
         {
-            await CacheService.RemoveCacheAsync(typeof(TView));
+            await MixService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
 
@@ -135,7 +135,8 @@ namespace Mix.Cms.Lib.Controllers
         [HttpPost]
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
-            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Identity.Name));
+            ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
@@ -155,7 +156,8 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
                 if (id != currentId)
@@ -193,7 +195,8 @@ namespace Mix.Cms.Lib.Controllers
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
             {
-                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Identity.Name));
+                ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
+                    c => c.Type == "Username").Value));
                 ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
                 if (saveResult.IsSucceed)
@@ -271,7 +274,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
@@ -283,7 +286,7 @@ namespace Mix.Cms.Lib.Controllers
             if (!string.IsNullOrEmpty(_lang))
             {
                 var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                predicate = ReflectionHelper.CombineExpression(predicate, idPre, Heart.Enums.MixHeartEnums.ExpressionMethod.And);
+                predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync(predicate);
@@ -369,11 +372,11 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<Lib.ViewModels.FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
         {
 
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
-            Lib.ViewModels.FileViewModel file = null;
+            FileViewModel file = null;
             if (getData.IsSucceed)
             {
                 string exportPath = $"{MixFolders.ExportFolder}/Structures/{typeof(TModel).Name}";
@@ -382,7 +385,7 @@ namespace Mix.Cms.Lib.Controllers
                     new JProperty("type", type.ToString()),
                     new JProperty("data", JArray.FromObject(getData.Data))
                     );
-                file = new Lib.ViewModels.FileViewModel()
+                file = new FileViewModel()
                 {
                     Filename = filename,
                     Extension = MixFileExtensions.Json,
@@ -390,11 +393,11 @@ namespace Mix.Cms.Lib.Controllers
                     Content = objContent.ToString()
                 };
                 // Copy current templates file
-                Lib.Repositories.FileRepository.Instance.SaveWebFile(file);
+                FileRepository.Instance.SaveWebFile(file);
 
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
-            return new RepositoryResponse<Lib.ViewModels.FileViewModel>()
+            return new RepositoryResponse<FileViewModel>()
             {
                 IsSucceed = true,
                 Data = file,

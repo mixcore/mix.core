@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
@@ -86,14 +87,14 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 if (theme != null)
                 {
-                    Repositories.FileRepository.Instance.SaveWebFile(theme, theme.FileName, importFolder);
-                    data.TemplateAsset = new Lib.ViewModels.FileViewModel(theme, importFolder);
+                    FileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
+                    data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else
                 {
                     if (data.IsCreateDefault)
                     {
-                        data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                        data.TemplateAsset = new FileViewModel()
                         {
                             Filename = "default",
                             Extension = MixFileExtensions.Zip,
@@ -102,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     }
                     else
                     {
-                        data.TemplateAsset = new Lib.ViewModels.FileViewModel()
+                        data.TemplateAsset = new FileViewModel()
                         {
                             Filename = "default_blank",
                             Extension = MixFileExtensions.Zip,

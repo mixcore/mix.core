@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
@@ -44,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -96,7 +98,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
-            Obj.LoadReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
             {

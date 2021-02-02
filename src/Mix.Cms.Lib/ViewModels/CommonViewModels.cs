@@ -14,7 +14,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Xml.Linq;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels
 {
@@ -128,74 +129,6 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("name")]
         public string Name { get; set; }
-    }
-
-    public class FileViewModel
-    {
-        private string _fullPath = string.Empty;
-        private string _webPath = string.Empty;
-
-        [JsonProperty("fullPath")]
-        public string FullPath
-        {
-            get
-            {
-                _fullPath = CommonHelper.GetFullPath(new string[] {
-                    FileFolder,
-                    //FolderName,
-                    $"{Filename}{Extension}"
-                });
-
-                return _fullPath;
-            }
-            set
-            {
-                _fullPath = value;
-            }
-        }
-
-        [JsonProperty("webPath")]
-        public string WebPath
-        {
-            get
-            {
-                _webPath = FullPath.Replace(MixFolders.WebRootPath, MixService.GetConfig<string>(MixAppSettingKeywords.Domain));
-                return _webPath;
-            }
-            set
-            {
-                _webPath = value;
-            }
-        }
-
-        [JsonProperty("folderName")]
-        public string FolderName { get; set; }
-
-        [JsonProperty("fileFolder")]
-        public string FileFolder { get; set; }
-
-        [JsonProperty("fileName")]
-        public string Filename { get; set; }
-
-        [JsonProperty("extension")]
-        public string Extension { get; set; }
-
-        [JsonProperty("content")]
-        public string Content { get; set; }
-
-        [JsonProperty("fileStream")]
-        public string FileStream { get; set; }
-
-        public FileViewModel()
-        {
-        }
-
-        public FileViewModel(IFormFile file, string folder)
-        {
-            Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
-            Extension = file.FileName.Substring(file.FileName.LastIndexOf('.'));
-            FileFolder = folder;
-        }
     }
 
     public class TemplateViewModel

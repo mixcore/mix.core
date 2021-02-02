@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Service.SignalR.Models;
 using Mix.Domain.Data.ViewModels;
@@ -139,45 +140,45 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         {
             switch (item.DataType)
             {
-                case Lib.MixEnums.MixDataType.DateTime:
+                case MixDataType.DateTime:
                     return new JProperty(item.AttributeFieldName, item.DateTimeValue);
 
-                case Lib.MixEnums.MixDataType.Date:
+                case MixDataType.Date:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case Lib.MixEnums.MixDataType.Time:
+                case MixDataType.Time:
                     return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
 
-                case Lib.MixEnums.MixDataType.Double:
+                case MixDataType.Double:
                     return (new JProperty(item.AttributeFieldName, item.DoubleValue));
 
-                case Lib.MixEnums.MixDataType.Boolean:
+                case MixDataType.Boolean:
                     return (new JProperty(item.AttributeFieldName, item.BooleanValue));
 
-                case Lib.MixEnums.MixDataType.Integer:
+                case MixDataType.Integer:
                     return (new JProperty(item.AttributeFieldName, item.IntegerValue));
 
-                case Lib.MixEnums.MixDataType.Reference:
+                case MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
                     return (new JProperty(item.AttributeFieldName, new JArray()));
 
-                case Lib.MixEnums.MixDataType.Custom:
-                case Lib.MixEnums.MixDataType.Duration:
-                case Lib.MixEnums.MixDataType.PhoneNumber:
-                case Lib.MixEnums.MixDataType.Text:
-                case Lib.MixEnums.MixDataType.Html:
-                case Lib.MixEnums.MixDataType.MultilineText:
-                case Lib.MixEnums.MixDataType.EmailAddress:
-                case Lib.MixEnums.MixDataType.Password:
-                case Lib.MixEnums.MixDataType.Url:
-                case Lib.MixEnums.MixDataType.ImageUrl:
-                case Lib.MixEnums.MixDataType.CreditCard:
-                case Lib.MixEnums.MixDataType.PostalCode:
-                case Lib.MixEnums.MixDataType.Upload:
-                case Lib.MixEnums.MixDataType.Color:
-                case Lib.MixEnums.MixDataType.Icon:
-                case Lib.MixEnums.MixDataType.VideoYoutube:
-                case Lib.MixEnums.MixDataType.TuiEditor:
+                case MixDataType.Custom:
+                case MixDataType.Duration:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Upload:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
             }

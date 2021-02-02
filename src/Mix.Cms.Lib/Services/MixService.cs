@@ -16,6 +16,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Account;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -522,7 +523,16 @@ namespace Mix.Cms.Lib.Services
                 default:
                     return null;
             }
+        }
 
+        public static async Task RemoveCacheAsync(Type type, string key = null)
+        {
+            string path = $"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/{type.Name}";
+            if (!string.IsNullOrEmpty(key))
+            {
+                path += $"/{key}";
+            }
+            await CacheService.RemoveCacheAsync(path);
         }
     }
 }

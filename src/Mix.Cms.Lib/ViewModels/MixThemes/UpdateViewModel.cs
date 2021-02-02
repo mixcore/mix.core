@@ -16,7 +16,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
+using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -55,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -168,7 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 //Import From existing Theme (zip)
                 if (string.IsNullOrEmpty(TemplateAsset.Filename))
                 {
-                    TemplateAsset = new Lib.ViewModels.FileViewModel()
+                    TemplateAsset = new FileViewModel()
                     {
                         Filename = "default_blank",
                         Extension = MixFileExtensions.Zip,

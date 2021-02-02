@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Mix.Cms.Lib.Enums;
+using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.Models.Cms
         }
 
         public int Id { get; set; }
-        public string Type { get; set; }
+        public MixDatabaseType Type { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime? LastModified { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
 
     }
 }

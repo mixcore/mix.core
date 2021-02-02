@@ -1059,6 +1059,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     PageId = table.Column<int>(nullable: false),
                     RoleId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -1078,7 +1079,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.RoleId, x.PageId });
+                    table.PrimaryKey("PRIMARY", x => x.Id);
                     table.ForeignKey(
                         name: "FK_mix_portal_page_role_mix_portal_page",
                         column: x => x.PageId,

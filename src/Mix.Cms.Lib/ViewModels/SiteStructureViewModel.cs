@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -116,7 +117,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 item.Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
-                var refFields = item.Fields.Where(f => f.DataType == MixEnums.MixDataType.Reference);
+                var refFields = item.Fields.Where(f => f.DataType == MixDataType.Reference);
 
                 foreach (var field in refFields)
                 {
@@ -152,7 +153,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     ExportPageModuleNav(item, context, transaction);
                     ExportPagePostNav(item, context, transaction);
-                    ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Page, context, transaction);
+                    ExportAdditionalData(item.Id.ToString(), MixDatabaseParentType.Page, context, transaction);
                     item.UrlAliases = item.GetAliases(context, transaction);
                 }
             }
@@ -197,7 +198,7 @@ namespace Mix.Cms.Lib.ViewModels
                     ExportModuleDatas(item, context, transaction);
                     ExportModulePostNavs(item, context, transaction);
                 }
-                ExportAdditionalData(item.Id.ToString(), MixEnums.MixAttributeSetDataType.Module, context, transaction);
+                ExportAdditionalData(item.Id.ToString(), MixDatabaseParentType.Module, context, transaction);
             }
         }
 
@@ -228,12 +229,12 @@ namespace Mix.Cms.Lib.ViewModels
         #endregion
 
 
-        private void ExportAdditionalData(string id, MixEnums.MixAttributeSetDataType type, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
                 var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
-                            m => m.Specificulture == Specificulture && m.ParentType == type.ToString()
+                            m => m.Specificulture == Specificulture && m.ParentType == type
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
                 {
@@ -845,14 +846,12 @@ namespace Mix.Cms.Lib.ViewModels
                 item.Specificulture = desCulture;
                 switch (item.ParentType)
                 {
-                    case MixEnums.MixAttributeSetDataType.System:
-                        break;
-                    case MixEnums.MixAttributeSetDataType.Set:
+                    case MixDatabaseParentType.Set:
                         item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
                         break;
-                    case MixEnums.MixAttributeSetDataType.Post:
+                    case MixDatabaseParentType.Post:
                         break;
-                    case MixEnums.MixAttributeSetDataType.Page:
+                    case MixDatabaseParentType.Page:
                         if (dicPageIds.TryGetValue(int.Parse(item.ParentId), out int pageId))
                         {
                             item.ParentId = pageId.ToString();
@@ -862,7 +861,7 @@ namespace Mix.Cms.Lib.ViewModels
                             continue;
                         }
                         break;
-                    case MixEnums.MixAttributeSetDataType.Module:
+                    case MixDatabaseParentType.Module:
                         if (dicModuleIds.TryGetValue(int.Parse(item.ParentId), out int moduleId))
                         {
                             item.ParentId = moduleId.ToString();
@@ -871,8 +870,6 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             continue;
                         }
-                        break;
-                    case MixEnums.MixAttributeSetDataType.Service:
                         break;
                     default:
                         break;

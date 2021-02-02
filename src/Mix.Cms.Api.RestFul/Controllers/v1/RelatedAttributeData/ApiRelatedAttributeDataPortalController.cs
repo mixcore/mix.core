@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas;
 using Mix.Domain.Core.ViewModels;
@@ -18,17 +19,17 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/related-attribute-data/portal")]
     public class ApiRelatedAttributeDataPortalController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixRelatedAttributeData, FormViewModel, FormViewModel, FormViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixRelatedAttributeData, FormViewModel, FormViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/{culture}/related-attribute-data
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixEnums.MixContentStatus status);
+            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
             bool isAttributeId = int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string parentType = Request.Query["parentType"];
+            bool isParentType = Enum.TryParse(Request.Query["parentType"], out MixDatabaseParentType parentType);
             string parentId = Request.Query["parentId"];
             string attributeSetName = Request.Query["attributeSetName"];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
@@ -38,7 +39,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && ((isAttributeId && model.AttributeSetId == attributeSetId) || model.AttributeSetName == attributeSetName)
                 && (string.IsNullOrEmpty(parentId)
-                 || (model.ParentId == parentId && model.ParentType == parentType.ToString())
+                 || (model.ParentId == parentId && model.ParentType == parentType)
                  );
 
 

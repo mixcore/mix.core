@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using static Mix.Cms.Lib.MixEnums;
+using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public int? Views { get; set; }
 
         [JsonProperty("type")]
-        public MixPageType Type { get; set; }
+        public MixPageType Type { get; set; } = MixPageType.ListPost;
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("priority")]
         public int Priority { get; set; }
         [JsonProperty("status")]
-        public MixEnums.MixContentStatus Status { get; set; }
+        public MixContentStatus Status { get; set; }
         #endregion Models
 
         #region Views
@@ -185,7 +185,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return MixEnums.EnumTemplateFolder.Pages.ToString();
+                return MixTemplateFolders.Pages.ToString();
             }
         }
 
@@ -211,9 +211,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("attributeSets")]
         public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
-
-        [JsonProperty("attributeSetNavs")]
-        public List<MixRelatedAttributeSets.UpdateViewModel> AttributeSetNavs { get; set; }
 
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
@@ -292,7 +289,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load Attributes
             // Load master views
             this.Masters = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == MixEnums.EnumTemplateFolder.Masters.ToString(), _context, _transaction).Data;
+                t => t.Theme.Id == ActivedTheme && t.FolderType == MixTemplateFolders.Masters.ToString(), _context, _transaction).Data;
             var masterName = Layout?.Substring(Layout.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Master;
             this.Master = Masters.FirstOrDefault(t => !string.IsNullOrEmpty(masterName) && masterName.Equals($"{t.FileName}{t.Extension}"));
             if (this.Master == null)
@@ -329,7 +326,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (result.IsSucceed)
                     {
                         item.SourceId = parent.Id.ToString();
-                        item.Type = UrlAliasType.Page;
+                        item.Type = MixUrlAliasType.Page;
                         item.Specificulture = Specificulture;
                         var saveResult = item.SaveModel(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -387,7 +384,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     if (result.IsSucceed)
                     {
                         item.SourceId = parent.Id.ToString();
-                        item.Type = UrlAliasType.Page;
+                        item.Type = MixUrlAliasType.Page;
                         item.Specificulture = Specificulture;
                         var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
@@ -429,7 +426,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             AttributeData.ParentId = parentId.ToString();
-            AttributeData.ParentType = MixEnums.MixAttributeSetDataType.Page;
+            AttributeData.ParentType = MixDatabaseParentType.Page;
             var saveData = await AttributeData.Data.SaveModelAsync(true, context, transaction);
             ViewModelHelper.HandleResult(saveData, ref result);
             if (result.IsSucceed)
@@ -486,7 +483,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                         new MixRelatedAttributeData()
                         {
                             Specificulture = Specificulture,
-                            ParentType = MixEnums.MixAttributeSetDataType.Page.ToString(),
+                            ParentType = MixDatabaseParentType.Page,
                             ParentId = Id.ToString(),
                             AttributeSetId = AttributeSet.Id,
                             AttributeSetName = AttributeSet.Name
@@ -522,7 +519,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     val.Field = field;
                 }
                 var getCategories = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString()
+                && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Page
                 && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, _context, _transaction);
                 if (getCategories.IsSucceed)
                 {
@@ -530,17 +527,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 }
 
                 var getTags = MixRelatedAttributeDatas.UpdateViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
-                    && m.ParentId == Id.ToString() && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString()
+                    && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Page
                     && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, _context, _transaction);
                 if (getTags.IsSucceed)
                 {
                     SysTags = getTags.Data;
                 }
             }
-
-            AttributeSetNavs = MixRelatedAttributeSets.UpdateViewModel.Repository.GetModelListBy(
-                m => m.ParentId == Id && m.ParentType == MixEnums.MixAttributeSetDataType.Page.ToString() && m.Specificulture == Specificulture
-                , _context, _transaction).Data;
         }
 
         private void GenerateSEO(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -578,7 +571,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
-                        && p.SourceId == Id.ToString() && p.Type == (int)MixEnums.UrlAliasType.Page, context, transaction);
+                        && p.SourceId == Id.ToString() && p.Type == (int)MixUrlAliasType.Page, context, transaction);
             if (result.IsSucceed && result.Data != null)
             {
                 return result.Data;
