@@ -69,6 +69,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
                     : null; 
         }
+        
+        [JsonProperty("detailApiUrl")]
+        public string DetailApiUrl { 
+            get => !string.IsNullOrEmpty(Id)
+                    ? $"/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
+                    : null; 
+        }
 
         [JsonProperty("templatePath")]
         public string TemplatePath { get => $"{MixCmsHelper.GetTemplateFolder(Specificulture)}/{Property<string>("template_path")}"; }
