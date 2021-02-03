@@ -38,14 +38,14 @@ namespace Mix.Cms.Lib.Services
                 string folder = $"wwwroot";
                 FileRepository.Instance.CreateDirectoryIfNotExist(folder);
                 string filename = $"sitemap";
-                string filePath = $"{folder}/{filename}.xml";
+                string filePath = $"{folder}/{filename}{MixFileExtensions.Xml}";
                 root.Save(filePath);
                 return new RepositoryResponse<FileViewModel>()
                 {
                     IsSucceed = true,
                     Data = new FileViewModel()
                     {
-                        Extension = ".xml",
+                        Extension = MixFileExtensions.Xml,
                         Filename = filename,
                         FileFolder = folder
                     }

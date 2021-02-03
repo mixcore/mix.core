@@ -1,4 +1,5 @@
 ﻿using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -33,7 +34,7 @@ namespace Mix.Cms.Lib.Models.Common
         public string Icon { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public MixMenuItemType Type { get; set; }
 
         [JsonProperty("target")]
         public string Target { get; set; }
