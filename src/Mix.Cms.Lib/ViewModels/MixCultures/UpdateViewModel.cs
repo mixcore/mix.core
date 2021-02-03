@@ -235,7 +235,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedAttributeData>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -265,7 +266,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetData>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -295,7 +297,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetValue>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -326,7 +329,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixUrlAlias>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -356,7 +360,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixModule>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -385,7 +390,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixMedia>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -414,7 +420,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixPostMedia>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -443,7 +450,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedPost>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -474,7 +482,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             {
 
                 var getModules = await DefaultModelRepository<MixCmsContext, MixModulePost>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getModules.IsSucceed)
                 {
                     foreach (var p in getModules.Data)
@@ -503,7 +512,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixPagePost>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -532,7 +542,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixPageModule>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -561,7 +572,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixPost>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -590,7 +602,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixModuleData>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -619,7 +632,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixLanguage>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -649,7 +663,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixConfiguration>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
@@ -679,7 +694,8 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             try
             {
                 var getPages = await DefaultModelRepository<MixCmsContext, MixPage>.Instance.GetModelListByAsync(
-                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture));
+                    c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
+                    context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
