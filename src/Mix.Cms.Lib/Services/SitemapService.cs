@@ -22,18 +22,12 @@ namespace Mix.Cms.Lib.Services
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                var getNavigations = await ViewModels.MixAttributeSetDatas.ReadMvcViewModel.Repository.GetModelListByAsync(
-                    m => m.AttributeSetName == MixDatabaseNames.NAVIGATION,
-                    context, transaction
-                );
+               
                 XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
                 var root = new XElement(aw + "urlset");
-                List<int> handledPageId = new List<int>();
-                var navs = getNavigations.Data.Select(n => n.Obj.ToObject<MixNavigation>());
-                foreach (var nav in navs)
-                {
-                    ParseMenuItems(root, nav.MenuItems, context, transaction);
-                }
+
+                await ParseNavigationsAsync(root, context, transaction);
+                await ParsePostsDocAsync(root, context, transaction);
 
                 string folder = $"wwwroot";
                 FileRepository.Instance.CreateDirectoryIfNotExist(folder);
@@ -65,21 +59,97 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        private static void ParseMenuItems(XElement root, List<MenuItem> menuItems, MixCmsContext context, IDbContextTransaction transaction)
+        #region Post
+
+        private static async Task ParsePostsDocAsync(XElement root, MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var page in menuItems)
+            var getPosts = await Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelListAsync(context, transaction);
+            var dicPosts = getPosts.Data
+               .GroupBy(m => m.Id)
+               .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var item in dicPosts)
             {
-                //var otherLanguages = menuItems.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
+                var post = item.Value.First();
                 var lstOther = new List<SitemapLanguage>();
-                //foreach (var item in otherLanguages)
-                //{
-                //    lstOther.Add(new SitemapLanguage()
-                //    {
-                //        HrefLang = item.Specificulture,
-                //        Href = MixCmsHelper.GetRouterUrl(
-                //                   new { culture = item.Specificulture, seoName = page.SeoName }, Request, Url)
-                //    });
-                //}
+                foreach (var menu in item.Value.Skip(1))
+                {
+                    lstOther.Add(new SitemapLanguage()
+                    {
+                        HrefLang = menu.Specificulture,
+                        Href = menu.DetailsUrl
+                    });
+                }
+
+                var sitemap = new SiteMap()
+                {
+                    ChangeFreq = "monthly",
+                    LastMod = DateTime.UtcNow,
+                    Loc = post.DetailsUrl,
+                    Priority = 0.3,
+                    OtherLanguages = lstOther
+                };
+                var el = sitemap.ParseXElement();
+
+                root.Add(el);
+            }
+        }
+        #endregion
+
+        #region Navigation
+
+        private static async Task ParseNavigationsAsync(XElement root, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getNavigations = await ViewModels.MixAttributeSetDatas.ReadMvcViewModel.Repository.GetModelListByAsync(
+                   m => m.AttributeSetName == MixDatabaseNames.NAVIGATION,
+                   context, transaction
+               );
+            var navs = getNavigations.Data.Select(n => new MixNavigation(n.Obj, n.Specificulture)).ToList();
+            List<MenuItem> menuItems = new List<MenuItem>();
+            navs.ForEach(n => menuItems.AddRange(n.MenuItems));
+            var subMenus = ParseMenuItems(menuItems, context, transaction);
+            menuItems.AddRange(subMenus);
+            ParseMenuItemsDoc(root, menuItems, context, transaction);
+        }
+
+        private static List<MenuItem> ParseMenuItems(List<MenuItem> menuItems, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            List<MenuItem> subMenuItems = new List<MenuItem>();
+
+            foreach (var item in menuItems)
+            {
+
+                if (item.MenuItems.Count > 0)
+                {
+                    subMenuItems.AddRange(item.MenuItems.Where(m => !menuItems.Any(p => p.Href == m.Href)));
+                    subMenuItems.ForEach(m => m.Specificulture = item.Specificulture);
+                }
+            }
+            if (subMenuItems.Count > 0)
+            {
+                subMenuItems.AddRange(ParseMenuItems(subMenuItems, context, transaction));
+            }
+            return subMenuItems;
+        }
+
+        private static void ParseMenuItemsDoc(XElement root, List<MenuItem> menuItems, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var dicMenuItems = menuItems
+                .GroupBy(m => m.Id)
+                .ToDictionary(g => g.Key, g => g.ToList());
+
+            foreach (var item in dicMenuItems)
+            {
+                var page = item.Value.First();
+                var lstOther = new List<SitemapLanguage>();
+                foreach (var menu in item.Value.Skip(1))
+                {
+                    lstOther.Add(new SitemapLanguage()
+                    {
+                        HrefLang = menu.Specificulture,
+                        Href = menu.Href
+                    });
+                }
 
                 var sitemap = new SiteMap()
                 {
@@ -90,12 +160,10 @@ namespace Mix.Cms.Lib.Services
                     OtherLanguages = lstOther
                 };
                 var el = sitemap.ParseXElement();
-                if (page.MenuItems.Count > 0)
-                {
-                    ParseMenuItems(root, page.MenuItems, context, transaction);
-                }
+                
                 root.Add(el);
             }
         }
+        #endregion
     }
 }

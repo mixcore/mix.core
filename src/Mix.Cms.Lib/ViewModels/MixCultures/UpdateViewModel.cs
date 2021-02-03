@@ -306,6 +306,10 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
                         if (!context.MixAttributeSetValue.Any(m => m.DataId == p.DataId && m.Specificulture == Specificulture))
                         {
                             p.Id = Guid.NewGuid().ToString();
+                            if (!string.IsNullOrEmpty(p.StringValue) && p.StringValue.Contains($"/{p.Specificulture}"))
+                            {
+                                p.StringValue = p.StringValue.Replace($"/{p.Specificulture}", $"/{Specificulture}");
+                            }
                             p.Specificulture = Specificulture;
                             p.CreatedDateTime = DateTime.UtcNow;
                             context.Entry(p).State = EntityState.Added;
@@ -764,13 +768,13 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var values = await _context.MixAttributeSetValue.Where(c => c.Specificulture == Specificulture).ToListAsync();
-            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            values.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var datas = await _context.MixAttributeSetData.Where(c => c.Specificulture == Specificulture).ToListAsync();
-            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            datas.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             var relateddatas = await _context.MixRelatedAttributeData.Where(c => c.Specificulture == Specificulture).ToListAsync();
-            aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            relateddatas.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             result.IsSucceed = (await _context.SaveChangesAsync() > 0);
             return result;

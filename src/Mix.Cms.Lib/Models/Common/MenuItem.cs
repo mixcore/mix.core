@@ -16,6 +16,9 @@ namespace Mix.Cms.Lib.Models.Common
         [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("specificulture")]
+        public string Specificulture { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
