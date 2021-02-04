@@ -7,6 +7,7 @@
         <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
         <UserSecretsId>20a88919-2a4a-4558-9c68-0a12ed724415</UserSecretsId>
         <Nullable>disable</Nullable>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>
