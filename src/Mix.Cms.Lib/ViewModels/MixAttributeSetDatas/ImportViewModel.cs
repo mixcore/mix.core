@@ -116,8 +116,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 AttributeSetId = _context.MixAttributeSet.First(m => m.Name == AttributeSetName)?.Id ?? 0;
             }
             Values ??= MixAttributeSetValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture).Data.OrderBy(a => a.Priority).ToList();
-            Fields ??= MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
+                , _context, _transaction)
+                .Data.OrderBy(a => a.Priority).ToList();
+
+            Fields ??= MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
+                    f => f.AttributeSetId == AttributeSetId, 
+                    _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
@@ -159,7 +164,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                                 // if have id => update data, else add new
                                 if (!string.IsNullOrEmpty(id))
                                 {
-                                    var getData = Repository.GetSingleModel(m => m.Id == id && m.Specificulture == Specificulture, _context, _transaction);
+                                    var getData = Repository.GetSingleModel(
+                                        m => m.Id == id && m.Specificulture == Specificulture, 
+                                        _context, _transaction);
                                     if (getData.IsSucceed)
                                     {
                                         getData.Data.Obj = objData["obj"].Value<JObject>();
