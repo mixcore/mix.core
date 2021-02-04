@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
             //path to temporary folder
             string tempPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
+            string outputPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = culture;
             var result = data.ExportSelectedItemsAsync();
@@ -47,7 +47,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 };
 
                 // Delete Existing folder
-                FileRepository.Instance.DeleteFolder(outputPath);
+                FileRepository.Instance.DeleteWebFolder(outputPath);
                 // Copy current templates file
                 FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
                 // Copy current assets files
