@@ -1,3 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <lastmod>2021-02-04T02:15:42.0489942Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/page/en-us/maintenance</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/page/en-au/maintenance" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/maintenance" />
+  </url>
+  <url>
+    <lastmod>2021-02-04T02:15:42.0490816Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/page/en-us/search</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/page/en-au/search" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/search" />
+  </url>
+  <url>
+    <lastmod>2021-02-04T02:15:42.0490871Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/page/en-us/home</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/en-au/home" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/home" />
+  </url>
+  <url>
+    <lastmod>2021-02-04T02:15:42.069946Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/post/en-us/1/mixcore-cms</loc>
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/post/en-au/1/mixcore-cms" />
+    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/post/vi-vn/1/mixcore-cms" />
+  </url>
 </urlset>
