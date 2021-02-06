@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
                     MixFolders.SiteContentUploadsFolder,
                     DateTime.UtcNow.ToString("MMM-yyyy")
                 }); ;
-                var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
+                var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {
                     Avatar = MediaFile.FullPath;

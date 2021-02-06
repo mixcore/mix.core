@@ -175,12 +175,12 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
             if (result.IsSucceed)
             {
-                FileRepository.Instance.DeleteFolder(AssetFolder);
+                MixFileRepository.Instance.DeleteFolder(AssetFolder);
             }
 
             if (result.IsSucceed)
             {
-                FileRepository.Instance.DeleteFolder(TemplateFolder);
+                MixFileRepository.Instance.DeleteFolder(TemplateFolder);
             }
             return result;
         }

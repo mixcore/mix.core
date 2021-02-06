@@ -208,7 +208,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     FileFolder = "edms",
                     Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
                 };
-                if (FileRepository.Instance.SaveWebFile(edmFile))
+                if (MixFileRepository.Instance.SaveWebFile(edmFile))
                 {
                     Obj["edm"] = edmFile.WebPath;
                     edmField.StringValue = edmFile.WebPath;

@@ -158,13 +158,13 @@ namespace Mix.Cms.Api.Controllers.v1
             if (assets != null)
             {
                 data.Asset = new FileViewModel(assets, data.AssetFolder);
-                FileRepository.Instance.SaveFile(assets, $"wwwroot/{data.AssetFolder}/{assets.FileName}");
+                MixFileRepository.Instance.SaveFile(assets, $"wwwroot/{data.AssetFolder}");
             }
             if (theme != null)
             {
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new FileViewModel(theme, importFolder);
-                FileRepository.Instance.SaveFile(theme, $"wwwroot/{importFolder}/{theme.FileName}");
+                MixFileRepository.Instance.SaveFile(theme, $"wwwroot/{importFolder}");
             }
 
             // Load default blank if created new without upload theme
@@ -174,8 +174,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     var currentThemeFolder = $"{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}";
                     var assetFolder = $"{MixFolders.SiteContentAssetsFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
-                    FileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
-                    FileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
+                    MixFileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
+                    MixFileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
                 }
                 else
                 {

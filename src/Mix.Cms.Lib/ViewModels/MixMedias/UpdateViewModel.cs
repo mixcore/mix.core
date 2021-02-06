@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
-                var isSaved = FileRepository.Instance.SaveWebFile(MediaFile);
+                var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {
                     Extension = MediaFile.Extension.ToLower();
@@ -182,7 +182,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                     FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
                     FileName = SeoHelper.GetSEOString(File.FileName.Substring(0, File.FileName.LastIndexOf('.'))) + DateTime.UtcNow.Ticks;
                     Extension = File.FileName.Substring(File.FileName.LastIndexOf('.'));
-                    var saveFile = FileRepository.Instance.SaveWebFile(File, $"{FileFolder}/{FileName}{Extension}");
+                    var saveFile = MixFileRepository.Instance.SaveWebFile(File, $"{FileFolder}/{FileName}{Extension}");
                     if (saveFile != null)
                     {
                         IsValid = false;
@@ -207,7 +207,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             var result = new RepositoryResponse<bool>
             {
-                IsSucceed = FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder)
+                IsSucceed = MixFileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder)
             };
             result.IsSucceed = Repository.RemoveListModel(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction).IsSucceed;
             return result;
@@ -218,7 +218,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             // Remove local file
             if (FileFolder.IndexOf("http") < 0)
             {
-                FileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
             }
             await Repository.RemoveListModelAsync(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
             return await base.RemoveRelatedModelsAsync(view, _context, _transaction);

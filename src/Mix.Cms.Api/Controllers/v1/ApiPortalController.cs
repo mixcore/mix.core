@@ -105,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             try
             {
-                var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
+                var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
                 var obj = JObject.Parse(cultures.Content);
                 return new RepositoryResponse<JArray>()
                 {
@@ -128,7 +128,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("json-data/{name}")]
         public RepositoryResponse<JObject> loadJsonData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
+            var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(cultures.Content);
             return new RepositoryResponse<JObject>()
             {
@@ -233,7 +233,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/details")]
         public RepositoryResponse<JObject> LoadAppSettings()
         {
-            var settings = FileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
             return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
@@ -355,11 +355,11 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/save")]
         public RepositoryResponse<JObject> SaveAppSettings([FromBody] JObject model)
         {
-            var settings = FileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
             if (model != null)
             {
                 settings.Content = model.ToString();
-                if (FileRepository.Instance.SaveFile(settings))
+                if (MixFileRepository.Instance.SaveFile(settings))
                 {
                     MixService.Reload();
                     if (!MixService.GetMixConfig<bool>("IsCache"))
@@ -417,10 +417,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var saveFile = FileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
+            var saveFile = MixFileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
             if (saveFile != null)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
+                var fileContent = MixFileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
                     saveFile.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())

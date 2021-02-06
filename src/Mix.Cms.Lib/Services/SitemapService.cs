@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Services
                 await ParsePostsDocAsync(root, context, transaction);
 
                 string folder = $"wwwroot";
-                FileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                MixFileRepository.Instance.CreateDirectoryIfNotExist(folder);
                 string filename = $"sitemap";
                 string filePath = $"{folder}/{filename}{MixFileExtensions.Xml}";
                 root.Save(filePath);

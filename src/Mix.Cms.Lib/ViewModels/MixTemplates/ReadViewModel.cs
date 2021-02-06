@@ -134,7 +134,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
+            var file = MixFileRepository.Instance.GetFile(FileName, Extension, FileFolder);
             if (!string.IsNullOrWhiteSpace(file?.Content))
             {
                 Content = file.Content;
