@@ -59,7 +59,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 //}
 
                 //string folder = $"Sitemaps";
-                //FileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                //MixFileRepository.Instance.CreateDirectoryIfNotExist(folder);
                 //string filename = $"sitemap";
                 //string filePath = $"wwwroot/{folder}/{filename}.xml";
                 //root.Save(filePath);

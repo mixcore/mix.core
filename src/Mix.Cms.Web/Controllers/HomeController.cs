@@ -53,7 +53,7 @@ namespace Mix.Cms.Web.Controllers
                 {
                     if (CheckIsVueRoute(seoName))
                     {
-                        var staticFile = FileRepository.Instance.GetFile(seoName, MixFolders.WebRootPath);
+                        var staticFile = MixFileRepository.Instance.GetFile(seoName, MixFolders.WebRootPath);
                         if (staticFile != null)
                         {
                             return Ok(staticFile.Content);

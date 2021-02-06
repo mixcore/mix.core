@@ -32,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.v1
             // Request: Key => folder, Keyword => filename
             if (!string.IsNullOrEmpty(folder))
             {
-                var file = FileRepository.Instance.GetFile(filename, folder);
+                var file = MixFileRepository.Instance.GetFile(filename, folder);
 
                 return new RepositoryResponse<FileViewModel>()
                 {
@@ -52,7 +52,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<bool> Delete()
         {
             string fullPath = Request.Query["fullPath"].ToString();
-            var result = FileRepository.Instance.DeleteFile(fullPath);
+            var result = MixFileRepository.Instance.DeleteFile(fullPath);
             return new RepositoryResponse<bool>()
             {
                 IsSucceed = result,
@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (ModelState.IsValid)
             {
-                var result = FileRepository.Instance.SaveFile(file, $"{folder}/{file.FileName}");
+                var result = MixFileRepository.Instance.SaveFile(file, $"{folder}");
                 return Ok(result);
             }
             return BadRequest();
@@ -86,7 +86,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                var result = FileRepository.Instance.SaveFile(model);
+                var result = MixFileRepository.Instance.SaveFile(model);
                 return new RepositoryResponse<FileViewModel>()
                 {
                     IsSucceed = result,
@@ -103,8 +103,8 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
-            var files = FileRepository.Instance.GetTopFiles(request.Key);
-            var directories = FileRepository.Instance.GetTopDirectories(request.Key);
+            var files = MixFileRepository.Instance.GetTopFiles(request.Key);
+            var directories = MixFileRepository.Instance.GetTopDirectories(request.Key);
             return new RepositoryResponse<FilePageViewModel>()
             {
                 IsSucceed = true,

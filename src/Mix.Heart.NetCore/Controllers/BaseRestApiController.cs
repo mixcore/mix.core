@@ -110,7 +110,7 @@ namespace Mix.Heart.NetCore.Controllers
                     Content = objContent.ToString()
                 };
                 // Copy current templates file
-                FileRepository.Instance.SaveWebFile(file);
+                MixFileRepository.Instance.SaveWebFile(file);
 
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
