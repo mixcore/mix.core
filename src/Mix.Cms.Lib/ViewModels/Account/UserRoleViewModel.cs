@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         #region Views
 
         [JsonProperty("role")]
-        public RoleViewModel Role { get; set; }
+        public RoleViewModel UserRole { get; set; }
 
         #endregion Views
 
@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Role = RoleViewModel.Repository.GetSingleModel(r => r.Id == RoleId, _context, _transaction).Data;
+            UserRole = RoleViewModel.Repository.GetSingleModel(r => r.Id == RoleId, _context, _transaction).Data;
         }
 
         #endregion Overrides
