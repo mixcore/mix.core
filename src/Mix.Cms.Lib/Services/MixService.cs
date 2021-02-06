@@ -332,6 +332,7 @@ namespace Mix.Cms.Lib.Services
             try
             {
                 Instance.Translator = new JObject();
+                Instance.Cultures = null;
                 var ListLanguage = context.MixLanguage.ToList();
                 var cultures = context.MixCulture.ToList();
                 foreach (var culture in cultures)
