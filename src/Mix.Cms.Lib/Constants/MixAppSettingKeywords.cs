@@ -26,6 +26,7 @@
         public const string DefaultContentStatus = "DefaultContentStatus";
         public const string NextSyncContent = "NextSyncContent";
         public const string AllowedHosts = "AllowedHosts";
+        public const string MaxPageSize = "MaxPageSize";
     }
 
 }

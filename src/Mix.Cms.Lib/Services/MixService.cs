@@ -108,10 +108,10 @@ namespace Mix.Cms.Lib.Services
             instance.MixConfigurations = jsonSettings["MixConfigurations"] != null ? JObject.FromObject(jsonSettings["MixConfigurations"]) : new JObject();
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             instance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
-            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+            instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
             CommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -128,10 +128,10 @@ namespace Mix.Cms.Lib.Services
             defaultInstance.MixConfigurations = JObject.FromObject(jsonSettings["MixConfigurations"]);
             defaultInstance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             defaultInstance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
-            defaultInstance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             defaultInstance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             defaultInstance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             defaultInstance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+            defaultInstance.Smtp = JObject.FromObject(defaultInstance.GlobalSettings["Smtp"] ?? new JObject());
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
