@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Common.Helper;
@@ -96,6 +97,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             {
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
+
+            Obj.LoadAllReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
             {
