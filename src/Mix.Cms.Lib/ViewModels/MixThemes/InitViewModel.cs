@@ -187,28 +187,28 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             if (File.Exists(filePath))
             {
                 string outputFolder = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/Extract";
-                FileRepository.Instance.DeleteFolder(outputFolder);
-                FileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
-                FileRepository.Instance.UnZipFile(filePath, outputFolder);
+                MixFileRepository.Instance.DeleteFolder(outputFolder);
+                MixFileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
+                MixFileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
+                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
                 //Move Unzip Templates folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
+                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
-                FileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
+                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
-                var strSchema = FileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
+                var strSchema = MixFileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
                                                        .Replace("[CULTURE]", Specificulture);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
-                FileRepository.Instance.DeleteFolder(outputFolder);
-                //FileRepository.Instance.DeleteFile(filePath);
+                MixFileRepository.Instance.DeleteFolder(outputFolder);
+                //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
                 if (result.IsSucceed)
                 {
                     // Save template files to db
-                    var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
+                    var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
@@ -309,9 +309,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             string defaultFolder = $"{MixService.GetConfig<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
 
-            bool copyResult = FileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
+            bool copyResult = MixFileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 
-            var files = FileRepository.Instance.GetFilesWithContent(TemplateFolder);
+            var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
             var id = _context.MixTemplate.Count() + 1;
             //TODO: Create default asset
             foreach (var file in files)

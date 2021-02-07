@@ -39,15 +39,6 @@
       "OriginKey": ""
     }
   },
-  "Smtp": {
-    "Server": "",
-    "Port": 587,
-    "SSL": true,
-    "User": "",
-    "Password": "",
-    "From": "support@mixcore.org",
-    "FromName": "mix-core"
-  },
   "Translator": {},
   "LocalSettings": {
     "en-us": {
@@ -97,6 +88,15 @@
     "LastUpdateConfiguration": null,
     "DatabaseProvider": "MSSQL",
     "AllowedHosts": [],
+    "Smtp": {
+      "Server": "",
+      "Port": 587,
+      "SSL": true,
+      "User": "",
+      "Password": "",
+      "From": "support@mixcore.org",
+      "FromName": "mix-core"
+    },
     "PortalThemeSettings": {
       "primaryColorHue": 211,
       "primaryColorSaturation": 100,

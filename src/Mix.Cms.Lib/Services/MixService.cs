@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.ViewModels;
+﻿using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Newtonsoft.Json.Linq;
 using System;
@@ -97,11 +94,11 @@ namespace Mix.Cms.Lib.Services
         {
             // Load configurations from appSettings.json
             JObject jsonSettings = new JObject();
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true);
+            var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true);
 
             if (string.IsNullOrEmpty(settings.Content))
             {
-                settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
+                settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
             }
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
@@ -111,10 +108,10 @@ namespace Mix.Cms.Lib.Services
             instance.MixConfigurations = jsonSettings["MixConfigurations"] != null ? JObject.FromObject(jsonSettings["MixConfigurations"]) : new JObject();
             instance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             instance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
-            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+            instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
             CommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -122,7 +119,7 @@ namespace Mix.Cms.Lib.Services
         {
             // Load configurations from appSettings.json
             JObject jsonSettings = new JObject();
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true);
+            var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true);
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             jsonSettings = JObject.Parse(content);
@@ -131,10 +128,10 @@ namespace Mix.Cms.Lib.Services
             defaultInstance.MixConfigurations = JObject.FromObject(jsonSettings["MixConfigurations"]);
             defaultInstance.Authentication = JObject.FromObject(jsonSettings["Authentication"]);
             defaultInstance.IpSecuritySettings = JObject.FromObject(jsonSettings["IpSecuritySettings"]);
-            defaultInstance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             defaultInstance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             defaultInstance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             defaultInstance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
+            defaultInstance.Smtp = JObject.FromObject(defaultInstance.GlobalSettings["Smtp"] ?? new JObject());
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
@@ -279,19 +276,19 @@ namespace Mix.Cms.Lib.Services
 
         public static bool SaveSettings()
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
             if (settings != null)
             {
                 if (string.IsNullOrWhiteSpace(settings.Content))
                 {
-                    var defaultSettings = FileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
+                    var defaultSettings = MixFileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true, "{}");
                     settings = new FileViewModel()
                     {
                         Filename = "appsettings",
                         Extension = MixFileExtensions.Json,
                         Content = defaultSettings.Content
                     };
-                    return FileRepository.Instance.SaveFile(settings);
+                    return MixFileRepository.Instance.SaveFile(settings);
                 }
                 else
                 {
@@ -306,7 +303,7 @@ namespace Mix.Cms.Lib.Services
                     jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
                     jsonSettings["Smtp"] = instance.Smtp;
                     settings.Content = jsonSettings.ToString();
-                    return FileRepository.Instance.SaveFile(settings);
+                    return MixFileRepository.Instance.SaveFile(settings);
                 }
             }
             else
@@ -317,10 +314,10 @@ namespace Mix.Cms.Lib.Services
 
         public static bool SaveSettings(string content)
         {
-            var settings = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true, "{}");
 
             settings.Content = content;
-            return FileRepository.Instance.SaveFile(settings);
+            return MixFileRepository.Instance.SaveFile(settings);
         }
 
         public static void Reload()
@@ -335,6 +332,7 @@ namespace Mix.Cms.Lib.Services
             try
             {
                 Instance.Translator = new JObject();
+                Instance.Cultures = null;
                 var ListLanguage = context.MixLanguage.ToList();
                 var cultures = context.MixCulture.ToList();
                 foreach (var culture in cultures)

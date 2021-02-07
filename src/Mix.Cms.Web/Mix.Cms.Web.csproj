@@ -7,24 +7,21 @@
         <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
         <UserSecretsId>20a88919-2a4a-4558-9c68-0a12ed724415</UserSecretsId>
         <Nullable>disable</Nullable>
+        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     </PropertyGroup>
 
     <ItemGroup>
         <Compile Remove="logs\**" />
         <Compile Remove="MixContent\cache\**" />
-        <Compile Remove="Views\Shared\Templates\**" />
         <Compile Remove="wwwroot\mix-content\assets\**" />
         <Content Remove="logs\**" />
         <Content Remove="MixContent\cache\**" />
-        <Content Remove="Views\Shared\Templates\**" />
         <Content Remove="wwwroot\mix-content\assets\**" />
         <EmbeddedResource Remove="logs\**" />
         <EmbeddedResource Remove="MixContent\cache\**" />
-        <EmbeddedResource Remove="Views\Shared\Templates\**" />
         <EmbeddedResource Remove="wwwroot\mix-content\assets\**" />
         <None Remove="logs\**" />
         <None Remove="MixContent\cache\**" />
-        <None Remove="Views\Shared\Templates\**" />
         <None Remove="wwwroot\mix-content\assets\**" />
     </ItemGroup>
 
@@ -54,6 +51,12 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="Views\_ViewImports.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Update="Views\_ViewStart.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 

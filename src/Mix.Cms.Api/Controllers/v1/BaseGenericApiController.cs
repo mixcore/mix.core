@@ -211,7 +211,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     Content = objContent.ToString()
                 };
                 // Copy current templates file
-                FileRepository.Instance.SaveWebFile(file);
+                MixFileRepository.Instance.SaveWebFile(file);
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
             return new RepositoryResponse<FileViewModel>()

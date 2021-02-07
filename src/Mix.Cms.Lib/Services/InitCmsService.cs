@@ -144,7 +144,7 @@ namespace Mix.Cms.Lib.Services
             /* Init Configs */
 
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var getConfigs = FileRepository.Instance.GetFile(
+            var getConfigs = MixFileRepository.Instance.GetFile(
                 MixConstants.CONST_FILE_CONFIGURATIONS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getConfigs.Content);
             var configurations = obj["data"].ToObject<List<MixConfiguration>>();
@@ -177,7 +177,7 @@ namespace Mix.Cms.Lib.Services
 
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getData = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
+            var getData = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getData.Content);
             var data = obj["data"].ToObject<List<ViewModels.MixAttributeSets.UpdateViewModel>>();
             foreach (var item in data)
@@ -286,7 +286,7 @@ namespace Mix.Cms.Lib.Services
         protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
         {
             /* Init Pages */
-            var pages = FileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
+            var pages = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(pages.Content);
             var arrPage = obj["data"].ToObject<List<MixPage>>();
             foreach (var page in arrPage)
