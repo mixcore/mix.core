@@ -27,6 +27,7 @@ using Mix.Common.Helper;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Constants;
 using Mix.Services;
+using Mix.Cms.Lib.ViewModels.Common;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -104,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             try
             {
-                var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
+                var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
                 var obj = JObject.Parse(cultures.Content);
                 return new RepositoryResponse<JArray>()
                 {
@@ -127,7 +128,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("json-data/{name}")]
         public RepositoryResponse<JObject> loadJsonData(string name)
         {
-            var cultures = FileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
+            var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(cultures.Content);
             return new RepositoryResponse<JObject>()
             {
@@ -221,86 +222,9 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/category/id
         [HttpGet, HttpOptions]
         [Route("sitemap")]
-        public RepositoryResponse<FileViewModel> SiteMap()
+        public async Task<RepositoryResponse<FileViewModel>> SiteMapAsync()
         {
-            try
-            {
-                XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
-                var root = new XElement(aw + "urlset");
-                var pages = Lib.ViewModels.MixPages.ReadListItemViewModel.Repository.GetModelList();
-                List<int> handledPageId = new List<int>();
-                foreach (var page in pages.Data)
-                {
-                    page.DetailsUrl = MixCmsHelper.GetRouterUrl(
-                                    new { culture = page.Specificulture, seoName = page.SeoName }, Request, Url);
-                    var otherLanguages = pages.Data.Where(p => p.Id == page.Id && p.Specificulture != page.Specificulture);
-                    var lstOther = new List<SitemapLanguage>();
-                    foreach (var item in otherLanguages)
-                    {
-                        lstOther.Add(new SitemapLanguage()
-                        {
-                            HrefLang = item.Specificulture,
-                            Href = MixCmsHelper.GetRouterUrl(
-                                       new { culture = item.Specificulture, seoName = page.SeoName }, Request, Url)
-                        });
-                    }
-
-                    var sitemap = new SiteMap()
-                    {
-                        ChangeFreq = "monthly",
-                        LastMod = DateTime.UtcNow,
-                        Loc = page.DetailsUrl,
-                        Priority = 0.3,
-                        OtherLanguages = lstOther
-                    };
-                    root.Add(sitemap.ParseXElement());
-                }
-
-                var posts = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
-                foreach (var post in posts.Data)
-                {
-                    var otherLanguages = pages.Data.Where(p => p.Id == post.Id && p.Specificulture != post.Specificulture);
-                    var lstOther = new List<SitemapLanguage>();
-                    foreach (var item in otherLanguages)
-                    {
-                        lstOther.Add(new SitemapLanguage()
-                        {
-                            HrefLang = item.Specificulture,
-                            Href = MixCmsHelper.GetRouterUrl(
-                                        new { culture = item.Specificulture, seoName = post.SeoName }, Request, Url)
-                        });
-                    }
-                    var sitemap = new SiteMap()
-                    {
-                        ChangeFreq = "monthly",
-                        LastMod = DateTime.UtcNow,
-                        Loc = post.DetailsUrl,
-                        OtherLanguages = lstOther,
-                        Priority = 0.3
-                    };
-                    root.Add(sitemap.ParseXElement());
-                }
-
-                string folder = $"Sitemaps";
-                FileRepository.Instance.CreateDirectoryIfNotExist(folder);
-                string filename = $"sitemap";
-                string filePath = $"wwwroot/{folder}/{filename}.xml";
-                root.Save(filePath);
-                return new RepositoryResponse<FileViewModel>()
-                {
-                    IsSucceed = true,
-                    Data = new FileViewModel()
-                    {
-                        Extension = ".xml",
-                        Filename = filename,
-                        FileFolder = folder
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                return new RepositoryResponse<FileViewModel>() { Exception = ex };
-            }
+            return await SitemapService.ParseSitemapAsync();
         }
 
         // GET
@@ -309,7 +233,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/details")]
         public RepositoryResponse<JObject> LoadAppSettings()
         {
-            var settings = FileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
             return new RepositoryResponse<JObject>() { IsSucceed = true, Data = JObject.Parse(settings.Content) };
         }
 
@@ -431,11 +355,11 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("app-settings/save")]
         public RepositoryResponse<JObject> SaveAppSettings([FromBody] JObject model)
         {
-            var settings = FileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
             if (model != null)
             {
                 settings.Content = model.ToString();
-                if (FileRepository.Instance.SaveFile(settings))
+                if (MixFileRepository.Instance.SaveFile(settings))
                 {
                     MixService.Reload();
                     if (!MixService.GetMixConfig<bool>("IsCache"))
@@ -493,10 +417,10 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string importFolder = $"Imports/Structures/{_lang}";
             var result = new RepositoryResponse<bool>();
-            var saveFile = FileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
+            var saveFile = MixFileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
             if (saveFile != null)
             {
-                var fileContent = FileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
+                var fileContent = MixFileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
                     saveFile.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())

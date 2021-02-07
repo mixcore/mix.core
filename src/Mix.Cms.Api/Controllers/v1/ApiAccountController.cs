@@ -394,7 +394,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         Request.HttpContext.Response.StatusCode = 401;
                     }
                 }
-                FileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
+                MixFileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
                 return result;
             }
             return new RepositoryResponse<UserInfoViewModel>();

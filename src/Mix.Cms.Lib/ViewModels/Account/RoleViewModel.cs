@@ -20,7 +20,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("concurrencyStamp")]
         public string ConcurrencyStamp { get; set; }
 
-        [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
 

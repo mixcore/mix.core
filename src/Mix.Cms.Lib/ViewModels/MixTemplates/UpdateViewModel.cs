@@ -136,7 +136,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             if (!string.IsNullOrEmpty(FileName))
             {
-                var file = FileRepository.Instance.GetFile(FileName, Extension, FileFolder);
+                var file = MixFileRepository.Instance.GetFile(FileName, Extension, FileFolder);
                 if (!string.IsNullOrWhiteSpace(file?.Content))
                 {
                     Content = file.Content;

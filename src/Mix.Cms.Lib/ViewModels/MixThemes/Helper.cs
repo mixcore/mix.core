@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
             //path to temporary folder
             string tempPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}/temp";
-            string outputPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
+            string outputPath = $"{MixFolders.ExportFolder}/Themes/{getTheme.Data.Name}";
             data.ThemeName = getTheme.Data.Name;
             data.Specificulture = culture;
             var result = data.ExportSelectedItemsAsync();
@@ -47,24 +47,24 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 };
 
                 // Delete Existing folder
-                FileRepository.Instance.DeleteFolder(outputPath);
+                MixFileRepository.Instance.DeleteWebFolder(outputPath);
                 // Copy current templates file
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
+                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
                 // Copy current assets files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
                 // Copy current uploads files
-                FileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
                 // Save Site Structures
-                FileRepository.Instance.SaveFile(file);
+                MixFileRepository.Instance.SaveFile(file);
 
                 // Zip to [theme_name].zip ( wwwroot for web path)
-                string filePath = FileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
+                string filePath = MixFileRepository.Instance.ZipFolder($"{tempPath}", outputPath, $"{getTheme.Data.Name}-{Guid.NewGuid()}");
 
                 // Delete temp folder
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
-                FileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
+                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
+                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
+                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
+                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
 
                 return new RepositoryResponse<string>()
                 {
@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 if (theme != null)
                 {
-                    FileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
+                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else

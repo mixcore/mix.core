@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -11,7 +10,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
@@ -59,13 +57,13 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Obj { get; set; }
 
         [JsonProperty("nav")]
-        public Navigation Nav
+        public MixNavigation Nav
         {
             get
             {
                 if (AttributeSetName == MixConstants.AttributeSetName.NAVIGATION && Obj != null)
                 {
-                    return Obj.ToObject<Navigation>();
+                    return Obj.ToObject<MixNavigation>();
                 }
                 return null;
             }
@@ -148,86 +146,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         #region Expands
        
         #endregion Expands
-    }
-
-    public class Navigation
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("menu_items")]
-        public List<MenuItem> MenuItems { get; set; } = new List<MenuItem>();
-
-        [JsonProperty("actived_menu_items")]
-        public List<MenuItem> ActivedMenuItems { get; set; } = new List<MenuItem>();
-
-        [JsonProperty("actived_menu_item")]
-        public MenuItem ActivedMenuItem { get; set; }
-    }
-
-    public class MenuItem
-    {
-        [JsonIgnore]
-        [JsonProperty("obj")]
-        public JObject Obj { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("uri")]
-        public string Uri { get; set; }
-
-        [JsonProperty("icon")]
-        public string Icon { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("target")]
-        public string Target { get; set; }
-
-        [JsonProperty("classes")]
-        public string Classes { get; set; }
-
-        [JsonProperty("description")]
-        public string Description { get; set; }
-        
-        [JsonProperty("target_id")]
-        public string TargetId { get; set; }
-
-        [JsonProperty("isActive")]
-        public bool IsActive { get; set; }
-
-        [JsonProperty("menu_items")]
-        public List<MenuItem> MenuItems { get; set; }
-
-        public T Property<T>(string fieldName)
-        {
-            if (Obj != null)
-            {
-                var field = Obj.GetValue(fieldName);
-                if (field != null)
-                {
-                    return field.Value<T>();
-                }
-                else
-                {
-                    return default;
-                }
-            }
-            else
-            {
-                return default;
-            }
-        }
-    }
+    }   
 }
