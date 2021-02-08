@@ -102,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/post/{Specificulture}/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Specificulture}/post/{Id}/{SeoName}" : null; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
