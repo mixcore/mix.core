@@ -95,6 +95,25 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
+        [HttpPost, HttpOptions]
+        [Route("upload-media")]
+        public async Task<RepositoryResponse<UpdateViewModel>> UploadMedia([FromForm] IFormFile file)
+        {
+            if (file != null)
+            {
+                var data = new UpdateViewModel()
+                {
+                    Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                    Specificulture = _lang,
+                    FileFolder = $"{MixService.GetTemplateUploadFolder(_lang)}/{DateTime.UtcNow.ToString("yyyy-MM")}",
+                    File = file
+                };
+                var result = await base.SaveAsync<UpdateViewModel>(data, true);
+                return result;
+            }
+            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
+        }
+
         // GET api/media
         [HttpPost, HttpOptions]
         [Route("list")]
