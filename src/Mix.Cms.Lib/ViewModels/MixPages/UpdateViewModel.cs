@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
+        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/page/{SeoName}" : null; }
 
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules

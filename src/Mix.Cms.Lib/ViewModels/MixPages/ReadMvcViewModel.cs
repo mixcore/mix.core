@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("details")]
-        public string DetailsUrl { get => Id > 0 ? $"/page/{Specificulture}/{SeoName}" : null; }
+        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/page/{SeoName}" : null; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }

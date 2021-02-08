@@ -22,22 +22,20 @@
 
     try
     {
-       @await Html.PartialAsync(Model.TemplatePath, Model)
+        @await Html.PartialAsync(Model.TemplatePath, Model)
     }
     catch (System.InvalidOperationException invalidOperationException)
     {
-        <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
+        <p class="danger text-center has-error">Unable load template @Model.TemplatePath with Exception detail below:</p>
         <code>
             @invalidOperationException
         </code>
-
     }
     catch (Exception ex)
     {
         <code>
             @ex
         </code>
-        <p class="danger text-center has-error">Unable load template</p>
     }
 }
 else
