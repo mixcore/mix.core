@@ -21,7 +21,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Route("api/v1/rest/{culture}/attribute-set-data/portal")]
     public class AttributeSetDataPortalController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel, FormViewModel, DeleteViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data
         [HttpGet]
