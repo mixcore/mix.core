@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -35,6 +37,7 @@ namespace Mix.Cms.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
+
         #region Routes
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
@@ -52,22 +55,9 @@ namespace Mix.Cms.Lib.Controllers
                 OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
                 Direction = direction
             };
-            Expression<Func<TModel, bool>> predicate = null;
-            RepositoryResponse<PaginationModel<TView>> getData = null;
-            if (!string.IsNullOrEmpty(_lang))
-            {
-                predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
-                getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
-                            predicate,
-                            request.OrderBy, request.Direction,
-                            request.PageSize, request.PageIndex, null, null)
-                    .ConfigureAwait(false);
-            }
-            else
-            {
-                getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+
+            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-            }
 
             if (getData.IsSucceed)
             {
@@ -87,6 +77,44 @@ namespace Mix.Cms.Lib.Controllers
             if (getData.IsSucceed)
             {
                 return getData.Data;
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        // GET: api/v1/rest/{culture}/attribute-set-data/5
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<TView>> Duplicate(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                var data = getData.Data;
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), "Id");
+                switch (idProperty.Name.ToLower())
+                {
+                    case "int32":
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", 0));
+                        break;
+                    default:
+                        ReflectionHelper.SetPropertyValue(data, new JProperty("id", default));
+                        break;
+                }
+
+                var saveResult = await data.SaveModelAsync(true);
+                if (saveResult.IsSucceed)
+                {
+                    string key = $"_{id}";
+                    key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
+                    await MixService.RemoveCacheAsync(typeof(TModel), key);
+                    return Ok(saveResult.Data);
+                }
+                else
+                {
+                    return BadRequest(saveResult.Errors);
+                }
             }
             else
             {
@@ -226,6 +254,46 @@ namespace Mix.Cms.Lib.Controllers
 
         }
 
+        [HttpPost, HttpOptions]
+        [Route("list-action")]
+        public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
+        {
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            //ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> idPre = null;
+            foreach (var id in data.Data)
+            {
+                var temp = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+
+                idPre = idPre != null
+                    ? idPre.AndAlso(temp)
+                    : temp;
+            }
+            if (idPre != null)
+            {
+                predicate = predicate.AndAlso(idPre);
+
+                switch (data.Action)
+                {
+                    case "Delete":
+                        return Ok(JObject.FromObject(await DeleteListAsync(predicate, true)));
+
+                    case "Publish":
+                        return Ok(JObject.FromObject(await PublishListAsync(predicate)));
+
+                    case "{MixFolders.ExportFolder}":
+                        return Ok(JObject.FromObject(await ExportListAsync(predicate)));
+
+                    default:
+                        return JObject.FromObject(new RepositoryResponse<bool>());
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
 
         #endregion
 
@@ -255,6 +323,7 @@ namespace Mix.Cms.Lib.Controllers
             }
             base.OnActionExecuting(context);
         }
+
         protected void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
@@ -263,6 +332,17 @@ namespace Mix.Cms.Lib.Controllers
         #endregion Overrides
 
         #region Helpers
+
+        private async Task<RepositoryResponse<List<TView>>> PublishListAsync(Expression<Func<TModel, bool>> predicate)
+        {
+            var data = await GetListAsync<TView>(predicate);
+            foreach (var item in data.Data.Items)
+            {
+                ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
+            }
+            return await SaveListAsync(data.Data.Items, false);
+        }
+
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
@@ -322,10 +402,11 @@ namespace Mix.Cms.Lib.Controllers
             }
             return new RepositoryResponse<TModel>() { IsSucceed = false };
         }
+
         protected async Task<RepositoryResponse<TModel>> DeleteAsync(string id, bool isDeleteRelated = false)
         {
 
-            var data = await GetSingleAsync(id);
+            var data = await GetSingleAsync<TView>(id);
             if (data.IsSucceed)
             {
                 var result = await DeleteAsync(data.Data, isDeleteRelated);
@@ -368,39 +449,35 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
+        protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
-
-            var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
-            FileViewModel file = null;
+            string type = typeof(TModel).Name;
+            var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, _context);
+            var jData = new List<JObject>();
             if (getData.IsSucceed)
             {
-                string exportPath = $"{MixFolders.ExportFolder}/Structures/{typeof(TModel).Name}";
-                string filename = $"{type}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
-                var objContent = new JObject(
-                    new JProperty("type", type.ToString()),
-                    new JProperty("data", JArray.FromObject(getData.Data))
-                    );
-                file = new FileViewModel()
+                string exportPath = $"{MixFolders.ExportFolder}/{typeof(TModel).Name}";
+                foreach (var item in JArray.FromObject(getData.Data))
                 {
-                    Filename = filename,
-                    Extension = MixFileExtensions.Json,
-                    FileFolder = exportPath,
-                    Content = objContent.ToString()
-                };
-                // Copy current templates file
-                MixFileRepository.Instance.SaveWebFile(file);
+                    jData.Add(JObject.FromObject(item));
+                }
 
+                var result = Lib.ViewModels.MixAttributeSetDatas.Helper.ExportAttributeToExcel(
+                        jData, string.Empty, exportPath, $"{type}", null);
+
+                return result;
             }
-            UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
-            return new RepositoryResponse<FileViewModel>()
+            else
             {
-                IsSucceed = true,
-                Data = file,
-            };
-
+                return new RepositoryResponse<FileViewModel>()
+                {
+                    Errors = getData.Errors
+                };
+            }
         }
-        protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
+
+        protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null)
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
@@ -416,19 +493,19 @@ namespace Mix.Cms.Lib.Controllers
                 Direction = direction
             };
 
-            RepositoryResponse<PaginationModel<TView>> data = null;
+            RepositoryResponse<PaginationModel<T>> data = null;
 
             if (data == null)
             {
 
                 if (predicate != null)
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
+                    data = await DefaultRepository<TDbContext, TModel, T>.Instance.GetModelListByAsync(
                         predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null);
                 }
                 else
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+                    data = await DefaultRepository<TDbContext, TModel, T>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
 
                 }
 
@@ -436,7 +513,8 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<TView>> SaveAsync(TView vm, bool isSaveSubModel)
+        protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
+            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)
             {
@@ -445,15 +523,13 @@ namespace Mix.Cms.Lib.Controllers
 
                 return result;
             }
-            return new RepositoryResponse<TView>();
+            return new RepositoryResponse<T>();
         }
 
-        protected async Task<RepositoryResponse<TModel>> SaveAsync(JObject obj, Expression<Func<TModel, bool>> predicate)
+        protected async Task<RepositoryResponse<TModel>> SavePropertiesAsync(JObject obj, Expression<Func<TModel, bool>> predicate)
         {
             if (obj != null)
             {
-
-
                 List<EntityField> fields = new List<EntityField>();
                 Type type = typeof(TModel);
                 foreach (var item in obj.Properties())
