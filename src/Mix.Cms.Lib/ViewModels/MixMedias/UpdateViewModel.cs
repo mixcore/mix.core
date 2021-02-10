@@ -179,19 +179,22 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 if (File != null)
                 {
-                    FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
-                    FileName = SeoHelper.GetSEOString(File.FileName.Substring(0, File.FileName.LastIndexOf('.'))) + DateTime.UtcNow.Ticks;
-                    Extension = File.FileName.Substring(File.FileName.LastIndexOf('.'));
-                    var saveFile = MixFileRepository.Instance.SaveWebFile(File, $"{FileFolder}/{FileName}{Extension}");
-                    if (saveFile != null)
+                    var saveFile = MixFileRepository.Instance.SaveWebFile(File, $"{FileFolder}");
+                    if (saveFile == null)
                     {
                         IsValid = false;
                         Errors.Add("Cannot save file");
                     }
-                    if (string.IsNullOrEmpty(Title))
+                    else
                     {
-                        Title = FileName;
+                        if (string.IsNullOrEmpty(Title))
+                        {
+                            Title = FileName;
+                        }
+                        FileName = saveFile.Filename;
+                        Extension = saveFile.Extension;
                     }
+                    
                 }
             }
             FileType = FileType ?? "image";

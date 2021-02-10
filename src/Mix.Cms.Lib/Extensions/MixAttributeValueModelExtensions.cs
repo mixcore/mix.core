@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Common.Helper;
@@ -18,8 +20,8 @@ namespace Mix.Cms.Lib.Extensions
     public static class MixAttributeValueModelExtensions
     {
         public static JProperty ToJProperty(
-            this MixAttributeSetValue item, 
-            MixCmsContext _context, 
+            this MixAttributeSetValue item,
+            MixCmsContext _context,
             IDbContextTransaction _transaction)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
@@ -59,6 +61,14 @@ namespace Mix.Cms.Lib.Extensions
 
                 case MixDataType.Reference:
                     return (new JProperty(item.AttributeFieldName, new JArray()));
+                case MixDataType.Upload:
+                    string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                    string url = !string.IsNullOrEmpty(item.StringValue)
+                   ? !item.StringValue.Contains(domain) 
+                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
+                        :  item.StringValue
+                   : null;
+                    return (new JProperty(item.AttributeFieldName, url));
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -71,7 +81,6 @@ namespace Mix.Cms.Lib.Extensions
                 case MixDataType.ImageUrl:
                 case MixDataType.CreditCard:
                 case MixDataType.PostalCode:
-                case MixDataType.Upload:
                 case MixDataType.Color:
                 case MixDataType.Icon:
                 case MixDataType.VideoYoutube:
@@ -184,7 +193,7 @@ namespace Mix.Cms.Lib.Extensions
             }
 
         }
-        
+
         public static void LoadAllReferenceData(this JObject obj
            , string dataId, int attributeSetId, string culture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -199,7 +208,7 @@ namespace Mix.Cms.Lib.Extensions
             foreach (var item in refFields)
             {
                 JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, _context, _transaction);
-                
+
                 if (obj.ContainsKey(item.Name))
                 {
                     obj[item.Name] = arr;

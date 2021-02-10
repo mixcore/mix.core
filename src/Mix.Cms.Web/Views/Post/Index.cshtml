@@ -21,18 +21,17 @@
             }
             catch (System.InvalidOperationException invalidOperationException)
             {
-                <p class="danger text-center has-error">Unable load template with Exception detail below:</p>
+                <p class="danger text-center has-error">Unable load template @Model.TemplatePath with Exception detail below:</p>
                 <code>
                     @invalidOperationException
                 </code>
-
             }
             catch (Exception ex)
             {
+                <p class="danger text-center has-error">Unable load template @Model.TemplatePath with Exception detail below:</p>
                 <code>
                     @ex
                 </code>
-                <p class="danger text-center has-error">Unable load template</p>
             }
         }
         else
