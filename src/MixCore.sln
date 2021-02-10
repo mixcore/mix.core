@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart.NetCore", "Mix.He
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Schedule", "Mix.Cms.Schedule\Mix.Cms.Schedule.csproj", "{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart", "..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj", "{8E98B2F0-FD5C-4443-ACA4-A3BAC0644317}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,10 +59,6 @@ Global
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCEA1296-5B82-4A1C-AD81-5A9ACC421750}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E98B2F0-FD5C-4443-ACA4-A3BAC0644317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E98B2F0-FD5C-4443-ACA4-A3BAC0644317}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E98B2F0-FD5C-4443-ACA4-A3BAC0644317}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E98B2F0-FD5C-4443-ACA4-A3BAC0644317}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
