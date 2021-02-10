@@ -19,7 +19,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/attribute-set-data/client")]
     public class ApiAttributeSetDataController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel, FormViewModel, FormViewModel>
+        BaseRestApiController<MixCmsContext, MixAttributeSetData, FormViewModel>
     {
         // GET: api/v1/rest/{culture}/attribute-set-data/client/search
         [HttpGet]

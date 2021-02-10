@@ -88,7 +88,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var removeDataIds = _context.MixAttributeSetValue.Where(m => m.AttributeFieldId == Id).Select(m => m.DataId).ToList();
-            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeFieldId == Id);
+            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeFieldId == Id
+            , _context, _transaction);
             ViewModelHelper.HandleResult(removeFieldValues, ref result);
             if (result.IsSucceed)
             {
