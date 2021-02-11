@@ -165,7 +165,9 @@ namespace Mix.Cms.Lib.Controllers
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
-                    c => c.Type == "Username").Value));
+                    c => c.Type == "Username")?.Value));
+            ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
+            ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
             {
@@ -186,7 +188,7 @@ namespace Mix.Cms.Lib.Controllers
             if (data != null)
             {
                 ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
-                    c => c.Type == "Username").Value));
+                    c => c.Type == "Username")?.Value));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, "Id").ToString();
                 if (id != currentId)
@@ -225,7 +227,7 @@ namespace Mix.Cms.Lib.Controllers
             if (result.IsSucceed)
             {
                 ReflectionHelper.SetPropertyValue(result.Data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
-                    c => c.Type == "Username").Value));
+                    c => c.Type == "Username")?.Value));
                 ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
                 if (saveResult.IsSucceed)
