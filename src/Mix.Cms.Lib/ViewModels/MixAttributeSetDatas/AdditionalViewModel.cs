@@ -600,19 +600,25 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         private void ParseData(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            var defaultFields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
+                            f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             if (Obj == null)
             {
                 var getValues = MixAttributeSetValues.UpdateViewModel
-                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, 
+                       _context, _transaction);
 
+                
                 // if create new => init from default custom data
+
                 if (string.IsNullOrEmpty(Id))
                 {
-                    Fields = Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                    Fields = Fields ?? defaultFields;
                 }
                 else // load custom fields
                 {
                     Fields = getValues.Data.Select(v => v.Field).OrderBy(f => f.Priority).ToList();
+                    
                 }
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
@@ -647,6 +653,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     Obj.Add(ParseValue(item, _context, _transaction));
                 }
             }
+
+            Fields.AddRange(
+                        defaultFields.Where(df => !Fields.Any(f => f.Name == df.Name)));
         }
         public static async Task<RepositoryResponse<FormViewModel>> SaveObjectAsync(JObject data, string attributeSetName)
         {

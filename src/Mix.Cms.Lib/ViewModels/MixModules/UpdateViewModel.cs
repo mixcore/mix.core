@@ -79,13 +79,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Views
 
-        #region Attributes
-
-        [JsonProperty("attributeSet")]
-        public MixAttributeSets.UpdateViewModel AttributeSet { get; set; }
-
-        #endregion Attributes
-
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
