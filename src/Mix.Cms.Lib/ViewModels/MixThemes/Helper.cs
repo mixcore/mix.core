@@ -32,7 +32,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
-                    .Replace($"/{culture}/", "/[CULTURE]/");
+                    .Replace($"/{culture}/", "/[CULTURE]/")
+                    .Replace($"/{data.ThemeName}/", "/[THEME_NAME]/");
                 if (!string.IsNullOrEmpty(domain))
                 {
                     content = content.Replace(domain, string.Empty);
@@ -51,9 +52,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Copy current templates file
                 MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
                 // Copy current assets files
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
                 // Copy current uploads files
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}/{getTheme.Data.Name}", $"{tempPath}/Uploads");
+                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
                 // Save Site Structures
                 MixFileRepository.Instance.SaveFile(file);
 

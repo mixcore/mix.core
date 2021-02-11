@@ -191,7 +191,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
                         m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)

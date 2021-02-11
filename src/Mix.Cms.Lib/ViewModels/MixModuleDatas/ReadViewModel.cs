@@ -175,11 +175,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         }
         public bool HasValue(string fieldName)
         {
-            return !string.IsNullOrEmpty(JItem[fieldName]?.Value<JObject>().Value<string>("value"));
+            return !string.IsNullOrEmpty(JItem[fieldName]?.Value<JObject>()?.Value<string>("value"));
         }
         public string Property(string name)
         {
-            return JItem[name]?.Value<JObject>().Value<string>("value");
+            return HasValue(name) ? JItem[name]?.Value<JObject>()?.Value<string>("value"): default;
         }
 
         public ApiModuleDataValueViewModel GetDataProperty(string name)
