@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             get
             {
-                return $"{MixFolders.SiteContentUploadsFolder}";
+                return $"{MixFolders.SiteContentAssetsFolder}/{Name}/uploads";
             }
         }
 
@@ -259,7 +259,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Get SiteStructure
                 var strSchema = MixFileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
-                                                       .Replace("[CULTURE]", Specificulture);
+                                                       .Replace("[CULTURE]", Specificulture)
+                                                       .Replace("[THEME_NAME]", parent.Name);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 //MixFileRepository.Instance.DeleteFile(filePath);
