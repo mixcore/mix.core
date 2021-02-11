@@ -138,18 +138,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                 if (val == null)
                 {
-                    val = new MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
-                        {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
-                        }
-                        , _context, _transaction)
+                    val = new MixAttributeSetValues.UpdateViewModel()
                     {
+                        AttributeFieldId = field.Id,
+                        AttributeFieldName = field.Name,
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field
+                        Field = field,
+                        DataId = Id
                     };
+                    val.ExpandView(_context, _transaction);
                     Values.Add(val);
                 }
                 else
