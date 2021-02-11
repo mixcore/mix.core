@@ -105,7 +105,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     Specificulture = _lang,
-                    FileFolder = $"{MixService.GetTemplateUploadFolder(_lang)}/{DateTime.UtcNow.ToString("yyyy-MM")}",
+                    FileFolder = $"{MixService.GetTemplateUploadFolder(_lang)}",
                     File = file
                 };
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);

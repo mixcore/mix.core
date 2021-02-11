@@ -53,7 +53,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Copy current assets files
                 MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
                 // Copy current uploads files
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}/{getTheme.Data.Name}", $"{tempPath}/Uploads");
                 // Save Site Structures
                 MixFileRepository.Instance.SaveFile(file);
 
@@ -84,10 +84,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
             if (data != null)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                string importFolder = $"{MixFolders.ImportFolder}/" +
+                    $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
                 if (theme != null)
                 {
-                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
+                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else

@@ -485,7 +485,10 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetTemplateUploadFolder(string culture)
         {
-            return $"{MixFolders.SiteContentUploadsFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/uploads";
+            return $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/" +
+                $"uploads/" +
+                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 
         public static MixCmsContext GetDbContext()

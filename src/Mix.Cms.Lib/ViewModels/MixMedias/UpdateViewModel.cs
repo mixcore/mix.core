@@ -156,7 +156,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         {
             if (MediaFile?.FileStream != null)
             {
-                FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}/{DateTime.UtcNow.ToString("yyyy-MM")}";
+                FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
