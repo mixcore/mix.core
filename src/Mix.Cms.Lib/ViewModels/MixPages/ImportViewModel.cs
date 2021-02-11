@@ -111,6 +111,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("themeName")]
         public string ThemeName { get; set; } = "default";
 
+        [JsonProperty("relatedData")]
+        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -131,6 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            GetAdditionalData(Id.ToString(), MixDatabaseParentType.Page, _context, _transaction);
         }
 
         #region Async
@@ -167,6 +170,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return MixPagePosts.ImportViewModel.Repository.GetModelListBy(
                 m => m.Specificulture == Specificulture && m.PageId == Id,
                 context, transaction).Data;
+        }
+
+        private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+                        m => m.Specificulture == Specificulture && m.ParentType == type
+                            && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData = (getRelatedData.Data);
+            }
         }
 
         #endregion Expands

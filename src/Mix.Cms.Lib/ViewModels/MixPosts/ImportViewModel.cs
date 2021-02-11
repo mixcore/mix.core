@@ -123,9 +123,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
-        #endregion Views
         [JsonProperty("relatedData")]
         public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
+        #endregion Views
+
         #endregion Properties
 
         #region Contructors

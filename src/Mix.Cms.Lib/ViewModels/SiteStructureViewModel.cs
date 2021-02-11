@@ -262,6 +262,8 @@ namespace Mix.Cms.Lib.ViewModels
             }
             // Load Related Data
             RelatedData.AddRange(Posts.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
+            RelatedData.AddRange(Pages.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
+            RelatedData.AddRange(Modules.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
             foreach (var item in RelatedData)
             {
                 if (!AttributeSetDatas.Any(m => m.Id == item.Id))
@@ -490,17 +492,16 @@ namespace Mix.Cms.Lib.ViewModels
                                 field.ReferenceId = refId.Value;
 
                             }
-                            if (!dicFieldIds.Any(m => m.Key == field.Id))
+                            if (dicFieldIds.ContainsKey(field.Id))
                             {
-                                startFieldId++;
-                                dicFieldIds.Add(field.Id, startFieldId);
-                                field.Id = startFieldId;
+                                field.Id = dicFieldIds[field.Id];
                                 field.CreatedDateTime = DateTime.UtcNow;
                             }
                             else
                             {
-                                var current = dicFieldIds.FirstOrDefault(m => m.Key == field.Id);
-                                field.Id = current.Value;
+                                startFieldId++;
+                                dicFieldIds.Add(field.Id, startFieldId);
+                                field.Id = startFieldId;
                                 field.CreatedDateTime = DateTime.UtcNow;
                             }
                             var saveResult = await field.SaveModelAsync(false, context, transaction);

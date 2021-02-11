@@ -93,6 +93,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("isExportData")]
         public bool IsExportData { get; set; }
 
+        [JsonProperty("relatedData")]
+        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -138,16 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //var getDataResult = MixModuleDatas.ReadViewModel.Repository
-            //           .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-            //           , "Priority", 0, null, null
-            //           , _context, _transaction);
-            //if (getDataResult.IsSucceed)
-            //{
-            //    getDataResult.Data.JsonItems = new List<JObject>();
-            //    getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
-            //    Data = getDataResult.Data;
-            //}
+            GetAdditionalData(Id.ToString(), MixDatabaseParentType.Module, _context, _transaction);
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context, IDbContextTransaction _transaction)
@@ -194,6 +187,17 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return MixModulePosts.ImportViewModel.Repository.GetModelListBy(
                 m => m.Specificulture == Specificulture && m.ModuleId == Id,
                 context, transaction).Data;
+        }
+
+        private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+                        m => m.Specificulture == Specificulture && m.ParentType == type
+                            && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData = (getRelatedData.Data);
+            }
         }
         #endregion Expand
     }

@@ -120,15 +120,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                         Errors.Add($"Field {Name} Existed");
                     }
                 }
-                else
-                {
-                    var currentField = Repository.GetSingleModel(m => m.Name == Name && m.DataType == DataType, _context, _transaction);
-                    if (currentField.IsSucceed)
-                    {
-                        Id = currentField.Data.Id;
-                        CreatedDateTime = currentField.Data.CreatedDateTime;
-                    }
-                }
             }
 
         }
