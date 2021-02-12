@@ -39,15 +39,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
-        [JsonProperty("content")]
-        public string Content { get; set; }
-
-        [JsonProperty("mobileContent")]
-        public string MobileContent { get; set; } = "{}";
-
-        [JsonProperty("spaContent")]
-        public string SpaContent { get; set; } = "";
-
         [JsonProperty("scripts")]
         public string Scripts { get; set; }
 
