@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
@@ -204,10 +205,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
 
             // Save Edm html
-            var getAttrSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName
-                , _context, _transaction);
-            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture
-                , _context, _transaction);
+            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction);
+            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
             var edmField = Values.FirstOrDefault(f => f.AttributeFieldName == "edm");
             if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
             {
@@ -219,8 +218,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var edmFile = new FileViewModel()
                 {
                     Content = body,
-                    Extension = ".html",
-                    FileFolder = "edms",
+                    Extension = MixFileExtensions.Html,
+                    FileFolder = MixTemplateFolders.Edms,
                     Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
                 };
                 if (MixFileRepository.Instance.SaveWebFile(edmFile))
@@ -230,6 +229,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
             //End save edm
+
             return base.ParseModel(_context, _transaction); ;
         }
 
@@ -272,7 +272,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 if (result.IsSucceed)
                 {
-                    CleanCache(context);
+                    Model.CleanCache(context);
                     Obj = Helper.ParseData(Id, Specificulture, context, transaction);
                 }
 
@@ -292,23 +292,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
 
-        }
-
-        private void CleanCache(MixCmsContext context)
-        {
-            var tasks = new List<Task>();
-            // Get Parent Ids
-            var relatedModels = context.MixRelatedAttributeData.Where(
-                p => p.DataId == Id && p.Specificulture == Specificulture)
-                    .Select(m => m.Id);
-            foreach (var model in relatedModels)
-            {
-                var parentKey = $"_{ParentId}_{Specificulture}";
-                var navKey = $"_{model}_{Specificulture}";
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixAttributeSetData), parentKey));
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixRelatedAttributeData), navKey));
-            }
-            Task.WhenAll(tasks);
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

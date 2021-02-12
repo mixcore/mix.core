@@ -9,5 +9,6 @@
         public const string MENU_ITEM = "sys_menu_item";
         public const string SYSTEM_CATEGORY = "sys_category";
         public const string SYSTEM_TAG = "sys_tag";
+        public const string SYSTEM_USER_INFO= "sys_user_info";
     }
 }
