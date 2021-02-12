@@ -85,9 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                     SeoHelper.GetSEOString(ThemeName) });
+                return MixCmsHelper.GetAssetFolder();
             }
         }
 
@@ -96,8 +94,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
+                return $"{MixFolders.TemplatesFolder}/{SeoHelper.GetSEOString(ThemeName)}";
             }
         }
 
@@ -172,13 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
-
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
@@ -295,12 +286,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
                     ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);
-            string folder = CommonHelper.GetFullPath(new string[]
-                    {
-                    MixFolders.TemplatesFolder
-                    , activedTheme
-                    , folderType.ToString()
-                    });
+            string folder = $"{MixFolders.TemplatesFolder}/{activedTheme}/{folderType}";
             var defaulTemplate = MixTemplates.ImportViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()).Data?.FirstOrDefault();
             return defaulTemplate ?? new ImportViewModel(new MixTemplate()

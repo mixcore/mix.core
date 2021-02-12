@@ -92,9 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -110,9 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -147,13 +143,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
-                    , Template
-                });
+                return $"/{MixFolders.TemplatesFolder}/" +
+                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                    $"{Template}";
             }
         }
 
@@ -161,13 +153,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
-                    , FormTemplate
-                });
+                return $"/{MixFolders.TemplatesFolder}/" +
+                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                   $"{FormTemplate}";
             }
         }
 
@@ -175,13 +163,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    ""
-                    , MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"
-                    , EdmTemplate
-                });
+                return $"/{MixFolders.TemplatesFolder}/" +
+                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                   $"{EdmTemplate}";
             }
         }
 

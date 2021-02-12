@@ -80,22 +80,16 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                    ThemeName });
+                return MixCmsHelper.GetAssetFolder();
             }
         }
-
 
         [JsonProperty("templateFolder")]
         public string TemplateFolder
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.TemplatesFolder,
-                    ThemeName
-                    });
+                return $"{MixFolders.TemplatesFolder}/{SeoHelper.GetSEOString(ThemeName)}";
             }
         }
 
@@ -147,12 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();

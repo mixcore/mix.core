@@ -128,9 +128,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -146,9 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -194,13 +190,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
-                    , TemplateFolderType
-                }
-            );
+                return $"{MixFolders.TemplatesFolder}/" +
+                  $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
+                  $"{MixTemplateFolders.Pages}";
             }
         }
 

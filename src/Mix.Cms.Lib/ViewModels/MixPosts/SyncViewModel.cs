@@ -162,13 +162,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
-                    , TemplateFolderType
-                }
-            );
+                return $"{MixFolders.TemplatesFolder}/" +
+                  $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
+                  $"{MixTemplateFolders.Posts}";
             }
         }
 
@@ -181,9 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -199,9 +193,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -291,11 +283,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType).Data;
             View = MixTemplates.UpdateViewModel.GetTemplateByPath(Template, Specificulture, MixTemplateFolders.Posts, _context, _transaction);
 
-            this.Template = CommonHelper.GetFullPath(new string[]
-               {
-                    this.View?.FileFolder
-                    , this.View?.FileName
-               });
+            this.Template = $"{this.View?.FileFolder}/{this.View?.FileName}";
 
             var getPagePost = MixPagePosts.ReadViewModel.GetPagePostNavAsync(Id, Specificulture, _context, _transaction);
             if (getPagePost.IsSucceed)
@@ -400,30 +388,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
             if (ThumbnailFileStream != null)
             {
-                string folder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
-                });
+                string folder = MixCmsHelper.GetUploadFolder(Specificulture);
                 string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
                 bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
                 if (saveThumbnail)
                 {
                     CommonHelper.RemoveFile(Thumbnail);
-                    Thumbnail = CommonHelper.GetFullPath(new string[] { folder, filename });
+                    Thumbnail = $"{folder}/{filename}";
                 }
             }
             if (ImageFileStream != null)
             {
-                string folder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
-                });
+                string folder = MixCmsHelper.GetUploadFolder(Specificulture);
                 string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
                 bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
                 if (saveImage)
                 {
                     CommonHelper.RemoveFile(Image);
-                    Image = CommonHelper.GetFullPath(new string[] { folder, filename });
+                    Image = $"{folder}/{filename}";
                 }
             }
 

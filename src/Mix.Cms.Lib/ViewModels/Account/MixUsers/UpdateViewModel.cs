@@ -92,9 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
             {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Avatar
-                });
+                    return $"{Domain}/{Avatar}";
                 }
                 else
                 {
@@ -129,10 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         {
             if (MediaFile.FileStream != null)
             {
-                MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixFolders.SiteContentUploadsFolder,
-                    DateTime.UtcNow.ToString("MMM-yyyy")
-                }); ;
+                MediaFile.FileFolder = MixCmsHelper.GetUploadFolder(Specificulture);
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {

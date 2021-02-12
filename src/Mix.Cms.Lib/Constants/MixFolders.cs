@@ -10,6 +10,5 @@
         public const string ExportFolder = "mix-content/exports";
         public const string ImportFolder = "mix-content/imports/themes";
         public const string SiteContentAssetsFolder = "mix-content/assets";
-        public const string SiteContentUploadsFolder = "mix-content/uploads";
     }
 }

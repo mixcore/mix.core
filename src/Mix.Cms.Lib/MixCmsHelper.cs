@@ -38,12 +38,22 @@ namespace Mix.Cms.Lib
             return MixFileRepository.Instance.GetFile(name, folder, true, "[]");
         }
 
-        public static string GetAssetFolder(string culture)
+        public static string GetAssetFolder(string culture = null)
         {
+            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
+        
+        public static string GetUploadFolder(string culture = null)
+        {
+            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            return $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
+                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
+        }
+
         public static string GetTemplateFolder(string culture)
         {
             return $"/{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
