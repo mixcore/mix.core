@@ -79,7 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
                 var databaseName = request.Query["databaseName"].ToString();
 
-                return await LoadAdditionalData(parentType, parentId, databaseName, culture);
+                return await LoadAdditionalData(parentType, parentId, databaseName, culture, context, transaction);
             }
             catch (Exception ex)
             {
