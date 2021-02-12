@@ -198,10 +198,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         val.ToModelValue(Obj[val.AttributeFieldName]);
                     }
                 }
-                else
-                {
-                    Obj.Add(val.Model.ToJProperty(_context, _transaction));
-                }
             }
 
             // Save Edm html
