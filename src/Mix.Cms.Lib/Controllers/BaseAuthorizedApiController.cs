@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.Controllers
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
-    public class BaseAuthorizedRestApiController<TDbContext, TModel, TView, TRead> : Controller
+    public class BaseAuthorizedApiController<TDbContext, TModel, TView, TRead> : Controller
         where TDbContext : DbContext
         where TModel : class
         where TView : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, TView>

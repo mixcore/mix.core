@@ -18,7 +18,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/attribute-set-value/portal")]
     public class ApiAttributeSetValueController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSetValue, UpdateViewModel, ReadViewModel>
+        BaseAuthorizedApiController<MixCmsContext, MixAttributeSetValue, UpdateViewModel, ReadViewModel>
     {
 
         // GET: api/v1/rest/en-us/attribute-field/client
