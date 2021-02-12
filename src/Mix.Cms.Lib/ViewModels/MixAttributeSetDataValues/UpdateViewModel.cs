@@ -162,7 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
+                Field ??= MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
                     f => f.Id == AttributeFieldId
                     , _context, _transaction).Data;
                 if (Field != null && DataType == MixDataType.Reference)

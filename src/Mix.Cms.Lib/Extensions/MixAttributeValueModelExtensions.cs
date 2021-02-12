@@ -95,6 +95,11 @@ namespace Mix.Cms.Lib.Extensions
 
         public static void ToModelValue(this ViewModels.MixAttributeSetValues.UpdateViewModel item, JToken property)
         {
+            if (property == null)
+            {
+                return;
+            }
+
             if (item.Field.IsEncrypt)
             {
                 var obj = property.Value<JObject>();

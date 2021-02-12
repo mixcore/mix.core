@@ -143,32 +143,12 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UserRoles = GetRoleNavs();
+            UserRoles = Helper.GetRoleNavs(Id);
         }
 
         #endregion Overrides
 
         #region Expands
-
-        public List<NavUserRoleViewModel> GetRoleNavs()
-        {
-            using (MixCmsAccountContext context = new MixCmsAccountContext())
-            {
-                var query = context.AspNetRoles
-                  .Include(cp => cp.AspNetUserRoles)
-                  .ToList()
-                  .Select(p => new NavUserRoleViewModel()
-                  {
-                      UserId = Id,
-                      RoleId = p.Id,
-                      Specificulture = Specificulture,
-                      Description = p.Name,
-                      IsActived = context.AspNetUserRoles.Any(m => m.UserId == Id && m.RoleId == p.Id)
-                  });
-
-                return query.OrderBy(m => m.Priority).ToList();
-            }
-        }
 
         #endregion Expands
     }

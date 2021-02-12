@@ -1,4 +1,6 @@
 ﻿using Mix.Identity.Models;
+using Mix.Identity.Models.AccountViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,8 +15,25 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("user")]
         public ApplicationUser User { get; set; }
 
+        [JsonProperty("mediaFile")]
+        public FileViewModel MediaFile { get; set; } = new FileViewModel();
+
         [JsonProperty("userData")]
         public MixAttributeSetDatas.AdditionalViewModel UserData { get; set; }
+
+        [JsonProperty("userRoles")]
+        public List<NavUserRoleViewModel> UserRoles { get; set; }
+
+        #region Change Password
+        [JsonProperty("resetPassword")]
+        public ResetPasswordViewModel ResetPassword { get; set; }
+
+        [JsonProperty("isChangePassword")]
+        public bool IsChangePassword { get; set; }
+
+        [JsonProperty("changePassword")]
+        public ChangePasswordViewModel ChangePassword { get; set; }
+        #endregion        
 
         public MixUserViewModel(ApplicationUser user)
         {
@@ -23,7 +42,11 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public async Task LoadUserDataAsync()
         {
-            UserData ??= await Helper.LoadUserInfoAsync(User.Id);
+            if (User != null)
+            {
+                UserData ??= await Helper.LoadUserInfoAsync(User.Id);
+                UserRoles = Helper.GetRoleNavs(User.Id);
+            }
         }
     }
 }

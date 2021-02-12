@@ -45,7 +45,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
                 && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
             {
-                var getData = await Helper.GetAdditionalData(parentType, parentId, Request, _lang);
+                var getData = await Helper.GetAdditionalData(parentType, parentId.ToString(), Request, _lang);
                 if (getData.IsSucceed)
                 {
                     return Ok(getData.Data);

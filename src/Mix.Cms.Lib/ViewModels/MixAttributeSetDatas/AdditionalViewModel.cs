@@ -101,8 +101,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
             if (Obj == null)
             {
-                Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
+                var getValues = MixAttributeSetValues.UpdateViewModel
+                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+                var values = getValues.Data.Select(v => v.Model);
+                Fields = getValues.Data.Select(v => v.Field).ToList();
+                var properties = values.Select(m => m.ToJProperty(_context, _transaction));
+                Obj = new JObject(
+                    new JProperty("id", Id),
+                    properties
+                );
             }
+            Fields ??= new List<MixAttributeFields.UpdateViewModel>();
             var defaultFields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
                             f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
             Fields.AddRange(
