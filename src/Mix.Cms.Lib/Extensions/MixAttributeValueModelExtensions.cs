@@ -3,8 +3,6 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Common.Helper;
 using Mix.Heart.Extensions;
 using Mix.Services;

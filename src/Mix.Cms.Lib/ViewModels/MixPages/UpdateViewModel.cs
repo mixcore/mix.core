@@ -229,17 +229,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             GenerateSEO(_context, _transaction);
 
-            //var navParent = ParentNavs?.FirstOrDefault(p => p.IsActived);
-
-            //if (navParent != null)
-            //{
-            //    Level = 1; //Repository.GetSingleModel(c => c.Id == navParent.ParentId, _context, _transaction).Data.Level + 1;
-            //}
-            //else
-            //{
-            //    Level = 0;
-            //}
-
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
             Layout = Master != null ? $"{Master.FolderType}/{Master.FileName}{Master.Extension}" : null;
             if (Id == 0)
