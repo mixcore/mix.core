@@ -77,19 +77,16 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                    ThemeName });
+                return MixCmsHelper.GetAssetFolder();
             }
         }
-
 
         [JsonProperty("templateFolder")]
         public string TemplateFolder
         {
             get
             {
-                return CommonHelper.GetFullPath(new string[] { MixFolders.TemplatesFolder, ThemeName });
+                return $"{MixFolders.TemplatesFolder}/{SeoHelper.GetSEOString(ThemeName)}";
             }
         }
 
