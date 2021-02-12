@@ -147,6 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 {
                     val.LastModified = DateTime.UtcNow;
                 }
+                val.CreatedBy = CreatedBy;
                 val.Status = Status;
                 val.Priority = field.Priority;
                 val.AttributeSetName = AttributeSetName;

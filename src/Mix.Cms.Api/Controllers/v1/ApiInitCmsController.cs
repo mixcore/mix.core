@@ -24,6 +24,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -222,12 +224,14 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, HttpOptions]
-        [Route("init-cms/step-3")]
+        [Route("init-cms/step-3")]        
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, _lang, assets, theme);
+            string user = User.Claims.FirstOrDefault(c => c.Type == "Username").Value;
+            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
 
         #endregion Post

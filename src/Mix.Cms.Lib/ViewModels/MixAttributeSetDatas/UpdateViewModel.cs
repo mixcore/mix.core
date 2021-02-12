@@ -117,6 +117,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     };
                     Values.Add(val);
                 }
+                val.CreatedBy = CreatedBy;
+                val.ModifiedBy = ModifiedBy;
                 val.AttributeSetName = AttributeSetName;
                 val.Priority = field.Priority;
                 val.Field = field;
