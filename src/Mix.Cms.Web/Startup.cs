@@ -16,9 +16,11 @@ using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Schedule;
 using Mix.Cms.Schedule.Jobs;
 using Mix.Cms.Service.SignalR;
+using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -76,7 +78,7 @@ namespace Mix.Cms.Web
             services.AddMixScheduler(Configuration);
             /* Mix: End Inject Services */
 
-            VerifyInitData(services);
+            _ = VerifyInitDataAsync(services);
 
             services.AddMixAuthorize(Configuration);
             /* End Additional Config for Mixcore Cms  */
@@ -144,7 +146,7 @@ namespace Mix.Cms.Web
 
 
         // Mix: Check custom cms config
-        private void VerifyInitData(IServiceCollection services)
+        private async Task VerifyInitDataAsync(IServiceCollection services)
         {
             // Mix: Migrate db if already inited
 
@@ -153,6 +155,18 @@ namespace Mix.Cms.Web
                 using (var ctx = new MixCmsContext())
                 {
                     ctx.Database.Migrate();
+                    var transaction = ctx.Database.BeginTransaction();
+                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixAttributeSets.ImportViewModel>>();
+                    foreach (var db in sysDatabases)
+                    {
+                        if (!ctx.MixAttributeSet.Any(m=>m.Name == db.Name))
+                        {
+                            await db.SaveModelAsync(true, ctx, transaction);
+                        }
+                    }
+                    await transaction.CommitAsync();
+                    await transaction.DisposeAsync();
                 }
             }
 
