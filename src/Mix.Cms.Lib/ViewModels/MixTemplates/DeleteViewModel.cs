@@ -57,17 +57,15 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Views
 
-        [JsonIgnore]
         [JsonProperty("assetFolder")]
         public string AssetFolder
         {
             get
             {
-                return MixCmsHelper.GetAssetFolder();
+                return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
-        [JsonIgnore]
         [JsonProperty("templateFolder")]
         public string TemplateFolder
         {

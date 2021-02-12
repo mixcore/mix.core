@@ -80,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return MixCmsHelper.GetAssetFolder();
+                return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
@@ -89,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             get
             {
-                return $"{MixFolders.TemplatesFolder}/{SeoHelper.GetSEOString(ThemeName)}";
+                return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
