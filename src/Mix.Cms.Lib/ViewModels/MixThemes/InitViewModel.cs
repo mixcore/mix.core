@@ -200,6 +200,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                                                        .Replace("[CULTURE]", Specificulture)
                                                        .Replace("[THEME_NAME]", parent.Name);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
+                siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
@@ -211,11 +212,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
-                        string content = file.Content.Replace($"/{MixFolders.SiteContentAssetsFolder}/{siteStructures.ThemeName}/",
-                        $"/{MixFolders.SiteContentAssetsFolder}/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                             new MixTemplate()
                             {
+                                CreatedBy = CreatedBy,
                                 FileFolder = file.FileFolder,
                                 FileName = file.Filename,
                                 Content = file.Content,

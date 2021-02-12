@@ -15,6 +15,9 @@ namespace Mix.Cms.Lib.ViewModels
 {
     public class SiteStructureViewModel
     {
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }
 
@@ -381,6 +384,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
 
                 var oldId = module.Id;
+                module.CreatedBy = CreatedBy;
 
                 if (result.IsSucceed)
                 {
@@ -416,6 +420,7 @@ namespace Mix.Cms.Lib.ViewModels
             foreach (var post in Posts)
             {
                 var oldId = post.Id;
+                post.CreatedBy = CreatedBy;
 
                 if (result.IsSucceed)
                 {
@@ -454,6 +459,7 @@ namespace Mix.Cms.Lib.ViewModels
                 var attributeFields = new List<MixAttributeFields.UpdateViewModel>();
                 foreach (var set in AttributeSets)
                 {
+                    set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
                     {
                         if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
@@ -484,6 +490,7 @@ namespace Mix.Cms.Lib.ViewModels
                     {
                         if (result.IsSucceed)
                         {
+                            field.CreatedBy = CreatedBy;
                             var setId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.AttributeSetId);
                             field.AttributeSetId = setId.Value;
                             if (field.ReferenceId != null)
@@ -530,6 +537,7 @@ namespace Mix.Cms.Lib.ViewModels
                 foreach (var item in Configurations)
                 {
                     var oldId = item.Id;
+                    item.CreatedBy = CreatedBy;
                     if (!context.MixConfiguration.Any(p => p.Keyword == item.Keyword))
                     {
                         startId++;
@@ -584,6 +592,7 @@ namespace Mix.Cms.Lib.ViewModels
                 foreach (var item in Languages)
                 {
                     var oldId = item.Id;
+                    item.CreatedBy = CreatedBy;
                     if (!context.MixLanguage.Any(p => p.Keyword == item.Keyword))
                     {
                         startId++;
@@ -643,6 +652,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     // store old id => update to related data if save success
                     var oldId = item.Id;
+                    item.CreatedBy = CreatedBy;
                     // TODO: Id > 7 => not system init page
                     if (!context.MixPage.Any(p => p.SeoName == item.SeoName))
                     {
@@ -693,8 +703,10 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in AttributeSetDatas)
             {
+                item.CreatedBy = CreatedBy;
                 if (result.IsSucceed)
                 {
+                    item.CreatedBy = CreatedBy;
                     if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
                         item.Specificulture = destCulture;
@@ -758,6 +770,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (result.IsSucceed)
                 {
+                    item.CreatedBy = CreatedBy;
                     item.Specificulture = desCulture;
                     item.PageId = dicPageIds[item.PageId];
                     item.PostId = dicPostIds[item.PostId];
@@ -780,6 +793,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (result.IsSucceed)
                 {
+                    item.CreatedBy = CreatedBy;
                     item.Specificulture = desCulture;
                     item.PageId = dicPageIds[item.PageId];
                     item.ModuleId = dicModuleIds[item.ModuleId];
@@ -802,6 +816,7 @@ namespace Mix.Cms.Lib.ViewModels
             {
                 if (result.IsSucceed)
                 {
+                    item.CreatedBy = CreatedBy;
                     item.Specificulture = desCulture;
                     item.ModuleId = dicModuleIds[item.ModuleId];
                     item.PostId = dicPostIds[item.PostId];
@@ -822,6 +837,7 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in ModuleDatas)
             {
+                item.CreatedBy = CreatedBy;
                 if (result.IsSucceed)
                 {
                     item.Specificulture = desCulture;
@@ -843,6 +859,7 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RelatedData)
             {
+                item.CreatedBy = CreatedBy;
                 item.Id = Guid.NewGuid().ToString();
                 item.Specificulture = desCulture;
                 switch (item.ParentType)
