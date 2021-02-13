@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -187,6 +188,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("Layout")]
         public string Layout { get; set; }
+
+        [JsonProperty("author")]
+        public JObject Author { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -211,6 +215,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
             //Load Template + Style +  Scripts for views
+            LoadAuthor(_context, _transaction);
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             if (Pages == null)
             {
@@ -239,6 +244,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Related Posts
                 PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
 
+            }
+        }
+
+        private void LoadAuthor(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            if (!string.IsNullOrEmpty(CreatedBy))
+            {
+                var getAuthor = MixAttributeSetDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
+                    , Specificulture, context, transaction);
+                if (getAuthor.IsSucceed)
+                {
+                    Author = getAuthor.Data.Obj;
+                }
             }
         }
 

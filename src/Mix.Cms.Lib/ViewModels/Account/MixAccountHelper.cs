@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
-    public class Helper
+    public class MixAccountHelper
     {
-        public static async Task<MixAttributeSetDatas.AdditionalViewModel> LoadUserInfoAsync(string userId,
+        public static async Task<MixAttributeSetDatas.AdditionalViewModel> LoadUserInfoAsync(string userName,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var culture = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                var getInfo = await MixAttributeSetDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, userId, MixDatabaseNames.SYSTEM_USER_DATA
+                var getInfo = await MixAttributeSetDatas.Helper.LoadAdditionalDataAsync(MixDatabaseParentType.User, userName, MixDatabaseNames.SYSTEM_USER_DATA
                     , culture, context, transaction);
                 return getInfo.Data;
             }

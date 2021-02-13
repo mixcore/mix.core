@@ -143,7 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UserRoles = Helper.GetRoleNavs(Id);
+            UserRoles = MixAccountHelper.GetRoleNavs(Id);
         }
 
         #endregion Overrides
