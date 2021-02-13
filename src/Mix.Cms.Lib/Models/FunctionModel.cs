@@ -28,7 +28,6 @@ namespace Mix.Cms.Lib.Models
                 FieldName = fieldName,
                 Value = value,
             };
-
         }
 
         public static FunctionModel Create(MixCompareOperatorKind operatorKind, string fieldName,

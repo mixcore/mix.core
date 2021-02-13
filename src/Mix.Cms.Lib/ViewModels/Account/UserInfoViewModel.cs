@@ -2,9 +2,7 @@
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
@@ -59,9 +57,11 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
         public MixUserStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -76,10 +76,8 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl
-        {
-            get
-            {
+        public string AvatarUrl {
+            get {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
                     return $"{Domain}/{Avatar}";

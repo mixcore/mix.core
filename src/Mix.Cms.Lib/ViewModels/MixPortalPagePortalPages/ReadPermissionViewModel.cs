@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -22,10 +21,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public ReadPermissionViewModel() : base()
         {
         }
+
         #region Properties
+
         #region Models
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("id")]
         public int Id { get; set; }
 
@@ -43,19 +46,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         [JsonProperty("level")]
         public int Level { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
+
         #region Views
 
         [JsonProperty("isActived")]
@@ -65,7 +76,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
         public MixPortalPages.ReadRolePermissionViewModel Page { get; set; }
 
         #endregion Views
-        #endregion
+
+        #endregion Properties
 
         #region overrides
 

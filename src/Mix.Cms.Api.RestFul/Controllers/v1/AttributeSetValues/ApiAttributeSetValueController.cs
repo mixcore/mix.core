@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -20,7 +19,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiAttributeSetValueController :
         BaseAuthorizedApiController<MixCmsContext, MixAttributeSetValue, UpdateViewModel, ReadViewModel>
     {
-
         // GET: api/v1/rest/en-us/attribute-field/client
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -48,5 +46,4 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
     }
-
 }

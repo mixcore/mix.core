@@ -29,8 +29,5 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-
-
     }
-
 }

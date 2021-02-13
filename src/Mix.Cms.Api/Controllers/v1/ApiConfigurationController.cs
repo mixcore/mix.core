@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
@@ -15,8 +16,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {

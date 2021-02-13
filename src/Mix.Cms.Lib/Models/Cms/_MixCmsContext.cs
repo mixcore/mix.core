@@ -4,7 +4,6 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
 using MySqlConnector;
-using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -53,6 +52,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public MixCmsContext()
         {
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.EnableSensitiveDataLogging(true);
@@ -94,6 +94,7 @@ namespace Mix.Cms.Lib.Models.Cms
                 case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
+
                 case MixDatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;

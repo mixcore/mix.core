@@ -10,9 +10,8 @@ namespace Mix.Cms.Service.SignalR.Hubs
 {
     public class VideoChatHub : BaseSignalRHub
     {
-
         // Client API:
-        // 
+        //
         // updateUserList(List<User> userList)
         // callAccepted(User acceptingUser)
         // callDeclined(User decliningUser, string reason)
@@ -35,6 +34,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
             // Send down the new list to all clients
             await SendUserListUpdateAsync();
         }
+
         #region Overrides
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -212,6 +212,6 @@ namespace Mix.Cms.Service.SignalR.Hubs
             return matchingCall;
         }
 
-        #endregion
+        #endregion Private Helpers
     }
 }

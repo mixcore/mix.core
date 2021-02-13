@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -22,7 +21,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, ReadMvcViewModel>
     {
-
         // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()

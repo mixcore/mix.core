@@ -13,18 +13,20 @@ namespace Mix.Heart.Providers
     {
         public Assembly Assembly { get; set; }
         public Type BaseType { get; set; }
+
         public GenericTypeControllerFeatureProvider(Assembly assembly, Type baseType = null)
         {
             this.Assembly = assembly;
             BaseType = baseType != null ? baseType : typeof(BaseRestApiController<,,>);
         }
+
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
         {
             var candidates = Assembly.GetExportedTypes().Where(x => x.GetCustomAttributes<GeneratedControllerAttribute>().Any());
 
             foreach (var candidate in candidates)
             {
-                if (candidate.BaseType.IsGenericType 
+                if (candidate.BaseType.IsGenericType
                     && candidate.BaseType.GenericTypeArguments.Length == this.BaseType.GetGenericArguments().Length)
                 {
                     Type[] types = candidate.BaseType.GenericTypeArguments;

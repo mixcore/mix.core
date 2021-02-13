@@ -4,7 +4,6 @@ using Mix.Cms.Lib;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using MySqlConnector;
-using System;
 
 namespace Mix.Cms.Messenger.Models.Data
 {
@@ -61,21 +60,26 @@ namespace Mix.Cms.Messenger.Models.Data
                         case MixDatabaseProvider.MSSQL:
                             optionsBuilder.UseSqlServer(cnn);
                             break;
+
                         case MixDatabaseProvider.MySQL:
                             optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                             break;
+
                         case MixDatabaseProvider.SQLITE:
                             optionsBuilder.UseSqlite(cnn);
                             break;
+
                         case MixDatabaseProvider.PostgreSQL:
                             optionsBuilder.UseNpgsql(cnn);
                             break;
+
                         default:
                             break;
                     }
                 }
             }
         }
+
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
@@ -85,12 +89,14 @@ namespace Mix.Cms.Messenger.Models.Data
                 case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
+
                 case MixDatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
             }
             base.Dispose();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<MixMessengerHubRoom>(entity =>

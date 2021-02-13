@@ -13,6 +13,5 @@ namespace Mix.Identity.Models.ManageViewModels
         /// The selected provider.
         /// </value>
         public string SelectedProvider { get; set; }
-
     }
 }

@@ -30,8 +30,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         [JsonProperty("normalizedName")]
         public string NormalizedName { get; set; }
 
-
-
         #region Views
 
         [JsonProperty("permissions")]

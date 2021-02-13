@@ -39,6 +39,7 @@ namespace Mix.Cms.Lib.Controllers
         protected string _domain;
 
         #region Routes
+
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
         {
@@ -98,6 +99,7 @@ namespace Mix.Cms.Lib.Controllers
                     case "int32":
                         ReflectionHelper.SetPropertyValue(data, new JProperty("id", 0));
                         break;
+
                     default:
                         ReflectionHelper.SetPropertyValue(data, new JProperty("id", default));
                         break;
@@ -254,7 +256,6 @@ namespace Mix.Cms.Lib.Controllers
             {
                 return BadRequest(result.Errors);
             }
-
         }
 
         [HttpPost, HttpOptions]
@@ -295,10 +296,9 @@ namespace Mix.Cms.Lib.Controllers
             {
                 return BadRequest();
             }
-
         }
 
-        #endregion
+        #endregion Routes
 
         #region Overrides
 
@@ -332,6 +332,7 @@ namespace Mix.Cms.Lib.Controllers
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
+
         #endregion Overrides
 
         #region Helpers
@@ -395,7 +396,6 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(string id, bool isDeleteRelated = false)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-
             var data = await GetSingleAsync<T>(id);
             if (data.IsSucceed)
             {
@@ -408,7 +408,6 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync(string id, bool isDeleteRelated = false)
         {
-
             var data = await GetSingleAsync<TView>(id);
             if (data.IsSucceed)
             {
@@ -423,7 +422,6 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
 
                 return result;
@@ -436,7 +434,6 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
 
                 return result;
@@ -446,7 +443,6 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
         {
-
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
 
             return data;
@@ -500,7 +496,6 @@ namespace Mix.Cms.Lib.Controllers
 
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, T>.Instance.GetModelListByAsync(
@@ -509,9 +504,7 @@ namespace Mix.Cms.Lib.Controllers
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, T>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-
                 }
-
             }
             return data;
         }
@@ -521,7 +514,6 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (vm != null)
             {
-
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 return result;
@@ -560,14 +552,13 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         {
-
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }
+
         protected RepositoryResponse<List<TView>> SaveList(List<TView> lstVm, bool isSaveSubModel)
         {
-
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
@@ -588,9 +579,6 @@ namespace Mix.Cms.Lib.Controllers
             return result;
         }
 
-
-        #endregion
-
+        #endregion Helpers
     }
-
 }

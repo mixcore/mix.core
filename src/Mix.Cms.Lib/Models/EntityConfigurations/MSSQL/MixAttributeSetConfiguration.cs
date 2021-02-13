@@ -81,7 +81,6 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
-
         }
     }
 }

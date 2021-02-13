@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -8,8 +9,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -21,8 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -61,24 +62,28 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         [JsonConverter(typeof(StringEnumConverter))]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Image}";
@@ -91,10 +96,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Thumbnail}";
@@ -108,6 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get => $"/{Specificulture}/module/{Id}/{SeoHelper.GetSEOString(Title)}"; }
+
         #endregion Properties
 
         #region Contructors

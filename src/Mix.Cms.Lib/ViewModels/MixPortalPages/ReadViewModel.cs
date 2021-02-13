@@ -16,8 +16,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("textKeyword")]
         public string TextKeyword { get; set; }
 
@@ -41,16 +43,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -86,6 +94,5 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPages
         //}
 
         #endregion Overrides
-
     }
 }

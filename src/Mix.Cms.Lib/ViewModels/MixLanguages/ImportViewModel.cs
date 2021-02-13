@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
@@ -14,7 +15,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixLanguages
 {
@@ -26,6 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
@@ -54,16 +55,22 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -169,6 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
                 }
             }
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
@@ -195,6 +203,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
         #endregion Overrides
 
         #region Expand
+
         public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

@@ -1,5 +1,5 @@
-﻿using System;
-using Mix.Cms.Lib.Enums;
+﻿using Mix.Cms.Lib.Enums;
+using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {

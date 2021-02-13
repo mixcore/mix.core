@@ -19,12 +19,16 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+
         /*
          * Parent Id: PostId / PageId / Module Id / Data Id / Attr Set Id
          */
@@ -43,17 +47,24 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Model
 
         #region Views
@@ -76,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            // Should not get Data from cache (if Data == null) because of multilevel data, 
+            // Should not get Data from cache (if Data == null) because of multilevel data,
             // already handle cached data in attribute set data
             var getData = MixAttributeSetDatas.ReadMvcViewModel.Repository.GetFirstModel(p => p.Id == DataId && p.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction

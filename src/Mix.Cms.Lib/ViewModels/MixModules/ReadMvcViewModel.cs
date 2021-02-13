@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -8,11 +8,9 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -26,8 +24,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -66,17 +66,24 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
+
         #region Views
 
         [JsonProperty("domain")]
@@ -86,10 +93,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string DetailsUrl { get; set; }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -102,10 +107,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -118,8 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("columns")]
-        public List<ModuleFieldViewModel> Columns
-        {
+        public List<ModuleFieldViewModel> Columns {
             get { return Fields == null ? null : JsonConvert.DeserializeObject<List<ModuleFieldViewModel>>(Fields); }
             set { Fields = JsonConvert.SerializeObject(value); }
         }
@@ -139,30 +141,24 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("posts")]
         public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                     $"{Template}";
             }
         }
 
-        public string FormTemplatePath
-        {
-            get
-            {
+        public string FormTemplatePath {
+            get {
                 return $"/{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{FormTemplate}";
             }
         }
 
-        public string EdmTemplatePath
-        {
-            get
-            {
+        public string EdmTemplatePath {
+            get {
                 return $"/{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{EdmTemplate}";
@@ -195,7 +191,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
             this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;

@@ -1,7 +1,6 @@
 ﻿using Mix.Cms.Lib.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mix.Cms.Lib.Models.Cms
 {

@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,8 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -73,19 +74,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Tags { get; set; } = "[]";
 
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("attributeData")]
         public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
 
@@ -108,10 +116,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -124,10 +130,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -141,6 +145,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -176,6 +181,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Overrides
 
         #region Expands
+
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             string type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
@@ -189,6 +195,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     , _context, _transaction).Data;
             }
         }
+
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
             var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture

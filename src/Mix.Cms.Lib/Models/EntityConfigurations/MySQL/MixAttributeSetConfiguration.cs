@@ -78,7 +78,6 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
-
         }
     }
 }

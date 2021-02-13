@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
-using Mix.Cms.Lib.Constants;
 using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1

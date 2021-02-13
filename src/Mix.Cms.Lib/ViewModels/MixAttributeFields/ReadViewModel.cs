@@ -52,21 +52,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("isUnique")]
         public bool IsUnique { get; set; }
+
         [JsonProperty("isMultiple")]
         public bool IsMultiple { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #endregion Properties

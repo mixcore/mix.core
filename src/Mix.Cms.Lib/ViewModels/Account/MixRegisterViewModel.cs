@@ -4,9 +4,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
@@ -24,6 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("username")]
         public string Username { get; set; }
 
@@ -50,14 +49,19 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("createdby")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixUserStatus Status { get; set; }
 
@@ -81,10 +85,8 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl
-        {
-            get
-            {
+        public string AvatarUrl {
+            get {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
                     return $"{Domain}/{Avatar}";

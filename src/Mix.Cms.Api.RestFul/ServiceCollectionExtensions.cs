@@ -15,6 +15,7 @@ namespace Mix.Cms.Api.RestFul
             });
             return services;
         }
+
         public static IApplicationBuilder UseMixRestApi(this IApplicationBuilder app)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.

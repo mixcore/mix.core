@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
@@ -24,8 +23,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
 
@@ -47,6 +48,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         #endregion Models
 
         #region Views
+
         [JsonProperty("data")]
         public JObject Data { get; set; }
 
@@ -62,8 +64,6 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
-
-
 
         #endregion Views
 
@@ -165,7 +165,6 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                         var arr = Data[val.AttributeFieldName].Value<JArray>();
                         if (arr != null)
                         {
-
                             foreach (JObject objData in arr)
                             {
                                 string id = objData["id"]?.Value<string>();

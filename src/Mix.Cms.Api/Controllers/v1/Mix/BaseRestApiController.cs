@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Constants;
-using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -30,6 +28,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
+
         /// <summary>
         /// The domain
         /// </summary>
@@ -61,12 +60,14 @@ namespace Mix.Cms.Api.Controllers.v1
             }
             base.OnActionExecuting(context);
         }
+
         protected void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
             ViewBag.culture = _lang;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
+
         #endregion Overrides
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync<TView>(Expression<Func<TModel, bool>> predicate = null, TModel model = null)
@@ -88,11 +89,9 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
-
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
            where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
@@ -108,7 +107,6 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (data != null)
             {
-
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
 
                 return result;
@@ -119,16 +117,13 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync<TView>(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
 
             return data;
         }
 
-
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
         {
-
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
             FileViewModel file = null;
             if (getData.IsSucceed)
@@ -148,7 +143,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 };
                 // Copy current templates file
                 MixFileRepository.Instance.SaveWebFile(file);
-
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
             return new RepositoryResponse<FileViewModel>()
@@ -156,8 +150,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 IsSucceed = true,
                 Data = file,
             };
-
         }
+
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync<TView>(Expression<Func<TModel, bool>> predicate = null)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
@@ -176,7 +170,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
@@ -185,9 +178,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-
                 }
-
             }
             return data;
         }
@@ -197,7 +188,6 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (vm != null)
             {
-
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 return result;
@@ -210,8 +200,6 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (obj != null)
             {
-
-
                 List<EntityField> fields = new List<EntityField>();
                 Type type = typeof(TModel);
                 foreach (var item in obj.Properties())
@@ -240,15 +228,14 @@ namespace Mix.Cms.Api.Controllers.v1
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }
+
         protected RepositoryResponse<List<TView>> SaveList<TView>(List<TView> lstVm, bool isSaveSubModel)
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
-
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
@@ -269,5 +256,4 @@ namespace Mix.Cms.Api.Controllers.v1
             return result;
         }
     }
-
 }

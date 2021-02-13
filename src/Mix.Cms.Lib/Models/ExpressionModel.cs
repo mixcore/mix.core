@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Mix.Cms.Lib.Enums;
+﻿using Mix.Cms.Lib.Enums;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models
 {
@@ -15,7 +14,6 @@ namespace Mix.Cms.Lib.Models
 
         [JsonProperty("expressions")]
         public List<ExpressionModel> Expressions { get; set; }
-
 
         public static ExpressionModel Create(MixLogicalOperatorKind expressType)
         {
@@ -34,5 +32,4 @@ namespace Mix.Cms.Lib.Models
             return this;
         }
     }
-
 }

@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -10,7 +9,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -175,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         PageSize = pageSize
                     }
                 };
-                // Get Data                
+                // Get Data
                 Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
                    && m.Status == MixContentStatus.Published;
                 foreach (var item in valueIds)
@@ -189,7 +187,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     var dataIds = getVal.Data.Select(m => m.DataId).Distinct();
                     if (dataIds.Count() == 1)
                     {
-
                         result = await GetPostListByDataIds<TView>(
                                 dataIds: dataIds.ToList(),
                                 culture: culture,

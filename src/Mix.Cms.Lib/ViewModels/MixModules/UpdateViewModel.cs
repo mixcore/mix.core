@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -25,8 +24,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -65,16 +66,22 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -83,10 +90,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -99,10 +104,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -126,10 +129,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
-        public string TemplateFolderType
-        {
-            get
-            {
+        public string TemplateFolderType {
+            get {
                 return MixTemplateFolders.Modules;
             }
         }
@@ -138,10 +139,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme
-        {
-            get
-            {
+        public int ActivedTheme {
+            get {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
@@ -150,10 +149,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string ThemeFolderType { get { return MixTemplateFolders.Modules.ToString(); } }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                     $"{ThemeFolderType}";
@@ -168,10 +165,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Post Forms
 
         [JsonIgnore]
-        public string FormFolderType
-        {
-            get
-            {
+        public string FormFolderType {
+            get {
                 return MixTemplateFolders.Forms.ToString();
             }
         }
@@ -180,10 +175,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel FormView { get; set; }
 
         [JsonProperty("formFolder")]
-        public string FormFolder
-        {
-            get
-            {
+        public string FormFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                     $"{MixTemplateFolders.Forms}";
@@ -198,10 +191,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Post Edms
 
         [JsonIgnore]
-        public string EdmFolderType
-        {
-            get
-            {
+        public string EdmFolderType {
+            get {
                 return MixTemplateFolders.Edms.ToString();
             }
         }
@@ -210,10 +201,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         [JsonProperty("edmFolder")]
-        public string EdmFolder
-        {
-            get
-            {
+        public string EdmFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                    $"{MixTemplateFolders.Edms}";
@@ -237,6 +226,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("sysTags")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -377,12 +367,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return result;
         }
 
-
         #endregion Async
 
         #endregion Overrides
 
         #region Expand
+
         public static async Task<RepositoryResponse<JObject>> SaveByModuleName(string culture, string createdBy, string name, string formName, JObject obj
        , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

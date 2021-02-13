@@ -18,14 +18,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("attributeSetId")]
         public int AttributeSetId { get; set; }
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
-        
+
         [JsonProperty("configurations")]
         public string Configurations { get; set; }
 
@@ -34,6 +36,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("regex")]
         public string Regex { get; set; }
+
         [JsonProperty("isRegex")]
         public bool IsRegex { get { return !string.IsNullOrEmpty(Regex); } }
 
@@ -66,20 +69,28 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 
         [JsonProperty("isUnique")]
         public bool IsUnique { get; set; }
+
         [JsonProperty("isMultiple")]
         public bool IsMultiple { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -87,7 +98,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         [JsonProperty("fieldConfigurations")]
         public FieldConfigurations FieldConfigurations { get; set; } = new FieldConfigurations();
 
-        #endregion
+        #endregion Views
 
         #endregion Properties
 
@@ -121,7 +132,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                     }
                 }
             }
-
         }
 
         public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -142,7 +152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             {
                 JOptions = JArray.Parse(Options);
             }
-            
+
             FieldConfigurations = string.IsNullOrEmpty(Configurations) ? new FieldConfigurations()
                     : JObject.Parse(Configurations).ToObject<FieldConfigurations>();
         }

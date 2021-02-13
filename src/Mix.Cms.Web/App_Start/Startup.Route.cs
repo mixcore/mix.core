@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using RewriteRules;

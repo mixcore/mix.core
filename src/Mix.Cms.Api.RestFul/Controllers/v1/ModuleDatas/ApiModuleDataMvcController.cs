@@ -4,18 +4,15 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -26,7 +23,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataMvcController :
         BaseAuthorizedApiController<MixCmsContext, MixModuleData, UpdateViewModel, ReadMvcViewModel>
     {
-
         // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
@@ -84,6 +80,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest();
             }
         }
+
         // GET api/module-data/create/id
         [HttpPost, HttpOptions]
         [Route("save/{moduleName}")]
@@ -118,5 +115,4 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
     }
-
 }

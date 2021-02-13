@@ -8,7 +8,6 @@ namespace Mix.Cms.Web.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class DataController : BaseController
     {
-
         #region contructor
 
         protected override void ValidateRequest()
