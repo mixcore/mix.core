@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
@@ -20,8 +19,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -72,6 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("type")]
         public MixPageType Type { get; set; }
+
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -86,16 +88,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -104,10 +112,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -120,10 +126,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";

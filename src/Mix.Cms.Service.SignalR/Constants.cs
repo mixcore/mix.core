@@ -3,6 +3,7 @@
     public class Constants
     {
         public const string DefaultDevice = "website";
+
         public class HubMethods
         {
             public const string ReceiveMethod = "receive_message";
@@ -15,14 +16,14 @@
             public const string NewNotification = "new_notification";
             public const string NewMember = "new_member";
         }
+
         public class HubMessages
         {
             public const string HubMemberName = "hub_member";
             public const string HubMemberFieldName = "hub_name";
             public const string UnknowErrorMsg = "Unknow";
-
-
         }
+
         public class Enums
         {
             public enum MessageReponseKey

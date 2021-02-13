@@ -93,5 +93,4 @@
         Reference,
         QRCode
     }
-
 }

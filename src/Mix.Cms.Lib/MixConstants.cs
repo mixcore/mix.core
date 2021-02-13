@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Mix.Cms.Lib
+﻿namespace Mix.Cms.Lib
 {
     public class MixConstants
     {

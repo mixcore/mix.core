@@ -1,18 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -25,8 +23,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
 
@@ -60,10 +60,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -76,10 +74,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -101,27 +97,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
-        public string UploadsFolder
-        {
-            get
-            {
+        public string UploadsFolder {
+            get {
                 return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
@@ -184,6 +174,5 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         #endregion Async
 
         #endregion Overrides
-
     }
 }

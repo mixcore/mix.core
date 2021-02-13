@@ -2,10 +2,7 @@
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.Account
@@ -25,6 +22,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public List<NavUserRoleViewModel> UserRoles { get; set; }
 
         #region Change Password
+
         [JsonProperty("resetPassword")]
         public ResetPasswordViewModel ResetPassword { get; set; }
 
@@ -33,7 +31,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("changePassword")]
         public ChangePasswordViewModel ChangePassword { get; set; }
-        #endregion        
+
+        #endregion Change Password
+
+
 
         public MixUserViewModel(ApplicationUser user)
         {

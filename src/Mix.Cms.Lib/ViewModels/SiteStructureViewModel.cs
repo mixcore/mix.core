@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json;
@@ -148,6 +146,7 @@ namespace Mix.Cms.Lib.ViewModels
         }
 
         #region Export Page
+
         private void ExportPages(MixCmsContext context, IDbContextTransaction transaction)
         {
             foreach (var item in Pages)
@@ -188,7 +187,7 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        #endregion
+        #endregion Export Page
 
         #region Export Modules
 
@@ -217,6 +216,7 @@ namespace Mix.Cms.Lib.ViewModels
                 ModuleDatas.AddRange(getDataResult.Data);
             }
         }
+
         private void ExportModulePostNavs(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             ModulePostNavs.AddRange(item.GetPostNavs(context, transaction)
@@ -229,8 +229,8 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
         }
-        #endregion
 
+        #endregion Export Modules
 
         private void ExportAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
@@ -299,17 +299,18 @@ namespace Mix.Cms.Lib.ViewModels
                 }
             }
         }
+
         #endregion Export
 
         #region Import
 
-        Dictionary<int, int> dicConfigurationIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicLanguageIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
-        Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicConfigurationIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicLanguageIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
 
         public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -382,7 +383,6 @@ namespace Mix.Cms.Lib.ViewModels
             var startId = context.MixModule.Any() ? context.MixModule.Max(m => m.Id) : 0;
             foreach (var module in Modules)
             {
-
                 var oldId = module.Id;
                 module.CreatedBy = CreatedBy;
 
@@ -424,7 +424,6 @@ namespace Mix.Cms.Lib.ViewModels
 
                 if (result.IsSucceed)
                 {
-
                     if (!context.MixPost.Any(m => m.SeoName == post.SeoName && m.Specificulture == destCulture))
                     {
                         startId++;
@@ -497,7 +496,6 @@ namespace Mix.Cms.Lib.ViewModels
                             {
                                 var refId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.ReferenceId);
                                 field.ReferenceId = refId.Value;
-
                             }
                             if (dicFieldIds.ContainsKey(field.Id))
                             {
@@ -656,7 +654,6 @@ namespace Mix.Cms.Lib.ViewModels
                     // TODO: Id > 7 => not system init page
                     if (!context.MixPage.Any(p => p.SeoName == item.SeoName))
                     {
-
                         startId++;
                         item.Id = startId;
 
@@ -745,7 +742,6 @@ namespace Mix.Cms.Lib.ViewModels
 
         private async Task<RepositoryResponse<bool>> ImportRelatedDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
-
             var result = await ImportRelatedAttributeSetDatas(desCulture, context, transaction);
             if (result.IsSucceed)
             {
@@ -867,8 +863,10 @@ namespace Mix.Cms.Lib.ViewModels
                     case MixDatabaseParentType.Set:
                         item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
                         break;
+
                     case MixDatabaseParentType.Post:
                         break;
+
                     case MixDatabaseParentType.Page:
                         if (dicPageIds.TryGetValue(int.Parse(item.ParentId), out int pageId))
                         {
@@ -879,6 +877,7 @@ namespace Mix.Cms.Lib.ViewModels
                             continue;
                         }
                         break;
+
                     case MixDatabaseParentType.Module:
                         if (dicModuleIds.TryGetValue(int.Parse(item.ParentId), out int moduleId))
                         {
@@ -889,6 +888,7 @@ namespace Mix.Cms.Lib.ViewModels
                             continue;
                         }
                         break;
+
                     default:
                         break;
                 }

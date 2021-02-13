@@ -1,5 +1,4 @@
-﻿using Mix.Cms.Lib;
-using Mix.Cms.Lib.Enums;
+﻿using Mix.Cms.Lib.Enums;
 using System;
 
 namespace Mix.Cms.Messenger.Models.Data

@@ -22,7 +22,6 @@ namespace Mix.Cms.Lib.Services
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-               
                 XNamespace aw = "http://www.sitemaps.org/schemas/sitemap/0.9";
                 var root = new XElement(aw + "urlset");
 
@@ -94,7 +93,8 @@ namespace Mix.Cms.Lib.Services
                 root.Add(el);
             }
         }
-        #endregion
+
+        #endregion Post
 
         #region Navigation
 
@@ -118,7 +118,6 @@ namespace Mix.Cms.Lib.Services
 
             foreach (var item in menuItems)
             {
-
                 if (item.MenuItems.Count > 0)
                 {
                     subMenuItems.AddRange(item.MenuItems.Where(m => !menuItems.Any(p => p.Href == m.Href)));
@@ -160,10 +159,11 @@ namespace Mix.Cms.Lib.Services
                     OtherLanguages = lstOther
                 };
                 var el = sitemap.ParseXElement();
-                
+
                 root.Add(el);
             }
         }
-        #endregion
+
+        #endregion Navigation
     }
 }

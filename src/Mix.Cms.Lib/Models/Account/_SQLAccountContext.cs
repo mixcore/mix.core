@@ -28,6 +28,7 @@ namespace Mix.Cms.Lib.Models.Account
             modelBuilder.ApplyIddentityConfigurations();
             OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

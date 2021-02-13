@@ -2,15 +2,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Enums;
+using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -20,10 +22,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Heart.Extensions;
-using Mix.Services;
-using Mix.Cms.Lib.Models.Common;
 
 namespace Mix.Cms.Lib
 {
@@ -33,6 +31,7 @@ namespace Mix.Cms.Lib
         {
             return SeoHelper.GetSEOString(input);
         }
+
         public static FileViewModel LoadDataFile(string folder, string name)
         {
             return MixFileRepository.Instance.GetFile(name, folder, true, "[]");
@@ -45,7 +44,7 @@ namespace Mix.Cms.Lib
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
-        
+
         public static string GetUploadFolder(string culture = null)
         {
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
@@ -58,6 +57,7 @@ namespace Mix.Cms.Lib
         {
             return $"/{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
         }
+
         public static T Property<T>(JObject obj, string fieldName)
         {
             if (obj != null && obj.ContainsKey(fieldName) && obj[fieldName] != null)
@@ -232,7 +232,7 @@ namespace Mix.Cms.Lib
                 culture, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
-            
+
             if (nav != null)
             {
                 foreach (var cate in nav.MenuItems)
@@ -331,26 +331,31 @@ namespace Mix.Cms.Lib
                         valPredicate = FilterObjectSet<MixAttributeSetValue, DateTime>("DateTimeValue", dtValue, filterType);
                     }
                     break;
+
                 case MixDataType.Double:
                     if (double.TryParse(fieldValue, out double dbValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, double>("DoubleValue", dbValue, filterType);
                     }
                     break;
+
                 case MixDataType.Boolean:
                     if (bool.TryParse(fieldValue, out bool boolValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, bool>("BooleanValue", boolValue, filterType);
                     }
                     break;
+
                 case MixDataType.Integer:
                     if (int.TryParse(fieldValue, out int intValue))
                     {
                         valPredicate = FilterObjectSet<MixAttributeSetValue, int>("IntegerValue", intValue, filterType);
                     }
                     break;
+
                 case MixDataType.Reference:
                     break;
+
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.DateTime:
@@ -413,26 +418,32 @@ namespace Mix.Cms.Lib
                     eq = Expression.Equal(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
+
                 case MixCompareOperatorKind.LessThan:
                     eq = Expression.LessThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
+
                 case MixCompareOperatorKind.GreaterThan:
                     eq = Expression.GreaterThan(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
+
                 case MixCompareOperatorKind.LessThanOrEqual:
                     eq = Expression.LessThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
+
                 case MixCompareOperatorKind.GreaterThanOrEqual:
                     eq = Expression.GreaterThanOrEqual(fieldPropertyExpression,
                                      Expression.Constant(data2, fieldPropertyType));
                     break;
+
                 case MixCompareOperatorKind.InRange:
                     var method = typeof(string).GetMethod("Contains");
                     var call = Expression.Call(par, method, Expression.Constant(data2, typeof(string)));
                     return Expression.Lambda<Func<TModel, bool>>(call, par);
+
                 default:
                     break;
             }

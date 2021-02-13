@@ -19,7 +19,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiAttributeSetController :
         BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSet, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-
         // GET: api/v1/rest/en-us/attribute-set/client
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -47,5 +46,4 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
     }
-
 }

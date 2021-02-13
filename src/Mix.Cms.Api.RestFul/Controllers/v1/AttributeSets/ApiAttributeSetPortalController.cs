@@ -5,7 +5,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -23,7 +22,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiAttributeSetPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixAttributeSet, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-
         // GET: api/v1/rest/en-us/attribute-set/portal
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -75,8 +73,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return NotFound();
             }
-
         }
     }
-
 }

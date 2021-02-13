@@ -21,8 +21,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -76,16 +78,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Tags { get; set; } = "[]";
 
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -125,6 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("relatedData")]
         public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -142,10 +151,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Contructors
 
         #region Overrides
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GetAdditionalData(Id.ToString(), MixDatabaseParentType.Post, _context, _transaction);
         }
+
         private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
             var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
@@ -156,14 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 RelatedData = (getRelatedData.Data);
             }
         }
-        #region Async Methods
-
-
-
-
-        #endregion Async Methods
 
         #endregion Overrides
-
     }
 }

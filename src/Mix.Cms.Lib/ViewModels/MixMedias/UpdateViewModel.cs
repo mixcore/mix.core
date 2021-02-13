@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
@@ -28,8 +27,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
@@ -62,16 +63,22 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -80,10 +87,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("fullPath")]
-        public string FullPath
-        {
-            get
-            {
+        public string FullPath {
+            get {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -97,10 +102,8 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         }
 
         [JsonProperty("filePath")]
-        public string FilePath
-        {
-            get
-            {
+        public string FilePath {
+            get {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -194,7 +197,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                         FileName = saveFile.Filename;
                         Extension = saveFile.Extension;
                     }
-                    
                 }
             }
             FileType = FileType ?? "image";

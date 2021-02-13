@@ -15,7 +15,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 {
     public class Helper
     {
-
         public static RepositoryResponse<List<MixPagePosts.ReadViewModel>> GetNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -89,6 +88,5 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 return new RepositoryResponse<List<TView>>();
             }
         }
-
     }
 }

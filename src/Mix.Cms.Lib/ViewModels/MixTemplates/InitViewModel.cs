@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -59,14 +58,19 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
 
@@ -78,27 +82,21 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string Layout { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }

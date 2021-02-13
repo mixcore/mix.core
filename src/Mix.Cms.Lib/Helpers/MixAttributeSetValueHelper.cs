@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Helpers
 {
-    class MixAttributeSetValueHelper
+    internal class MixAttributeSetValueHelper
     {
         public static async Task<RepositoryResponse<List<TView>>> FilterByOtherValueAsync<TView>(
            string culture, string attributeSetName
@@ -70,10 +70,10 @@ namespace Mix.Cms.Lib.Helpers
                 case "equal":
                     return m => m.AttributeFieldName == key
                         && (EF.Functions.Like(m.StringValue, $"{value}"));
+
                 case "contain":
                     return m => m.AttributeFieldName == key &&
                                             (EF.Functions.Like(m.StringValue, $"%{value}%"));
-
             }
             return null;
         }

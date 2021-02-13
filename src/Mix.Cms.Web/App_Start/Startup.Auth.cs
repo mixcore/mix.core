@@ -33,7 +33,6 @@ namespace Mix.Cms.Web
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password = pOpt;
-
             })
                 .AddEntityFrameworkStores<MixDbContext>()
                 .AddDefaultTokenProviders()

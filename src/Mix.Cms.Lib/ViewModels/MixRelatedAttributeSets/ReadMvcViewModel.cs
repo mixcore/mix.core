@@ -18,41 +18,56 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeSets
         public ReadMvcViewModel() : base()
         {
         }
+
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("attributeSetid")]
         public int AttributeSetId { get; set; }
+
         [JsonProperty("parentId")]
         public int ParentId { get; set; }
+
         [JsonProperty("parentType")]
         public MixDatabaseParentType ParentType { get; set; }
+
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("image")]
         public string Image { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
+
         #region Views
 
         public MixAttributeSets.ReadMvcViewModel AttributeSet { get; set; }
 
         #endregion Views
-        #endregion
 
-
+        #endregion Properties
 
         #region overrides
 

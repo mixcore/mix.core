@@ -5,16 +5,12 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Mix.Heart.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues
 {
@@ -74,10 +70,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues
                 case "equal":
                     return m => m.AttributeFieldName == key
                         && (EF.Functions.Like(m.StringValue, $"{value}"));
+
                 case "contain":
                     return m => m.AttributeFieldName == key &&
                                             (EF.Functions.Like(m.StringValue, $"%{value}%"));
-
             }
             return null;
         }

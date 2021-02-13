@@ -9,25 +9,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
+using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
 using Mix.Identity.Models;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Mix.Common.Helper;
-using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Constants;
-using Mix.Services;
-using Mix.Cms.Lib.ViewModels.Common;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -420,7 +418,7 @@ namespace Mix.Cms.Api.Controllers.v1
             var saveFile = MixFileRepository.Instance.SaveWebFile(assets, $"{importFolder}/{assets.FileName}");
             if (saveFile != null)
             {
-                var fileContent = MixFileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}", 
+                var fileContent = MixFileRepository.Instance.GetWebFile($"{saveFile.Filename}{saveFile.Extension}",
                     saveFile.FileFolder);
                 var obj = JObject.Parse(fileContent.Content);
                 switch (obj["type"].Value<string>())

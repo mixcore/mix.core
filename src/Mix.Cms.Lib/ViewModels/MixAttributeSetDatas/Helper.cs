@@ -10,7 +10,8 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.Helpers;
+using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
@@ -20,8 +21,6 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -30,7 +29,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
-
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -155,7 +153,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
-        
+
         public static RepositoryResponse<AdditionalViewModel> LoadAdditionalData(
             MixDatabaseParentType parentType,
             string parentId,
@@ -368,7 +366,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
                 var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"]) : new JObject();
 
-
                 // Data predicate
                 Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture
                    && (m.AttributeSetName == attributeSetName);
@@ -386,7 +383,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 // if filter by field name or keyword => filter by attr value
                 if (fieldQueries.Count > 0 || !string.IsNullOrEmpty(keyword))
                 {
-
                     // filter by all fields if have keyword
                     if (!string.IsNullOrEmpty(keyword))
                     {
@@ -562,6 +558,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
+
         public static RepositoryResponse<FileViewModel> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)
@@ -684,6 +681,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
             Task.WhenAll(tasks);
         }
-
     }
 }

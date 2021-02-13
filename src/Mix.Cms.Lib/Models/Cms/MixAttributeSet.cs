@@ -25,6 +25,5 @@ namespace Mix.Cms.Lib.Models.Cms
         public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public MixContentStatus Status { get; set; }
-
     }
 }

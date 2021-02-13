@@ -15,8 +15,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         #endregion Models
 
         #endregion Properties

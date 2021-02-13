@@ -8,10 +8,8 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         #region Properties
 
         [JsonProperty("connectionString")]
-        public string ConnectionString
-        {
-            get
-            {
+        public string ConnectionString {
+            get {
                 switch (DatabaseProvider)
                 {
                     case MixDatabaseProvider.MSSQL:
@@ -29,6 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                         return $"Host={DatabaseServer};Port={DatabasePort};Database={DatabaseName};Username={DatabaseUser};Password={DatabasePassword}";
                     case MixDatabaseProvider.SQLITE:
                         return SqliteDbConnectionString;
+
                     default:
                         return string.Empty;
                 }

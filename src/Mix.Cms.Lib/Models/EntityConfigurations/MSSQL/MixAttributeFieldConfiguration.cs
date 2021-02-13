@@ -37,12 +37,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-                
+
             entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(250);
 
-                entity.Property(e => e.Options).HasColumnType("ntext");
+            entity.Property(e => e.Options).HasColumnType("ntext");
 
             entity.Property(e => e.Regex).HasMaxLength(4000);
 

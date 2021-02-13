@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -12,7 +13,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
@@ -25,8 +25,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -78,6 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("type")]
         public MixPageType Type { get; set; } = MixPageType.ListPost;
+
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -92,16 +95,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -122,10 +131,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -138,10 +145,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -168,28 +173,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme
-        {
-            get
-            {
+        public int ActivedTheme {
+            get {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType
-        {
-            get
-            {
+        public string TemplateFolderType {
+            get {
                 return MixTemplateFolders.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/" +
                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                   $"{MixTemplateFolders.Pages}";

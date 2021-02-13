@@ -23,8 +23,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -33,24 +35,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl
-        {
+        public string DetailsUrl {
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
                     ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}"
                     : null;
@@ -65,7 +74,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("parentType")]
         public MixDatabaseParentType ParentType { get; set; }
 
-
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
@@ -74,10 +82,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+
         [JsonIgnore]
         public List<MixAttributeSetDatas.AdditionalViewModel> RefData { get; set; } = new List<AdditionalViewModel>();
-
-
 
         #endregion Views
 
@@ -167,7 +174,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         var arr = Obj[val.AttributeFieldName].Value<JArray>();
                         if (arr != null)
                         {
-
                             foreach (JObject objData in arr)
                             {
                                 string id = objData["id"]?.Value<string>();
@@ -214,7 +220,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
@@ -261,7 +266,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     context.Dispose();
                 }
             }
-
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
@@ -442,6 +446,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             };
             return await vm.SaveModelAsync();
         }
+
         public bool HasValue(string fieldName)
         {
             return Obj.Value<string>(fieldName) != null;
@@ -458,6 +463,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 return default(T);
             }
         }
+
         #endregion Expands
     }
 }
