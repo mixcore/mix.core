@@ -9,6 +9,7 @@
     <Nullable>disable</Nullable>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
