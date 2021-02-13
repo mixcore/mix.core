@@ -102,7 +102,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost("search-post")]
         public async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> SearchPost([FromBody] List<string> dataIds, [FromQuery] string keyword)
         {
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPost<ReadListItemViewModel>(
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPostByIds<ReadListItemViewModel>(
                 keyword, dataIds);
             if (result.IsSucceed)
             {

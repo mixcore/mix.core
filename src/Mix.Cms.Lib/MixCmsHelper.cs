@@ -473,7 +473,7 @@ namespace Mix.Cms.Lib
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             pageIndex = (pageIndex >= 0) ? pageIndex : 0;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByAdditionalField<TView>(
+            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPostByField<TView>(
                 fieldName, value,
                 culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
         }

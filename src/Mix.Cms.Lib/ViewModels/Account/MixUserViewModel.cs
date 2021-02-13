@@ -44,8 +44,8 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
             if (User != null)
             {
-                UserData ??= await Helper.LoadUserInfoAsync(User.Id);
-                UserRoles = Helper.GetRoleNavs(User.Id);
+                UserData ??= await MixAccountHelper.LoadUserInfoAsync(User.UserName);
+                UserRoles = MixAccountHelper.GetRoleNavs(User.Id);
             }
         }
     }
