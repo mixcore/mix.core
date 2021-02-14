@@ -201,10 +201,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysTags { get; set; }
 
         #endregion Views
 

@@ -100,7 +100,7 @@ namespace Mix.Cms.Lib.Services
 
         private static async Task ParseNavigationsAsync(XElement root, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getNavigations = await ViewModels.MixAttributeSetDatas.ReadMvcViewModel.Repository.GetModelListByAsync(
+            var getNavigations = await ViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetModelListByAsync(
                    m => m.MixDatabaseName == MixDatabaseNames.NAVIGATION,
                    context, transaction
                );

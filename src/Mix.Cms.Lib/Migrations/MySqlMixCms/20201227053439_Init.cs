@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
+                name: "mix_database",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -54,11 +54,11 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
+                name: "mix_database_data_value",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false)
@@ -67,11 +67,11 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeFieldId = table.Column<int>(nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false)
+                    MixDatabaseColumnId = table.Column<int>(nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true)
@@ -112,7 +112,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -352,8 +352,8 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
+                    MixDatabaseId = table.Column<int>(nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true)
@@ -395,8 +395,8 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
+                    MixDatabaseId = table.Column<int>(nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true)
@@ -460,13 +460,13 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
+                name: "mix_database_column",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
+                    MixDatabaseId = table.Column<int>(nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     Configurations = table.Column<string>(nullable: true),
@@ -509,23 +509,23 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_mix_attribute_field_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_column_mix_database",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_mix_attribute_field_mix_attribute_set1",
+                        name: "FK_mix_database_column_mix_database1",
                         column: x => x.ReferenceId,
-                        principalTable: "mix_attribute_set",
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
+                name: "mix_database_data",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false)
@@ -534,8 +534,8 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
+                    MixDatabaseId = table.Column<int>(nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
@@ -555,15 +555,15 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 {
                     table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_data_mix_database",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
+                name: "mix_database_reference",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -576,7 +576,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Image = table.Column<string>(type: "varchar(450)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
+                    MixDatabaseId = table.Column<int>(nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
@@ -592,11 +592,11 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_reference", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_reference_mix_database",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -609,7 +609,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
                         .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
+                    MixDatabaseId = table.Column<int>(nullable: false),
                     ParentId = table.Column<int>(nullable: false),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -637,9 +637,9 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 {
                     table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set",
+                        name: "FK_mix_related_attribute_set_mix_database",
                         column: x => x.Id,
-                        principalTable: "mix_attribute_set",
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1533,28 +1533,28 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_AttributeSetId",
-                table: "mix_attribute_field",
-                column: "AttributeSetId");
+                name: "IX_mix_database_column_MixDatabaseId",
+                table: "mix_database_column",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_ReferenceId",
-                table: "mix_attribute_field",
+                name: "IX_mix_database_column_ReferenceId",
+                table: "mix_database_column",
                 column: "ReferenceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
+                name: "IX_mix_database_reference_MixDatabaseId",
+                table: "mix_database_reference",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
                 column: "DataId");
 
             migrationBuilder.CreateIndex(
@@ -1707,16 +1707,16 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
+                name: "mix_database_column");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
+                name: "mix_database_data");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
+                name: "mix_database_reference");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_cache");
@@ -1788,7 +1788,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_module");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set");
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_post");

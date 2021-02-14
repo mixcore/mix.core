@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Helpers
 {
-    internal class MixAttributeSetValueHelper
+    internal class MixDatabaseDataValueHelper
     {
         public static async Task<RepositoryResponse<List<TView>>> FilterByOtherValueAsync<TView>(
-           string culture, string attributeSetName
+           string culture, string mixDatabaseName
            , string filterType, Dictionary<string, string> queries
            , string responseName
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.Helpers
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == attributeSetName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == mixDatabaseName;
                 RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>()
                 {
                     IsSucceed = true,
@@ -37,7 +37,7 @@ namespace Mix.Cms.Lib.Helpers
                     Expression<Func<MixDatabaseDataValue, bool>> pre = GetValueFilter(filterType, fieldQuery.Key, fieldQuery.Value);
                     valPredicate = valPredicate.AndAlso(pre);
                 }
-                var query = context.MixAttributeSetValue.Where(valPredicate).Select(m => m.DataId).Distinct();
+                var query = context.MixDatabaseDataValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
                 if (query != null)
                 {

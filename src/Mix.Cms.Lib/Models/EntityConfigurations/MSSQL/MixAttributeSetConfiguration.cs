@@ -6,11 +6,11 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 {
-    public class MixAttributeSetConfiguration : IEntityTypeConfiguration<MixDatabase>
+    public class MixDatabaseConfiguration : IEntityTypeConfiguration<MixDatabase>
     {
         public void Configure(EntityTypeBuilder<MixDatabase> entity)
         {
-            entity.ToTable("mix_attribute_set");
+            entity.ToTable("mix_database");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever();

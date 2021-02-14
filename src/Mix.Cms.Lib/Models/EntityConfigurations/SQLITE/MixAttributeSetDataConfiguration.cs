@@ -6,14 +6,14 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
 {
-    public class MixAttributeSetDataConfiguration : IEntityTypeConfiguration<MixDatabaseData>
+    public class MixDatabaseDataConfiguration : IEntityTypeConfiguration<MixDatabaseData>
     {
         public void Configure(EntityTypeBuilder<MixDatabaseData> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PK_mix_attribute_set_data");
+                    .HasName("PK_mix_database_data");
 
-            entity.ToTable("mix_attribute_set_data");
+            entity.ToTable("mix_database_data");
 
             entity.HasIndex(e => e.MixDatabaseId);
 

@@ -15,7 +15,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.Extensions
 {
-    public static class MixAttributeValueModelExtensions
+    public static class MixDatabaseDataValueModelExtensions
     {
         public static JProperty ToJProperty(
             this MixDatabaseDataValue item,
@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.Extensions
             }
         }
 
-        public static void ToModelValue(this ViewModels.MixAttributeSetValues.UpdateViewModel item, JToken property)
+        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, JToken property)
         {
             if (property == null)
             {
@@ -191,14 +191,14 @@ namespace Mix.Cms.Lib.Extensions
         }
 
         public static void LoadAllReferenceData(this JObject obj
-           , string dataId, int attributeSetId, string culture
+           , string dataId, int mixDatabaseId, string culture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                     _context, _transaction,
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var refFields = context.MixAttributeField.Where(
-                   m => m.MixDatabaseId == attributeSetId
+            var refFields = context.MixDatabaseColumn.Where(
+                   m => m.MixDatabaseId == mixDatabaseId
                     && m.DataType == MixDataType.Reference).ToList();
 
             foreach (var item in refFields)
@@ -227,12 +227,12 @@ namespace Mix.Cms.Lib.Extensions
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                     _context, _transaction,
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
-                    (model.AttributeSetId == referenceId)
+            Expression<Func<MixDatabaseDataAssociation, bool>> predicate = model =>
+                    (model.MixDatabaseId == referenceId)
                     && (model.ParentId == dataId && model.ParentType == MixDatabaseParentType.Set)
                     && model.Specificulture == culture
                     ;
-            var getData = ViewModels.MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
+            var getData = ViewModels.MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
 
             JArray arr = new JArray();
             foreach (var nav in getData.Data.OrderBy(v => v.Priority))

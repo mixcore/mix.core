@@ -6,14 +6,14 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 {
-    public class MixAttributeSetValueConfiguration : IEntityTypeConfiguration<MixDatabaseDataValue>
+    public class MixDatabaseDataValueConfiguration : IEntityTypeConfiguration<MixDatabaseDataValue>
     {
         public void Configure(EntityTypeBuilder<MixDatabaseDataValue> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
-                    .HasName("PK_mix_attribute_set_value");
+                    .HasName("PK_mix_database_data_value");
 
-            entity.ToTable("mix_attribute_set_value");
+            entity.ToTable("mix_database_data_value");
 
             entity.HasIndex(e => e.DataId);
 

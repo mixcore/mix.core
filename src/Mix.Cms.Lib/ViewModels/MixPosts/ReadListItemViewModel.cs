@@ -95,13 +95,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("attributeData")]
-        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
+        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+        public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; } = new List<MixRelatedAttributeDatas.FormViewModel>();
+        public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("listTag")]
         public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
@@ -116,8 +116,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -130,8 +132,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -184,23 +188,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            string type = Type ?? MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST;
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
+            string type = Type ?? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST;
+            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(
                 m => m.Name == type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
+                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture
-                    && a.AttributeSetId == getAttrs.Data.Id
+                    && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
         }
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getTags = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+            var getTags = MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
                    && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
-                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_TAG, context, transaction);
+                   && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
                 SysTags = getTags.Data;
@@ -209,9 +213,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getData = MixRelatedAttributeDatas.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+            var getData = MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
                    && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
-                   && m.AttributeSetName == MixConstants.AttributeSetName.SYSTEM_CATEGORY, context, transaction);
+                   && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
             {
                 SysCategories = getData.Data;
