@@ -21,12 +21,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
         public ReadViewModel() : base()
         {
         }
+
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("mediaId")]
         public int MediaId { get; set; }
 
@@ -44,25 +49,34 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
+
         #region Views
 
         public UpdateViewModel Media { get; set; }
 
         #endregion Views
-        #endregion
+
+        #endregion Properties
 
         #region overrides
+
         public override MixPostMedia ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -71,6 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostMedias
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getMedia = UpdateViewModel.Repository.GetSingleModel(p => p.Id == MediaId && p.Specificulture == Specificulture

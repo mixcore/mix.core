@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
@@ -27,7 +26,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataDataController :
         BaseAuthorizedRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
     {
-
         // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
@@ -106,6 +104,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
+
         // GET api/module-data/create/id
         [HttpGet, HttpOptions]
         [Route("init-form/{moduleId}")]
@@ -130,6 +129,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest();
             }
         }
+
         // GET api/module-data/create/id
         [HttpPost, HttpOptions]
         [Route("save/{moduleName}")]
@@ -164,5 +164,4 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
     }
-
 }

@@ -2,9 +2,7 @@
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
@@ -59,9 +57,11 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
         public MixUserStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -76,15 +76,11 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl
-        {
-            get
-            {
+        public string AvatarUrl {
+            get {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Avatar
-                });
+                    return $"{Domain}/{Avatar}";
                 }
                 else
                 {
@@ -128,10 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
             if (MediaFile.FileStream != null)
             {
-                MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixFolders.SiteContentUploadsFolder,
-                    DateTime.UtcNow.ToString("MMM-yyyy")
-                }); ;
+                MediaFile.FileFolder = MixCmsHelper.GetUploadFolder();
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {

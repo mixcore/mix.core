@@ -6,7 +6,6 @@ namespace Mix.Cms.Web.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class InitController : BaseController
     {
-
         [HttpGet]
         [Route("init")]
         [Route("init/{page}")]

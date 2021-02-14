@@ -3,8 +3,6 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Common.Helper;
 using Mix.Heart.Extensions;
 using Mix.Services;
@@ -61,14 +59,16 @@ namespace Mix.Cms.Lib.Extensions
 
                 case MixDataType.Reference:
                     return (new JProperty(item.AttributeFieldName, new JArray()));
+
                 case MixDataType.Upload:
                     string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
                     string url = !string.IsNullOrEmpty(item.StringValue)
-                   ? !item.StringValue.Contains(domain) 
+                   ? !item.StringValue.Contains(domain)
                         ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
-                        :  item.StringValue
+                        : item.StringValue
                    : null;
                     return (new JProperty(item.AttributeFieldName, url));
+
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -97,6 +97,11 @@ namespace Mix.Cms.Lib.Extensions
 
         public static void ToModelValue(this ViewModels.MixAttributeSetValues.UpdateViewModel item, JToken property)
         {
+            if (property == null)
+            {
+                return;
+            }
+
             if (item.Field.IsEncrypt)
             {
                 var obj = property.Value<JObject>();
@@ -191,7 +196,6 @@ namespace Mix.Cms.Lib.Extensions
                         break;
                 }
             }
-
         }
 
         public static void LoadAllReferenceData(this JObject obj

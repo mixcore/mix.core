@@ -28,10 +28,8 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static TemplateRepository Instance
-        {
-            get
-            {
+        public static TemplateRepository Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -81,15 +79,13 @@ namespace Mix.Cms.Lib.Repositories
 
         public bool DeleteTemplate(string name, string templateFolder)
         {
-            string fullPath = CommonHelper.GetFullPath(new string[]
-            {
-                templateFolder,
-                name + MixFileExtensions.CsHtml
-            });
+            string fullPath = $"{templateFolder}/{name + MixFileExtensions.CsHtml}";
+
             if (File.Exists(fullPath))
             {
                 CommonHelper.RemoveFile(fullPath);
             }
+
             return true;
         }
 
@@ -128,7 +124,7 @@ namespace Mix.Cms.Lib.Repositories
                     {
                         Directory.CreateDirectory(file.FileFolder);
                     }
-                    string fileName = CommonHelper.GetFullPath(new string[] { file.FileFolder, file.Filename + file.Extension });
+                    string fileName = $"{file.FileFolder}/{file.Filename + file.Extension}";
                     using (var writer = File.CreateText(fileName))
                     {
                         writer.WriteLine(file.Content);

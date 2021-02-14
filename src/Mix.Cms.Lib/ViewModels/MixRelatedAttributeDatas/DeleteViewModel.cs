@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 {
@@ -55,6 +49,7 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
             }
             return base.ParseModel(_context, _transaction);
         }
+
         #endregion Overrides
     }
 }

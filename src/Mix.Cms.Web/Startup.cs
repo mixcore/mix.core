@@ -14,11 +14,11 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Schedule;
-using Mix.Cms.Schedule.Jobs;
 using Mix.Cms.Service.SignalR;
+using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,7 +31,7 @@ namespace Mix.Cms.Web
             Configuration = configuration;
         }
 
-        readonly string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
+        private readonly string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -76,13 +76,12 @@ namespace Mix.Cms.Web
             services.AddMixScheduler(Configuration);
             /* Mix: End Inject Services */
 
-            VerifyInitData(services);
+            _ = VerifyInitDataAsync(services);
 
             services.AddMixAuthorize(Configuration);
             /* End Additional Config for Mixcore Cms  */
 
             #endregion Additionals Config for Mixcore Cms
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -125,6 +124,7 @@ namespace Mix.Cms.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
             #region Additionals Config for Mixcore Cms
 
             if (MixService.GetConfig<bool>("IsHttps"))
@@ -138,13 +138,12 @@ namespace Mix.Cms.Web
 
             app.UseMixRoutes();
             app.UseMixScheduler();
-            #endregion Additionals Config for Mixcore Cms
 
+            #endregion Additionals Config for Mixcore Cms
         }
 
-
         // Mix: Check custom cms config
-        private void VerifyInitData(IServiceCollection services)
+        private async Task VerifyInitDataAsync(IServiceCollection services)
         {
             // Mix: Migrate db if already inited
 
@@ -153,6 +152,18 @@ namespace Mix.Cms.Web
                 using (var ctx = new MixCmsContext())
                 {
                     ctx.Database.Migrate();
+                    var transaction = ctx.Database.BeginTransaction();
+                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixAttributeSets.ImportViewModel>>();
+                    foreach (var db in sysDatabases)
+                    {
+                        if (!ctx.MixAttributeSet.Any(m => m.Name == db.Name))
+                        {
+                            await db.SaveModelAsync(true, ctx, transaction);
+                        }
+                    }
+                    await transaction.CommitAsync();
+                    await transaction.DisposeAsync();
                 }
             }
 

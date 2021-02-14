@@ -1,20 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels;
-using Mix.Cms.Messenger.Models.Data;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -83,7 +81,6 @@ namespace Mix.Cms.Lib.Services
 
                     var countCulture = context.MixCulture.Count();
 
-
                     /**
                      * Init Selected Language as default
                      */
@@ -128,7 +125,6 @@ namespace Mix.Cms.Lib.Services
                 context?.Dispose();
             }
         }
-
 
         /// <summary>
         /// Step 2

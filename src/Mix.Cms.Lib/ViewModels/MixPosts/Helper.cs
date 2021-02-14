@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -9,7 +9,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
-using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -174,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         PageSize = pageSize
                     }
                 };
-                // Get Data                
+                // Get Data
                 Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
                    && m.Status == MixContentStatus.Published;
                 foreach (var item in valueIds)
@@ -188,7 +187,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     var dataIds = getVal.Data.Select(m => m.DataId).Distinct();
                     if (dataIds.Count() == 1)
                     {
-
                         result = await GetPostListByDataIds<TView>(
                                 dataIds: dataIds.ToList(),
                                 culture: culture,
@@ -392,7 +390,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPost<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByIds<TView>(
             string keyword
             , List<string> dataIds
             , List<int> pageIds = null
@@ -504,8 +502,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return postPredicate;
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByAdditionalField<TView>(
-            string fieldName, string value, string culture
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByField<TView>(
+            string fieldName, string value
+            , string culture = null
             , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -514,6 +513,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
                 var result = new RepositoryResponse<PaginationModel<TView>>()
                 {
                     IsSucceed = true,

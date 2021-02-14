@@ -7,10 +7,13 @@ namespace Mix.Cms.Service.SignalR.Models
     {
         [JsonProperty("uid")]
         public string Uid { get; set; }
+
         [JsonProperty("connection")]
         public MessengerConnection Connection { get; set; }
+
         [JsonProperty("from")]
         public string From { get; set; }
+
         [JsonProperty("to")]
         public string To { get; set; }
 
@@ -31,6 +34,7 @@ namespace Mix.Cms.Service.SignalR.Models
 
         [JsonProperty("isMyself")]
         public bool IsMySelf { get; set; }
+
         [JsonProperty("isSave")]
         public bool IsSave { get; set; }
 

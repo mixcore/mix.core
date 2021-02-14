@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -20,7 +19,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiTemplateController :
         BaseAuthorizedRestApiController<MixCmsContext, MixTemplate, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
-
         // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -52,7 +50,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-
         // GET: api/s/5
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<UpdateViewModel>> Copy(string id)
@@ -64,7 +61,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 if (copyResult.IsSucceed)
                 {
                     return Ok(copyResult.Data);
-
                 }
                 else
                 {
@@ -76,7 +72,5 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return NotFound();
             }
         }
-
     }
-
 }

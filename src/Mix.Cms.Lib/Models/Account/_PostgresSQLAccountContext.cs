@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
-using Mix.Cms.Lib.Services;
 using Mix.Identity.Data;
 
 namespace Mix.Cms.Lib.Models.Account
@@ -24,12 +22,13 @@ namespace Mix.Cms.Lib.Models.Account
         public PostgresSQLAccountContext()
         {
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyPostgresIddentityConfigurations();
             OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

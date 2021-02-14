@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -32,7 +31,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
-                    .Replace($"/{culture}/", "/[CULTURE]/");
+                    .Replace($"/{culture}/", "/[CULTURE]/")
+                    .Replace($"/{data.ThemeName}/", "/[THEME_NAME]/");
                 if (!string.IsNullOrEmpty(domain))
                 {
                     content = content.Replace(domain, string.Empty);
@@ -51,9 +51,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Copy current templates file
                 MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
                 // Copy current assets files
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
                 // Copy current uploads files
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
                 // Save Site Structures
                 MixFileRepository.Instance.SaveFile(file);
 
@@ -78,16 +78,18 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
         }
 
-        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string culture, IFormFile assets, IFormFile theme)
+        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string userName, string culture, IFormFile assets, IFormFile theme)
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
             if (data != null)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                data.CreatedBy = userName;
+                string importFolder = $"{MixFolders.ImportFolder}/" +
+                    $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
                 if (theme != null)
                 {
-                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}/{theme.FileName}");
+                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else

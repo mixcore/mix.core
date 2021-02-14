@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.Models.Cms
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyAllConfigurationsFromNamespace(
-                this.GetType().Assembly, 
+                this.GetType().Assembly,
                 "Mix.Cms.Lib.Models.EntityConfigurations.MySQL");
             OnModelCreatingPartial(modelBuilder);
         }

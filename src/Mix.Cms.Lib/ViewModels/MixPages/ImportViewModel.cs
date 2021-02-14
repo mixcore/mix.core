@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
-using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
@@ -21,8 +18,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -74,6 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("type")]
         public MixPageType Type { get; set; }
+
         [JsonProperty("tags")]
         public string Tags { get; set; }
 
@@ -88,16 +88,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -110,6 +116,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("themeName")]
         public string ThemeName { get; set; } = "default";
+
+        [JsonProperty("relatedData")]
+        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
 
         #endregion Views
 
@@ -131,11 +140,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            GetAdditionalData(Id.ToString(), MixDatabaseParentType.Page, _context, _transaction);
         }
-
-        #region Async
-
-        #endregion Async
 
         #endregion Overrides
 
@@ -167,6 +173,17 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             return MixPagePosts.ImportViewModel.Repository.GetModelListBy(
                 m => m.Specificulture == Specificulture && m.PageId == Id,
                 context, transaction).Data;
+        }
+
+        private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
+                        m => m.Specificulture == Specificulture && m.ParentType == type
+                            && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData = (getRelatedData.Data);
+            }
         }
 
         #endregion Expands

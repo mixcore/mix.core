@@ -53,16 +53,22 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -124,37 +130,18 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
         }
 
-        //public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
-        //{
-        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
-        //    // Save Fields
-        //    //if (Fields != null)
-        //    //{
-        //    //    result = await SaveFieldsAsync(parent, _context, _transaction);
-        //    //}
-        //    //if (result.IsSucceed)
-        //    //{
-        //    //    // Save Data
-        //    //    result = await SaveDataAsync(parent, _context, _transaction);
-        //    //}
-
-        //    return result;
-        //}
-
-        private async Task<RepositoryResponse<bool>> SaveDataAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (Data != null)
+            if (result.IsSucceed)
             {
-                foreach (var item in Data)
+                foreach (var item in Fields)
                 {
                     if (result.IsSucceed)
                     {
-                        item.AttributeSetId = parent.Id;
                         item.AttributeSetName = parent.Name;
-                        item.Fields = Fields;
-                        item.CreatedDateTime = DateTime.UtcNow;
-                        var saveResult = await item.SaveModelAsync(true, context, transaction);
+                        item.AttributeSetId = parent.Id;
+                        var saveResult = await item.SaveModelAsync(false, _context, _transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                     else
@@ -165,26 +152,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return result;
         }
-
-        //private async Task<RepositoryResponse<bool>> SaveFieldsAsync(MixAttributeSet parent, MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
-        //    foreach (var item in Fields)
-        //    {
-        //        if (result.IsSucceed)
-        //        {
-        //            item.AttributeSetId = parent.Id;
-        //            item.AttributeSetName = parent.Name;
-        //            var saveResult = await item.SaveModelAsync(false, context, transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    return result;
-        //}
 
         public override RepositoryResponse<bool> SaveSubModels(MixAttributeSet parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
@@ -208,29 +175,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             }
             return result;
         }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixAttributeSetData.Where(m => m.AttributeSetId == Id);
-        //    var attrFields = context.MixAttributeField.Where(m => m.AttributeSetId == Id);
-
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixAttributeSetDatas.ImportViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in attrFields)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixAttributeFields.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
 
         #endregion Overrides
     }

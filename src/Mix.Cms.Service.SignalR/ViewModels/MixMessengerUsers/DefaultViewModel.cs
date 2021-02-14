@@ -4,7 +4,6 @@ using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 {
@@ -14,6 +13,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("facebookId")]
         public string FacebookId { get; set; }
 
@@ -59,10 +59,6 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
         }
 
         #endregion Sync
-
-        #region Async
-
-        #endregion Async
 
         #endregion Override
     }

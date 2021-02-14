@@ -20,19 +20,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         public string Type { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #endregion Properties
@@ -124,13 +132,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (result.IsSucceed)
             {
-                var navs = await _context.MixRelatedAttributeData.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post  && n.Specificulture == Specificulture).ToListAsync();
+                var navs = await _context.MixRelatedAttributeData.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
                 }
             }
-
 
             await _context.SaveChangesAsync();
             var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(

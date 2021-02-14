@@ -1,19 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 {
@@ -55,17 +50,23 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         [JsonProperty("createdby")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty("status")]
         public MixUserStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -86,15 +87,11 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl
-        {
-            get
-            {
+        public string AvatarUrl {
+            get {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Avatar
-                });
+                    return $"{Domain}/{Avatar}";
                 }
                 else
                 {
@@ -129,10 +126,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         {
             if (MediaFile.FileStream != null)
             {
-                MediaFile.FileFolder = CommonHelper.GetFullPath(new[] {
-                    MixFolders.SiteContentUploadsFolder,
-                    DateTime.UtcNow.ToString("MMM-yyyy")
-                }); ;
+                MediaFile.FileFolder = MixCmsHelper.GetUploadFolder(Specificulture);
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
                 if (isSaved)
                 {
@@ -148,33 +142,9 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            UserRoles = GetRoleNavs();
+            UserRoles = MixAccountHelper.GetRoleNavs(Id);
         }
 
         #endregion Overrides
-
-        #region Expands
-
-        public List<NavUserRoleViewModel> GetRoleNavs()
-        {
-            using (MixCmsAccountContext context = new MixCmsAccountContext())
-            {
-                var query = context.AspNetRoles
-                  .Include(cp => cp.AspNetUserRoles)
-                  .ToList()
-                  .Select(p => new NavUserRoleViewModel()
-                  {
-                      UserId = Id,
-                      RoleId = p.Id,
-                      Specificulture = Specificulture,
-                      Description = p.Name,
-                      IsActived = context.AspNetUserRoles.Any(m => m.UserId == Id && m.RoleId == p.Id)
-                  });
-
-                return query.OrderBy(m => m.Priority).ToList();
-            }
-        }
-
-        #endregion Expands
     }
 }

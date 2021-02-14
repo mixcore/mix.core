@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -11,7 +12,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 {
@@ -31,8 +31,6 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         [JsonProperty("normalizedName")]
         public string NormalizedName { get; set; }
-
-
 
         #region Views
 

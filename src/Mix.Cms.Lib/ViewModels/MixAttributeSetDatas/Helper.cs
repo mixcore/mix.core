@@ -10,7 +10,8 @@ using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.Helpers;
+using Mix.Heart.Extensions;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
@@ -20,8 +21,6 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -30,7 +29,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public static async Task<RepositoryResponse<bool>> ImportData(
             string culture, Lib.ViewModels.MixAttributeSets.ReadViewModel attributeSet, IFormFile file)
         {
-
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -68,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         }
 
         public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
-            MixDatabaseParentType parentType, int parentId,
+            MixDatabaseParentType parentType, string parentId,
             HttpRequest request, string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -76,21 +74,49 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             try
             {
                 // Additional Data is sub data of page / post / module only
-                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
                 var databaseName = request.Query["databaseName"].ToString();
+
+                return await LoadAdditionalDataAsync(parentType, parentId, databaseName, culture, context, transaction);
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AdditionalViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+
+        public static async Task<RepositoryResponse<AdditionalViewModel>> LoadAdditionalDataAsync(
+            MixDatabaseParentType parentType,
+            string parentId,
+            string databaseName,
+            string culture = null,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
                 var dataId = (await context.MixRelatedAttributeData.FirstOrDefaultAsync(
-                    m => m.AttributeSetName == databaseName && m.ParentType == parentType && m.ParentId == parentId.ToString() && m.Specificulture == culture))?.DataId;
+                    m => m.AttributeSetName == databaseName && m.ParentType == parentType && m.ParentId == parentId && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
                     return await AdditionalViewModel.Repository.GetSingleModelAsync(
                         m => m.Id == dataId && m.Specificulture == culture
-                        ,  context, transaction);
+                        , context, transaction);
                 }
                 else
                 {
                     // Init default data
                     var getAttrSet = await Lib.ViewModels.MixAttributeSets.UpdateViewModel.Repository.GetSingleModelAsync(
-                    m => m.Name == request.Query["databaseName"].ToString()
+                    m => m.Name == databaseName
                     , context, transaction);
                     if (getAttrSet.IsSucceed)
                     {
@@ -101,7 +127,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             AttributeSetName = getAttrSet.Data.Name,
                             Status = MixContentStatus.Published,
                             Fields = getAttrSet.Data.Fields,
-                            ParentType = parentType
+                            ParentType = parentType,
+                            ParentId = parentId
                         };
                         result.ExpandView(context, transaction);
                         return new RepositoryResponse<AdditionalViewModel>()
@@ -110,8 +137,69 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             Data = result
                         };
                     }
+                    return new RepositoryResponse<AdditionalViewModel>();
                 }
-                return new RepositoryResponse<AdditionalViewModel>();
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<AdditionalViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+
+        public static RepositoryResponse<AdditionalViewModel> LoadAdditionalData(
+            MixDatabaseParentType parentType,
+            string parentId,
+            string databaseName,
+            string culture = null,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var dataId = context.MixRelatedAttributeData.FirstOrDefault(
+                    m => m.AttributeSetName == databaseName && m.ParentType == parentType && m.ParentId == parentId && m.Specificulture == culture)?.DataId;
+                if (!string.IsNullOrEmpty(dataId))
+                {
+                    return AdditionalViewModel.Repository.GetSingleModel(
+                        m => m.Id == dataId && m.Specificulture == culture
+                        , context, transaction);
+                }
+                else
+                {
+                    // Init default data
+                    var getAttrSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(
+                    m => m.Name == databaseName
+                    , context, transaction);
+                    if (getAttrSet.IsSucceed)
+                    {
+                        AdditionalViewModel result = new AdditionalViewModel()
+                        {
+                            Specificulture = culture,
+                            AttributeSetId = getAttrSet.Data.Id,
+                            AttributeSetName = getAttrSet.Data.Name,
+                            Status = MixContentStatus.Published,
+                            Fields = getAttrSet.Data.Fields,
+                            ParentType = parentType,
+                            ParentId = parentId
+                        };
+                        result.ExpandView(context, transaction);
+                        return new RepositoryResponse<AdditionalViewModel>()
+                        {
+                            IsSucceed = true,
+                            Data = result
+                        };
+                    }
+                    return new RepositoryResponse<AdditionalViewModel>();
+                }
             }
             catch (Exception ex)
             {
@@ -202,7 +290,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                             {
                                 Expression<Func<MixAttributeSetValue, bool>> pre = m =>
                                     m.AttributeFieldName == q.Key && m.StringValue == (q.Value.ToString());
-                                valPredicate = valPredicate == null 
+                                valPredicate = valPredicate == null
                                     ? pre
                                     : valPredicate = valPredicate.AndAlso(pre);
                             }
@@ -278,7 +366,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var fields = getfields.IsSucceed ? getfields.Data : new List<MixAttributeFields.ReadViewModel>();
                 var fieldQueries = !string.IsNullOrEmpty(request.Query["query"]) ? JObject.Parse(request.Query["query"]) : new JObject();
 
-
                 // Data predicate
                 Expression<Func<MixAttributeSetData, bool>> predicate = m => m.Specificulture == culture
                    && (m.AttributeSetName == attributeSetName);
@@ -296,7 +383,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 // if filter by field name or keyword => filter by attr value
                 if (fieldQueries.Count > 0 || !string.IsNullOrEmpty(keyword))
                 {
-
                     // filter by all fields if have keyword
                     if (!string.IsNullOrEmpty(keyword))
                     {
@@ -472,6 +558,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
         }
+
         public static RepositoryResponse<FileViewModel> ExportAttributeToExcel(List<JObject> lstData, string sheetName
           , string folderPath, string fileName
           , List<string> headers = null)
@@ -564,7 +651,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 m => m.DataId == dataId && m.Specificulture == culture
                     && !string.IsNullOrEmpty(m.AttributeFieldName));
             var properties = values.Select(m => m.ToJProperty(_context, _transaction));
-
             var obj = new JObject(
                 new JProperty("id", dataId),
                 properties
@@ -577,6 +663,23 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
 
             return obj;
+        }
+
+        public static void CleanCache(this MixAttributeSetData data, MixCmsContext context)
+        {
+            var tasks = new List<Task>();
+            // Get Parent Ids
+            var relatedModels = context.MixRelatedAttributeData.Where(
+                p => p.DataId == data.Id && p.Specificulture == data.Specificulture)
+                    .Select(m => new { navId = m.Id, parentId = m.ParentId });
+            foreach (var model in relatedModels)
+            {
+                var parentKey = $"_{model.parentId}_{data.Specificulture}";
+                var navKey = $"_{model.navId}_{data.Specificulture}";
+                tasks.Add(MixService.RemoveCacheAsync(typeof(MixAttributeSetData), parentKey));
+                tasks.Add(MixService.RemoveCacheAsync(typeof(MixRelatedAttributeData), navKey));
+            }
+            Task.WhenAll(tasks);
         }
     }
 }

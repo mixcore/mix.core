@@ -54,23 +54,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
 
         public PaginationModel<MixRelatedAttributeDatas.ReadMvcViewModel> Data { get; set; }
+
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -94,9 +102,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             Fields = Fields ?? MixAttributeFields.UpdateViewModel
                 .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
         }
-        #endregion
 
-
+        #endregion Overrides
 
         #region Expand
 

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Services;
 using System.Text.RegularExpressions;
@@ -13,7 +12,6 @@ namespace Mix.Cms.Web.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : BaseController
     {
-
         #region contructor
 
         protected override void ValidateRequest()

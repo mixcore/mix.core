@@ -1,5 +1,10 @@
-﻿using Mix.Cms.Lib.Models.Cms;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Models.Account;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,11 +14,6 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Enums;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Models.Account;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.Services
 {
@@ -50,10 +50,8 @@ namespace Mix.Cms.Lib.Services
             watcher.EnableRaisingEvents = true;
         }
 
-        public static MixService Instance
-        {
-            get
-            {
+        public static MixService Instance {
+            get {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -70,10 +68,8 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static MixService DefaultInstance
-        {
-            get
-            {
+        public static MixService DefaultInstance {
+            get {
                 if (defaultInstance == null)
                 {
                     lock (syncRoot)
@@ -485,7 +481,10 @@ namespace Mix.Cms.Lib.Services
 
         public static string GetTemplateUploadFolder(string culture)
         {
-            return $"{MixFolders.SiteContentUploadsFolder}/{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/uploads";
+            return $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{Instance.LocalSettings[culture][MixAppSettingKeywords.ThemeFolder]}/" +
+                $"uploads/" +
+                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 
         public static MixCmsContext GetDbContext()
@@ -495,16 +494,19 @@ namespace Mix.Cms.Lib.Services
             {
                 case MixDatabaseProvider.MSSQL:
                     return new MsSqlMixCmsContext();
+
                 case MixDatabaseProvider.MySQL:
                     return new MySqlMixCmsContext();
+
                 case MixDatabaseProvider.SQLITE:
                     return new MySqlMixCmsContext();
+
                 case MixDatabaseProvider.PostgreSQL:
                     return new PostgresqlMixCmsContext();
+
                 default:
                     return null;
             }
-
         }
 
         public static MixCmsAccountContext GetAccountDbContext()
@@ -516,8 +518,10 @@ namespace Mix.Cms.Lib.Services
                 case MixDatabaseProvider.MySQL:
                 case MixDatabaseProvider.SQLITE:
                     return new SQLAccountContext();
+
                 case MixDatabaseProvider.PostgreSQL:
                     return new PostgresSQLAccountContext();
+
                 default:
                     return null;
             }

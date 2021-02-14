@@ -5,6 +5,7 @@
         Set,
         Post,
         Page,
-        Module
+        Module,
+        User
     }
 }

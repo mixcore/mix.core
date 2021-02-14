@@ -20,8 +20,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
 
@@ -43,10 +45,13 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         #endregion Models
 
         #region Views
+
         [JsonProperty("data")]
         public JObject Data { get; set; }
+
         [JsonProperty("connection")]
         public MessengerConnection Connection { get; set; }
+
         [JsonProperty("relatedData")]
         [JsonIgnore]
         public List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel>();
@@ -59,8 +64,6 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
-
-
 
         #endregion Views
 
@@ -101,15 +104,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
         }
 
-
-
-        #region Async
-
-        #endregion Async
-
         #endregion Overrides
 
         #region Expands
+
         private void ParseValueData(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
@@ -136,6 +134,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
             ParseData();
         }
+
         private JProperty ParseValue(Lib.ViewModels.MixAttributeSetValues.UpdateViewModel item)
         {
             switch (item.DataType)

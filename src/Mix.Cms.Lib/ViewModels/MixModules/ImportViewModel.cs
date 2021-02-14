@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Lib.ViewModels.MixModules
 {
@@ -20,8 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -62,16 +64,22 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -92,6 +100,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         [JsonProperty("isExportData")]
         public bool IsExportData { get; set; }
+
+        [JsonProperty("relatedData")]
+        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
 
         #endregion Views
 
@@ -138,16 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            //var getDataResult = MixModuleDatas.ReadViewModel.Repository
-            //           .GetModelListBy(m => m.ModuleId == Id && m.Specificulture == Specificulture
-            //           , "Priority", 0, null, null
-            //           , _context, _transaction);
-            //if (getDataResult.IsSucceed)
-            //{
-            //    getDataResult.Data.JsonItems = new List<JObject>();
-            //    getDataResult.Data.Items.ForEach(d => getDataResult.Data.JsonItems.Add(d.JItem));
-            //    Data = getDataResult.Data;
-            //}
+            GetAdditionalData(Id.ToString(), MixDatabaseParentType.Module, _context, _transaction);
         }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixModule parent, MixCmsContext _context, IDbContextTransaction _transaction)
@@ -189,12 +191,25 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                        , "Priority", 0, null, null
                        , _context, _transaction);
         }
+
         public List<MixModulePosts.ImportViewModel> GetPostNavs(MixCmsContext context, IDbContextTransaction transaction)
         {
             return MixModulePosts.ImportViewModel.Repository.GetModelListBy(
                 m => m.Specificulture == Specificulture && m.ModuleId == Id,
                 context, transaction).Data;
         }
+
+        private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
+                        m => m.Specificulture == Specificulture && m.ParentType == type
+                            && m.ParentId == id, context, transaction);
+            if (getRelatedData.IsSucceed)
+            {
+                RelatedData = (getRelatedData.Data);
+            }
+        }
+
         #endregion Expand
     }
 }

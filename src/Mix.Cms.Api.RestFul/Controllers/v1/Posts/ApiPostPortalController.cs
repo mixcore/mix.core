@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
@@ -23,7 +22,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadListItemViewModel, DeleteViewModel>
     {
-
         // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> Get()
@@ -69,12 +67,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                     Type = Request.Query["type"].ToString(),
                     Template = template
-
                 };
                 var result = new UpdateViewModel(model, context, transaction);
                 return Ok(result);
             }
         }
     }
-
 }

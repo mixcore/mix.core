@@ -27,7 +27,7 @@ namespace Mix.Cms.Schedule
                 // this WONT'T work with scoped services like EF Core's DbContext
                 q.UseMicrosoftDependencyInjectionJobFactory(options =>
                 {
-                    // if we don't have the job in DI, allow fallback 
+                    // if we don't have the job in DI, allow fallback
                     // to configure via default constructor
                     options.AllowDefaultConstructor = true;
                 });
@@ -42,7 +42,6 @@ namespace Mix.Cms.Schedule
                 {
                     tp.MaxConcurrency = 10;
                 });
-
 
                 if (!MixService.GetConfig<bool>("IsInit"))
                 {
@@ -135,6 +134,5 @@ namespace Mix.Cms.Schedule
                 throw new NotImplementedException();
             }
         }
-
     }
 }

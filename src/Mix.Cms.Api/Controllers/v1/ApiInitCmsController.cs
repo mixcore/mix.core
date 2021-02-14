@@ -2,28 +2,24 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
-using Mix.Cms.Lib.Attributes;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Identity.Models;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -108,19 +104,6 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                         await _userManager.AddToRoleAsync(user, "SuperAdmin");
-                        model.ExpandView();
-                        model.Id = user.Id;
-                        model.CreatedDateTime = DateTime.UtcNow;
-                        model.Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar");
-                        model.CreatedDateTime = DateTime.UtcNow;
-                        model.Status = MixUserStatus.Active;
-                        model.LastModified = DateTime.UtcNow;
-                        model.CreatedBy = User.Identity.Name;
-                        model.ModifiedBy = User.Identity.Name;
-                        // Save to cms db context
-
-                        await model.SaveModelAsync();
-
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true);
                         if (token != null)
                         {
@@ -223,11 +206,13 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, _lang, assets, theme);
+            string user = User.Claims.FirstOrDefault(c => c.Type == "Username").Value;
+            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
 
         #endregion Post
