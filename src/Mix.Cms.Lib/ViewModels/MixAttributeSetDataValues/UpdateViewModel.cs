@@ -20,8 +20,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("attributeFieldId")]
         public int AttributeFieldId { get; set; }
 
@@ -63,18 +65,25 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         [JsonProperty("encryptType")]
         public int EncryptType { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
@@ -162,7 +171,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
             if (AttributeFieldId > 0)
             {
-                Field = MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
+                Field ??= MixAttributeFields.UpdateViewModel.Repository.GetSingleModel(
                     f => f.Id == AttributeFieldId
                     , _context, _transaction).Data;
                 if (Field != null && DataType == MixDataType.Reference)

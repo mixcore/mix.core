@@ -31,12 +31,16 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+
         /*
          * Parent Id: PostId / PageId / Module Id / Data Id / Attr Set Id
          */
@@ -55,23 +59,32 @@ namespace Mix.Cms.Lib.ViewModels.MixRelatedAttributeDatas
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Model
 
         #region Views
+
         [JsonProperty("parentName")]
         public string ParentName { get; set; }
+
         [JsonProperty("data")]
         public MixAttributeSetDatas.UpdateViewModel Data { get; set; }
 

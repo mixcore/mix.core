@@ -4,7 +4,6 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Services;
@@ -62,14 +61,19 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
 
@@ -81,31 +85,22 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string Layout { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                     SeoHelper.GetSEOString(ThemeName) });
+        public string AssetFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.TemplatesFolder, SeoHelper.GetSEOString(ThemeName) });
+        public string TemplateFolder {
+            get {
+                return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -142,7 +137,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     Content = file.Content;
                 }
             }
-
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -172,13 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                 Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
-
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
@@ -299,12 +287,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
                     ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);
-            string folder = CommonHelper.GetFullPath(new string[]
-                    {
-                    MixFolders.TemplatesFolder
-                    , activedTheme
-                    , folderType
-                    });
+            string folder = $"{MixFolders.TemplatesFolder}/{activedTheme}/{folderType}";
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()
                 , _context, _transaction
@@ -329,6 +312,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             // Not write file to disk
             return await result.Data.SaveModelAsync(false);
         }
+
         #endregion Expands
     }
 }

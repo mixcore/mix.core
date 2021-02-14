@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
@@ -11,7 +10,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixAttributeSetDatas;
 using Mix.Domain.Core.ViewModels;
-using System;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
@@ -40,7 +38,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{attributeSetName}")]
         public async Task<ActionResult<UpdateViewModel>> Init(string attributeSetName)
         {
-
             var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == attributeSetName);
             if (getAttrSet.IsSucceed)
             {
@@ -60,5 +57,4 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
     }
-
 }

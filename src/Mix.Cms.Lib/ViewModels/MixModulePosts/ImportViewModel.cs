@@ -23,10 +23,13 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         public ImportViewModel() : base()
         {
         }
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("postId")]
         public int PostId { get; set; }
 
@@ -44,16 +47,22 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #region Views
 
         [JsonProperty("post")]
@@ -65,6 +74,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
         #endregion Views
 
         #region overrides
+
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
@@ -78,6 +88,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
                 }
             }
         }
+
         public override MixModulePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)

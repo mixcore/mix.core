@@ -19,12 +19,14 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                         //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
                         val["value"] = new JArray();
                         break;
+
                     case MixDataType.Upload:
                         string fullUrl = val["value"].ToString().TrimStart('/');
 
                         fullUrl = fullUrl.IndexOf("http") >= 0 ? fullUrl : $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{fullUrl}";
                         val["value"] = fullUrl;
                         break;
+
                     case MixDataType.DateTime:
                     case MixDataType.Date:
                     case MixDataType.Time:

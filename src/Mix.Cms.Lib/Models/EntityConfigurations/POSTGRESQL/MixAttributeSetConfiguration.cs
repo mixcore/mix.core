@@ -78,7 +78,6 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("und-x-icu");
-
         }
     }
 }

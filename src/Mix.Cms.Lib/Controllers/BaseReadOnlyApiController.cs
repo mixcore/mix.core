@@ -8,7 +8,6 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
-using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -32,7 +31,9 @@ namespace Mix.Cms.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
+
         #region Routes
+
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
         {
@@ -121,7 +122,8 @@ namespace Mix.Cms.Lib.Controllers
             await MixService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
-        #endregion
+
+        #endregion Routes
 
         #region Overrides
 
@@ -155,9 +157,11 @@ namespace Mix.Cms.Lib.Controllers
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
+
         #endregion Overrides
 
         #region Helpers
+
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
@@ -203,7 +207,7 @@ namespace Mix.Cms.Lib.Controllers
             }
             return data;
         }
-        
+
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
@@ -224,7 +228,6 @@ namespace Mix.Cms.Lib.Controllers
 
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
@@ -233,15 +236,11 @@ namespace Mix.Cms.Lib.Controllers
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-
                 }
-
             }
             return data;
         }
 
-        #endregion
-
+        #endregion Helpers
     }
-
 }

@@ -4,7 +4,6 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Services;
@@ -59,14 +58,19 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
 
@@ -74,36 +78,23 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Views
 
-
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                    ThemeName });
+        public string AssetFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
-
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.TemplatesFolder,
-                    ThemeName
-                    });
+        public string TemplateFolder {
+            get {
+                return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -147,12 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();

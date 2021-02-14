@@ -7,7 +7,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Constants;
 
 namespace Mix.Cms.Api.Controllers.v1
 {

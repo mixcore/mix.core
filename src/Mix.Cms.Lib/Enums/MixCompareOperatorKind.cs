@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mix.Cms.Lib.Enums
+﻿namespace Mix.Cms.Lib.Enums
 {
     public enum MixCompareOperatorKind
     {

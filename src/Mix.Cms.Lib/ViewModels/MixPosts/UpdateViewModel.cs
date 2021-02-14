@@ -28,8 +28,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -91,19 +93,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Tags { get; set; } = "[]";
 
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("templatePath")]
         public string TemplatePath { get; set; }
 
@@ -149,50 +158,36 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
-        public int ActivedTheme
-        {
-            get
-            {
+        public int ActivedTheme {
+            get {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType
-        {
-            get
-            {
-                return MixTemplateFolders.Posts.ToString();
+        public string TemplateFolderType {
+            get {
+                return MixTemplateFolders.Posts;
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)
-                    , TemplateFolderType
-                }
-            );
+        public string TemplateFolder {
+            get {
+                return $"{MixFolders.TemplatesFolder}/" +
+                  $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
+                  $"{MixTemplateFolders.Posts}";
             }
         }
 
         #endregion Template
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -202,15 +197,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -308,30 +299,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             Template = View != null ? string.Format(@"{0}/{1}{2}", View.FolderType, View.FileName, View.Extension) : Template;
             if (ThumbnailFileStream != null)
             {
-                string folder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
-                });
+                string folder = MixCmsHelper.GetUploadFolder(Specificulture);
                 string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
                 bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
                 if (saveThumbnail)
                 {
                     CommonHelper.RemoveFile(Thumbnail);
-                    Thumbnail = CommonHelper.GetFullPath(new string[] { folder, filename });
+                    Thumbnail = $"{folder}/{filename}";
                 }
             }
             if (ImageFileStream != null)
             {
-                string folder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.SiteContentUploadsFolder, "Posts", DateTime.UtcNow.ToString("dd-MM-yyyy")
-                });
+                string folder = MixCmsHelper.GetUploadFolder(Specificulture);
                 string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
                 bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
                 if (saveImage)
                 {
                     CommonHelper.RemoveFile(Image);
-                    Image = CommonHelper.GetFullPath(new string[] { folder, filename });
+                    Image = $"{folder}/{filename}";
                 }
             }
 

@@ -18,11 +18,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
         public ReadMvcViewModel() : base()
         {
         }
+
         #region Models
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
 
@@ -37,19 +41,26 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
 
         #region Views
 
@@ -59,6 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
         #endregion Views
 
         #region overrides
+
         public override MixPageModule ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -67,6 +79,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getModule = MixModules.ReadMvcViewModel.Repository.GetSingleModel(p => p.Id == ModuleId && p.Specificulture == Specificulture

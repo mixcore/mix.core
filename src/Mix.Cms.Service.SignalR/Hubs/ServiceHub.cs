@@ -5,7 +5,6 @@ using Mix.Cms.Service.SignalR.Models;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -16,11 +15,13 @@ namespace Mix.Cms.Service.SignalR.Hubs
     {
         private readonly MixChatServiceContext _context;
         private readonly MixCmsContext _msgContext;
+
         public ServiceHub(MixChatServiceContext context, MixCmsContext msgContext) : base()
         {
             _context = context;
             _msgContext = msgContext;
         }
+
         #region Hub Methods
 
         // TODO Handle Join/Leave group
@@ -31,25 +32,28 @@ namespace Mix.Cms.Service.SignalR.Hubs
             {
                 case Constants.HubMethods.SaveData:
                     return SaveData(request);
+
                 case Constants.HubMethods.JoinGroup:
                     return JoinGroup(request);
+
                 case Constants.HubMethods.SendMessage:
                     return SendToAll(request, Constants.Enums.MessageReponseKey.NewMessage, request.IsMySelf);
+
                 case Constants.HubMethods.SendGroupMessage:
                     if (request.IsSave)
                     {
                         _ = SaveData(request);
                     }
                     return SendToGroup(request, Constants.Enums.MessageReponseKey.NewMessage, request.Room, request.IsMySelf);
+
                 default:
                     return SendToCaller(Constants.HubMessages.UnknowErrorMsg, Constants.Enums.MessageReponseKey.Error);
             }
         }
 
-        #endregion
+        #endregion Hub Methods
 
         #region Handler
-
 
         private async Task SaveData(HubRequest<JObject> request)
         {
@@ -94,7 +98,6 @@ namespace Mix.Cms.Service.SignalR.Hubs
             }
             var groupMembers = GetGroupMembersAsync(request);
 
-
             var result = new RepositoryResponse<bool>();
             // Mapping connecting user to db  models
             var user = new ViewModels.MixMessengerUsers.ConnectViewModel(connection)
@@ -102,7 +105,6 @@ namespace Mix.Cms.Service.SignalR.Hubs
                 CreatedDate = DateTime.UtcNow
             };
             result = user.Join();
-
         }
 
         private async Task<object> GetGroupMembersAsync(HubRequest<JObject> request)
@@ -225,12 +227,12 @@ namespace Mix.Cms.Service.SignalR.Hubs
                         getUser.Data.Status = Constants.Enums.OnlineStatus.Disconnected;
                         getUser.Data.SaveModel(false);
                     }
-
                 }
             }
 
             return base.OnDisconnectedAsync(exception);
         }
-        #endregion
+
+        #endregion Handler
     }
 }

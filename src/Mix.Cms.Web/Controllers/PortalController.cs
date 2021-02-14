@@ -8,7 +8,6 @@ namespace Mix.Cms.Web.Controllers
     [ApiExplorerSettings(IgnoreApi = true)]
     public class PortalController : BaseController
     {
-
         #region overrides
 
         protected override void ValidateRequest()

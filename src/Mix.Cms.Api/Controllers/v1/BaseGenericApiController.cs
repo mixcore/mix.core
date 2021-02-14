@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Helpers;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Constants;
-using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -44,10 +42,8 @@ namespace Mix.Cms.Api.Controllers.v1
 
         protected bool _forbidden = false;
 
-        protected bool _forbiddenPortal
-        {
-            get
-            {
+        protected bool _forbiddenPortal {
+            get {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return _forbidden || (

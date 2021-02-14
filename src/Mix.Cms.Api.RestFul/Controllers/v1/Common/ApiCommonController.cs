@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.ViewModels;
-using Mix.Cms.Lib.ViewModels.Common;
 using Mix.Domain.Core.ViewModels;
 using Mix.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Linq;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -31,7 +24,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 //    );
                 //var cultures = await Lib.ViewModels.MixCultures.ReadViewModel.Repository.GetModelListAsync();
                 //List<int> handledPageId = new List<int>();
-                
 
                 //var posts = Lib.ViewModels.MixPosts.ReadListItemViewModel.Repository.GetModelList();
                 //foreach (var post in posts.Data)

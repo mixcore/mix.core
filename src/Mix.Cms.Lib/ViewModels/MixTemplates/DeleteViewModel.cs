@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
@@ -39,8 +38,6 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         [JsonProperty("extension")]
         public string Extension { get; set; }
 
-
-
         [JsonIgnore]
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -57,36 +54,23 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
 
         #region Views
 
-        [JsonIgnore]
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.SiteContentAssetsFolder,
-                    ThemeName });
+        public string AssetFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
-        [JsonIgnore]
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
-                return CommonHelper.GetFullPath(new string[] {
-                    MixFolders.TemplatesFolder,
-                    ThemeName
-                    });
+        public string TemplateFolder {
+            get {
+                return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath
-        {
-            get
-            {
+        public string TemplatePath {
+            get {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -114,18 +98,14 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Overrides
 
         #region Common
+
         public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FileFolder = CommonHelper.GetFullPath(new string[]
-                {
-                    MixFolders.TemplatesFolder
-                    , ThemeName
-                    , FolderType
-                });
+            FileFolder = $"{MixFolders.TemplatesFolder}/{ThemeName}/{FolderType}";
             return base.ParseModel(_context, _transaction);
         }
 

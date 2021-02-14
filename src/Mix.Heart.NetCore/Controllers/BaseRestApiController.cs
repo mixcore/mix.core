@@ -28,16 +28,16 @@ namespace Mix.Heart.NetCore.Controllers
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
+
         /// <summary>
         /// The domain
         /// </summary>
         protected string _domain;
 
-        #region Overrides
 
-        #endregion Overrides
 
         #region Helpers
+
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
@@ -48,6 +48,7 @@ namespace Mix.Heart.NetCore.Controllers
             }
             return data;
         }
+
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             RepositoryResponse<TView> data = null;
@@ -60,7 +61,6 @@ namespace Mix.Heart.NetCore.Controllers
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
         {
-
             var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
             if (data.IsSucceed)
             {
@@ -75,7 +75,6 @@ namespace Mix.Heart.NetCore.Controllers
         {
             if (data != null)
             {
-
                 var result = await data.RemoveModelAsync(isDeleteRelated).ConfigureAwait(false);
 
                 return result;
@@ -91,7 +90,6 @@ namespace Mix.Heart.NetCore.Controllers
 
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
         {
-
             var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
             FileViewModel file = null;
             if (getData.IsSucceed)
@@ -111,7 +109,6 @@ namespace Mix.Heart.NetCore.Controllers
                 };
                 // Copy current templates file
                 MixFileRepository.Instance.SaveWebFile(file);
-
             }
             UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
             return new RepositoryResponse<FileViewModel>()
@@ -119,8 +116,8 @@ namespace Mix.Heart.NetCore.Controllers
                 IsSucceed = true,
                 Data = file,
             };
-
         }
+
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
@@ -138,7 +135,6 @@ namespace Mix.Heart.NetCore.Controllers
 
             if (data == null)
             {
-
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
@@ -147,9 +143,7 @@ namespace Mix.Heart.NetCore.Controllers
                 else
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
-
                 }
-
             }
             return data;
         }
@@ -158,7 +152,6 @@ namespace Mix.Heart.NetCore.Controllers
         {
             if (vm != null)
             {
-
                 var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
 
                 return result;
@@ -170,8 +163,6 @@ namespace Mix.Heart.NetCore.Controllers
         {
             if (obj != null)
             {
-
-
                 List<EntityField> fields = new List<EntityField>();
                 Type type = typeof(TModel);
                 foreach (var item in obj.Properties())
@@ -199,14 +190,13 @@ namespace Mix.Heart.NetCore.Controllers
 
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         {
-
             var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }
+
         protected RepositoryResponse<List<TView>> SaveList(List<TView> lstVm, bool isSaveSubModel)
         {
-
             var result = new RepositoryResponse<List<TView>>() { IsSucceed = true };
             if (lstVm != null)
             {
@@ -226,9 +216,11 @@ namespace Mix.Heart.NetCore.Controllers
 
             return result;
         }
-        #endregion
+
+        #endregion Helpers
 
         #region Routes
+
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
         {
@@ -358,7 +350,6 @@ namespace Mix.Heart.NetCore.Controllers
             {
                 return BadRequest(result.Errors);
             }
-
         }
 
         [HttpGet("clear-cache")]
@@ -366,7 +357,7 @@ namespace Mix.Heart.NetCore.Controllers
         {
             await CacheService.RemoveCacheAsync(type: type);
         }
-        #endregion
-    }
 
+        #endregion Routes
+    }
 }

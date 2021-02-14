@@ -4,7 +4,6 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using System;
@@ -20,6 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
@@ -31,35 +31,38 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("image")]
         public string Image { get; set; }
+
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -69,15 +72,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl
-        {
-            get
-            {
+        public string ThumbnailUrl {
+            get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Thumbnail
-                });
+                    return $"{Domain}/{Thumbnail}";
                 }
                 else
                 {
@@ -93,27 +92,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public IFormFile Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
-                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
+        public string AssetFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
-        public string UploadsFolder
-        {
-            get
-            {
-                return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentUploadsFolder}";
+        public string UploadsFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{Name}/uploads";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }

@@ -53,21 +53,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
 
@@ -100,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
             if (Id > 0)
             {
                 Fields ??= MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList() 
+                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixAttributeFields.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
                 //EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
@@ -206,9 +214,5 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         //}
 
         #endregion Overrides
-
-        #region Expand
-
-        #endregion
     }
 }

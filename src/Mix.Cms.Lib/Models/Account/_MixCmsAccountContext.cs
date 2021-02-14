@@ -48,36 +48,42 @@ namespace Mix.Cms.Lib.Models.Account
                     case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
+
                     case MixDatabaseProvider.MySQL:
                         optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
                         break;
+
                     case MixDatabaseProvider.SQLITE:
                         optionsBuilder.UseSqlite(cnn);
                         break;
+
                     case MixDatabaseProvider.PostgreSQL:
                         optionsBuilder.UseNpgsql(cnn);
                         break;
+
                     default:
                         break;
                 }
             }
         }
+
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-
             var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
+
                 case MixDatabaseProvider.MySQL:
                     MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
                     break;
             }
             base.Dispose();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
@@ -86,6 +92,7 @@ namespace Mix.Cms.Lib.Models.Account
                 case MixDatabaseProvider.PostgreSQL:
                     modelBuilder.ApplyPostgresIddentityConfigurations();
                     break;
+
                 case MixDatabaseProvider.MSSQL:
                 case MixDatabaseProvider.MySQL:
                 case MixDatabaseProvider.SQLITE:
@@ -95,6 +102,7 @@ namespace Mix.Cms.Lib.Models.Account
             }
             OnModelCreatingPartial(modelBuilder);
         }
+
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -25,11 +25,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         }
 
         #region Properties
+
         #region Models
+
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("postId")]
         public int PostId { get; set; }
 
@@ -47,17 +51,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
-        #endregion
+
+        #endregion Models
+
         #region Views
 
         [JsonProperty("post")]
@@ -67,9 +78,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         public MixPages.ReadViewModel Page { get; set; }
 
         #endregion Views
-        #endregion
+
+        #endregion Properties
 
         #region overrides
+
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
@@ -83,6 +96,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 }
             }
         }
+
         public override MixPagePost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
@@ -92,6 +106,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             }
             return base.ParseModel(_context, _transaction);
         }
+
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             //this.LoadPost(_context, _transaction);
@@ -101,6 +116,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         #endregion overrides
 
         #region Expand
+
         public void LoadPage(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPage = MixPages.ReadViewModel.Repository.GetSingleModel(p => p.Id == PageId && p.Specificulture == Specificulture
@@ -111,6 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                 Page = getPage.Data;
             }
         }
+
         public void LoadPost(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var getPost = MixPosts.ReadListItemViewModel.Repository.GetSingleModel(p => p.Id == PostId && p.Specificulture == Specificulture

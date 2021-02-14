@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
@@ -26,8 +25,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -36,24 +37,31 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl
-        {
+        public string DetailsUrl {
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
                     ? $"/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}"
                     : null;
@@ -68,7 +76,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         [JsonProperty("parentType")]
         public MixDatabaseParentType ParentType { get; set; }
 
-
         [JsonProperty("relatedData")]
         public List<MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.UpdateViewModel>();
 
@@ -77,10 +84,9 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("fields")]
         public List<MixAttributeFields.UpdateViewModel> Fields { get; set; }
+
         [JsonIgnore]
         public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
-
-
 
         #endregion Views
 
@@ -138,18 +144,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                 if (val == null)
                 {
-                    val = new MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
-                        {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
-                        }
-                        , _context, _transaction)
+                    val = new MixAttributeSetValues.UpdateViewModel()
                     {
+                        AttributeFieldId = field.Id,
+                        AttributeFieldName = field.Name,
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field
+                        Field = field,
+                        DataId = Id
                     };
+                    val.ExpandView(_context, _transaction);
                     Values.Add(val);
                 }
                 else
@@ -168,7 +172,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         val.StringValue = val.Field.ReferenceId.ToString();
                         if (arr != null)
                         {
-
                             foreach (JObject objData in arr)
                             {
                                 string id = objData["id"]?.Value<string>();
@@ -199,17 +202,11 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                         val.ToModelValue(Obj[val.AttributeFieldName]);
                     }
                 }
-                else
-                {
-                    Obj.Add(val.Model.ToJProperty(_context, _transaction));
-                }
             }
 
             // Save Edm html
-            var getAttrSet = MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName
-                , _context, _transaction);
-            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture
-                , _context, _transaction);
+            var getAttrSet = Mix.Cms.Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModel(m => m.Name == AttributeSetName, _context, _transaction);
+            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
             var edmField = Values.FirstOrDefault(f => f.AttributeFieldName == "edm");
             if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
             {
@@ -221,8 +218,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 var edmFile = new FileViewModel()
                 {
                     Content = body,
-                    Extension = ".html",
-                    FileFolder = "edms",
+                    Extension = MixFileExtensions.Html,
+                    FileFolder = MixTemplateFolders.Edms,
                     Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
                 };
                 if (MixFileRepository.Instance.SaveWebFile(edmFile))
@@ -232,6 +229,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
             }
             //End save edm
+
             return base.ParseModel(_context, _transaction); ;
         }
 
@@ -244,7 +242,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 _context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
@@ -274,7 +271,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 }
                 if (result.IsSucceed)
                 {
-                    CleanCache(context);
+                    Model.CleanCache(context);
                     Obj = Helper.ParseData(Id, Specificulture, context, transaction);
                 }
 
@@ -293,24 +290,6 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                     context.Dispose();
                 }
             }
-
-        }
-
-        private void CleanCache(MixCmsContext context)
-        {
-            var tasks = new List<Task>();
-            // Get Parent Ids
-            var relatedModels = context.MixRelatedAttributeData.Where(
-                p => p.DataId == Id && p.Specificulture == Specificulture)
-                    .Select(m => m.Id);
-            foreach (var model in relatedModels)
-            {
-                var parentKey = $"_{ParentId}_{Specificulture}";
-                var navKey = $"_{model}_{Specificulture}";
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixAttributeSetData), parentKey));
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixRelatedAttributeData), navKey));
-            }
-            Task.WhenAll(tasks);
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -431,6 +410,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             };
             return await vm.SaveModelAsync();
         }
+
         public bool HasValue(string fieldName)
         {
             return Obj != null && Obj.Value<string>(fieldName) != null;
@@ -447,6 +427,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 return default;
             }
         }
+
         #endregion Expands
     }
 }

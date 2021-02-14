@@ -4,15 +4,12 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixAttributeSetDataValues;
 using Mix.Common.Helper;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
@@ -25,8 +22,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("id")]
         public string Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
+
         [JsonProperty("cultures")]
         public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
 
@@ -35,21 +34,29 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("attributeSetName")]
         public string AttributeSetName { get; set; }
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("values")]
         public List<MixAttributeSetValues.ReadViewModel> Values { get; set; }
 
@@ -57,17 +64,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         public JObject Obj { get; set; }
 
         [JsonProperty("previewUrl")]
-        public string PreviewUrl { 
-            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url") 
-                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}" 
-                    : null; 
+        public string PreviewUrl {
+            get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{AttributeSetName}/{Property<string>("seo_url")}"
+                    : null;
         }
-        
+
         [JsonProperty("detailApiUrl")]
-        public string DetailApiUrl { 
+        public string DetailApiUrl {
             get => !string.IsNullOrEmpty(Id)
-                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}" 
-                    : null; 
+                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}"
+                    : null;
         }
 
         [JsonProperty("templatePath")]
@@ -96,12 +103,12 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                   _context, _transaction,
                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            
+
             if (Obj == null)
             {
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
-            
+
             Obj.LoadAllReferenceData(Id, AttributeSetId, Specificulture, context, transaction);
 
             if (isRoot)
@@ -111,17 +118,16 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-
         public bool HasValue(string fieldName)
         {
             return Obj != null ? Obj.Value<string>(fieldName) != null : false;
         }
-        
+
         public T Property<T>(string fieldName)
         {
             return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
-        #endregion Expands
+        #endregion Overrides
     }
 }

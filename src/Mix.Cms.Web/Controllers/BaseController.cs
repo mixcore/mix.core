@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -12,7 +13,6 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
 
 namespace Mix.Cms.Web.Controllers
 {
@@ -23,10 +23,8 @@ namespace Mix.Cms.Web.Controllers
         protected bool isValid = true;
         protected string _redirectUrl;
 
-        protected bool _forbiddenPortal
-        {
-            get
-            {
+        protected bool _forbiddenPortal {
+            get {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
@@ -50,10 +48,8 @@ namespace Mix.Cms.Web.Controllers
         public ViewContext ViewContext { get; set; }
         private string _culture;
 
-        public string culture
-        {
-            get
-            {
+        public string culture {
+            get {
                 return RouteData?.Values["culture"]?.ToString().ToLower()
                     ?? _culture
                     ?? MixService.GetConfig<string>("DefaultCulture");
@@ -161,7 +157,6 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
-
 
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;

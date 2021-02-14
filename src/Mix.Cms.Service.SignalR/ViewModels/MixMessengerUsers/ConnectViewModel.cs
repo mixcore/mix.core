@@ -29,8 +29,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
 
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("isJoin")]
         public bool IsJoin { get; set; }
+
         #endregion Properties
 
         #region Contructor
@@ -46,7 +48,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
                 ConnectionId = connection.ConnectionId,
                 DeviceId = connection.DeviceId,
             };
-            // TODO - verify cnn before add/update connections         
+            // TODO - verify cnn before add/update connections
         }
 
         private bool CheckIsJoin()
@@ -67,6 +69,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixMessengerUsers
         #region Override
 
         #region Async
+
         // Cannot use asyn method for signalr hub
         public RepositoryResponse<bool> Join(MixChatServiceContext _context = null, IDbContextTransaction _transaction = null)
         {

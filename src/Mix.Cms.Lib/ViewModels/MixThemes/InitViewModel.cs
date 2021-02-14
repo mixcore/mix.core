@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,8 +16,6 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Cms.Lib.Enums;
-using Mix.Services;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
 {
@@ -29,6 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("id")]
         public int Id { get; set; }
+
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
@@ -44,34 +44,38 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
+
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
+
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+
         [JsonProperty("priority")]
         public int Priority { get; set; }
+
         [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
+
         #endregion Models
 
         #region Views
+
         [JsonProperty("isCreateDefault")]
         public bool IsCreateDefault { get; set; }
+
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl
-        {
-            get
-            {
+        public string ImageUrl {
+            get {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return CommonHelper.GetFullPath(new string[] {
-                    Domain,  Image
-                });
+                    return $"{Domain}/{Image}";
                 }
                 else
                 {
@@ -90,27 +94,21 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder
-        {
-            get
-            {
+        public string AssetFolder {
+            get {
                 return $"{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
-        public string UploadsFolder
-        {
-            get
-            {
-                return $"{MixFolders.SiteContentAssetsFolder}";
+        public string UploadsFolder {
+            get {
+                return $"{MixFolders.SiteContentAssetsFolder}/{Name}/uploads";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder
-        {
-            get
-            {
+        public string TemplateFolder {
+            get {
                 return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
@@ -199,8 +197,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Get SiteStructure
                 var strSchema = MixFileRepository.Instance.GetFile("schema.json", $"{outputFolder}/Data");
                 string parseContent = strSchema.Content.Replace("[ACCESS_FOLDER]", AssetFolder)
-                                                       .Replace("[CULTURE]", Specificulture);
+                                                       .Replace("[CULTURE]", Specificulture)
+                                                       .Replace("[THEME_NAME]", parent.Name);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
+                siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
@@ -212,11 +212,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     //TODO: Create default asset
                     foreach (var file in files)
                     {
-                        string content = file.Content.Replace($"/{MixFolders.SiteContentAssetsFolder}/{siteStructures.ThemeName}/",
-                        $"/{MixFolders.SiteContentAssetsFolder}/{Name}/");
                         MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
                             new MixTemplate()
                             {
+                                CreatedBy = CreatedBy,
                                 FileFolder = file.FileFolder,
                                 FileName = file.Filename,
                                 Content = file.Content,
@@ -227,7 +226,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                                 ThemeName = parent.Name,
                                 FolderType = file.FolderName,
                                 ModifiedBy = CreatedBy
-                            }, _context,  _transaction);
+                            }, _context, _transaction);
                         var saveResult = await template.SaveModelAsync(true, _context, _transaction);
                         result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                         if (!saveResult.IsSucceed)

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Enums;
-using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Models;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Heart.Extensions;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Linq.Expressions;
 
 namespace Mix.Cms.Lib.Helpers
 {
@@ -45,7 +45,6 @@ namespace Mix.Cms.Lib.Helpers
                 ExpressionModel expressionModel = jsonQuery.ToObject<ExpressionModel>();
                 root = GetExpression(expressionModel);
                 return root;
-
             }
             catch (Exception ex)
             {
@@ -54,8 +53,6 @@ namespace Mix.Cms.Lib.Helpers
 
             return null;
         }
-
-       
 
         private static Expression<Func<MixAttributeSetValue, bool>> GetExpression(
          ExpressionModel expressionModel)
@@ -68,7 +65,6 @@ namespace Mix.Cms.Lib.Helpers
                     root = CombineExpressionByType(expressionModel.ExpressionType,
                         root, GetFunction(function));
                 });
-
 
                 expressionModel?.Expressions?.ForEach(expression =>
                 {
@@ -105,6 +101,7 @@ namespace Mix.Cms.Lib.Helpers
                 _ => expr2,
             };
         }
+
         private static Expression<Func<MixAttributeSetValue, bool>> GetFunction(FunctionModel functionModel)
         {
             return functionModel.Rule switch
