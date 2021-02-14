@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.Content)
                 .IsRequired()
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -58,7 +58,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.MobileContent)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -68,12 +68,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Scripts)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.SpaContent)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -85,7 +85,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Styles)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

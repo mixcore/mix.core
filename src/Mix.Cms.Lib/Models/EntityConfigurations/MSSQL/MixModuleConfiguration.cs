@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Fields)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
