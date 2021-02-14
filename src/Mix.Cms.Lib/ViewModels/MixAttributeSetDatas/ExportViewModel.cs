@@ -13,7 +13,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
 {
     public class ExportViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, ExportViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseData, ExportViewModel>
     {
         #region Properties
 
@@ -81,7 +81,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
         {
         }
 
-        public ExportViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ExportViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -100,17 +100,17 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
+                Priority = Repository.Count(m => m.MixDatabaseName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
             Values = Values ?? MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == AttributeSetId, _context, _transaction).Data;
             if (string.IsNullOrEmpty(AttributeSetName))
             {
                 AttributeSetName = _context.MixAttributeSet.First(m => m.Id == AttributeSetId)?.Name;
@@ -121,10 +121,10 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
+                        new MixDatabaseDataValue()
                         {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
+                            MixDatabaseColumnId = field.Id,
+                            MixDatabaseColumnName = field.Name,
                         }
                         , _context, _transaction)
                     {

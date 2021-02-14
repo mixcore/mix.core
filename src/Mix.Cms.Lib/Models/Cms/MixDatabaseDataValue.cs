@@ -3,13 +3,13 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixAttributeSetValue
+    public partial class MixDatabaseDataValue
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
-        public int AttributeFieldId { get; set; }
-        public string AttributeFieldName { get; set; }
-        public string AttributeSetName { get; set; }
+        public int MixDatabaseColumnId { get; set; }
+        public string MixDatabaseColumnName { get; set; }
+        public string MixDatabaseName { get; set; }
         public string Regex { get; set; }
         public MixDataType DataType { get; set; }
         public bool? BooleanValue { get; set; }

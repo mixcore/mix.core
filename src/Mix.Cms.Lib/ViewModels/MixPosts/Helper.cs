@@ -58,8 +58,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get Tag
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Specificulture == culture && m.Status == MixContentStatus.Published
-                        && m.AttributeSetName == metaName
-                        && m.AttributeFieldName == "title" && m.StringValue == metaValue
+                        && m.MixDatabaseName == metaName
+                        && m.MixDatabaseColumnName == "title" && m.StringValue == metaValue
                 , context, transaction);
                 if (getVal.IsSucceed)
                 {
@@ -174,11 +174,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                 };
                 // Get Data
-                Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == culture
+                Expression<Func<MixDatabaseDataValue, bool>> predicate = m => m.Specificulture == culture
                    && m.Status == MixContentStatus.Published;
                 foreach (var item in valueIds)
                 {
-                    Expression<Func<MixAttributeSetValue, bool>> pre = m => m.Id == item;
+                    Expression<Func<MixDatabaseDataValue, bool>> pre = m => m.Id == item;
                     predicate = predicate.AndAlso(pre);
                 }
                 var getVal = await MixAttributeSetValues.ReadViewModel.Repository.GetModelListByAsync(predicate, context, transaction);
@@ -526,8 +526,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 // Get Value
                 var dataIds = await context.MixAttributeSetValue.Where(
-                    m => m.AttributeSetName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
-                        && m.StringValue == value && m.AttributeFieldName == fieldName)
+                    m => m.MixDatabaseName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
+                        && m.StringValue == value && m.MixDatabaseColumnName == fieldName)
                     .Select(m => m.DataId)?.ToListAsync();
                 if (dataIds != null && dataIds.Count > 0)
                 {

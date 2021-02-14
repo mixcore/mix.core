@@ -88,7 +88,7 @@ namespace Mix.Cms.Service.SignalR.Hubs
                 await SendToCaller(getAvailableUsers.Data, Constants.Enums.MessageReponseKey.ConnectSuccess);
             }
             var getPreviousMsgs = Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas.ReadViewModel.Repository.GetModelListBy(
-                        m => m.AttributeSetName == request.Room && m.Specificulture == request.Specificulture
+                        m => m.MixDatabaseName == request.Room && m.Specificulture == request.Specificulture
                         , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
             // Get previous messages
             if (getPreviousMsgs.IsSucceed)
@@ -109,8 +109,8 @@ namespace Mix.Cms.Service.SignalR.Hubs
 
         private async Task<object> GetGroupMembersAsync(HubRequest<JObject> request)
         {
-            Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == request.Specificulture
-                 && m.AttributeSetName == Constants.HubMessages.HubMemberName && m.AttributeFieldName == request.Room;
+            Expression<Func<MixDatabaseDataValue, bool>> predicate = m => m.Specificulture == request.Specificulture
+                 && m.MixDatabaseName == Constants.HubMessages.HubMemberName && m.MixDatabaseColumnName == request.Room;
             var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.FormViewModel>(
                 request.Specificulture, request.Room, null, null);
             return data;

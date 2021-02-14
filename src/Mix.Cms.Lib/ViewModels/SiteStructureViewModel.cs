@@ -116,7 +116,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             foreach (var item in AttributeSets)
             {
-                item.Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.AttributeSetId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
+                item.Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
                 var refFields = item.Fields.Where(f => f.DataType == MixDataType.Reference);
 
@@ -255,7 +255,7 @@ namespace Mix.Cms.Lib.ViewModels
                 if (item.IsExportData)
                 {
                     var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
-                        a => a.Specificulture == Specificulture && a.AttributeSetId == item.Id, context, transaction)
+                        a => a.Specificulture == Specificulture && a.MixDatabaseId == item.Id, context, transaction)
                         .Data?.OrderBy(a => a.Priority).ToList();
                     if (getData != null)
                     {
@@ -714,7 +714,7 @@ namespace Mix.Cms.Lib.ViewModels
                             item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
                         }
                         item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
-                            m => m.AttributeSetId == item.AttributeSetId, context, transaction).Data;
+                            m => m.MixDatabaseId == item.AttributeSetId, context, transaction).Data;
                         foreach (var field in item.Fields)
                         {
                             field.Specificulture = destCulture;

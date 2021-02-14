@@ -18,14 +18,14 @@ namespace Mix.Cms.Lib.Extensions
     public static class MixAttributeValueModelExtensions
     {
         public static JProperty ToJProperty(
-            this MixAttributeSetValue item,
+            this MixDatabaseDataValue item,
             MixCmsContext _context,
             IDbContextTransaction _transaction)
         {
             switch (item.DataType)
             {
                 case MixDataType.DateTime:
-                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+                    return new JProperty(item.MixDatabaseColumnName, item.DateTimeValue);
 
                 case MixDataType.Date:
                     if (!item.DateTimeValue.HasValue)
@@ -40,22 +40,22 @@ namespace Mix.Cms.Lib.Extensions
                             item.DateTimeValue = date;
                         }
                     }
-                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
 
                 case MixDataType.Time:
-                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
 
                 case MixDataType.Double:
-                    return (new JProperty(item.AttributeFieldName, item.DoubleValue ?? 0));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DoubleValue ?? 0));
 
                 case MixDataType.Boolean:
-                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.BooleanValue));
 
                 case MixDataType.Integer:
-                    return (new JProperty(item.AttributeFieldName, item.IntegerValue ?? 0));
+                    return (new JProperty(item.MixDatabaseColumnName, item.IntegerValue ?? 0));
 
                 case MixDataType.Reference:
-                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                    return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
                     string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.Extensions
                         ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
                         : item.StringValue
                    : null;
-                    return (new JProperty(item.AttributeFieldName, url));
+                    return (new JProperty(item.MixDatabaseColumnName, url));
 
                 case MixDataType.Custom:
                 case MixDataType.Duration:
@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.Extensions
                 case MixDataType.VideoYoutube:
                 case MixDataType.TuiEditor:
                 default:
-                    return (new JProperty(item.AttributeFieldName, item.StringValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
             }
         }
 
@@ -198,7 +198,7 @@ namespace Mix.Cms.Lib.Extensions
                     _context, _transaction,
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var refFields = context.MixAttributeField.Where(
-                   m => m.AttributeSetId == attributeSetId
+                   m => m.MixDatabaseId == attributeSetId
                     && m.DataType == MixDataType.Reference).ToList();
 
             foreach (var item in refFields)

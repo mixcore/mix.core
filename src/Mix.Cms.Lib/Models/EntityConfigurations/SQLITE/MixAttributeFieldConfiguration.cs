@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
 {
-    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixAttributeField>
+    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixDatabaseColumn>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeField> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseColumn> entity)
         {
             entity.ToTable("mix_attribute_field");
 
@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                .HasCharSet("utf8")
                .HasCollation("Vietnamese_CI_AS");
 
-            entity.Property(e => e.AttributeSetName).HasMaxLength(250);
+            entity.Property(e => e.MixDatabaseName).HasMaxLength(250);
 
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(50)

@@ -6,16 +6,16 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
 {
-    public class MixAttributeSetDataConfiguration : IEntityTypeConfiguration<MixAttributeSetData>
+    public class MixAttributeSetDataConfiguration : IEntityTypeConfiguration<MixDatabaseData>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeSetData> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseData> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
                     .HasName("PK_mix_attribute_set_data");
 
             entity.ToTable("mix_attribute_set_data");
 
-            entity.HasIndex(e => e.AttributeSetId);
+            entity.HasIndex(e => e.MixDatabaseId);
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
@@ -28,7 +28,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
-            entity.Property(e => e.AttributeSetName)
+            entity.Property(e => e.MixDatabaseName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");

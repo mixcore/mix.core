@@ -18,7 +18,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/attribute-field/portal")]
     public class ApiAttributeFieldController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixAttributeField, UpdateViewModel, ReadViewModel, DeleteViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseColumn, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/en-us/attribute-field/client
         [HttpGet]
@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)
-                 || model.AttributeSetName.Contains(keyword)
+                 || model.MixDatabaseName.Contains(keyword)
                  || model.Name.Contains(keyword)
                  || model.DefaultValue.Contains(keyword)
                  );
@@ -53,7 +53,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<PaginationModel<UpdateViewModel>>> Init(string attributeSet)
         {
             int.TryParse(attributeSet, out int attributeSetId);
-            var getData = await UpdateViewModel.Repository.GetModelListByAsync(f => f.AttributeSetName == attributeSet || f.AttributeSetId == attributeSetId
+            var getData = await UpdateViewModel.Repository.GetModelListByAsync(f => f.MixDatabaseName == attributeSet || f.MixDatabaseId == attributeSetId
             , _context, _transaction);
 
             if (getData.IsSucceed)

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSet, ReadViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabase, ReadViewModel>
     {
         #region Properties
 
@@ -82,7 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
         }
 
-        public ReadViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixDatabase model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = MixAttributeFields.ReadViewModel.Repository.GetModelListBy(f => f.AttributeSetId == Id, _context, _transaction).Data;
+            Fields = MixAttributeFields.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == Id, _context, _transaction).Data;
         }
 
         #endregion Overrides

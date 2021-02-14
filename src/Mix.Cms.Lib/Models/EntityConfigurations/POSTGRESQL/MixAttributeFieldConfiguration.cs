@@ -6,17 +6,17 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
 {
-    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixAttributeField>
+    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixDatabaseColumn>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeField> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseColumn> entity)
         {
             entity.ToTable("mix_attribute_field");
 
-            entity.HasIndex(e => e.AttributeSetId);
+            entity.HasIndex(e => e.MixDatabaseId);
 
             entity.HasIndex(e => e.ReferenceId);
 
-            entity.Property(e => e.AttributeSetName)
+            entity.Property(e => e.MixDatabaseName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("und-x-icu");

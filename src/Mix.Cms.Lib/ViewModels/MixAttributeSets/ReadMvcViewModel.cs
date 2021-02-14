@@ -13,7 +13,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
 {
     public class ReadMvcViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSet, ReadMvcViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabase, ReadMvcViewModel>
     {
         #region Properties
 
@@ -89,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         {
         }
 
-        public ReadMvcViewModel(MixAttributeSet model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadMvcViewModel(MixDatabase model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -100,7 +100,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSets
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Fields = Fields ?? MixAttributeFields.UpdateViewModel
-                .Repository.GetModelListBy(a => a.AttributeSetId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
+                .Repository.GetModelListBy(a => a.MixDatabaseId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList();
         }
 
         #endregion Overrides

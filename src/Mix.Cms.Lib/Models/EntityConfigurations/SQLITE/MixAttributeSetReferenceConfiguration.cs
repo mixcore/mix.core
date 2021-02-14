@@ -6,16 +6,16 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
 {
-    public class MixAttributeSetReferenceConfiguration : IEntityTypeConfiguration<MixAttributeSetReference>
+    public class MixAttributeSetReferenceConfiguration : IEntityTypeConfiguration<MixDatabaseAssociation>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeSetReference> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseAssociation> entity)
         {
             entity.ToTable("mix_attribute_set_reference");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedNever();
 
-            entity.HasIndex(e => e.AttributeSetId);
+            entity.HasIndex(e => e.MixDatabaseId);
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")

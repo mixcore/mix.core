@@ -271,7 +271,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetData>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixDatabaseData>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
@@ -302,7 +302,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetValue>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixDatabaseDataValue>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)

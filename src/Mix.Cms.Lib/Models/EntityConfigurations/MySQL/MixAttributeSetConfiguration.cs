@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
-    public class MixAttributeSetConfiguration : IEntityTypeConfiguration<MixAttributeSet>
+    public class MixAttributeSetConfiguration : IEntityTypeConfiguration<MixDatabase>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeSet> entity)
+        public void Configure(EntityTypeBuilder<MixDatabase> entity)
         {
             entity.ToTable("mix_attribute_set");
 

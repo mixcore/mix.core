@@ -10,7 +10,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
     public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeField, UpdateViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseColumn, UpdateViewModel>
     {
         #region Properties
 
@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         {
         }
 
-        public UpdateViewModel(MixAttributeField model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -125,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
                 {
                     // Check if there is field name in the same attribute set
                     IsValid = !_context.MixAttributeField.Any(
-                        f => f.Id != Id && f.Name == Name && f.AttributeSetId == AttributeSetId);
+                        f => f.Id != Id && f.Name == Name && f.MixDatabaseId == AttributeSetId);
                     if (!IsValid)
                     {
                         Errors.Add($"Field {Name} Existed");
@@ -134,7 +134,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
             }
         }
 
-        public override MixAttributeField ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseColumn ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {

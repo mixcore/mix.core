@@ -3,12 +3,12 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixAttributeSetData
+    public partial class MixDatabaseData
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }
-        public int AttributeSetId { get; set; }
-        public string AttributeSetName { get; set; }
+        public int MixDatabaseId { get; set; }
+        public string MixDatabaseName { get; set; }
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? LastModified { get; set; }
@@ -16,6 +16,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public MixContentStatus Status { get; set; }
 
-        public virtual MixAttributeSet AttributeSet { get; set; }
+        public virtual MixDatabase MixDatabaseId { get; set; }
     }
 }

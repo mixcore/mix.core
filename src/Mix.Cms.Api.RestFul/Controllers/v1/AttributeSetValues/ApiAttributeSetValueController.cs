@@ -32,7 +32,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)
-                 || model.AttributeSetName.Contains(keyword)
+                 || model.MixDatabaseName.Contains(keyword)
                  || model.StringValue.Contains(keyword)
                  );
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
