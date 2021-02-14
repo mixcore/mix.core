@@ -4,5 +4,5 @@
 ex: Model.Property<string>("[propName]");
 ### GetModule
 ex: Model.GetModule("[moduleSetName]");
-### GetAttributeSet
-ex: Model.GetAttributeSet("[attrSetName]");
+### GetMixDatabase
+ex: Model.GetMixDatabase("[attrSetName]");

@@ -24,11 +24,11 @@ remove default value
   delete from test_123.dbo.mix_theme
   delete from test_123.dbo.mix_template
   delete from test_123.[dbo].[mix_related_attribute_data]
-  delete from test_123.dbo.mix_attribute_set_data
-  delete from test_123.dbo.mix_attribute_set_value
-  delete from test_123.dbo.mix_attribute_field
-  delete from test_123.dbo.mix_attribute_set_data
-  delete from test_123.dbo.mix_attribute_set
+  delete from test_123.dbo.mix_database_data
+  delete from test_123.dbo.mix_database_data_value
+  delete from test_123.dbo.mix_database_column
+  delete from test_123.dbo.mix_database_data
+  delete from test_123.dbo.mix_database
 
 UnitOfWorkHelper<TDbContext>.InitTransaction(_context, _transaction, out TDbContext context, out IDbContextTransaction transaction, out bool isRoot);
 try

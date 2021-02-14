@@ -22,8 +22,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("modules")]
         public List<MixModules.ImportViewModel> Modules { get; set; }
 
-        [JsonProperty("attributeSets")]
-        public List<MixAttributeSets.ImportViewModel> AttributeSets { get; set; }
+        [JsonProperty("databases")]
+        public List<MixDatabases.ImportViewModel> Databases { get; set; }
 
         [JsonProperty("configurations")]
         public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixLanguages.ImportViewModel> Languages { get; set; }
 
         [JsonProperty("relatedData")]
-        public List<MixRelatedAttributeDatas.ImportViewModel> RelatedData { get; set; } = new List<MixRelatedAttributeDatas.ImportViewModel>();
+        public List<MixDatabaseDataAssociations.ImportViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.ImportViewModel>();
 
         [JsonProperty("pagePostNavs")]
         public List<MixPagePosts.ImportViewModel> PagePostNavs { get; set; } = new List<MixPagePosts.ImportViewModel>();
@@ -49,8 +49,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("moduleDatas")]
         public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
 
-        [JsonProperty("attributeSetDatas")]
-        public List<MixAttributeSetDatas.ImportViewModel> AttributeSetDatas { get; set; } = new List<MixAttributeSetDatas.ImportViewModel>();
+        [JsonProperty("databaseDatas")]
+        public List<MixDatabaseDatas.ImportViewModel> DatabaseDatas { get; set; } = new List<MixDatabaseDatas.ImportViewModel>();
 
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            AttributeSets = (await MixAttributeSets.ImportViewModel.Repository.GetModelListAsync()).Data;
+            Databases = (await MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
         #region Export
@@ -84,7 +84,7 @@ namespace Mix.Cms.Lib.ViewModels
 
                 ExportPages(context, transaction);
                 ExportModules(context, transaction);
-                ExportAttributeSetsAsync(context, transaction);
+                ExportMixDatabasesAsync(context, transaction);
                 ExportDatas(context, transaction);
                 return result;
             }
@@ -108,29 +108,29 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
-            ExportAttributeSetData(context, transaction);
+            ExportMixDatabaseData(context, transaction);
             ExportRelatedDatas(context, transaction);
         }
 
-        private void ExportAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportMixDatabasesAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var item in AttributeSets)
+            foreach (var item in Databases)
             {
-                item.Fields = MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
+                item.Fields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
                 var refFields = item.Fields.Where(f => f.DataType == MixDataType.Reference);
 
                 foreach (var field in refFields)
                 {
-                    var refSet = AttributeSets.FirstOrDefault(m => m.Name == field.AttributeSetName);
+                    var refSet = Databases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                     if (refSet == null)
                     {
-                        var getSet = MixAttributeSets.ImportViewModel.Repository.GetSingleModel(m => m.Name == field.AttributeSetName, context, transaction);
+                        var getSet = MixDatabases.ImportViewModel.Repository.GetSingleModel(m => m.Name == field.MixDatabaseName, context, transaction);
                         if (getSet.IsSucceed)
                         {
                             refSet = getSet.Data;
                             refSet.IsExportData = refSet.IsExportData || item.IsExportData;
-                            AttributeSets.Add(refSet);
+                            Databases.Add(refSet);
                         }
                     }
                     else
@@ -236,7 +236,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
-                var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetSingleModel(
+                var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetSingleModel(
                             m => m.Specificulture == Specificulture && m.ParentType == type
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
@@ -246,20 +246,20 @@ namespace Mix.Cms.Lib.ViewModels
             }
         }
 
-        private void ExportAttributeSetData(MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportMixDatabaseData(MixCmsContext context, IDbContextTransaction transaction)
         {
-            AttributeSetDatas = new List<MixAttributeSetDatas.ImportViewModel>();
-            // Load AttributeSet data
-            foreach (var item in AttributeSets)
+            DatabaseDatas = new List<MixDatabaseDatas.ImportViewModel>();
+            // Load MixDatabase data
+            foreach (var item in Databases)
             {
                 if (item.IsExportData)
                 {
-                    var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetModelListBy(
+                    var getData = MixDatabaseDatas.ImportViewModel.Repository.GetModelListBy(
                         a => a.Specificulture == Specificulture && a.MixDatabaseId == item.Id, context, transaction)
                         .Data?.OrderBy(a => a.Priority).ToList();
                     if (getData != null)
                     {
-                        AttributeSetDatas.AddRange(getData);
+                        DatabaseDatas.AddRange(getData);
                     }
                 }
             }
@@ -269,13 +269,13 @@ namespace Mix.Cms.Lib.ViewModels
             RelatedData.AddRange(Modules.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
             foreach (var item in RelatedData)
             {
-                if (!AttributeSetDatas.Any(m => m.Id == item.Id))
+                if (!DatabaseDatas.Any(m => m.Id == item.Id))
                 {
-                    var getData = MixAttributeSetDatas.ImportViewModel.Repository.GetSingleModel(
+                    var getData = MixDatabaseDatas.ImportViewModel.Repository.GetSingleModel(
                         m => m.Id == item.Id, context, transaction);
                     if (getData.IsSucceed)
                     {
-                        AttributeSetDatas.Add(getData.Data);
+                        DatabaseDatas.Add(getData.Data);
                     }
                 }
             }
@@ -283,16 +283,16 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportRelatedDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var item in AttributeSetDatas)
+            foreach (var item in DatabaseDatas)
             {
-                var getDataResult = MixRelatedAttributeDatas.ImportViewModel.Repository
+                var getDataResult = MixDatabaseDataAssociations.ImportViewModel.Repository
                                    .GetModelListBy(m => m.ParentId == item.Id && m.Specificulture == item.Specificulture
                                    , context, transaction);
 
                 if (getDataResult.IsSucceed && getDataResult.Data.Count > 0)
                 {
                     var data = getDataResult.Data.Where(m =>
-                        AttributeSetDatas.Any(d => d.Id == m.DataId)
+                        DatabaseDatas.Any(d => d.Id == m.DataId)
                         && !RelatedData.Any(r => r.ParentId == item.Id && r.DataId == m.DataId))
                         .ToList();
                     RelatedData.AddRange(data);
@@ -310,7 +310,7 @@ namespace Mix.Cms.Lib.ViewModels
         private Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicAttributeSetIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
         public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -344,13 +344,13 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportPostsAsync(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && AttributeSets != null && AttributeSets.Count > 0)
+                if (result.IsSucceed && Databases != null && Databases.Count > 0)
                 {
-                    result = await ImportAttributeSetsAsync(context, transaction);
+                    result = await ImportMixDatabasesAsync(context, transaction);
                 }
-                if (result.IsSucceed && AttributeSetDatas.Count > 0)
+                if (result.IsSucceed && DatabaseDatas.Count > 0)
                 {
-                    result = await ImportAttributeSetDatas(destCulture, context, transaction);
+                    result = await ImportMixDatabaseDatas(destCulture, context, transaction);
                 }
                 if (result.IsSucceed && RelatedData.Count > 0)
                 {
@@ -448,33 +448,33 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportAttributeSetsAsync(MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportMixDatabasesAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (AttributeSets != null)
+            if (Databases != null)
             {
-                var startId = MixAttributeSets.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
-                var startFieldId = MixAttributeFields.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
-                var attributeFields = new List<MixAttributeFields.UpdateViewModel>();
-                foreach (var set in AttributeSets)
+                var startId = MixDatabases.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var startFieldId = MixDatabaseColumns.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var mixDatabaseColumns = new List<MixDatabaseColumns.UpdateViewModel>();
+                foreach (var set in Databases)
                 {
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
                     {
-                        if (!context.MixAttributeSet.Any(m => m.Name == set.Name))
+                        if (!context.MixDatabase.Any(m => m.Name == set.Name))
                         {
                             startId++;
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
-                            attributeFields.AddRange(set.Fields
-                                    .Where(m => !attributeFields.Any(n => n.Id == m.Id))
+                            mixDatabaseColumns.AddRange(set.Fields
+                                    .Where(m => !mixDatabaseColumns.Any(n => n.Id == m.Id))
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
                         }
-                        if (!dicAttributeSetIds.Any(m => m.Key == set.Id))
+                        if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
                         {
-                            dicAttributeSetIds.Add(set.Id, startId);
+                            dicMixDatabaseIds.Add(set.Id, startId);
                         }
                     }
                     else
@@ -485,16 +485,16 @@ namespace Mix.Cms.Lib.ViewModels
                 // save fields
                 if (result.IsSucceed)
                 {
-                    foreach (var field in attributeFields)
+                    foreach (var field in mixDatabaseColumns)
                     {
                         if (result.IsSucceed)
                         {
                             field.CreatedBy = CreatedBy;
-                            var setId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.AttributeSetId);
-                            field.AttributeSetId = setId.Value;
+                            var setId = dicMixDatabaseIds.FirstOrDefault(m => m.Key == field.MixDatabaseId);
+                            field.MixDatabaseId = setId.Value;
                             if (field.ReferenceId != null)
                             {
-                                var refId = dicAttributeSetIds.FirstOrDefault(m => m.Key == field.ReferenceId);
+                                var refId = dicMixDatabaseIds.FirstOrDefault(m => m.Key == field.ReferenceId);
                                 field.ReferenceId = refId.Value;
                             }
                             if (dicFieldIds.ContainsKey(field.Id))
@@ -695,36 +695,36 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportAttributeSetDatas(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportMixDatabaseDatas(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in AttributeSetDatas)
+            foreach (var item in DatabaseDatas)
             {
                 item.CreatedBy = CreatedBy;
                 if (result.IsSucceed)
                 {
                     item.CreatedBy = CreatedBy;
-                    if (!context.MixAttributeSetData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
+                    if (!context.MixDatabaseData.Any(m => m.Id == item.Id && m.Specificulture == item.Specificulture))
                     {
                         item.Specificulture = destCulture;
                         item.CreatedDateTime = DateTime.UtcNow;
                         // update new Id if not system attribute
-                        if (item.AttributeSetName.IndexOf("sys_") != 0 && dicAttributeSetIds.ContainsKey(item.AttributeSetId))
+                        if (item.MixDatabaseName.IndexOf("sys_") != 0 && dicMixDatabaseIds.ContainsKey(item.MixDatabaseId))
                         {
-                            item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
+                            item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Fields = item.Fields ?? MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(
-                            m => m.MixDatabaseId == item.AttributeSetId, context, transaction).Data;
+                        item.Fields = item.Fields ?? MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
+                            m => m.MixDatabaseId == item.MixDatabaseId, context, transaction).Data;
                         foreach (var field in item.Fields)
                         {
                             field.Specificulture = destCulture;
-                            var newSet = AttributeSets.FirstOrDefault(m => m.Name == field.AttributeSetName);
+                            var newSet = Databases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {
                                 field.Id = newField.Id;
-                                field.AttributeSetId = newSet.Id;
-                                field.AttributeSetName = newSet.Name;
+                                field.MixDatabaseId = newSet.Id;
+                                field.MixDatabaseName = newSet.Name;
                                 field.CreatedDateTime = DateTime.UtcNow;
                             }
                         }
@@ -742,7 +742,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         private async Task<RepositoryResponse<bool>> ImportRelatedDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var result = await ImportRelatedAttributeSetDatas(desCulture, context, transaction);
+            var result = await ImportRelatedMixDatabaseDatas(desCulture, context, transaction);
             if (result.IsSucceed)
             {
                 result = await ImportPagePostNavs(desCulture, context, transaction);
@@ -850,7 +850,7 @@ namespace Mix.Cms.Lib.ViewModels
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ImportRelatedAttributeSetDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> ImportRelatedMixDatabaseDatas(string desCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RelatedData)
@@ -861,7 +861,7 @@ namespace Mix.Cms.Lib.ViewModels
                 switch (item.ParentType)
                 {
                     case MixDatabaseParentType.Set:
-                        item.AttributeSetId = dicAttributeSetIds[item.AttributeSetId];
+                        item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         break;
 
                     case MixDatabaseParentType.Post:

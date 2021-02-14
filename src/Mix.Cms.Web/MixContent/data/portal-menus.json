@@ -14,12 +14,11 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/attribute-set-data/create?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation&dataId=default" 
-          
+          "path": "/portal/attribute-set-data/create?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation&dataId=default"
         },
         {
           "path": "/portal/attribute-set-data/list?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation",
-          
+
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -663,18 +662,18 @@
         {
           "path": "/portal/attribute-set/create",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set/details.html",
-          "controller": "AttributeSetController"
+          "controller": "MixDatabaseController"
         },
         {
           "path": "/portal/attribute-set/list",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set/list.html",
-          "controller": "AttributeSetController"
-        },
+          "controller": "MixDatabaseController"
+        },MixDatabase
         {
           "path": "/portal/attribute-set/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set/details.html",
-          "controller": "AttributeSetController"
-        }
+          "controller": "MixDatabaseController"
+        }MixDatabase
       ]
     },
     {
@@ -753,18 +752,18 @@
         {
           "path": "/portal/attribute-set-data/create",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/details.html",
-          "controller": "MixAttributeSetDataController"
-        },
+          "controller": "MixDatabaseController"
+        },MixDatabase
         {
           "path": "/portal/attribute-set-data/list",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/list.html",
-          "controller": "MixAttributeSetDataController"
-        },
+          "controller": "MixDatabaseController"
+        },MixDatabase
         {
           "path": "/portal/attribute-set-data/details",
           "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/details.html",
-          "controller": "MixAttributeSetDataController"
-        }
+          "controller": "MixDatabaseController"
+        }MixDatabase
       ]
     },
     {

@@ -6,11 +6,11 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
-    public class MixAttributeFieldConfiguration : IEntityTypeConfiguration<MixDatabaseColumn>
+    public class MixDatabaseColumnConfiguration : IEntityTypeConfiguration<MixDatabaseColumn>
     {
         public void Configure(EntityTypeBuilder<MixDatabaseColumn> entity)
         {
-            entity.ToTable("mix_attribute_field");
+            entity.ToTable("mix_database_column");
 
             entity.HasIndex(e => e.MixDatabaseId);
 

@@ -8,12 +8,12 @@ namespace Mix.Cms.Lib.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
+                name: "mix_database_column",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Configurations = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Regex = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -36,11 +36,11 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
+                name: "mix_database",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -62,18 +62,18 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
+                name: "mix_database_data_value",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeFieldId = table.Column<int>(type: "int", nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseColumnId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     BooleanValue = table.Column<bool>(type: "bit", nullable: true),
@@ -94,7 +94,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -226,8 +226,8 @@ namespace Mix.Cms.Lib.Migrations
                     DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -251,8 +251,8 @@ namespace Mix.Cms.Lib.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -289,13 +289,13 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
+                name: "mix_database_data",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -305,17 +305,17 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_data_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
+                name: "mix_database_reference",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
@@ -323,7 +323,7 @@ namespace Mix.Cms.Lib.Migrations
                     ParentType = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -333,11 +333,11 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_reference", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_reference_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -348,7 +348,7 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -365,9 +365,9 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set_IdNavigationId",
+                        name: "FK_mix_related_attribute_set_mix_database_IdNavigationId",
                         column: x => x.IdNavigationId,
-                        principalTable: "mix_attribute_set",
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -952,18 +952,18 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
+                name: "IX_mix_database_reference_MixDatabaseId",
+                table: "mix_database_reference",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
                 column: "DataId");
 
             migrationBuilder.CreateIndex(
@@ -1121,16 +1121,16 @@ namespace Mix.Cms.Lib.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
+                name: "mix_database_column");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
+                name: "mix_database_data");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
+                name: "mix_database_reference");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_cache");
@@ -1202,7 +1202,7 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_module");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set");
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_post");

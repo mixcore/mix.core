@@ -154,10 +154,10 @@ namespace Mix.Cms.Web
                     ctx.Database.Migrate();
                     var transaction = ctx.Database.BeginTransaction();
                     var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixAttributeSets.ImportViewModel>>();
+                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixDatabases.ImportViewModel>>();
                     foreach (var db in sysDatabases)
                     {
-                        if (!ctx.MixAttributeSet.Any(m => m.Name == db.Name))
+                        if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
                         {
                             await db.SaveModelAsync(true, ctx, transaction);
                         }

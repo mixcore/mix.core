@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 {
-    public class MixRelatedDataConfiguration : IEntityTypeConfiguration<MixRelatedData>
+    public class MixRelatedDataConfiguration : IEntityTypeConfiguration<MixDatabaseDataAssociation>
     {
-        public void Configure(EntityTypeBuilder<MixRelatedData> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseDataAssociation> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
                        .HasName("PK_mix_related_data");
@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
-            entity.Property(e => e.AttributeSetName)
+            entity.Property(e => e.MixDatabaseName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");

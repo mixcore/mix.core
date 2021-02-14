@@ -9,13 +9,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
+                name: "mix_database_column",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Configurations = table.Column<string>(type: "text", nullable: true),
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -38,11 +38,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
+                name: "mix_database",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -65,18 +65,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
+                name: "mix_database_data_value",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeFieldId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    MixDatabaseColumnId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     BooleanValue = table.Column<bool>(type: "boolean", nullable: true),
@@ -97,7 +97,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -231,8 +231,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -256,8 +256,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     Type = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -295,13 +295,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
+                name: "mix_database_data",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -311,17 +311,17 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_data_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
+                name: "mix_database_reference",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -330,7 +330,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     ParentType = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
                     Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -340,11 +340,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_reference", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
+                        name: "FK_mix_database_reference_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -355,7 +355,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
@@ -372,9 +372,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set_IdNavigationId",
+                        name: "FK_mix_related_attribute_set_mix_database_IdNavigationId",
                         column: x => x.IdNavigationId,
-                        principalTable: "mix_attribute_set",
+                        principalTable: "mix_database",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -962,28 +962,28 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_AttributeSetId",
-                table: "mix_attribute_field",
-                column: "AttributeSetId");
+                name: "IX_mix_database_column_MixDatabaseId",
+                table: "mix_database_column",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_ReferenceId",
-                table: "mix_attribute_field",
+                name: "IX_mix_database_column_ReferenceId",
+                table: "mix_database_column",
                 column: "ReferenceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
+                name: "IX_mix_database_reference_MixDatabaseId",
+                table: "mix_database_reference",
+                column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
                 column: "DataId");
 
             migrationBuilder.CreateIndex(
@@ -1141,16 +1141,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
+                name: "mix_database_column");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
+                name: "mix_database_data");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
+                name: "mix_database_reference");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_cache");
@@ -1222,7 +1222,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_module");
 
             migrationBuilder.DropTable(
-                name: "mix_attribute_set");
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_post");

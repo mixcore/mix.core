@@ -21,15 +21,15 @@ namespace Mix.Cms.Lib.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeField", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseColumn", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AttributeSetName")
+                    b.Property<string>("MixDatabaseName")
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -105,10 +105,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("mix_attribute_field");
+                    b.ToTable("mix_database_column");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSet", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabase", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -186,10 +186,10 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("mix_attribute_set");
+                    b.ToTable("mix_database");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseData", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
@@ -201,10 +201,10 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AttributeSetName")
+                    b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -235,19 +235,19 @@ namespace Mix.Cms.Lib.Migrations
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_attribute_set_data");
+                        .HasName("PK_mix_database_data");
 
-                    b.HasIndex("AttributeSetId");
+                    b.HasIndex("MixDatabaseId");
 
-                    b.ToTable("mix_attribute_set_data");
+                    b.ToTable("mix_database_data");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetReference", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseReference", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -293,28 +293,28 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AttributeSetId");
+                    b.HasIndex("MixDatabaseId");
 
-                    b.ToTable("mix_attribute_set_reference");
+                    b.ToTable("mix_database_reference");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetValue", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseDataValue", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(50)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("AttributeFieldId")
+                    b.Property<int>("MixDatabaseColumnId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AttributeFieldName")
+                    b.Property<string>("MixDatabaseColumnName")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("AttributeSetName")
+                    b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -401,7 +401,7 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.HasIndex("DataId");
 
-                    b.ToTable("mix_attribute_set_value");
+                    b.ToTable("mix_database_data_value");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCache", b =>
@@ -1841,10 +1841,10 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AttributeSetName")
+                    b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -1903,7 +1903,7 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_related_attribute_data");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedMixDatabase", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -1913,7 +1913,7 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -1981,10 +1981,10 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("AttributeSetId")
+                    b.Property<int>("MixDatabaseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("AttributeSetName")
+                    b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -2321,26 +2321,26 @@ namespace Mix.Cms.Lib.Migrations
                     b.ToTable("mix_url_alias");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetData", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseData", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixDatabase", "MixDatabase")
                         .WithMany()
-                        .HasForeignKey("AttributeSetId")
+                        .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AttributeSet");
+                    b.Navigation("MixDatabase");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixAttributeSetReference", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseReference", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "AttributeSet")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixDatabase", "MixDatabase")
                         .WithMany()
-                        .HasForeignKey("AttributeSetId")
+                        .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AttributeSet");
+                    b.Navigation("MixDatabase");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
@@ -2570,9 +2570,9 @@ namespace Mix.Cms.Lib.Migrations
                     b.Navigation("MixPost");
                 });
 
-            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedAttributeSet", b =>
+            modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedMixDatabase", b =>
                 {
-                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixAttributeSet", "IdNavigation")
+                    b.HasOne("Mix.Cms.Lib.Models.Cms.MixDatabase", "IdNavigation")
                         .WithMany()
                         .HasForeignKey("IdNavigationId");
 
