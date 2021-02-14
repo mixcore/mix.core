@@ -222,7 +222,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 if (seoName != "404")
                 {
-                    return Redirect($"/{culture}/404");
+                     return Redirect($"/{culture}/404");
                 }
                 else
                 {
@@ -266,7 +266,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return Redirect($"/{culture}/404");
+                 return Redirect($"/{culture}/404");
             }
         }
 
@@ -308,7 +308,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return Redirect($"/{culture}/404");
+                 return Redirect($"/{culture}/404");
             }
         }
 
@@ -349,7 +349,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return Redirect($"/{culture}/404");
+                 return Redirect($"/{culture}/404");
             }
         }
 
