@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -209,7 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 {
                     var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
                         && d.AttributeSetName == AttributeSetName
-                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
+                        && EF.Functions.Like(d.StringValue, $"{StringValue}") && d.Id != Id && d.DataId != DataId);
                     if (exist)
                     {
                         IsValid = false;

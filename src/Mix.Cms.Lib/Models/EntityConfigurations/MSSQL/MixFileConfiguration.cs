@@ -64,7 +64,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.StringContent)
                 .IsRequired()
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

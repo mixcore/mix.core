@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Content)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -38,22 +38,22 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Excerpt)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.ExtraFields)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.ExtraProperties)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Icon)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -72,12 +72,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.PublishedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.SeoDescription)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.SeoKeywords)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.SeoTitle)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Tags)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -119,7 +119,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Title)
-                .HasColumnType("text")
+                .HasColumnType("ntext")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
