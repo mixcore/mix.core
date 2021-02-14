@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -23,8 +24,10 @@ namespace Mix.Cms.Web.Controllers
         protected bool isValid = true;
         protected string _redirectUrl;
 
-        protected bool _forbiddenPortal {
-            get {
+        protected bool _forbiddenPortal
+        {
+            get
+            {
                 var allowedIps = MixService.GetIpConfig<JArray>("AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
@@ -39,6 +42,23 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
+            if (!MixService.GetConfig<bool>("IsInit"))
+            {
+                LoadCulture();
+            }
+        }
+
+        private void LoadCulture()
+        {
+            if (RouteData?.Values["culture"]?.ToString().ToLower() is not null)
+            {
+                culture = RouteData?.Values["culture"]?.ToString().ToLower();
+            }
+            if (!MixService.Instance.CheckValidCulture(culture))
+            {
+                culture = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            }
+
             // Set CultureInfo
             var cultureInfo = new CultureInfo(culture);
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
@@ -48,11 +68,11 @@ namespace Mix.Cms.Web.Controllers
         public ViewContext ViewContext { get; set; }
         private string _culture;
 
-        public string culture {
-            get {
-                return RouteData?.Values["culture"]?.ToString().ToLower()
-                    ?? _culture
-                    ?? MixService.GetConfig<string>("DefaultCulture");
+        public string culture
+        {
+            get
+            {
+                return _culture;
             }
             set { _culture = value; }
         }
@@ -60,6 +80,7 @@ namespace Mix.Cms.Web.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ValidateRequest();
+
             ViewBag.culture = culture;
             if (!string.IsNullOrEmpty(culture))
             {
@@ -93,7 +114,7 @@ namespace Mix.Cms.Web.Controllers
             if (forbidden)
             {
                 isValid = false;
-                _redirectUrl = $"/error/403";
+                _redirectUrl = $"/403";
             }
 
             // If mode Maintenance enabled in appsettings
@@ -201,7 +222,7 @@ namespace Mix.Cms.Web.Controllers
             {
                 if (seoName != "404")
                 {
-                    return await Page("404");
+                    return Redirect($"/{culture}/404");
                 }
                 else
                 {
@@ -245,7 +266,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Page("404");
+                return Redirect($"/{culture}/404");
             }
         }
 
@@ -271,7 +292,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Page("404");
+                return Redirect($"/{culture}/404");
             }
         }
 
@@ -287,7 +308,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Page("404");
+                return Redirect($"/{culture}/404");
             }
         }
 
@@ -328,7 +349,7 @@ namespace Mix.Cms.Web.Controllers
             }
             else
             {
-                return await Page("404");
+                return Redirect($"/{culture}/404");
             }
         }
 
