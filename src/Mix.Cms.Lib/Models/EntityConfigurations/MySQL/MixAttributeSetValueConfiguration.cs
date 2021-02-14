@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
 {
-    public class MixAttributeSetValueConfiguration : IEntityTypeConfiguration<MixAttributeSetValue>
+    public class MixAttributeSetValueConfiguration : IEntityTypeConfiguration<MixDatabaseDataValue>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeSetValue> entity)
+        public void Configure(EntityTypeBuilder<MixDatabaseDataValue> entity)
         {
             entity.HasKey(e => new { e.Id, e.Specificulture })
                     .HasName("PRIMARY");
@@ -22,13 +22,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.AttributeFieldName)
+            entity.Property(e => e.MixDatabaseColumnName)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");
 
-            entity.Property(e => e.AttributeSetName)
+            entity.Property(e => e.MixDatabaseName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("utf8_unicode_ci");

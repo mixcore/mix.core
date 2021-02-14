@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
 {
-    public class MixAttributeValueConfiguration : IEntityTypeConfiguration<MixAttributeSetValue>
+    public class MixAttributeValueConfiguration : IEntityTypeConfiguration<MixDatabaseDataValue>
     {
-        public void Configure(EntityTypeBuilder<MixAttributeSetValue> builder)
+        public void Configure(EntityTypeBuilder<MixDatabaseDataValue> builder)
         {
             builder
             .Property(e => e.DataType)

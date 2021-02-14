@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
     public class UpdateViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetValue, UpdateViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseDataValue, UpdateViewModel>
     {
         #region Properties
 
@@ -103,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             //IsCache = false;
         }
 
-        public UpdateViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public UpdateViewModel(MixDatabaseDataValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
             //IsCache = false;
         }
@@ -112,7 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 
         #region Overrides
 
-        public override MixAttributeSetValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseDataValue ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -209,8 +209,8 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
                 if (Field.IsUnique)
                 {
                     var exist = _context.MixAttributeSetValue.Any(d => d.Specificulture == Specificulture
-                        && d.AttributeSetName == AttributeSetName
-                        && EF.Functions.Like(d.StringValue, $"{StringValue}") && d.Id != Id && d.DataId != DataId);
+                        && d.MixDatabaseName == AttributeSetName
+                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
                     if (exist)
                     {
                         IsValid = false;

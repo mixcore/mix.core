@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
 {
     public class DeleteViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetValue, DeleteViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseDataValue, DeleteViewModel>
     {
         #region Properties
 
@@ -85,7 +85,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetValues
             IsCache = false;
         }
 
-        public DeleteViewModel(MixAttributeSetValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixDatabaseDataValue model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
             IsCache = false;
         }

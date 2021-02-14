@@ -25,7 +25,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/attribute-field")]
     public class ApiAttributeFieldController :
-        BaseGenericApiController<MixCmsContext, MixAttributeField>
+        BaseGenericApiController<MixCmsContext, MixDatabaseColumn>
     {
         public ApiAttributeFieldController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/attribute-field/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixAttributeField>> DeleteAsync(int id)
+        public async Task<RepositoryResponse<MixDatabaseColumn>> DeleteAsync(int id)
         {
             return await base.DeleteAsync<UpdateViewModel>(
                 model => model.Id == id, true);
@@ -54,13 +54,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     if (id.HasValue)
                     {
-                        Expression<Func<MixAttributeField, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixDatabaseColumn, bool>> predicate = model => model.Id == id;
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
-                        var model = new MixAttributeField()
+                        var model = new MixDatabaseColumn()
                         {
                             Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
@@ -73,13 +73,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 default:
                     if (id.HasValue)
                     {
-                        Expression<Func<MixAttributeField, bool>> predicate = model => model.Id == id;
+                        Expression<Func<MixDatabaseColumn, bool>> predicate = model => model.Id == id;
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixAttributeField()
+                        var model = new MixDatabaseColumn()
                         {
                             Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
@@ -99,7 +99,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<RepositoryResponse<List<UpdateViewModel>>> InitByName(int setId)
         {
             return await UpdateViewModel.Repository.GetModelListByAsync(
-                m => m.AttributeSetId == setId).ConfigureAwait(false);
+                m => m.MixDatabaseId == setId).ConfigureAwait(false);
         }
 
         #endregion Get
@@ -134,7 +134,7 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
-            Expression<Func<MixAttributeField, bool>> predicate = model =>
+            Expression<Func<MixDatabaseColumn, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
                     || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))
                     );

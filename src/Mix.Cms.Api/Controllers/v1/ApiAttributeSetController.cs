@@ -23,7 +23,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/{culture}/attribute-set")]
     public class ApiAttributeSetController :
-        BaseGenericApiController<MixCmsContext, MixAttributeSet>
+        BaseGenericApiController<MixCmsContext, MixDatabase>
     {
         public ApiAttributeSetController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
@@ -34,7 +34,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // GET api/attribute-set/id
         [HttpGet, HttpOptions]
         [Route("delete/{id}")]
-        public async Task<RepositoryResponse<MixAttributeSet>> DeleteAsync(int id)
+        public async Task<RepositoryResponse<MixDatabase>> DeleteAsync(int id)
         {
             return await base.DeleteAsync<DeleteViewModel>(
                 model => model.Id == id, true);
@@ -53,13 +53,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 case "portal":
                     if (id.HasValue || !string.IsNullOrEmpty(name))
                     {
-                        Expression<Func<MixAttributeSet, bool>> predicate = model => (model.Id == id || model.Name == name);
+                        Expression<Func<MixDatabase, bool>> predicate = model => (model.Id == id || model.Name == name);
                         var portalResult = await base.GetSingleAsync<UpdateViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(portalResult));
                     }
                     else
                     {
-                        var model = new MixAttributeSet()
+                        var model = new MixDatabase()
                         {
                             Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
@@ -72,13 +72,13 @@ namespace Mix.Cms.Api.Controllers.v1
                 default:
                     if (id.HasValue || !string.IsNullOrEmpty(name))
                     {
-                        Expression<Func<MixAttributeSet, bool>> predicate = model => model.Id == id || model.Name == name;
+                        Expression<Func<MixDatabase, bool>> predicate = model => model.Id == id || model.Name == name;
                         var result = await base.GetSingleAsync<ReadViewModel>($"{viewType}_{id}", predicate);
                         return Ok(JObject.FromObject(result));
                     }
                     else
                     {
-                        var model = new MixAttributeSet()
+                        var model = new MixDatabase()
                         {
                             Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)
                             ,
@@ -122,7 +122,7 @@ namespace Mix.Cms.Api.Controllers.v1
             [FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
-            Expression<Func<MixAttributeSet, bool>> predicate = model =>
+            Expression<Func<MixDatabase, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
                     || (EF.Functions.Like(model.Name, $"%{request.Keyword}%"))
                     || (EF.Functions.Like(model.Title, $"%{request.Keyword}%"))

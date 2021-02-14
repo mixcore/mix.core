@@ -3,9 +3,9 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixAttributeSet
+    public partial class MixDatabase
     {
-        public MixAttributeSet()
+        public MixDatabase()
         {
         }
 

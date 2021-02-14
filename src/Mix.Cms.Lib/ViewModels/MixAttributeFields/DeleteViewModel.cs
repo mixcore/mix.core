@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
 {
     public class DeleteViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeField, DeleteViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseColumn, DeleteViewModel>
     {
         #region Properties
 
@@ -82,7 +82,7 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         {
         }
 
-        public DeleteViewModel(MixAttributeField model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public DeleteViewModel(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -93,15 +93,15 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeFields
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(DeleteViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var removeDataIds = _context.MixAttributeSetValue.Where(m => m.AttributeFieldId == Id).Select(m => m.DataId).ToList();
-            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.AttributeFieldId == Id
+            var removeDataIds = _context.MixAttributeSetValue.Where(m => m.MixDatabaseColumnId == Id).Select(m => m.DataId).ToList();
+            var removeFieldValues = await MixAttributeSetValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.MixDatabaseColumnId == Id
             , _context, _transaction);
             ViewModelHelper.HandleResult(removeFieldValues, ref result);
             if (result.IsSucceed)
             {
                 foreach (var item in removeDataIds)
                 {
-                    _ = MixService.RemoveCacheAsync(typeof(MixAttributeSetData), item);
+                    _ = MixService.RemoveCacheAsync(typeof(MixDatabaseData), item);
                 }
             }
             return result;

@@ -9,11 +9,11 @@ namespace Mix.Cms.Lib.Models.Cms
 {
     public partial class MixCmsContext : DbContext
     {
-        public virtual DbSet<MixAttributeField> MixAttributeField { get; set; }
-        public virtual DbSet<MixAttributeSet> MixAttributeSet { get; set; }
-        public virtual DbSet<MixAttributeSetData> MixAttributeSetData { get; set; }
-        public virtual DbSet<MixAttributeSetReference> MixAttributeSetReference { get; set; }
-        public virtual DbSet<MixAttributeSetValue> MixAttributeSetValue { get; set; }
+        public virtual DbSet<MixDatabaseColumn> MixAttributeField { get; set; }
+        public virtual DbSet<MixDatabase> MixAttributeSet { get; set; }
+        public virtual DbSet<MixDatabaseData> MixAttributeSetData { get; set; }
+        public virtual DbSet<MixDatabaseAssociation> MixAttributeSetReference { get; set; }
+        public virtual DbSet<MixDatabaseDataValue> MixAttributeSetValue { get; set; }
         public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 {
     public class FormViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, FormViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseData, FormViewModel>
     {
         #region Properties
 
@@ -75,7 +75,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         {
         }
 
-        public FormViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public FormViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -89,7 +89,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
             {
-                Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+                Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == AttributeSetId, _context, _transaction).Data;
                 Values = getValues.Data.OrderBy(a => a.Priority).ToList();
                 foreach (var field in Fields.OrderBy(f => f.Priority))
                 {
@@ -97,10 +97,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                     if (val == null)
                     {
                         val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
-                            new MixAttributeSetValue()
+                            new MixDatabaseDataValue()
                             {
-                                AttributeFieldId = field.Id,
-                                AttributeFieldName = field.Name,
+                                MixDatabaseColumnId = field.Id,
+                                MixDatabaseColumnName = field.Name,
                             }
                             , _context, _transaction)
                         {
@@ -116,13 +116,13 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override MixAttributeSetData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.AttributeSetName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
+                Priority = Repository.Count(m => m.MixDatabaseName == AttributeSetName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
 
             if (string.IsNullOrEmpty(AttributeSetName))
@@ -135,7 +135,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
             Values = Values ?? Lib.ViewModels.MixAttributeSetValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction).Data.OrderBy(a => a.Priority).ToList();
-            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == AttributeSetId, _context, _transaction).Data;
 
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
@@ -143,10 +143,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 if (val == null)
                 {
                     val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
+                        new MixDatabaseDataValue()
                         {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
+                            MixDatabaseColumnId = field.Id,
+                            MixDatabaseColumnName = field.Name,
                         }
                         , _context, _transaction)
                     {
@@ -251,7 +251,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixAttributeSetData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixDatabaseData parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
@@ -277,7 +277,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveValues(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Values)
@@ -306,7 +306,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RefData)
@@ -338,7 +338,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixAttributeSetData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
@@ -349,8 +349,8 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                     // Current data is child data
                     if (string.IsNullOrEmpty(item.Id))
                     {
-                        item.AttributeSetId = parent.AttributeSetId;
-                        item.AttributeSetName = parent.AttributeSetName;
+                        item.AttributeSetId = parent.MixDatabaseId;
+                        item.AttributeSetName = parent.MixDatabaseName;
                         item.Id = parent.Id;
                     }
                     // Current data is parent data
@@ -517,7 +517,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             }
         }
 
-        public override async Task GenerateCache(MixAttributeSetData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task GenerateCache(MixDatabaseData model, FormViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             ParseData();
             await base.GenerateCache(model, view, _context, _transaction).ConfigureAwait(false);

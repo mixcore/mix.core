@@ -19,6 +19,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Priority { get; set; }
         public MixContentStatus Status { get; set; }
 
-        public virtual MixAttributeSet IdNavigation { get; set; }
+        public virtual MixDatabase IdNavigation { get; set; }
     }
 }

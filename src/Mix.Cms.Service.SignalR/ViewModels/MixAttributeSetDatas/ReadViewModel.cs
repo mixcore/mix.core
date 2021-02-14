@@ -12,7 +12,7 @@ using System.Linq;
 namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 {
     public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, ReadViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseData, ReadViewModel>
     {
         #region Properties
 
@@ -75,7 +75,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         {
         }
 
-        public ReadViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -110,17 +110,17 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         private void ParseValueData(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == AttributeSetId, _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
                 if (val == null)
                 {
                     val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
+                        new MixDatabaseDataValue()
                         {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
+                            MixDatabaseColumnId = field.Id,
+                            MixDatabaseColumnName = field.Name,
                         }
                         , _context, _transaction)
                     {

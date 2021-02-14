@@ -281,8 +281,8 @@ namespace Mix.Cms.Lib
                     }
                 };
                 // Get Value Predicate By Type
-                Expression<Func<MixAttributeSetValue, bool>> valPredicate = m => m.AttributeSetName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST
-                   && m.AttributeFieldName == fieldName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == MixConstants.AttributeSetName.ADDITIONAL_FIELD_POST
+                   && m.MixDatabaseColumnName == fieldName;
 
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);
                 if (pre != null)
@@ -318,38 +318,38 @@ namespace Mix.Cms.Lib
             }
         }
 
-        private static Expression<Func<MixAttributeSetValue, bool>> GetValuePredicate(string fieldValue
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetValuePredicate(string fieldValue
             , MixCompareOperatorKind filterType, MixDataType dataType)
         {
-            Expression<Func<MixAttributeSetValue, bool>> valPredicate = null;
+            Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
             switch (dataType)
             {
                 case MixDataType.Date:
                 case MixDataType.Time:
                     if (DateTime.TryParse(fieldValue, out DateTime dtValue))
                     {
-                        valPredicate = FilterObjectSet<MixAttributeSetValue, DateTime>("DateTimeValue", dtValue, filterType);
+                        valPredicate = FilterObjectSet<MixDatabaseDataValue, DateTime>("DateTimeValue", dtValue, filterType);
                     }
                     break;
 
                 case MixDataType.Double:
                     if (double.TryParse(fieldValue, out double dbValue))
                     {
-                        valPredicate = FilterObjectSet<MixAttributeSetValue, double>("DoubleValue", dbValue, filterType);
+                        valPredicate = FilterObjectSet<MixDatabaseDataValue, double>("DoubleValue", dbValue, filterType);
                     }
                     break;
 
                 case MixDataType.Boolean:
                     if (bool.TryParse(fieldValue, out bool boolValue))
                     {
-                        valPredicate = FilterObjectSet<MixAttributeSetValue, bool>("BooleanValue", boolValue, filterType);
+                        valPredicate = FilterObjectSet<MixDatabaseDataValue, bool>("BooleanValue", boolValue, filterType);
                     }
                     break;
 
                 case MixDataType.Integer:
                     if (int.TryParse(fieldValue, out int intValue))
                     {
-                        valPredicate = FilterObjectSet<MixAttributeSetValue, int>("IntegerValue", intValue, filterType);
+                        valPredicate = FilterObjectSet<MixDatabaseDataValue, int>("IntegerValue", intValue, filterType);
                     }
                     break;
 
@@ -376,7 +376,7 @@ namespace Mix.Cms.Lib
                 case MixDataType.TuiEditor:
                 case MixDataType.QRCode:
                 default:
-                    valPredicate = FilterObjectSet<MixAttributeSetValue, string>("StringValue", fieldValue, filterType);
+                    valPredicate = FilterObjectSet<MixDatabaseDataValue, string>("StringValue", fieldValue, filterType);
                     break;
             }
 
@@ -495,7 +495,7 @@ namespace Mix.Cms.Lib
             string orderBy = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc,
             int? pageSize = null, int? pageIndex = 0,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixAttributeSetData, TView>
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
         {
             return await ViewModels.MixAttributeSetDatas.Helper.GetAttributeDataByParent<TView>(
                 culture, attributeSetName,

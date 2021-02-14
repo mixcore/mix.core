@@ -3,11 +3,11 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixAttributeField
+    public partial class MixDatabaseColumn
     {
         public int Id { get; set; }
-        public int AttributeSetId { get; set; }
-        public string AttributeSetName { get; set; }
+        public int MixDatabaseId { get; set; }
+        public string MixDatabaseName { get; set; }
         public string Configurations { get; set; }
         public string Regex { get; set; }
         public string Title { get; set; }
