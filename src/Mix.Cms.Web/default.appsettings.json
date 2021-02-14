@@ -98,8 +98,8 @@
       "FromName": "mix-core"
     },
     "PortalThemeSettings": {
-      "primaryColorHue": 211,
-      "primaryColorSaturation": 100,
+      "primaryColorHue": 90,
+      "primaryColorSaturation": 35,
       "primaryColorBrightness": 50,
       "bgColor": "#fbfbfb",
       "textColor": "#404040",
