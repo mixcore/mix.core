@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -23,13 +24,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isAttributeId = int.TryParse(Request.Query["attributeSetId"], out int attributeSetId);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            bool isParentType = Enum.TryParse(Request.Query["parentType"], out MixDatabaseParentType parentType);
-            string parentId = Request.Query["parentId"];
-            string attributeSetName = Request.Query["attributeSetName"];
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isAttributeId = int.TryParse(Request.Query[MixRequestQueryKeywords.DatabaseId], out int attributeSetId);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            bool isParentType = Enum.TryParse(Request.Query[MixRequestQueryKeywords.ParentType], out MixDatabaseParentType parentType);
+            string parentId = Request.Query[MixRequestQueryKeywords.ParentId];
+            string attributeSetName = Request.Query[MixRequestQueryKeywords.DatabaseName];
             Expression<Func<MixRelatedAttributeData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (!isStatus || model.Status == status)
@@ -50,14 +51,5 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
-
-        //[HttpGet]
-        //[Route("navigation/{name}")]
-        //public async Task<ActionResult<Navigation>> GetNavigation(string name)
-        //{
-        //    var navs = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.NavigationViewModel>(
-        //        _lang, MixConstants.AttributeSetName.NAVIGATION, "equal", "name", name);
-        //    return Ok(navs.Data.FirstOrDefault()?.Nav);
-        //}
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -17,18 +18,18 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/page-post/mvc")]
     public class ApiPagePostMvcController :
-        BaseAuthorizedApiController<MixCmsContext, MixPagePost, ReadMvcViewModel, ReadMvcViewModel>
+        BaseRestApiController<MixCmsContext, MixPagePost, ReadMvcViewModel>
     {
-        // GET: api/s
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             bool isPage = int.TryParse(Request.Query["page_id"], out int pageId);
             bool isPost = int.TryParse(Request.Query["post_id"], out int postId);
-            string keyword = Request.Query["keyword"];
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPagePost, bool>> predicate = model =>
                         model.Specificulture == _lang
                         && (!isStatus || model.Status == status)
@@ -39,7 +40,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         && (string.IsNullOrWhiteSpace(keyword)
                             || (model.Description.Contains(keyword)
                             ));
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadMvcViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;

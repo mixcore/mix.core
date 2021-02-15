@@ -352,14 +352,14 @@ namespace Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
                 attributeSetName = attributeSetName ?? request.Query["attributeSetName"].ToString();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
-                var orderBy = request.Query["orderBy"].ToString();
+                var orderBy = request.Query[MixRequestQueryKeywords.OrderBy].ToString();
                 int.TryParse(request.Query["attributeSetId"], out int attributeSetId);
-                bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
-                int.TryParse(request.Query["pageIndex"], out int pageIndex);
-                var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
-                bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
-                bool isToDate = DateTime.TryParse(request.Query["toDate"], out DateTime toDate);
-                bool isStatus = Enum.TryParse(request.Query["status"], out MixContentStatus status);
+                bool isDirection = Enum.TryParse(request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+                int.TryParse(request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
+                var isPageSize = int.TryParse(request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
+                bool isFromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+                bool isToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+                bool isStatus = Enum.TryParse(request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 var getfields = await MixAttributeFields.ReadViewModel.Repository.GetModelListByAsync(
                     m => m.AttributeSetId == attributeSetId || m.AttributeSetName == attributeSetName, context, transaction);

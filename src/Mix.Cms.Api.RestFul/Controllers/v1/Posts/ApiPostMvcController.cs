@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -21,15 +22,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, ReadMvcViewModel>
     {
-        // GET: api/s
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string type = Request.Query["type"];
-            string keyword = Request.Query["keyword"];
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPost, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (!isStatus || model.Status == status)
@@ -56,7 +57,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByAttribute()
         {
             var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<ReadMvcViewModel>(
-                Request.Query["attributeSetName"], Request.Query["value"], _lang);
+                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], _lang);
             if (result.IsSucceed)
             {
                 return result.Data;

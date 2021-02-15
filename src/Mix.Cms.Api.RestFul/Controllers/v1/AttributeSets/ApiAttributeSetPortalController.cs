@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -26,11 +27,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
             bool isType = Enum.TryParse(Request.Query["type"], out MixDatabaseType type);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixAttributeSet, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isType || model.Type == type)
@@ -51,7 +52,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
+        // DELETE: api/v1/rest/en-us/attribute-set/portal
         [HttpDelete("{id}")]
         public override async Task<ActionResult<MixAttributeSet>> Delete(string id)
         {

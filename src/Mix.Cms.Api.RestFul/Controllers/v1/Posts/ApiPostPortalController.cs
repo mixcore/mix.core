@@ -22,15 +22,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadListItemViewModel, DeleteViewModel>
     {
-        // GET: api/s
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string type = Request.Query["type"];
-            string keyword = Request.Query["keyword"];
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPost, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (!isStatus || model.Status == status)
