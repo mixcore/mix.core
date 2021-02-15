@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -41,8 +42,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("additional-data")]
         public async Task<ActionResult<PaginationModel<AdditionalViewModel>>> GetAdditionalData()
         {
-            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
-                && int.TryParse(Request.Query["parentId"].ToString(), out int parentId) && parentId > 0)
+            if (Enum.TryParse(Request.Query[MixRequestQueryKeywords.ParentType].ToString(), out MixDatabaseParentType parentType)
+                && int.TryParse(Request.Query[MixRequestQueryKeywords.ParentId].ToString(), out int parentId) && parentId > 0)
             {
                 var getData = await Helper.GetAdditionalData(parentType, parentId.ToString(), Request, _lang);
                 if (getData.IsSucceed)
@@ -76,7 +77,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // PUT: api/s/5
+        // PUT: api/s
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-additional-data")]
@@ -140,7 +141,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("export")]
         public async Task<ActionResult> Export()
         {
-            string attributeSetName = Request.Query["attributeSetName"].ToString();
+            string attributeSetName = Request.Query[MixRequestQueryKeywords.DatabaseName].ToString();
             string exportPath = $"content/exports/module/{attributeSetName}";
             var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
 
@@ -179,7 +180,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<ImportViewModel>() { Status = 501 };
         }
 
-        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
+        // DELETE: api/v1/rest/en-us/attribute-set/portal
         [HttpDelete("{id}")]
         public override async Task<ActionResult<MixAttributeSetData>> Delete(string id)
         {

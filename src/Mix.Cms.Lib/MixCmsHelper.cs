@@ -461,8 +461,8 @@ namespace Mix.Cms.Lib
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             string orderBy = MixService.GetConfig<string>("OrderBy");
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
-            int.TryParse(context.Request.Query["page"], out int page);
-            int.TryParse(context.Request.Query["pageSize"], out int pageSize);
+            int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
+            int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             page = (page > 0) ? page : 1;
 
@@ -512,8 +512,8 @@ namespace Mix.Cms.Lib
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null
             )
         {
-            int.TryParse(context.Request.Query["page"], out int page);
-            int.TryParse(context.Request.Query["pageSize"], out int pageSize);
+            int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
+            int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
             page = (page > 0) ? page : 1;
             var result = await ViewModels.MixPosts.Helper.GetPostListByPageId<Lib.ViewModels.MixPagePosts.ReadViewModel>(
                 pageId, keyword, culture,

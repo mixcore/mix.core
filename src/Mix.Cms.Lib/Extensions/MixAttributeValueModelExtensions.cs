@@ -22,9 +22,6 @@ namespace Mix.Cms.Lib.Extensions
             MixCmsContext _context,
             IDbContextTransaction _transaction)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(
-                   _context, _transaction,
-                   out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             switch (item.DataType)
             {
                 case MixDataType.DateTime:
@@ -87,11 +84,6 @@ namespace Mix.Cms.Lib.Extensions
                 case MixDataType.TuiEditor:
                 default:
                     return (new JProperty(item.AttributeFieldName, item.StringValue));
-            }
-            if (isRoot)
-            {
-                transaction.Dispose();
-                context.Dispose();
             }
         }
 
