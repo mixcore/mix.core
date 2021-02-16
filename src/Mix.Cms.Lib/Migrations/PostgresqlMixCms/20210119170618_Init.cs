@@ -223,31 +223,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_related_attribute_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
-                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_attribute_data", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_data",
+                name: "mix_database_data_association",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -268,7 +244,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_related_data", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_database_data_association", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -928,7 +904,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_related_post",
+                name: "mix_post_association",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -946,15 +922,15 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_related_post", x => new { x.Id, x.Specificulture });
+                    table.PrimaryKey("PK_mix_post_association", x => new { x.Id, x.Specificulture });
                     table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post",
+                        name: "FK_mix_post_association_mix_post",
                         columns: x => new { x.SourceId, x.Specificulture },
                         principalTable: "mix_post",
                         principalColumns: new[] { "Id", "Specificulture" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post1",
+                        name: "FK_mix_post_association_mix_post1",
                         columns: x => new { x.DestinationId, x.Specificulture },
                         principalTable: "mix_post",
                         principalColumns: new[] { "Id", "Specificulture" },
@@ -1118,13 +1094,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 column: "IdNavigationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_DestinationId_Specificulture",
-                table: "mix_related_post",
+                name: "IX_mix_post_association_DestinationId_Specificulture",
+                table: "mix_post_association",
                 columns: new[] { "DestinationId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_SourceId_Specificulture",
-                table: "mix_related_post",
+                name: "IX_mix_post_association_SourceId_Specificulture",
+                table: "mix_post_association",
                 columns: new[] { "SourceId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
@@ -1192,16 +1168,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_post_module");
 
             migrationBuilder.DropTable(
-                name: "mix_related_attribute_data");
-
-            migrationBuilder.DropTable(
                 name: "mix_related_attribute_set");
 
             migrationBuilder.DropTable(
-                name: "mix_related_data");
+                name: "mix_database_data_association");
 
             migrationBuilder.DropTable(
-                name: "mix_related_post");
+                name: "mix_post_association");
 
             migrationBuilder.DropTable(
                 name: "mix_template");

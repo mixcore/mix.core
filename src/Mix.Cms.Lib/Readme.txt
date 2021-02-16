@@ -23,7 +23,7 @@ remove default value
   delete from test_123.dbo.mix_module
   delete from test_123.dbo.mix_theme
   delete from test_123.dbo.mix_template
-  delete from test_123.[dbo].[mix_related_attribute_data]
+  delete from test_123.[dbo].[mix_database_data_association]
   delete from test_123.dbo.mix_database_data
   delete from test_123.dbo.mix_database_data_value
   delete from test_123.dbo.mix_database_column

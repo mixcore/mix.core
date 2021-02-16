@@ -43,13 +43,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.FileFolder)
                 .IsRequired()
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FileName)
                 .IsRequired()
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -72,7 +72,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Source)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -84,12 +84,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Tags)
-                .HasColumnType("varchar(400)")
+                .HasColumnType("nvarchar(400)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.TargetUrl)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

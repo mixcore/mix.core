@@ -11,7 +11,6 @@ namespace Mix.Cms.Lib.Models.Cms
     {
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixDatabase> MixDatabase { get; set; }
-        public virtual DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
         public virtual DbSet<MixDatabaseData> MixDatabaseData { get; set; }
         public virtual DbSet<MixDatabaseDataAssociation> MixDatabaseDataAssociation { get; set; }
         public virtual DbSet<MixDatabaseDataValue> MixDatabaseDataValue { get; set; }
@@ -35,7 +34,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixPostMedia> MixPostMedia { get; set; }
         public virtual DbSet<MixPostModule> MixPostModule { get; set; }
         
-        public virtual DbSet<MixRelatedPost> MixRelatedPost { get; set; }
+        public virtual DbSet<MixPostAssociation> MixRelatedPost { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }

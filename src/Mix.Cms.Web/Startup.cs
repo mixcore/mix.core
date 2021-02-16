@@ -106,7 +106,6 @@ namespace Mix.Cms.Web
                     context.Database.Migrate();
                 }
             }
-            app.UseStatusCodePagesWithRedirects("/404");
             app.UseCors(MixcoreAllowSpecificOrigins);
 
             var provider = new FileExtensionContentTypeProvider();

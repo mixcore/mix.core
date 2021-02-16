@@ -459,7 +459,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedPost>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPostAssociation>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
