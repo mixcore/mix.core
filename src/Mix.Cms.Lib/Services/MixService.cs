@@ -499,7 +499,7 @@ namespace Mix.Cms.Lib.Services
                     return new MySqlMixCmsContext();
 
                 case MixDatabaseProvider.SQLITE:
-                    return new MySqlMixCmsContext();
+                    return new SqliteMixCmsContext();
 
                 case MixDatabaseProvider.PostgreSQL:
                     return new PostgresqlMixCmsContext();

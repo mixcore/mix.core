@@ -17,7 +17,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/mix-database-data-value/portal")]
     public class ApiMixDatabaseDataValueController :
-        BaseAuthorizedApiController<MixCmsContext, MixDatabaseDataValue, UpdateViewModel, ReadViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseDataValue, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         // GET: api/v1/rest/en-us/mix-database-column/client
         [HttpGet]
@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.MixDatabaseName.Contains(keyword)
                  || model.StringValue.Contains(keyword)
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);

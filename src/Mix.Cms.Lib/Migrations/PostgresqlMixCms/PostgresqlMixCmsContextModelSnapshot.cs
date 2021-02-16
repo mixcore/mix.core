@@ -1926,9 +1926,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_related_attribute_data");
+                        .HasName("PK_mix_database_data_association");
 
-                    b.ToTable("mix_related_attribute_data");
+                    b.ToTable("mix_database_data_association");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedMixDatabase", b =>
@@ -2069,9 +2069,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_related_data");
+                        .HasName("PK_mix_database_data_association");
 
-                    b.ToTable("mix_related_data");
+                    b.ToTable("mix_database_data_association");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixRelatedPost", b =>
@@ -2126,13 +2126,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id", "Specificulture")
-                        .HasName("PK_mix_related_post");
+                        .HasName("PK_mix_post_association");
 
                     b.HasIndex("DestinationId", "Specificulture");
 
                     b.HasIndex("SourceId", "Specificulture");
 
-                    b.ToTable("mix_related_post");
+                    b.ToTable("mix_post_association");
                 });
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixTemplate", b =>
@@ -2621,13 +2621,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "MixPost")
                         .WithMany("MixRelatedPostMixPost")
                         .HasForeignKey("DestinationId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_post_mix_post1")
+                        .HasConstraintName("FK_mix_post_association_mix_post1")
                         .IsRequired();
 
                     b.HasOne("Mix.Cms.Lib.Models.Cms.MixPost", "S")
                         .WithMany("MixRelatedPostS")
                         .HasForeignKey("SourceId", "Specificulture")
-                        .HasConstraintName("FK_mix_related_post_mix_post")
+                        .HasConstraintName("FK_mix_post_association_mix_post")
                         .IsRequired();
 
                     b.Navigation("MixPost");

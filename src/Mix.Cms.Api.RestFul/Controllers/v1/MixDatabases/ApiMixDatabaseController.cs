@@ -28,7 +28,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
-            Expression<Func<MixAttributeSet, bool>> predicate = model =>
+            Expression<Func<MixDatabase, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
