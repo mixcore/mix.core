@@ -148,7 +148,7 @@ namespace Mix.Cms.Web
 
             if (!MixService.GetConfig<bool>("IsInit"))
             {
-                using (var ctx = new MixCmsContext())
+                using (var ctx = MixService.GetDbContext())
                 {
                     ctx.Database.Migrate();
                     var transaction = ctx.Database.BeginTransaction();

@@ -2,7 +2,7 @@
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 
-namespace Mix.Cms.Lib.Migrations.MySqlMixCms
+namespace Mix.Cms.Lib.Migrations.SqliteMixCms
 {
     public partial class RenameDatabase : Migration
     {
