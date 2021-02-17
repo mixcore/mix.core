@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20210119170618_Init")]
-    partial class Init
+    [Migration("20210217103639_RenameDatabase")]
+    partial class RenameDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

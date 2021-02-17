@@ -3,7 +3,6 @@ using Mix.Cms.Lib.Models.Cms;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
-
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
     public partial class RenameDatabase : Migration
