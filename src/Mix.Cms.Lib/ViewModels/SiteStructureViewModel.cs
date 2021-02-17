@@ -22,8 +22,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("modules")]
         public List<MixModules.ImportViewModel> Modules { get; set; }
 
-        [JsonProperty("databases")]
-        public List<MixDatabases.ImportViewModel> Databases { get; set; }
+        [JsonProperty("mixDatabases")]
+        public List<MixDatabases.ImportViewModel> MixDatabases { get; set; }
 
         [JsonProperty("configurations")]
         public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
@@ -49,8 +49,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("moduleDatas")]
         public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
 
-        [JsonProperty("databaseDatas")]
-        public List<MixDatabaseDatas.ImportViewModel> DatabaseDatas { get; set; } = new List<MixDatabaseDatas.ImportViewModel>();
+        [JsonProperty("mixDatabaseDatas")]
+        public List<MixDatabaseDatas.ImportViewModel> MixDatabaseDatas { get; set; } = new List<MixDatabaseDatas.ImportViewModel>();
 
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            Databases = (await MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
+            MixDatabases = (await ViewModels.MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
 
         #region Export
@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportMixDatabasesAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var item in Databases)
+            foreach (var item in MixDatabases)
             {
                 item.Fields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
@@ -122,15 +122,15 @@ namespace Mix.Cms.Lib.ViewModels
 
                 foreach (var field in refFields)
                 {
-                    var refSet = Databases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
+                    var refSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                     if (refSet == null)
                     {
-                        var getSet = MixDatabases.ImportViewModel.Repository.GetSingleModel(m => m.Name == field.MixDatabaseName, context, transaction);
+                        var getSet = ViewModels.MixDatabases.ImportViewModel.Repository.GetSingleModel(m => m.Name == field.MixDatabaseName, context, transaction);
                         if (getSet.IsSucceed)
                         {
                             refSet = getSet.Data;
                             refSet.IsExportData = refSet.IsExportData || item.IsExportData;
-                            Databases.Add(refSet);
+                            MixDatabases.Add(refSet);
                         }
                     }
                     else
@@ -248,18 +248,18 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportMixDatabaseData(MixCmsContext context, IDbContextTransaction transaction)
         {
-            DatabaseDatas = new List<MixDatabaseDatas.ImportViewModel>();
+            MixDatabaseDatas = new List<MixDatabaseDatas.ImportViewModel>();
             // Load MixDatabase data
-            foreach (var item in Databases)
+            foreach (var item in MixDatabases)
             {
                 if (item.IsExportData)
                 {
-                    var getData = MixDatabaseDatas.ImportViewModel.Repository.GetModelListBy(
+                    var getData = ViewModels.MixDatabaseDatas.ImportViewModel.Repository.GetModelListBy(
                         a => a.Specificulture == Specificulture && a.MixDatabaseId == item.Id, context, transaction)
                         .Data?.OrderBy(a => a.Priority).ToList();
                     if (getData != null)
                     {
-                        DatabaseDatas.AddRange(getData);
+                        MixDatabaseDatas.AddRange(getData);
                     }
                 }
             }
@@ -269,13 +269,13 @@ namespace Mix.Cms.Lib.ViewModels
             RelatedData.AddRange(Modules.Where(p => p.RelatedData != null).Select(p => p.RelatedData));
             foreach (var item in RelatedData)
             {
-                if (!DatabaseDatas.Any(m => m.Id == item.Id))
+                if (!MixDatabaseDatas.Any(m => m.Id == item.Id))
                 {
-                    var getData = MixDatabaseDatas.ImportViewModel.Repository.GetSingleModel(
+                    var getData = ViewModels.MixDatabaseDatas.ImportViewModel.Repository.GetSingleModel(
                         m => m.Id == item.Id, context, transaction);
                     if (getData.IsSucceed)
                     {
-                        DatabaseDatas.Add(getData.Data);
+                        MixDatabaseDatas.Add(getData.Data);
                     }
                 }
             }
@@ -283,7 +283,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportRelatedDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var item in DatabaseDatas)
+            foreach (var item in MixDatabaseDatas)
             {
                 var getDataResult = MixDatabaseDataAssociations.ImportViewModel.Repository
                                    .GetModelListBy(m => m.ParentId == item.Id && m.Specificulture == item.Specificulture
@@ -292,7 +292,7 @@ namespace Mix.Cms.Lib.ViewModels
                 if (getDataResult.IsSucceed && getDataResult.Data.Count > 0)
                 {
                     var data = getDataResult.Data.Where(m =>
-                        DatabaseDatas.Any(d => d.Id == m.DataId)
+                        MixDatabaseDatas.Any(d => d.Id == m.DataId)
                         && !RelatedData.Any(r => r.ParentId == item.Id && r.DataId == m.DataId))
                         .ToList();
                     RelatedData.AddRange(data);
@@ -344,11 +344,11 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportPostsAsync(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && Databases != null && Databases.Count > 0)
+                if (result.IsSucceed && MixDatabases != null && MixDatabases.Count > 0)
                 {
                     result = await ImportMixDatabasesAsync(context, transaction);
                 }
-                if (result.IsSucceed && DatabaseDatas.Count > 0)
+                if (result.IsSucceed && MixDatabaseDatas.Count > 0)
                 {
                     result = await ImportMixDatabaseDatas(destCulture, context, transaction);
                 }
@@ -451,12 +451,12 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportMixDatabasesAsync(MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            if (Databases != null)
+            if (MixDatabases != null)
             {
-                var startId = MixDatabases.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var startId = ViewModels.MixDatabases.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
                 var startFieldId = MixDatabaseColumns.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
                 var mixDatabaseColumns = new List<MixDatabaseColumns.UpdateViewModel>();
-                foreach (var set in Databases)
+                foreach (var set in MixDatabases)
                 {
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
@@ -698,7 +698,7 @@ namespace Mix.Cms.Lib.ViewModels
         private async Task<RepositoryResponse<bool>> ImportMixDatabaseDatas(string destCulture, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in DatabaseDatas)
+            foreach (var item in MixDatabaseDatas)
             {
                 item.CreatedBy = CreatedBy;
                 if (result.IsSucceed)
@@ -718,7 +718,7 @@ namespace Mix.Cms.Lib.ViewModels
                         foreach (var field in item.Fields)
                         {
                             field.Specificulture = destCulture;
-                            var newSet = Databases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
+                            var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {
