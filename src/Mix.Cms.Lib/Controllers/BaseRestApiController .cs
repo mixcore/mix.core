@@ -454,7 +454,7 @@ namespace Mix.Cms.Lib.Controllers
                     jData.Add(JObject.FromObject(item));
                 }
 
-                var result = Lib.ViewModels.MixAttributeSetDatas.Helper.ExportAttributeToExcel(
+                var result = Lib.ViewModels.MixDatabaseDatas.Helper.ExportAttributeToExcel(
                         jData, string.Empty, exportPath, $"{type}", null);
 
                 return result;

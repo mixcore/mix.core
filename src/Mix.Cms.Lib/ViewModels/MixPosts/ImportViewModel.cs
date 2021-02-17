@@ -117,22 +117,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public JArray ListTag { get; set; } = new JArray();
 
         [JsonProperty("attributes")]
-        public MixAttributeSets.ImportViewModel Attributes { get; set; }
+        public MixDatabases.ImportViewModel Attributes { get; set; }
 
         [JsonProperty("attributeData")]
-        public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
+        public MixDatabaseDataAssociations.UpdateViewModel AttributeData { get; set; }
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.FormViewModel> SysCategories { get; set; }
+        public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.FormViewModel> SysTags { get; set; }
+        public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         [JsonProperty("relatedData")]
-        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
+        public MixDatabaseDataAssociations.ImportViewModel RelatedData { get; set; }
 
         #endregion Views
 
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
+            var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetFirstModel(
                         m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)

@@ -90,8 +90,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -104,8 +106,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -129,8 +133,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Templates { get; set; }// Post Templates
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixTemplateFolders.Modules;
             }
         }
@@ -139,8 +145,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel View { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
@@ -149,8 +157,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string ThemeFolderType { get { return MixTemplateFolders.Modules.ToString(); } }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                     $"{ThemeFolderType}";
@@ -165,8 +175,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Post Forms
 
         [JsonIgnore]
-        public string FormFolderType {
-            get {
+        public string FormFolderType
+        {
+            get
+            {
                 return MixTemplateFolders.Forms.ToString();
             }
         }
@@ -175,8 +187,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel FormView { get; set; }
 
         [JsonProperty("formFolder")]
-        public string FormFolder {
-            get {
+        public string FormFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                     $"{MixTemplateFolders.Forms}";
@@ -191,8 +205,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Post Edms
 
         [JsonIgnore]
-        public string EdmFolderType {
-            get {
+        public string EdmFolderType
+        {
+            get
+            {
                 return MixTemplateFolders.Edms.ToString();
             }
         }
@@ -201,8 +217,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         [JsonProperty("edmFolder")]
-        public string EdmFolder {
-            get {
+        public string EdmFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                    $"{MixTemplateFolders.Edms}";
@@ -222,10 +240,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysTags { get; set; }
 
         #endregion Views
 
@@ -329,11 +347,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             // TODO: Verified why use below code
             //if (SetAttributeId.HasValue)
             //{
-            //    AttributeSet = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
+            //    MixDatabase = MixDatabases.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
             //}
             //else
             //{
-            //    AttributeSet = new MixAttributeSets.UpdateViewModel();
+            //    MixDatabase = new MixDatabases.UpdateViewModel();
             //}
         }
 
@@ -384,27 +402,27 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 if (getModule.IsSucceed)
                 {
                     // Get Attribute set
-                    var getAttrSet = await Lib.ViewModels.MixAttributeSets.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == formName, context, transaction);
+                    var getAttrSet = await Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == formName, context, transaction);
                     if (getAttrSet.IsSucceed)
                     {
                         // Save attr data + navigation
-                        MixAttributeSetDatas.UpdateViewModel data = new MixAttributeSetDatas.UpdateViewModel()
+                        MixDatabaseDatas.UpdateViewModel data = new MixDatabaseDatas.UpdateViewModel()
                         {
                             Id = dataId,
                             CreatedBy = createdBy,
-                            AttributeSetId = getAttrSet.Data.Id,
-                            AttributeSetName = getAttrSet.Data.Name,
+                            MixDatabaseId = getAttrSet.Data.Id,
+                            MixDatabaseName = getAttrSet.Data.Name,
                             Specificulture = culture,
                             Data = obj
                         };
 
                         // Create navigation module - attr data
-                        var getNavigation = await MixRelatedAttributeDatas.ReadViewModel.Repository.GetSingleModelAsync(
+                        var getNavigation = await MixDatabaseDataAssociations.ReadViewModel.Repository.GetSingleModelAsync(
                             m => m.ParentId == getModule.Data.Id.ToString() && m.ParentType == MixDatabaseParentType.Module && m.Specificulture == culture
                             , context, transaction);
                         if (!getNavigation.IsSucceed)
                         {
-                            data.RelatedData.Add(new MixRelatedAttributeDatas.UpdateViewModel()
+                            data.RelatedData.Add(new MixDatabaseDataAssociations.UpdateViewModel()
                             {
                                 ParentId = getModule.Data.Id.ToString(),
                                 Specificulture = culture,

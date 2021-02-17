@@ -32,13 +32,13 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.FileFolder)
                 .IsRequired()
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FileName)
                 .IsRequired()
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -70,7 +70,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
 
             entity.Property(e => e.ThemeName)
                 .IsRequired()
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

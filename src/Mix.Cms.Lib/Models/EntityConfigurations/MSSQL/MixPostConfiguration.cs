@@ -58,7 +58,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Image)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Source)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
@@ -109,12 +109,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Template)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Thumbnail)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

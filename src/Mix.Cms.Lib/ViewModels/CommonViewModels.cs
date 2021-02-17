@@ -51,8 +51,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("moduleTypes")]
         public List<object> ModuleTypes { get; set; }
 
-        [JsonProperty("attributeSetTypes")]
-        public List<object> AttributeSetTypes { get; set; }
+        [JsonProperty("mixDatabaseTypes")]
+        public List<object> MixDatabaseTypes { get; set; }
 
         [JsonProperty("dataTypes")]
         public List<object> DataTypes { get; set; }

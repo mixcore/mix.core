@@ -9,6 +9,7 @@ namespace Mix.Cms.Lib.Constants
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
         public const string CONST_SETTING_IS_MYSQL = "IsMysql";
         public const string CONST_SETTING_DATABASE_PROVIDER = "DatabaseProvider";
+        public const string CONST_MIXCORE_VERSION = "MixcoreVersion";
         public const string CONST_SETTING_LANGUAGE = "Language";
         public const string CONST_FILE_APPSETTING = "appsettings.json";
         public const string CONST_DEFAULT_FILE_APPSETTING = "default.appsettings.json";
