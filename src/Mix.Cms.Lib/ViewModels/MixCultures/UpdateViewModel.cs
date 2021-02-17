@@ -216,7 +216,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             // Clone Attribute Value from Default culture
             if (result.IsSucceed)
             {
-                var cloneResult = await CloneAttributeValuesAsync(parent, _context, _transaction);
+                var cloneResult = await CloneMixDatabaseDataValuesAsync(parent, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneResult, ref result);
             }
             // Clone Attribute Data from Default culture
@@ -240,14 +240,14 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedAttributeData>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixDatabaseDataAssociation>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
                     {
-                        if (!context.MixRelatedAttributeData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        if (!context.MixDatabaseDataAssociation.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
                         {
                             p.Specificulture = Specificulture;
                             p.CreatedDateTime = DateTime.UtcNow;
@@ -271,14 +271,14 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetData>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixDatabaseData>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
                     {
-                        if (!context.MixAttributeSetData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
+                        if (!context.MixDatabaseData.Any(m => m.Id == p.Id && m.Specificulture == Specificulture))
                         {
                             p.Specificulture = Specificulture;
                             p.CreatedDateTime = DateTime.UtcNow;
@@ -297,19 +297,19 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             return result;
         }
 
-        public async Task<RepositoryResponse<bool>> CloneAttributeValuesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> CloneMixDatabaseDataValuesAsync(MixCulture parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixAttributeSetValue>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixDatabaseDataValue>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
                 {
                     foreach (var p in getPages.Data)
                     {
-                        if (!context.MixAttributeSetValue.Any(m => m.DataId == p.DataId && m.Specificulture == Specificulture))
+                        if (!context.MixDatabaseDataValue.Any(m => m.DataId == p.DataId && m.Specificulture == Specificulture))
                         {
                             p.Id = Guid.NewGuid().ToString();
                             if (!string.IsNullOrEmpty(p.StringValue) && p.StringValue.Contains($"/{p.Specificulture}"))
@@ -459,7 +459,7 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                var getPages = await DefaultModelRepository<MixCmsContext, MixRelatedPost>.Instance.GetModelListByAsync(
+                var getPages = await DefaultModelRepository<MixCmsContext, MixPostAssociation>.Instance.GetModelListByAsync(
                     c => c.Specificulture == MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture),
                     context, transaction);
                 if (getPages.IsSucceed)
@@ -772,13 +772,13 @@ namespace Mix.Cms.Lib.ViewModels.MixCultures
             var aliases = await _context.MixUrlAlias.Where(c => c.Specificulture == Specificulture).ToListAsync();
             aliases.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var values = await _context.MixAttributeSetValue.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            var values = await _context.MixDatabaseDataValue.Where(c => c.Specificulture == Specificulture).ToListAsync();
             values.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var datas = await _context.MixAttributeSetData.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            var datas = await _context.MixDatabaseData.Where(c => c.Specificulture == Specificulture).ToListAsync();
             datas.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
-            var relateddatas = await _context.MixRelatedAttributeData.Where(c => c.Specificulture == Specificulture).ToListAsync();
+            var relateddatas = await _context.MixDatabaseDataAssociation.Where(c => c.Specificulture == Specificulture).ToListAsync();
             relateddatas.ForEach(c => _context.Entry(c).State = Microsoft.EntityFrameworkCore.EntityState.Deleted);
 
             result.IsSucceed = (await _context.SaveChangesAsync() > 0);

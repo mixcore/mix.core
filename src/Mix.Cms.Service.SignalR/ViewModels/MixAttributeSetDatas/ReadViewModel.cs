@@ -9,10 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
+namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
 {
     public class ReadViewModel
-      : ViewModelBase<MixCmsContext, MixAttributeSetData, ReadViewModel>
+      : ViewModelBase<MixCmsContext, MixDatabaseData, ReadViewModel>
     {
         #region Properties
 
@@ -28,10 +28,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         public int Priority { get; set; }
 
         [JsonProperty("attributeSetId")]
-        public int AttributeSetId { get; set; }
+        public int MixDatabaseId { get; set; }
 
         [JsonProperty("attributeSetName")]
-        public string AttributeSetName { get; set; }
+        public string MixDatabaseName { get; set; }
 
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
@@ -54,16 +54,16 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         [JsonProperty("relatedData")]
         [JsonIgnore]
-        public List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel> RelatedData { get; set; } = new List<Lib.ViewModels.MixRelatedAttributeDatas.UpdateViewModel>();
+        public List<Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel> RelatedData { get; set; } = new List<Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel>();
 
         [JsonIgnore]
-        public List<Lib.ViewModels.MixAttributeSetValues.UpdateViewModel> Values { get; set; }
+        public List<Lib.ViewModels.MixDatabaseDataValues.UpdateViewModel> Values { get; set; }
 
         [JsonIgnore]
-        public List<Lib.ViewModels.MixAttributeFields.UpdateViewModel> Fields { get; set; }
+        public List<Lib.ViewModels.MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
 
         [JsonIgnore]
-        public List<MixAttributeSetDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
+        public List<MixDatabaseDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
 
         #endregion Views
 
@@ -75,7 +75,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
         {
         }
 
-        public ReadViewModel(MixAttributeSetData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -85,7 +85,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getValues = Lib.ViewModels.MixAttributeSetValues.UpdateViewModel
+            var getValues = Lib.ViewModels.MixDatabaseDataValues.UpdateViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             if (getValues.IsSucceed)
             {
@@ -110,17 +110,17 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
 
         private void ParseValueData(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            Fields = Lib.ViewModels.MixAttributeFields.UpdateViewModel.Repository.GetModelListBy(f => f.AttributeSetId == AttributeSetId, _context, _transaction).Data;
+            Fields = Lib.ViewModels.MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId, _context, _transaction).Data;
             foreach (var field in Fields.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.AttributeFieldId == field.Id);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
                 if (val == null)
                 {
-                    val = new Lib.ViewModels.MixAttributeSetValues.UpdateViewModel(
-                        new MixAttributeSetValue()
+                    val = new Lib.ViewModels.MixDatabaseDataValues.UpdateViewModel(
+                        new MixDatabaseDataValue()
                         {
-                            AttributeFieldId = field.Id,
-                            AttributeFieldName = field.Name,
+                            MixDatabaseColumnId = field.Id,
+                            MixDatabaseColumnName = field.Name,
                         }
                         , _context, _transaction)
                     {
@@ -129,37 +129,37 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                     Values.Add(val);
                 }
                 val.Priority = field.Priority;
-                val.AttributeSetName = AttributeSetName;
+                val.MixDatabaseName = MixDatabaseName;
             }
 
             ParseData();
         }
 
-        private JProperty ParseValue(Lib.ViewModels.MixAttributeSetValues.UpdateViewModel item)
+        private JProperty ParseValue(Lib.ViewModels.MixDatabaseDataValues.UpdateViewModel item)
         {
             switch (item.DataType)
             {
                 case MixDataType.DateTime:
-                    return new JProperty(item.AttributeFieldName, item.DateTimeValue);
+                    return new JProperty(item.MixDatabaseColumnName, item.DateTimeValue);
 
                 case MixDataType.Date:
-                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
 
                 case MixDataType.Time:
-                    return (new JProperty(item.AttributeFieldName, item.DateTimeValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
 
                 case MixDataType.Double:
-                    return (new JProperty(item.AttributeFieldName, item.DoubleValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DoubleValue));
 
                 case MixDataType.Boolean:
-                    return (new JProperty(item.AttributeFieldName, item.BooleanValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.BooleanValue));
 
                 case MixDataType.Integer:
-                    return (new JProperty(item.AttributeFieldName, item.IntegerValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.IntegerValue));
 
                 case MixDataType.Reference:
                     //string url = $"/api/v1/odata/en-us/related-attribute-set-data/mobile/parent/set/{Id}/{item.Field.ReferenceId}";
-                    return (new JProperty(item.AttributeFieldName, new JArray()));
+                    return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Custom:
                 case MixDataType.Duration:
@@ -179,7 +179,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
                 case MixDataType.VideoYoutube:
                 case MixDataType.TuiEditor:
                 default:
-                    return (new JProperty(item.AttributeFieldName, item.StringValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
             }
         }
 
@@ -188,7 +188,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas
             Data = new JObject();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                item.AttributeFieldName = item.Field.Name;
+                item.MixDatabaseColumnName = item.Field.Name;
                 Data.Add(ParseValue(item));
             }
         }

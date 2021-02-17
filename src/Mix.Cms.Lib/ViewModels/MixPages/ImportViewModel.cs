@@ -118,7 +118,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string ThemeName { get; set; } = "default";
 
         [JsonProperty("relatedData")]
-        public MixRelatedAttributeDatas.ImportViewModel RelatedData { get; set; }
+        public MixDatabaseDataAssociations.ImportViewModel RelatedData { get; set; }
 
         #endregion Views
 
@@ -177,7 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getRelatedData = MixRelatedAttributeDatas.ImportViewModel.Repository.GetFirstModel(
+            var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetFirstModel(
                         m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)

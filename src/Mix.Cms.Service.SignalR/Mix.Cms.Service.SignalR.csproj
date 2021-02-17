@@ -16,8 +16,8 @@
 
   <ItemGroup>
     <Folder Include="ViewModels\MixRelatedAttributeDatas\" />
-    <Folder Include="ViewModels\MixAttributeSetValues\" />
-    <Folder Include="ViewModels\MixAttributeFields\" />
+    <Folder Include="ViewModels\MixDatabaseDataValues\" />
+    <Folder Include="ViewModels\MixMixDatabaseColumns\" />
   </ItemGroup>
 
 </Project>
