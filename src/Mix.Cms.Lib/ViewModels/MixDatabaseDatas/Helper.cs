@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     m => m.MixDatabaseName == databaseName && m.ParentType == parentType && m.ParentId == parentId && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
-                    return await AdditionalViewModel.Repository.GetSingleModelAsync(
+                    return await AdditionalViewModel.Repository.GetFirstModelAsync(
                         m => m.Id == dataId && m.Specificulture == culture
                         , context, transaction);
                 }
