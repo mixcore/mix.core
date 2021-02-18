@@ -87,7 +87,10 @@ namespace Mix.Cms.Lib.Extensions
             }
         }
 
-        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, JToken property)
+        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, 
+            JToken property,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
         {
             if (property == null)
             {
@@ -155,7 +158,7 @@ namespace Mix.Cms.Lib.Extensions
                                     FileFolder = "Attributes"
                                 }
                             };
-                            var saveMedia = media.SaveModel(true);
+                            var saveMedia = media.SaveModel(true, _context, _transaction);
                             if (saveMedia.IsSucceed)
                             {
                                 item.StringValue = saveMedia.Data.FullPath;

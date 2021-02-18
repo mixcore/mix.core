@@ -10,7 +10,7 @@ using Mix.Cms.Lib.Models.Cms;
 namespace Mix.Cms.Lib.Migrations
 {
     [DbContext(typeof(MsSqlMixCmsContext))]
-    [Migration("20210216144458_Init")]
+    [Migration("20210107122622_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
