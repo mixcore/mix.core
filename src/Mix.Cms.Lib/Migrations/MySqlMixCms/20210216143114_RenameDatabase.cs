@@ -33,6 +33,8 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 migrationBuilder.RenameTable("mix_attribute_field", null, "mix_database_column");
                 migrationBuilder.RenameColumn("AttributeSetId", "mix_database_column", "MixDatabaseId");
                 migrationBuilder.RenameColumn("AttributeSetName", "mix_database_column", "MixDatabaseName");
+                MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.1");
+                MixService.SaveSettings();
             }
         }
 
