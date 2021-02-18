@@ -76,7 +76,7 @@ namespace Mix.Cms.Web
             services.AddMixScheduler(Configuration);
             /* Mix: End Inject Services */
 
-            _ = VerifyInitDataAsync(services);
+            VerifyInitData(services);
 
             services.AddMixAuthorize(Configuration);
             /* End Additional Config for Mixcore Cms  */
@@ -142,7 +142,7 @@ namespace Mix.Cms.Web
         }
 
         // Mix: Check custom cms config
-        private async Task VerifyInitDataAsync(IServiceCollection services)
+        private void VerifyInitData(IServiceCollection services)
         {
             // Mix: Migrate db if already inited
 
@@ -158,11 +158,11 @@ namespace Mix.Cms.Web
                     {
                         if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
                         {
-                            await db.SaveModelAsync(true, ctx, transaction);
+                            db.SaveModel(true, ctx, transaction);
                         }
                     }
-                    await transaction.CommitAsync();
-                    await transaction.DisposeAsync();
+                    transaction.Commit();
+                    transaction.Dispose();
                 }
             }
 
