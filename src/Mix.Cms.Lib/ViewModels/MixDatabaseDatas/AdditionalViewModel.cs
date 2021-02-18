@@ -202,7 +202,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     }
                     else
                     {
-                        val.ToModelValue(Obj[val.MixDatabaseColumnName]);
+                        val.ToModelValue(Obj[val.MixDatabaseColumnName], _context, _transaction);
                     }
                 }
                 else
