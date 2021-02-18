@@ -162,6 +162,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     val.LastModified = DateTime.UtcNow;
                 }
                 val.Status = Status;
+                val.Specificulture = Specificulture;
                 val.Priority = field.Priority;
                 val.MixDatabaseName = MixDatabaseName;
                 if (Obj[val.MixDatabaseColumnName] != null)
@@ -200,7 +201,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     }
                     else
                     {
-                        val.ToModelValue(Obj[val.MixDatabaseColumnName]);
+                        val.ToModelValue(Obj[val.MixDatabaseColumnName], _context, _transaction);
                     }
                 }
             }
