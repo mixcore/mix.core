@@ -8,7 +8,7 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) == "1.0.0")
+            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) != "1.0.1")
             {
                 migrationBuilder.DropTable("mix_related_attribute_set");
                 migrationBuilder.DropTable("mix_attribute_set_reference");
