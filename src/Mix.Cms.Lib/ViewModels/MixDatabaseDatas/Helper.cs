@@ -349,7 +349,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
                 var queryDictionary = request.Query.ToList();
-                mixDatabaseName = mixDatabaseName ?? request.Query["mixDatabaseName"].ToString();
+                mixDatabaseName = mixDatabaseName ?? request.Query["mixDatabaseName"].ToString().Trim();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
@@ -403,7 +403,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     if (fieldQueries != null && fieldQueries.Properties().Count() > 0) // filter by specific field name
                     {
                         var valPredicate = GetFilterValueByFields(fields, fieldQueries, filterType);
-                        attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
+                        attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
                     var query = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();

@@ -207,29 +207,29 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
 
             // Save Edm html
-            var getAttrSet = Mix.Cms.Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseName, _context, _transaction);
-            var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
-            var edmField = Values.FirstOrDefault(f => f.MixDatabaseColumnName == "edm");
-            if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
-            {
-                string body = getEdm.Data.Content;
-                foreach (var prop in Obj.Properties())
-                {
-                    body = body.Replace($"[[{prop.Name}]]", Obj[prop.Name].Value<string>());
-                }
-                var edmFile = new FileViewModel()
-                {
-                    Content = body,
-                    Extension = MixFileExtensions.Html,
-                    FileFolder = MixTemplateFolders.Edms,
-                    Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
-                };
-                if (MixFileRepository.Instance.SaveWebFile(edmFile))
-                {
-                    Obj["edm"] = edmFile.WebPath;
-                    edmField.StringValue = edmFile.WebPath;
-                }
-            }
+            //var getAttrSet = Mix.Cms.Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseName, _context, _transaction);
+            //var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
+            //var edmField = Values.FirstOrDefault(f => f.MixDatabaseColumnName == "edm");
+            //if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
+            //{
+            //    string body = getEdm.Data.Content;
+            //    foreach (var prop in Obj.Properties())
+            //    {
+            //        body = body.Replace($"[[{prop.Name}]]", Obj[prop.Name].Value<string>());
+            //    }
+            //    var edmFile = new FileViewModel()
+            //    {
+            //        Content = body,
+            //        Extension = MixFileExtensions.Html,
+            //        FileFolder = MixTemplateFolders.Edms,
+            //        Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
+            //    };
+            //    if (MixFileRepository.Instance.SaveWebFile(edmFile))
+            //    {
+            //        Obj["edm"] = edmFile.WebPath;
+            //        edmField.StringValue = edmFile.WebPath;
+            //    }
+            //}
             //End save edm
 
             return base.ParseModel(_context, _transaction); ;
