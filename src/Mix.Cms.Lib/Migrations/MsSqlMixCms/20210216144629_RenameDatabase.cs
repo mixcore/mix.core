@@ -53,8 +53,45 @@ namespace Mix.Cms.Lib.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.0");
-            MixService.SaveSettings();
+            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) != "1.0.1")
+            {
+                string schema = null;
+
+                // mix_related_attribute_set and mix_attribute_set_reference not used, so we don't need to restore them.
+
+                migrationBuilder.RenameTable("mix_post_association", schema, "mix_related_post");
+                migrationBuilder.RenameTable("mix_database", schema, "mix_attribute_set");
+                migrationBuilder.RenameTable("mix_database_data_association", schema, "mix_related_attribute_data");
+                migrationBuilder.RenameTable("mix_database_data_value", schema, "mix_attribute_set_value");
+                migrationBuilder.RenameTable("mix_database_data", schema, "mix_attribute_set_data");
+                migrationBuilder.RenameTable("mix_database_column", schema, "mix_attribute_field");
+
+                migrationBuilder.RenameColumn("MixDatabaseId", "mix_database_column", "AttributeSetId", schema);
+                migrationBuilder.RenameColumn("MixDatabaseName", "mix_database_column", "AttributeSetName", schema);
+
+                migrationBuilder.RenameColumn("MixDatabaseColumnId", "mix_database_data_value", "AttributeFieldId", schema);
+                migrationBuilder.RenameColumn("MixDatabaseColumnName", "mix_database_data_value", "AttributeFieldName", schema);
+                migrationBuilder.RenameColumn("MixDatabaseName", "mix_database_data_value", "AttributeSetName", schema);
+
+
+                migrationBuilder.RenameColumn("MixDatabaseId", "mix_database_data_association", "AttributeSetId", schema);
+                migrationBuilder.RenameColumn("MixDatabaseName", "mix_database_data_association", "AttributeSetName", schema);
+
+                migrationBuilder.RenameColumn("MixDatabaseId", "mix_database_data", "AttributeSetId", schema);
+                migrationBuilder.RenameColumn("MixDatabaseName", "mix_database_data", "AttributeSetName", schema);
+
+                migrationBuilder.CreateIndex("IX_mix_attribute_field_AttributeSetId", "mix_attribute_field", "AttributeSetId", schema);
+                migrationBuilder.CreateIndex("IX_mix_attribute_field_ReferenceId", "mix_attribute_field", "ReferenceId", schema);
+                migrationBuilder.CreateIndex("IX_mix_attribute_set_data_AttributeSetId", "mix_attribute_set_data", "AttributeSetId", schema);
+                migrationBuilder.CreateIndex("IX_mix_attribute_set_value_DataId", "mix_attribute_set_value", "DataId", schema);
+
+                migrationBuilder.AddForeignKey("FK_mix_attribute_set_data_mix_attribute_set", "mix_attribute_set_data", "AttributeSetId", "mix_attribute_set", schema);
+                migrationBuilder.AddForeignKey("FK_mix_attribute_field_mix_attribute_set", "mix_attribute_field", "Id", "mix_attribute_set", schema);
+                migrationBuilder.AddForeignKey("FK_mix_attribute_field_mix_attribute_set1", "mix_attribute_field", "Id", "mix_attribute_set", schema);
+
+                MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.0");
+                MixService.SaveSettings();
+            }
         }
     }
 }
