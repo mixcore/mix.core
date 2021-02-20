@@ -84,7 +84,7 @@ namespace Mix.Cms.Web.Controllers
                     }
                     else
                     {
-                        HandleSeoName(ref seoName);
+                        HandleSeoName(ref seoName, ref keyword);
                     }
                 }
                 ViewData["Layout"] = "Masters/_Layout";
@@ -97,7 +97,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        private void HandleSeoName(ref string seoName)
+        private void HandleSeoName(ref string seoName, ref string keyword)
         {
             // Check url is end with '/' or '?'
             // Ex: en-us/page-name/ => seoName = en-us/page-name
@@ -126,7 +126,8 @@ namespace Mix.Cms.Web.Controllers
             if (MixService.Instance.CheckValidCulture(seoName))
             {
                 culture = seoName;
-                seoName = string.Empty;
+                seoName = keyword;
+                keyword = string.Empty;
             }
         }
 

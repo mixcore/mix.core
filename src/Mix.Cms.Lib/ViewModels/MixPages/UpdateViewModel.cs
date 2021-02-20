@@ -272,8 +272,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             this.Layout = $"{Master?.FileFolder}/{Master?.FileName}{Master?.Extension}";
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
-            //this.ParentNavs = GetParentNavs(_context, _transaction);
-            //this.ChildNavs = GetChildNavs(_context, _transaction);
             this.UrlAliases = GetAliases(_context, _transaction);
         }
 

@@ -8,7 +8,8 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) != "1.0.1")
+            var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
+            if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
             {
                 string schema = null;
 

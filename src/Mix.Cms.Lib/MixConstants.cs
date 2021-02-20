@@ -56,7 +56,7 @@
         {
             public const string Master = "_Layout.cshtml";
             public const string Page = "_Blank.cshtml";
-            public const string Post = "_Blank.cshtml";
+            public const string Post = "Default.cshtml";
             public const string Module = "_Blank.cshtml";
         }
     }
