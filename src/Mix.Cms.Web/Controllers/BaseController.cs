@@ -170,7 +170,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName)
+        protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName, string keyword = null)
         {
             // Home Page
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
@@ -178,7 +178,10 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
-
+            if (keyword is not null)
+            {
+                ViewData["keyword"] = keyword;
+            }
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
 
