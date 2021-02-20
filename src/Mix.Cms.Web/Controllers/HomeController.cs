@@ -41,8 +41,9 @@ namespace Mix.Cms.Web.Controllers
         [HttpGet]
         [Route("")]
         [Route("{seoName}")]
-        [Route("{culture}/{seoName}")]
-        public async Task<IActionResult> Index(string seoName)
+        [Route("{seoName}/{keyword}")]
+        [Route("{culture}/{seoName}/{keyword}")]
+        public async Task<IActionResult> Index(string seoName, string keyword)
         {
             if (isValid)
             {
@@ -87,6 +88,7 @@ namespace Mix.Cms.Web.Controllers
                     }
                 }
                 ViewData["Layout"] = "Masters/_Layout";
+                ViewData["keyword"] = keyword;
                 return await AliasAsync(seoName);
             }
             else
