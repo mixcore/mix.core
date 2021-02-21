@@ -198,6 +198,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("author")]
         public JObject Author { get; set; }
 
+        [JsonProperty("bodyClass")]
+        public string BodyClass => Property<string>("body_class");
+
         #endregion Views
 
         #endregion Properties

@@ -174,6 +174,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("attributeData")]
         public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
 
+        [JsonProperty("bodyClass")]
+        public string BodyClass => CssClass;
+
         #endregion Views
 
         #endregion Properties

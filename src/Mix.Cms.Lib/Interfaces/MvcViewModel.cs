@@ -9,6 +9,7 @@
         public string SeoDescription { get; set; }
         public string TemplatePath { get; }
         public string DetailsUrl { get; }
+        public string BodyClass { get; }
         public ViewModels.MixTemplates.ReadListItemViewModel View { get; set; }
     }
 }
