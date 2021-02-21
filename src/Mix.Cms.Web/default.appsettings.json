@@ -89,7 +89,6 @@
     "LastUpdateConfiguration": null,
     "DatabaseProvider": "MSSQL",
     "AllowedHosts": [],
-    "MixcoreVersion": "1.0.0",
     "Smtp": {
       "Server": "",
       "Port": 587,

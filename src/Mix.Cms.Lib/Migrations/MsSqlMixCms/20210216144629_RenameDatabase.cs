@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
+using System;
 
 namespace Mix.Cms.Lib.Migrations
 {
@@ -8,7 +9,9 @@ namespace Mix.Cms.Lib.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) != "1.0.1")
+            Version.TryParse(MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION), out Version dbVersion);
+            var prevVersion = new Version("1.0.0");
+            if (dbVersion == null || dbVersion.CompareTo(prevVersion) <= 0)
             {
                 string schema = null;
 

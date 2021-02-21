@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
+using System;
 
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
@@ -8,8 +9,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
-            if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
+            Version.TryParse(MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION), out Version dbVersion);
+            var prevVersion = new Version("1.0.0");
+            if (dbVersion == null || dbVersion.CompareTo(prevVersion) <= 0)
             {
                 string schema = null;
 
@@ -54,7 +56,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            if (MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION) != "1.0.1")
+            var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
+            if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
             {
                 string schema = null;
 

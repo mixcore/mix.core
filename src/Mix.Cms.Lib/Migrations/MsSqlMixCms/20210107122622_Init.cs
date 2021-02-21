@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.Migrations
 {
@@ -7,6 +9,8 @@ namespace Mix.Cms.Lib.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.1");
+            MixService.SaveSettings();
             migrationBuilder.CreateTable(
                 name: "mix_cache",
                 columns: table => new
