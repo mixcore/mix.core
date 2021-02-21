@@ -8,6 +8,7 @@ using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
@@ -364,24 +365,24 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
-            var isStatus = Enum.TryParse<MixUserStatus>(request.Status, out MixUserStatus status);
-            Expression<Func<MixCmsUser, bool>> predicate = model =>
-                (!isStatus || model.Status == status)
-                && (string.IsNullOrWhiteSpace(request.Keyword)
+            Expression<Func<AspNetUsers, bool>> predicate = model =>
+                (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
-                    (EF.Functions.Like(model.Username, $"%{request.Keyword}%"))
+                    (EF.Functions.Like(model.UserName, $"%{request.Keyword}%"))
                    || (EF.Functions.Like(model.FirstName, $"%{request.Keyword}%"))
                    || (EF.Functions.Like(model.LastName, $"%{request.Keyword}%"))
                    )
                 )
                 && (!request.FromDate.HasValue
-                    || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
+                    || (model.JoinDate >= request.FromDate.Value.ToUniversalTime())
                 )
                 && (!request.ToDate.HasValue
-                    || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
+                    || (model.JoinDate <= request.ToDate.Value.ToUniversalTime())
                 );
 
-            var data = await UserInfoViewModel.Repository.GetModelListByAsync(predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex).ConfigureAwait(false);
+            var data = await UserInfoViewModel.Repository.GetModelListByAsync(
+                predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex)
+                .ConfigureAwait(false);
             if (data.IsSucceed)
             {
                 data.Data.Items.ForEach(a =>

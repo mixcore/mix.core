@@ -217,7 +217,8 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
-                ViewData["PageClass"] = getPage.Data.CssClass;
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -262,7 +263,8 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
-                ViewData["PageClass"] = getPage.Data.CssClass;
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
                 ViewData["Layout"] = getPage.Data.Layout ?? "Masters/_Layout";
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
@@ -290,6 +292,8 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPost.Data.SeoDescription;
                 ViewData["Keywords"] = getPost.Data.SeoKeywords;
                 ViewData["Image"] = getPost.Data.ImageUrl;
+                ViewData["ViewMode"] = MixMvcViewMode.Post;
+                ViewData["BodyClass"] = getPost.Data.BodyClass;
                 getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
             }
