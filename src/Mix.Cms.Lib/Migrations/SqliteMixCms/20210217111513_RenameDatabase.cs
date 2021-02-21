@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 
@@ -8,8 +9,9 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
-            if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
+            Version.TryParse(MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION), out Version dbVersion);
+            var prevVersion = new Version("1.0.0");
+            if (dbVersion == null || dbVersion.CompareTo(prevVersion) <= 0)
             {
                 string schema = null;
 
@@ -55,7 +57,7 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
-            if (string.IsNullOrEmpty(dbVersion) || dbVersion ==  "1.0.0")
+            if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
             {
                 string schema = null;
 
@@ -81,7 +83,7 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
 
                 migrationBuilder.RenameColumn("MixDatabaseId", "mix_database_data", "AttributeSetId", schema);
                 migrationBuilder.RenameColumn("MixDatabaseName", "mix_database_data", "AttributeSetName", schema);
-               
+
                 migrationBuilder.CreateIndex("IX_mix_attribute_field_AttributeSetId", "mix_attribute_field", "AttributeSetId", schema);
                 migrationBuilder.CreateIndex("IX_mix_attribute_field_ReferenceId", "mix_attribute_field", "ReferenceId", schema);
                 migrationBuilder.CreateIndex("IX_mix_attribute_set_data_AttributeSetId", "mix_attribute_set_data", "AttributeSetId", schema);
