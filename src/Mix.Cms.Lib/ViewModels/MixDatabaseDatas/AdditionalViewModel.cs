@@ -119,7 +119,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     properties
                 );
             }
-            Fields ??= new List<MixDatabaseColumns.UpdateViewModel>();
+            Fields = new List<MixDatabaseColumns.UpdateViewModel>();
             var defaultFields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
                             f => f.MixDatabaseId == MixDatabaseId, _context, _transaction).Data;
             Fields.AddRange(
