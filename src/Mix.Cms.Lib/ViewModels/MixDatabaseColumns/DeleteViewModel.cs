@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -101,7 +102,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
             {
                 foreach (var item in removeDataIds)
                 {
-                    _ = MixService.RemoveCacheAsync(typeof(MixDatabaseData), item);
+                    _ = MixCacheService.RemoveCacheAsync(typeof(MixDatabaseData), item);
                 }
             }
             return result;

@@ -2,10 +2,12 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
+using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 {
@@ -157,6 +159,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
                     : JObject.Parse(Configurations).ToObject<FieldConfigurations>();
         }
 
+        public override Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            using (_context ??= new MixCmsContext())
+            {
+                var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
+                MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
+                return base.RemoveCache(model, _context, _transaction);
+            }
+        }
         #endregion Overrides
     }
 }

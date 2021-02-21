@@ -125,7 +125,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     MixService.SetConfig("InitStatus", 3);
                     MixService.SetConfig("IsInit", false);
                     MixService.SaveSettings();
-                    _ = Mix.Services.CacheService.RemoveCacheAsync();
+                    _ = Mix.Services.MixCacheService.RemoveCacheAsync();
                     MixService.Reload();
                 }
                 return result;
