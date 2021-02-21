@@ -107,23 +107,24 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            var database = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Id == MixDatabaseId, _context, _transaction);
+            Fields = database.Data.Fields;
             if (Obj == null)
             {
                 var getValues = MixDatabaseDataValues.UpdateViewModel
                        .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
                 var values = getValues.Data.Select(v => v.Model);
-                Fields = getValues.Data.Select(v => v.Field).ToList();
+                Fields.AddRange(
+                    getValues.Data
+                    .Where(v => !Fields.Any(f => f.Id == v.Field.Id))
+                    .Select(v => v.Field)
+                    .ToList());
                 var properties = values.Select(m => m.ToJProperty(_context, _transaction));
                 Obj = new JObject(
                     new JProperty("id", Id),
                     properties
                 );
             }
-            Fields = new List<MixDatabaseColumns.UpdateViewModel>();
-            var defaultFields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
-                            f => f.MixDatabaseId == MixDatabaseId, _context, _transaction).Data;
-            Fields.AddRange(
-                        defaultFields.Where(df => !Fields.Any(f => f.Name == df.Name)));
         }
 
         public override MixDatabaseData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

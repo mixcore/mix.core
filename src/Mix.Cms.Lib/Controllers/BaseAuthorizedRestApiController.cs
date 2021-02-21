@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.Controllers
                 {
                     string key = $"_{id}";
                     key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-                    await MixService.RemoveCacheAsync(typeof(TModel), key);
+                    await MixCacheService.RemoveCacheAsync(typeof(TModel), key);
                     return Ok(saveResult.Data);
                 }
                 else
@@ -148,14 +148,14 @@ namespace Mix.Cms.Lib.Controllers
         {
             string key = $"_{id}";
             key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-            await MixService.RemoveCacheAsync(typeof(TModel), key);
+            await MixCacheService.RemoveCacheAsync(typeof(TModel), key);
             return NoContent();
         }
 
         [HttpGet("remove-cache")]
         public virtual async Task<ActionResult> ClearCacheAsync()
         {
-            await MixService.RemoveCacheAsync(typeof(TModel));
+            await MixCacheService.RemoveCacheAsync(typeof(TModel));
             return NoContent();
         }
 

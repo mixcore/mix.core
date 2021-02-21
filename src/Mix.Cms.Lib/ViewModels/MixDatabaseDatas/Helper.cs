@@ -676,8 +676,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 var parentKey = $"_{model.parentId}_{data.Specificulture}";
                 var navKey = $"_{model.navId}_{data.Specificulture}";
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixDatabaseData), parentKey));
-                tasks.Add(MixService.RemoveCacheAsync(typeof(MixDatabaseDataAssociation), navKey));
+                tasks.Add(MixCacheService.RemoveCacheAsync(typeof(MixDatabaseData), parentKey));
+                tasks.Add(MixCacheService.RemoveCacheAsync(typeof(MixDatabaseDataAssociation), navKey));
             }
             Task.WhenAll(tasks);
         }

@@ -526,15 +526,5 @@ namespace Mix.Cms.Lib.Services
                     return null;
             }
         }
-
-        public static async Task RemoveCacheAsync(Type type, string key = null)
-        {
-            string path = $"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/{type.Name}";
-            if (!string.IsNullOrEmpty(key))
-            {
-                path += $"/{key}";
-            }
-            await CacheService.RemoveCacheAsync(path);
-        }
     }
 }

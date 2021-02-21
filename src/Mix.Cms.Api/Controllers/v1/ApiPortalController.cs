@@ -362,7 +362,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     MixService.Reload();
                     if (!MixService.GetMixConfig<bool>("IsCache"))
                     {
-                        Services.CacheService.RemoveCacheAsync();
+                        Services.MixCacheService.RemoveCacheAsync();
                     }
                 }
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
