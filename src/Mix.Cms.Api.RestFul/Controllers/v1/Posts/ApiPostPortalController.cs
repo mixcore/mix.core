@@ -20,11 +20,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/post/portal")]
     public class ApiPostController :
-        BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadListItemViewModel, DeleteViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<ReadListItemViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Content, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync<ReadListItemViewModel>(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;
