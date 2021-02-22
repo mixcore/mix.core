@@ -5,6 +5,7 @@
         Page,
         Module,
         Post,
-        Database
+        Database,
+        Uri
     }
 }
