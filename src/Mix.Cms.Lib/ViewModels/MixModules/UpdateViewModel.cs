@@ -326,33 +326,20 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.TemplateFolderType, _context, _transaction).Data;
             var templateName = Template?.Substring(Template.LastIndexOf('/') + 1) ?? MixConstants.DefaultTemplate.Module;
             this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
-            if (this.View == null)
-            {
-                this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
-            }
-            this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
+            this.View ??= Templates.FirstOrDefault();
+            this.Template = $"{View?.FileFolder}/{View?.FileName}{View?.Extension}";
 
             this.Forms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType
                 , _context, _transaction).Data;
             this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixTemplateFolders.Forms, _context, _transaction);
-            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View.Extension}";
+            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View?.Extension}";
 
             this.Edms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType
                 , _context, _transaction).Data;
             this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixTemplateFolders.Edms, _context, _transaction);
-            this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View.Extension}";
-
-            // TODO: Verified why use below code
-            //if (SetAttributeId.HasValue)
-            //{
-            //    MixDatabase = MixDatabases.UpdateViewModel.Repository.GetSingleModel(s => s.Id == SetAttributeId.Value).Data;
-            //}
-            //else
-            //{
-            //    MixDatabase = new MixDatabases.UpdateViewModel();
-            //}
+            this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View?.Extension}";
         }
 
         #region Async
