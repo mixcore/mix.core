@@ -11,6 +11,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPages;
 using Mix.Domain.Core.ViewModels;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -30,6 +31,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPage, bool>> predicate = model =>
                 model.Specificulture == _lang
+                && (User.IsInRole("SuperAdmin") || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
                 && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)

@@ -14,7 +14,7 @@ using System.Linq;
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class ReadMvcViewModel
-        : ViewModelBase<MixCmsContext, MixPost, ReadMvcViewModel>, MvcViewModel
+        : ViewModelBase<MixCmsContext, MixPost, ReadMvcViewModel>, IMvcViewModel
     {
         #region Properties
 
