@@ -267,7 +267,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["BodyClass"] = getPage.Data.CssClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
 
-                ViewBag.ViewMode = MixMvcViewMode.Page;
+                ViewBag.viewMode = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -297,7 +297,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["BodyClass"] = getPost.Data.BodyClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Post;
 
-                ViewBag.ViewMode = MixMvcViewMode.Post;
+                ViewBag.viewMode = MixMvcViewMode.Post;
                 getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
             }

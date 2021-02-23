@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
@@ -37,8 +38,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(folderType) || model.FolderType == folderType)
                 && (string.IsNullOrEmpty(keyword)
-                 || model.FileName.Contains(keyword)
-                 || model.Content.Contains(keyword)
+                 || EF.Functions.Like(model.FileName, $"%{keyword}%")
+                 || EF.Functions.Like(model.Content, $"%{keyword}%")
                  );
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
