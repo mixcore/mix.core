@@ -263,7 +263,7 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
-      "isHiden": false,
+      "isHiden": true,
       "subMenus": [
         {
           "title": "List Online",
