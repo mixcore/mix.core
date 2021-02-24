@@ -273,3 +273,4 @@ src/Mix.Cms.Web/wwwroot/css/app-vendor-scss.min.css
 src/Mix.Cms.Web/MixContent/mix-cms.db-wal
 
 src/Mix.Cms.Web/MixContent/mix-cms.db-shm
+/src/Mix.Cms.Web/wwwroot/mix-content/exports
