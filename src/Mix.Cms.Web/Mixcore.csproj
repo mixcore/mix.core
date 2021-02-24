@@ -10,6 +10,8 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <Version>1.0.1</Version>
+    <AssemblyName>mixcore</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
