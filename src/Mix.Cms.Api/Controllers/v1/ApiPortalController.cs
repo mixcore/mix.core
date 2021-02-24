@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
                 ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -171,7 +171,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
                 ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -362,7 +362,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     MixService.Reload();
                     if (!MixService.GetMixConfig<bool>("IsCache"))
                     {
-                        Services.CacheService.RemoveCacheAsync();
+                        Services.MixCacheService.RemoveCacheAsync();
                     }
                 }
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
@@ -467,7 +467,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Cultures = cultures,
                 PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
                 ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
-                AttributeSetTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")

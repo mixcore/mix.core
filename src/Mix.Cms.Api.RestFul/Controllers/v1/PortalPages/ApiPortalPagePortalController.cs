@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -20,16 +21,16 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/permission")]
     public class ApiPortalPageController :
-        BaseAuthorizedApiController<MixCmsContext, MixPortalPage, UpdateViewModel, ReadViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixPortalPage, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-        // GET: api/s
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             var exceptIds = Request.Query["exceptIds"].ToString();
             var lstExceptIds = !string.IsNullOrEmpty(exceptIds) ? exceptIds.Split(',').Select(m => int.Parse(m)).ToList()
                 : new List<int>();
@@ -46,7 +47,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || (EF.Functions.Like(model.TextDefault, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Url, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;

@@ -4,6 +4,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -18,17 +19,17 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/portal-page-navigation")]
     public class ApiPortalPageNavigationPortalController :
-        BaseAuthorizedApiController<MixCmsContext, MixPortalPageNavigation, UpdateViewModel, ReadViewModel>
+        BaseAuthorizedRestApiController<MixCmsContext, MixPortalPageNavigation, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-        // GET: api/s
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
-            bool isParentId = int.TryParse(Request.Query["parentId"], out int parentId);
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
+            bool isParentId = int.TryParse(Request.Query[MixRequestQueryKeywords.ParentId], out int parentId);
             Expression<Func<MixPortalPageNavigation, bool>> predicate = model =>
                 (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
@@ -37,7 +38,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Description, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;

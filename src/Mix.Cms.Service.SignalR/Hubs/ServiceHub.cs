@@ -57,10 +57,10 @@ namespace Mix.Cms.Service.SignalR.Hubs
 
         private async Task SaveData(HubRequest<JObject> request)
         {
-            var data = new Lib.ViewModels.MixAttributeSetDatas.FormViewModel()
+            var data = new Lib.ViewModels.MixDatabaseDatas.FormViewModel()
             {
                 Specificulture = request.Specificulture,
-                AttributeSetName = request.Room,
+                MixDatabaseName = request.Room,
                 Obj = request.Data,
                 CreatedBy = request.Uid
             };
@@ -87,8 +87,8 @@ namespace Mix.Cms.Service.SignalR.Hubs
                 // Announce User Connected to Group and list available users
                 await SendToCaller(getAvailableUsers.Data, Constants.Enums.MessageReponseKey.ConnectSuccess);
             }
-            var getPreviousMsgs = Mix.Cms.Service.SignalR.ViewModels.MixAttributeSetDatas.ReadViewModel.Repository.GetModelListBy(
-                        m => m.AttributeSetName == request.Room && m.Specificulture == request.Specificulture
+            var getPreviousMsgs = Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas.ReadViewModel.Repository.GetModelListBy(
+                        m => m.MixDatabaseName == request.Room && m.Specificulture == request.Specificulture
                         , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
             // Get previous messages
             if (getPreviousMsgs.IsSucceed)
@@ -109,9 +109,9 @@ namespace Mix.Cms.Service.SignalR.Hubs
 
         private async Task<object> GetGroupMembersAsync(HubRequest<JObject> request)
         {
-            Expression<Func<MixAttributeSetValue, bool>> predicate = m => m.Specificulture == request.Specificulture
-                 && m.AttributeSetName == Constants.HubMessages.HubMemberName && m.AttributeFieldName == request.Room;
-            var data = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.FormViewModel>(
+            Expression<Func<MixDatabaseDataValue, bool>> predicate = m => m.Specificulture == request.Specificulture
+                 && m.MixDatabaseName == Constants.HubMessages.HubMemberName && m.MixDatabaseColumnName == request.Room;
+            var data = await Lib.ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixDatabaseDatas.FormViewModel>(
                 request.Specificulture, request.Room, null, null);
             return data;
         }

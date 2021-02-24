@@ -36,10 +36,10 @@ namespace Mix.Cms.Lib.Helpers
                 );
         }
 
-        public static Expression<Func<MixAttributeSetValue, bool>> CreateExpression(
+        public static Expression<Func<MixDatabaseDataValue, bool>> CreateExpression(
           JObject jsonQuery)
         {
-            Expression<Func<MixAttributeSetValue, bool>> root = null;
+            Expression<Func<MixDatabaseDataValue, bool>> root = null;
             try
             {
                 ExpressionModel expressionModel = jsonQuery.ToObject<ExpressionModel>();
@@ -54,10 +54,10 @@ namespace Mix.Cms.Lib.Helpers
             return null;
         }
 
-        private static Expression<Func<MixAttributeSetValue, bool>> GetExpression(
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetExpression(
          ExpressionModel expressionModel)
         {
-            Expression<Func<MixAttributeSetValue, bool>> root = null;
+            Expression<Func<MixDatabaseDataValue, bool>> root = null;
             try
             {
                 expressionModel?.Functions?.ForEach(function =>
@@ -89,10 +89,10 @@ namespace Mix.Cms.Lib.Helpers
         /// <param name="expr2"></param>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        private static Expression<Func<MixAttributeSetValue, bool>> CombineExpressionByType(
+        private static Expression<Func<MixDatabaseDataValue, bool>> CombineExpressionByType(
             MixLogicalOperatorKind type,
-            Expression<Func<MixAttributeSetValue, bool>> expr1,
-            Expression<Func<MixAttributeSetValue, bool>> expr2)
+            Expression<Func<MixDatabaseDataValue, bool>> expr1,
+            Expression<Func<MixDatabaseDataValue, bool>> expr2)
         {
             return type switch
             {
@@ -102,42 +102,42 @@ namespace Mix.Cms.Lib.Helpers
             };
         }
 
-        private static Expression<Func<MixAttributeSetValue, bool>> GetFunction(FunctionModel functionModel)
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetFunction(FunctionModel functionModel)
         {
             return functionModel.Rule switch
             {
-                MixCompareOperatorKind.Equal => m => m.AttributeFieldName == functionModel.FieldName
-                && m.StringValue == functionModel.Value,
+                MixCompareOperatorKind.Equal => m => m.MixDatabaseColumnName == functionModel.FieldName
+                && EF.Functions.Like(m.StringValue, functionModel.Value),
 
-                MixCompareOperatorKind.NotEqual => m => m.AttributeFieldName == functionModel.FieldName
-                && m.StringValue != functionModel.Value,
+                MixCompareOperatorKind.NotEqual => m => m.MixDatabaseColumnName == functionModel.FieldName
+                && !EF.Functions.Like(m.StringValue, functionModel.Value),
 
-                MixCompareOperatorKind.Contain => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.Contain => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (EF.Functions.Like(m.StringValue, buildLikeString(functionModel.Value))),
 
-                MixCompareOperatorKind.NotContain => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.NotContain => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && !(EF.Functions.Like(m.StringValue, buildLikeString(functionModel.Value))),
 
-                MixCompareOperatorKind.InRange => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.InRange => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (string.Compare(m.StringValue, functionModel.MinValue) > 0
                 && string.Compare(m.StringValue, functionModel.MaxValue) < 0),
 
-                MixCompareOperatorKind.NotInRange => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.NotInRange => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (string.Compare(m.StringValue, functionModel.MinValue) < 0
                 || string.Compare(m.StringValue, functionModel.MaxValue) > 0),
 
-                MixCompareOperatorKind.GreaterThanOrEqual => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.GreaterThanOrEqual => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (string.Compare(m.StringValue, functionModel.Value) > 0
                 || m.StringValue == functionModel.Value),
 
-                MixCompareOperatorKind.GreaterThan => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.GreaterThan => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && string.Compare(m.StringValue, functionModel.Value) > 0,
 
-                MixCompareOperatorKind.LessThanOrEqual => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.LessThanOrEqual => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (string.Compare(m.StringValue, functionModel.Value) < 0
                 || m.StringValue == functionModel.Value),
 
-                MixCompareOperatorKind.LessThan => m => m.AttributeFieldName == functionModel.FieldName
+                MixCompareOperatorKind.LessThan => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && string.Compare(m.StringValue, functionModel.Value) < 0,
 
                 _ => null,

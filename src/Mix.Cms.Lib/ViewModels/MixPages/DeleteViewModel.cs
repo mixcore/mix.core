@@ -204,16 +204,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
 
         [JsonProperty("attributes")]
-        public MixAttributeSets.UpdateViewModel Attributes { get; set; }
+        public MixDatabases.UpdateViewModel Attributes { get; set; }
 
         [JsonProperty("attributeData")]
-        public MixRelatedAttributeDatas.UpdateViewModel AttributeData { get; set; }
+        public MixDatabaseDataAssociations.UpdateViewModel AttributeData { get; set; }
 
         [JsonProperty("sysCategories")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysCategories { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysCategories { get; set; }
 
         [JsonProperty("sysTags")]
-        public List<MixRelatedAttributeDatas.UpdateViewModel> SysTags { get; set; }
+        public List<MixDatabaseDataAssociations.UpdateViewModel> SysTags { get; set; }
 
         #endregion Views
 
@@ -243,7 +243,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var navModls = _context.MixPageModule.Where(m => m.PageId == Id && m.Specificulture == Specificulture);
             await navModls.ForEachAsync(m => _context.Entry(m).State = EntityState.Deleted);
             await _context.SaveChangesAsync();
-            var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
+            var removeRelatedData = await MixDatabaseDataAssociations.Helper.RemoveRelatedDataAsync(
                     Id.ToString(), MixDatabaseParentType.Page
                     , Specificulture
                     , _context, _transaction);

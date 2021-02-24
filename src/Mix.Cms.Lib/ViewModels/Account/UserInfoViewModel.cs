@@ -1,66 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Helpers;
+using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Data.ViewModels;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class UserInfoViewModel
-        : ViewModelBase<MixCmsContext, MixCmsUser, UserInfoViewModel>
+        : ViewModelBase<MixCmsAccountContext, AspNetUsers, UserInfoViewModel>
     {
         #region Properties
 
-        //[JsonProperty("id")]
-
         #region Models
 
-        [JsonProperty("id")]
         public string Id { get; set; }
-
-        [JsonProperty("username")]
-        public string Username { get; set; }
-
-        [JsonProperty("email")]
-        public string Email { get; set; }
-
-        [JsonProperty("firstName")]
-        public string FirstName { get; set; }
-
-        [JsonProperty("middleName")]
-        public string MiddleName { get; set; }
-
-        [JsonProperty("lastName")]
-        public string LastName { get; set; }
-
-        [JsonProperty("avatar")]
+        public int AccessFailedCount { get; set; }
         public string Avatar { get; set; }
-
-        [JsonProperty("address")]
-        public string Address { get; set; }
-
-        [JsonProperty("phoneNumber")]
+        public string ConcurrencyStamp { get; set; }
+        public int CountryId { get; set; }
+        public string Culture { get; set; }
+        public DateTime? Dob { get; set; }
+        public string Email { get; set; }
+        public ulong EmailConfirmed { get; set; }
+        public string FirstName { get; set; }
+        public string Gender { get; set; }
+        public ulong IsActived { get; set; }
+        public DateTime JoinDate { get; set; }
+        public DateTime LastModified { get; set; }
+        public string LastName { get; set; }
+        public ulong LockoutEnabled { get; set; }
+        public DateTime? LockoutEnd { get; set; }
+        public string ModifiedBy { get; set; }
+        public string NickName { get; set; }
+        public string NormalizedEmail { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
-
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
-        [JsonProperty("priority")]
-        public int Priority { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [JsonProperty("status")]
-        public MixUserStatus Status { get; set; }
+        public ulong PhoneNumberConfirmed { get; set; }
+        public string RegisterType { get; set; }
+        public string SecurityStamp { get; set; }
+        public ulong TwoFactorEnabled { get; set; }
+        public string UserName { get; set; }
 
         #endregion Models
 
@@ -70,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public string DetailsUrl { get; set; }
 
         [JsonProperty("userRoles")]
-        public List<UserRoleViewModel> UserRoles { get; set; } = new List<UserRoleViewModel>();
+        public List<UserRoleViewModel> UserRoles { get; set; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
@@ -111,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
         }
 
-        public UserInfoViewModel(MixCmsUser model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public UserInfoViewModel(AspNetUsers model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -120,7 +106,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         #region Overrides
 
-        public override MixCmsUser ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override AspNetUsers ParseModel(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (MediaFile.FileStream != null)
             {
@@ -138,8 +124,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
             return base.ParseModel(_context, _transaction);
         }
 
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
+            UserRoles ??= UserRoleViewModel.Repository.GetModelListBy(
+                m => m.UserId == Id, _context, _transaction).Data;
             ResetPassword = new ResetPasswordViewModel();
         }
 

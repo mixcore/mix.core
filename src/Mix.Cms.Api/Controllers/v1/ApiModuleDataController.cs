@@ -315,7 +315,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (models != null)
             {
-                await CacheService.RemoveCacheAsync();
+                await MixCacheService.RemoveCacheAsync();
                 return await ReadViewModel.UpdateInfosAsync(models);
             }
             else

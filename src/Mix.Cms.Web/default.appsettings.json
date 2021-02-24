@@ -6,6 +6,7 @@
   },
   "MixConfigurations": {
     "IsCache": true,
+    "MixCacheMode": "Json",
     "MixCacheFolder": "MixContent/cache",
     "JsonDataFolder": "MixContent/data",
     "MixLogsFolder": "MixContent/logs"

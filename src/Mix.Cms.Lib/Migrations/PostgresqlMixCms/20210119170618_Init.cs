@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
@@ -8,98 +10,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Configurations = table.Column<string>(type: "text", nullable: true),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    DefaultValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
-                    Options = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    IsRequire = table.Column<bool>(type: "boolean", nullable: false),
-                    IsEncrypt = table.Column<bool>(type: "boolean", nullable: false),
-                    IsMultiple = table.Column<bool>(type: "boolean", nullable: false),
-                    IsSelect = table.Column<bool>(type: "boolean", nullable: false),
-                    IsUnique = table.Column<bool>(type: "boolean", nullable: false),
-                    ReferenceId = table.Column<int>(type: "integer", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    EdmAutoSend = table.Column<bool>(type: "boolean", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeFieldId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    BooleanValue = table.Column<bool>(type: "boolean", nullable: true),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    DateTimeValue = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    DoubleValue = table.Column<double>(type: "double precision", nullable: true),
-                    IntegerValue = table.Column<int>(type: "integer", nullable: true),
-                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    EncryptType = table.Column<int>(type: "integer", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
-                });
-
+            MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.1");
+            MixService.SaveSettings();
             migrationBuilder.CreateTable(
                 name: "mix_cache",
                 columns: table => new
@@ -170,6 +82,122 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_database",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    EdmAutoSend = table.Column<bool>(type: "boolean", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_column",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Configurations = table.Column<string>(type: "text", nullable: true),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    DefaultValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Options = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    IsRequire = table.Column<bool>(type: "boolean", nullable: false),
+                    IsEncrypt = table.Column<bool>(type: "boolean", nullable: false),
+                    IsMultiple = table.Column<bool>(type: "boolean", nullable: false),
+                    IsSelect = table.Column<bool>(type: "boolean", nullable: false),
+                    IsUnique = table.Column<bool>(type: "boolean", nullable: false),
+                    ReferenceId = table.Column<int>(type: "integer", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_data_association",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_data_association", x => new { x.Id, x.Specificulture });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_data_value",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    MixDatabaseColumnId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    BooleanValue = table.Column<bool>(type: "boolean", nullable: true),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    DateTimeValue = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    DoubleValue = table.Column<double>(type: "double precision", nullable: true),
+                    IntegerValue = table.Column<int>(type: "integer", nullable: true),
+                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    EncryptType = table.Column<int>(type: "integer", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_media",
                 columns: table => new
                 {
@@ -223,55 +251,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_related_attribute_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_attribute_data", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_data",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_data", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_theme",
                 columns: table => new
                 {
@@ -292,91 +271,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_mix_theme", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ParentId = table.Column<int>(type: "integer", nullable: false),
-                    ParentType = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_attribute_set",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    AttributeSetId = table.Column<int>(type: "integer", nullable: false),
-                    ParentId = table.Column<int>(type: "integer", nullable: false),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    IdNavigationId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set_IdNavigationId",
-                        column: x => x.IdNavigationId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -495,7 +389,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     Tags = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Title = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     PostType = table.Column<string>(type: "text", nullable: true),
                     Views = table.Column<int>(type: "integer", nullable: true),
                     PageSize = table.Column<int>(type: "integer", nullable: true),
@@ -589,6 +483,32 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_database_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_data", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_database_data_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_portal_page_navigation",
                 columns: table => new
                 {
@@ -626,15 +546,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PageId = table.Column<int>(type: "integer", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    RoleId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "character varying(50)", unicode: false, maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    ModifiedBy = table.Column<string>(type: "character varying(50)", unicode: false, maxLength: 50, nullable: true),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                    Status = table.Column<string>(type: "character varying(50)", unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -858,6 +779,40 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_post_association",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
+                    SourceId = table.Column<int>(type: "integer", nullable: false),
+                    DestinationId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_post_association", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post",
+                        columns: x => new { x.SourceId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post1",
+                        columns: x => new { x.DestinationId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_post_media",
                 columns: table => new
                 {
@@ -927,65 +882,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "mix_related_post",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "und-x-icu"),
-                    SourceId = table.Column<int>(type: "integer", nullable: false),
-                    DestinationId = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "und-x-icu"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_post", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post",
-                        columns: x => new { x.SourceId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post1",
-                        columns: x => new { x.DestinationId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_AttributeSetId",
-                table: "mix_attribute_field",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_ReferenceId",
-                table: "mix_attribute_field",
-                column: "ReferenceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
-                column: "DataId");
-
             migrationBuilder.CreateIndex(
                 name: "Index_ExpiresAtTime",
                 table: "mix_cache",
@@ -1001,6 +897,26 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 table: "mix_culture",
                 column: "Specificulture",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_column_MixDatabaseId",
+                table: "mix_database_column",
+                column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_column_ReferenceId",
+                table: "mix_database_column",
+                column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
+                column: "DataId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_file_ThemeId",
@@ -1093,6 +1009,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_DestinationId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "DestinationId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_SourceId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "SourceId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_post_media_MediaId_Specificulture",
                 table: "mix_post_media",
                 columns: new[] { "MediaId", "Specificulture" });
@@ -1113,21 +1039,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_related_attribute_set_IdNavigationId",
-                table: "mix_related_attribute_set",
-                column: "IdNavigationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_DestinationId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "DestinationId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_SourceId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "SourceId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_template_file_TemplateId",
                 table: "mix_template",
                 column: "ThemeId");
@@ -1141,18 +1052,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
-
-            migrationBuilder.DropTable(
                 name: "mix_cache");
 
             migrationBuilder.DropTable(
@@ -1160,6 +1059,18 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
             migrationBuilder.DropTable(
                 name: "mix_configuration");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_column");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_association");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_file");
@@ -1186,28 +1097,22 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 name: "mix_portal_page_role");
 
             migrationBuilder.DropTable(
+                name: "mix_post_association");
+
+            migrationBuilder.DropTable(
                 name: "mix_post_media");
 
             migrationBuilder.DropTable(
                 name: "mix_post_module");
 
             migrationBuilder.DropTable(
-                name: "mix_related_attribute_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_attribute_set");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_post");
-
-            migrationBuilder.DropTable(
                 name: "mix_template");
 
             migrationBuilder.DropTable(
                 name: "mix_url_alias");
+
+            migrationBuilder.DropTable(
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_page");
@@ -1220,9 +1125,6 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
             migrationBuilder.DropTable(
                 name: "mix_module");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set");
 
             migrationBuilder.DropTable(
                 name: "mix_post");

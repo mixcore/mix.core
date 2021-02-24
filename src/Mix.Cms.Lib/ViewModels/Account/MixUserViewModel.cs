@@ -16,7 +16,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public FileViewModel MediaFile { get; set; } = new FileViewModel();
 
         [JsonProperty("userData")]
-        public MixAttributeSetDatas.AdditionalViewModel UserData { get; set; }
+        public MixDatabaseDatas.AdditionalViewModel UserData { get; set; }
 
         [JsonProperty("userRoles")]
         public List<NavUserRoleViewModel> UserRoles { get; set; }

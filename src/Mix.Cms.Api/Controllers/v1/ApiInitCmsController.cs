@@ -189,7 +189,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         MixService.SetConfig("InitStatus", 4);
                         MixService.SetConfig("IsInit", true);
                         MixService.SaveSettings();
-                        _ = Services.CacheService.RemoveCacheAsync();
+                        _ = Services.MixCacheService.RemoveCacheAsync();
                         MixService.Reload();
                     }
                 }
@@ -206,12 +206,11 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         //[RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = User.Claims.FirstOrDefault(c => c.Type == "Username").Value;
+            string user = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
 

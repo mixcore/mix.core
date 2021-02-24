@@ -30,7 +30,7 @@
         public const string CONST_DEFAULT_STRING_ID = "default";
         public const string CONST_UPLOAD_FOLDER_DATE_FORMAT = "yyyy-MM";
 
-        public static class AttributeSetName
+        public static class MixDatabaseName
         {
             public const string ADDITIONAL_FIELD_PAGE = "sys_additional_field_page";
             public const string ADDITIONAL_FIELD_POST = "sys_additional_field_post";
@@ -56,7 +56,7 @@
         {
             public const string Master = "_Layout.cshtml";
             public const string Page = "_Blank.cshtml";
-            public const string Post = "_Blank.cshtml";
+            public const string Post = "Default.cshtml";
             public const string Module = "_Blank.cshtml";
         }
     }

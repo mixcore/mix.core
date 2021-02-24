@@ -1,4 +1,4 @@
-﻿                                                                                                                                                                                                           @using Mix.Cms
+﻿@using Mix.Cms
 @using Mix.Identity.Models
 @using Mix.Identity.Models.AccountViewModels
 @using Mix.Identity.Models.ManageViewModels
@@ -9,15 +9,20 @@
 @using Mix.Domain.Core.ViewModels
 @using Mix.Cms.Lib.ViewModels
 @using Mix.Cms.Lib
+@using Mix.Cms.Lib.Helpers
 @using Mix.Cms.Web.Models
 @using Mix.Cms.Lib.Services
 @using Mix.Cms.Lib.Enums;
+@using Mix.Heart.Enums;
 @using Mix.Cms.Lib.Constants;
 @using Newtonsoft.Json.Linq;
+@using System.Security.Claims;
+@using Mix.Cms.Lib.Models.Common
+@using Mix.Cms.Lib.Interfaces
+
 @using MixModules = Mix.Cms.Lib.ViewModels.MixModules
 @using MixPosts = Mix.Cms.Lib.ViewModels.MixPosts
 @using MixPages = Mix.Cms.Lib.ViewModels.MixPages
-@using MixDatas = Mix.Cms.Lib.ViewModels.MixAttributeSetDatas
-@using MixCmsHelper = Mix.Cms.Lib.MixCmsHelper
-@using MixService = Mix.Cms.Lib.Services.MixService
+@using MixDatas = Mix.Cms.Lib.ViewModels.MixDatabaseDatas
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

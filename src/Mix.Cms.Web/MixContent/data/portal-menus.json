@@ -14,12 +14,11 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/attribute-set-data/create?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation&dataId=default" 
-          
+          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
         },
         {
-          "path": "/portal/attribute-set-data/list?attributeSetId=2&attributeSetName=sys_navigation&attributeSetTitle=Navigation",
-          
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -102,10 +101,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/attribute-set/create"
+          "path": "/portal/mix-database/create"
         },
         {
-          "path": "/portal/attribute-set/list",
+          "path": "/portal/mix-database/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -119,10 +118,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/attribute-set-data/create?attributeSetId=7&attributeSetName=sys_category&attributeSetTitle=Category&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/attribute-set-data/list?attributeSetId=7&attributeSetName=sys_category&attributeSetTitle=Category&dataId=default",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -136,10 +135,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/attribute-set-data/create?attributeSetId=8&attributeSetName=sys_tag&attributeSetTitle=Tag&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/attribute-set-data/list?attributeSetId=8&attributeSetName=sys_tag&attributeSetTitle=Tag&dataId=default",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -658,22 +657,22 @@
       ]
     },
     {
-      "cate": "attribute set",
+      "cate": "Mix Database",
       "items": [
         {
-          "path": "/portal/attribute-set/create",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set/details.html",
-          "controller": "AttributeSetController"
+          "path": "/portal/mix-database/create",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database/details.html",
+          "controller": "MixDatabaseController"
         },
         {
-          "path": "/portal/attribute-set/list",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set/list.html",
-          "controller": "AttributeSetController"
+          "path": "/portal/mix-database/list",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database/list.html",
+          "controller": "MixDatabaseController"
         },
         {
-          "path": "/portal/attribute-set/details/:id",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set/details.html",
-          "controller": "AttributeSetController"
+          "path": "/portal/mix-database/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database/details.html",
+          "controller": "MixDatabaseController"
         }
       ]
     },
@@ -748,22 +747,22 @@
       ]
     },
     {
-      "cate": "attribute set data",
+      "cate": "mix database data",
       "items": [
         {
-          "path": "/portal/attribute-set-data/create",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/details.html",
-          "controller": "MixAttributeSetDataController"
+          "path": "/portal/mix-database-data/create",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/details.html",
+          "controller": "MixDatabaseDataController"
         },
         {
-          "path": "/portal/attribute-set-data/list",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/list.html",
-          "controller": "MixAttributeSetDataController"
+          "path": "/portal/mix-database-data/list",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/list.html",
+          "controller": "MixDatabaseDataController"
         },
         {
-          "path": "/portal/attribute-set-data/details",
-          "templatePath": "/mix-app/views/app-portal/pages/attribute-set-data/details.html",
-          "controller": "MixAttributeSetDataController"
+          "path": "/portal/mix-database-data/details",
+          "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/details.html",
+          "controller": "MixDatabaseDataController"
         }
       ]
     },

@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 {
@@ -8,136 +10,26 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EdmAutoSend = table.Column<ulong>(type: "bit(1)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeFieldId = table.Column<int>(nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    BooleanValue = table.Column<ulong>(type: "bit(1)", nullable: true),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
-                    DoubleValue = table.Column<double>(nullable: true),
-                    IntegerValue = table.Column<int>(nullable: true),
-                    StringValue = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EncryptValue = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EncryptType = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
-                });
-
+            MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.1");
+            MixService.SaveSettings();
             migrationBuilder.CreateTable(
                 name: "mix_cache",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Value = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     ExpiredDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -148,45 +40,33 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_cms_user",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Address = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Username = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Email = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Address = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -197,38 +77,29 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_culture",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Alias = table.Column<string>(type: "varchar(150)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FullName = table.Column<string>(type: "varchar(150)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LCID = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Alias = table.Column<string>(type: "varchar(150)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FullName = table.Column<string>(type: "varchar(150)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LCID = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -237,56 +108,202 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_database",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EdmAutoSend = table.Column<ulong>(type: "bit(1)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_column",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Configurations = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DefaultValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Options = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    IsRequire = table.Column<ulong>(type: "bit(1)", nullable: false),
+                    IsEncrypt = table.Column<ulong>(type: "bit(1)", nullable: false),
+                    IsMultiple = table.Column<ulong>(type: "bit(1)", nullable: false),
+                    IsSelect = table.Column<ulong>(type: "bit(1)", nullable: false),
+                    IsUnique = table.Column<ulong>(type: "bit(1)", nullable: false),
+                    ReferenceId = table.Column<int>(type: "int", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_data_association",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_data_value",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MixDatabaseColumnId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    BooleanValue = table.Column<ulong>(type: "bit(1)", nullable: true),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
+                    DoubleValue = table.Column<double>(type: "double", nullable: true),
+                    IntegerValue = table.Column<int>(type: "int", nullable: true),
+                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EncryptType = table.Column<int>(type: "int", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_media",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileProperties = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileSize = table.Column<long>(nullable: false),
-                    FileType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "varchar(400)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileProperties = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileSize = table.Column<long>(type: "bigint", nullable: false),
+                    FileType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Tags = table.Column<string>(type: "varchar(400)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -297,36 +314,28 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_portal_page",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    TextKeyword = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Url = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    TextDefault = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Level = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    TextKeyword = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    TextDefault = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -334,125 +343,30 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_related_attribute_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_data",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Type = table.Column<int>(nullable: false),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_theme",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    PreviewUrl = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PreviewUrl = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -460,225 +374,31 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Configurations = table.Column<string>(nullable: true),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DefaultValue = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Options = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    IsRequire = table.Column<ulong>(type: "bit(1)", nullable: false),
-                    IsEncrypt = table.Column<ulong>(type: "bit(1)", nullable: false),
-                    IsMultiple = table.Column<ulong>(type: "bit(1)", nullable: false),
-                    IsSelect = table.Column<ulong>(type: "bit(1)", nullable: false),
-                    IsUnique = table.Column<ulong>(type: "bit(1)", nullable: false),
-                    ReferenceId = table.Column<int>(nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_field_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_field_mix_attribute_set1",
-                        column: x => x.ReferenceId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ParentId = table.Column<int>(nullable: false),
-                    ParentType = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_attribute_set",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    AttributeSetId = table.Column<int>(nullable: false),
-                    ParentId = table.Column<int>(nullable: false),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set",
-                        column: x => x.Id,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_configuration",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -695,40 +415,30 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_language",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DataType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -745,52 +455,39 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_module",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Description = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Fields = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Type = table.Column<int>(nullable: false),
-                    PostType = table.Column<string>(nullable: true),
-                    PageSize = table.Column<int>(nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Fields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    PostType = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    PageSize = table.Column<int>(type: "int", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -807,74 +504,54 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_page",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Content = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CssClass = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Excerpt = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Layout = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Level = table.Column<int>(nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoTitle = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    StaticUrl = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    PostType = table.Column<string>(nullable: true),
-                    Views = table.Column<int>(nullable: true),
-                    PageSize = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Content = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CssClass = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Layout = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Level = table.Column<int>(type: "int", nullable: true),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoTitle = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    StaticUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Tags = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PostType = table.Column<string>(type: "longtext CHARACTER SET utf8mb4", nullable: true),
+                    Views = table.Column<int>(type: "int", nullable: true),
+                    PageSize = table.Column<int>(type: "int", nullable: true),
+                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -891,72 +568,52 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_post",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Content = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Content = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Icon = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SeoTitle = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Tags = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Title = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Views = table.Column<int>(nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Icon = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SeoTitle = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Tags = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Title = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Views = table.Column<int>(type: "int", nullable: true),
+                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -973,32 +630,25 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_url_alias",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SourceId = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Type = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Alias = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SourceId = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Alias = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1012,31 +662,58 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_database_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_database_data_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_portal_page_navigation",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PageId = table.Column<int>(nullable: false),
-                    ParentId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1059,27 +736,20 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    PageId = table.Column<int>(nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<string>(type: "varchar(50) CHARACTER SET utf8mb4", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(50) CHARACTER SET utf8mb4", unicode: false, maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50) CHARACTER SET utf8mb4", unicode: false, maxLength: 50, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50) CHARACTER SET utf8mb4", unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => x.Id);
+                    table.PrimaryKey("PK_mix_portal_page_role", x => x.Id);
                     table.ForeignKey(
                         name: "FK_mix_portal_page_role_mix_portal_page",
                         column: x => x.PageId,
@@ -1092,39 +762,30 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_file",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StringContent = table.Column<string>(type: "text", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ThemeId = table.Column<int>(nullable: true),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    StringContent = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ThemeId = table.Column<int>(type: "int", nullable: true),
+                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1141,51 +802,38 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_template",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(type: "text", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Extension = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    MobileContent = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Scripts = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SpaContent = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Styles = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ThemeId = table.Column<int>(nullable: false),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Content = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MobileContent = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Scripts = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SpaContent = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Styles = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ThemeId = table.Column<int>(type: "int", nullable: false),
+                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1202,31 +850,25 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_page_module",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ModuleId = table.Column<int>(nullable: false),
-                    PageId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Position = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1249,33 +891,26 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_module_data",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ModuleId = table.Column<int>(nullable: false),
-                    PageId = table.Column<int>(nullable: true),
-                    PostId = table.Column<int>(nullable: true),
-                    Fields = table.Column<string>(type: "text", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Value = table.Column<string>(type: "text", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: true),
+                    PostId = table.Column<int>(type: "int", nullable: true),
+                    Fields = table.Column<string>(type: "text", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Value = table.Column<string>(type: "text", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1304,30 +939,24 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_module_post",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    PostId = table.Column<int>(nullable: false),
-                    ModuleId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1350,30 +979,24 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_page_post",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    PostId = table.Column<int>(nullable: false),
-                    PageId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    PageId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1393,34 +1016,68 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_post_association",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SourceId = table.Column<int>(type: "int", nullable: false),
+                    DestinationId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post",
+                        columns: x => new { x.SourceId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post1",
+                        columns: x => new { x.DestinationId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_post_media",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    MediaId = table.Column<int>(nullable: false),
-                    PostId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Position = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    MediaId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1443,31 +1100,25 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_post_module",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    ModuleId = table.Column<int>(nullable: false),
-                    PostId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Position = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ModuleId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Position = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
                 },
                 constraints: table =>
                 {
@@ -1486,77 +1137,6 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "mix_related_post",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    SourceId = table.Column<int>(nullable: false),
-                    DestinationId = table.Column<int>(nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
-                        .Annotation("MySql:Collation", "utf8_unicode_ci")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post1",
-                        columns: x => new { x.DestinationId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post",
-                        columns: x => new { x.SourceId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_AttributeSetId",
-                table: "mix_attribute_field",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_field_ReferenceId",
-                table: "mix_attribute_field",
-                column: "ReferenceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
-                column: "DataId");
-
             migrationBuilder.CreateIndex(
                 name: "Index_ExpiresAtTime",
                 table: "mix_cache",
@@ -1574,6 +1154,26 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_database_column_MixDatabaseId",
+                table: "mix_database_column",
+                column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_column_ReferenceId",
+                table: "mix_database_column",
+                column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
+                column: "DataId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_file_ThemeId",
                 table: "mix_file",
                 column: "ThemeId");
@@ -1589,6 +1189,11 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_module_data_ModuleId_PageId_Specificulture",
+                table: "mix_module_data",
+                columns: new[] { "ModuleId", "PageId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_module_data_ModuleId_Specificulture",
                 table: "mix_module_data",
                 columns: new[] { "ModuleId", "Specificulture" });
@@ -1602,11 +1207,6 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "IX_mix_module_data_PostId_Specificulture",
                 table: "mix_module_data",
                 columns: new[] { "PostId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_module_data_ModuleId_PageId_Specificulture",
-                table: "mix_module_data",
-                columns: new[] { "ModuleId", "PageId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_module_post_ModuleId_Specificulture",
@@ -1664,6 +1264,16 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_DestinationId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "DestinationId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_SourceId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "SourceId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_post_media_MediaId_Specificulture",
                 table: "mix_post_media",
                 columns: new[] { "MediaId", "Specificulture" });
@@ -1684,16 +1294,6 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_DestinationId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "DestinationId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_SourceId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "SourceId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_template_file_TemplateId",
                 table: "mix_template",
                 column: "ThemeId");
@@ -1707,18 +1307,6 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
-
-            migrationBuilder.DropTable(
                 name: "mix_cache");
 
             migrationBuilder.DropTable(
@@ -1726,6 +1314,18 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 
             migrationBuilder.DropTable(
                 name: "mix_configuration");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_column");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_association");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_file");
@@ -1752,28 +1352,22 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
                 name: "mix_portal_page_role");
 
             migrationBuilder.DropTable(
+                name: "mix_post_association");
+
+            migrationBuilder.DropTable(
                 name: "mix_post_media");
 
             migrationBuilder.DropTable(
                 name: "mix_post_module");
 
             migrationBuilder.DropTable(
-                name: "mix_related_attribute_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_attribute_set");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_post");
-
-            migrationBuilder.DropTable(
                 name: "mix_template");
 
             migrationBuilder.DropTable(
                 name: "mix_url_alias");
+
+            migrationBuilder.DropTable(
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_page");
@@ -1786,9 +1380,6 @@ namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 
             migrationBuilder.DropTable(
                 name: "mix_module");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set");
 
             migrationBuilder.DropTable(
                 name: "mix_post");
