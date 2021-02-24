@@ -107,10 +107,10 @@ namespace Mix.Cms.Lib.Helpers
             return functionModel.Rule switch
             {
                 MixCompareOperatorKind.Equal => m => m.MixDatabaseColumnName == functionModel.FieldName
-                && m.StringValue == functionModel.Value,
+                && EF.Functions.Like(m.StringValue, functionModel.Value),
 
                 MixCompareOperatorKind.NotEqual => m => m.MixDatabaseColumnName == functionModel.FieldName
-                && m.StringValue != functionModel.Value,
+                && !EF.Functions.Like(m.StringValue, functionModel.Value),
 
                 MixCompareOperatorKind.Contain => m => m.MixDatabaseColumnName == functionModel.FieldName
                 && (EF.Functions.Like(m.StringValue, buildLikeString(functionModel.Value))),

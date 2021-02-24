@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Data.ViewModels;
@@ -194,7 +195,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                 if (Field.IsUnique)
                 {
                     var exist = _context.MixDatabaseDataValue.Any(d => d.Specificulture == Specificulture
-                        && d.StringValue == StringValue && d.Id != Id && d.DataId != DataId);
+                        && EF.Functions.Like(d.StringValue, StringValue) && d.Id != Id && d.DataId != DataId);
                     if (exist)
                     {
                         IsValid = false;

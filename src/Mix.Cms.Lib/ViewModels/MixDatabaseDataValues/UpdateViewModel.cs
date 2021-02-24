@@ -210,7 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                 {
                     var exist = _context.MixDatabaseDataValue.Any(d => d.Specificulture == Specificulture
                         && d.MixDatabaseName == MixDatabaseName
-                        && EF.Functions.Like(d.StringValue, $"{StringValue}") && d.Id != Id && d.DataId != DataId);
+                        && EF.Functions.Like(d.StringValue, StringValue) && d.Id != Id && d.DataId != DataId);
                     if (exist)
                     {
                         IsValid = false;
