@@ -19,12 +19,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .ValueGeneratedNever()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .HasCollation("NOCASE");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .HasCollation("NOCASE");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -35,20 +35,20 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .HasCollation("NOCASE");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .HasCollation("NOCASE");
 
             entity.Property(e => e.Value)
                 .IsRequired()
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .HasCollation("NOCASE");
         }
     }
 }

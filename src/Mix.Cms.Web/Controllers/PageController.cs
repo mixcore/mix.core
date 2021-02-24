@@ -35,12 +35,14 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [Route("page/{seoName}")]
+        [Route("page/{seoName}/{keyword}")]
         [Route("{culture}/page/{seoName}")]
-        public async Task<IActionResult> Index(string culture, string seoName)
+        [Route("{culture}/page/{seoName}/{keyword}")]
+        public async Task<IActionResult> Index(string culture, string seoName, string keyword)
         {
             if (isValid)
             {
-                return await Page(seoName);
+                return await Page(seoName, keyword);
             }
             else
             {

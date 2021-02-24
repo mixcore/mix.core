@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.Migrations
 {
@@ -7,13 +9,109 @@ namespace Mix.Cms.Lib.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            MixService.SetConfig(MixConfigurations.CONST_MIXCORE_VERSION, "1.0.1");
+            MixService.SaveSettings();
             migrationBuilder.CreateTable(
-                name: "mix_attribute_field",
+                name: "mix_cache",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Value = table.Column<string>(type: "ntext", nullable: false, collation: "Vietnamese_CI_AS"),
+                    ExpiredDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_cache", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_cms_user",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Address = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Avatar = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Username = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Email = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_cms_user", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_culture",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Alias = table.Column<string>(type: "varchar(150)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    FullName = table.Column<string>(type: "nvarchar(150)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LCID = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_culture", x => x.Id);
+                    table.UniqueConstraint("AK_mix_culture_Specificulture", x => x.Specificulture);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Name = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    FormTemplate = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EdmTemplate = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EdmSubject = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EdmFrom = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EdmAutoSend = table.Column<bool>(type: "bit", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "mix_database_column",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Configurations = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Regex = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -36,53 +134,51 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_field", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_column", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set",
+                name: "mix_database_data_association",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EdmSubject = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EdmFrom = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EdmAutoSend = table.Column<bool>(type: "bit", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set", x => x.Id);
+                    table.PrimaryKey("PK_mix_database_data_association", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_value",
+                name: "mix_database_data_value",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeFieldId = table.Column<int>(type: "int", nullable: false),
-                    AttributeFieldName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Regex = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseColumnId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseColumnName = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Regex = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     BooleanValue = table.Column<bool>(type: "bit", nullable: true),
                     DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
                     DoubleValue = table.Column<double>(type: "float", nullable: true),
                     IntegerValue = table.Column<int>(type: "int", nullable: true),
-                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    StringValue = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EncryptValue = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     EncryptKey = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     EncryptType = table.Column<int>(type: "int", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -94,75 +190,7 @@ namespace Mix.Cms.Lib.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_mix_attribute_set_value", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_cache",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Value = table.Column<string>(type: "text", nullable: false, collation: "Vietnamese_CI_AS"),
-                    ExpiredDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_cache", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_cms_user",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Address = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    MiddleName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_cms_user", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_culture",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Alias = table.Column<string>(type: "varchar(150)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    FullName = table.Column<string>(type: "varchar(150)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LCID = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_culture", x => x.Id);
-                    table.UniqueConstraint("AK_mix_culture_Specificulture", x => x.Specificulture);
+                    table.PrimaryKey("PK_mix_database_data_value", x => new { x.Id, x.Specificulture });
                 });
 
             migrationBuilder.CreateTable(
@@ -171,17 +199,17 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileProperties = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    FileFolder = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileProperties = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     FileSize = table.Column<long>(type: "bigint", nullable: false),
                     FileType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Tags = table.Column<string>(type: "varchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Tags = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Source = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    TargetUrl = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -200,10 +228,10 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    TextKeyword = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Url = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    TextDefault = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    TextKeyword = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Url = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    TextDefault = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Level = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -218,64 +246,15 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_related_attribute_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_attribute_data", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_data",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    DataId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_data", x => new { x.Id, x.Specificulture });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_theme",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    PreviewUrl = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Thumbnail = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Name = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    PreviewUrl = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -289,100 +268,16 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "mix_attribute_set_data",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    AttributeSetName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_data", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_data_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_attribute_set_reference",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
-                    ParentType = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_attribute_set_reference", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_mix_attribute_set_reference_mix_attribute_set_AttributeSetId",
-                        column: x => x.AttributeSetId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "mix_related_attribute_set",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    AttributeSetId = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false),
-                    ParentType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    IdNavigationId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_attribute_set", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_attribute_set_mix_attribute_set_IdNavigationId",
-                        column: x => x.IdNavigationId,
-                        principalTable: "mix_attribute_set",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "mix_configuration",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Category = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Value = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -408,11 +303,11 @@ namespace Mix.Cms.Lib.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Keyword = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Category = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Category = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    DefaultValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Value = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    DefaultValue = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -437,15 +332,15 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Description = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Fields = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Fields = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Thumbnail = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    FormTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    EdmTemplate = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    FormTemplate = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    EdmTemplate = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Type = table.Column<int>(type: "int", nullable: false),
                     PostType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PageSize = table.Column<int>(type: "int", nullable: true),
@@ -473,26 +368,26 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Content = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CssClass = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Content = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CssClass = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Excerpt = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Layout = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Level = table.Column<int>(type: "int", nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoDescription = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoKeywords = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SeoTitle = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    StaticUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Tags = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoTitle = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    StaticUrl = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Tags = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     PostType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Views = table.Column<int>(type: "int", nullable: true),
                     PageSize = table.Column<int>(type: "int", nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ExtraFields = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -517,24 +412,24 @@ namespace Mix.Cms.Lib.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Content = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Content = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    ExtraProperties = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Icon = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Excerpt = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ExtraProperties = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Icon = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoDescription = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoKeywords = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     SeoName = table.Column<string>(type: "varchar(500)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SeoTitle = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Tags = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Template = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Thumbnail = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Title = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SeoTitle = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Source = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Tags = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Thumbnail = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Title = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     Type = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Views = table.Column<int>(type: "int", nullable: true),
-                    ExtraFields = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ExtraFields = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -582,14 +477,40 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_database_data",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    MixDatabaseId = table.Column<int>(type: "int", nullable: false),
+                    MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_database_data", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_database_data_mix_database_MixDatabaseId",
+                        column: x => x.MixDatabaseId,
+                        principalTable: "mix_database",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_portal_page_navigation",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -618,15 +539,16 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_portal_page_role",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     PageId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    RoleId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                    Status = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -644,13 +566,13 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    StringContent = table.Column<string>(type: "text", nullable: false, collation: "Vietnamese_CI_AS"),
+                    StringContent = table.Column<string>(type: "ntext", nullable: false, collation: "Vietnamese_CI_AS"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileFolder = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ThemeId = table.Column<int>(type: "int", nullable: true),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    ThemeName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -674,17 +596,17 @@ namespace Mix.Cms.Lib.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Content = table.Column<string>(type: "ntext", nullable: false, collation: "Vietnamese_CI_AS"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    FileName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileFolder = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    FileName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     FolderType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    MobileContent = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Scripts = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    SpaContent = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Styles = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    MobileContent = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Scripts = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    SpaContent = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Styles = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     ThemeId = table.Column<int>(type: "int", nullable: false),
-                    ThemeName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    ThemeName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -711,8 +633,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ModuleId = table.Column<int>(type: "int", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Position = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -747,8 +669,8 @@ namespace Mix.Cms.Lib.Migrations
                     ModuleId = table.Column<int>(type: "int", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: true),
                     PostId = table.Column<int>(type: "int", nullable: true),
-                    Fields = table.Column<string>(type: "text", nullable: false, collation: "Vietnamese_CI_AS"),
-                    Value = table.Column<string>(type: "text", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Fields = table.Column<string>(type: "ntext", nullable: false, collation: "Vietnamese_CI_AS"),
+                    Value = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -787,8 +709,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     ModuleId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -821,8 +743,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     PageId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -848,6 +770,40 @@ namespace Mix.Cms.Lib.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mix_post_association",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
+                    SourceId = table.Column<int>(type: "int", nullable: false),
+                    DestinationId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(400)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mix_post_association", x => new { x.Id, x.Specificulture });
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post",
+                        columns: x => new { x.SourceId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_mix_post_association_mix_post1",
+                        columns: x => new { x.DestinationId, x.Specificulture },
+                        principalTable: "mix_post",
+                        principalColumns: new[] { "Id", "Specificulture" },
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "mix_post_media",
                 columns: table => new
                 {
@@ -855,8 +811,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     MediaId = table.Column<int>(type: "int", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Position = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -890,8 +846,8 @@ namespace Mix.Cms.Lib.Migrations
                     Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ModuleId = table.Column<int>(type: "int", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Description = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     Position = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -917,55 +873,6 @@ namespace Mix.Cms.Lib.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "mix_related_post",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(10)", nullable: false, collation: "Vietnamese_CI_AS"),
-                    SourceId = table.Column<int>(type: "int", nullable: false),
-                    DestinationId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Image = table.Column<string>(type: "varchar(450)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_mix_related_post", x => new { x.Id, x.Specificulture });
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post",
-                        columns: x => new { x.SourceId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_mix_related_post_mix_post1",
-                        columns: x => new { x.DestinationId, x.Specificulture },
-                        principalTable: "mix_post",
-                        principalColumns: new[] { "Id", "Specificulture" },
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_data_AttributeSetId",
-                table: "mix_attribute_set_data",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_reference_AttributeSetId",
-                table: "mix_attribute_set_reference",
-                column: "AttributeSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_attribute_set_value_DataId",
-                table: "mix_attribute_set_value",
-                column: "DataId");
-
             migrationBuilder.CreateIndex(
                 name: "Index_ExpiresAtTime",
                 table: "mix_cache",
@@ -981,6 +888,16 @@ namespace Mix.Cms.Lib.Migrations
                 table: "mix_culture",
                 column: "Specificulture",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_MixDatabaseId",
+                table: "mix_database_data",
+                column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_database_data_value_DataId",
+                table: "mix_database_data_value",
+                column: "DataId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_mix_file_ThemeId",
@@ -1073,6 +990,16 @@ namespace Mix.Cms.Lib.Migrations
                 column: "Specificulture");
 
             migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_DestinationId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "DestinationId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mix_post_association_SourceId_Specificulture",
+                table: "mix_post_association",
+                columns: new[] { "SourceId", "Specificulture" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_mix_post_media_MediaId_Specificulture",
                 table: "mix_post_media",
                 columns: new[] { "MediaId", "Specificulture" });
@@ -1093,21 +1020,6 @@ namespace Mix.Cms.Lib.Migrations
                 columns: new[] { "PostId", "Specificulture" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_mix_related_attribute_set_IdNavigationId",
-                table: "mix_related_attribute_set",
-                column: "IdNavigationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_DestinationId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "DestinationId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_mix_related_post_SourceId_Specificulture",
-                table: "mix_related_post",
-                columns: new[] { "SourceId", "Specificulture" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_mix_template_file_TemplateId",
                 table: "mix_template",
                 column: "ThemeId");
@@ -1121,18 +1033,6 @@ namespace Mix.Cms.Lib.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mix_attribute_field");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_reference");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set_value");
-
-            migrationBuilder.DropTable(
                 name: "mix_cache");
 
             migrationBuilder.DropTable(
@@ -1140,6 +1040,18 @@ namespace Mix.Cms.Lib.Migrations
 
             migrationBuilder.DropTable(
                 name: "mix_configuration");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_column");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_association");
+
+            migrationBuilder.DropTable(
+                name: "mix_database_data_value");
 
             migrationBuilder.DropTable(
                 name: "mix_file");
@@ -1166,28 +1078,22 @@ namespace Mix.Cms.Lib.Migrations
                 name: "mix_portal_page_role");
 
             migrationBuilder.DropTable(
+                name: "mix_post_association");
+
+            migrationBuilder.DropTable(
                 name: "mix_post_media");
 
             migrationBuilder.DropTable(
                 name: "mix_post_module");
 
             migrationBuilder.DropTable(
-                name: "mix_related_attribute_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_attribute_set");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_data");
-
-            migrationBuilder.DropTable(
-                name: "mix_related_post");
-
-            migrationBuilder.DropTable(
                 name: "mix_template");
 
             migrationBuilder.DropTable(
                 name: "mix_url_alias");
+
+            migrationBuilder.DropTable(
+                name: "mix_database");
 
             migrationBuilder.DropTable(
                 name: "mix_page");
@@ -1200,9 +1106,6 @@ namespace Mix.Cms.Lib.Migrations
 
             migrationBuilder.DropTable(
                 name: "mix_module");
-
-            migrationBuilder.DropTable(
-                name: "mix_attribute_set");
 
             migrationBuilder.DropTable(
                 name: "mix_post");

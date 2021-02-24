@@ -4,12 +4,14 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPages;
 using Mix.Domain.Core.ViewModels;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -20,16 +22,16 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPageController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPage, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
-        // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPage, bool>> predicate = model =>
                 model.Specificulture == _lang
+                && (User.IsInRole("SuperAdmin") || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
                 && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
@@ -48,5 +50,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(getData.Errors);
             }
         }
+
+        [HttpPost]
+        public override Task<ActionResult<MixPage>> Create([FromBody] UpdateViewModel data)
+        {
+            // Handle your code here or do something before call the base Api.
+            return base.Create(data);
+        }
+
+
     }
 }

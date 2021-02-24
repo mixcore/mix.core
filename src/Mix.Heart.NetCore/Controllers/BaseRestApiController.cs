@@ -355,7 +355,7 @@ namespace Mix.Heart.NetCore.Controllers
         [HttpGet("clear-cache")]
         protected async Task ClearCacheAsync(Type type)
         {
-            await CacheService.RemoveCacheAsync(type: type);
+            await MixCacheService.RemoveCacheAsync(type: type);
         }
 
         #endregion Routes

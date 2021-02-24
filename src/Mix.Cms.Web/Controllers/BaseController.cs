@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Domain.Core.ViewModels;
@@ -170,7 +171,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName)
+        protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName, string keyword = null)
         {
             // Home Page
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
@@ -178,7 +179,10 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
-
+            if (keyword is not null)
+            {
+                ViewData["keyword"] = keyword;
+            }
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
 
@@ -214,7 +218,8 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
-                ViewData["PageClass"] = getPage.Data.CssClass;
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -259,8 +264,11 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
-                ViewData["PageClass"] = getPage.Data.CssClass;
                 ViewData["Layout"] = getPage.Data.Layout ?? "Masters/_Layout";
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
+
+                ViewBag.viewMode = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -287,6 +295,10 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getPost.Data.SeoDescription;
                 ViewData["Keywords"] = getPost.Data.SeoKeywords;
                 ViewData["Image"] = getPost.Data.ImageUrl;
+                ViewData["BodyClass"] = getPost.Data.BodyClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Post;
+
+                ViewBag.viewMode = MixMvcViewMode.Post;
                 getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
             }
@@ -298,7 +310,7 @@ namespace Mix.Cms.Web.Controllers
 
         protected async System.Threading.Tasks.Task<IActionResult> Data(string attributeSetName, string seoName)
         {
-            var getData = await Lib.ViewModels.MixAttributeSetDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixAttributeSetDatas.ReadMvcViewModel>(
+            var getData = await Lib.ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel>(
                 culture, attributeSetName, "equal", "seo_url", seoName);
 
             if (getData.IsSucceed && getData.Data.Count > 0)

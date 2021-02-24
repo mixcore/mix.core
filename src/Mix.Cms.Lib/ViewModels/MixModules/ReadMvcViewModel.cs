@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -93,8 +94,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string DetailsUrl { get; set; }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -107,8 +110,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -121,7 +126,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("columns")]
-        public List<ModuleFieldViewModel> Columns {
+        public List<ModuleFieldViewModel> Columns
+        {
             get { return Fields == null ? null : JsonConvert.DeserializeObject<List<ModuleFieldViewModel>>(Fields); }
             set { Fields = JsonConvert.SerializeObject(value); }
         }
@@ -141,24 +147,30 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("posts")]
         public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{MixFolders.TemplatesFolder}/" +
                     $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                     $"{Template}";
             }
         }
 
-        public string FormTemplatePath {
-            get {
+        public string FormTemplatePath
+        {
+            get
+            {
                 return $"/{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{FormTemplate}";
             }
         }
 
-        public string EdmTemplatePath {
-            get {
+        public string EdmTemplatePath
+        {
+            get
+            {
                 return $"/{MixFolders.TemplatesFolder}/" +
                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{EdmTemplate}";
@@ -166,7 +178,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("attributeData")]
-        public MixRelatedAttributeDatas.ReadMvcViewModel AttributeData { get; set; }
+        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
 
         #endregion Views
 
@@ -205,11 +217,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixAttributeSets.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.AttributeSetName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
+            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixRelatedAttributeDatas.ReadMvcViewModel.Repository.GetFirstModel(
-                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.AttributeSetId == getAttrs.Data.Id
+                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
+                a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
         }

@@ -21,19 +21,18 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/module-data/mvc")]
     public class ApiModuleDataMvcController :
-        BaseAuthorizedApiController<MixCmsContext, MixModuleData, UpdateViewModel, ReadMvcViewModel>
+        BaseRestApiController<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {
-        // GET: api/s
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
             bool isModuleId = int.TryParse(Request.Query["module_id"], out int moduleId);
             bool isPostId = int.TryParse(Request.Query["post_id"], out int postId);
             bool isPageId = int.TryParse(Request.Query[""], out int pageId);
-            bool isStatus = Enum.TryParse(Request.Query["status"], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            string keyword = Request.Query["keyword"];
+            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
+            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
+            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
+            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixModuleData, bool>> predicate = model =>
                 model.Specificulture == _lang
                 && (model.ModuleId == moduleId)
@@ -45,7 +44,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (string.IsNullOrEmpty(keyword)
                  || (EF.Functions.Like(model.Value, $"%{keyword}%"))
                  );
-            var getData = await base.GetListAsync(predicate);
+            var getData = await base.GetListAsync<ReadMvcViewModel>(predicate);
             if (getData.IsSucceed)
             {
                 return getData.Data;
@@ -56,7 +55,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET api/module-data/create/id
         [HttpGet, HttpOptions]
         [Route("init-form/{moduleId}")]
         public async Task<ActionResult<UpdateViewModel>> InitByIdAsync(int moduleId)
@@ -81,7 +79,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET api/module-data/create/id
         [HttpPost, HttpOptions]
         [Route("save/{moduleName}")]
         public async Task<RepositoryResponse<UpdateViewModel>> SaveByName(string moduleName, [FromBody] JObject data)

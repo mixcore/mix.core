@@ -1,16 +1,6 @@
 ﻿{
   "data": [
     {
-      "keyword": "MixcoreVersion",
-      "scope": "System",
-      "category": "Version",
-      "value": "1.0.0",
-      "dataType": "Text",
-      "description": "Mixcore CMS Version",
-      "priority": 0,
-      "status": "Published"
-    },
-    {
       "keyword": "SiteName",
       "scope": "Site",
       "category": "Common",

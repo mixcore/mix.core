@@ -28,12 +28,12 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Image)
-                .HasColumnType("varchar(250)")
+                .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
                 .HasCollation("Vietnamese_CI_AS");
 

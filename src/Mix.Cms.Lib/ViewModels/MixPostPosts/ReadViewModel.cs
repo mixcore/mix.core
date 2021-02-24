@@ -8,7 +8,7 @@ using System;
 namespace Mix.Cms.Lib.ViewModels.MixPostPosts
 {
     public class ReadViewModel
-        : ViewModelBase<MixCmsContext, MixRelatedPost, ReadViewModel>
+        : ViewModelBase<MixCmsContext, MixPostAssociation, ReadViewModel>
     {
         #region Properties
 
@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
         {
         }
 
-        public ReadViewModel(MixRelatedPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ReadViewModel(MixPostAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -88,7 +88,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPostPosts
             }
         }
 
-        public override MixRelatedPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixPostAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {

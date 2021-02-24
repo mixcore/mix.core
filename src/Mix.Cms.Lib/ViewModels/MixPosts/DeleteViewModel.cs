@@ -132,7 +132,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             if (result.IsSucceed)
             {
-                var navs = await _context.MixRelatedAttributeData.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post && n.Specificulture == Specificulture).ToListAsync();
+                var navs = await _context.MixDatabaseDataAssociation.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
                     _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
@@ -140,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
 
             await _context.SaveChangesAsync();
-            var removeRelatedData = await MixRelatedAttributeDatas.Helper.RemoveRelatedDataAsync(
+            var removeRelatedData = await MixDatabaseDataAssociations.Helper.RemoveRelatedDataAsync(
                     Id.ToString(), MixDatabaseParentType.Post
                     , Specificulture
                     , _context, _transaction);

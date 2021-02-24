@@ -76,7 +76,7 @@ namespace Mix.Cms.Web
             services.AddMixScheduler(Configuration);
             /* Mix: End Inject Services */
 
-            _ = VerifyInitDataAsync(services);
+            VerifyInitData(services);
 
             services.AddMixAuthorize(Configuration);
             /* End Additional Config for Mixcore Cms  */
@@ -93,7 +93,7 @@ namespace Mix.Cms.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/404");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -106,7 +106,6 @@ namespace Mix.Cms.Web
                     context.Database.Migrate();
                 }
             }
-
             app.UseCors(MixcoreAllowSpecificOrigins);
 
             var provider = new FileExtensionContentTypeProvider();
@@ -143,27 +142,27 @@ namespace Mix.Cms.Web
         }
 
         // Mix: Check custom cms config
-        private async Task VerifyInitDataAsync(IServiceCollection services)
+        private void VerifyInitData(IServiceCollection services)
         {
             // Mix: Migrate db if already inited
 
             if (!MixService.GetConfig<bool>("IsInit"))
             {
-                using (var ctx = new MixCmsContext())
+                using (var ctx = MixService.GetDbContext())
                 {
                     ctx.Database.Migrate();
                     var transaction = ctx.Database.BeginTransaction();
                     var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixAttributeSets.ImportViewModel>>();
+                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixDatabases.ImportViewModel>>();
                     foreach (var db in sysDatabases)
                     {
-                        if (!ctx.MixAttributeSet.Any(m => m.Name == db.Name))
+                        if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
                         {
-                            await db.SaveModelAsync(true, ctx, transaction);
+                            db.SaveModel(true, ctx, transaction);
                         }
                     }
-                    await transaction.CommitAsync();
-                    await transaction.DisposeAsync();
+                    transaction.Commit();
+                    transaction.Dispose();
                 }
             }
 
