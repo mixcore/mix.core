@@ -59,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var getVal = await MixDatabaseDataValues.ReadViewModel.Repository.GetSingleModelAsync(
                     m => m.Specificulture == culture && m.Status == MixContentStatus.Published
                         && m.MixDatabaseName == metaName
-                        && m.MixDatabaseColumnName == "title" && m.StringValue == metaValue
+                        && m.MixDatabaseColumnName == "title" && EF.Functions.Like(m.StringValue, metaValue)
                 , context, transaction);
                 if (getVal.IsSucceed)
                 {
@@ -527,7 +527,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Get Value
                 var dataIds = await context.MixDatabaseDataValue.Where(
                     m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
-                        && m.StringValue == value && m.MixDatabaseColumnName == fieldName)
+                        && EF.Functions.Like(m.StringValue, value) && m.MixDatabaseColumnName == fieldName)
                     .Select(m => m.DataId)?.ToListAsync();
                 if (dataIds != null && dataIds.Count > 0)
                 {

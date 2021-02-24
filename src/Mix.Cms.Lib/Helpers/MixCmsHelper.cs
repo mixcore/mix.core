@@ -23,7 +23,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib
+namespace Mix.Cms.Lib.Helpers
 {
     public class MixCmsHelper
     {

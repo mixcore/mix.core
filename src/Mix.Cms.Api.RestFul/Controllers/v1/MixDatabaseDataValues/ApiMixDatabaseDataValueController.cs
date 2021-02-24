@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
@@ -33,7 +34,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 && (!isToDate || model.CreatedDateTime <= toDate)
                 && (string.IsNullOrEmpty(keyword)
                  || model.MixDatabaseName.Contains(keyword)
-                 || model.StringValue.Contains(keyword)
+                 || EF.Functions.Like(model.StringValue, $"%{keyword}%")
                  );
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)

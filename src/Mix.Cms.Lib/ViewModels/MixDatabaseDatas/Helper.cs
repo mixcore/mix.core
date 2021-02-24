@@ -477,7 +477,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 };
                 if (filterType == "equal")
                 {
-                    Expression<Func<MixDatabaseDataValue, bool>> pre = m => m.MixDatabaseColumnName == fieldName && m.StringValue == keyword;
+                    Expression<Func<MixDatabaseDataValue, bool>> pre = m => m.MixDatabaseColumnName == fieldName && EF.Functions.Like(m.StringValue, keyword);
 
                     valPredicate = valPredicate == null
                                    ? pre
