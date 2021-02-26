@@ -6,6 +6,8 @@
         Module,
         Post,
         Database,
-        Uri
+        Uri,
+        Home,
+        ListPost
     }
 }

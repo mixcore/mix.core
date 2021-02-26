@@ -42,7 +42,10 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public static List<NavUserRoleViewModel> GetRoleNavs(string userId)
         {
-            using (MixCmsAccountContext context = new MixCmsAccountContext())
+            UnitOfWorkHelper<MixCmsAccountContext>.InitTransaction(
+                    null, null, out MixCmsAccountContext context,
+                    out IDbContextTransaction transaction, out bool isRoot);
+            try
             {
                 var query = context.AspNetRoles
                   .Include(cp => cp.AspNetUserRoles)
@@ -56,8 +59,21 @@ namespace Mix.Cms.Lib.ViewModels.Account
                   })
                   .OrderBy(m => m.Priority)
                   .ToList();
-                query.ForEach(m => m.ExpandView(context));
+                query.ForEach(m => m.ExpandView(context, transaction));
                 return query;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsAccountContext>.HandleException<List<NavUserRoleViewModel>>(
+                    ex, isRoot, transaction).Data;
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsAccountContext>.CloseDbContext(ref context, ref transaction);
+                }
             }
         }
     }
