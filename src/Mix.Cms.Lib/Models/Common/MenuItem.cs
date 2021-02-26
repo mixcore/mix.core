@@ -26,10 +26,12 @@ namespace Mix.Cms.Lib.Models.Common
         public string Uri { get; set; }
 
         [JsonProperty("href")]
-        public string Href {
-            get {
+        public string Href
+        {
+            get
+            {
                 var domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
-                return Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
+                return Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
             }
         }
 

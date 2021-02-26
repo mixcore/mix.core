@@ -406,10 +406,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
-                    var query = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                    var dataIds = query.ToList();
-
-                    predicate = predicate.AndAlsoIf(query != null, m => dataIds.Any(id => m.Id == id));
+                    var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                    predicate = predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Any(id => m.Id == id));
                 }
                 else
                 {
@@ -419,8 +417,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 }
+                var query = context.MixDatabaseData.Where(predicate).Select(m => m.Id).Distinct();
+                var excludeChildDataIds = context.MixDatabaseDataAssociation
+                    .Where(m => query.Any(q => q == m.DataId) && m.ParentType == MixDatabaseParentType.Set).Select(m => m.DataId);
+
                 result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
-                            predicate, orderBy, direction, isPageSize ? pageSize : default, isPageSize ? pageIndex : 0, null, null, context, transaction);
+                            m => query.Any(d => d == m.Id)
+                                && !excludeChildDataIds.Any(q => q == m.Id)
+                                && m.Specificulture == culture,
+                            orderBy, direction, isPageSize ? pageSize : default, isPageSize ? pageIndex : 0, null, null, context, transaction);
                 return result;
             }
             catch (Exception ex)
