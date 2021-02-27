@@ -24,9 +24,9 @@ using System.Threading.Tasks;
 
 namespace Mix.Theme.Blog
 {
-    class Posts
+    public class Posts
     {
-        public async Task<dynamic> MyPosts(string culture, IUrlHelper Url)
+        public async Task<dynamic> GetPosts()
         {
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
                 m => m.Status == MixContentStatus.Published,
