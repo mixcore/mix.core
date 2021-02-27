@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CMS", "CMS", "{C45D03E7-0453-4199-A5DE-E61B5FF29AF4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C45D03E7-0453-4199-A5DE-E61B5FF29AF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mixcore", "Mix.Cms.Web\Mixcore.csproj", "{0E27FDA9-70B1-41AD-8465-3E56EA78F0DF}"
 EndProject
