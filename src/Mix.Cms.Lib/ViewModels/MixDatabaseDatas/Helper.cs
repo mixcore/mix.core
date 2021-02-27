@@ -421,7 +421,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 var query = context.MixDatabaseData.Where(predicate).Select(m => m.Id).Distinct();
                 var excludeChildDataIds = context.MixDatabaseDataAssociation
-                    .Where(m => query.Any(q => q == m.DataId) && m.ParentType == MixDatabaseParentType.Set).Select(m => m.DataId);
+                    .Where(m => query.Any(q => q == m.DataId)
+                    && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
+                    && m.ParentType == MixDatabaseParentType.Set)
+                    .Select(m => m.DataId);
 
                 result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
                             m => query.Any(d => d == m.Id)
