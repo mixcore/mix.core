@@ -130,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     {
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field
+                        Column = field
                     };
                     Values.Add(val);
                 }
@@ -138,7 +138,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 val.MixDatabaseName = MixDatabaseName;
                 if (Data[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Field.DataType == MixDataType.Reference)
+                    if (val.Column.DataType == MixDataType.Reference)
                     {
                         var arr = Data[val.MixDatabaseColumnName].Value<JArray>();
                         foreach (JObject objData in arr)
@@ -233,7 +233,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         private void ParseModelValue(JToken property, MixDatabaseDataValues.UpdateViewModel item)
         {
-            switch (item.Field.DataType)
+            switch (item.Column.DataType)
             {
                 case MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
@@ -324,7 +324,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             Data = new JObject();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                item.MixDatabaseColumnName = item.Field.Name;
+                item.MixDatabaseColumnName = item.Column.Name;
                 Data.Add(ParseValue(item));
             }
             Data.Add(new JProperty("createdDateTime", CreatedDateTime));

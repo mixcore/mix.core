@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -83,8 +81,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         [JsonIgnore]
         public List<MixDatabaseDataValues.UpdateViewModel> Values { get; set; }
 
-        [JsonProperty("fields")]
-        public List<MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
         [JsonIgnore]
         public List<MixDatabaseDatas.FormViewModel> RefData { get; set; } = new List<FormViewModel>();
@@ -113,6 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
             }
+            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, _context, _transaction);
         }
 
         public override MixDatabaseData ParseModel(
@@ -137,10 +136,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
                 , _context, _transaction)
                 .Data.OrderBy(a => a.Priority).ToList();
-            Fields ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
+            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
             , _context, _transaction).Data;
 
-            foreach (var field in Fields.OrderBy(f => f.Priority))
+            Obj ??= new JObject();
+            foreach (var field in Columns.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
                 if (val == null)
@@ -151,7 +151,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         MixDatabaseColumnName = field.Name,
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field,
+                        Column = field,
                         DataId = Id
                     };
                     val.ExpandView(_context, _transaction);
@@ -167,11 +167,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 val.MixDatabaseName = MixDatabaseName;
                 if (Obj[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Field.DataType == MixDataType.Reference)
+                    if (val.Column.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.MixDatabaseColumnName].Value<JArray>();
-                        val.IntegerValue = val.Field.ReferenceId;
-                        val.StringValue = val.Field.ReferenceId.ToString();
+                        val.IntegerValue = val.Column.ReferenceId;
+                        val.StringValue = val.Column.ReferenceId.ToString();
                         if (arr != null)
                         {
                             foreach (JObject objData in arr)
@@ -337,11 +337,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (result.IsSucceed)
                 {
-                    if (Fields.Any(f => f.Id == item.MixDatabaseColumnId))
+                    if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
                     {
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Column.Priority;
                         item.Status = MixContentStatus.Published;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);

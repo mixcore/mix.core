@@ -150,6 +150,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
 
+        [JsonProperty("author")]
+        public JObject Author { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -174,6 +176,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadPages(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
+            LoadAuthor(_context, _transaction);
         }
 
         private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)
@@ -185,6 +188,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Overrides
 
         #region Expands
+
+        private void LoadAuthor(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            if (!string.IsNullOrEmpty(CreatedBy))
+            {
+                var getAuthor = MixDatabaseDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
+                    , Specificulture, context, transaction);
+                if (getAuthor.IsSucceed)
+                {
+                    Author = getAuthor.Data.Obj;
+                }
+            }
+        }
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {

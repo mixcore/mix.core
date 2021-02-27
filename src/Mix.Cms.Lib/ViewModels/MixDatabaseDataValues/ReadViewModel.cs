@@ -84,8 +84,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
         #region Views
 
-        [JsonProperty("field")]
-        public MixDatabaseColumns.ReadViewModel Field { get; set; }
+        [JsonProperty("columns")]
+        public MixDatabaseColumns.ReadViewModel Column { get; set; }
 
         #endregion Views
 

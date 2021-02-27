@@ -188,7 +188,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
             Data = new JObject();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                item.MixDatabaseColumnName = item.Field.Name;
+                item.MixDatabaseColumnName = item.Column.Name;
                 Data.Add(ParseValue(item));
             }
         }

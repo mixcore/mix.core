@@ -66,7 +66,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         MixDatabaseId = getAttrSet.Data.Id,
                         MixDatabaseName = getAttrSet.Data.Name,
                         Status = MixContentStatus.Published,
-                        Fields = getAttrSet.Data.Fields,
+                        Columns = getAttrSet.Data.Columns,
                         ParentType = parentType
                     };
                     result.ExpandView();
@@ -125,7 +125,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     MixDatabaseId = getAttrSet.Data.Id,
                     MixDatabaseName = getAttrSet.Data.Name,
                     Status = MixContentStatus.Published,
-                    Fields = getAttrSet.Data.Fields
+                    Columns = getAttrSet.Data.Columns
                 };
                 result.ExpandView();
                 return Ok(result);

@@ -152,7 +152,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
                     {
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field
+                        Column = field
                     };
                     Values.Add(val);
                 }
@@ -160,7 +160,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
                 val.MixDatabaseName = MixDatabaseName;
                 if (Data[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Field.DataType == MixDataType.Reference)
+                    if (val.Column.DataType == MixDataType.Reference)
                     {
                         var arr = Data[val.MixDatabaseColumnName].Value<JArray>();
                         if (arr != null)
@@ -286,7 +286,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
                 {
                     if (Fields.Any(f => f.Id == item.MixDatabaseColumnId))
                     {
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Column.Priority;
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
@@ -430,7 +430,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
 
         private void ParseModelValue(JToken property, Lib.ViewModels.MixDatabaseDataValues.UpdateViewModel item)
         {
-            switch (item.Field.DataType)
+            switch (item.Column.DataType)
             {
                 case MixDataType.DateTime:
                     item.DateTimeValue = property.Value<DateTime?>();
@@ -528,7 +528,7 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
             Data = new JObject();
             foreach (var item in Values.OrderBy(v => v.Priority))
             {
-                item.MixDatabaseColumnName = item.Field.Name;
+                item.MixDatabaseColumnName = item.Column.Name;
                 Data.Add(ParseValue(item));
             }
         }

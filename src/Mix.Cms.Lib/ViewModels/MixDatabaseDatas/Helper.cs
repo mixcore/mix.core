@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     if (result.IsSucceed)
                     {
                         var isCreateNew = string.IsNullOrEmpty(item.Id);
-                        item.Fields = fields;
+                        item.Columns = fields;
                         item.MixDatabaseName = mixDatabase.Name;
                         item.Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus);
                         var saveResult = await item.SaveModelAsync(true, context, transaction);
@@ -122,14 +122,16 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     {
                         AdditionalViewModel result = new AdditionalViewModel()
                         {
+                            Id = Guid.NewGuid().ToString(),
                             Specificulture = culture,
                             MixDatabaseId = getAttrSet.Data.Id,
                             MixDatabaseName = getAttrSet.Data.Name,
                             Status = MixContentStatus.Published,
-                            Fields = getAttrSet.Data.Fields,
+                            Columns = getAttrSet.Data.Columns,
                             ParentType = parentType,
                             ParentId = parentId
                         };
+                        await result.SaveModelAsync(true, context, transaction);
                         result.ExpandView(context, transaction);
                         return new RepositoryResponse<AdditionalViewModel>()
                         {
@@ -187,7 +189,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             MixDatabaseId = getAttrSet.Data.Id,
                             MixDatabaseName = getAttrSet.Data.Name,
                             Status = MixContentStatus.Published,
-                            Fields = getAttrSet.Data.Fields,
+                            Columns = getAttrSet.Data.Columns,
                             ParentType = parentType,
                             ParentId = parentId
                         };

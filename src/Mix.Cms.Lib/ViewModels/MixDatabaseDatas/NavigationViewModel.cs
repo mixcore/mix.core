@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public List<MixDatabaseDataValues.NavigationViewModel> Values { get; set; }
 
-        public List<MixDatabaseColumns.ReadViewModel> Fields { get; set; }
+        public List<MixDatabaseColumns.ReadViewModel> Columns { get; set; }
 
         [JsonProperty("data")]
         public JObject Obj { get; set; }
@@ -127,7 +127,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     if (result.IsSucceed)
                     {
-                        if (Fields.Any(f => f.Id == item.MixDatabaseColumnId))
+                        if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
                         {
                             item.Priority = item.Field.Priority;
                             item.DataId = parent.Id;
