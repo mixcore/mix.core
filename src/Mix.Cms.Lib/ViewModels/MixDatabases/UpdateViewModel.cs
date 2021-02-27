@@ -76,8 +76,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
-        [JsonProperty("fields")]
-        public List<MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
         [JsonProperty("formView")]
         public MixTemplates.UpdateViewModel FormView { get; set; }
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         {
             if (Id > 0)
             {
-                Fields ??= MixDatabaseColumns.UpdateViewModel
+                Columns ??= MixDatabaseColumns.UpdateViewModel
                 .Repository.GetModelListBy(a => a.MixDatabaseId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixDatabaseColumns.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             }
             else
             {
-                Fields = new List<MixDatabaseColumns.UpdateViewModel>();
+                Columns = new List<MixDatabaseColumns.UpdateViewModel>();
             }
         }
 
@@ -149,7 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {
@@ -172,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {

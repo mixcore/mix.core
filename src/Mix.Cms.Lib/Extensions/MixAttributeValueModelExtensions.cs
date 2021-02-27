@@ -97,7 +97,7 @@ namespace Mix.Cms.Lib.Extensions
                 return;
             }
 
-            if (item.Field.IsEncrypt)
+            if (item.Column.IsEncrypt)
             {
                 var obj = property.Value<JObject>();
                 item.StringValue = obj.ToString(Formatting.None);
@@ -106,7 +106,7 @@ namespace Mix.Cms.Lib.Extensions
             }
             else
             {
-                switch (item.Field.DataType)
+                switch (item.Column.DataType)
                 {
                     case MixDataType.DateTime:
                         item.DateTimeValue = property.Value<DateTime?>();
@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib.Extensions
 
             foreach (var item in refFields)
             {
-                JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, _context, _transaction);
+                JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, context, transaction);
 
                 if (obj.ContainsKey(item.Name))
                 {
@@ -235,7 +235,8 @@ namespace Mix.Cms.Lib.Extensions
                     && (model.ParentId == dataId && model.ParentType == MixDatabaseParentType.Set)
                     && model.Specificulture == culture
                     ;
-            var getData = ViewModels.MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListBy(predicate, context, transaction);
+            var getData = ViewModels.MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListBy(
+                predicate, context, transaction);
 
             JArray arr = new JArray();
             foreach (var nav in getData.Data.OrderBy(v => v.Priority))

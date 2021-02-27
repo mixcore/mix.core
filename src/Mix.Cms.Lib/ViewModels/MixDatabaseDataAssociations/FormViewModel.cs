@@ -135,10 +135,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
                         DataId = saveData.Data.Id;
                     }
                 }
-                else
-                {
-                    DataId = AttributeData.Id;
-                }
                 if (result.IsSucceed)
                 {
                     result = await base.SaveModelAsync(true, context, transaction);
