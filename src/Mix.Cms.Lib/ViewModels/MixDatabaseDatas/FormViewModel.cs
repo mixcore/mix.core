@@ -245,7 +245,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             try
             {
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
-                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
+                if (result.IsSucceed && !string.IsNullOrEmpty(ParentId) && ParentId != "0")
                 {
                     var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.CheckIsExists(
                         m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
