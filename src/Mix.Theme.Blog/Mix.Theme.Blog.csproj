@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
     <ProjectReference Include="..\Mix.Cms.Schedule\Mix.Cms.Schedule.csproj" />
     <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
