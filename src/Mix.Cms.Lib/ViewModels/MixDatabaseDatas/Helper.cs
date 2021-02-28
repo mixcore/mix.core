@@ -488,7 +488,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     IsSucceed = false,
                 };
-                Expression<Func<MixDatabaseDataValue, bool>> pre = 
+                Expression<Func<MixDatabaseDataValue, bool>> pre =
                     m => m.MixDatabaseColumnName == columnName && EF.Functions.Like(m.StringValue, keyword);
 
                 valPredicate = valPredicate == null
@@ -503,7 +503,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 if (query != null)
                 {
                     var dataId = query.FirstOrDefault();
-                    Expression<Func<MixDatabaseData, bool>> predicate = 
+                    Expression<Func<MixDatabaseData, bool>> predicate =
                         m => m.Specificulture == culture && m.Id == dataId;
                     result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetFirstModelAsync(
                         predicate, context, transaction);
@@ -523,7 +523,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
         }
-        
+
         public static RepositoryResponse<TView> GetSingleDataByParentId<TView>(
             string parentId
             , MixDatabaseParentType parentType
@@ -557,7 +557,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
         }
-       
+
         public static async Task<RepositoryResponse<TView>> GetSingleDataByParentIdAsync<TView>(
             string parentId
             , MixDatabaseParentType parentType
@@ -574,7 +574,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 if (dataId is not null)
                 {
                     return await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetSingleModelAsync(
-                        m => m.Id == dataId, context,transaction);
+                        m => m.Id == dataId, context, transaction);
                 }
                 return default;
             }
@@ -591,7 +591,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
         }
-        
+
         public static RepositoryResponse<TView> GetSingleData<TView>(
             string keyword
             , string columnName
@@ -610,7 +610,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     IsSucceed = false,
                 };
-                Expression<Func<MixDatabaseDataValue, bool>> pre = 
+                Expression<Func<MixDatabaseDataValue, bool>> pre =
                     m => m.MixDatabaseColumnName == columnName && EF.Functions.Like(m.StringValue, keyword);
 
                 valPredicate = valPredicate == null
@@ -625,7 +625,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 if (query != null)
                 {
                     var dataId = query.FirstOrDefault();
-                    Expression<Func<MixDatabaseData, bool>> predicate = 
+                    Expression<Func<MixDatabaseData, bool>> predicate =
                         m => m.Specificulture == culture && m.Id == dataId;
                     result = DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetFirstModel(
                         predicate, context, transaction);
@@ -645,7 +645,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
         }
-        
+
         public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string mixDatabaseName
             , string filterType, string fieldName, string keyword
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -704,7 +704,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
         }
-        
+
         public static RepositoryResponse<List<TView>> FilterByKeyword<TView>(string culture, string mixDatabaseName
             , string filterType, string fieldName, string keyword
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)

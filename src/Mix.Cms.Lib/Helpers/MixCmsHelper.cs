@@ -260,7 +260,7 @@ namespace Mix.Cms.Lib.Helpers
 
             return nav;
         }
-        
+
         public static MixNavigation GetNavigation(
             string name, string culture, IUrlHelper Url)
         {
@@ -491,6 +491,8 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
+            , int pageSize = 1
+            , int page = 1
             , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -498,8 +500,14 @@ namespace Mix.Cms.Lib.Helpers
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["keyword"];
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
+            if (!string.IsNullOrEmpty(context.Request.Query[MixRequestQueryKeywords.Page]))
+            {
+                int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out page);
+            }
+            if (!string.IsNullOrEmpty(context.Request.Query[MixRequestQueryKeywords.PageSize]))
+            {
+                int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out pageSize);
+            }
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             page = (page > 0) ? page : 1;
 
