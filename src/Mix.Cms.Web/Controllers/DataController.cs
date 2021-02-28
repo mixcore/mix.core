@@ -35,7 +35,7 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [Route("data/{attributeSetName}/{seoName}")]
-        [Route("data/{culture}/{attributeSetName}/{seoName}")]
+        [Route("{culture}/data/{attributeSetName}/{seoName}")]
         public async Task<IActionResult> Index(string attributeSetName, string seoName)
         {
             if (isValid)

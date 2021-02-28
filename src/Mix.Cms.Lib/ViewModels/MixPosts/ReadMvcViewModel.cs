@@ -185,10 +185,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }

@@ -225,10 +225,46 @@ namespace Mix.Cms.Lib.Helpers
             return getData.Data;
         }
 
-        public static async System.Threading.Tasks.Task<MixNavigation> GetNavigation(
+        public static async Task<MixNavigation> GetNavigationAsync(
             string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<ViewModels.MixDatabaseDatas.NavigationViewModel>(
+                culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+            var nav = navs.Data?.FirstOrDefault()?.Nav;
+            string activePath = Url.ActionContext.HttpContext.Request.Path;
+
+            if (nav != null)
+            {
+                foreach (var cate in nav.MenuItems)
+                {
+                    cate.IsActive = cate.Uri == activePath;
+                    if (cate.IsActive)
+                    {
+                        nav.ActivedMenuItem = cate;
+                        nav.ActivedMenuItems.Add(cate);
+                    }
+
+                    foreach (var item in cate.MenuItems)
+                    {
+                        item.IsActive = item.Uri == activePath;
+                        if (item.IsActive)
+                        {
+                            nav.ActivedMenuItem = item;
+                            nav.ActivedMenuItems.Add(cate);
+                            nav.ActivedMenuItems.Add(item);
+                        }
+                        cate.IsActive = cate.IsActive || item.IsActive;
+                    }
+                }
+            }
+
+            return nav;
+        }
+        
+        public static MixNavigation GetNavigation(
+            string name, string culture, IUrlHelper Url)
+        {
+            var navs = ViewModels.MixDatabaseDatas.Helper.FilterByKeyword<ViewModels.MixDatabaseDatas.NavigationViewModel>(
                 culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
