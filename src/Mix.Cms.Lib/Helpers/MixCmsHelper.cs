@@ -491,8 +491,8 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
-            , int pageSize = 1
-            , int page = 1
+            , int pageSize = 0
+            , int page = 0
             , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
