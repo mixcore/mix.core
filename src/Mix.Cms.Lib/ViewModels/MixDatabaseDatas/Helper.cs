@@ -524,6 +524,74 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
         
+        public static RepositoryResponse<TView> GetSingleDataByParentId<TView>(
+            string parentId
+            , MixDatabaseParentType parentType
+            , string culture = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                var dataId = _context.MixDatabaseDataAssociation.FirstOrDefault(
+                        m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
+                if (dataId is not null)
+                {
+                    return DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetSingleModel(
+                        m => m.Id == dataId);
+                }
+                return default;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<TView>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+       
+        public static async Task<RepositoryResponse<TView>> GetSingleDataByParentIdAsync<TView>(
+            string parentId
+            , MixDatabaseParentType parentType
+            , string culture = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                var dataId = _context.MixDatabaseDataAssociation.FirstOrDefault(
+                        m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
+                if (dataId is not null)
+                {
+                    return await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetSingleModelAsync(
+                        m => m.Id == dataId);
+                }
+                return default;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<TView>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+        
         public static RepositoryResponse<TView> GetSingleData<TView>(
             string keyword
             , string columnName
