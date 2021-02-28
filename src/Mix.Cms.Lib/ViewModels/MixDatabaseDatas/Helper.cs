@@ -569,12 +569,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             try
             {
                 culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-                var dataId = _context.MixDatabaseDataAssociation.FirstOrDefault(
+                var dataId = context.MixDatabaseDataAssociation.FirstOrDefault(
                         m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
                 if (dataId is not null)
                 {
                     return await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetSingleModelAsync(
-                        m => m.Id == dataId);
+                        m => m.Id == dataId, context,transaction);
                 }
                 return default;
             }
