@@ -470,6 +470,114 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return valPredicate;
         }
 
+        public static async Task<RepositoryResponse<TView>> GetSingleDataAsync<TView>(
+            string keyword
+            , string columnName
+            , string mixDatabaseName
+            , string culture = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
+                RepositoryResponse<TView> result = new RepositoryResponse<TView>()
+                {
+                    IsSucceed = false,
+                };
+                Expression<Func<MixDatabaseDataValue, bool>> pre = 
+                    m => m.MixDatabaseColumnName == columnName && EF.Functions.Like(m.StringValue, keyword);
+
+                valPredicate = valPredicate == null
+                               ? pre
+                               : valPredicate = valPredicate.AndAlso(pre);
+                if (valPredicate != null)
+                {
+                    attrPredicate = valPredicate.AndAlso(attrPredicate);
+                }
+
+                var query = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                if (query != null)
+                {
+                    var dataId = query.FirstOrDefault();
+                    Expression<Func<MixDatabaseData, bool>> predicate = 
+                        m => m.Specificulture == culture && m.Id == dataId;
+                    result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetFirstModelAsync(
+                        predicate, context, transaction);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<TView>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+        
+        public static RepositoryResponse<TView> GetSingleData<TView>(
+            string keyword
+            , string columnName
+            , string mixDatabaseName
+            , string culture = null
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
+                RepositoryResponse<TView> result = new RepositoryResponse<TView>()
+                {
+                    IsSucceed = false,
+                };
+                Expression<Func<MixDatabaseDataValue, bool>> pre = 
+                    m => m.MixDatabaseColumnName == columnName && EF.Functions.Like(m.StringValue, keyword);
+
+                valPredicate = valPredicate == null
+                               ? pre
+                               : valPredicate = valPredicate.AndAlso(pre);
+                if (valPredicate != null)
+                {
+                    attrPredicate = valPredicate.AndAlso(attrPredicate);
+                }
+
+                var query = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                if (query != null)
+                {
+                    var dataId = query.FirstOrDefault();
+                    Expression<Func<MixDatabaseData, bool>> predicate = 
+                        m => m.Specificulture == culture && m.Id == dataId;
+                    result = DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetFirstModel(
+                        predicate, context, transaction);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<TView>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+        
         public static async Task<RepositoryResponse<List<TView>>> FilterByKeywordAsync<TView>(string culture, string mixDatabaseName
             , string filterType, string fieldName, string keyword
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -511,6 +619,65 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     Expression<Func<MixDatabaseData, bool>> predicate = m => m.Specificulture == culture && dataIds.Any(id => m.Id == id);
                     result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
+                        predicate, context, transaction);
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<List<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+        
+        public static RepositoryResponse<List<TView>> FilterByKeyword<TView>(string culture, string mixDatabaseName
+            , string filterType, string fieldName, string keyword
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
+                RepositoryResponse<List<TView>> result = new RepositoryResponse<List<TView>>()
+                {
+                    IsSucceed = true,
+                    Data = new List<TView>()
+                };
+                if (filterType == "equal")
+                {
+                    Expression<Func<MixDatabaseDataValue, bool>> pre = m => m.MixDatabaseColumnName == fieldName && EF.Functions.Like(m.StringValue, keyword);
+
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
+                }
+                else
+                {
+                    Expression<Func<MixDatabaseDataValue, bool>> pre = m => m.MixDatabaseColumnName == fieldName && m.StringValue.Contains(keyword);
+                    valPredicate = valPredicate == null
+                                   ? pre
+                                   : valPredicate = valPredicate.AndAlso(pre);
+                }
+                if (valPredicate != null)
+                {
+                    attrPredicate = valPredicate.AndAlso(attrPredicate);
+                }
+
+                var query = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
+                var dataIds = query.ToList();
+                if (query != null)
+                {
+                    Expression<Func<MixDatabaseData, bool>> predicate = m => m.Specificulture == culture && dataIds.Any(id => m.Id == id);
+                    result = DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListBy(
                         predicate, context, transaction);
                 }
                 return result;
