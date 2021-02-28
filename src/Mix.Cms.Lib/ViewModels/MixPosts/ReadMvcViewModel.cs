@@ -160,9 +160,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        //[JsonProperty("properties")]
-        //public List<ExtraProperty> Properties { get; set; }
-
         [JsonProperty("mediaNavs")]
         public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
 

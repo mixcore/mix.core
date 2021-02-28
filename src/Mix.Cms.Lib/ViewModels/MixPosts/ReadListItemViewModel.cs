@@ -46,6 +46,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("excerpt")]
         public string Excerpt { get; set; }
 
+        [JsonProperty("content")]
+        public string Content { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -107,7 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Specificulture}/post/{Id}/{SeoName}" : null; }
