@@ -107,11 +107,19 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
+           , _context, _transaction).Data;
+
             if (Obj == null)
             {
                 Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
             }
-            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, _context, _transaction);
+            if (Columns.Any(c => c.DataType == MixDataType.Reference))
+            {
+                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, Columns
+                    .Select(c => c.Model).ToList()
+                        , _context, _transaction);
+            }
         }
 
         public override MixDatabaseData ParseModel(
