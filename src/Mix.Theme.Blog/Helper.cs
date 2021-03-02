@@ -35,7 +35,7 @@ namespace Mix.Theme.Blog
 
         public static async Task<dynamic> GetAuthorInfo(string keyword, string culture)
         {
-            return (await MixDatas.Helper.GetSingleDataByParentIdAsync<MixDatas.ReadMvcViewModel>(keyword, MixDatabaseParentType.User, culture)).Data.Obj as dynamic;
+            return (await MixDatas.Helper.GetSingleDataByParentIdAsync<MixDatas.ReadMvcViewModel>(keyword, MixDatabaseParentType.User, culture))?.Data?.Obj as dynamic;
         }
 
         public static async Task<dynamic> GetNextPrevPostByTag(MixPosts.ReadMvcViewModel currentPost, string culture)
