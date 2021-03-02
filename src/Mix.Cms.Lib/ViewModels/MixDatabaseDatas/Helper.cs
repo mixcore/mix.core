@@ -419,17 +419,18 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     && (!isFromDate || (m.CreatedDateTime >= fromDate))
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 }
-                var query = context.MixDatabaseData.Where(predicate).Select(m => m.Id).Distinct();
-                var excludeChildDataIds = context.MixDatabaseDataAssociation
-                    .Where(m => query.Any(q => q == m.DataId)
-                    && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
-                    && m.ParentType == MixDatabaseParentType.Set)
+
+                var excludeIds = context.MixDatabaseDataAssociation.Where(
+                    m => m.MixDatabaseId == mixDatabaseId
+                    && m.Specificulture == culture
+                    && m.ParentType == MixDatabaseParentType.Set
+                    && !string.IsNullOrEmpty(m.ParentId))
                     .Select(m => m.DataId);
 
+                predicate = predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
+
                 result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
-                            m => query.Any(d => d == m.Id)
-                                && !excludeChildDataIds.Any(q => q == m.Id)
-                                && m.Specificulture == culture,
+                            predicate,
                             orderBy, direction, isPageSize ? pageSize : default, isPageSize ? pageIndex : 0, null, null, context, transaction);
                 return result;
             }
