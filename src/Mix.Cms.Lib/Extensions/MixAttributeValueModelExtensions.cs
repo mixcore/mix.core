@@ -206,7 +206,7 @@ namespace Mix.Cms.Lib.Extensions
                    m => m.MixDatabaseId == mixDatabaseId
                     && m.DataType == MixDataType.Reference).ToList();
 
-            foreach (var item in refColumns)
+            foreach (var item in refColumns.Where(p=>p.DataType == MixDataType.Reference))
             {
                 JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, context, transaction);
 
