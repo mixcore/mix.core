@@ -888,7 +888,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
-        public static JObject ParseData(string dataId, string culture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static JObject ParseData(
+            string dataId, 
+            string culture, 
+            MixCmsContext _context = null, 
+            IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                     _context, _transaction,

@@ -9,6 +9,7 @@ using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -195,16 +196,17 @@ namespace Mix.Cms.Lib.Extensions
 
         public static void LoadAllReferenceData(this JObject obj
            , string dataId, int mixDatabaseId, string culture
+           , List<MixDatabaseColumn> refColumns = null
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                     _context, _transaction,
                     out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            var refFields = context.MixDatabaseColumn.Where(
+            refColumns ??= context.MixDatabaseColumn.Where(
                    m => m.MixDatabaseId == mixDatabaseId
                     && m.DataType == MixDataType.Reference).ToList();
 
-            foreach (var item in refFields)
+            foreach (var item in refColumns)
             {
                 JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, context, transaction);
 
