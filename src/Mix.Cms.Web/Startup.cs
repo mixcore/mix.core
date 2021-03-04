@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -58,7 +59,9 @@ namespace Mix.Cms.Web
                 });
 
             #region Additionals Config for Mixcore Cms
-
+            services.Configure<GzipCompressionProviderOptions>(
+                options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
+            services.AddResponseCompression(options => options.EnableForHttps = true);
             /* Additional Config for Mixcore Cms  */
 
             /* Mix: Add db contexts */
@@ -93,7 +96,6 @@ namespace Mix.Cms.Web
             }
             else
             {
-                app.UseExceptionHandler("/404");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -106,6 +108,8 @@ namespace Mix.Cms.Web
                     context.Database.Migrate();
                 }
             }
+            app.UseResponseCompression();
+
             app.UseCors(MixcoreAllowSpecificOrigins);
 
             var provider = new FileExtensionContentTypeProvider();
