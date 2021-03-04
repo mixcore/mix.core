@@ -22,6 +22,8 @@ namespace Mix.Theme.Blog
         public bool IsAllowMembers { get; set; }
 
         public dynamic Post { get; set; }
+        public dynamic NextPost { get; set; }
+        public dynamic PreviousPost { get; set; }
 
         public MixNavigation Navigation { get; set; }
 
@@ -29,16 +31,19 @@ namespace Mix.Theme.Blog
 
         public MixNavigation SecondaryNavigation { get; set; }
 
-        public Site(string culture, IUrlHelper Url)
+        public Site(string culture, IUrlHelper urlHelper)
         {
+            Url = MixService.GetConfig<string>("Domain");
+            Title = MixService.GetConfig<string>("SiteTitle", culture);
             Title = MixService.GetConfig<string>("SiteTitle", culture);
             Logo = MixService.GetConfig<string>("SiteLogo", culture);
             Description = MixService.GetConfig<string>("SiteDescription", culture);
             CoverImage = MixService.GetConfig<string>("SiteCoverImage", culture);
-            Navigation = MixCmsHelper.GetNavigation("navigation", culture, Url);
-            SecondaryNavigation = MixCmsHelper.GetNavigation("secondary_navigation", culture, Url);
-            SocialNavigation = MixCmsHelper.GetNavigation("social_navigation", culture, Url);
             IsAllowMembers = MixService.GetConfig<bool>("IsRegistration");
+
+            Navigation = MixCmsHelper.GetNavigation("navigation", culture, urlHelper);
+            SecondaryNavigation = MixCmsHelper.GetNavigation("secondary_navigation", culture, urlHelper);
+            SocialNavigation = MixCmsHelper.GetNavigation("social_navigation", culture, urlHelper);
         }
 
         public string ImgUrl(string Url, string size)

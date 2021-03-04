@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Heart.Enums;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -38,25 +39,24 @@ namespace Mix.Theme.Blog
             return (await MixDatas.Helper.GetSingleDataByParentIdAsync<MixDatas.ReadMvcViewModel>(keyword, MixDatabaseParentType.User, culture))?.Data?.Obj as dynamic;
         }
 
-        public static async Task<dynamic> GetNextPrevPostByTag(MixPosts.ReadMvcViewModel currentPost, string culture)
+        public static async Task<dynamic> GetNextPrevPostByMeta(MixPosts.ReadMvcViewModel currentPost, string culture)
         {
             using (var ctx = new MixCmsContext())
             {
-                var tagId = currentPost.SysTags.FirstOrDefault()?.AttributeData.Id;
-                if (tagId != null)
+                Dictionary<string, dynamic> result = new Dictionary<string, dynamic>();
+                var metaId = currentPost.SysTags.FirstOrDefault()?.AttributeData.Id;
+                metaId ??= currentPost.SysCategories.FirstOrDefault()?.AttributeData.Id;
+                if (metaId != null)
                 {
 
-                    var postIdsByTag = await ctx.MixDatabaseDataAssociation.Where(
-                            p => p.DataId == tagId && p.ParentType == MixDatabaseParentType.Post && p.Specificulture == culture)
+                    var postIdsByMeta = await ctx.MixDatabaseDataAssociation.Where(
+                            p => p.DataId == metaId && p.ParentType == MixDatabaseParentType.Post && p.Specificulture == culture)
                         .Select(p => int.Parse(p.ParentId))
                         .ToListAsync();
-                    var prevId = postIdsByTag.OrderBy(p => p).Where(p => p < currentPost.Id).FirstOrDefault();
-                    var nextId = postIdsByTag.OrderBy(p => p).Where(p => p > currentPost.Id).FirstOrDefault();
-                    return new
-                    {
-                        PreviousPost = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId)) : null,
-                        NextPost = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId)) : null
-                    };
+                    var prevId = postIdsByMeta.OrderBy(p => p).Where(p => p < currentPost.Id).FirstOrDefault();
+                    var nextId = postIdsByMeta.OrderBy(p => p).Where(p => p > currentPost.Id).FirstOrDefault();
+                    result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId)) : null;
+                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId)) : null;                     
                 }
                 else
                 {
@@ -66,12 +66,10 @@ namespace Mix.Theme.Blog
                     var nextPost = ctx.MixPost.Where(
                             m => m.Specificulture == culture && m.Id > currentPost.Id)
                         .OrderBy(m => m.Id).FirstOrDefault();
-                    return new
-                    {
-                        PreviousPost = prevPost != null ? new MixPosts.ReadMvcViewModel(prevPost) : null,
-                        NextPost = nextPost != null ? new MixPosts.ReadMvcViewModel(nextPost) : null
-                    };
+                    result["PreviousPost"] = prevPost != null ? new MixPosts.ReadMvcViewModel(prevPost) : null;
+                    result["NextPost"] = nextPost != null ? new MixPosts.ReadMvcViewModel(nextPost) : null;
                 }
+                return result;
             }
         }
 

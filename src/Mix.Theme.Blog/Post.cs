@@ -5,7 +5,7 @@ using MixPosts = Mix.Cms.Lib.ViewModels.MixPosts;
 
 namespace Mix.Theme.Blog
 {
-    public class Posts
+    public class Post
     {
     }
 }
