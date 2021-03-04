@@ -51,6 +51,8 @@ namespace Mix.Cms.Web
                                   });
             });
 
+            services.AddResponseCompression();
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
@@ -108,6 +110,7 @@ namespace Mix.Cms.Web
                     context.Database.Migrate();
                 }
             }
+
             app.UseResponseCompression();
 
             app.UseCors(MixcoreAllowSpecificOrigins);
