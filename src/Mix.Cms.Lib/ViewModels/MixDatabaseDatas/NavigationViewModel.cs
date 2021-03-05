@@ -114,7 +114,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             if (Columns.Any(c =>c.DataType == MixDataType.Reference))
             {
                 Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture,
-                Columns.Select(c => c.Model).ToList(),
+                Columns
+                    .Where(c => c.DataType == MixDataType.Reference)
+                    .Select(c => new MixDatabaseColumn()
+                    {
+                        Name = c.Name,
+                        ReferenceId = c.ReferenceId,
+                        DataType = c.DataType
+                    })
+                    .ToList(),
                 context, transaction);
             }
 

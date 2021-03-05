@@ -421,7 +421,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
 
                 var excludeIds = context.MixDatabaseDataAssociation.Where(
-                    m => m.MixDatabaseId == mixDatabaseId
+                    m => (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
                     && m.Specificulture == culture
                     && m.ParentType == MixDatabaseParentType.Set
                     && !string.IsNullOrEmpty(m.ParentId))
@@ -437,6 +437,43 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             catch (Exception ex)
             {
                 return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+
+        public static async Task<RepositoryResponse<List<TView>>> GetAllRootDataAsync<TView>(
+            string mixDatabaseName,
+            string culture,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Expression<Func<MixDatabaseData, bool>> predicate = m => m.MixDatabaseName == mixDatabaseName && m.Specificulture == culture;
+                var excludeIds = context.MixDatabaseDataAssociation.Where(
+                    m => m.MixDatabaseName == mixDatabaseName
+                    && m.Specificulture == culture
+                    && m.ParentType == MixDatabaseParentType.Set
+                    && !string.IsNullOrEmpty(m.ParentId))
+                    .Select(m => m.DataId);
+
+                predicate = predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
+
+                return await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
+                            predicate,
+                            context, transaction);
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<List<TView>>(ex, isRoot, transaction);
             }
             finally
             {
@@ -889,9 +926,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         }
 
         public static JObject ParseData(
-            string dataId, 
-            string culture, 
-            MixCmsContext _context = null, 
+            string dataId,
+            string culture,
+            MixCmsContext _context = null,
             IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
