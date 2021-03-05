@@ -499,7 +499,7 @@ namespace Mix.Cms.Lib.Helpers
         {
             int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            keyword ??= context.Request.Query["keyword"];
+            keyword ??= context.Request.Query["Keyword"];
             if (!string.IsNullOrEmpty(context.Request.Query[MixRequestQueryKeywords.Page]))
             {
                 int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out page);

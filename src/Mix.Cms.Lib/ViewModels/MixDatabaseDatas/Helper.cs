@@ -357,6 +357,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["mixDatabaseId"], out int mixDatabaseId);
                 bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+                bool.TryParse(request.Query["isGroup"], out bool isGroup);
                 int.TryParse(request.Query["pageIndex"], out int pageIndex);
                 var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
                 bool isFromDate = DateTime.TryParse(request.Query["fromDate"], out DateTime fromDate);
@@ -420,14 +421,16 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     && (!isToDate || (m.CreatedDateTime <= toDate));
                 }
 
-                var excludeIds = context.MixDatabaseDataAssociation.Where(
-                    m => (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
-                    && m.Specificulture == culture
-                    && m.ParentType == MixDatabaseParentType.Set
-                    && !string.IsNullOrEmpty(m.ParentId))
-                    .Select(m => m.DataId);
-
-                predicate = predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
+                if (isGroup)
+                {
+                    var excludeIds = context.MixDatabaseDataAssociation.Where(
+                        m => (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
+                        && m.Specificulture == culture
+                        && m.ParentType == MixDatabaseParentType.Set
+                        && !string.IsNullOrEmpty(m.ParentId))
+                        .Select(m => m.DataId);
+                    predicate = predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
+                }
 
                 result = await DefaultRepository<MixCmsContext, MixDatabaseData, TView>.Instance.GetModelListByAsync(
                             predicate,

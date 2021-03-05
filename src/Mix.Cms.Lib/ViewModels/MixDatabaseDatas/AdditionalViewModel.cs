@@ -113,13 +113,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 var getValues = MixDatabaseDataValues.UpdateViewModel
                        .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
-                var values = getValues.Data.Select(v => v.Model);
                 Columns.AddRange(
                     getValues.Data
-                    .Where(v => !Columns.Any(f => f.Id == v.Column.Id))
+                    .Where(v => !Columns.Any(f => f.Id == v.Column?.Id))
                     .Select(v => v.Column)
                     .ToList());
-                var properties = values.Select(m => m.ToJProperty(_context, _transaction));
+                var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
                 Obj = new JObject(
                     new JProperty("id", Id),
                     properties

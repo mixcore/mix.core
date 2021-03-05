@@ -87,6 +87,76 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
             }
         }
+        
+        public static JProperty ToJProperty(
+            this ViewModels.MixDatabaseDataValues.UpdateViewModel item,
+            MixCmsContext _context,
+            IDbContextTransaction _transaction)
+        {
+            switch (item.DataType)
+            {
+                case MixDataType.DateTime:
+                    return new JProperty(item.MixDatabaseColumnName, item.DateTimeValue);
+
+                case MixDataType.Date:
+                    if (!item.DateTimeValue.HasValue)
+                    {
+                        if (DateTime.TryParseExact(
+                            item.StringValue,
+                            "MM/dd/yyyy HH:mm:ss",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.RoundtripKind,
+                            out DateTime date))
+                        {
+                            item.DateTimeValue = date;
+                        }
+                    }
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
+
+                case MixDataType.Time:
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
+
+                case MixDataType.Double:
+                    return (new JProperty(item.MixDatabaseColumnName, item.DoubleValue ?? 0));
+
+                case MixDataType.Boolean:
+                    return (new JProperty(item.MixDatabaseColumnName, item.BooleanValue));
+
+                case MixDataType.Integer:
+                    return (new JProperty(item.MixDatabaseColumnName, item.IntegerValue ?? 0));
+
+                case MixDataType.Reference:
+                    return (new JProperty(item.MixDatabaseColumnName, new JArray()));
+
+                case MixDataType.Upload:
+                    string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                    string url = !string.IsNullOrEmpty(item.StringValue)
+                   ? !item.StringValue.Contains(domain)
+                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
+                        : item.StringValue
+                   : null;
+                    return (new JProperty(item.MixDatabaseColumnName, url));
+
+                case MixDataType.Custom:
+                case MixDataType.Duration:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
+                default:
+                    return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
+            }
+        }
 
         public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, 
             JToken property,

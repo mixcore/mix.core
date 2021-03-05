@@ -87,14 +87,20 @@ namespace Mix.Cms.Web.Controllers
                         HandleSeoName(ref seoName, ref keyword);
                     }
                 }
-                ViewData["Layout"] = "Masters/_Layout";
-                ViewData["keyword"] = keyword;
-                return await AliasAsync(seoName);
+                return await AliasAsync(seoName, keyword);
             }
             else
             {
                 return Redirect(_redirectUrl);
             }
+        }
+
+        [HttpPost]
+        [Route("search")]
+        [Route("{culture}/search")]
+        public async Task<IActionResult> Search([FromBody] string keyword)
+        {
+            return await Page("search", keyword);
         }
 
         private void HandleSeoName(ref string seoName, ref string keyword)
