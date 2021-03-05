@@ -199,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                                     var getData = Repository.GetSingleModel(m => m.Id == id && m.Specificulture == Specificulture, _context, _transaction);
                                     if (getData.IsSucceed)
                                     {
-                                        getData.Data.Obj = objData["obj"].Value<JObject>();
+                                        getData.Data.Obj = objData;
                                         RefData.Add(getData.Data);
                                     }
                                 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 {
-    public class FieldConfigurations
+    public class ColumnConfigurations
     {
         [JsonProperty("upload")]
         public UploadConfigurations Upload { get; set; } = new UploadConfigurations();

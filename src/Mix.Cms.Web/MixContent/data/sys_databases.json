@@ -45,7 +45,7 @@
           "lastModified": null,
           "priority": 0,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -81,7 +81,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -117,7 +117,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -166,7 +166,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -223,7 +223,7 @@
           "lastModified": null,
           "priority": 4,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -259,7 +259,7 @@
           "lastModified": null,
           "priority": 4,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -295,7 +295,7 @@
           "lastModified": null,
           "priority": 5,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -331,7 +331,7 @@
           "lastModified": null,
           "priority": 6,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -367,7 +367,7 @@
           "lastModified": null,
           "priority": 7,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -403,7 +403,7 @@
           "lastModified": null,
           "priority": 8,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -439,7 +439,7 @@
           "lastModified": null,
           "priority": 9,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -492,7 +492,7 @@
           "lastModified": null,
           "priority": 10,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -550,7 +550,7 @@
           "lastModified": null,
           "priority": 0,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -586,7 +586,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -622,7 +622,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -680,7 +680,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -716,7 +716,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -752,7 +752,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -788,7 +788,7 @@
           "lastModified": null,
           "priority": 4,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -824,7 +824,7 @@
           "lastModified": null,
           "priority": 5,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -860,7 +860,7 @@
           "lastModified": null,
           "priority": 6,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -939,7 +939,7 @@
           "lastModified": null,
           "priority": 0,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -975,7 +975,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1033,7 +1033,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 0,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1069,7 +1069,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 0,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1105,7 +1105,7 @@
           "lastModified": null,
           "priority": 6,
           "status": 0,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1163,7 +1163,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1199,7 +1199,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1248,7 +1248,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1284,7 +1284,7 @@
           "lastModified": null,
           "priority": 4,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1320,7 +1320,7 @@
           "lastModified": null,
           "priority": 5,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1378,7 +1378,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1414,7 +1414,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1450,7 +1450,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1508,7 +1508,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1544,7 +1544,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1580,7 +1580,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1638,7 +1638,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1674,7 +1674,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1710,7 +1710,7 @@
           "lastModified": null,
           "priority": 4,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1768,7 +1768,7 @@
           "lastModified": null,
           "priority": 0,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1804,7 +1804,7 @@
           "lastModified": null,
           "priority": 1,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1840,7 +1840,7 @@
           "lastModified": null,
           "priority": 2,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1885,7 +1885,7 @@
           "lastModified": null,
           "priority": 3,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
@@ -1921,7 +1921,7 @@
           "lastModified": null,
           "priority": 5,
           "status": 2,
-          "fieldConfigurations": {
+          "columnConfigurations": {
             "upload": {
               "arrayAccepts": [],
               "accepts": "",
