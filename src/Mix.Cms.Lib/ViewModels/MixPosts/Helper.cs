@@ -393,6 +393,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByIds<TView>(
             string keyword
             , List<string> dataIds
+            , List<string> nestedIds
             , List<int> pageIds = null
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
@@ -410,11 +411,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                              || (EF.Functions.Like(m.Title, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Excerpt, $"%{keyword}%"))
                              || (EF.Functions.Like(m.Content, $"%{keyword}%")));
-                if (dataIds.Count > 0)
-                {
-                    var searchPostByDataIds = SearchPostByDataIdsPredicate(dataIds, culture, context);
-                    postPredicate = searchPostByDataIds.AndAlso(postPredicate);
-                }
+                var searchPostByDataIds = SearchPostByDataIdsPredicate(dataIds, nestedIds, culture, context);
+                postPredicate = postPredicate.AndAlsoIf(searchPostByDataIds != null, searchPostByDataIds);
 
                 if (pageIds != null && pageIds.Count > 0)
                 {
@@ -476,29 +474,35 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return postPredicate;
         }
 
-        private static Expression<Func<MixPost, bool>> SearchPostByDataIdsPredicate(List<string> dataIds, string culture, MixCmsContext context)
+        private static Expression<Func<MixPost, bool>> SearchPostByDataIdsPredicate(List<string> dataIds, List<string> nestedIds, string culture, MixCmsContext context)
         {
             Expression<Func<MixPost, bool>> postPredicate = null;
-            Expression<Func<MixDatabaseDataAssociation, bool>> predicate = null;
-            foreach (var id in dataIds)
-            {
-                // Get list related post ids by data id
-                Expression<Func<MixDatabaseDataAssociation, bool>> pre =
-                    m => m.Specificulture == culture
-                        && m.ParentType == MixDatabaseParentType.Post
-                        && m.DataId == id;
+            Expression<Func<MixDatabaseDataAssociation, bool>> predicate = m => m.ParentType == MixDatabaseParentType.Post
+                && m.Specificulture == culture;
 
-                predicate = predicate == null ? pre : predicate.AndAlso(pre);
+            if (nestedIds != null && nestedIds.Count > 0)
+            {
+                var nestedQuery = context.MixDatabaseDataAssociation
+                .Where(m =>
+                    m.Specificulture == culture
+                   && nestedIds.Any(n => n == m.DataId))
+                .Select(m => m.ParentId).Distinct();
+
+                dataIds.AddRange(nestedQuery);
             }
 
-            if (predicate != null)
+            if (dataIds.Count > 0)
             {
+                predicate = predicate.AndAlso(m => dataIds.Any(n => n == m.DataId));
                 var postIds = context.MixDatabaseDataAssociation
-                    .Where(predicate)
-                    .Select(m => m.ParentId).Distinct();
+                .Where(predicate)
+                .GroupBy(m => m.ParentId)
+                .Select(g => new { ParentId = g.Key, Count = g.Count() })
+                .Where(c => c.Count == dataIds.Count)
+                .Select(m => m.ParentId);
+
                 postPredicate = p => postIds.Any(m => p.Id.ToString() == m);
             }
-
             return postPredicate;
         }
 

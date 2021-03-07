@@ -17,7 +17,7 @@ namespace Mix.Cms.Service.SignalR.Models
         [JsonProperty("to")]
         public string To { get; set; }
 
-        [JsonProperty("attributeSetName")]
+        [JsonProperty("mixDatabaseName")]
         public string MixDatabaseName { get; set; }
 
         [JsonProperty("action")]

@@ -34,13 +34,13 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
-        [Route("data/{attributeSetName}/{seoName}")]
-        [Route("{culture}/data/{attributeSetName}/{seoName}")]
-        public async Task<IActionResult> Index(string attributeSetName, string seoName)
+        [Route("data/{mixDatabaseName}/{seoName}")]
+        [Route("{culture}/data/{mixDatabaseName}/{seoName}")]
+        public async Task<IActionResult> Index(string mixDatabaseName, string seoName)
         {
             if (isValid)
             {
-                return await Data(attributeSetName, seoName);
+                return await Data(mixDatabaseName, seoName);
             }
             else
             {
