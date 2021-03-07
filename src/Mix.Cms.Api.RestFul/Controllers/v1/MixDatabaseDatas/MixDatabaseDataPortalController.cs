@@ -62,6 +62,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     AdditionalViewModel result = new AdditionalViewModel()
                     {
+                        Id = Guid.NewGuid().ToString(),
                         Specificulture = _lang,
                         MixDatabaseId = getAttrSet.Data.Id,
                         MixDatabaseName = getAttrSet.Data.Name,
