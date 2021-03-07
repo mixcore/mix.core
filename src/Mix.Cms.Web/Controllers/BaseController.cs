@@ -307,10 +307,10 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected async System.Threading.Tasks.Task<IActionResult> Data(string attributeSetName, string seoName)
+        protected async System.Threading.Tasks.Task<IActionResult> Data(string mixDatabaseName, string seoName)
         {
             var getData = await Lib.ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel>(
-                culture, attributeSetName, "equal", "seo_url", seoName);
+                culture, mixDatabaseName, "equal", "seo_url", seoName);
 
             if (getData.IsSucceed && getData.Data.Count > 0)
             {

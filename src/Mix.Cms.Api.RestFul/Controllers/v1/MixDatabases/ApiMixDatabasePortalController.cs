@@ -51,6 +51,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
+        [HttpGet("{id}")]
+        public override async Task<ActionResult<UpdateViewModel>> Get(string id)
+        {
+            int.TryParse(id, out int dbId);
+            var result = await UpdateViewModel.Repository.GetSingleModelAsync(
+                    m => (m.Id == dbId || m.Name == id));
+            return Ok(result.Data);
+        }
+
         // DELETE: api/v1/rest/en-us/mix-database/portal/5
         [HttpDelete("{id}")]
         public override async Task<ActionResult<MixDatabase>> Delete(string id)

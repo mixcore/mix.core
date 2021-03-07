@@ -30,10 +30,10 @@ namespace Mix.Cms.Service.SignalR.ViewModels.MixDatabaseDatas
         [JsonProperty("priority")]
         public int Priority { get; set; }
 
-        [JsonProperty("attributeSetId")]
+        [JsonProperty("mixDatabaseId")]
         public int MixDatabaseId { get; set; }
 
-        [JsonProperty("attributeSetName")]
+        [JsonProperty("mixDatabaseName")]
         public string MixDatabaseName { get; set; }
 
         [JsonProperty("createdDateTime")]

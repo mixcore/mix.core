@@ -91,27 +91,28 @@ namespace Mix.Cms.Api.Controllers.v1
                         loginResult.Status = 1;
                         loginResult.Data = token;
                         _logger.LogInformation("User logged in.");
-                        return Ok(loginResult);
+                        return Ok(token);
                     }
                     else
                     {
-                        return Ok(loginResult);
+                        return Ok(token);
                     }
                 }
                 if (result.IsLockedOut)
                 {
                     loginResult.Errors.Add("This account has been locked out, please try again later.");
-                    return BadRequest(loginResult);
+                    return BadRequest(loginResult.Errors);
                 }
                 else
                 {
                     loginResult.Errors.Add("Login failed");
-                    return BadRequest(loginResult);
+                    return BadRequest(loginResult.Errors);
                 }
             }
             else
             {
-                return BadRequest(loginResult);
+                loginResult.Errors.Add("Invalid model");
+                return BadRequest(loginResult.Errors);
             }
         }
 
