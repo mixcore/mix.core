@@ -263,7 +263,7 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
-      "isHiden": true,
+      "isHiden": false,
       "subMenus": [
         {
           "title": "List Online",
@@ -278,7 +278,7 @@
       "icon": "mi mi-Settings  mi-spin",
       "subMenus": [
         {
-          "title": "Portal App Settings",
+          "title": "Global Settings",
           "icon": "mi mi-Apps",
           "path": "/portal/app-settings/details"
         },
@@ -289,7 +289,7 @@
         },
         {
           "path": "/portal/configuration/list",
-          "title": "List",
+          "title": "Local settings",
           "icon": "mi mi-List"
         }
       ]
