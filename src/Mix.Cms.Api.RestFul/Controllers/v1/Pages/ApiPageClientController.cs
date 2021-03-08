@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPages;
 using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Extensions;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,18 +30,19 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
-            Expression<Func<MixPage, bool>> predicate = model =>
-                model.Specificulture == _lang
-                && (User.IsInRole("SuperAdmin") || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
-                && (!isStatus || model.Status == status)
-                && (!isFromDate || model.CreatedDateTime >= fromDate)
-                && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(keyword)
-                 || (EF.Functions.Like(model.Title, $"%{keyword}%"))
+
+            Expression<Func<MixPage, bool>> predicate = model => model.Specificulture == _lang;
+            predicate = predicate.AndAlsoIf(isStatus, model => model.Status == status);
+            predicate = predicate.AndAlsoIf(!isStatus, model => model.Status == MixContentStatus.Published);
+            predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
+            predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime >= toDate);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model => 
+                (EF.Functions.Like(model.Title, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Content, $"%{keyword}%"))
-                 );
+                 || (EF.Functions.Like(model.Content, $"%{keyword}%")));
+
             var getData = await base.GetListAsync(predicate);
+
             if (getData.IsSucceed)
             {
                 return getData.Data;
