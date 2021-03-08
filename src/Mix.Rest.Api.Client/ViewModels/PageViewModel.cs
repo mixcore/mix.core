@@ -1,25 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Helpers;
-using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
-using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using MixLibViewModels = Mix.Cms.Lib.ViewModels;
 
-namespace Mix.Cms.Lib.ViewModels.MixPages
+namespace Mix.Rest.Api.Client.ViewModels
 {
-    public class ReadClientViewModel : ViewModelBase<MixCmsContext, MixPage, ReadClientViewModel>
+    public class PageViewModel : ViewModelBase<MixCmsContext, MixPage, PageViewModel>
     {
         #region Properties
 
@@ -32,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -155,10 +153,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("posts")]
-        public PaginationModel<MixPosts.ReadClientViewModel> Posts { get; set; } = new PaginationModel<MixPosts.ReadClientViewModel>();
+        public PaginationModel<PostViewModel> Posts { get; set; } = new PaginationModel<PostViewModel>();
 
         [JsonProperty("modules")]
-        public List<MixModules.ReadClientViewModel> Modules { get; set; } = new List<MixModules.ReadClientViewModel>(); // Get All Module
+        public List<ModuleViewModel> Modules { get; set; } = new List<ModuleViewModel>(); // Get All Module
 
         public string TemplatePath
         {
@@ -180,11 +178,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Contructors
 
-        public ReadClientViewModel() : base()
+        public PageViewModel() : base()
         {
         }
 
-        public ReadClientViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public PageViewModel(MixPage model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -233,7 +231,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 if (postExp != null)
                 {
                     var postIds = context.MixPagePost.Where(postExp).Select(m => m.PostId);
-                    Posts = MixPosts.ReadClientViewModel.Repository.GetModelListBy(
+                    Posts = PostViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture && postIds.Any(n => n == m.Id),
                         MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy),
                         0,
@@ -245,7 +243,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
             catch (Exception ex)
             {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadClientViewModel>>(ex, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<PageViewModel>>(ex, isRoot, transaction);
             }
             finally
             {
@@ -262,7 +260,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var moduleIds = _context.MixPageModule.Where(
                 m => m.PageId == Id && m.Specificulture == Specificulture
                 ).Select(m => m.ModuleId);
-            Modules = MixModules.ReadClientViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+            Modules = ModuleViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
              && moduleIds.Any(n => n == m.Id), _context, _transaction).Data;
 
         }
@@ -277,7 +275,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_PAGE)
                 .Select(m => m.DataId)
                 .FirstOrDefault();
-            AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
+            AdditionalData = MixLibViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                a => a.Id == dataId && a.Specificulture == Specificulture
                    , _context, _transaction).Data?.Obj;
         }

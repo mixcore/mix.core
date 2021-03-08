@@ -1,19 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MixLibViewModels = Mix.Cms.Lib.ViewModels;
 
-namespace Mix.Cms.Lib.ViewModels.MixPosts
+namespace Mix.Rest.Api.Client.ViewModels
 {
-    public class ReadClientViewModel
-        : ViewModelBase<MixCmsContext, MixPost, ReadClientViewModel>
+    public class PostViewModel
+        : ViewModelBase<MixCmsContext, MixPost, PostViewModel>
     {
         #region Properties
 
@@ -26,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -149,14 +152,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        [JsonProperty("mediaNavs")]
-        public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
-
         [JsonProperty("postNavs")]
-        public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
-
-        [JsonProperty("Databases")]
-        public List<MixDatabases.ReadViewModel> Databases { get; set; } = new List<MixDatabases.ReadViewModel>();
+        public List<MixLibViewModels.MixPosts.ReadListItemViewModel> PostNavs { get; set; }
 
         [JsonProperty("additionalData")]
         public JObject AdditionalData { get; set; }
@@ -168,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<JObject> Categories { get; set; } = new List<JObject>();
 
         [JsonProperty("pages")]
-        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
+        public List<PageViewModel> Pages { get; set; }
 
         [JsonProperty("Layout")]
         public string Layout { get; set; }
@@ -182,11 +179,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Contructors
 
-        public ReadClientViewModel() : base()
+        public PostViewModel() : base()
         {
         }
 
-        public ReadClientViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public PostViewModel(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -204,15 +201,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (Pages == null)
             {
                 LoadPages(_context, _transaction);
-                var getPostMedia = MixPostMedias.ReadViewModel.Repository.GetModelListBy(n => n.PostId == Id && n.Specificulture == Specificulture, _context, _transaction);
-                if (getPostMedia.IsSucceed)
-                {
-                    MediaNavs = getPostMedia.Data.OrderBy(p => p.Priority).ToList();
-                    MediaNavs.ForEach(n => n.IsActived = true);
-                }
-
                 // Related Posts
-                PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
+                PostNavs = MixLibViewModels.MixPostPosts.ReadViewModel.Repository.GetModelListBy(
+                    n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction)
+                    .Data.Select(m=>m.RelatedPost).ToList();
             }
         }
 
@@ -220,7 +212,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (!string.IsNullOrEmpty(CreatedBy))
             {
-                var getAuthor = MixDatabaseDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
+                var getAuthor = MixLibViewModels.MixDatabaseDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
                     , Specificulture, context, transaction);
                 if (getAuthor.IsSucceed)
                 {
@@ -231,19 +223,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getTags = MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(
+            var getTags = MixLibViewModels.MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(
                     m => m.Specificulture == Specificulture && m.Status == MixContentStatus.Published
                    && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
                    && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
-                Tags = getTags.Data.Select(m=>m.AttributeData.Obj).ToList();
+                Tags = getTags.Data.Select(m => m.AttributeData.Obj).ToList();
             }
         }
 
         private void LoadCategories(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getData = MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(m => m.Specificulture == Specificulture
+            var getData = MixLibViewModels.MixDatabaseDataAssociations.FormViewModel.Repository.GetModelListBy(
+                m => m.Specificulture == Specificulture
                    && m.ParentId == Id.ToString() && m.ParentType == MixDatabaseParentType.Post
                    && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
@@ -258,8 +251,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadPages(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            this.Pages = MixPagePosts.Helper.GetActivedNavAsync<MixPagePosts.ReadViewModel>(Id, null, Specificulture, _context, _transaction).Data;
-            this.Pages.ForEach(p => p.LoadPage(_context, _transaction));
+            var pageIds = _context.MixPagePost.Where(m => m.Specificulture == Specificulture
+                && m.PostId == Id).Select(m => m.PageId);
+            Pages = PageViewModel.Repository.GetModelListBy(m =>
+                m.Specificulture == Specificulture 
+                && pageIds.Any(n => n == m.Id)
+                , _context, _transaction
+                ).Data;
         }
 
         /// <summary>Loads the attributes.</summary>
@@ -275,7 +273,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 .Select(m => m.DataId)
                 .FirstOrDefault();
 
-            AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
+            AdditionalData = MixLibViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.Id == dataId && a.Specificulture == Specificulture
                     , _context, _transaction).Data?.Obj;
         }

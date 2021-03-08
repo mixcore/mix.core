@@ -8,23 +8,22 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.ViewModels.MixPages;
 using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Extensions;
+using Mix.Rest.Api.Client.ViewModels;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.RestFul.Controllers.v1
+namespace Mix.Rest.Api.Client.v1
 {
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/page/client")]
-    public class ApiPageCLientController :
-        BaseReadOnlyApiController<MixCmsContext, MixPage, ReadClientViewModel>
+    public class ApiPageController :
+        BaseReadOnlyApiController<MixCmsContext, MixPage, PageViewModel>
     {
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<ReadClientViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<PageViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
