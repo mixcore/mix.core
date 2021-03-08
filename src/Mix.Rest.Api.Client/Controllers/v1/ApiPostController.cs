@@ -10,20 +10,21 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
+using Mix.Rest.Api.Client.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.RestFul.Controllers.v1
+namespace Mix.Rest.Api.Client.v1
 {
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/post/client")]
     public class ApiPostClientController :
-        BaseReadOnlyApiController<MixCmsContext, MixPost, ReadClientViewModel>
+        BaseReadOnlyApiController<MixCmsContext, MixPost, PostViewModel>
     {
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<ReadClientViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<PostViewModel>>> Get()
         {
             bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
@@ -53,9 +54,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("get-by-meta")]
-        public async Task<ActionResult<PaginationModel<ReadClientViewModel>>> GetByMeta()
+        public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByMeta()
         {
-            var result = await Helper.GetModelistByMeta<ReadClientViewModel>(
+            var result = await Helper.GetModelistByMeta<PostViewModel>(
                 Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], _lang);
             if (result.IsSucceed)
             {
@@ -66,11 +67,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-        
+
         [HttpGet("get-by-value")]
-        public async Task<ActionResult<PaginationModel<ReadClientViewModel>>> GetByValue()
+        public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByValue()
         {
-            var result = await Helper.SearchPostByField<ReadClientViewModel>(
+            var result = await Helper.SearchPostByField<PostViewModel>(
                 Request.Query["column"], Request.Query["value"], _lang);
             if (result.IsSucceed)
             {
@@ -83,9 +84,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("get-by-value-id")]
-        public async Task<ActionResult<PaginationModel<ReadClientViewModel>>> GetByValueId()
+        public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByValueId()
         {
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueId<ReadClientViewModel>(
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueId<PostViewModel>(
                 Request.Query["value"]);
             if (result.IsSucceed)
             {
@@ -98,9 +99,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpPost("get-by-value-ids")]
-        public async Task<ActionResult<PaginationModel<ReadClientViewModel>>> GetByValueIds([FromBody] List<string> valueIds)
+        public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByValueIds([FromBody] List<string> valueIds)
         {
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueIds<ReadClientViewModel>(
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueIds<PostViewModel>(
                 valueIds);
             if (result.IsSucceed)
             {
@@ -128,9 +129,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpGet("get-by-data-id")]
-        public async Task<ActionResult<PaginationModel<ReadClientViewModel>>> GetByAttributeDataId()
+        public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByAttributeDataId()
         {
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByDataId<ReadClientViewModel>(
+            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByDataId<PostViewModel>(
                 Request.Query["value"]
                 , _lang);
             if (result.IsSucceed)

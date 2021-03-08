@@ -3,7 +3,9 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
+using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.NetCore.Attributes;
@@ -14,11 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Mix.Cms.Lib.ViewModels.MixModules
+namespace Mix.Rest.Api.Client.ViewModels
 {
     [GeneratedController("api/v1/rest/{culture}/module/client")]
-    public class ReadClientViewModel
-        : ViewModelBase<MixCmsContext, MixModule, ReadClientViewModel>
+    public class ModuleViewModel
+        : ViewModelBase<MixCmsContext, MixModule, ModuleViewModel>
     {
         #region Properties
 
@@ -31,7 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -134,10 +136,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("data")]
-        public PaginationModel<ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<ViewModels.MixModuleDatas.ReadViewModel>();
+        public PaginationModel<Cms.Lib.ViewModels.MixModuleDatas.ReadViewModel> Data { get; set; } = new PaginationModel<Cms.Lib.ViewModels.MixModuleDatas.ReadViewModel>();
 
         [JsonProperty("posts")]
-        public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
+        public PaginationModel<Cms.Lib.ViewModels.MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<Cms.Lib.ViewModels.MixModulePosts.ReadViewModel>();
 
         [JsonProperty("additionalData")]
         public JObject AdditionalData { get; set; }
@@ -151,11 +153,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Contructors
 
-        public ReadClientViewModel() : base()
+        public ModuleViewModel() : base()
         {
         }
 
-        public ReadClientViewModel(MixModule model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ModuleViewModel(MixModule model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -181,12 +183,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                     && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_MODULE)
                 .Select(m => m.DataId)
                 .FirstOrDefault();
-            AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
+            AdditionalData = Cms.Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                a => a.Id == dataId && a.Specificulture == Specificulture
                    , _context, _transaction).Data?.Obj;
         }
 
-        public static RepositoryResponse<ReadClientViewModel> GetBy(
+        public static RepositoryResponse<ModuleViewModel> GetBy(
             Expression<Func<MixModule, bool>> predicate, int? postId = null, int? productid = null, int pageId = 0
              , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -232,7 +234,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
                 if (dataExp != null)
                 {
-                    var getDataResult = MixModuleDatas.ReadViewModel.Repository
+                    var getDataResult = Cms.Lib.ViewModels.MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
                         , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy
@@ -248,7 +250,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 }
                 if (postExp != null)
                 {
-                    var getPosts = MixModulePosts.ReadViewModel.Repository
+                    var getPosts = Cms.Lib.ViewModels.MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
                     , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
@@ -261,7 +263,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
             catch (Exception ex)
             {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadClientViewModel>>(ex, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ModuleViewModel>>(ex, isRoot, transaction);
             }
             finally
             {
