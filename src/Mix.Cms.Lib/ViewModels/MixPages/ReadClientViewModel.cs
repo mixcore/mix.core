@@ -155,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("posts")]
-        public PaginationModel<MixPagePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixPagePosts.ReadViewModel>();
+        public PaginationModel<MixPosts.ReadClientViewModel> Posts { get; set; } = new PaginationModel<MixPosts.ReadClientViewModel>();
 
         [JsonProperty("modules")]
         public List<MixModules.ReadClientViewModel> Modules { get; set; } = new List<MixModules.ReadClientViewModel>(); // Get All Module
@@ -169,7 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("additionalData")]
-        public MixDatabaseDatas.ReadMvcViewModel AdditionalData { get; set; }
+        public JObject AdditionalData { get; set; }
 
         [JsonProperty("bodyClass")]
         public string BodyClass => CssClass;
@@ -232,125 +232,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
                 if (postExp != null)
                 {
-                    var getPosts = MixPagePosts.ReadViewModel.Repository
-                    .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
-                    , pageSize, pageIndex
-                    , _context: context, _transaction: transaction);
-                    if (getPosts.IsSucceed)
-                    {
-                        Posts = getPosts.Data;
-                        Posts.Items.ForEach(m => m.LoadPost(context, transaction));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadClientViewModel>>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
-                }
-            }
-        }
-
-        public void LoadDataByTag(string tagName
-            , string orderBy, int orderDirection
-            , int? pageSize = null, int? pageIndex = null
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                pageSize = pageSize > 0 ? pageSize : PageSize;
-                pageIndex = pageIndex ?? 0;
-                Expression<Func<MixPost, bool>> postExp = null;
-                JObject obj = new JObject(new JProperty("text", tagName));
-
-                postExp = n => n.Tags.Contains(obj.ToString(Newtonsoft.Json.Formatting.None)) && n.Specificulture == Specificulture;
-
-                if (postExp != null)
-                {
-                    var getPosts = MixPosts.ReadListItemViewModel.Repository
-                    .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(orderBy), 0
-                    , pageSize, pageIndex
-                    , _context: context, _transaction: transaction);
-                    if (getPosts.IsSucceed)
-                    {
-                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
-                        Posts.PageIndex = getPosts.Data.PageIndex;
-                        Posts.PageSize = getPosts.Data.PageSize;
-                        Posts.TotalItems = getPosts.Data.TotalItems;
-                        Posts.TotalPage = getPosts.Data.TotalPage;
-                        foreach (var post in getPosts.Data.Items)
-                        {
-                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
-                            {
-                                PageId = Id,
-                                PostId = post.Id,
-                                Post = post
-                            });
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<ReadClientViewModel>>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                if (isRoot)
-                {
-                    //if current Context is Root
-                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
-                }
-            }
-        }
-
-        public void LoadDataByKeyword(string keyword
-           , string orderBy, int orderDirection
-           , int? pageSize = null, int? pageIndex = null
-           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                pageSize = pageSize > 0 ? pageSize : PageSize;
-                pageIndex = pageIndex ?? 0;
-                Expression<Func<MixPost, bool>> postExp = null;
-
-                postExp = n => n.Title.Contains(keyword) && n.Specificulture == Specificulture;
-
-                if (postExp != null)
-                {
-                    var getPosts = MixPosts.ReadListItemViewModel.Repository
-                    .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(orderBy), 0
-                    , pageSize, pageIndex
-                    , _context: context, _transaction: transaction);
-                    if (getPosts.IsSucceed)
-                    {
-                        Posts.Items = new List<MixPagePosts.ReadViewModel>();
-                        Posts.PageIndex = getPosts.Data.PageIndex;
-                        Posts.PageSize = getPosts.Data.PageSize;
-                        Posts.TotalItems = getPosts.Data.TotalItems;
-                        Posts.TotalPage = getPosts.Data.TotalPage;
-                        foreach (var post in getPosts.Data.Items)
-                        {
-                            Posts.Items.Add(new MixPagePosts.ReadViewModel()
-                            {
-                                PageId = Id,
-                                PostId = post.Id,
-                                Post = post
-                            });
-                        }
-                    }
+                    var postIds = context.MixPagePost.Where(postExp).Select(m => m.PostId);
+                    Posts = MixPosts.ReadClientViewModel.Repository.GetModelListBy(
+                        m => m.Specificulture == Specificulture && postIds.Any(n => n == m.Id),
+                        MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy),
+                        0,
+                        pageSize,
+                        pageIndex
+                    , _context: context, _transaction: transaction
+                        ).Data;
                 }
             }
             catch (Exception ex)
@@ -377,20 +267,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         }
 
-        private void GetSubPosts(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
-                n => n.PageId == Id && n.Specificulture == Specificulture,
-                MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
-                , 4, 0
-               , _context: _context, _transaction: _transaction
-               );
-            if (getPosts.IsSucceed)
-            {
-                Posts = getPosts.Data;
-            }
-        }
-
         #endregion Sync
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -403,7 +279,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 .FirstOrDefault();
             AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                a => a.Id == dataId && a.Specificulture == Specificulture
-                   , _context, _transaction).Data ?? new MixDatabaseDatas.ReadMvcViewModel();
+                   , _context, _transaction).Data?.Obj;
         }
         #endregion Expands
     }

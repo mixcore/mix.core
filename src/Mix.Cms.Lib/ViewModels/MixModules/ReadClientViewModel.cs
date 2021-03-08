@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -9,6 +8,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -140,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public PaginationModel<MixModulePosts.ReadViewModel> Posts { get; set; } = new PaginationModel<MixModulePosts.ReadViewModel>();
 
         [JsonProperty("additionalData")]
-        public MixDatabaseDatas.ReadMvcViewModel AdditionalData { get; set; }
+        public JObject AdditionalData { get; set; }
 
         #endregion Views
 
@@ -183,7 +183,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 .FirstOrDefault();
             AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                a => a.Id == dataId && a.Specificulture == Specificulture
-                   , _context, _transaction).Data ?? new MixDatabaseDatas.ReadMvcViewModel();
+                   , _context, _transaction).Data?.Obj;
         }
 
         public static RepositoryResponse<ReadClientViewModel> GetBy(

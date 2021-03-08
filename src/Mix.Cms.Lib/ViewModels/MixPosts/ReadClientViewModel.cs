@@ -81,9 +81,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("publishedDateTime")]
         public DateTime? PublishedDateTime { get; set; }
 
-        [JsonProperty("tags")]
-        public string Tags { get; set; } = "[]";
-
         public string CreatedBy { get; set; }
 
         [JsonProperty("createdDateTime")]
@@ -162,19 +159,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixDatabases.ReadViewModel> Databases { get; set; } = new List<MixDatabases.ReadViewModel>();
 
         [JsonProperty("additionalData")]
-        public MixDatabaseDatas.ReadMvcViewModel AdditionalData { get; set; }
+        public JObject AdditionalData { get; set; }
 
-        [JsonProperty("sysTags")]
-        public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
+        [JsonProperty("tags")]
+        public List<JObject> Tags { get; set; } = new List<JObject>();
 
-        [JsonProperty("sysCategories")]
-        public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
-
-        [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
-
-        [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
+        [JsonProperty("categories")]
+        public List<JObject> Categories { get; set; } = new List<JObject>();
 
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
@@ -246,7 +237,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                    && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_TAG, context, transaction);
             if (getTags.IsSucceed)
             {
-                SysTags = getTags.Data;
+                Tags = getTags.Data.Select(m=>m.AttributeData.Obj).ToList();
             }
         }
 
@@ -257,7 +248,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                    && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_CATEGORY, context, transaction);
             if (getData.IsSucceed)
             {
-                SysCategories = getData.Data;
+                Categories = getData.Data.Select(m => m.AttributeData.Obj).ToList();
             }
         }
 
@@ -286,7 +277,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             AdditionalData = MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.Id == dataId && a.Specificulture == Specificulture
-                    , _context, _transaction).Data ?? new MixDatabaseDatas.ReadMvcViewModel();
+                    , _context, _transaction).Data?.Obj;
         }
 
         #endregion Expands
