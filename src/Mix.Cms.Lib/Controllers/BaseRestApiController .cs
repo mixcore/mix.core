@@ -32,6 +32,13 @@ namespace Mix.Cms.Lib.Controllers
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
+        protected DefaultRepository<TDbContext, TModel, TView> _repo;
+
+        public BaseRestApiController(DefaultRepository<TDbContext, TModel, TView> repo)
+        {
+            _repo = repo;
+        }
+
         protected string _lang;
         protected bool _forbidden;
 

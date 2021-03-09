@@ -74,11 +74,14 @@ namespace Mix.Cms.Web
 
             /* Mix: Inject Services */
             services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            services.AddRepositories();
             services.AddGenerateApis();
             services.AddMixRestApi();
             services.AddMixSignalR();
             //services.AddMixGprc();
             services.AddMixScheduler(Configuration);
+
+            services.AddSingleton<MixCacheService>();
             /* Mix: End Inject Services */
 
             VerifyInitData(services);

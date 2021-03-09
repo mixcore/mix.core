@@ -39,7 +39,6 @@ namespace Mix.Cms.Lib.Controllers
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
-
         /// <summary>
         /// The domain
         /// </summary>
