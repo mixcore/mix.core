@@ -8,6 +8,7 @@
     "IsCache": true,
     "MixCacheMode": "Json",
     "MixCacheFolder": "MixContent/cache",
+    "MixCacheDb": "MixContent/mix_cache.db",
     "JsonDataFolder": "MixContent/data",
     "MixLogsFolder": "MixContent/logs"
   },
