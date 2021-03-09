@@ -26,5 +26,6 @@
         public const string NextSyncContent = "NextSyncContent";
         public const string AllowedHosts = "AllowedHosts";
         public const string MaxPageSize = "MaxPageSize";
+        public const string ImageSizes = "ImageSizes";
     }
 }
