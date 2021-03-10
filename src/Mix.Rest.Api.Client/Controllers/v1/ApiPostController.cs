@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
 using Mix.Rest.Api.Client.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,11 @@ namespace Mix.Rest.Api.Client.v1
     public class ApiPostClientController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, PostViewModel>
     {
+        public ApiPostClientController(DefaultRepository<MixCmsContext, MixPost, PostViewModel> repo) 
+            : base(repo)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<PostViewModel>>> Get()
         {

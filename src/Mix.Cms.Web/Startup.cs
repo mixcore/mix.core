@@ -16,6 +16,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Schedule;
 using Mix.Cms.Service.SignalR;
+using Mix.Rest.Api.Client;
 using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -75,6 +76,7 @@ namespace Mix.Cms.Web
             /* Mix: Inject Services */
             services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
             services.AddRepositories();
+            services.AddRestClientServices();
             services.AddGenerateApis();
             services.AddMixRestApi();
             services.AddMixSignalR();

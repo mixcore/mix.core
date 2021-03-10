@@ -8,24 +8,25 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Rest.Api.Client.ViewModels;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.RestFul.Controllers.v1
+namespace Mix.Rest.Api.Client.v1
 {
-    [Route("api/v1/rest/{culture}/mix-database-data/mvc")]
-    public class MixDatabaseDataMvcController :
-        BaseReadOnlyApiController<MixCmsContext, MixDatabaseData, ReadMvcViewModel>
+    [Produces("application/json")]
+    [Route("api/v1/rest/{culture}/mix-database-data/client")]
+    public class ApiMixDatabaseDataController :
+        BaseReadOnlyApiController<MixCmsContext, MixDatabaseData, DataViewModel>
     {
-        public MixDatabaseDataMvcController(DefaultRepository<MixCmsContext, MixDatabaseData, ReadMvcViewModel> repo) 
-            : base(repo)
+        public ApiMixDatabaseDataController(DefaultRepository<MixCmsContext, MixDatabaseData, DataViewModel> repo) : base(repo)
         {
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data
+        // GET: api/v1/rest/{culture}/mix-database-data/client/search
         [HttpGet]
-        public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
+        public override async Task<ActionResult<PaginationModel<DataViewModel>>> Get()
         {
-            var getData = await Helper.FilterByKeywordAsync<ReadMvcViewModel>(Request, _lang);
+            var getData = await Helper.FilterByKeywordAsync<DataViewModel>(Request, _lang);
             if (getData.IsSucceed)
             {
                 return Ok(getData.Data);
