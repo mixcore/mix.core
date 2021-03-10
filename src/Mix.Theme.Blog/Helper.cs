@@ -85,7 +85,7 @@ namespace Mix.Theme.Blog
                     rtn += "_" + size + ".";
                 }
             }
-            return Url;
+            return rtn;
         }
 
         public static int CountWord(string Content)
