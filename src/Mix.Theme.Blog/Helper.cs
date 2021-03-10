@@ -79,8 +79,8 @@ namespace Mix.Theme.Blog
             string rtn = "";
             for (int i = 0; i < tmp.Length; i++)
             {
-                rtn += tmp[i];
-                if (i < tmp.Length - 1)
+                rtn += tmp[i] + (i < tmp.Length-2?".":"");
+                if (i == tmp.Length - 2)
                 {
                     rtn += "_" + size + ".";
                 }
