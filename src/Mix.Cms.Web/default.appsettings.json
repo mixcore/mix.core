@@ -10,7 +10,27 @@
     "MixCacheFolder": "MixContent/cache",
     "MixCacheDb": "MixContent/mix_cache.db",
     "JsonDataFolder": "MixContent/data",
-    "MixLogsFolder": "MixContent/logs"
+    "MixLogsFolder": "MixContent/logs",
+    "ImageSizes": {
+      "XXS": {
+        "width": 30
+      },
+      "XS": {
+        "width": 100
+      },
+      "S": {
+        "width": 300
+      },
+      "M": {
+        "width": 600
+      },
+      "L": {
+        "width": 1000
+      },
+      "XL": {
+        "width": 2000
+      }
+    }
   },
   "Authentication": {
     "ClockSkew": 20,
