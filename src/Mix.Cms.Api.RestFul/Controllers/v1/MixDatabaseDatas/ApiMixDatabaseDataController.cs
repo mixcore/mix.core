@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/mix-database-data/client")]
+    [Route("api/v1/rest/{culture}/mix-database-data/form")]
     public class ApiMixDatabaseDataController :
         BaseRestApiController<MixCmsContext, MixDatabaseData, FormViewModel>
     {

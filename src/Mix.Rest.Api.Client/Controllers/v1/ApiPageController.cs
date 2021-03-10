@@ -9,6 +9,7 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
 using Mix.Heart.Extensions;
 using Mix.Rest.Api.Client.ViewModels;
 using System;
@@ -22,6 +23,11 @@ namespace Mix.Rest.Api.Client.v1
     public class ApiPageController :
         BaseReadOnlyApiController<MixCmsContext, MixPage, PageViewModel>
     {
+        public ApiPageController(DefaultRepository<MixCmsContext, MixPage, PageViewModel> repo) 
+            : base(repo)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<PageViewModel>>> Get()
         {

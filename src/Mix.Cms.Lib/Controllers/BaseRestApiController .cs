@@ -66,7 +66,7 @@ namespace Mix.Cms.Lib.Controllers
                 Direction = direction
             };
 
-            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+            RepositoryResponse<PaginationModel<TView>> getData = await _repo.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
 
             if (getData.IsSucceed)
@@ -377,7 +377,7 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<TView> data = null;
             if (predicate != null)
             {
-                data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                data = await _repo.GetSingleModelAsync(predicate);
             }
             return data;
         }
@@ -443,7 +443,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
         {
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            var data = await _repo.RemoveListModelAsync(isRemoveRelatedModel, predicate);
 
             return data;
         }
@@ -451,7 +451,7 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
             string type = typeof(TModel).Name;
-            var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, _context);
+            var getData = await _repo.GetModelListByAsync(predicate, _context);
             var jData = new List<JObject>();
             if (getData.IsSucceed)
             {
@@ -543,7 +543,7 @@ namespace Mix.Cms.Lib.Controllers
                     }
                 }
 
-                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
+                var result = await _repo.UpdateFieldsAsync(predicate, fields);
 
                 return result;
             }
@@ -552,7 +552,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         {
-            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
+            var result = await _repo.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }
