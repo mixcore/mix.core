@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.ViewModels;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabases
 {
@@ -189,29 +191,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             }
             return result;
         }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixDatabaseData.Where(m => m.MixDatabaseId == Id);
-        //    var attrFields = context.MixDatabaseColumn.Where(m => m.MixDatabaseId == Id);
-
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixDatabaseDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in attrFields)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixDatabaseColumns.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
 
         #endregion Overrides
     }

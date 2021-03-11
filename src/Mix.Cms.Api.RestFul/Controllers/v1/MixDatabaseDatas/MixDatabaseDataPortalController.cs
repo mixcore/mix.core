@@ -194,5 +194,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
+
+        [HttpGet("migrate-data/{databaseId}")]
+        public async Task<ActionResult> MigrateData(int databaseId)
+        {
+            var result = await Helper.MigrateData(databaseId);
+            return result ? Ok() : BadRequest();
+        }
     }
 }
