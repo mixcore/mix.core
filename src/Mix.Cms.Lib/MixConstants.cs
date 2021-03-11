@@ -29,6 +29,7 @@
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
         public const string CONST_UPLOAD_FOLDER_DATE_FORMAT = "yyyy-MM";
+        public const string CONST_MIXDB_PREFIX  = "mixdb_";
 
         public static class MixDatabaseName
         {
