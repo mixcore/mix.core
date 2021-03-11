@@ -59,6 +59,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     m => (m.Id == dbId || m.Name == id));
             return Ok(result.Data);
         }
+        
+        [HttpPost("migrate/{id}")]
+        public async Task<ActionResult> Migrate([FromBody] UpdateViewModel database)
+        {
+            var result = await Helper.MigrateDatabase(database);
+            return result ? Ok() : BadRequest();
+        }
 
         // DELETE: api/v1/rest/en-us/mix-database/portal/5
         [HttpDelete("{id}")]

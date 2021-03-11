@@ -6,6 +6,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 {
     public class ColumnConfigurations
     {
+        [JsonProperty("maxLength")]
+        public int? MaxLength { get; set; }
         [JsonProperty("upload")]
         public UploadConfigurations Upload { get; set; } = new UploadConfigurations();
     }

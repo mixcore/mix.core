@@ -971,5 +971,52 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
             Task.WhenAll(tasks);
         }
+
+        public static async Task<bool> MigrateData(int databaseId)
+        {
+            var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId);
+            if (getDatabase.IsSucceed)
+            {
+                string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
+                
+
+                List<string> datas = new List<string>();
+                var getData = await FormViewModel.Repository.GetModelListByAsync(m => m.MixDatabaseName == getDatabase.Data.Name);
+                if (getData.IsSucceed)
+                {
+                    foreach (var item in getData.Data)
+                    {
+                        datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns));
+                    }
+                }
+                string columns = string.Join(", ", getDatabase.Data.Columns.Select(c => c.Name).ToList());
+                string values = string.Join(", ", datas);
+                string truncateSql = $"TRUNCATE TABLE {databaseName};";
+                string commandText = $"INSERT INTO {databaseName} (id, {columns}) VALUES {values}";
+
+                if (!string.IsNullOrEmpty(commandText))
+                {
+                    using (var ctx = new MixCmsContext())
+                    {
+                        await ctx.Database.ExecuteSqlRawAsync(truncateSql);
+                        await ctx.Database.ExecuteSqlRawAsync(commandText);
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+
+        private static string GenerateInsertValuesSql(FormViewModel data, List<MixDatabaseColumns.UpdateViewModel> columns)
+        {
+            List<string> values = new List<string>();
+            values.Add(data.Id);
+            foreach (var col in columns)
+            {
+                values.Add(data.Obj.Value<string>(col.Name));
+            }
+            return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
+        }
     }
 }
