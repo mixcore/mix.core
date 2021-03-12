@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,7 +19,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 {
                     colSqls.Add(GenerateColumnSql(col));
                 }
-                string commandText = $"DROP TABLE IF EXISTS {MixConstants.CONST_MIXDB_PREFIX}{database.Name}; CREATE TABLE {MixConstants.CONST_MIXDB_PREFIX}{database.Name} (id varchar(50) NOT NULL Unique, {string.Join(",", colSqls.ToArray())})";
+                string commandText = $"DROP TABLE IF EXISTS {MixConstants.CONST_MIXDB_PREFIX}{database.Name}; " +
+                    $"CREATE TABLE {MixConstants.CONST_MIXDB_PREFIX}{database.Name} " +
+                    $"(id varchar(50) NOT NULL Unique, specificulture varchar(50), status varchar(50), createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                    $" {string.Join(",", colSqls.ToArray())})";
                 if (!string.IsNullOrEmpty(commandText))
                 {
                     using (var ctx = new MixCmsContext())
@@ -36,32 +38,35 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 
         private static string GenerateColumnSql(MixDatabaseColumns.UpdateViewModel col)
         {
+
+            string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
+            string nullable = col.IsRequire ? "NOT NUll" : "NULL";
+            return $"{col.Name} {colType} {nullable}";
+        }
+
+        private static string GetColumnType(MixDataType dataType, int? maxLength = null)
+        {
             var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            string colType;
-            switch (col.DataType)
+            switch (dataType)
             {
                 case MixDataType.DateTime:
                 case MixDataType.Date:
                 case MixDataType.Time:
-                    colType = provider switch
+                    return provider switch
                     {
                         MixDatabaseProvider.PostgreSQL => "timestamp without time zone",
                         _ => "datetime"
                     };
-                    break;
                 case MixDataType.Double:
-                    colType = "float";
-                    break;
+                    return "float";
                 case MixDataType.Integer:
-                    colType = "int";
-                    break;
+                    return "int";
                 case MixDataType.Html:
-                    colType = provider switch
+                    return provider switch
                     {
                         MixDatabaseProvider.MSSQL => "ntext",
                         _ => "text"
                     };
-                    break;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:
@@ -82,11 +87,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 case MixDataType.Reference:
                 case MixDataType.QRCode:
                 default:
-                    colType = $"varchar({col.ColumnConfigurations.MaxLength ?? 250})";
-                    break;
+                    return $"varchar({maxLength ?? 250})";
             }
-            string nullable = col.IsRequire ? "NOT NUll" : "NULL";
-            return $"{col.Name} {colType} {nullable}";
         }
     }
 }
