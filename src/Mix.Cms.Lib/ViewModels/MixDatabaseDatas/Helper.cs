@@ -414,11 +414,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 else
                 {
-                    predicate = m => m.Specificulture == culture
-                    && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
-                    && (!isStatus || (m.Status == status))
-                    && (!isFromDate || (m.CreatedDateTime >= fromDate))
-                    && (!isToDate || (m.CreatedDateTime <= toDate));
+                    predicate = m => m.Specificulture == culture && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName);
+                    predicate = predicate.AndAlsoIf(isStatus, m => m.Status == status);
+                    predicate = predicate.AndAlsoIf(isFromDate, m => m.CreatedDateTime >= fromDate);
+                    predicate = predicate.AndAlsoIf(isToDate, m => m.CreatedDateTime <= toDate);
                 }
 
                 if (isGroup)
@@ -978,21 +977,24 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             if (getDatabase.IsSucceed)
             {
                 string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
-                
+
 
                 List<string> datas = new List<string>();
                 var getData = await FormViewModel.Repository.GetModelListByAsync(m => m.MixDatabaseName == getDatabase.Data.Name);
                 if (getData.IsSucceed)
                 {
+                    
                     foreach (var item in getData.Data)
                     {
                         datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns));
                     }
                 }
-                string columns = string.Join(", ", getDatabase.Data.Columns.Select(c => c.Name).ToList());
+                string columns = string.Join(", ", getDatabase.Data.Columns
+                    .Where(c => c.DataType != MixDataType.Reference)
+                    .Select(c => c.Name).ToList());
                 string values = string.Join(", ", datas);
-                string truncateSql = $"TRUNCATE TABLE {databaseName};";
-                string commandText = $"INSERT INTO {databaseName} (id, {columns}) VALUES {values}";
+                string truncateSql = $"DELETE FROM {databaseName};";
+                string commandText = $"INSERT INTO {databaseName} (id, specificulture, status, createdDateTime, {columns}) VALUES {values}";
 
                 if (!string.IsNullOrEmpty(commandText))
                 {
@@ -1012,7 +1014,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         {
             List<string> values = new List<string>();
             values.Add(data.Id);
-            foreach (var col in columns)
+            values.Add(data.Specificulture);
+            values.Add(data.Status.ToString());
+            values.Add(data.CreatedDateTime.ToString());
+            foreach (var col in columns.Where(c => c.DataType != MixDataType.Reference))
             {
                 values.Add(data.Obj.Value<string>(col.Name));
             }

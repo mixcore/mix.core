@@ -62,7 +62,7 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<PaginationModel<TView>> getData = null;
             if (!string.IsNullOrEmpty(_lang))
             {
-                predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
                 getData = await _repo.GetModelListByAsync(
                             predicate,
                             request.OrderBy, request.Direction,
@@ -106,8 +106,8 @@ namespace Mix.Cms.Lib.Controllers
             {
                 var transaction = context.Database.BeginTransaction();
                 TView data = ReflectionHelper.InitModel<TView>();
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Specificulture, _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }
@@ -171,10 +171,10 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -183,10 +183,10 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
