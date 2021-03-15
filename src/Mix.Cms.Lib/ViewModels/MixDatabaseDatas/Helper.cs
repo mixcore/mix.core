@@ -12,6 +12,7 @@ using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
@@ -20,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
@@ -978,26 +980,23 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
 
-
                 List<string> datas = new List<string>();
                 var getData = await FormViewModel.Repository.GetModelListByAsync(m => m.MixDatabaseName == getDatabase.Data.Name);
                 if (getData.IsSucceed)
                 {
-                    
                     foreach (var item in getData.Data)
                     {
                         datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns));
                     }
                 }
-                string columns = string.Join(", ", getDatabase.Data.Columns
-                    .Where(c => c.DataType != MixDataType.Reference)
-                    .Select(c => c.Name).ToList());
-                string values = string.Join(", ", datas);
-                string truncateSql = $"DELETE FROM {databaseName};";
-                string commandText = $"INSERT INTO {databaseName} (id, specificulture, status, createdDateTime, {columns}) VALUES {values}";
-
-                if (!string.IsNullOrEmpty(commandText))
+                if (datas.Count > 0)
                 {
+                    string columns = string.Join(", ", getDatabase.Data.Columns
+                        .Select(c => c.Name).ToList());
+                    string values = string.Join(", ", datas);
+                    string truncateSql = $"DELETE FROM {databaseName};";
+                    string commandText = $@"INSERT INTO {databaseName} (id, specificulture, status, createdDateTime, {columns}) VALUES {values}";
+
                     using (var ctx = new MixCmsContext())
                     {
                         await ctx.Database.ExecuteSqlRawAsync(truncateSql);
@@ -1012,16 +1011,50 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         private static string GenerateInsertValuesSql(FormViewModel data, List<MixDatabaseColumns.UpdateViewModel> columns)
         {
-            List<string> values = new List<string>();
-            values.Add(data.Id);
-            values.Add(data.Specificulture);
-            values.Add(data.Status.ToString());
-            values.Add(data.CreatedDateTime.ToString());
-            foreach (var col in columns.Where(c => c.DataType != MixDataType.Reference))
+            using (var ctx = new MixCmsContext())
             {
-                values.Add(data.Obj.Value<string>(col.Name));
+                List<string> values = new List<string>();
+                values.Add(data.Id);
+                values.Add(data.Specificulture);
+                values.Add(data.Status.ToString());
+                values.Add(data.CreatedDateTime.ToString());
+                foreach (var col in columns)
+                {
+                    if (col.DataType == MixDataType.Reference)
+                    {
+                        var dbName = ctx.MixDatabase.FirstOrDefault(m => m.Id == col.ReferenceId).Name;
+                        var arr = JArray.FromObject(ctx.MixDatabaseDataAssociation.Where(
+                                m => m.ParentId == data.Id && m.MixDatabaseName == dbName).ToList());
+                        JObject refData = new JObject(
+                            new JProperty("ref_table_name", dbName),
+                            new JProperty("children", arr));
+                        values.Add(EncodeRefData(refData));
+                    }
+                    else
+                    {
+                        values.Add(data.Obj.Value<string>(col.Name));
+                    }
+                }
+                return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
             }
-            return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
+        }
+
+        public static string EncodeRefData(JObject refData)
+        {
+            return Convert.ToBase64String(
+                Encoding.Unicode
+                .GetBytes(refData
+                .ToString(Formatting.None)));
+        }
+
+        public static JObject DecodeRefData(string encoded)
+        {
+            var data = !string.IsNullOrEmpty(encoded) ? Convert.FromBase64String(encoded) : null;
+            if (data != null)
+            {
+                return JObject.Parse(Encoding.Unicode.GetString(data));
+            }
+            return null;
         }
     }
 }

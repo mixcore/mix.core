@@ -61,6 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                     return "float";
                 case MixDataType.Integer:
                     return "int";
+                case MixDataType.Reference: // JObject - { ref_table_name: "", children: [] }
                 case MixDataType.Html:
                     return provider switch
                     {
@@ -83,8 +84,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 case MixDataType.Boolean:
                 case MixDataType.Icon:
                 case MixDataType.VideoYoutube:
-                case MixDataType.TuiEditor:
-                case MixDataType.Reference:
+                case MixDataType.TuiEditor:                
                 case MixDataType.QRCode:
                 default:
                     return $"varchar({maxLength ?? 250})";

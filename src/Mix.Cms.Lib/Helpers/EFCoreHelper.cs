@@ -10,37 +10,32 @@ namespace Mix.Cms.Lib.Helpers
 {
     public class EFCoreHelper
     {
-        public static List<JObject> RawSqlQuery(string query)
+        public static List<JObject> RawSqlQuery(string query, MixCmsContext context)
         {
-            using (var context = new MixCmsContext())
+            using (var command = context.Database.GetDbConnection().CreateCommand())
             {
-                using (var command = context.Database.GetDbConnection().CreateCommand())
+                command.CommandText = query;
+                command.CommandType = CommandType.Text;
+
+                using (var result = command.ExecuteReader())
                 {
-                    command.CommandText = query;
-                    command.CommandType = CommandType.Text;
+                    var entities = new List<JObject>();
+                    var cols = new List<string>();
+                    for (var i = 0; i < result.FieldCount; i++)
+                        cols.Add(result.GetName(i));
 
-                    context.Database.OpenConnection();
-
-                    using (var result = command.ExecuteReader())
+                    while (result.Read())
                     {
-                        var entities = new List<JObject>();
-                        var cols = new List<string>();
-                        for (var i = 0; i < result.FieldCount; i++)
-                            cols.Add(result.GetName(i));
 
-                        while (result.Read())
-                        {
-
-                            entities.Add(SerializeRow(cols, result));
-                        }
-
-                        return entities;
+                        entities.Add(SerializeRow(cols, result));
                     }
+
+                    return entities;
                 }
             }
         }
 
-        private  static JObject SerializeRow(IEnumerable<string> cols,
+        private static JObject SerializeRow(IEnumerable<string> cols,
                                                 DbDataReader reader)
         {
             var result = new Dictionary<string, object>();
