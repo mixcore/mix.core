@@ -274,3 +274,5 @@ src/Mix.Cms.Web/MixContent/mix-cms.db-wal
 
 src/Mix.Cms.Web/MixContent/mix-cms.db-shm
 /src/Mix.Cms.Web/wwwroot/mix-content/exports
+
+src/Mix.Cms.Web/mix_cache.db

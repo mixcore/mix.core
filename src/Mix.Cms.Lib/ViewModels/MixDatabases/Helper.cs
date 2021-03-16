@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 }
                 string commandText = $"DROP TABLE IF EXISTS {MixConstants.CONST_MIXDB_PREFIX}{database.Name}; " +
                     $"CREATE TABLE {MixConstants.CONST_MIXDB_PREFIX}{database.Name} " +
-                    $"(id varchar(50) NOT NULL Unique, specificulture varchar(50), status varchar(50), createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                    $"(id varchar(50) NOT NULL Unique, specificulture varchar(50), mix_status varchar(50), createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
                     $" {string.Join(",", colSqls.ToArray())})";
                 if (!string.IsNullOrEmpty(commandText))
                 {
