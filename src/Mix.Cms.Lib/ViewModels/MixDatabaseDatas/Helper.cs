@@ -975,68 +975,79 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public static async Task<bool> MigrateData(int databaseId)
         {
-            var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId);
-            if (getDatabase.IsSucceed)
+            using (var ctx = new MixCmsContext())
             {
-                string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
+                var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId, ctx, null);
+                if (getDatabase.IsSucceed)
+                {
+                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
 
-                List<string> datas = new List<string>();
-                var getData = await FormViewModel.Repository.GetModelListByAsync(m => m.MixDatabaseName == getDatabase.Data.Name);
-                if (getData.IsSucceed)
-                {
-                    foreach (var item in getData.Data)
-                    {
-                        datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns));
-                    }
-                }
-                if (datas.Count > 0)
-                {
-                    string columns = string.Join(", ", getDatabase.Data.Columns
-                        .Select(c => c.Name).ToList());
-                    string values = string.Join(", ", datas);
+                    
+                    int page = 0;
+                    int pageSize = 10;
                     string truncateSql = $"DELETE FROM {databaseName};";
-                    string commandText = $@"INSERT INTO {databaseName} (id, specificulture, status, createdDateTime, {columns}) VALUES {values}";
-
-                    using (var ctx = new MixCmsContext())
+                    await ctx.Database.ExecuteSqlRawAsync(truncateSql);
+                    while (true)
                     {
-                        await ctx.Database.ExecuteSqlRawAsync(truncateSql);
-                        await ctx.Database.ExecuteSqlRawAsync(commandText);
-                        return true;
+                        List<string> datas = new List<string>();
+                        var getData = await FormViewModel.Repository.GetModelListByAsync(
+                        m => m.MixDatabaseName == getDatabase.Data.Name
+                        , "Id", Heart.Enums.MixHeartEnums.DisplayDirection.Asc
+                        , pageSize, page, null, null
+                        , ctx, null);
+                        page++;
+                        foreach (var item in getData.Data.Items)
+                        {
+                            datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns, ctx));
+                        }
+                        if (datas.Count > 0)
+                        {
+                            string columns = string.Join(", ", getDatabase.Data.Columns
+                                .Select(c => c.Name).ToList());
+                            string values = string.Join(", ", datas);
+                            
+                            string commandText = $@"INSERT INTO {databaseName} (id, specificulture, mix_status, createdDateTime, {columns}) VALUES {values}";
+                            
+                            await ctx.Database.ExecuteSqlRawAsync(commandText);
+
+                            await ctx.SaveChangesAsync();
+                        }
+                        if (getData.Data.Page == getData.Data.TotalPage)
+                        {
+                            break;
+                        }
                     }
+                    return true;
                 }
-                return false;
             }
             return false;
         }
 
-        private static string GenerateInsertValuesSql(FormViewModel data, List<MixDatabaseColumns.UpdateViewModel> columns)
+        private static string GenerateInsertValuesSql(FormViewModel data, List<MixDatabaseColumns.UpdateViewModel> columns, MixCmsContext ctx)
         {
-            using (var ctx = new MixCmsContext())
+            List<string> values = new List<string>();
+            values.Add(data.Id);
+            values.Add(data.Specificulture);
+            values.Add(data.Status.ToString());
+            values.Add(data.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            foreach (var col in columns)
             {
-                List<string> values = new List<string>();
-                values.Add(data.Id);
-                values.Add(data.Specificulture);
-                values.Add(data.Status.ToString());
-                values.Add(data.CreatedDateTime.ToString());
-                foreach (var col in columns)
+                if (col.DataType == MixDataType.Reference)
                 {
-                    if (col.DataType == MixDataType.Reference)
-                    {
-                        var dbName = ctx.MixDatabase.FirstOrDefault(m => m.Id == col.ReferenceId).Name;
-                        var arr = JArray.FromObject(ctx.MixDatabaseDataAssociation.Where(
-                                m => m.ParentId == data.Id && m.MixDatabaseName == dbName).ToList());
-                        JObject refData = new JObject(
-                            new JProperty("ref_table_name", dbName),
-                            new JProperty("children", arr));
-                        values.Add(EncodeRefData(refData));
-                    }
-                    else
-                    {
-                        values.Add(data.Obj.Value<string>(col.Name));
-                    }
+                    var dbName = ctx.MixDatabase.FirstOrDefault(m => m.Id == col.ReferenceId).Name;
+                    var arr = JArray.FromObject(ctx.MixDatabaseDataAssociation.Where(
+                            m => m.ParentId == data.Id && m.MixDatabaseName == dbName).ToList());
+                    JObject refData = new JObject(
+                        new JProperty("ref_table_name", dbName),
+                        new JProperty("children", arr));
+                    values.Add(EncodeRefData(refData));
                 }
-                return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
+                else
+                {
+                    values.Add(data.Obj.Value<string>(col.Name));
+                }
             }
+            return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
         }
 
         public static string EncodeRefData(JObject refData)
