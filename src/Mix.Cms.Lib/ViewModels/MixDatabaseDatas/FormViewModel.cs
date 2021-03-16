@@ -107,8 +107,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
-           , _context, _transaction).Data;
+            Columns ??= MixDatabases.UpdateViewModel.Repository.GetSingleModel(f => f.Id == MixDatabaseId
+           , _context, _transaction).Data.Columns;
 
             if (Obj == null)
             {
