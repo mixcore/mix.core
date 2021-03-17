@@ -94,7 +94,8 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
         }
 
-        [HttpPost, HttpOptions]
+        [DisableRequestSizeLimit]
+        [HttpPost]
         [Route("upload-media")]
         public async Task<RepositoryResponse<UpdateViewModel>> UploadMedia([FromForm] IFormFile file)
         {
