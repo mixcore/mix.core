@@ -95,7 +95,6 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files
-
         [HttpPost, HttpOptions]
         [Route("list")]
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
