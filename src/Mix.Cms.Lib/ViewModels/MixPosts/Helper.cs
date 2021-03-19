@@ -9,6 +9,7 @@ using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
+using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
                 var result = new RepositoryResponse<PaginationModel<TView>>()
                 {
                     IsSucceed = true,
@@ -55,27 +56,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         PageSize = pageSize
                     }
                 };
-                // Get Tag
-                var getVal = await MixDatabaseDataValues.ReadViewModel.Repository.GetSingleModelAsync(
-                    m => m.Specificulture == culture && m.Status == MixContentStatus.Published
-                        && m.MixDatabaseName == metaName
-                        && m.MixDatabaseColumnName == "slug" && EF.Functions.Like(m.StringValue, metaValue)
-                , context, transaction);
-                if (getVal.IsSucceed)
-                {
-                    result = await GetPostListByDataId<TView>(
-                            dataId: getVal.Data.DataId,
-                            culture: culture,
-                            orderByPropertyName: orderByPropertyName,
-                            direction: direction,
-                            pageSize: pageSize,
-                            pageIndex: pageIndex,
-                            _context: context,
-                            _transaction: transaction);
-                    //var query = context.MixRelatedAttributeData.Where(m=> m.Specificulture == culture
-                    //    && m.Id == getVal.Data.DataId && m.ParentId == parentId && m.ParentType == (int) MixEnums.MixDatabaseDataType.Post)
-                    //    .Select(m => m.ParentId).Distinct().ToList();
-                }
+                
+                var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
+
+                var query = context.MixPost.GetPostsByValue(valExp, context, orderByPropertyName, culture);
+
+
+                result.Data = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.ParsePagingQueryAsync(
+                            query,
+                            orderByPropertyName,
+                            direction,
+                            pageSize,
+                            pageIndex,
+                            null,
+                            null,
+                            context: context,
+                            transaction: transaction);
+
                 return result;
             }
             catch (Exception ex)
