@@ -100,7 +100,7 @@ namespace Mix.Cms.Lib.Controllers
             if (getData.IsSucceed)
             {
                 var data = getData.Data;
-                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixColumnName.Id);
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixQueryColumnName.Id);
                 switch (idProperty.Name.ToLower())
                 {
                     case "int32":
@@ -138,8 +138,8 @@ namespace Mix.Cms.Lib.Controllers
             {
                 var transaction = context.Database.BeginTransaction();
                 TView data = ReflectionHelper.InitModel<TView>();
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Specificulture, _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }
@@ -166,8 +166,8 @@ namespace Mix.Cms.Lib.Controllers
         {
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
-            ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Specificulture, _lang));
-            ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Status, MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
+            ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
+            ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
 
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
@@ -188,7 +188,7 @@ namespace Mix.Cms.Lib.Controllers
                 ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
-                var currentId = ReflectionHelper.GetPropertyValue(data, MixColumnName.Id).ToString();
+                var currentId = ReflectionHelper.GetPropertyValue(data, MixQueryColumnName.Id).ToString();
                 if (id != currentId)
                 {
                     return BadRequest();
@@ -261,13 +261,13 @@ namespace Mix.Cms.Lib.Controllers
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(
-                MixColumnName.Specificulture,
+                MixQueryColumnName.Specificulture,
                 _lang,
                 MixHeartEnums.ExpressionMethod.Eq);
             Expression<Func<TModel, bool>> idPre = null;
             foreach (var id in data.Data)
             {
-                var temp = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+                var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
 
                 idPre = idPre != null
                     ? idPre.AndAlso(temp)
@@ -342,7 +342,7 @@ namespace Mix.Cms.Lib.Controllers
             var data = await GetListAsync<TView>(predicate);
             foreach (var item in data.Data.Items)
             {
-                ReflectionHelper.SetPropertyValue(item, new JProperty(MixColumnName.Status, MixContentStatus.Published));
+                ReflectionHelper.SetPropertyValue(item, new JProperty(MixQueryColumnName.Status, MixContentStatus.Published));
             }
             return await SaveListAsync(data.Data.Items, false);
         }
@@ -350,10 +350,10 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -362,10 +362,10 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 

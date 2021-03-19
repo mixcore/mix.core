@@ -491,29 +491,17 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
-            , int pageSize = 0
-            , int page = 0
-            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
+            
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
-            if (!string.IsNullOrEmpty(context.Request.Query[MixRequestQueryKeywords.Page]))
-            {
-                int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out page);
-            }
-            if (!string.IsNullOrEmpty(context.Request.Query[MixRequestQueryKeywords.PageSize]))
-            {
-                int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out pageSize);
-            }
-            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
-            page = (page > 0) ? page : 1;
-
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
+            PagingDataModel pagingData = new PagingDataModel(context.Request);
+            return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
-                culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
+                pagingData,
+                culture, _context, _transaction);
         }
 
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(

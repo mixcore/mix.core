@@ -11,6 +11,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class MixDatabaseDataPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseData, FormViewModel, FormViewModel, DeleteViewModel>
     {
+        public MixDatabaseDataPortalController(DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo, DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo, DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+        {
+        }
+
         // GET: api/v1/rest/{culture}/mix-database-data
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
@@ -193,6 +198,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(result.Errors);
             }
+        }
+
+        [HttpGet("migrate-data/{databaseId}")]
+        public async Task<ActionResult> MigrateData(int databaseId)
+        {
+            var result = await Helper.MigrateData(databaseId);
+            return result ? Ok() : BadRequest();
         }
     }
 }

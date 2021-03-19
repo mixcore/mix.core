@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.Extensions
                     {
                         if (DateTime.TryParseExact(
                             item.StringValue,
-                            "MM/dd/yyyy HH:mm:ss",
+                            "yyyy-MM-dd HH:mm:ss",
                             CultureInfo.InvariantCulture,
                             DateTimeStyles.RoundtripKind,
                             out DateTime date))
@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.Extensions
                             item.DateTimeValue = date;
                         }
                     }
-                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
+                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
                 case MixDataType.Time:
                     return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
