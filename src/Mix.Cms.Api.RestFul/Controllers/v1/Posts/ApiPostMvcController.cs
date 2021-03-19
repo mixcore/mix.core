@@ -8,6 +8,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
@@ -61,8 +62,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("get-by-attribute")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByAttribute()
         {
+            var pagingData = new PagingDataModel(Request);
             var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<ReadMvcViewModel>(
-                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], _lang);
+                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], pagingData, _lang);
             if (result.IsSucceed)
             {
                 return result.Data;

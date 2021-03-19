@@ -5,10 +5,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Rest.Api.Client.Helpers;
 using Mix.Rest.Api.Client.ViewModels;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Rest.Api.Client.v1
@@ -18,7 +21,8 @@ namespace Mix.Rest.Api.Client.v1
     public class ApiMixDatabaseDataController :
         BaseReadOnlyApiController<MixCmsContext, MixDatabaseData, DataViewModel>
     {
-        public ApiMixDatabaseDataController(DefaultRepository<MixCmsContext, MixDatabaseData, DataViewModel> repo) : base(repo)
+        public ApiMixDatabaseDataController(
+            DefaultRepository<MixCmsContext, MixDatabaseData, DataViewModel> repo) : base(repo)
         {
         }
 
@@ -35,6 +39,12 @@ namespace Mix.Rest.Api.Client.v1
             {
                 return BadRequest(getData.Errors);
             }
+        }
+        [HttpGet("search")]
+        public async Task<ActionResult<PaginationModel<JObject>>> Search()
+        {
+            var getData = MixDatabaseHelper.GetListData<JObject>(Request, _lang);
+            return Ok(getData);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -36,10 +37,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <returns></returns>
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByMeta<TView>(
             string metaName, string metaValue
+            , PagingDataModel pagingData
             , string culture = null
-            , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
-            , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
@@ -52,26 +51,24 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     IsSucceed = true,
                     Data = new PaginationModel<TView>()
                     {
-                        PageIndex = pageIndex.HasValue ? pageIndex.Value : 0,
-                        PageSize = pageSize
+                        PageIndex = pagingData.PageIndex,
+                        PageSize = pagingData.PageSize
                     }
                 };
-                
+
                 var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
 
-                var query = context.MixPost.GetPostsByValue(valExp, context, orderByPropertyName, culture);
+                var postIds = IQueryableHelper.GetPostIdsByValue(valExp, context, pagingData, culture)
+                    .AsEnumerable()
+                    .Select(p => int.Parse(p))
+                    .ToList();
 
-
-                result.Data = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.ParsePagingQueryAsync(
-                            query,
-                            orderByPropertyName,
-                            direction,
-                            pageSize,
-                            pageIndex,
-                            null,
-                            null,
-                            context: context,
-                            transaction: transaction);
+                var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                            m => postIds.Any(p => p == m.Id) && m.Specificulture == culture,
+                            context,
+                            transaction));
+                result.Data.Items = getPosts.Data.OrderBy(
+                    m => postIds.IndexOf((int)ReflectionHelper.GetPropertyValue(m, "Id"))).ToList();
 
                 return result;
             }

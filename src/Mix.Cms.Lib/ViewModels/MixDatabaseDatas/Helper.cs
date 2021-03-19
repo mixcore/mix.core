@@ -12,6 +12,7 @@ using Mix.Domain.Data.Repository;
 using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
@@ -20,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
@@ -414,11 +416,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 else
                 {
-                    predicate = m => m.Specificulture == culture
-                    && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName)
-                    && (!isStatus || (m.Status == status))
-                    && (!isFromDate || (m.CreatedDateTime >= fromDate))
-                    && (!isToDate || (m.CreatedDateTime <= toDate));
+                    predicate = m => m.Specificulture == culture && (m.MixDatabaseId == mixDatabaseId || m.MixDatabaseName == mixDatabaseName);
+                    predicate = predicate.AndAlsoIf(isStatus, m => m.Status == status);
+                    predicate = predicate.AndAlsoIf(isFromDate, m => m.CreatedDateTime >= fromDate);
+                    predicate = predicate.AndAlsoIf(isToDate, m => m.CreatedDateTime <= toDate);
                 }
 
                 if (isGroup)
@@ -970,6 +971,101 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 tasks.Add(MixCacheService.RemoveCacheAsync(typeof(MixDatabaseDataAssociation), navKey));
             }
             Task.WhenAll(tasks);
+        }
+
+        public static async Task<bool> MigrateData(int databaseId)
+        {
+            using (var ctx = new MixCmsContext())
+            {
+                var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId, ctx, null);
+                if (getDatabase.IsSucceed)
+                {
+                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
+
+                    
+                    int page = 0;
+                    int pageSize = 10;
+                    string truncateSql = $"DELETE FROM {databaseName};";
+                    await ctx.Database.ExecuteSqlRawAsync(truncateSql);
+                    while (true)
+                    {
+                        List<string> datas = new List<string>();
+                        var getData = await FormViewModel.Repository.GetModelListByAsync(
+                        m => m.MixDatabaseName == getDatabase.Data.Name
+                        , "Id", Heart.Enums.MixHeartEnums.DisplayDirection.Asc
+                        , pageSize, page, null, null
+                        , ctx, null);
+                        page++;
+                        foreach (var item in getData.Data.Items)
+                        {
+                            datas.Add(GenerateInsertValuesSql(item, getDatabase.Data.Columns, ctx));
+                        }
+                        if (datas.Count > 0)
+                        {
+                            string columns = string.Join(", ", getDatabase.Data.Columns
+                                .Select(c => c.Name).ToList());
+                            string values = string.Join(", ", datas);
+                            
+                            string commandText = $@"INSERT INTO {databaseName} (id, specificulture, mix_status, createdDateTime, {columns}) VALUES {values}";
+                            
+                            await ctx.Database.ExecuteSqlRawAsync(commandText);
+
+                            await ctx.SaveChangesAsync();
+                        }
+                        if (getData.Data.Page == getData.Data.TotalPage)
+                        {
+                            break;
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static string GenerateInsertValuesSql(FormViewModel data, List<MixDatabaseColumns.UpdateViewModel> columns, MixCmsContext ctx)
+        {
+            List<string> values = new List<string>();
+            values.Add(data.Id);
+            values.Add(data.Specificulture);
+            values.Add(data.Status.ToString());
+            values.Add(data.CreatedDateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            foreach (var col in columns)
+            {
+                if (col.DataType == MixDataType.Reference)
+                {
+                    var dbName = ctx.MixDatabase.FirstOrDefault(m => m.Id == col.ReferenceId).Name;
+                    var arr = JArray.FromObject(ctx.MixDatabaseDataAssociation.Where(
+                            m => m.ParentId == data.Id && m.MixDatabaseName == dbName).ToList());
+                    JObject refData = new JObject(
+                        new JProperty("ref_table_name", dbName),
+                        new JProperty("children", arr));
+                    values.Add(EncodeRefData(refData));
+                }
+                else
+                {
+                    values.Add(data.Obj.Value<string>(col.Name));
+                }
+            }
+            return $"({string.Join(", ", values.Select(m => $"'{m}'"))})";
+        }
+
+        public static string EncodeRefData(JObject refData)
+        {
+            return Convert.ToBase64String(
+                Encoding.Unicode
+                .GetBytes(refData
+                .ToString(Formatting.None)));
+        }
+
+        public static JObject DecodeRefData(string encoded)
+        {
+            var data = !string.IsNullOrEmpty(encoded) ? Convert.FromBase64String(encoded) : null;
+            if (data != null)
+            {
+                return JObject.Parse(Encoding.Unicode.GetString(data));
+            }
+            return null;
         }
     }
 }
