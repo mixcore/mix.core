@@ -35,8 +35,7 @@ namespace Mix.Cms.Lib.Helpers
             }
         }
 
-        private static JObject SerializeRow(IEnumerable<string> cols,
-                                                DbDataReader reader)
+        private static JObject SerializeRow(IEnumerable<string> cols, DbDataReader reader)
         {
             var result = new Dictionary<string, object>();
             foreach (var col in cols)
