@@ -1532,7 +1532,7 @@
           "defaultValue": null,
           "strOptions": "[]",
           "options": [],
-          "name": "attribute_set_name",
+          "name": "databaseName",
           "isRequire": false,
           "isEncrypt": false,
           "isSelect": false,
