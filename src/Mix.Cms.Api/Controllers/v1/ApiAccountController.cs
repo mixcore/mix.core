@@ -14,14 +14,18 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -68,8 +72,11 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] LoginViewModel model)
+        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] JObject data)
         {
+            string message = data.Value<string>("message");
+            string key =  MixService.GetAuthConfig<string>("SecretKey");
+            var model = JsonConvert.DeserializeObject<LoginViewModel>(message.Decrypt(key));
             RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
             if (ModelState.IsValid)
             {
