@@ -75,8 +75,10 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key =  MixService.GetAuthConfig<string>("SecretKey");
-            var model = JsonConvert.DeserializeObject<LoginViewModel>(message.Decrypt(key));
+            string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string iv =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
+            string decryptMsg = AesEncryptionHelper.DecryptString(message, key, iv);
+            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
             if (ModelState.IsValid)
             {

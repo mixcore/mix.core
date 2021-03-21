@@ -15,8 +15,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public static IQueryable<string> GetPostIdsByValue(
             Expression<Func<MixDatabaseDataValue, bool>> valExp,
             MixCmsContext context,
-            PagingDataModel pagingData,
-            string culture = null)
+            string culture = null,
+            string postType = MixDatabaseNames.ADDITIONAL_FIELD_POST)
         {
             culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
 
@@ -30,26 +30,27 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var associations = context.MixDatabaseDataAssociation.Where(relatedExp);
             var parentIds = associations.Select(m => m.ParentId);
 
-            if (pagingData.OrderBy.StartsWith("additionalData."))
-            {
-                parentIds = SortParentIds(parentIds, context, pagingData, culture);
-            }
-            return parentIds
-                .Skip(pagingData.PageIndex * pagingData.PageSize)
-                .Take(pagingData.PageSize);
+            
+            return parentIds;
         }
 
-        private static IQueryable<string> SortParentIds(
-            IQueryable<string> parentIds,
+        public static IEnumerable<string> SortParentIds(
+            IEnumerable<string> parentIds,
             MixCmsContext context,
             PagingDataModel pagingData,
-            string culture)
+            string culture,
+            string postType)
         {
+            if (!pagingData.OrderBy.StartsWith("additionalData."))
+            {
+                return parentIds;
+            }
+
             string orderCol = pagingData.OrderBy.Split('.')[1];
             var sortQuery = context.MixDatabaseDataValue
                 .Where(
                 v => v.Specificulture == culture
-                    && v.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_POST
+                    && v.MixDatabaseName == postType
                     && v.MixDatabaseColumnName == orderCol);
 
             switch (pagingData.Direction)
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     return (from association in
                             context.MixDatabaseDataAssociation.Where(
                                 m => m.ParentType == MixDatabaseParentType.Post
-                            && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_POST
+                            && m.MixDatabaseName == postType
                             && parentIds.Any(p => p == m.ParentId))
                             join value in sortQuery
                             on association.DataId equals value.DataId
@@ -71,7 +72,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     return (from association in
                                    context.MixDatabaseDataAssociation.Where(
                                        m => m.ParentType == MixDatabaseParentType.Post
-                                   && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_POST
+                                   && m.MixDatabaseName == postType
                                    && parentIds.Any(p => p == m.ParentId))
                             join value in sortQuery
                             on association.DataId equals value.DataId

@@ -320,7 +320,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string decrypt = string.Empty;
             if (!string.IsNullOrEmpty(request.PlainText))
             {
-                encrypted = AesEncryptionHelper.EncryptStringToBytes_Aes(new JObject()).ToString();
+                //encrypted = AesEncryptionHelper.enc(new JObject()).ToString();
             }
             if (!string.IsNullOrEmpty(request.Encrypted))
             {

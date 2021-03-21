@@ -79,7 +79,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
                 var databaseName = request.Query["databaseName"].ToString();
 
-                return await LoadAdditionalDataAsync(parentType, parentId, databaseName, culture, context, transaction);
+                var result = await LoadAdditionalDataAsync(parentType, parentId, databaseName, culture, context, transaction);
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(true, isRoot, transaction);
+                return result;
             }
             catch (Exception ex)
             {
@@ -133,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             ParentType = parentType,
                             ParentId = parentId
                         };
-                        await result.SaveModelAsync(true, context, transaction);
+                        await result.SaveModelAsync(false, context, transaction);
                         result.ExpandView(context, transaction);
                         return new RepositoryResponse<AdditionalViewModel>()
                         {
@@ -982,7 +984,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
 
-                    
+
                     int page = 0;
                     int pageSize = 10;
                     string truncateSql = $"DELETE FROM {databaseName};";
@@ -1005,9 +1007,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             string columns = string.Join(", ", getDatabase.Data.Columns
                                 .Select(c => c.Name).ToList());
                             string values = string.Join(", ", datas);
-                            
+
                             string commandText = $@"INSERT INTO {databaseName} (id, specificulture, mix_status, createdDateTime, {columns}) VALUES {values}";
-                            
+
                             await ctx.Database.ExecuteSqlRawAsync(commandText);
 
                             await ctx.SaveChangesAsync();
