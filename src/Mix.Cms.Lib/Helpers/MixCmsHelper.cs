@@ -497,9 +497,11 @@ namespace Mix.Cms.Lib.Helpers
             
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
+            
             PagingDataModel pagingData = new PagingDataModel(context.Request);
             return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
+                MixDatabaseNames.ADDITIONAL_FIELD_POST,
                 pagingData,
                 culture, _context, _transaction);
         }

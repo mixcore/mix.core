@@ -21,56 +21,75 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class Helper
     {
-        /// <summary>
-        /// Gets the modelist by meta.
-        /// </summary>
-        /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <param name="culture">The culture.</param>
-        /// <param name="metaName">Name of the meta. Ex: sys_tag / sys_category</param>
-        /// <param name="metaValue">The meta value.</param>
-        /// <param name="orderByPropertyName">Name of the order by property.</param>
-        /// <param name="direction">The direction.</param>
-        /// <param name="pageSize">Size of the page.</param>
-        /// <param name="pageIndex">Index of the page.</param>
-        /// <param name="_context">The context.</param>
-        /// <param name="_transaction">The transaction.</param>
-        /// <returns></returns>
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByMeta<TView>(
-            string metaName, string metaValue
-            , PagingDataModel pagingData
-            , string culture = null
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPosts<TView>(
+            SearchPostQueryModel searchPostData,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-                var result = new RepositoryResponse<PaginationModel<TView>>()
+
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
+                valPredicate = valPredicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(searchPostData.Category),
+                     Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_CATEGORY, searchPostData.Category, searchPostData.Specificulture));
+                valPredicate = valPredicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(searchPostData.Tag),
+                     Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_TAG, searchPostData.Tag, searchPostData.Specificulture));
+
+                if (valPredicate != null)
                 {
-                    IsSucceed = true,
-                    Data = new PaginationModel<TView>()
+                    return await SearchPostByValue<TView>(valPredicate, searchPostData.PagingData, searchPostData.PostType, searchPostData.Specificulture, context, transaction);
+                }
+                else
+                {
+                    Expression<Func<MixPost, bool>> predicate = BuildPostExpression(searchPostData);
+                    if (searchPostData.PagingData.OrderBy.StartsWith("additionalData."))
                     {
-                        PageIndex = pagingData.PageIndex,
-                        PageSize = pagingData.PageSize
+                        var allPostIds = context.MixPost.Where(predicate).AsEnumerable().Select(m => m.Id.ToString()).ToList();
+                        var resultIds = IQueryableHelper.SortParentIds(
+                           allPostIds,
+                           context,
+                           searchPostData.PagingData,
+                           searchPostData.Specificulture,
+                           searchPostData.PostType)
+                           .AsEnumerable()
+                           .Select(p => int.Parse(p))
+                           .ToList();
+
+                        var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                                    m => resultIds.Any(p => p == m.Id) && m.Specificulture == searchPostData.Specificulture,
+                                    context,
+                                    transaction));
+                        var items = getPosts.Data.OrderBy(
+                            m => resultIds.IndexOf((int)ReflectionHelper.GetPropertyValue(m, "Id"))).ToList();
+                        var total = allPostIds.Count();
+
+                        return new RepositoryResponse<PaginationModel<TView>>()
+                        {
+                            IsSucceed = true,
+                            Data = new PaginationModel<TView>()
+                            {
+                                Items = items,
+                                PageIndex = searchPostData.PagingData.PageIndex,
+                                PageSize = searchPostData.PagingData.PageSize,
+                                TotalItems = total,
+                                TotalPage = (int)Math.Ceiling((double)total / searchPostData.PagingData.PageSize)
+                            }
+                        };
                     }
-                };
-
-                var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
-
-                var postIds = IQueryableHelper.GetPostIdsByValue(valExp, context, pagingData, culture)
-                    .AsEnumerable()
-                    .Select(p => int.Parse(p))
-                    .ToList();
-
-                var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                            m => postIds.Any(p => p == m.Id) && m.Specificulture == culture,
-                            context,
-                            transaction));
-                result.Data.Items = getPosts.Data.OrderBy(
-                    m => postIds.IndexOf((int)ReflectionHelper.GetPropertyValue(m, "Id"))).ToList();
-
-                return result;
+                    return await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                        predicate,
+                        searchPostData.PagingData.OrderBy,
+                        searchPostData.PagingData.Direction,
+                        searchPostData.PagingData.PageSize,
+                        searchPostData.PagingData.PageIndex,
+                        null, null,
+                        context,
+                        transaction);
+                }
             }
             catch (Exception ex)
             {
@@ -85,6 +104,101 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 }
             }
         }
+
+        private static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByValue<TView>(
+             Expression<Func<MixDatabaseDataValue, bool>> valPredicate,
+            PagingDataModel pagingData,
+            string postType,
+            string specificulture,
+            MixCmsContext context,
+            IDbContextTransaction transaction)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            var allPostIds = IQueryableHelper.GetPostIdsByValue(
+                        valPredicate,
+                        context,
+                        specificulture,
+                        postType);
+            var resultIds = IQueryableHelper.SortParentIds(
+                allPostIds,
+                context,
+                pagingData,
+                specificulture,
+                postType)
+                .AsEnumerable()
+                .Select(p => int.Parse(p))
+                .ToList();
+
+            var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
+                        m => resultIds.Any(p => p == m.Id) && m.Specificulture == specificulture,
+                        context,
+                        transaction));
+            var items = getPosts.Data.OrderBy(
+                m => resultIds.IndexOf((int)ReflectionHelper.GetPropertyValue(m, "Id"))).ToList();
+            var total = allPostIds.Count();
+            var result = new RepositoryResponse<PaginationModel<TView>>()
+            {
+                IsSucceed = true,
+                Data = new PaginationModel<TView>()
+                {
+                    Items = items,
+                    PageIndex = pagingData.PageIndex,
+                    PageSize = pagingData.PageSize,
+                    TotalItems = total,
+                    TotalPage = (int)Math.Ceiling((double)total / pagingData.PageSize)
+                }
+            };
+            return result;
+        }
+
+        private static Expression<Func<MixPost, bool>> BuildPostExpression(SearchPostQueryModel searchPostData)
+        {
+            Expression<Func<MixPost, bool>> predicate = model => model.Specificulture == searchPostData.Specificulture;
+            predicate = predicate.AndAlsoIf(searchPostData.Status.HasValue, model => model.Status == searchPostData.Status.Value);
+            predicate = predicate.AndAlsoIf(searchPostData.FromDate.HasValue, model => model.CreatedDateTime >= searchPostData.FromDate.Value);
+            predicate = predicate.AndAlsoIf(searchPostData.ToDate.HasValue, model => model.CreatedDateTime <= searchPostData.ToDate.Value);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(searchPostData.PostType), model => model.Type == searchPostData.PostType);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(searchPostData.Keyword), model =>
+                (EF.Functions.Like(model.Title, $"%{searchPostData.Keyword}%"))
+                    || (EF.Functions.Like(model.Excerpt, $"%{searchPostData.Keyword}%"))
+                    || (EF.Functions.Like(model.Content, $"%{searchPostData.Keyword}%")));
+            return predicate;
+        }
+
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetModelistByMeta<TView>(
+            string metaName,
+            string metaValue,
+            string postType,
+            PagingDataModel pagingData,
+            string culture = null,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
+            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                postType ??= MixDatabaseNames.ADDITIONAL_FIELD_POST;
+
+                var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
+
+                return await SearchPostByValue<TView>(valExp, pagingData, postType, culture, context, transaction);
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<PaginationModel<TView>>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    //if current Context is Root
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+        }
+
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetPostListByValueId<TView>(
             string valueId

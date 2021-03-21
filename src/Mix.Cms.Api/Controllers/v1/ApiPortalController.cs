@@ -326,10 +326,11 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
-            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            var iv = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
             return new RepositoryResponse<string>()
             {
-                Data = AesEncryptionHelper.EncryptString(data, Convert.ToBase64String(key))
+                Data = AesEncryptionHelper.EncryptString(data, key, iv)
             };
         }
 
@@ -339,11 +340,11 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<string> Decrypt([FromBody] JObject model)
         {
             string data = model.GetValue("data")?.Value<string>();
-            //string key = model.GetValue("key")?.Value<string>();
-            var key = System.Text.Encoding.UTF8.GetBytes("sw-cms-secret-key");
+            var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            var iv = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
             return new RepositoryResponse<string>()
             {
-                Data = AesEncryptionHelper.DecryptString(data, Convert.ToBase64String(key))
+                Data = AesEncryptionHelper.DecryptString(data, key, iv)
             };
         }
 
