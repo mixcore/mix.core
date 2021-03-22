@@ -48,35 +48,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     Expression<Func<MixPost, bool>> predicate = BuildPostExpression(searchPostData);
                     if (searchPostData.PagingData.OrderBy.StartsWith("additionalData."))
                     {
-                        var allPostIds = context.MixPost.Where(predicate).AsEnumerable().Select(m => m.Id.ToString()).ToList();
-                        var resultIds = IQueryableHelper.SortParentIds(
-                           allPostIds,
-                           context,
-                           searchPostData.PagingData,
-                           searchPostData.Specificulture,
-                           searchPostData.PostType)
-                           .AsEnumerable()
-                           .Select(p => int.Parse(p))
-                           .ToList();
+                        var total = context.MixPost.Count(predicate);
+                        var allPostIds = context.MixPost.Where(predicate)
+                            .AsEnumerable()
+                            .Select(m => m.Id);
 
-                        var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                                    m => resultIds.Any(p => p == m.Id) && m.Specificulture == searchPostData.Specificulture,
-                                    context,
-                                    transaction));
-                        var items = getPosts.Data.OrderBy(
-                            m => resultIds.IndexOf((int)ReflectionHelper.GetPropertyValue(m, "Id"))).ToList();
-                        var total = allPostIds.Count();
-
+                        var posts = IQueryableHelper.GetSortedPost(allPostIds, context, searchPostData).ToList();
                         return new RepositoryResponse<PaginationModel<TView>>()
                         {
                             IsSucceed = true,
                             Data = new PaginationModel<TView>()
                             {
-                                Items = items,
-                                PageIndex = searchPostData.PagingData.PageIndex,
+                                Items = DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetCachedData(posts, context, transaction),
                                 PageSize = searchPostData.PagingData.PageSize,
-                                TotalItems = total,
-                                TotalPage = (int)Math.Ceiling((double)total / searchPostData.PagingData.PageSize)
+                                PageIndex = searchPostData.PagingData.PageIndex
                             }
                         };
                     }
@@ -120,7 +105,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         specificulture,
                         postType);
             var resultIds = IQueryableHelper.SortParentIds(
-                allPostIds,
+                allPostIds.Skip(pagingData.PageIndex * pagingData.PageSize)
+                            .Take(pagingData.PageSize),
                 context,
                 pagingData,
                 specificulture,
