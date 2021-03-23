@@ -108,7 +108,6 @@
     "SearchPageSize": "20",
     "IsEncryptApi": true,
     "ApiEncryptKey": "MbQeThWmZq4t7w!z$C&F)J@NcRfUjXn2",
-    "ApiEncryptIV": "3s6v9y$B&E)H@McQ",
     "LastUpdateConfiguration": null,
     "DatabaseProvider": "MSSQL",
     "AllowedHosts": [],

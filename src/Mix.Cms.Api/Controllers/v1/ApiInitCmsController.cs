@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -107,11 +108,13 @@ namespace Mix.Cms.Api.Controllers.v1
                         await _userManager.AddToRoleAsync(user, "SuperAdmin");
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                         var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                        
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
                         {
                             result.IsSucceed = true;
                             MixService.LoadFromDatabase();
+                            MixService.SetConfig<string>(MixAppSettingKeywords.ApiEncryptKey, aesKey);
                             MixService.SetConfig("InitStatus", 2);
                             MixService.SaveSettings();
                             MixService.Reload();

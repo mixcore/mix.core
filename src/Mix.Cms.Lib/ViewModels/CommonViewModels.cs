@@ -36,9 +36,6 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("apiEncryptKey")]
         public string ApiEncryptKey { get; set; }
 
-        [JsonProperty("apiEncryptIV")]
-        public string ApiEncryptIV { get; set; }
-
         [JsonProperty("rsaKeys")]
         public Dictionary<string, string> RSAKeys { get; set; }
 

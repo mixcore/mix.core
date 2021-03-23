@@ -166,7 +166,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 PortalThemeSettings = MixService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                ApiEncryptIV = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV),
                 IsEncryptApi = MixService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
@@ -303,10 +302,9 @@ namespace Mix.Cms.Api.Controllers.v1
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
             var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
-            var iv = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
             return new RepositoryResponse<string>()
             {
-                Data = AesEncryptionHelper.EncryptString(data, key, iv)
+                Data = AesEncryptionHelper.EncryptString(data, key)
             };
         }
 
@@ -317,10 +315,9 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string data = model.GetValue("data")?.Value<string>();
             var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
-            var iv = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
             return new RepositoryResponse<string>()
             {
-                Data = AesEncryptionHelper.DecryptString(data, key, iv)
+                Data = AesEncryptionHelper.DecryptString(data, key)
             };
         }
 
@@ -439,7 +436,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 PortalThemeSettings = MixService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang),
                 ApiEncryptKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                ApiEncryptIV = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV),
                 IsEncryptApi = MixService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
