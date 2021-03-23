@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
@@ -72,7 +71,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost, HttpOptions]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] JObject data)
+        public async Task<ActionResult<RepositoryResponse<JObject>>> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
             string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
@@ -89,23 +88,8 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-
-                    var token = await _helper.GenerateAccessTokenAsync(user, model.RememberMe);
-                    if (token != null)
-                    {
-                        token.Info = new MixUserViewModel(user);
-                        await token.Info.LoadUserDataAsync();
-
-                        loginResult.IsSucceed = true;
-                        loginResult.Status = 1;
-                        loginResult.Data = token;
-                        _logger.LogInformation("User logged in.");
-                        return Ok(token);
-                    }
-                    else
-                    {
-                        return Ok(token);
-                    }
+                    var token = await _helper.GetAuthData(user, model.RememberMe);
+                    return Ok(token);
                 }
                 if (result.IsLockedOut)
                 {
@@ -128,9 +112,9 @@ namespace Mix.Cms.Api.Controllers.v1
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("refresh-token/{refreshTokenId}")]
         [HttpGet, HttpOptions]
-        public async Task<RepositoryResponse<AccessTokenViewModel>> RefreshToken(string refreshTokenId)
+        public async Task<RepositoryResponse<JObject>> RefreshToken(string refreshTokenId)
         {
-            RepositoryResponse<AccessTokenViewModel> result = new RepositoryResponse<AccessTokenViewModel>();
+            RepositoryResponse<JObject> result = new RepositoryResponse<JObject>();
             var getRefreshToken = await RefreshTokenViewModel.Repository.GetSingleModelAsync(t => t.Id == refreshTokenId);
             if (getRefreshToken.IsSucceed)
             {
@@ -140,26 +124,14 @@ namespace Mix.Cms.Api.Controllers.v1
                     var user = await _userManager.FindByEmailAsync(oldToken.Email);
                     await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                    var token = await _helper.GenerateAccessTokenAsync(user, true);
+                    var token = await _helper.GetAuthData(user, true);
                     if (token != null)
                     {
                         await oldToken.RemoveModelAsync();
-
-                        token.Info = new MixUserViewModel(user);
-                        await token.Info.LoadUserDataAsync();
-
                         result.IsSucceed = true;
-                        result.Status = 1;
                         result.Data = token;
-                        _logger.LogInformation("User refresh token.");
-                        return result;
                     }
-                    else
-                    {
-                        result.IsSucceed = false;
-                        result.Data = token;
-                        return result;
-                    }
+                    return result;
                 }
                 else
                 {
@@ -198,7 +170,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     _logger.LogInformation("User created a new account with password.");
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
-                    var token = await _helper.GenerateAccessTokenAsync(user, true);
+                    var rsaKeys = RSAEncryptionHelper.GenerateKeys();
+                    var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                    var token = await _helper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
                         result.IsSucceed = true;

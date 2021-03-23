@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
 using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using System;
 using System.Collections.Generic;
@@ -104,7 +105,9 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                         await _userManager.AddToRoleAsync(user, "SuperAdmin");
-                        var token = await _idHelper.GenerateAccessTokenAsync(user, true);
+                        var rsaKeys = RSAEncryptionHelper.GenerateKeys();
+                        var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                        var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
                         {
                             result.IsSucceed = true;
