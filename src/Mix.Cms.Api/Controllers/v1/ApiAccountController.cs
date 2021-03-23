@@ -70,13 +70,11 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("login")]
         [HttpPost, HttpOptions]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult<RepositoryResponse<JObject>>> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
             string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
-            string iv =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptIV);
-            string decryptMsg = AesEncryptionHelper.DecryptString(message, key, iv);
+            string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
             if (ModelState.IsValid)
