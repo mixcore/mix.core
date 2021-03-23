@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
@@ -195,8 +196,7 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
-                    c => c.Type == "Username")?.Value));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", IdentityHelper.GetClaim(User, MixClaims.Username)));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, MixQueryColumnName.Id).ToString();
                 if (id != currentId)

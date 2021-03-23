@@ -297,30 +297,6 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [AllowAnonymous]
         [HttpPost, HttpOptions]
-        [Route("encrypt-rsa")]
-        public RepositoryResponse<string> EncryptRsa([FromBody] JObject model)
-        {
-            string data = model.GetValue("data").Value<string>();
-            return new RepositoryResponse<string>()
-            {
-                Data = RSAEncryptionHelper.GetEncryptedText(data)
-            };
-        }
-
-        [AllowAnonymous]
-        [HttpPost, HttpOptions]
-        [Route("decrypt-rsa")]
-        public RepositoryResponse<string> DecryptRsa([FromBody] JObject model)
-        {
-            string data = model.GetValue("data").Value<string>();
-            return new RepositoryResponse<string>()
-            {
-                Data = Lib.Helpers.RSAEncryptionHelper.GetDecryptedText(data)
-            };
-        }
-
-        [AllowAnonymous]
-        [HttpPost, HttpOptions]
         [Route("encrypt")]
         public RepositoryResponse<string> Encrypt([FromBody] JObject model)
         {
@@ -471,6 +447,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
+                RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
             };
 
@@ -491,12 +468,16 @@ namespace Mix.Cms.Api.Controllers.v1
 
                 new JProperty("data", MixService.GetLocalSettings(_lang))
             };
+
+
             JObject result = new JObject()
             {
                 new JProperty("globalSettings", JObject.FromObject(configurations)),
                 new JProperty("translator", translator),
                 new JProperty("settings", JObject.FromObject(settings))
             };
+
+            
 
             return new RepositoryResponse<JObject>()
             {

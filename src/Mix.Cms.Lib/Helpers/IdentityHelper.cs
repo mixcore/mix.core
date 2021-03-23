@@ -1,17 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Api.Helpers
+namespace Mix.Cms.Lib.Helpers
 {
     public class IdentityHelper
     {
@@ -29,7 +34,31 @@ namespace Mix.Cms.Api.Helpers
             _roleManager = roleManager;
         }
 
-        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember)
+        public async Task<JObject> GetAuthData(ApplicationUser user, bool rememberMe)
+        {
+            var rsaKeys = RSAEncryptionHelper.GenerateKeys();
+            var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+            var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+            if (token != null)
+            {
+                token.Info = new MixUserViewModel(user);
+                await token.Info.LoadUserDataAsync();
+
+                var plainText = JObject.FromObject(token).ToString(Formatting.None).Replace("\r\n", string.Empty);
+                var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
+
+                var resp = new JObject()
+                        {
+                            new JProperty("k", aesKey),
+                            new JProperty("rpk", rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
+                            new JProperty("data", encryptedInfo)
+                        };
+                return resp;
+            }
+            return default;
+        }
+
+        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
             var dtIssued = DateTime.UtcNow;
             var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
@@ -57,11 +86,10 @@ namespace Mix.Cms.Api.Helpers
 
             AccessTokenViewModel token = new AccessTokenViewModel()
             {
-                Access_token = await GenerateTokenAsync(user, dtExpired, refreshToken),
+                Access_token = await GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey),
                 Refresh_token = refreshTokenId,
                 Token_type = MixService.GetAuthConfig<string>("TokenType"),
                 Expires_in = MixService.GetAuthConfig<int>("CookieExpiration"),
-                //UserData = user,
                 Issued = dtIssued,
                 Expires = dtExpired,
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
@@ -69,14 +97,16 @@ namespace Mix.Cms.Api.Helpers
             return token;
         }
 
-        public async Task<string> GenerateTokenAsync(ApplicationUser user, DateTime expires, string refreshToken)
+        public async Task<string> GenerateTokenAsync(ApplicationUser user, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey)
         {
             List<Claim> claims = await GetClaimsAsync(user);
             claims.AddRange(new[]
                 {
-                    new Claim("Id", user.Id.ToString()),
-                    new Claim("Username", user.UserName),
-                    new Claim("RefreshToken", refreshToken)
+                    new Claim(MixClaims.Id, user.Id.ToString()),
+                    new Claim(MixClaims.Username, user.UserName),
+                    new Claim(MixClaims.RefreshToken, refreshToken),
+                    new Claim(MixClaims.AESKey, aesKey),
+                    new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
                 });
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: MixService.GetAuthConfig<string>("Issuer"),
@@ -118,6 +148,11 @@ namespace Mix.Cms.Api.Helpers
         public Claim CreateClaim(string type, string value)
         {
             return new Claim(type, value, ClaimValueTypes.String);
+        }
+
+        public static string GetClaim(ClaimsPrincipal User, string claimType)
+        {
+            return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
