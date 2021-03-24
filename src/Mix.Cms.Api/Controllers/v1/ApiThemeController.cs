@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
@@ -13,6 +14,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixThemes;
+using Mix.Cms.Service.SignalR.Hubs;
 using Mix.Domain.Core.ViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
@@ -26,11 +28,12 @@ using System.Threading.Tasks;
 namespace Mix.Cms.Api.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/{culture}/theme")]
+    [Route("api/v1/theme")]
     public class ApiThemeController :
         BaseGenericApiController<MixCmsContext, MixTheme>
     {
-        public ApiThemeController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiThemeController(MixCmsContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext) 
+            : base(context, memoryCache, hubContext)
         {
         }
 

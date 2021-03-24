@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -81,10 +82,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string userName, string culture, IFormFile assets, IFormFile theme)
         {
             var json = JObject.Parse(model);
-            var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
+            var data = json.ToObject<InitViewModel>();
             if (data != null)
             {
                 data.CreatedBy = userName;
+                data.Status = MixContentStatus.Published;
                 string importFolder = $"{MixFolders.ImportFolder}/" +
                     $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
                 if (theme != null)

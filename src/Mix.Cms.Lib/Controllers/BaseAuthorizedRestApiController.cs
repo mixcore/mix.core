@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
@@ -483,21 +484,16 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
-        protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null)
+        protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null, SearchQueryModel searchQuery = null)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
-            int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
-            bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
-
+            searchQuery ??= new SearchQueryModel(Request);
             RequestPaging request = new RequestPaging()
             {
-                PageIndex = pageIndex,
-                PageSize = isPageSize ? pageSize : 100,
-                OrderBy = Request.Query[MixRequestQueryKeywords.OrderBy].ToString().ToTitleCase(),
-                Direction = direction
+                PageIndex = searchQuery.PagingData.PageIndex,
+                PageSize = searchQuery.PagingData.PageSize,
+                OrderBy = searchQuery.PagingData.OrderBy,
+                Direction = searchQuery.PagingData.Direction
             };
 
             RepositoryResponse<PaginationModel<T>> data = null;
