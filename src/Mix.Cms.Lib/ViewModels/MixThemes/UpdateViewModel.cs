@@ -160,6 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
                 Name = SeoHelper.GetSEOString(Title);
                 CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
                 //Import From existing Theme (zip)
                 if (string.IsNullOrEmpty(TemplateAsset.Filename))
                 {
@@ -178,7 +179,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { 
+                FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
@@ -197,7 +199,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
             }
             // Import Assets
-            if (result.IsSucceed && !string.IsNullOrEmpty(Asset.Filename))
+            if (result.IsSucceed && !string.IsNullOrEmpty(Asset?.Filename))
             {
                 result = ImportAssetsAsync(_context, _transaction);
             }

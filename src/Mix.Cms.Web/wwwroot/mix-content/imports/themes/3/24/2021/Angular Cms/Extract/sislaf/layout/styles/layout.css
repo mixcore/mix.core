@@ -1,0 +1,564 @@
+@charset "utf-8";
+/*
+Template Name: Sislaf
+Author: <a href="https://www.os-templates.com/">OS Templates</a>
+Author URI: https://www.os-templates.com/
+Copyright: OS-Templates.com
+Licence: Free to use under our free template licence terms
+Licence URI: https://www.os-templates.com/template-terms
+File: Layout CSS
+*/
+
+@import url("fontawesome-free/css/fontawesome-all.min.css");
+@import url("framework.css");
+
+/* Rows
+--------------------------------------------------------------------------------------------------------------- */
+.row0, .row0 a{}
+.row1{border:solid; border-width:1px 0;}
+.row2, .row2 a{}
+.row3, .row3 a{}
+.row4, .row4 a{}
+.row5, .row5 a{}
+
+
+/* Top Bar
+--------------------------------------------------------------------------------------------------------------- */
+#topbar{padding:20px 0; font-size:.8rem; text-transform:uppercase;}
+
+#topbar ul li{display:inline-block; margin-right:15px;}
+#topbar ul li:last-child{margin-right:0; padding-right:0; border-right:none;}
+#topbar i{line-height:normal;}
+#topbar > div:nth-of-type(2) i{font-size:1rem;}
+
+/* Search Form */
+#topbar #searchform{position:relative; line-height:1; z-index:9999;}
+#topbar #searchform::after{display:block; height:18px; line-height:18px; padding:0; font-family:"Font Awesome\ 5 Free"; font-weight:900; font-size:1rem; content:"\f002"/* fa-search */;}
+#topbar #searchform:hover::after, #topbar #searchform button{cursor:pointer;}
+#topbar #searchform > div{position:absolute; top:18px; right:0; width:280px; visibility:hidden; opacity:0/* Required for transition effect */;}
+#topbar #searchform:hover > div{visibility:visible; opacity:1/* Required for transition effect */;}
+#topbar #searchform form{display:block; position:relative;}
+#topbar #searchform form *{border:none;}
+#topbar #searchform input{display:block; width:100%; height:36px; padding:8px 40px 8px 10px; font-size:1rem;}
+#topbar #searchform ::placeholder{text-transform:capitalize;}
+#topbar #searchform button{display:block; position:absolute; top:3px; right:2px; height:30px; font-size:16px; line-height:1;}
+
+
+/* Header
+--------------------------------------------------------------------------------------------------------------- */
+#header{}
+
+#header #logo{margin:22px 0 0 0;}
+#header #logo h1{margin:0; padding:0; font-size:2.2rem; text-transform:uppercase;}
+
+
+/* Page Intro
+--------------------------------------------------------------------------------------------------------------- */
+#pageintro{padding:200px 0 300px;}/* 300px => 100px for #introblocks negative margin */
+
+#pageintro article, #pageintro article p{display:block; max-width:75%; margin:0 auto; text-align:center;}
+#pageintro article p{max-width:65%; line-height:2rem;}
+#pageintro .heading{margin-bottom:20px; font-size:4rem;}
+#pageintro footer{margin-top:50px;}
+
+
+/* Content Area
+--------------------------------------------------------------------------------------------------------------- */
+.container{padding:80px 0;}
+
+/* Content */
+.container .content{}
+
+.sectiontitle{display:block; max-width:55%; margin:0 auto 80px; text-align:center;}
+.sectiontitle *{margin:0;}
+
+/* Introblocks - x3 */
+#introblocks{display:block; position:relative; margin:-180px 0 0 0; z-index:1; text-align:center;}/* 180px => 100px + container padding */
+#introblocks figure{}
+#introblocks figure figcaption{display:block; padding:30px 0 0 0; text-align:center;}
+#introblocks figure figcaption > a{}
+#introblocks figure figcaption .heading{font-size:1.2rem; font-weight:700; margin-bottom:0;}
+#introblocks figure figcaption .heading.underline::after{left:50%; margin-left:-12%;}
+
+/* Overview - for services etc. */
+#overview{}
+#overview li{margin-bottom:50px;}
+#overview li:nth-last-child(-n+3){margin-bottom:0;}/* Removes bottom margin from the last three items - margin is restored in the media queries when items stack */
+#overview li:nth-child(3n+1){margin-left:0; clear:left;}/* Removes the need to add class="first" */
+#overview article{}
+#overview article *{margin:0; padding:0;}
+#overview article > div{display:block; position:relative; min-height:36px; margin:0 0 20px 0; padding:8px 0 0 55px;}
+#overview article > div *{line-height:1;}
+#overview article > div i{display:block; position:absolute; top:0; left:0; font-size:36px;}
+#overview article > div .heading{}
+#overview article p{}
+
+/* Split Fifty */
+#splitfifty{}
+#splitfifty *{margin:0;}
+#splitfifty > .sectiontitle{max-width:none; margin:0 0 50px 0; text-align:left;}
+#splitfifty > .sectiontitle .heading.underline::after{left:0; margin-left:0;}
+#splitfifty > div:nth-of-type(2) article{display:block; float:left; width:50%; padding:50px;}
+#splitfifty > div:nth-of-type(2) article *{margin:0 0 30px 0;}
+#splitfifty > div:nth-of-type(2) article .heading{}
+#splitfifty > div:nth-of-type(2) article p{}
+#splitfifty > div:nth-of-type(2) article footer, #splitfifty > div:nth-of-type(2) article footer a{margin:0;}
+#splitfifty.disright > div:nth-of-type(2) article{float:right;}/* Display the block to the right, instead of left - depends on your preference */
+
+/* Team Members */
+.team{}
+.team li:last-child{margin-bottom:0;}/* Used when elements stack in small viewports */
+.team figure{display:block; text-align:center;}
+.team figure *{margin:0; padding:0;}
+.team figure a{}
+.team figure img{}
+.team figure figcaption{padding:20px 10px; line-height:1;}
+.team figure strong{display:block; margin-bottom:8px; font-size:1.4rem; font-weight:400;}
+.team figure em{display:block; font-style:normal; font-size:.8rem;}
+
+/* Stats */
+#stats{}
+#stats > li{display:block; float:left; width:25%; border:solid; border-width:0 1px 0 0; text-align:center;}
+#stats > li:last-child{border:none;}
+#stats > li *{margin:0; padding:0;}
+#stats > li i{margin-bottom:30px; font-size:5rem;}
+#stats > li p:first-of-type{margin-bottom:15px; font-size:3rem; font-weight:700; line-height:1;}
+#stats > li p:last-of-type{text-transform:uppercase;}
+
+/* Testimonials */
+#testimonials{}
+#testimonials > .one_half{margin:0;}
+#testimonials ul{margin:0; padding:50px; list-style:none;}
+#testimonials ul li{margin:0 0 50px 0;}
+#testimonials ul li:last-child{margin:0;}
+#testimonials blockquote{display:block; position:relative; width:100%; margin:0 0 30px 0; padding:30px; line-height:1.4; z-index:1; border-radius:10px;}
+#testimonials blockquote::before{display:block; position:absolute; top:10px; left:10px; font-family:"Font Awesome\ 5 Free"; font-weight:900; font-size:32px; line-height:32px; content:"\f10d"; z-index:-1;}
+#testimonials blockquote::after{display:block; position:absolute; bottom:-15px; left:30px; width:0; height:0; content:""; border:15px solid transparent; border-bottom:none;}
+#testimonials figure{}
+#testimonials figure *{margin:0; line-height:1;}
+#testimonials figure img{float:left; margin:0 15px;}
+#testimonials figcaption{float:left; margin-top:10px;}
+#testimonials figcaption .heading{font-size:1.2rem; font-weight:700;}
+#testimonials figcaption em{font-size:.8rem;}
+#testimonials footer{}
+
+/* Latest - Blog posts etc. */
+#latest{}
+#latest article{}
+#latest article figure{}
+#latest article figure img{}
+#latest article .meta{display:block; padding:5px 10px;}
+#latest article .meta li{display:block; float:left; width:50%; font-size:.8rem;}
+#latest article .meta li:last-child{text-align:right;}
+#latest article .meta li i{margin-right:5px;}
+#latest article .excerpt{padding:30px; border:solid; border-width:0 1px 1px 1px;}
+#latest article .excerpt .heading{margin:0 0 15px 0; font-size:1.2rem;}
+#latest article .excerpt p{}
+#latest article .excerpt footer{margin-top:30px;}
+
+/* Comments */
+#comments ul{margin:0 0 40px 0; padding:0; list-style:none;}
+#comments li{margin:0 0 10px 0; padding:15px;}
+#comments .avatar{float:right; margin:0 0 10px 10px; padding:3px; border:1px solid;}
+#comments address{font-weight:bold;}
+#comments time{font-size:smaller;}
+#comments .comcont{display:block; margin:0; padding:0;}
+#comments .comcont p{margin:10px 5px 10px 0; padding:0;}
+
+#comments form{display:block; width:100%;}
+#comments input, #comments textarea{width:100%; padding:10px; border:1px solid;}
+#comments textarea{overflow:auto;}
+#comments div{margin-bottom:15px;}
+#comments input[type="submit"], #comments input[type="reset"]{display:inline-block; width:auto; min-width:150px; margin:0; padding:8px 5px; cursor:pointer;}
+
+/* Sidebar */
+.container .sidebar{}
+
+.sidebar .sdb_holder{margin-bottom:50px;}
+.sidebar .sdb_holder:last-child{margin-bottom:0;}
+
+
+/* Footer
+--------------------------------------------------------------------------------------------------------------- */
+#footer{padding:80px 0;}
+
+#footer .heading{margin-bottom:50px; font-size:1.2rem;}
+
+#footer > div:first-of-type .heading{margin-bottom:20px; text-transform:uppercase; font-size:1.8rem;}
+#footer > div:first-of-type .faico{margin-bottom:30px;}
+
+#footer input, #footer button{border:1px solid;}
+#footer input{display:block; width:100%; padding:8px;}
+#footer button{padding:8px 18px 10px; text-transform:uppercase; font-weight:400; cursor:pointer;}
+
+#footer .linklist li{display:block; margin-bottom:15px; padding:0 0 15px 0; border-bottom:1px solid;}
+#footer .linklist li:last-child{margin:0; padding:0; border:none;}
+#footer .linklist li::before, #footer .linklist li::after{display:table; content:"";}
+#footer .linklist li, #footer .linklist li::after{clear:both;}
+
+#footer .contact{}
+#footer .contact.linklist li, #footer .contact.linklist li:last-child{position:relative; padding-left:40px;}
+#footer .contact li *{margin:0; padding:0; line-height:1.6;}
+#footer .contact li i{display:block; position:absolute; top:0; left:0; width:30px; font-size:16px; text-align:center;}
+
+#footer .latestimg{}
+#footer .latestimg > li{display:inline-block; float:left; width:30%; margin:0 0 5% 5%;}
+#footer .latestimg > li:nth-last-child(-n+3){margin-bottom:0;}/* Removes bottom margin from the last three items - margin is restored in the media queries when items stack */
+#footer .latestimg > li:nth-child(3n+1){margin-left:0; clear:left;}/* Removes the need to add class="first" */
+#footer .latestimg > li img{width:100%;}/* Force the image to resize to take the full space - may have to be changed for tablets, depends on personal preference */
+#footer .latestimg > li a.imgover{display:block;}
+
+#footer #ctdetails{padding-top:80px; border-top:1px solid;}
+#footer #ctdetails ul{}
+#footer #ctdetails ul li{}
+#footer #ctdetails ul li div{position:relative; min-height:30px; padding:0 0 0 35px; line-height:1;}
+#footer #ctdetails ul li div i{position:absolute; top:0; left:0; width:25px; height:23px; font-size:20px; text-align:center;}
+#footer #ctdetails ul li div span{display:block;}
+#footer #ctdetails ul li div strong{display:block; margin:0 0 8px 0; text-transform:capitalize;}
+
+
+/* Copyright
+--------------------------------------------------------------------------------------------------------------- */
+#copyright{padding:20px 0;}
+#copyright *{margin:0; padding:0;}
+
+
+/* Transition Fade
+This gives a smooth transition to "ALL" elements used in the layout - other than the navigation form used in mobile devices
+If you don't want it to fade all elements, you have to list the ones you want to be faded individually
+Delete it completely to stop fading
+--------------------------------------------------------------------------------------------------------------- */
+*, *::before, *::after{transition:all .3s ease-in-out;}
+#mainav form *{transition:none !important;}
+
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+
+
+/* Navigation
+--------------------------------------------------------------------------------------------------------------- */
+nav ul, nav ol{margin:0; padding:0; list-style:none;}
+
+#mainav, #breadcrumb, .sidebar nav{line-height:normal;}
+#mainav .drop::after, #mainav li li .drop::after, #breadcrumb li a::after, .sidebar nav a::after{position:absolute; font-family:"Font Awesome\ 5 Free"; font-weight:900; font-size:10px; line-height:10px;}
+
+/* Top Navigation */
+#mainav{}
+#mainav ul{text-transform:uppercase;}
+#mainav ul ul{position:absolute; width:180px; text-transform:none; z-index:9999;}
+#mainav ul ul ul{left:180px; top:0;}
+#mainav li{display:inline-block; position:relative; margin:0 15px 0 0; padding:0;}
+#mainav li:last-child{margin-right:0;}
+#mainav li li{width:100%; margin:0;}
+#mainav li a{display:block; padding:30px 0;}
+#mainav li li a{border:solid; border-width:0 0 1px 0;}
+#mainav .drop{padding-left:15px;}
+#mainav li li a, #mainav li li .drop{display:block; margin:0; padding:10px 15px;}
+#mainav .drop::after, #mainav li li .drop::after{content:"\f0d7";}
+#mainav .drop::after{top:35px; left:5px;}
+#mainav li li .drop::after{top:15px; left:5px;}
+#mainav ul ul{visibility:hidden; opacity:0;}
+#mainav ul li:hover > ul{visibility:visible; opacity:1;}
+
+#mainav form{display:none; width:100%; margin:0; padding:0;}
+#mainav form select, #mainav form select option{display:block; cursor:pointer; outline:none;}
+#mainav form select{width:100%; padding:5px; border:none;}
+#mainav form select option{margin:5px; padding:0; border:none;}
+
+/* Breadcrumb */
+#breadcrumb{padding:150px 0 30px;}
+#breadcrumb ul{margin:0; padding:0; list-style:none; text-transform:uppercase;}
+#breadcrumb li{display:inline-block; margin:0 6px 0 0; padding:0;}
+#breadcrumb li a{display:block; position:relative; margin:0; padding:0 12px 0 0; font-size:12px;}
+#breadcrumb li a::after{top:4px; right:0; content:"\f0da";}
+#breadcrumb li:last-child a{margin:0; padding:0;}
+#breadcrumb li:last-child a::after{display:none;}
+#breadcrumb .heading{margin:0; font-size:2rem;}
+
+/* Sidebar Navigation */
+.sidebar nav{display:block; width:100%;}
+.sidebar nav li{margin:0 0 3px 0; padding:0;}
+.sidebar nav a{display:block; position:relative; margin:0; padding:5px 10px 5px 15px; text-decoration:none; border:solid; border-width:0 0 1px 0;}
+.sidebar nav a::after{top:10px; left:5px; content:"\f0da";}
+.sidebar nav ul ul a{padding-left:35px;}
+.sidebar nav ul ul a::after{left:25px;}
+.sidebar nav ul ul ul a{padding-left:55px;}
+.sidebar nav ul ul ul a::after{left:45px;}
+
+/* Pagination */
+.pagination{display:block; width:100%; text-align:center; clear:both;}
+.pagination li{display:inline-block; margin:0 2px 0 0;}
+.pagination li:last-child{margin-right:0;}
+.pagination a, .pagination strong{display:block; padding:8px 11px; border:1px solid; background-clip:padding-box; font-weight:normal;}
+
+/* Back to Top */
+#backtotop{z-index:999; display:inline-block; position:fixed; visibility:hidden; bottom:20px; right:20px; width:36px; height:36px; line-height:36px; font-size:16px; text-align:center; opacity:.2;}
+#backtotop i{display:block; width:100%; height:100%; line-height:inherit;}
+#backtotop.visible{visibility:visible; opacity:.5;}
+#backtotop:hover{opacity:1;}
+
+
+/* Tables
+--------------------------------------------------------------------------------------------------------------- */
+table, th, td{border:1px solid; border-collapse:collapse; vertical-align:top;}
+table, th{table-layout:auto;}
+table{width:100%; margin-bottom:15px;}
+th, td{padding:5px 8px;}
+td{border-width:0 1px;}
+
+
+/* Gallery
+--------------------------------------------------------------------------------------------------------------- */
+#gallery{display:block; width:100%; margin-bottom:50px;}
+#gallery figure figcaption{display:block; width:100%; clear:both;}
+#gallery li{margin-bottom:30px;}
+
+
+/* Font Awesome Social Icons
+--------------------------------------------------------------------------------------------------------------- */
+.faico{margin:0; padding:0; list-style:none;}
+.faico li{display:inline-block; margin:8px 5px 0 0; padding:0; line-height:normal;}
+.faico li:last-child{margin-right:0;}
+.faico a{display:inline-block; width:36px; height:36px; line-height:36px; font-size:18px; text-align:center;}
+
+.faico a{color:#474747; background-color:rgba(255,255,255,.8);}
+.faico a:hover{color:#FFFFFF;}
+
+.faicon-dribble:hover{background-color:#EA4C89;}
+.faicon-facebook:hover{background-color:#3B5998;}
+.faicon-google-plus:hover{background-color:#DB4A39;}
+.faicon-linkedin:hover{background-color:#0E76A8;}
+.faicon-twitter:hover{background-color:#00ACEE;}
+.faicon-vk:hover{background-color:#4E658E;}
+
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+
+
+/* Colours
+--------------------------------------------------------------------------------------------------------------- */
+body{color:#A5A6AA; background-color:#1C1D21;}
+a{color:#FBAB45;}
+a:active, a:focus{background:transparent !important;}/* IE10 + 11 Bugfix - prevents grey background */
+hr, .borderedbox{border-color:#D7D7D7;}
+label span{color:#FF0000; background-color:inherit;}
+input:focus, textarea:focus, *:required:focus{border-color:#FBAB45 !important;}
+
+.overlay{color:#FFFFFF; background-color:inherit;}
+.overlay::after{color:inherit; background-color:rgba(0,0,0,.55);}
+.overlay.light{color:#474747;}
+.overlay.light::after{background-color:rgba(255,255,255,.7);}
+
+.btn, .btn.inverse:hover{color:#FFFFFF; background-color:#FBAB45; border-color:#FBAB45;}
+.btn:hover, .btn.inverse{color:inherit; background-color:transparent; border-color:inherit;}
+
+.imgover:hover::before{background-color:rgba(251,171,69,.5);/* #FBAB45 */}
+.imgover, .imgover:hover::after{color:#FFFFFF;}
+
+.heading.underline::after{background-color:#FA8D0A;}
+
+
+/* Rows */
+.row0{}
+.row1{border-color:rgba(255,255,255,.3);}
+.row2{color:#474747; background-color:#F4F4F4;}
+.row3{color:#474747; background-color:#FFFFFF;}
+.row4{color:#A5A6AA; background-color:#27282E;}
+.row5, .row5 a{color:#A5A6AA; background-color:#1C1D21;}
+
+
+/* Top Bar */
+#topbar #searchform{color:#FBAB45;}
+#topbar #searchform:hover{}
+#topbar #searchform input{color:#FFFFFF; background:#FA8D0A;}
+#topbar #searchform button{color:#FFFFFF; background:transparent;}
+
+
+/* Header */
+#header #logo h1 a{color:inherit;}
+
+
+/* Page Intro */
+#pageintro{color:#FFFFFF;}
+
+
+/* Content Area */
+#overview article a{color:inherit;}
+#overview article:hover a{color:#FBAB45;}
+
+#splitfifty article{color:#474747; background-color:rgba(255,255,255,.8);}
+#splitfifty article:hover{background-color:#FFFFFF;}
+
+.team figure, .latest article{box-shadow:0px 0px 15px rgba(0,0,0,.1);}
+.team figure:hover{color:#FFFFFF; background-color:#FBAB45;}
+
+#stats > li{border-color:#D7D7D7;}
+#stats > li i{color:rgba(0,0,0,.2);}
+#stats > li:hover i{color:rgba(0,0,0,.6);}
+
+#testimonials blockquote{color:#474747; background-color:rgba(255,255,255,.8);}
+#testimonials:hover blockquote{background-color:#FFFFFF;}
+#testimonials blockquote::before{color:rgba(0,0,0,.1);}
+#testimonials blockquote::after{border-top-color:rgba(255,255,255,.8);}
+#testimonials:hover blockquote::after{border-top-color:#FFFFFF;}
+
+
+/* Latest */
+#latest article:hover{box-shadow:0px 0px 15px rgba(0,0,0,.1);}
+#latest article .meta, #latest article .meta a{color:#FFFFFF; background-color:#1C1D21;}
+#latest article .excerpt{border-color:#D7D7D7;}
+
+
+/* Footer */
+#footer .heading, #footer #ctdetails ul li div strong{color:#FFFFFF;}
+#footer hr, #footer .borderedbox, #footer .linklist li, #footer #ctdetails{border-color:rgba(255,255,255,.1);}
+
+#footer input, #footer button{border-color:transparent;}
+#footer input{color:#474747; background-color:rgba(255,255,255,.8);}
+#footer input:focus{border-color:#FBAB45;}
+#footer button{color:#FFFFFF; background-color:#FBAB45;}
+#footer button:hover{color:inherit; background-color:transparent; border-color:inherit;}
+
+
+/* Navigation */
+#mainav{}
+#mainav li a{color:inherit;}
+#mainav .active a, #mainav a:hover, #mainav li:hover > a{color:#FBAB45; background-color:inherit;}
+#mainav li li a, #mainav .active li a{color:#FFFFFF; background-color:rgba(251,171,69,.5);/* #FBAB45 */ border-color:rgba(251,171,69,.5);}
+#mainav li li:hover > a, #mainav .active .active > a{color:#FFFFFF; background-color:#FBAB45;}
+#mainav form select{color:#474747; background-color:#FFFFFF;}
+
+#breadcrumb a{color:inherit; background-color:inherit;}
+#breadcrumb li:last-child a{color:#FBAB45;}
+
+.container .sidebar nav a{color:inherit; border-color:#D7D7D7;}
+.container .sidebar nav a:hover{color:#FBAB45;}
+
+.pagination a, .pagination strong{border-color:#D7D7D7;}
+.pagination .current *{color:#FFFFFF; background-color:#FBAB45;}
+
+#backtotop{color:#FFFFFF; background-color:#FBAB45;}
+
+
+/* Tables + Comments */
+table, th, td, #comments .avatar, #comments input, #comments textarea{border-color:#D7D7D7;}
+th{color:#FFFFFF; background-color:#373737;}
+tr, #comments li, #comments input[type="submit"], #comments input[type="reset"]{color:inherit; background-color:#FBFBFB;}
+tr:nth-child(even), #comments li:nth-child(even){color:inherit; background-color:#F7F7F7;}
+table a, #comments a{background-color:inherit;}
+
+
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------------------------------------ */
+
+
+/* Media Queries
+--------------------------------------------------------------------------------------------------------------- */
+@-ms-viewport{width:device-width;}
+
+
+/* Max Wrapper Width - Laptop, Desktop etc.
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (min-width:1140px){
+	.hoc{max-width:1140px;}
+}
+
+@media screen and (min-width:978px) and (max-width:1140px){
+	.hoc{max-width:95%;}
+}
+
+
+/* Mobile Devices
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (max-width:978px){
+	.hoc{max-width:90%;}
+
+	#topbar{}
+
+	#header{padding:30px 0;}
+	#header #logo{margin-top:0;}
+
+	#mainav{}
+	#mainav ul{display:none;}
+	#mainav form{display:block; margin-top:2px;}
+
+	#breadcrumb{}
+
+	.container{}
+	#comments input[type="reset"]{margin-top:10px;}
+	.pagination li{display:inline-block; margin:0 5px 5px 0;}
+
+	#footer{}
+
+	#copyright{}
+	#copyright p:first-of-type{margin-bottom:10px;}
+}
+
+@media screen and (max-width:750px){
+	.imgl, .imgr{display:inline-block; float:none; margin:0 0 10px 0;}
+	.fl_left, .fl_right{display:block; float:none;}
+	.group .group > *:last-child, .clear .clear > *:last-child, .clear .group > *:last-child, .group .clear > *:last-child{margin-bottom:0;}/* Experimental - Needs more testing in different situations, stops double margin when stacking */
+	.one_half, .one_third, .two_third, .one_quarter, .two_quarter, .three_quarter{display:block; float:none; width:auto; margin:0 0 30px 0;}
+
+	#topbar{text-align:center;}
+	#topbar > div:first-of-type ul{margin:0 0 10px 0;}
+	#topbar #searchform{display:none;}/* This is personal preference - remove if not required */
+
+	#header{text-align:center;}
+	#header #logo{margin:0 0 15px 0;}
+
+	#pageintro article, #pageintro article p{max-width:none;}
+	#pageintro .heading{font-size:2rem;}
+
+	.sectiontitle{max-width:none;}
+	
+	#introblocks > ul{margin:0 auto 80px;}
+	#introblocks > ul, #latest article{max-width:348px;}/* Restrict the width to the one_third grid element */
+	.team figure{max-width:300px;}/* Restrict the width to the image width */
+	#introblocks > ul > li, #overview li:nth-last-child(-n+3){margin-bottom:50px;}
+	#introblocks > ul > li:last-child, #overview li:last-child{margin-bottom:0;}
+	#splitfifty > div:nth-of-type(2) article{display:block; float:none; width:100%;}
+
+	#footer .latestimg > li, #footer .latestimg > li:nth-last-child(-n+3){display:inline-block; float:none; width:auto; margin:0 5% 5% 0;}
+	#footer .latestimg > li:last-child{margin-bottom:0;}
+	#footer .latestimg > li img{width:auto;}
+}
+
+@media screen and (min-width:450px) and (max-width:750px){
+	#stats > li{width:50%; margin-bottom:50px;}
+	#stats > li:nth-child(even){border:none;}
+	#stats > li:nth-last-child(-n+2){margin-bottom:0;}
+}
+
+@media screen and (max-width:450px){
+	#topbar > div:first-of-type ul li{display:block; margin:0;}
+
+	#splitfifty > div:nth-of-type(2) article, #testimonials ul, #latest article .excerpt{padding:20px;}
+	#stats > li{float:none; width:100%; margin-bottom:25px; padding-bottom:25px;}
+	#stats > li, #stats > li:nth-child(even){border-width:0 0 1px 0;}
+	#stats > li:last-child{margin:25px 0 0 0; padding-bottom:0;}
+}
+
+/* Other
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (max-width:650px){
+	.scrollable{display:block; width:100%; margin:0 0 30px 0; padding:0 0 15px 0; overflow:auto; overflow-x:scroll;}
+	.scrollable table{margin:0; padding:0; white-space:nowrap;}
+
+	.inline li{display:block; margin-bottom:10px;}
+	.pushright li{margin-right:0;}
+
+	.font-x2{font-size:1.6rem;}
+	.font-x3{font-size:1.8rem;}
+}

@@ -62,6 +62,8 @@ namespace Mix.Cms.Web
                 });
 
             #region Additionals Config for Mixcore Cms
+            services.AddHttpClient();
+            services.AddSingleton<HttpService>();
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
             services.AddResponseCompression(options => options.EnableForHttps = true);
