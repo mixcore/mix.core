@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Services
@@ -28,7 +29,9 @@ namespace Mix.Cms.Lib.Services
 
         }
 
-        public async Task<string> DownloadAsync(string downloadUrl, string downloadPath, string fileName, string extension)
+        public async Task<string> DownloadAsync(
+            string downloadUrl, string downloadPath, string fileName, string extension,
+            IProgress<double> progress, CancellationToken token)
         {
             using (var client = _httpClientFactory.CreateClient())
             using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).Result)
@@ -44,7 +47,8 @@ namespace Mix.Cms.Lib.Services
                     var totalReads = 0L;
                     var buffer = new byte[8192];
                     var isMoreToRead = true;
-
+                    var total = response.Content.Headers.ContentLength.HasValue ? response.Content.Headers.ContentLength.Value : -1L;
+                    var canReportProgress = total != -1 && progress != null;
                     do
                     {
                         var read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
@@ -59,9 +63,9 @@ namespace Mix.Cms.Lib.Services
                             totalRead += read;
                             totalReads += 1;
 
-                            if (totalReads % 2000 == 0)
+                            if (canReportProgress)
                             {
-                                Console.WriteLine(string.Format("total bytes downloaded so far: {0:n0}", totalRead));
+                                progress.Report((totalRead * 1d) / (total * 1d) * 100);
                             }
                         }
                     }
