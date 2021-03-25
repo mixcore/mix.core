@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Mix.Cms.Lib.Controllers;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Heart.NetCore;
 using System.Reflection;
 
@@ -17,6 +19,28 @@ namespace Mix.Cms.Lib.Extensions
         {
             services.AddGeneratedRestApi(Assembly.GetExecutingAssembly(), typeof(BaseRestApiController<,,>));
             return services;
+        }
+
+        public static IServiceCollection AddMixSignalR(this IServiceCollection services)
+        {
+            services.AddSignalR()
+                   .AddJsonProtocol(options =>
+                   {
+                       options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+                   })
+                   .AddMessagePackProtocol();
+            return services;
+        }
+
+        public static IApplicationBuilder UseMixSignalR(this IApplicationBuilder app)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<PortalHub>("/portalHub");
+                //endpoints.MapHub<ServiceHub>("/serviceHub");
+                endpoints.MapHub<VideoChatHub>("/videoChatHub");
+            });
+            return app;
         }
     }
 }

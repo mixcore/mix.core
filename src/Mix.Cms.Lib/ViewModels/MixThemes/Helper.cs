@@ -137,7 +137,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return new RepositoryResponse<InitViewModel>();
         }
 
-        public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<double> progress, HttpService httpService)
+        public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<int> progress, HttpService httpService)
         {
             string name = theme.Value<string>("title");
             var newtheme = new UpdateViewModel()

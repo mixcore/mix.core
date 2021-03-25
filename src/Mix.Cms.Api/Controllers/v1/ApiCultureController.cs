@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.ViewModels;
 using Newtonsoft.Json.Linq;
@@ -26,7 +27,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiCultureController :
         BaseGenericApiController<MixCmsContext, MixCulture>
     {
-        public ApiCultureController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiCultureController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

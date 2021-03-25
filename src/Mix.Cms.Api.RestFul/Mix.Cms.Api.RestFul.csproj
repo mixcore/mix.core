@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
-    <ProjectReference Include="..\Mix.Cms.Service.SignalR\Mix.Cms.Service.SignalR.csproj" />
+    <ProjectReference Include="..\Mix.Cms.Lib.SignalR\Mix.Cms.Lib.SignalR.csproj" />
   </ItemGroup>
 
 

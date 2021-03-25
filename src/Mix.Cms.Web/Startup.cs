@@ -15,14 +15,12 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Schedule;
-using Mix.Cms.Service.SignalR;
 using Mix.Rest.Api.Client;
 using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Web
 {
