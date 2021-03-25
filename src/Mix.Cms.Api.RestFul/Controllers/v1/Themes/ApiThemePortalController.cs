@@ -26,7 +26,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Service.SignalR.Hubs;
+using Mix.Cms.Lib.SignalR.Hubs;
+using Mix.Cms.Lib.SignalR.Constants;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -70,19 +71,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        [HttpGet("{id}")]
-        public override async Task<ActionResult<UpdateViewModel>> Get(string id)
+        protected override async Task<RepositoryResponse<UpdateViewModel>> GetSingleAsync(string id)
         {
-            RepositoryResponse<UpdateViewModel> getTheme = await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
-            if (getTheme.IsSucceed)
-            {
-                getTheme.Data.IsActived = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang) == getTheme.Data.Id;
-                return Ok(getTheme.Data);
-            }
-            else
-            {
-                return BadRequest(getTheme.Errors);
-            }
+            return await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
+        }
+
+        protected override Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
+        {
+            return DefaultRepository<MixCmsContext, MixTheme, T>.Instance.GetSingleModelAsync(m => m.Id == int.Parse(id));
         }
 
         // POST api/theme
@@ -148,10 +144,16 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [Route("install")]
         public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> InstallTheme([FromBody] JObject theme)
         {
-            var progress = new Progress<double>();
+            var progress = new Progress<int>();
+            var percent = 0;
             progress.ProgressChanged += (sender, value) =>
             {
-                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
+                if (value > percent)
+                {
+                    percent = value;
+                    _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
+
+                }
             };
 
             string createdBy = IdentityHelper.GetClaim(User, MixClaims.Username);
@@ -165,34 +167,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 return BadRequest(result.Errors);
             }
         }
-
-        protected async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
-        {
-            var address = Request.Headers["X-Forwarded-For"];
-            if (string.IsNullOrEmpty(address))
-            {
-                address = Request.Host.Value;
-            }
-            var logMsg = new JObject()
-                {
-                    new JProperty("created_at", DateTime.UtcNow),
-                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
-                    new JProperty("address", address),
-                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", IdentityHelper.GetClaim(User, MixClaims.Username)),
-                    new JProperty("request_url", Request.Path.Value),
-                    new JProperty("action", action),
-                    new JProperty("status", status),
-                    new JProperty("message", message)
-                };
-
-            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
-            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
-            await clients.SendAsync(
-                Service.SignalR.Constants.HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
-        }
-
-
 
         // GET api/theme/id
         [HttpGet]

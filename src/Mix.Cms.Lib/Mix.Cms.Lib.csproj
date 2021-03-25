@@ -24,8 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mix.Cms.Lib.SignalR\Mix.Cms.Lib.SignalR.csproj" />
     <ProjectReference Include="..\Mix.Heart.NetCore\Mix.Heart.NetCore.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\SignalR\" />
   </ItemGroup>
 
 </Project>

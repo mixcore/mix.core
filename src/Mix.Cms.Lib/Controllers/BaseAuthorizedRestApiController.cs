@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
@@ -9,6 +10,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -18,6 +20,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -355,20 +358,20 @@ namespace Mix.Cms.Lib.Controllers
             return await SaveListAsync(data.Data.Items, false);
         }
 
-        protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
+        protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, MixHeartEnums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
         }
 
-        protected async Task<RepositoryResponse<TUpdate>> GetSingleAsync(string id)
+        protected virtual async Task<RepositoryResponse<TUpdate>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(
                 MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
@@ -581,6 +584,32 @@ namespace Mix.Cms.Lib.Controllers
             }
 
             return result;
+        }
+
+        public virtual async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
+        {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (string.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
+            var logMsg = new JObject()
+                {
+                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
+                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    new JProperty("user", IdentityHelper.GetClaim(User, MixClaims.Username)),
+                    new JProperty("request_url", Request.Path.Value),
+                    new JProperty("action", action),
+                    new JProperty("status", status),
+                    new JProperty("message", message)
+                };
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+            await clients.SendAsync(
+                HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
         }
 
         #endregion Helpers

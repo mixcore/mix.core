@@ -15,6 +15,7 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
@@ -43,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
            MixCmsContext context,
-            Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext,
+            Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext,
             IMemoryCache memoryCache
             )
             : base(context, memoryCache, hubContext)

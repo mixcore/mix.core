@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib.Services
 
         public async Task<string> DownloadAsync(
             string downloadUrl, string downloadPath, string fileName, string extension,
-            IProgress<double> progress, CancellationToken token)
+            IProgress<int> progress, CancellationToken token)
         {
             using (var client = _httpClientFactory.CreateClient())
             using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).Result)
@@ -65,7 +65,7 @@ namespace Mix.Cms.Lib.Services
 
                             if (canReportProgress)
                             {
-                                progress.Report((totalRead * 1d) / (total * 1d) * 100);
+                                progress.Report((int)Math.Round((totalRead * 1d) / (total * 1d) * 100, 0));
                             }
                         }
                     }
