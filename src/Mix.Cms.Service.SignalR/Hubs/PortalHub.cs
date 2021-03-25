@@ -7,6 +7,11 @@ namespace Mix.Cms.Service.SignalR.Hubs
 {
     public class PortalHub : BaseSignalRHub
     {
+        public async Task JoinRoom(string room)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, room);
+        }
+
         public async Task SendMessage(string message)
         {
             await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message).ConfigureAwait(false);

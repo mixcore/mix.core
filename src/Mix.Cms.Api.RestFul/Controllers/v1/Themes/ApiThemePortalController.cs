@@ -21,11 +21,12 @@ using Newtonsoft.Json.Linq;
 using Mix.Services;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Helpers;
-using Mix.Cms.Lib.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
+using Mix.Cms.Service.SignalR.Hubs;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -35,16 +36,18 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiThemeController :
         BaseAuthorizedRestApiController<MixCmsContext, MixTheme, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
+        protected readonly IHubContext<PortalHub> _hubContext;
         HttpService _httpService;
         public ApiThemeController(
             HttpService httpService,
             DefaultRepository<MixCmsContext, MixTheme, ReadViewModel> repo,
             DefaultRepository<MixCmsContext, MixTheme, UpdateViewModel> updRepo,
-            DefaultRepository<MixCmsContext, MixTheme, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+            DefaultRepository<MixCmsContext, MixTheme, DeleteViewModel> delRepo,
+            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo)
         {
             _httpService = httpService;
+            _hubContext = hubContext;
         }
-
 
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -145,26 +148,50 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [Route("install")]
         public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> InstallTheme([FromBody] JObject theme)
         {
-            string name = theme.Value<string>("title");
-            var newtheme = new UpdateViewModel()
+            var progress = new Progress<double>();
+            progress.ProgressChanged += (sender, value) =>
             {
-                Title = name,
-                CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username),
-                Specificulture = _lang,
-                Status = MixContentStatus.Published,
-                TemplateAsset = new FileViewModel()
-                {
-                    Filename = name,
-                    Extension = MixFileExtensions.Zip,
-                    FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{name}"
-                }
+                _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
             };
-            await _httpService.DownloadAsync(
-                theme.Value<string>("source"),
-                newtheme.TemplateAsset.FileFolder,
-                newtheme.TemplateAsset.Filename, MixFileExtensions.Zip);
-            return await base.SaveAsync<UpdateViewModel>(newtheme, true);
+
+            string createdBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+            var result = await Helper.InstallThemeAsync(theme, createdBy, _lang, progress, _httpService);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
         }
+
+        protected async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
+        {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (string.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
+            var logMsg = new JObject()
+                {
+                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
+                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    new JProperty("user", IdentityHelper.GetClaim(User, MixClaims.Username)),
+                    new JProperty("request_url", Request.Path.Value),
+                    new JProperty("action", action),
+                    new JProperty("status", status),
+                    new JProperty("message", message)
+                };
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+            await clients.SendAsync(
+                Service.SignalR.Constants.HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
+        }
+
 
 
         // GET api/theme/id

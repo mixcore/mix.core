@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
@@ -133,6 +135,33 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return result;
             }
             return new RepositoryResponse<InitViewModel>();
+        }
+
+        public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<double> progress, HttpService httpService)
+        {
+            string name = theme.Value<string>("title");
+            var newtheme = new UpdateViewModel()
+            {
+                Title = name,
+                CreatedBy = createdBy,
+                Specificulture = culture,
+                Status = MixContentStatus.Published,
+                TemplateAsset = new FileViewModel()
+                {
+                    Filename = name,
+                    Extension = MixFileExtensions.Zip,
+                    FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{name}"
+                }
+            };
+
+            var cancellationToken = new CancellationToken();
+
+            await httpService.DownloadAsync(
+                theme.Value<string>("source"),
+                newtheme.TemplateAsset.FileFolder,
+                newtheme.TemplateAsset.Filename, MixFileExtensions.Zip,
+                progress, cancellationToken);
+            return await newtheme.SaveModelAsync(true);
         }
     }
 }
