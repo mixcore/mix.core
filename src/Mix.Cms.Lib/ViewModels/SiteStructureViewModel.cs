@@ -16,6 +16,9 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
+        [JsonProperty("posts")]
+        public List<MixPosts.ImportViewModel> Posts { get; set; }
+        
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }
 
@@ -43,9 +46,6 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("modulePostNavs")]
         public List<MixModulePosts.ImportViewModel> ModulePostNavs { get; set; } = new List<MixModulePosts.ImportViewModel>();
 
-        [JsonProperty("posts")]
-        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
-
         [JsonProperty("moduleDatas")]
         public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
 
@@ -65,6 +65,7 @@ namespace Mix.Cms.Lib.ViewModels
         public async Task InitAsync(string culture)
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
+            Posts = (await MixPosts.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             MixDatabases = (await ViewModels.MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
