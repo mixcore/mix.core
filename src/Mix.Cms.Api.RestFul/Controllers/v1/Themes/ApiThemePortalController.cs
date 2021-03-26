@@ -86,7 +86,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost, HttpOptions]
         [DisableRequestSizeLimit]
         [Route("save")]
-        public async Task<RepositoryResponse<UpdateViewModel>> Save(
+        public async Task<ActionResult<UpdateViewModel>> Save(
             [FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
             var data = JsonConvert.DeserializeObject<UpdateViewModel>(model);
@@ -133,10 +133,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     MixService.LoadFromDatabase();
                     MixService.SaveSettings();
+                    return Ok(result.Data);
                 }
-                return result;
+                else
+                {
+                    return BadRequest(result.Errors);
+                }
+                
             }
-            return new RepositoryResponse<UpdateViewModel>() { Status = 501 };
+            return NotFound();
         }
 
 
@@ -185,15 +190,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         // GET api/theme/id
         [HttpGet]
         [Route("export/{id}")]
-        public async Task<RepositoryResponse<SiteStructureViewModel>> Export(int id)
+        public async Task<ActionResult<SiteStructureViewModel>> Export(int id)
         {
             var siteStructures = new SiteStructureViewModel();
             await siteStructures.InitAsync(_lang);
-            return new RepositoryResponse<SiteStructureViewModel>()
-            {
-                IsSucceed = true,
-                Data = siteStructures
-            };
+            return Ok(siteStructures);
         }
 
         // GET api/theme/id
