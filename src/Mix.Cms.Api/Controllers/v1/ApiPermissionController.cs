@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
@@ -105,7 +106,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                model.CreatedBy = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+                model.CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username);
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }

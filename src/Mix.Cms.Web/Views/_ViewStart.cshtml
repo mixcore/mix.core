@@ -26,7 +26,7 @@
 //    string master = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, ViewBag.culture) ?? "Default";
 //    Layout = $"Templates/{master}/Masters/{"_Layout"}";
 //    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-//    User.IsInRole("SuperAdmin");
+//    User.IsInRole(MixRoles.SuperAdmin);
 //    // Get by paging
 //    int.TryParse(Context.Request.Query["pIndex"], out int pIndex);
 //    //var pagingReq = new RequestPaging()

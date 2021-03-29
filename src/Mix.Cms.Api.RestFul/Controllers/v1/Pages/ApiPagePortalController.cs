@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPage, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (User.IsInRole("SuperAdmin") || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
+                && (User.IsInRole(MixRoles.SuperAdmin) || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
                 && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)

@@ -33,7 +33,6 @@
     }
   },
   "Authentication": {
-    "ClockSkew": 20,
     "CookieExpiration": 20,
     "RefreshTokenExpiration": 120,
     "ValidateIssuer": false,
@@ -45,8 +44,7 @@
     "SecretKey": "mixcore-secret-key",
     "Issuer": "mix-core",
     "Issuers": "mix-core",
-    "Audiences": "mix-core",
-    "AllowedIps": ""
+    "Audiences": "mix-core"
   },
   "IpSecuritySettings": {
     "IsRetrictIp": true,
