@@ -88,7 +88,7 @@ namespace Mix.Cms.Web
 
             VerifyInitData(services);
 
-            services.AddMixAuthorize(Configuration);
+            services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
             /* End Additional Config for Mixcore Cms  */
 
             #endregion Additionals Config for Mixcore Cms
