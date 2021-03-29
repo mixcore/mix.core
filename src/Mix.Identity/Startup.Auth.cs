@@ -5,22 +5,22 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Models.Account;
-using Mix.Cms.Lib.Services;
 using Mix.Identity.Models;
 using System;
 using System.Text;
+using Mix.Identity.Extensions;
 
 namespace Mix.Cms.Web
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public static class AuthServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixAuthorize(this IServiceCollection services, IConfiguration Configuration)
+        public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services,
+            MixAuthenticationConfigurations authConfigurations)
+            where TDbContext : DbContext
         {
             PasswordOptions pOpt = new PasswordOptions()
             {
@@ -31,11 +31,13 @@ namespace Mix.Cms.Web
                 RequireUppercase = false
             };
 
+            const string accessDeniedPath = "/security/login";
+
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password = pOpt;
             })
-                .AddEntityFrameworkStores<MixDbContext>()
+                .AddEntityFrameworkStores<TDbContext>()
                 .AddDefaultTokenProviders()
                 .AddUserManager<UserManager<ApplicationUser>>()
 
@@ -43,7 +45,7 @@ namespace Mix.Cms.Web
 
             services.AddAuthorization();
 
-            services.AddAuthentication("Bearer")
+            services.AddAuthentication(authConfigurations.TokenType)
                     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                     {
                         options.RequireHttpsMetadata = false;
@@ -51,13 +53,13 @@ namespace Mix.Cms.Web
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
-                                 ValidateIssuer = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuer),
-                                 ValidateAudience = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateAudience),
-                                 ValidateLifetime = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateLifetime),
-                                 ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuerSigningKey),
-                                 ValidIssuers = MixService.GetAuthConfig<string>(MixAuthConfigurations.Issuers).Split(','),
-                                 ValidAudiences = MixService.GetAuthConfig<string>(MixAuthConfigurations.Audiences).Split(','),
-                                 IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey))
+                                 ValidateIssuer = authConfigurations.ValidateIssuer,
+                                 ValidateAudience = authConfigurations.ValidateAudience,
+                                 ValidateLifetime = authConfigurations.ValidateLifetime,
+                                 ValidateIssuerSigningKey = authConfigurations.ValidateIssuerSigningKey,
+                                 ValidIssuers = authConfigurations.Issuers.Split(','),
+                                 ValidAudiences = authConfigurations.Audiences.Split(','),
+                                 IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
                              };
                         // TODO Handle Custom Auth
                         //options.Events = new JwtBearerEvents
@@ -74,15 +76,27 @@ namespace Mix.Cms.Web
                         //    },
 
                         //};
-                    });
+                    })
+                    .AddFacebookIf(
+                        !string.IsNullOrEmpty(authConfigurations.Facebook?.AppId), 
+                        authConfigurations.Facebook, accessDeniedPath)
+                    .AddGoogleIf(
+                        !string.IsNullOrEmpty(authConfigurations.Google?.AppId), 
+                        authConfigurations.Google, accessDeniedPath)
+                    .AddTwitterIf(
+                        !string.IsNullOrEmpty(authConfigurations.Twitter?.AppId),
+                        authConfigurations.Twitter, accessDeniedPath)
+                    .AddMicrosoftAccountIf(
+                        !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
+                        authConfigurations.Microsoft, accessDeniedPath);
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
-                options.LoginPath = "/security/login";
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(authConfigurations.CookieExpiration);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(authConfigurations.CookieExpiration);
+                options.LoginPath = accessDeniedPath;
                 options.LogoutPath = "/";
-                options.AccessDeniedPath = "/security/login";
+                options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
             return services;

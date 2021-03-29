@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
+using Mix.Identity.Models;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -41,7 +42,7 @@ namespace Mix.Cms.Lib.Services
         private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         private readonly FileSystemWatcher watcher = new FileSystemWatcher();
-
+        public MixAuthenticationConfigurations MixAuthentications { get => Authentication.ToObject<MixAuthenticationConfigurations>(); }
         public MixService()
         {
             watcher.Path = System.IO.Directory.GetCurrentDirectory();

@@ -341,7 +341,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/account/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
@@ -445,7 +445,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {
@@ -470,5 +470,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             return result;
         }
+
+
     }
 }
