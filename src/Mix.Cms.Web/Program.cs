@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Services;
+using Mix.Heart.Helpers;
+using System;
 using System.IO;
 
 namespace Mix.Cms.Web
@@ -18,6 +22,10 @@ namespace Mix.Cms.Web
             if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}"))
             {
                 File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}", $"{MixConstants.CONST_FILE_APPSETTING}");
+                var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                MixService.SetConfig<string>(MixAppSettingKeywords.ApiEncryptKey, aesKey);
+                MixService.SetAuthConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+                MixService.SaveSettings();
             }
 
             var config = new ConfigurationBuilder()

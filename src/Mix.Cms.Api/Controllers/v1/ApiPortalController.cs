@@ -174,10 +174,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
-                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
             };
 
-            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
+            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>(MixAppSettingKeywords.Language);
             return new RepositoryResponse<JObject>()
             {
                 IsSucceed = true,
@@ -445,10 +445,10 @@ namespace Mix.Cms.Api.Controllers.v1
                 DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
                 Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
-                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
             };
 
-            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>("Language");
+            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>(MixAppSettingKeywords.Language);
 
             // Get translator
             var translator = new JObject()

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Identity.Models;
@@ -50,16 +51,13 @@ namespace Mix.Cms.Web
                         options.TokenValidationParameters =
                              new TokenValidationParameters
                              {
-                                 ClockSkew = TimeSpan.Zero,//.FromMinutes(MixService.GetAuthConfig<int>("ClockSkew")), //x minute tolerance for the expiration date
-                                 ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
-                                 ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
-                                 ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
-                                 ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>("ValidateIssuerSigningKey"),
-                                 //ValidIssuer = MixService.GetAuthConfig<string>("Issuer"),
-                                 //ValidAudience = MixService.GetAuthConfig<string>("Audience"),
-                                 ValidIssuers = MixService.GetAuthConfig<string>("Issuers").Split(','),
-                                 ValidAudiences = MixService.GetAuthConfig<string>("Audiences").Split(','),
-                                 IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
+                                 ValidateIssuer = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuer),
+                                 ValidateAudience = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateAudience),
+                                 ValidateLifetime = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateLifetime),
+                                 ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuerSigningKey),
+                                 ValidIssuers = MixService.GetAuthConfig<string>(MixAuthConfigurations.Issuers).Split(','),
+                                 ValidAudiences = MixService.GetAuthConfig<string>(MixAuthConfigurations.Audiences).Split(','),
+                                 IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey))
                              };
                         // TODO Handle Custom Auth
                         //options.Events = new JwtBearerEvents
@@ -80,12 +78,11 @@ namespace Mix.Cms.Web
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                //options.Cookie.Expiration = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-                options.LoginPath = "/security/login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                options.LogoutPath = "/"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                options.AccessDeniedPath = "/security/login"; // If the MixConstants.Default.DefaultCulture is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
+                options.LoginPath = "/security/login";
+                options.LogoutPath = "/";
+                options.AccessDeniedPath = "/security/login";
                 options.SlidingExpiration = true;
             });
             return services;

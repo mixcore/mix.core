@@ -26,5 +26,6 @@
         public const string AllowedHosts = "AllowedHosts";
         public const string MaxPageSize = "MaxPageSize";
         public const string ImageSizes = "ImageSizes";
+        public const string LastUpdateConfiguration = "LastUpdateConfiguration";
     }
 }

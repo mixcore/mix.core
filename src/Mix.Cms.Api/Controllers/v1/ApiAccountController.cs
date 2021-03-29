@@ -28,8 +28,6 @@ using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    //[Authorize(Roles = "SuperAdmin,Admin")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/account")]
     public class ApiAccountController : Controller
     {
@@ -197,7 +195,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = "SuperAdmin")]
+        Roles = MixRoles.SuperAdmin)]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
@@ -447,7 +445,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = MixRoles.SuperAdmin)]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {

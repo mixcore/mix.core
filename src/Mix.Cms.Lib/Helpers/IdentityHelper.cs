@@ -61,8 +61,8 @@ namespace Mix.Cms.Lib.Helpers
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
             var dtIssued = DateTime.UtcNow;
-            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>("CookieExpiration"));
-            var dtRefreshTokenExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>("RefreshTokenExpiration"));
+            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
+            var dtRefreshTokenExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.RefreshTokenExpiration));
             string refreshTokenId = string.Empty;
             string refreshToken = string.Empty;
             if (isRemember)
@@ -74,7 +74,7 @@ namespace Mix.Cms.Lib.Helpers
                                 Id = refreshToken,
                                 Email = user.Email,
                                 IssuedUtc = dtIssued,
-                                ClientId = MixService.GetAuthConfig<string>("Audience"),
+                                ClientId = MixService.GetAuthConfig<string>(MixAuthConfigurations.Audience),
                                 Username = user.UserName,
                                 //Subject = SWCmsConstants.AuthConfiguration.Audience,
                                 ExpiresUtc = dtRefreshTokenExpired
@@ -88,11 +88,11 @@ namespace Mix.Cms.Lib.Helpers
             {
                 Access_token = await GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey),
                 Refresh_token = refreshTokenId,
-                Token_type = MixService.GetAuthConfig<string>("TokenType"),
-                Expires_in = MixService.GetAuthConfig<int>("CookieExpiration"),
+                Token_type = MixService.GetAuthConfig<string>(MixAuthConfigurations.TokenType),
+                Expires_in = MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration),
                 Issued = dtIssued,
                 Expires = dtExpired,
-                LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration")
+                LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
             };
             return token;
         }
@@ -109,14 +109,14 @@ namespace Mix.Cms.Lib.Helpers
                     new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
                 });
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
-                issuer: MixService.GetAuthConfig<string>("Issuer"),
-                audience: MixService.GetAuthConfig<string>("Audience"),
-                notBefore: expires.AddMinutes(-MixService.GetAuthConfig<int>("CookieExpiration")),
+                issuer: MixService.GetAuthConfig<string>(MixAuthConfigurations.Issuer),
+                audience: MixService.GetAuthConfig<string>(MixAuthConfigurations.Audience),
+                notBefore: expires.AddMinutes(-MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration)),
 
                 claims: claims,
                 // our token will live 1 hour, but you can change you token lifetime here
                 expires: expires,
-                signingCredentials: new SigningCredentials(JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey")), SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey)), SecurityAlgorithms.HmacSha256));
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
@@ -159,11 +159,11 @@ namespace Mix.Cms.Lib.Helpers
         {
             var tokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = MixService.GetAuthConfig<bool>("ValidateIssuer"),
-                ValidateAudience = MixService.GetAuthConfig<bool>("ValidateAudience"),
-                ValidateLifetime = MixService.GetAuthConfig<bool>("ValidateLifetime"),
-                ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>("ValidateIssuerSigningKey"),
-                IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>("SecretKey"))
+                ValidateIssuer = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuer),
+                ValidateAudience = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateAudience),
+                ValidateLifetime = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateLifetime),
+                ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuerSigningKey),
+                IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey))
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
