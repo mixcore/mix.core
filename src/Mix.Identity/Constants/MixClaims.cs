@@ -1,4 +1,4 @@
-﻿namespace Mix.Cms.Lib.Constants
+﻿namespace Mix.Identity.Constants
 {
     public class MixClaims
     {

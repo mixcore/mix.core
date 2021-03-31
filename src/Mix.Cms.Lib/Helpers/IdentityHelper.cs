@@ -1,19 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Heart.Helpers;
+using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Helpers
@@ -23,15 +18,18 @@ namespace Mix.Cms.Lib.Helpers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly MixIdentityHelper _helper;
 
         public IdentityHelper(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager, 
+            MixIdentityHelper helper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _helper = helper;
         }
 
         public async Task<JObject> GetAuthData(ApplicationUser user, bool rememberMe)
@@ -86,7 +84,7 @@ namespace Mix.Cms.Lib.Helpers
 
             AccessTokenViewModel token = new AccessTokenViewModel()
             {
-                Access_token = await GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey),
+                Access_token = await _helper.GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey, MixService.Instance.MixAuthentications),
                 Refresh_token = refreshTokenId,
                 Token_type = MixService.GetAuthConfig<string>(MixAuthConfigurations.TokenType),
                 Expires_in = MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration),
@@ -95,93 +93,6 @@ namespace Mix.Cms.Lib.Helpers
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
             };
             return token;
-        }
-
-        public async Task<string> GenerateTokenAsync(ApplicationUser user, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey)
-        {
-            List<Claim> claims = await GetClaimsAsync(user);
-            claims.AddRange(new[]
-                {
-                    new Claim(MixClaims.Id, user.Id.ToString()),
-                    new Claim(MixClaims.Username, user.UserName),
-                    new Claim(MixClaims.RefreshToken, refreshToken),
-                    new Claim(MixClaims.AESKey, aesKey),
-                    new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
-                });
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
-                issuer: MixService.GetAuthConfig<string>(MixAuthConfigurations.Issuer),
-                audience: MixService.GetAuthConfig<string>(MixAuthConfigurations.Audience),
-                notBefore: expires.AddMinutes(-MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration)),
-
-                claims: claims,
-                // our token will live 1 hour, but you can change you token lifetime here
-                expires: expires,
-                signingCredentials: new SigningCredentials(JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey)), SecurityAlgorithms.HmacSha256));
-            return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        }
-
-        public async Task<List<Claim>> GetClaimsAsync(ApplicationUser user)
-        {
-            List<Claim> claims = new List<Claim>();
-            var userRoles = await _userManager.GetRolesAsync(user);
-            foreach (var claim in user.Claims)
-            {
-                claims.Add(CreateClaim(claim.ClaimType, claim.ClaimValue));
-            }
-
-            foreach (var userRole in userRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, userRole));
-                var role = await _roleManager.FindByNameAsync(userRole);
-                if (role != null)
-                {
-                    var roleClaims = await _roleManager.GetClaimsAsync(role);
-                    foreach (Claim roleClaim in roleClaims)
-                    {
-                        claims.Add(roleClaim);
-                    }
-                }
-            }
-            return claims;
-        }
-
-        public Claim CreateClaim(string type, string value)
-        {
-            return new Claim(type, value, ClaimValueTypes.String);
-        }
-
-        public static string GetClaim(ClaimsPrincipal User, string claimType)
-        {
-            return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
-        }
-
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuer),
-                ValidateAudience = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateAudience),
-                ValidateLifetime = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateLifetime),
-                ValidateIssuerSigningKey = MixService.GetAuthConfig<bool>(MixAuthConfigurations.ValidateIssuerSigningKey),
-                IssuerSigningKey = JwtSecurityKey.Create(MixService.GetAuthConfig<string>(MixAuthConfigurations.SecretKey))
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
-
-            return principal;
-        }
-
-        public static class JwtSecurityKey
-        {
-            public static SymmetricSecurityKey Create(string secret)
-            {
-                return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
-            }
         }
     }
 }

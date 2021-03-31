@@ -25,6 +25,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
+using Mix.Identity.Helpers;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -41,13 +42,14 @@ namespace Mix.Cms.Api.Controllers.v1
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
+            MixIdentityHelper mixIdentityHelper,
             ILogger<ApiAccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
-            _helper = new IdentityHelper(userManager, signInManager, roleManager);
+            _helper = new IdentityHelper(mixIdentityHelper);
         }
 
         [TempData]
@@ -72,6 +74,46 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string message = data.Value<string>("message");
             string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
+            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+            RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(
+                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                    var token = await _helper.GetAuthData(user, model.RememberMe);
+                    return Ok(token);
+                }
+                if (result.IsLockedOut)
+                {
+                    loginResult.Errors.Add("This account has been locked out, please try again later.");
+                    return BadRequest(loginResult.Errors);
+                }
+                else
+                {
+                    loginResult.Errors.Add("Login failed");
+                    return BadRequest(loginResult.Errors);
+                }
+            }
+            else
+            {
+                loginResult.Errors.Add("Invalid model");
+                return BadRequest(loginResult.Errors);
+            }
+        }
+
+        [Route("external-login")]
+        [HttpPost, HttpOptions]
+        [AllowAnonymous]
+        public async Task<ActionResult<RepositoryResponse<JObject>>> ExternalLogin([FromBody] JObject data)
+        {
+            string message = data.Value<string>("message");
+            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();

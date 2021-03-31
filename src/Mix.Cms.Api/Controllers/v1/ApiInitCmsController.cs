@@ -42,14 +42,14 @@ namespace Mix.Cms.Api.Controllers.v1
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
             IHubContext<PortalHub> hubContext,
-            IMemoryCache memoryCache
-            )
+            IMemoryCache memoryCache, 
+            IdentityHelper idHelper)
             : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _idHelper = new IdentityHelper(userManager, signInManager, roleManager);
+            _idHelper = idHelper;
         }
 
         #region Post
