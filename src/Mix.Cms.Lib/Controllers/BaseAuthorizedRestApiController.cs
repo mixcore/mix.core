@@ -19,6 +19,8 @@ using Mix.Domain.Data.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -47,15 +49,18 @@ namespace Mix.Cms.Lib.Controllers
         protected DefaultRepository<TDbContext, TModel, TRead> _repo;
         protected DefaultRepository<TDbContext, TModel, TUpdate> _updRepo;
         protected DefaultRepository<TDbContext, TModel, TDelete> _delRepo;
+        protected MixIdentityHelper _mixIdentityHelper;
 
         public BaseAuthorizedRestApiController(
-            DefaultRepository<TDbContext, TModel, TRead> repo, 
-            DefaultRepository<TDbContext, TModel, TUpdate> updRepo, 
-            DefaultRepository<TDbContext, TModel, TDelete> delRepo)
+            DefaultRepository<TDbContext, TModel, TRead> repo,
+            DefaultRepository<TDbContext, TModel, TUpdate> updRepo,
+            DefaultRepository<TDbContext, TModel, TDelete> delRepo, 
+            MixIdentityHelper mixIdentityHelper)
         {
             _repo = repo;
             _updRepo = updRepo;
             _delRepo = delRepo;
+            _mixIdentityHelper = mixIdentityHelper;
         }
 
         /// <summary>
@@ -200,7 +205,7 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", IdentityHelper.GetClaim(User, MixClaims.Username)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", _mixIdentityHelper.GetClaim(User, MixClaims.Username)));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
                 var currentId = ReflectionHelper.GetPropertyValue(data, MixQueryColumnName.Id).ToString();
                 if (id != currentId)
@@ -599,7 +604,7 @@ namespace Mix.Cms.Lib.Controllers
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", IdentityHelper.GetClaim(User, MixClaims.Username)),
+                    new JProperty("user", _mixIdentityHelper.GetClaim(User, MixClaims.Username)),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),
