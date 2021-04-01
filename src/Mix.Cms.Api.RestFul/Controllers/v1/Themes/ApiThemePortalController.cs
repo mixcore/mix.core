@@ -20,14 +20,14 @@ using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
 using Mix.Services;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Lib.SignalR.Hubs;
-using Mix.Cms.Lib.SignalR.Constants;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -44,7 +44,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixTheme, ReadViewModel> repo,
             DefaultRepository<MixCmsContext, MixTheme, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixTheme, DeleteViewModel> delRepo,
-            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo)
+             MixIdentityHelper idHelper,
+            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo, idHelper)
         {
             _httpService = httpService;
             _hubContext = hubContext;
@@ -126,7 +127,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
             if (data != null)
             {
-                data.CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+                data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 data.Specificulture = _lang;
                 var result = await base.SaveAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
@@ -161,7 +162,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 }
             };
 
-            string createdBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+            string createdBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
             var result = await Helper.InstallThemeAsync(theme, createdBy, _lang, progress, _httpService);
             if (result.IsSucceed)
             {

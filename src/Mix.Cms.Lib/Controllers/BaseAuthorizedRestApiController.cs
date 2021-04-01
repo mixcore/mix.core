@@ -32,8 +32,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.Controllers
-{
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+{    
     [Produces("application/json")]
     public class BaseAuthorizedRestApiController<TDbContext, TModel, TUpdate, TRead, TDelete> : Controller
         where TDbContext : DbContext

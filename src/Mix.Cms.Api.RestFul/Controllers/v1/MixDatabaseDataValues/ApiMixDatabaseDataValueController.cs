@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDataValues;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -21,7 +22,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabaseDataValueController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseDataValue, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
-        public ApiMixDatabaseDataValueController(DefaultRepository<MixCmsContext, MixDatabaseDataValue, ReadViewModel> repo, DefaultRepository<MixCmsContext, MixDatabaseDataValue, UpdateViewModel> updRepo, DefaultRepository<MixCmsContext, MixDatabaseDataValue, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+        public ApiMixDatabaseDataValueController(
+            DefaultRepository<MixCmsContext, MixDatabaseDataValue, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataValue, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataValue, DeleteViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
 

@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
@@ -14,6 +15,8 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -28,8 +31,14 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiCultureController :
         BaseGenericApiController<MixCmsContext, MixCulture>
     {
-        public ApiCultureController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        private readonly MixIdentityHelper _idHelper;
+        public ApiCultureController(
+            MixCmsContext context, 
+            IMemoryCache memoryCache, 
+            IHubContext<PortalHub> hubContext,
+            MixIdentityHelper idHelper) : base(context, memoryCache, hubContext)
         {
+            _idHelper = idHelper;
         }
 
         #region Get
@@ -110,7 +119,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                model.CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+                model.CreatedBy = _idHelper.GetClaim(User, MixClaims.Username);
                 // Only savesubmodels when create new => clone data from default culture
                 var result = await base.SaveAsync<UpdateViewModel>(model, model.Id == 0);
                 if (result.IsSucceed)
