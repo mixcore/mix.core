@@ -71,35 +71,21 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("login")]
         [HttpPost, HttpOptions]
         [AllowAnonymous]
-        public async Task<ActionResult<RepositoryResponse<JObject>>> Login([FromBody] JObject data)
+        public async Task<ActionResult> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
             string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
-            RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
+            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(
-                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
-                if (result.Succeeded)
+                loginResult = await _helper.Login(model);
+                if (loginResult.IsSucceed)
                 {
-                    var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                    var token = await _helper.GetAuthData(user, model.RememberMe);
-                    return Ok(token);
+                    return Ok(loginResult.Data);
                 }
-                if (result.IsLockedOut)
-                {
-                    loginResult.Errors.Add("This account has been locked out, please try again later.");
-                    return BadRequest(loginResult.Errors);
-                }
-                else
-                {
-                    loginResult.Errors.Add("Login failed");
-                    return BadRequest(loginResult.Errors);
-                }
+                return BadRequest(loginResult.Errors);
             }
             else
             {
