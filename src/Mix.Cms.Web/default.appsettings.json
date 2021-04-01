@@ -44,7 +44,23 @@
     "SecretKey": "mixcore-secret-key",
     "Issuer": "mix-core",
     "Issuers": "mix-core",
-    "Audiences": "mix-core"
+    "Audiences": "mix-core",
+    "Facebook": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Google": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Twitter": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Microsoft": {
+      "AppId": "",
+      "AppSecret": ""
+    }
   },
   "IpSecuritySettings": {
     "IsRetrictIp": true,
