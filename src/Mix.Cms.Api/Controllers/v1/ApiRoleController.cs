@@ -13,6 +13,8 @@ using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
 using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using Newtonsoft.Json.Linq;
 using System;
@@ -29,7 +31,7 @@ namespace Mix.Cms.Api.Controllers.v1
         protected readonly UserManager<ApplicationUser> _userManager;
         protected readonly SignInManager<ApplicationUser> _signInManager;
         protected readonly RoleManager<IdentityRole> _roleManager;
-
+        protected MixIdentityHelper _mixIdentityHelper;
         //protected readonly IEmailSender _emailSender;
         protected readonly ILogger _logger;
 
@@ -39,13 +41,15 @@ namespace Mix.Cms.Api.Controllers.v1
             //IEmailSender emailSender,
             ILogger<ApiRoleController> logger,
             IMemoryCache memoryCache,
-            IHubContext<PortalHub> hubContext) : base(null, memoryCache, hubContext)
+            IHubContext<PortalHub> hubContext, 
+            MixIdentityHelper mixIdentityHelper) : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             //_emailSender = emailSender;
             _logger = logger;
+            _mixIdentityHelper = mixIdentityHelper;
         }
 
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -171,7 +175,7 @@ namespace Mix.Cms.Api.Controllers.v1
             {
                 if (model.IsActived)
                 {
-                    model.CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+                    model.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                     var saveResult = await model.SaveModelAsync(false);
                     result.IsSucceed = saveResult.IsSucceed;
 

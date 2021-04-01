@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class MixDatabaseDataPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseData, FormViewModel, FormViewModel, DeleteViewModel>
     {
-        public MixDatabaseDataPortalController(DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo, DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo, DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+        public MixDatabaseDataPortalController(
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo, 
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
 

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -89,6 +90,7 @@ namespace Mix.Cms.Web
             VerifyInitData(services);
 
             services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
+            services.AddScoped<IdentityHelper>();
             /* End Additional Config for Mixcore Cms  */
 
             #endregion Additionals Config for Mixcore Cms

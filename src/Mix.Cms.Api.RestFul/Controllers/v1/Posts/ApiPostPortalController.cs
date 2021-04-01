@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -23,10 +24,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
-        public ApiPostController(DefaultRepository<MixCmsContext, MixPost, ReadViewModel> repo, DefaultRepository<MixCmsContext, MixPost, UpdateViewModel> updRepo, DefaultRepository<MixCmsContext, MixPost, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+        public ApiPostController(
+            DefaultRepository<MixCmsContext, MixPost, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixPost, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPost, DeleteViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
-
+        
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {

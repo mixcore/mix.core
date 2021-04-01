@@ -12,6 +12,7 @@ using Mix.Identity.Models;
 using System;
 using System.Text;
 using Mix.Identity.Extensions;
+using Mix.Identity.Helpers;
 
 namespace Mix.Cms.Web
 {
@@ -37,58 +38,55 @@ namespace Mix.Cms.Web
             {
                 options.Password = pOpt;
             })
-                .AddEntityFrameworkStores<TDbContext>()
-                .AddDefaultTokenProviders()
-                .AddUserManager<UserManager<ApplicationUser>>()
-
-                ;
+            .AddEntityFrameworkStores<TDbContext>()
+            .AddDefaultTokenProviders()
+            .AddUserManager<UserManager<ApplicationUser>>();
 
             services.AddAuthorization();
 
             services.AddAuthentication(authConfigurations.TokenType)
-                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.SaveToken = true;
-                        options.TokenValidationParameters =
-                             new TokenValidationParameters
-                             {
-                                 ValidateIssuer = authConfigurations.ValidateIssuer,
-                                 ValidateAudience = authConfigurations.ValidateAudience,
-                                 ValidateLifetime = authConfigurations.ValidateLifetime,
-                                 ValidateIssuerSigningKey = authConfigurations.ValidateIssuerSigningKey,
-                                 ValidIssuers = authConfigurations.Issuers.Split(','),
-                                 ValidAudiences = authConfigurations.Audiences.Split(','),
-                                 IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
-                             };
-                        // TODO Handle Custom Auth
-                        //options.Events = new JwtBearerEvents
-                        //{
-                        //    OnAuthenticationFailed = context =>
-                        //    {
-                        //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                        //        return Task.CompletedTask;
-                        //    },
-                        //    OnTokenValidated = context =>
-                        //    {
-                        //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                        //        return Task.CompletedTask;
-                        //    },
-
-                        //};
-                    })
-                    .AddFacebookIf(
-                        !string.IsNullOrEmpty(authConfigurations.Facebook?.AppId), 
-                        authConfigurations.Facebook, accessDeniedPath)
-                    .AddGoogleIf(
-                        !string.IsNullOrEmpty(authConfigurations.Google?.AppId), 
-                        authConfigurations.Google, accessDeniedPath)
-                    .AddTwitterIf(
-                        !string.IsNullOrEmpty(authConfigurations.Twitter?.AppId),
-                        authConfigurations.Twitter, accessDeniedPath)
-                    .AddMicrosoftAccountIf(
-                        !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
-                        authConfigurations.Microsoft, accessDeniedPath);
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters =
+                        new TokenValidationParameters
+                        {
+                            ValidateIssuer = authConfigurations.ValidateIssuer,
+                            ValidateAudience = authConfigurations.ValidateAudience,
+                            ValidateLifetime = authConfigurations.ValidateLifetime,
+                            ValidateIssuerSigningKey = authConfigurations.ValidateIssuerSigningKey,
+                            ValidIssuers = authConfigurations.Issuers.Split(','),
+                            ValidAudiences = authConfigurations.Audiences.Split(','),
+                            IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
+                        };
+                // TODO Handle Custom Auth
+                //options.Events = new JwtBearerEvents
+                //{
+                //    OnAuthenticationFailed = context =>
+                //    {
+                //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                //        return Task.CompletedTask;
+                //    },
+                //    OnTokenValidated = context =>
+                //    {
+                //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                //        return Task.CompletedTask;
+                //    },
+                //};
+            })
+            .AddFacebookIf(
+                !string.IsNullOrEmpty(authConfigurations.Facebook?.AppId),
+                authConfigurations.Facebook, accessDeniedPath)
+            .AddGoogleIf(
+                !string.IsNullOrEmpty(authConfigurations.Google?.AppId),
+                authConfigurations.Google, accessDeniedPath)
+            .AddTwitterIf(
+                !string.IsNullOrEmpty(authConfigurations.Twitter?.AppId),
+                authConfigurations.Twitter, accessDeniedPath)
+            .AddMicrosoftAccountIf(
+                !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
+                authConfigurations.Microsoft, accessDeniedPath);
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -99,6 +97,7 @@ namespace Mix.Cms.Web
                 options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
+            services.AddScoped<MixIdentityHelper>();
             return services;
         }
 

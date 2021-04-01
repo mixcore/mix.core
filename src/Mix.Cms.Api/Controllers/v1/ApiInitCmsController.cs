@@ -19,6 +19,7 @@ using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
 using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
+using Mix.Identity.Constants;
 using Mix.Identity.Models;
 using System;
 using System.Collections.Generic;
@@ -42,14 +43,14 @@ namespace Mix.Cms.Api.Controllers.v1
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
             IHubContext<PortalHub> hubContext,
-            IMemoryCache memoryCache
-            )
+            IMemoryCache memoryCache, 
+            IdentityHelper idHelper)
             : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _idHelper = new IdentityHelper(userManager, signInManager, roleManager);
+            _idHelper = idHelper;
         }
 
         #region Post
@@ -217,7 +218,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = IdentityHelper.GetClaim(User, MixClaims.Username);
+            string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
 

@@ -9,6 +9,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,7 +21,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabaseDataAssociationPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseDataAssociation, FormViewModel, FormViewModel, DeleteViewModel>
     {
-        public ApiMixDatabaseDataAssociationPortalController(DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo, DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> updRepo, DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, DeleteViewModel> delRepo) : base(repo, updRepo, delRepo)
+        public ApiMixDatabaseDataAssociationPortalController(
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, DeleteViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
 
