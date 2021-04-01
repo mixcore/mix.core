@@ -3,9 +3,11 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
+using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
 using Mix.Identity.Helpers;
 using Mix.Identity.Models;
+using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -32,6 +34,34 @@ namespace Mix.Cms.Lib.Helpers
             _helper = helper;
         }
 
+        public async Task<RepositoryResponse<JObject>> Login(LoginViewModel model)
+        {
+            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await _signInManager.PasswordSignInAsync(
+                model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+
+            if (result.IsLockedOut)
+            {
+                loginResult.Errors.Add("This account has been locked out, please try again later.");
+            }
+            else
+            {
+                loginResult.Errors.Add("Login failed");
+            }
+
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                var token = await GetAuthData(user, model.RememberMe);
+                loginResult.IsSucceed = true;
+                loginResult.Data = token;
+            }
+           
+            return loginResult;
+        }
+
         public async Task<JObject> GetAuthData(ApplicationUser user, bool rememberMe)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
@@ -55,6 +85,8 @@ namespace Mix.Cms.Lib.Helpers
             }
             return default;
         }
+
+
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
