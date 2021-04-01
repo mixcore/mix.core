@@ -97,7 +97,7 @@ namespace Mix.Cms.Web
                 options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
-            services.AddSingleton<MixIdentityHelper>();
+            services.AddScoped<MixIdentityHelper>();
             return services;
         }
 

@@ -110,10 +110,10 @@ namespace Mix.Identity.Helpers
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: appConfigs.Issuer,
                 audience: appConfigs.Audience,
-                notBefore: expires.AddMinutes(appConfigs.CookieExpiration),
+                notBefore: expires,
                 claims: claims,
                 // our token will live 1 hour, but you can change you token lifetime here
-                expires: expires,
+                expires: expires.AddMinutes(appConfigs.CookieExpiration),
                 signingCredentials: new SigningCredentials(JwtSecurityKey.Create(appConfigs.SecretKey), SecurityAlgorithms.HmacSha256));
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }

@@ -42,14 +42,14 @@ namespace Mix.Cms.Api.Controllers.v1
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            MixIdentityHelper mixIdentityHelper,
+            IdentityHelper helper,
             ILogger<ApiAccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
-            _helper = new IdentityHelper(mixIdentityHelper);
+            _helper = helper;
         }
 
         [TempData]
@@ -57,6 +57,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         //
         // POST: /Account/Logout
+
         [Route("Logout")]
         [HttpGet, HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> Logout()

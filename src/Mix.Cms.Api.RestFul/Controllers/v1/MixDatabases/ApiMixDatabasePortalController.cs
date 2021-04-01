@@ -11,6 +11,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabases;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -23,7 +24,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabasePortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabase, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-        public ApiMixDatabasePortalController(DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo) : base(repo, updRepo, delRepo)
+        public ApiMixDatabasePortalController(
+            DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : 
+            base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
 

@@ -14,6 +14,8 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixPortalPages;
 using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -29,8 +31,11 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiPermissionController :
         BaseGenericApiController<MixCmsContext, MixPortalPage>
     {
-        public ApiPermissionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        protected MixIdentityHelper _mixIdentityHelper;
+        public ApiPermissionController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext,
+            MixIdentityHelper idHelper, MixIdentityHelper mixIdentityHelper) : base(context, memoryCache, hubContext)
         {
+            _mixIdentityHelper = mixIdentityHelper;
         }
 
         #region Get
@@ -106,7 +111,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (model != null)
             {
-                model.CreatedBy = IdentityHelper.GetClaim(User, MixClaims.Username);
+                model.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 var result = await base.SaveAsync<UpdateViewModel>(model, true);
                 return result;
             }
