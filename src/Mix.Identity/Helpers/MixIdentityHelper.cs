@@ -110,9 +110,8 @@ namespace Mix.Identity.Helpers
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: appConfigs.Issuer,
                 audience: appConfigs.Audience,
-                notBefore: expires.AddMinutes(-appConfigs.CookieExpiration),
                 claims: claims,
-                // our token will live 1 hour, but you can change you token lifetime here
+                notBefore: expires.AddMinutes(-appConfigs.AccessTokenExpiration),
                 expires: expires,
                 signingCredentials: new SigningCredentials(JwtSecurityKey.Create(appConfigs.SecretKey), SecurityAlgorithms.HmacSha256));
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -155,23 +154,28 @@ namespace Mix.Identity.Helpers
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
         {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = appConfigs.ValidateIssuer,
-                ValidateAudience = appConfigs.ValidateAudience,
-                ValidateLifetime = appConfigs.ValidateLifetime,
-                ValidateIssuerSigningKey = appConfigs.ValidateIssuerSigningKey,
-                IssuerSigningKey = JwtSecurityKey.Create(appConfigs.SecretKey)
-            };
-
+            var tokenValidationParameters = GetValidationParameters(appConfigs, false);
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
             var jwtSecurityToken = securityToken as JwtSecurityToken;
             if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
+                return null;
 
             return principal;
+        }
+
+        public TokenValidationParameters GetValidationParameters(MixAuthenticationConfigurations appConfigs, bool validateLifetime)
+        {
+            return new TokenValidationParameters
+            {
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuer = appConfigs.ValidateIssuer,
+                ValidateAudience = appConfigs.ValidateAudience,
+                ValidateLifetime = validateLifetime,
+                ValidateIssuerSigningKey = appConfigs.ValidateIssuerSigningKey,
+                IssuerSigningKey = JwtSecurityKey.Create(appConfigs.SecretKey)
+            };
         }
 
         public static class JwtSecurityKey

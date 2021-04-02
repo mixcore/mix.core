@@ -36,7 +36,7 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IdentityHelper _idHelper;
+        private readonly MixIdentityService _idHelper;
 
         public ApiInitCmsController(
            UserManager<ApplicationUser> userManager,
@@ -44,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
            RoleManager<IdentityRole> roleManager,
             IHubContext<PortalHub> hubContext,
             IMemoryCache memoryCache, 
-            IdentityHelper idHelper)
+            MixIdentityService idHelper)
             : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
