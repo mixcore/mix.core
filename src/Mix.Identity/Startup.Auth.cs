@@ -45,53 +45,55 @@ namespace Mix.Cms.Web
             services.AddAuthorization();
 
             services.AddAuthentication(authConfigurations.TokenType)
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters =
-                        new TokenValidationParameters
-                        {
-                            ValidateIssuer = authConfigurations.ValidateIssuer,
-                            ValidateAudience = authConfigurations.ValidateAudience,
-                            ValidateLifetime = authConfigurations.ValidateLifetime,
-                            ValidateIssuerSigningKey = authConfigurations.ValidateIssuerSigningKey,
-                            ValidIssuers = authConfigurations.Issuers.Split(','),
-                            ValidAudiences = authConfigurations.Audiences.Split(','),
-                            IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
-                        };
-                // TODO Handle Custom Auth
-                //options.Events = new JwtBearerEvents
-                //{
-                //    OnAuthenticationFailed = context =>
-                //    {
-                //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                //        return Task.CompletedTask;
-                //    },
-                //    OnTokenValidated = context =>
-                //    {
-                //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                //        return Task.CompletedTask;
-                //    },
-                //};
-            })
-            .AddFacebookIf(
+                .AddFacebookIf(
                 !string.IsNullOrEmpty(authConfigurations.Facebook?.AppId),
                 authConfigurations.Facebook, accessDeniedPath)
-            .AddGoogleIf(
-                !string.IsNullOrEmpty(authConfigurations.Google?.AppId),
-                authConfigurations.Google, accessDeniedPath)
-            .AddTwitterIf(
-                !string.IsNullOrEmpty(authConfigurations.Twitter?.AppId),
-                authConfigurations.Twitter, accessDeniedPath)
-            .AddMicrosoftAccountIf(
-                !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
-                authConfigurations.Microsoft, accessDeniedPath);
+                .AddGoogleIf(
+                    !string.IsNullOrEmpty(authConfigurations.Google?.AppId),
+                    authConfigurations.Google, accessDeniedPath)
+                .AddTwitterIf(
+                    !string.IsNullOrEmpty(authConfigurations.Twitter?.AppId),
+                    authConfigurations.Twitter, accessDeniedPath)
+                .AddMicrosoftAccountIf(
+                    !string.IsNullOrEmpty(authConfigurations.Microsoft?.AppId),
+                    authConfigurations.Microsoft, accessDeniedPath)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters =
+                            new TokenValidationParameters
+                            {
+                                ClockSkew = TimeSpan.Zero,
+                                ValidateIssuer = authConfigurations.ValidateIssuer,
+                                ValidateAudience = authConfigurations.ValidateAudience,
+                                ValidateLifetime = true,
+                                ValidateIssuerSigningKey = authConfigurations.ValidateIssuerSigningKey,
+                                ValidIssuers = authConfigurations.Issuers.Split(','),
+                                ValidAudiences = authConfigurations.Audiences.Split(','),
+                                IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
+                            };
+                    // TODO Handle Custom Auth
+                    //options.Events = new JwtBearerEvents
+                    //{
+                    //    OnAuthenticationFailed = context =>
+                    //    {
+                    //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                    //        return Task.CompletedTask;
+                    //    },
+                    //    OnTokenValidated = context =>
+                    //    {
+                    //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                    //        return Task.CompletedTask;
+                    //    },
+                    //};
+                });
+
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.MaxAge = TimeSpan.FromMinutes(authConfigurations.CookieExpiration);
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(authConfigurations.CookieExpiration);
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(authConfigurations.AccessTokenExpiration);
                 options.LoginPath = accessDeniedPath;
                 options.LogoutPath = "/";
                 options.AccessDeniedPath = accessDeniedPath;

@@ -85,12 +85,10 @@ namespace Mix.Cms.Web
             services.AddMixScheduler(Configuration);
 
             services.AddSingleton<MixCacheService>();
-            /* Mix: End Inject Services */
-
-            VerifyInitData(services);
-
             services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
-            services.AddScoped<IdentityHelper>();
+            services.AddScoped<MixIdentityService>();
+            /* Mix: End Inject Services */
+            VerifyInitData(services);
             /* End Additional Config for Mixcore Cms  */
 
             #endregion Additionals Config for Mixcore Cms

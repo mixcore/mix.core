@@ -26,6 +26,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Identity.Helpers;
+using Mix.Cms.Lib.Dtos;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -36,20 +37,20 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger _logger;
-        private readonly IdentityHelper _helper;
+        private readonly MixIdentityService _idService;
 
         public ApiAccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            IdentityHelper helper,
+            MixIdentityService helper,
             ILogger<ApiAccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
-            _helper = helper;
+            _idService = helper;
         }
 
         [TempData]
@@ -80,7 +81,7 @@ namespace Mix.Cms.Api.Controllers.v1
             RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
             if (ModelState.IsValid)
             {
-                loginResult = await _helper.Login(model);
+                loginResult = await _idService.Login(model);
                 if (loginResult.IsSucceed)
                 {
                     return Ok(loginResult.Data);
@@ -113,7 +114,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 if (result.Succeeded)
                 {
                     var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                    var token = await _helper.GetAuthData(user, model.RememberMe);
+                    var token = await _idService.GetAuthData(user, model.RememberMe);
                     return Ok(token);
                 }
                 if (result.IsLockedOut)
@@ -134,42 +135,11 @@ namespace Mix.Cms.Api.Controllers.v1
             }
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("refresh-token/{refreshTokenId}")]
-        [HttpGet, HttpOptions]
-        public async Task<RepositoryResponse<JObject>> RefreshToken(string refreshTokenId)
+        [Route("refresh-token")]
+        [HttpPost]
+        public async Task<RepositoryResponse<JObject>> RefreshToken([FromBody] RenewTokenDto refreshTokenDto)
         {
-            RepositoryResponse<JObject> result = new RepositoryResponse<JObject>();
-            var getRefreshToken = await RefreshTokenViewModel.Repository.GetSingleModelAsync(t => t.Id == refreshTokenId);
-            if (getRefreshToken.IsSucceed)
-            {
-                var oldToken = getRefreshToken.Data;
-                if (oldToken.ExpiresUtc > DateTime.UtcNow)
-                {
-                    var user = await _userManager.FindByEmailAsync(oldToken.Email);
-                    await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
-
-                    var token = await _helper.GetAuthData(user, true);
-                    if (token != null)
-                    {
-                        await oldToken.RemoveModelAsync();
-                        result.IsSucceed = true;
-                        result.Data = token;
-                    }
-                    return result;
-                }
-                else
-                {
-                    await oldToken.RemoveModelAsync();
-                    result.Errors.Add("Token expired");
-                    return result;
-                }
-            }
-            else
-            {
-                result.Errors.Add("Token expired");
-                return result;
-            }
+            return await _idService.RenewTokenAsync(refreshTokenDto);
         }
 
         [Route("Register")]
@@ -197,7 +167,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-                    var token = await _helper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+                    var token = await _idService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
                         result.IsSucceed = true;

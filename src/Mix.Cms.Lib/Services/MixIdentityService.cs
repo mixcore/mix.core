@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Dtos;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Account;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
@@ -13,19 +14,19 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.Helpers
+namespace Mix.Cms.Lib.Services
 {
-    public class IdentityHelper
+    public class MixIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         public readonly MixIdentityHelper _helper;
 
-        public IdentityHelper(
+        public MixIdentityService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager, 
+            RoleManager<IdentityRole> roleManager,
             MixIdentityHelper helper)
         {
             _userManager = userManager;
@@ -58,7 +59,7 @@ namespace Mix.Cms.Lib.Helpers
                 loginResult.IsSucceed = true;
                 loginResult.Data = token;
             }
-           
+
             return loginResult;
         }
 
@@ -91,7 +92,7 @@ namespace Mix.Cms.Lib.Helpers
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
             var dtIssued = DateTime.UtcNow;
-            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration));
+            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.AccessTokenExpiration));
             var dtRefreshTokenExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.RefreshTokenExpiration));
             string refreshTokenId = string.Empty;
             string refreshToken = string.Empty;
@@ -119,12 +120,57 @@ namespace Mix.Cms.Lib.Helpers
                 Access_token = await _helper.GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey, MixService.Instance.MixAuthentications),
                 Refresh_token = refreshTokenId,
                 Token_type = MixService.GetAuthConfig<string>(MixAuthConfigurations.TokenType),
-                Expires_in = MixService.GetAuthConfig<int>(MixAuthConfigurations.CookieExpiration),
+                Expires_in = MixService.GetAuthConfig<int>(MixAuthConfigurations.AccessTokenExpiration),
                 Issued = dtIssued,
                 Expires = dtExpired,
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
             };
             return token;
+        }
+
+        public async Task<RepositoryResponse<JObject>> RenewTokenAsync(RenewTokenDto refreshTokenDto)
+        {
+            RepositoryResponse<JObject> result = new RepositoryResponse<JObject>();
+            var getRefreshToken = await RefreshTokenViewModel.Repository.GetSingleModelAsync(t => t.Id == refreshTokenDto.RefreshToken);
+            if (getRefreshToken.IsSucceed)
+            {
+                var oldToken = getRefreshToken.Data;
+                if (oldToken.ExpiresUtc > DateTime.UtcNow)
+                {
+
+                    var principle = _helper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, MixService.Instance.MixAuthentications);
+                    if (principle != null)
+                    {
+                        var user = await _userManager.FindByEmailAsync(oldToken.Email);
+                        await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
+
+                        var token = await GetAuthData(user, true);
+                        if (token != null)
+                        {
+                            await oldToken.RemoveModelAsync();
+                            result.IsSucceed = true;
+                            result.Data = token;
+                        }
+                    }
+                    else
+                    {
+                        result.Errors.Add("Invalid Token");
+                    }
+                    
+                    return result;
+                }
+                else
+                {
+                    await oldToken.RemoveModelAsync();
+                    result.Errors.Add("Token expired");
+                    return result;
+                }
+            }
+            else
+            {
+                result.Errors.Add("Token expired");
+                return result;
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public class MixAuthConfigurations
     {
-        public const string CookieExpiration = "CookieExpiration";
+        public const string AccessTokenExpiration = "AccessTokenExpiration";
         public const string RefreshTokenExpiration = "RefreshTokenExpiration";
         public const string ValidateIssuer = "ValidateIssuer";
         public const string ValidateAudience = "ValidateAudience";
