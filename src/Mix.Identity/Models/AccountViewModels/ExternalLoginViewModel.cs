@@ -2,6 +2,8 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Mix.Identity.Constants;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
@@ -13,17 +15,25 @@ namespace Mix.Identity.Models.AccountViewModels
         public string Url { get; set; }
 
         public string State { get; set; }
+
+        public MixExternalLoginProviders Provider { get; set; }
     }
 
     public class RegisterExternalBindingModel
     {
         [Required]
+        [JsonProperty("username")]
         public string UserName { get; set; }
 
-        [Required]
-        public string Provider { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
 
         [Required]
+        [JsonProperty("provider")]
+        public MixExternalLoginProviders Provider { get; set; }
+
+        [Required]
+        [JsonProperty("externalAccessToken")]
         public string ExternalAccessToken { get; set; }
 
     }
