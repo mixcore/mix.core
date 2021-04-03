@@ -22,6 +22,9 @@ namespace Mix.Cms.Lib.ViewModels.Account
         [JsonProperty("email")]
         public string Email { get; set; }
 
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
         [JsonProperty("expiresUtc")]
         public DateTime ExpiresUtc { get; set; }
 

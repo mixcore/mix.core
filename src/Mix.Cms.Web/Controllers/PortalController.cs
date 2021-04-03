@@ -42,7 +42,6 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [HttpGet]
-        [Authorize]
         [Route("portal")]
         [Route("admin")]
         [Route("portal/page/{type}")]

@@ -75,64 +75,33 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key =  MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
-            if (ModelState.IsValid)
+            loginResult = await _idService.Login(model);
+            if (loginResult.IsSucceed)
             {
-                loginResult = await _idService.Login(model);
-                if (loginResult.IsSucceed)
-                {
-                    return Ok(loginResult.Data);
-                }
-                return BadRequest(loginResult.Errors);
+                return Ok(loginResult.Data);
             }
-            else
-            {
-                loginResult.Errors.Add("Invalid model");
-                return BadRequest(loginResult.Errors);
-            }
+            return BadRequest(loginResult.Errors);
         }
 
         [Route("external-login")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult<RepositoryResponse<JObject>>> ExternalLogin([FromBody] JObject data)
+        public async Task<ActionResult<JObject>> ExternalLogin([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
             string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
-            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
-            RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
-            if (ModelState.IsValid)
+            var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
+            RepositoryResponse<JObject> loginResult = await _idService.ExternalLogin(model);
+            if (loginResult.IsSucceed)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(
-                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                    var token = await _idService.GetAuthData(user, model.RememberMe);
-                    return Ok(token);
-                }
-                if (result.IsLockedOut)
-                {
-                    loginResult.Errors.Add("This account has been locked out, please try again later.");
-                    return BadRequest(loginResult.Errors);
-                }
-                else
-                {
-                    loginResult.Errors.Add("Login failed");
-                    return BadRequest(loginResult.Errors);
-                }
+                return Ok(loginResult.Data);
             }
-            else
-            {
-                loginResult.Errors.Add("Invalid model");
-                return BadRequest(loginResult.Errors);
-            }
+            return BadRequest(loginResult.Errors);
         }
 
         [Route("refresh-token")]

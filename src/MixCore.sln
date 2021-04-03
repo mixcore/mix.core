@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Theme", "Theme", "{43479FD0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Lib.SignalR", "Mix.Cms.Lib.SignalR\Mix.Cms.Lib.SignalR.csproj", "{B151F425-8761-4B64-80D8-E9F02FB0B069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{9F8EAF61-3CE1-4272-AE15-F4C82688734F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{B151F425-8761-4B64-80D8-E9F02FB0B069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B151F425-8761-4B64-80D8-E9F02FB0B069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B151F425-8761-4B64-80D8-E9F02FB0B069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F8EAF61-3CE1-4272-AE15-F4C82688734F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F8EAF61-3CE1-4272-AE15-F4C82688734F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F8EAF61-3CE1-4272-AE15-F4C82688734F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F8EAF61-3CE1-4272-AE15-F4C82688734F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{56B0FC3C-E8E9-44C8-9EF1-5065C4A3CEBB} = {12CBFE2B-6D82-41E0-B012-122CC4F3BD10}
 		{0ED23DEE-F0C1-4E99-8004-9711AB25A1D5} = {CCA797E2-3092-4C49-8839-C052D0D54B3B}
 		{B151F425-8761-4B64-80D8-E9F02FB0B069} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
+		{9F8EAF61-3CE1-4272-AE15-F4C82688734F} = {12CBFE2B-6D82-41E0-B012-122CC4F3BD10}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B133AF3-4413-4B56-9BEC-8C4509008F85}

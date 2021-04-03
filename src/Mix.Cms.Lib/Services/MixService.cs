@@ -261,7 +261,7 @@ namespace Mix.Cms.Lib.Services
             return JObject.FromObject(Instance.Translator[culture] ?? new JObject());
         }
 
-        public static JObject GetLocalSettings(string culture)
+        public static JObject GetLocalizeSettings(string culture)
         {
             return JObject.FromObject(Instance.LocalSettings[culture] ?? new JObject());
         }

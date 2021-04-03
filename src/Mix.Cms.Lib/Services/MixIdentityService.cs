@@ -6,6 +6,7 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
+using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
@@ -87,8 +88,6 @@ namespace Mix.Cms.Lib.Services
             return default;
         }
 
-
-
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
             var dtIssued = DateTime.UtcNow;
@@ -128,6 +127,39 @@ namespace Mix.Cms.Lib.Services
             return token;
         }
 
+        public async Task<RepositoryResponse<JObject>> ExternalLogin(RegisterExternalBindingModel model)
+        {
+            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+            var verifiedAccessToken = await _helper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, MixService.Instance.MixAuthentications);
+            if (verifiedAccessToken != null)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                // return local token if already register
+                if (user != null)
+                {
+                    loginResult.Data = await GetAuthData(user, true);
+                    loginResult.IsSucceed = true;
+                }
+                else if (!string.IsNullOrEmpty(model.Email))// register new account
+                {
+                    user = new ApplicationUser()
+                    {
+                        Email = model.Email,
+                        UserName = model.Email
+                    };
+                    await _userManager.CreateAsync(user);
+                    loginResult.Data = await GetAuthData(user, true);
+                    loginResult.IsSucceed = true;
+                }
+                else
+                {
+                    loginResult.Errors.Add("Login Failed");
+                }
+            }
+            return loginResult;
+        }
+
         public async Task<RepositoryResponse<JObject>> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
             RepositoryResponse<JObject> result = new RepositoryResponse<JObject>();
@@ -139,7 +171,7 @@ namespace Mix.Cms.Lib.Services
                 {
 
                     var principle = _helper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, MixService.Instance.MixAuthentications);
-                    if (principle != null)
+                    if (principle != null && oldToken.Username == _helper.GetClaim(principle, MixClaims.Username))
                     {
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
@@ -156,7 +188,7 @@ namespace Mix.Cms.Lib.Services
                     {
                         result.Errors.Add("Invalid Token");
                     }
-                    
+
                     return result;
                 }
                 else

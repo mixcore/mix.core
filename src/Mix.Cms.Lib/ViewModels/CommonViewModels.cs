@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Domain.Core.Models;
 using Mix.Domain.Core.ViewModels;
+using Mix.Identity.Models;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -59,6 +60,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("statuses")]
         public List<object> Statuses { get; set; }
+
+        [JsonProperty("externalLoginProviders")]
+        public JObject ExternalLoginProviders { get; set; }
 
         [JsonProperty("lastUpdateConfiguration")]
         public DateTime? LastUpdateConfiguration { get; set; }

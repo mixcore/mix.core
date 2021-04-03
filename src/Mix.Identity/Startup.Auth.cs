@@ -37,6 +37,7 @@ namespace Mix.Cms.Web
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password = pOpt;
+                options.User = new UserOptions() { RequireUniqueEmail = true };
             })
             .AddEntityFrameworkStores<TDbContext>()
             .AddDefaultTokenProviders()
