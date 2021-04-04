@@ -14,10 +14,10 @@
         public string Issuer { get; set; }
         public string Issuers { get; set; }
         public string Audiences { get; set; }
-        public ExternalLogin Facebook { get; set; }
-        public ExternalLogin Google { get; set; }
-        public ExternalLogin Microsoft { get; set; }
-        public ExternalLogin Twitter { get; set; }
+        public ExternalLogin Facebook { get; set; } = new ExternalLogin();
+        public ExternalLogin Google { get; set; } = new ExternalLogin();
+        public ExternalLogin Microsoft { get; set; } = new ExternalLogin();
+        public ExternalLogin Twitter { get; set; } = new ExternalLogin();
     }
 
     public class ExternalLogin

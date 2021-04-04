@@ -75,10 +75,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
-                    new JProperty("Facebook", MixService.Instance.MixAuthentications.Facebook.AppId),
-                    new JProperty("Google", MixService.Instance.MixAuthentications.Google.AppId),
-                    new JProperty("Twitter", MixService.Instance.MixAuthentications.Twitter.AppId),
-                    new JProperty("Microsoft", MixService.Instance.MixAuthentications.Microsoft.AppId),
+                    new JProperty("Facebook", MixService.Instance.MixAuthentications.Facebook?.AppId),
+                    new JProperty("Google", MixService.Instance.MixAuthentications.Google?.AppId),
+                    new JProperty("Twitter", MixService.Instance.MixAuthentications.Twitter?.AppId),
+                    new JProperty("Microsoft", MixService.Instance.MixAuthentications.Microsoft?.AppId),
                 },
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
 
