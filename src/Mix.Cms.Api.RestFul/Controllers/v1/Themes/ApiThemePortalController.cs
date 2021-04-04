@@ -74,7 +74,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         protected override async Task<RepositoryResponse<UpdateViewModel>> GetSingleAsync(string id)
         {
-            return await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
+            var result =  await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
+            if (result.IsSucceed)
+            {
+                result.Data.IsActived = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang) == result.Data.Id;
+            }
+            return result;
         }
 
         protected override Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
