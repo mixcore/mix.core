@@ -159,14 +159,14 @@ namespace Mix.Cms.Lib.Services
             return Instance.Cultures.Any(c => c == specificulture);
         }
 
-        public static T GetAuthConfig<T>(string name)
+        public static T GetAuthConfig<T>(string name, T defaultValue = default)
         {
             var result = Instance.Authentication[name];
             if (result == null)
             {
                 result = DefaultInstance.Authentication[name];
             }
-            return result != null ? result.Value<T>() : default;
+            return result != null ? result.Value<T>() : defaultValue;
         }
 
         public static void SetAuthConfig<T>(string name, T value)

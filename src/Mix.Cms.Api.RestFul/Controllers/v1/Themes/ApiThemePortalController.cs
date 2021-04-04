@@ -206,10 +206,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         // GET api/theme/id
         [HttpPost]
         [Route("export/{id}")]
-        public Task<RepositoryResponse<string>> Export(int id, [FromBody] SiteStructureViewModel data)
+        public async Task<ActionResult<string>> Export(int id, [FromBody] SiteStructureViewModel data)
         {
-            return Helper.ExportTheme(id, data
+            var result = await Helper.ExportTheme(id, data
                 , _lang, HttpContext.Request.Scheme, HttpContext.Request.Host.Value);
+            return GetResponse(result);
         }
     }
 }
