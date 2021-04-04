@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels
         public string CreatedBy { get; set; }
 
         [JsonProperty("posts")]
-        public List<MixPosts.ImportViewModel> Posts { get; set; }
+        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
         
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }

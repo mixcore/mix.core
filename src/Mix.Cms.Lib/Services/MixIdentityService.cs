@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.Services
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(ApplicationUser user, bool isRemember, string aesKey, string rsaPublicKey)
         {
             var dtIssued = DateTime.UtcNow;
-            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.AccessTokenExpiration));
+            var dtExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.AccessTokenExpiration, 20));
             var dtRefreshTokenExpired = dtIssued.AddMinutes(MixService.GetAuthConfig<int>(MixAuthConfigurations.RefreshTokenExpiration));
             string refreshTokenId = string.Empty;
             string refreshToken = string.Empty;
@@ -119,7 +119,7 @@ namespace Mix.Cms.Lib.Services
                 Access_token = await _helper.GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey, MixService.Instance.MixAuthentications),
                 Refresh_token = refreshTokenId,
                 Token_type = MixService.GetAuthConfig<string>(MixAuthConfigurations.TokenType),
-                Expires_in = MixService.GetAuthConfig<int>(MixAuthConfigurations.AccessTokenExpiration),
+                Expires_in = MixService.GetAuthConfig(MixAuthConfigurations.AccessTokenExpiration, 20),
                 Issued = dtIssued,
                 Expires = dtExpired,
                 LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
