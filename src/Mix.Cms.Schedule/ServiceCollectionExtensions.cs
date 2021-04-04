@@ -47,8 +47,11 @@ namespace Mix.Cms.Schedule
                 {
                     // here's a known job for triggers
                     var jobKey = new JobKey("PublishScheduledPostsJob", "Publish Scheduled Posts Job");
+                    var jobKey1 = new JobKey("KeepPoolAliveJob", "Keep Pool Alive Job");
                     q.AddJob<PublishScheduledPostsJob>(jobKey, j => j
                         .WithDescription("Publish Scheduled Posts Job")
+                    ).AddJob<KeepPoolAliveJob>(jobKey1, j => j
+                        .WithDescription("Ping Server")
                     );
 
                     q.AddTrigger(t => t
@@ -58,6 +61,15 @@ namespace Mix.Cms.Schedule
                         .WithSimpleSchedule(x => x.WithIntervalInMinutes(1)
                         .RepeatForever())
                         .WithDescription("Publish Scheduled Posts trigger")
+                    );
+                    
+                    q.AddTrigger(t => t
+                        .WithIdentity("KeepPoolAliveTrigger")
+                        .ForJob(jobKey1)
+                        .StartAt(DateTime.UtcNow.AddMinutes(15))
+                        .WithSimpleSchedule(x => x.WithIntervalInSeconds(10)
+                        .RepeatForever())
+                        .WithDescription("Keep Pool Alive trigger")
                     );
                 }
             });

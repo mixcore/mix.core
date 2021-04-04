@@ -18,6 +18,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class MixSharedController : ControllerBase
     {
         [HttpGet]
+        [Route("ping")]
+        public ActionResult Ping()
+        {
+            return Ok(DateTime.UtcNow);
+        }
+
+        [HttpGet]
         [Route("get-shared-settings")]
         [Route("{culture}/get-shared-settings")]
         public ActionResult<JObject> GetSharedSettingsAsync(string culture)
