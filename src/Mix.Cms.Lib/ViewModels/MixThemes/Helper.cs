@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixConfigurations;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
 using Mix.Services;
@@ -162,6 +165,69 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 newtheme.TemplateAsset.Filename, MixFileExtensions.Zip,
                 progress, cancellationToken);
             return await newtheme.SaveModelAsync(true);
+        }
+
+        public static async Task<RepositoryResponse<bool>> ActivedThemeAsync(
+            int themeId,
+            string themeName,
+            string culture,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var result = new RepositoryResponse<bool>() { IsSucceed = true };
+                var saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeName, themeName, culture, context, transaction);
+                if (saveResult.IsSucceed)
+                {
+                    saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeFolder, themeName, culture, context, transaction);
+                }
+
+                ViewModelHelper.HandleResult(saveResult, ref result);
+
+                if (result.IsSucceed)
+                {
+                    saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeId, themeId.ToString(), culture, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+        }
+
+        private static async Task<RepositoryResponse<MixConfigurations.UpdateViewModel>> SaveNewConfigAsync(string keyword, string value, string culture, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            MixConfigurations.UpdateViewModel config = (await MixConfigurations.UpdateViewModel.Repository.GetSingleModelAsync(
+                           c => c.Keyword == keyword && c.Specificulture == culture
+                           , context, transaction)).Data;
+            if (config == null)
+            {
+                config = new MixConfigurations.UpdateViewModel()
+                {
+                    Keyword = keyword,
+                    Specificulture = culture,
+                    Category = "Site",
+                    DataType = MixDataType.Text,
+                    Description = "Cms Theme",
+                    Value = value
+                };
+            }
+            else
+            {
+                config.Property.Value = value;
+            }
+            return await config.SaveModelAsync(false, context, transaction);
         }
     }
 }

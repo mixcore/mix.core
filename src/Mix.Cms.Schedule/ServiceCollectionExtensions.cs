@@ -66,8 +66,8 @@ namespace Mix.Cms.Schedule
                     q.AddTrigger(t => t
                         .WithIdentity("KeepPoolAliveTrigger")
                         .ForJob(jobKey1)
-                        .StartAt(DateTime.UtcNow.AddMinutes(15))
-                        .WithSimpleSchedule(x => x.WithIntervalInSeconds(10)
+                        .StartAt(DateTime.UtcNow.AddMinutes(5))
+                        .WithSimpleSchedule(x => x.WithIntervalInSeconds(5)
                         .RepeatForever())
                         .WithDescription("Keep Pool Alive trigger")
                     );

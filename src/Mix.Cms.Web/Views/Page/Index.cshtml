@@ -44,6 +44,7 @@ else
 }
 @{
     string url = ViewData["OgUrl"] != null ? (string)ViewData["OgUrl"] : Model.DetailsUrl;
+    var domain = url.IndexOf("http") == -1 ? $"{Context.Request.Scheme}://{Context.Request.Host}" : string.Empty;
     string title = ViewData["OgTitle"] != null ? (string)ViewData["OgTitle"] : Model.SeoTitle;
     string desc = ViewData["OgDescription"] != null ? (string)ViewData["OgDescription"] : Model.SeoDescription;
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
@@ -52,11 +53,11 @@ else
     <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
     <meta property="og:type" content="post" />
     <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
-    <link rel="canonical" href="@url" />
-    <meta property="og:url" content="@url" />
+    <link rel="canonical" href="@domain@url" />
+    <meta property="og:url" content="@domain@url" />
     <meta property="og:title" content="@title" />
     <meta property="og:description" content="@desc" />
-    <meta property="og:image" content="@image" />
+    <meta property="og:image" content="@domain@image" />
     <meta name="title" content="@title" />
     <meta name="description" content="@desc" />
     <meta name="keywords" content="@desc" />
