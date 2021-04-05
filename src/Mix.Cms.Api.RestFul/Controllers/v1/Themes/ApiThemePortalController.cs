@@ -152,6 +152,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [Route("install")]
         public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> InstallTheme([FromBody] JObject theme)
         {
@@ -168,6 +169,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             };
 
             string createdBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
+            _lang ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             var result = await Helper.InstallThemeAsync(theme, createdBy, _lang, progress, _httpService);
             if (result.IsSucceed)
             {

@@ -218,7 +218,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             // Actived Theme
             if (IsActived)
             {
-                result = await ActivedThemeAsync(_context, _transaction);
+                result = await Helper.ActivedThemeAsync(Model.Id, Name, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -251,6 +251,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                                                        .Replace("[CULTURE]", Specificulture)
                                                        .Replace("[THEME_NAME]", parent.Name);
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
+                siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
@@ -301,67 +302,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> ActivedThemeAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                    c => c.Keyword == MixAppSettingKeywords.ThemeName && c.Specificulture == Specificulture
-                    , _context, _transaction)).Data;
-            if (config == null)
-            {
-                config = new SystemConfigurationViewModel()
-                {
-                    Keyword = MixAppSettingKeywords.ThemeName,
-                    Specificulture = Specificulture,
-                    Category = "Site",
-                    DataType = MixDataType.Text,
-                    Description = "Cms Theme",
-                    Value = Name
-                };
-            }
-            else
-            {
-                config.Value = Name;
-            }
-            var saveConfigResult = await config.SaveModelAsync(false, _context, _transaction);
-            if (saveConfigResult.IsSucceed)
-            {
-                SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                c => c.Keyword == MixAppSettingKeywords.ThemeFolder && c.Specificulture == Specificulture
-                , _context, _transaction)).Data;
-                configFolder.Value = Name;
-
-                saveConfigResult = await configFolder.SaveModelAsync(false, _context, _transaction);
-            }
-
-            ViewModelHelper.HandleResult(saveConfigResult, ref result);
-
-            if (result.IsSucceed)
-            {
-                SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
-                      c => c.Keyword == MixAppSettingKeywords.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
-                if (configId == null)
-                {
-                    configId = new SystemConfigurationViewModel()
-                    {
-                        Keyword = MixAppSettingKeywords.ThemeId,
-                        Specificulture = Specificulture,
-                        Category = "Site",
-                        DataType = MixDataType.Text,
-                        Description = "Cms Theme Id",
-                        Value = Model.Id.ToString()
-                    };
-                }
-                else
-                {
-                    configId.Value = Model.Id.ToString();
-                }
-                var saveResult = await configId.SaveModelAsync(false, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
-            }
-            return result;
-        }
-
+       
         private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };

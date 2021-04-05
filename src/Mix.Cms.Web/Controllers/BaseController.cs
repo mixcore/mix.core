@@ -212,6 +212,7 @@ namespace Mix.Cms.Web.Controllers
             if (getPage.IsSucceed)
             {
                 ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Name"] = getPage.Data.SeoName;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;

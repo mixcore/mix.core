@@ -240,14 +240,14 @@ namespace Mix.Cms.Lib.Services
             Instance.LocalSettings[culture][name] = value.ToString();
         }
 
-        public static T Translate<T>(string name, string culture)
+        public static T Translate<T>(string name, string culture, T defaultVaule = default)
         {
             var result = Instance.Translator[culture][name];
             //if (result == null)
             //{
             //    result = DefaultInstance.Translator[culture][name];
             //}
-            return result != null ? result.Value<T>() : default;
+            return result != null ? result.Value<T>() : defaultVaule;
         }
 
         public static string TranslateString(string name, string culture)

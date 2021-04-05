@@ -313,7 +313,8 @@ namespace Mix.Cms.Lib.ViewModels
         private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
-        public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
+        public async Task<RepositoryResponse<bool>> ImportAsync(
+            string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };

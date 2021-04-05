@@ -109,6 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                         await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                        await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                         var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
                         
@@ -208,7 +209,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Step 5 when status = 4 (Finished)
+        /// Step 3 when status = 3 (Finished)
         ///     - Init default theme
         /// </summary>
         /// <param name="model"></param>
@@ -220,6 +221,32 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
+        }
+        
+        /// <summary>
+        /// Step 3 when status = 3 (Finished)
+        ///     - Init default theme
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost, HttpOptions]
+        [Route("init-cms/step-3/active")]
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult<bool>> Active([FromBody] Lib.ViewModels.MixThemes.UpdateViewModel model)
+        {
+            model.IsActived = true;
+            var result = await Cms.Lib.ViewModels.MixThemes.Helper.ActivedThemeAsync(model.Id, model.Name, model.Specificulture);
+            if (result.IsSucceed)
+            {
+                // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
+                MixService.LoadFromDatabase();
+                MixService.SetConfig("InitStatus", 3);
+                MixService.SetConfig("IsInit", false);
+                MixService.SaveSettings();
+                _ = Mix.Services.MixCacheService.RemoveCacheAsync();
+                MixService.Reload();
+            }
+            return Ok(result);
         }
 
         #endregion Post

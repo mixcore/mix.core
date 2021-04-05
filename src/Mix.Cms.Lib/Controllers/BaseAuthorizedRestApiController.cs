@@ -345,7 +345,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : null;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
 
