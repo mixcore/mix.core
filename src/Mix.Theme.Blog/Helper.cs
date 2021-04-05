@@ -104,6 +104,11 @@ namespace Mix.Theme.Blog
 
         public static string CountReadingTime(string Content)
         {
+            if (string.IsNullOrEmpty(Content))
+            {
+                return string.Empty;
+            }
+
             int totalSeconds = CountWord(Content) * 1 / 4;
             int seconds = totalSeconds % 60;
             int minutes = totalSeconds / 60;
