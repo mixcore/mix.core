@@ -3,11 +3,15 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Schedule.Jobs
 {
-    public class PublishScheduledPostsJob : IJob
+    public class PublishScheduledPostsJob : BaseJob
     {
-        public async Task Execute(IJobExecutionContext context)
+        public PublishScheduledPostsJob(string key, string group = null) : base(key, group)
         {
-            await Lib.ViewModels.MixPosts.Helper.PublishScheduledPosts();
+        }
+
+        public override Task Execute(IJobExecutionContext context)
+        {
+            return Lib.ViewModels.MixPosts.Helper.PublishScheduledPosts();
         }
     }
 }
