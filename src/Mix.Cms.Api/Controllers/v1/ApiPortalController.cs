@@ -109,6 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/category/id
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet, HttpOptions]
         [Route("{culture}/dashboard")]
         public RepositoryResponse<DashboardViewModel> Dashboard(string culture)
