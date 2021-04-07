@@ -19,7 +19,7 @@ namespace Mix.Cms.Web.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (MixService.GetConfig<bool>("IsInit"))
+            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))

@@ -1,4 +1,5 @@
-﻿using Mix.Cms.Lib.Constants;
+﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Quartz;
 using System;
@@ -9,8 +10,7 @@ namespace Mix.Cms.Schedule.Jobs
     public class KeepPoolAliveJob : BaseJob
     {
         HttpService _httpService;
-
-        public KeepPoolAliveJob(string key, string group, HttpService httpService): base(key, group)
+        public KeepPoolAliveJob([FromServices] HttpService httpService)
         {
             _httpService = httpService;
         }

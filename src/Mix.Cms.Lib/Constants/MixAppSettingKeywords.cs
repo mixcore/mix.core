@@ -2,6 +2,7 @@
 {
     public class MixAppSettingKeywords
     {
+        public const string IsInit = "IsInit";
         public const string SiteName = "SiteName";
         public const string ConnectionString = "ConnectionString";
         public const string OrderBy = "OrderBy";
