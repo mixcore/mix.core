@@ -8,6 +8,7 @@ namespace Mix.Cms.Schedule.Models
         public string Key { get; set; }
         public string Group { get; set; }
         public string Description { get; set; }
-        public string JobName { get; set; }
+        public Type JobType { get; set; }
+        public MixTrigger Trigger { get; set; } = new MixTrigger();
     }
 }

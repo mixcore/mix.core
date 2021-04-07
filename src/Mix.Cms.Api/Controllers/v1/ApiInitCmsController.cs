@@ -197,7 +197,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         MixService.LoadFromDatabase();
                         MixService.SetConfig("InitStatus", 4);
-                        MixService.SetConfig("IsInit", true);
+                        MixService.SetConfig(MixAppSettingKeywords.IsInit, true);
                         MixService.SaveSettings();
                         _ = Services.MixCacheService.RemoveCacheAsync();
                         MixService.Reload();
@@ -241,7 +241,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
                 MixService.LoadFromDatabase();
                 MixService.SetConfig("InitStatus", 3);
-                MixService.SetConfig("IsInit", false);
+                MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
                 MixService.SaveSettings();
                 _ = Mix.Services.MixCacheService.RemoveCacheAsync();
                 MixService.Reload();

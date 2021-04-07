@@ -112,7 +112,7 @@ namespace Mix.Cms.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 var context = MixService.GetDbContext();
                 var pendingMigration = context.Database.GetPendingMigrations();
@@ -164,7 +164,7 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 using (var ctx = MixService.GetDbContext())
                 {

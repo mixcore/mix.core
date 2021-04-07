@@ -130,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig("IsInit", false);
+                    MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
                     MixService.SaveSettings();
                     _ = Mix.Services.MixCacheService.RemoveCacheAsync();
                     MixService.Reload();

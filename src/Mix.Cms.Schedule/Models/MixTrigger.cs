@@ -10,8 +10,9 @@ namespace Mix.Cms.Schedule.Models
         public string JobName { get; set; }
         public string Description { get; set; }
         public DateTime? StartAt { get; set; }
+        public bool IsStartNow { get; set; }
         public int? Interval { get; set; }
-        public MixIntevalType? IntevalType { get; set; }
+        public MixIntevalType? IntervalType { get; set; }
         public int? RepeatCount { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 LoadCulture();
             }
