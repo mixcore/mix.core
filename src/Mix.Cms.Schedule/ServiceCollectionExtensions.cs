@@ -12,8 +12,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Cms.Schedule.Extensions;
-using Mix.Cms.Schedule.Enums;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Schedule.Helpers;
 
 namespace Mix.Cms.Schedule
 {
@@ -65,7 +65,7 @@ namespace Mix.Cms.Schedule
 
         private static async Task<IServiceCollectionQuartzConfigurator> AddMixJobsAsync(this IServiceCollectionQuartzConfigurator quartzConfiguration)
         {
-            List<MixJobModel> jobConfiguraions = LoadJobConfiguraions();
+            List<MixJobModel> jobConfiguraions = MixQuartzHelper.LoadJobConfiguraions();
             var assembly = Assembly.GetExecutingAssembly();
             var mixJobs = assembly
                 .GetExportedTypes()
@@ -77,17 +77,12 @@ namespace Mix.Cms.Schedule
                 var jobConfig = jobConfiguraions.FirstOrDefault(j => j.JobType == job);
                 if (jobConfig == null)
                 {
-                    jobConfig = new MixJobModel()
-                    {
-                        Key = job.Name,
-                        Group = null,
-                        Description = null,
-                        JobType = job
-                    };
+                    jobConfig = GetDefaultJob(job);
                 }
 
                 var jobKey = new JobKey(jobConfig.Key, jobConfig.Group);
                 Action<IJobConfigurator> jobConfigurator = j => j.WithDescription(jobConfig.Description);
+
 
                 var applyGenericMethod = typeof(Quartz.ServiceCollectionExtensions)
                    .GetMethods(BindingFlags.Static | BindingFlags.Public)
@@ -108,36 +103,14 @@ namespace Mix.Cms.Schedule
             return quartzConfiguration;
         }
 
-        private static List<MixJobModel> LoadJobConfiguraions()
+        private static MixJobModel GetDefaultJob(Type job)
         {
-            return new List<MixJobModel>()
+            return new MixJobModel()
             {
-                new MixJobModel()
-                {
-                    Key = "PublishScheduledPostsJob",
-                    Group = null,
-                    Description = "Publish Scheduled Posts Job",
-                    JobType = typeof(PublishScheduledPostsJob),
-                    Trigger = new MixTrigger()
-                    {
-                        StartAt = DateTime.UtcNow.AddSeconds(10),
-                        Interval = 1,
-                        IntervalType = MixIntevalType.Minute
-                    }
-                },
-                new MixJobModel()
-                {
-                    Key = "KeepPoolAliveJob",
-                    Group = null,
-                    Description = "Keep Pool Alive Job",
-                    JobType = typeof(KeepPoolAliveJob),
-                    Trigger = new MixTrigger()
-                    {
-                        StartAt = DateTime.UtcNow.AddSeconds(10),
-                        Interval = 5,
-                        IntervalType = MixIntevalType.Minute
-                    }
-                }
+                Key = job.Name,
+                Group = null,
+                Description = null,
+                JobType = job
             };
         }
 
