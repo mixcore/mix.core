@@ -32,7 +32,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
@@ -47,7 +46,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data/additional-data
         [HttpGet("additional-data")]
         public async Task<ActionResult<PaginationModel<AdditionalViewModel>>> GetAdditionalData()
         {
@@ -87,9 +85,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // PUT: api/s/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-additional-data")]
         public async Task<IActionResult> SaveAdditionalData([FromBody] AdditionalViewModel data)
         {
@@ -122,7 +117,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
@@ -147,7 +141,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET api/mix-database-data
         [HttpGet("export")]
         public async Task<ActionResult> Export()
         {
@@ -171,7 +164,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // POST api/mix-database-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("import-data/{mixDatabaseName}")]
@@ -190,7 +182,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<ImportViewModel>() { Status = 501 };
         }
 
-        // DELETE: api/v1/rest/en-us/mix-database/portal/5
         [HttpDelete("{id}")]
         public override async Task<ActionResult<MixDatabaseData>> Delete(string id)
         {
@@ -203,6 +194,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(result.Errors);
             }
+
         }
 
         [HttpGet("migrate-data/{databaseId}")]
