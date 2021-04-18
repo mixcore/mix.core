@@ -337,6 +337,18 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Helpers
 
+        protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result)
+        {
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
         private async Task<RepositoryResponse<List<TView>>> PublishListAsync(Expression<Func<TModel, bool>> predicate)
         {
             var data = await GetListAsync<TView>(predicate);

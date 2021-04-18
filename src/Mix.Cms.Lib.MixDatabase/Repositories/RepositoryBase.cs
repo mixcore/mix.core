@@ -10,7 +10,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Cms.Lib.MixDatabase
+namespace Mix.Cms.Lib.MixDatabase.Repositories
 {
     public class RepositoryBase<TDbConnection, TEntity> : IRepositoryBase<TDbConnection, TEntity>
     where TDbConnection : DbConnection
