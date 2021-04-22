@@ -505,7 +505,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null, SearchQueryModel searchQuery = null)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : ViewModelBase<TDbContext, TModel, T>
         {
             searchQuery ??= new SearchQueryModel(Request);
             RequestPaging request = new RequestPaging()
