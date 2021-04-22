@@ -491,14 +491,19 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
+            , int? pageSize = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            
+
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
-            
+
             PagingDataModel pagingData = new PagingDataModel(context.Request);
+            if (pageSize.HasValue)
+            {
+                pagingData.PageSize = pageSize.Value;
+            }
             return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
                 MixDatabaseNames.ADDITIONAL_FIELD_POST,

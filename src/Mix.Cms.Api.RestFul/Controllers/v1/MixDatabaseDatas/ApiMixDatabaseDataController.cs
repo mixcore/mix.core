@@ -17,8 +17,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
     [Route("api/v1/rest/{culture}/mix-database-data/form")]
+    [Route("api/v1/rest/mix-database-data/form")]
     public class ApiMixDatabaseDataController :
-        BaseRestApiController<MixCmsContext, MixDatabaseData, FormViewModel>
+        BaseLocalizeRestApiController<MixCmsContext, MixDatabaseData, FormViewModel>
     {
         public ApiMixDatabaseDataController(DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo) 
             : base(repo)

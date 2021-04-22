@@ -41,17 +41,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("formTemplate")]
         public string FormTemplate { get; set; }
 
-        [JsonProperty("edmTemplate")]
-        public string EdmTemplate { get; set; }
+        //[JsonProperty("edmTemplate")]
+        //public string EdmTemplate { get; set; }
 
-        [JsonProperty("edmSubject")]
-        public string EdmSubject { get; set; }
+        //[JsonProperty("edmSubject")]
+        //public string EdmSubject { get; set; }
 
-        [JsonProperty("edmFrom")]
-        public string EdmFrom { get; set; }
+        //[JsonProperty("edmFrom")]
+        //public string EdmFrom { get; set; }
 
-        [JsonProperty("edmAutoSend")]
-        public bool? EdmAutoSend { get; set; }
+        //[JsonProperty("edmAutoSend")]
+        //public bool? EdmAutoSend { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -81,11 +81,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("columns")]
         public List<MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
-        [JsonProperty("formView")]
-        public MixTemplates.UpdateViewModel FormView { get; set; }
+        //[JsonProperty("formView")]
+        //public MixTemplates.UpdateViewModel FormView { get; set; }
 
-        [JsonProperty("edmView")]
-        public MixTemplates.UpdateViewModel EdmView { get; set; }
+        //[JsonProperty("edmView")]
+        //public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         #endregion Views
 
@@ -128,8 +128,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
-            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
+            //FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            //EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
             return base.ParseModel(_context, _transaction);
         }
 

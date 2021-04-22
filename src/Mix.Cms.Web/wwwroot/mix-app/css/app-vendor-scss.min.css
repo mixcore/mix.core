@@ -1,5 +1,10 @@
-/* Mon Apr 05 2021 19:44:13 GMT+0700 (Indochina Time) */fb-login {
+/* Thu Apr 22 2021 00:36:43 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
+
+mix-column-preview .row {
+  max-height: 120px;
+  margin: 10px 0;
+  overflow: hidden; }
 
 mix-module-data-table .data-table .header {
   padding: 5px;

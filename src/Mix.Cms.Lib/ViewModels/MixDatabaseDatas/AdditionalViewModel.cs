@@ -109,21 +109,18 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         {
             var database = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Id == MixDatabaseId, _context, _transaction);
             Columns = database.Data.Columns;
-            if (Obj == null)
-            {
-                var getValues = MixDatabaseDataValues.UpdateViewModel
-                       .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
-                Columns.AddRange(
-                    getValues.Data
-                    .Where(v => !Columns.Any(f => f.Id == v.Column?.Id))
-                    .Select(v => v.Column)
-                    .ToList());
-                var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
-                Obj = new JObject(
-                    new JProperty("id", Id),
-                    properties
-                );
-            }
+            var getValues = MixDatabaseDataValues.UpdateViewModel
+                   .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            Columns.AddRange(
+                getValues.Data
+                .Where(v => !Columns.Any(f => f.Id == v.Column?.Id))
+                .Select(v => v.Column)
+                .ToList());
+            var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
+            Obj = new JObject(
+                new JProperty("id", Id),
+                properties
+            );
         }
 
         public override MixDatabaseData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

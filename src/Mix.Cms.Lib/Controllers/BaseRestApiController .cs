@@ -327,7 +327,7 @@ namespace Mix.Cms.Lib.Controllers
             base.OnActionExecuting(context);
         }
 
-        protected void GetLanguage()
+        protected virtual void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
