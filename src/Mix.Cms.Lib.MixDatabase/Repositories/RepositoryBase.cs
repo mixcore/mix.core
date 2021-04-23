@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Mix.Cms.Lib.MixDatabase.Interfaces;
 using Mix.Cms.Lib.MixDatabase.Models;
 using RepoDb;
@@ -18,15 +19,18 @@ namespace Mix.Cms.Lib.MixDatabase.Repositories
     {
         private AppSetting _settings;
 
-        public RepositoryBase(IOptions<AppSetting> settings,
-            ICache cache,
-            ITrace trace)
+        public RepositoryBase([FromServices]IOptions<AppSetting> settings,
+            [FromServices] ICache cache,
+            [FromServices] ITrace trace)
         {
             _settings = settings.Value;
             Cache = cache;
             Trace = trace;
         }
+        public RepositoryBase()
+        {
 
+        }
         /*** Properties ***/
 
         public ITrace Trace { get; }
