@@ -92,7 +92,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByValue<TView>(
              Expression<Func<MixDatabaseDataValue, bool>> valPredicate,
-            PagingDataModel pagingData,
+            PagingRequest pagingData,
             string postType,
             string specificulture,
             MixCmsContext context,
@@ -155,7 +155,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string metaName,
             string metaValue,
             string postType,
-            PagingDataModel pagingData,
+            PagingRequest pagingData,
             string culture = null,
             MixCmsContext _context = null,
             IDbContextTransaction _transaction = null)

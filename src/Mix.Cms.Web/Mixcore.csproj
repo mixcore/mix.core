@@ -129,6 +129,7 @@
     <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mix.Cms.Api.MixDatabase\Mix.Cms.Api.MixDatabase.csproj" />
     <ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
     <ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />

@@ -7,7 +7,7 @@ using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Lib.Models.Common
 {
-    public class PagingDataModel
+    public class PagingRequest
     {
         public string OrderBy { get; set; }
         public MixHeartEnums.DisplayDirection Direction { get; set; }
@@ -15,11 +15,11 @@ namespace Mix.Cms.Lib.Models.Common
         public int PageSize { get; set; }
         public int Page { get; set; }
 
-        public PagingDataModel()
+        public PagingRequest()
         {
 
         }
-        public PagingDataModel(HttpRequest request)
+        public PagingRequest(HttpRequest request)
         {
             OrderBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
                 ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";
