@@ -38,7 +38,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public static IEnumerable<string> SortParentIds(
             IEnumerable<string> parentIds,
             MixCmsContext context,
-            PagingDataModel pagingData,
+            PagingRequest pagingData,
             string culture,
             string postType)
         {

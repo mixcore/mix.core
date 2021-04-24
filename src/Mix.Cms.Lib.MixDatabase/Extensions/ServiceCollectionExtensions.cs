@@ -1,45 +1,42 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Mix.Cms.Lib.MixDatabase.Repositories;
+using RepoDb.Interfaces;
+using RepoDb;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.Enums;
-using System;
-using System.Data.SqlClient;
-using MySql.Data.MySqlClient;
-using Microsoft.Data.Sqlite;
-using Npgsql;
 
 namespace Mix.Cms.Lib.MixDatabase.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixDbRepository(this IServiceCollection services, Assembly assembly)
+        public static IServiceCollection AddMixDbRepository(this IServiceCollection services)
         {
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
-            {
-                var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-                var connectionType = GetDbConnectionType(provider);
-                var repositoryType = typeof(RepositoryReadBase<>);
-                services.AddScoped(repositoryType.MakeGenericType(connectionType));
-            }
+            InitializeRepoDb();
+            services.AddScoped<ICache, MemoryCache>();
+            services.AddScoped<MixDbRepository>();
             return services;
         }
 
-        static Type GetDbConnectionType(MixDatabaseProvider dbProvider)
+        private static void InitializeRepoDb()
         {
-            switch (dbProvider)
+            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:
-                    return typeof(SqlConnection);
+                    SqlServerBootstrap.Initialize();
+                    break;
                 case MixDatabaseProvider.MySQL:
-                    return typeof(MySqlConnection);
+                    MySqlBootstrap.Initialize();
+                    break;
                 case MixDatabaseProvider.PostgreSQL:
-                    return typeof(NpgsqlConnection);
+                    PostgreSqlBootstrap.Initialize();
+                    break;
                 case MixDatabaseProvider.SQLITE:
-                    return typeof(SqliteConnection);
+                    SqLiteBootstrap.Initialize();
+                    break;
                 default:
-                    return typeof(SqliteConnection);
+                    SqLiteBootstrap.Initialize();
+                    break;
             }
         }
     }

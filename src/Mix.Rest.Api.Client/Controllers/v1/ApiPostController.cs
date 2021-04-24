@@ -44,7 +44,7 @@ namespace Mix.Rest.Api.Client.v1
         [HttpGet("get-by-meta")]
         public async Task<ActionResult<PaginationModel<PostViewModel>>> GetByMeta()
         {
-            var pagingData = new PagingDataModel(Request);
+            var pagingData = new PagingRequest(Request);
             var result = await Helper.GetModelistByMeta<PostViewModel>(
                 Request.Query[MixRequestQueryKeywords.DatabaseName], 
                 Request.Query["value"], 

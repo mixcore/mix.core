@@ -13,7 +13,7 @@ namespace Mix.Cms.Lib.Models.Common
         public DateTime? ToDate { get; set; }
         public MixContentStatus? Status { get; set; }
         public string Keyword { get; set; }
-        public PagingDataModel PagingData { get; set; }
+        public PagingRequest PagingData { get; set; }
 
         public SearchQueryModel()
         {
@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Models.Common
                 ? status : null;
             Keyword = request.Query.TryGetValue(MixRequestQueryKeywords.Keyword, out var orderBy)
                 ? orderBy : string.Empty;
-            PagingData = new PagingDataModel(request);
+            PagingData = new PagingRequest(request);
         }
     }
 }
