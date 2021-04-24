@@ -499,7 +499,7 @@ namespace Mix.Cms.Lib.Helpers
             culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
 
-            PagingDataModel pagingData = new PagingDataModel(context.Request);
+            PagingRequest pagingData = new PagingRequest(context.Request);
             if (pageSize.HasValue)
             {
                 pagingData.PageSize = pageSize.Value;
