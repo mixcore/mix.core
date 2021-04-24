@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
-using Mix.Cms.Lib.Helpers;
+using Mix.Cms.Lib.MixDatabase.Extensions;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -86,6 +86,7 @@ namespace Mix.Cms.Web
             services.AddRestClientServices();
             services.AddGenerateApis();
             services.AddMixRestApi();
+            services.AddMixDbRepository();
             services.AddMixSignalR();
             //services.AddMixGprc();
             services.AddMixScheduler(Configuration);

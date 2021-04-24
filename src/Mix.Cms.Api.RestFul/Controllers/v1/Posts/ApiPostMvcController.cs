@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -37,17 +38,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string type = Request.Query["type"];
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
-            Expression<Func<MixPost, bool>> predicate = model =>
-                model.Specificulture == _lang
-                && (!isStatus || model.Status == status)
-                && (!isFromDate || model.CreatedDateTime >= fromDate)
-                && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(type) || model.Type == type)
-                && (string.IsNullOrEmpty(keyword)
-                 || (EF.Functions.Like(model.Title, $"%{keyword}%"))
+            Expression<Func<MixPost, bool>> predicate = model => model.Specificulture == _lang;
+            predicate = predicate.AndAlsoIf(isStatus, model => model.Status == status);
+            predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
+            predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime <= toDate);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(type), model => model.Type == type);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model => (EF.Functions.Like(model.Title, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Content, $"%{keyword}%"))
-                 );
+                 || (EF.Functions.Like(model.Content, $"%{keyword}%")));
             var getData = await base.GetListAsync(predicate);
             if (getData.IsSucceed)
             {
@@ -62,8 +60,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("get-by-attribute")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByAttribute()
         {
-            var pagingData = new PagingDataModel(Request);
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<ReadMvcViewModel>(
+            var pagingData = new PagingRequest(Request);
+            var result = await Helper.GetModelistByMeta<ReadMvcViewModel>(
                 Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], MixDatabaseNames.ADDITIONAL_FIELD_POST, pagingData, _lang);
             if (result.IsSucceed)
             {
@@ -78,7 +76,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("get-by-value-id")]
         public async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> GetByValueId()
         {
-            var result = await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetPostListByValueId<ReadMvcViewModel>(
+            var result = await Helper.GetPostListByValueId<ReadMvcViewModel>(
                 Request.Query["value"]);
             if (result.IsSucceed)
             {
