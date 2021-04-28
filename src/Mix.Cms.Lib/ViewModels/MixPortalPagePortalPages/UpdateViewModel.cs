@@ -115,9 +115,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(p => p.Id == PageId
-
-            );
+            var getCategory = MixPortalPages.UpdateRolePermissionViewModel.Repository.GetSingleModel(
+                p => p.Id == PageId, 
+                _context, _transaction);
             if (getCategory.IsSucceed)
             {
                 PortalPage = getCategory.Data;
