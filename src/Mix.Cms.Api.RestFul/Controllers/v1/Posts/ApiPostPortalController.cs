@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
@@ -37,31 +38,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
-            string type = Request.Query["type"];
-            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
-            Expression<Func<MixPost, bool>> predicate = model =>
-                model.Specificulture == _lang
-                && (!isStatus || model.Status == status)
-                && (!isFromDate || model.CreatedDateTime >= fromDate)
-                && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(type) || model.Type == type)
-                && (string.IsNullOrEmpty(keyword)
-                 || (EF.Functions.Like(model.Title, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Content, $"%{keyword}%"))
-                 );
-            var getData = await base.GetListAsync<ReadViewModel>(predicate);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return BadRequest(getData.Errors);
-            }
+            var searchPostData = new SearchPostQueryModel(Request);
+            var getData = await Helper.SearchPosts<ReadViewModel>(searchPostData);
+            return GetResponse(getData);
         }
 
         public override ActionResult<UpdateViewModel> Default()
