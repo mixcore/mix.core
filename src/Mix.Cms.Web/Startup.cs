@@ -129,8 +129,8 @@ namespace Mix.Cms.Web
 
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
+            app.UseDefaultFiles();
             provider.Mappings[".vue"] = "application/text";
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider

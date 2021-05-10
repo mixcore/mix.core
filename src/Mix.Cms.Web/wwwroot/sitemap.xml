@@ -1,27 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <lastmod>2021-03-17T04:50:30.3087182Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5386081Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://store.mixcore.org/page/en-us/tag</loc>
+    <loc>https://localhost:5001/</loc>
   </url>
   <url>
-    <lastmod>2021-03-17T04:50:30.312094Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5402948Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://store.mixcore.org/page/en-us/search</loc>
+    <loc>https://localhost:5001/tag/intro</loc>
   </url>
   <url>
-    <lastmod>2021-03-17T04:50:30.3121105Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5403228Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://store.mixcore.org/page/en-us/maintenance</loc>
+    <loc>https://localhost:5001/tag/getting-started</loc>
   </url>
   <url>
-    <lastmod>2021-03-17T04:50:30.7449856Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5403261Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://store.mixcore.org/en-us/post/1/mixcore-cms</loc>
+    <loc>https://localhost:5001/about-us</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.5403282Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://mixcore.org/</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.54033Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://www.facebook.com/mixcore.org</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.5403418Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://twitter.com/mixcore_cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6838349Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/1/business-digital-transformation-with-mixcore-cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840157Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/2/the-future-of-cms-from-mixcore</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.684019Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/3/welcome-to-mixcore-world</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840215Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/4/top-open-source-asp-net-core-content-management-system-cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840301Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/5/test-new-post</loc>
   </url>
 </urlset>

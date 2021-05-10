@@ -44,7 +44,6 @@ namespace Mix.Cms.Web.Controllers
 
         [HttpGet]
         [Route("portal")]
-        [Route("admin")]
         [Route("portal/page/{type}")]
         [Route("portal/post/{type}")]
         [Route("portal/{pageName}")]
@@ -55,6 +54,52 @@ namespace Mix.Cms.Web.Controllers
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
         [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
         public IActionResult Index(string page)
+        {
+            if (isValid)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect(_redirectUrl);
+            }
+        }
+        
+        [HttpGet]
+        [Route("admin")]
+        [Route("admin/page/{type}")]
+        [Route("admin/post/{type}")]
+        [Route("admin/{pageName}")]
+        [Route("admin/{pageName}/{type}")]
+        [Route("admin/{pageName}/{type}/{param}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
+        public IActionResult Svelte(string page)
+        {
+            if (isValid)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect(_redirectUrl);
+            }
+        }
+        
+        [HttpGet]
+        [Route("portal-v2")]
+        [Route("portal-v2/page/{type}")]
+        [Route("portal-v2/post/{type}")]
+        [Route("portal-v2/{pageName}")]
+        [Route("portal-v2/{pageName}/{type}")]
+        [Route("portal-v2/{pageName}/{type}/{param}")]
+        [Route("portal-v2/{pageName}/{type}/{param}/{param1}")]
+        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}")]
+        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
+        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
+        public IActionResult PortalV2(string page)
         {
             if (isValid)
             {
