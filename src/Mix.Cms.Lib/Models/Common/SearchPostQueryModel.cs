@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.Models.Common
         {
 
         }
-        public SearchPostQueryModel(HttpRequest request): base(request)
+        public SearchPostQueryModel(HttpRequest request, string culture): base(request, culture)
         {
             PostType = request.Query.TryGetValue("postType", out var postType)
                 ? postType : MixDatabaseNames.ADDITIONAL_FIELD_POST;

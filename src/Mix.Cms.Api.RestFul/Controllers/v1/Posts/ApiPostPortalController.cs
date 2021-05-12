@@ -2,10 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
@@ -16,8 +13,6 @@ using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Domain.Core.ViewModels;
 using Mix.Domain.Data.Repository;
 using Mix.Identity.Helpers;
-using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
@@ -38,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
-            var searchPostData = new SearchPostQueryModel(Request);
+            var searchPostData = new SearchPostQueryModel(Request, _lang);
             var getData = await Helper.SearchPosts<ReadViewModel>(searchPostData);
             return GetResponse(getData);
         }
