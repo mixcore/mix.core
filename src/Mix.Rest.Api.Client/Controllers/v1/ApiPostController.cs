@@ -29,7 +29,7 @@ namespace Mix.Rest.Api.Client.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<PostViewModel>>> Get()
         {
-            var searchPostData = new SearchPostQueryModel(Request);
+            var searchPostData = new SearchPostQueryModel(Request, _lang);
             var getData = await Helper.SearchPosts<PostViewModel>(searchPostData);
             if (getData.IsSucceed)
             {
