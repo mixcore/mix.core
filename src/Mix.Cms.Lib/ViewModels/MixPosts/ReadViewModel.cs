@@ -5,8 +5,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -196,7 +196,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
             int pageId, string specificulture
-            , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+            , string orderByPropertyName, Heart.Enums.DisplayDirection direction
             , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -249,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByCategory(
            int pageId, string specificulture
-           , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+           , string orderByPropertyName, Heart.Enums.DisplayDirection direction
            , int? pageSize = 1, int? pageIndex = 0
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -301,7 +301,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByModule(
           int ModuleId, string specificulture
-          , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+          , string orderByPropertyName, Heart.Enums.DisplayDirection direction
           , int? pageSize = 1, int? pageIndex = 0
           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {

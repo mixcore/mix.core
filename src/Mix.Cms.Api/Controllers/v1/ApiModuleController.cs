@@ -15,7 +15,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixModules;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;

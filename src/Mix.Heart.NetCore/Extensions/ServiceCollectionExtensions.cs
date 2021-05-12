@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Providers;
 using Mix.Heart.RestFul.Conventions;
 using System;

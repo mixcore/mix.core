@@ -5,6 +5,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
 using Mix.Heart.Extensions;
+using Mix.Heart.Models;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

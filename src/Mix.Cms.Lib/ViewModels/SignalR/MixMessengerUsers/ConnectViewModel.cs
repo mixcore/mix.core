@@ -3,7 +3,8 @@ using Mix.Cms.Lib.SignalR.Enums;
 using Mix.Cms.Lib.SignalR.Models;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 

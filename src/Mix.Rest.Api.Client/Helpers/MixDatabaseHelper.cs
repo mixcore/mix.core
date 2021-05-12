@@ -2,7 +2,6 @@
 using Mix.Cms.Lib.Services;
 using System;
 using System.Linq;
-using Mix.Domain.Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Mix.Cms.Lib.Enums;
 using Newtonsoft.Json.Linq;
@@ -13,6 +12,7 @@ using MixDatabaseDatas = Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using System.Collections.Generic;
 using Mix.Cms.Lib.Models.Cms;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Heart.Models;
 
 namespace Mix.Rest.Api.Client.Helpers
 {
@@ -23,7 +23,7 @@ namespace Mix.Rest.Api.Client.Helpers
             culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
             string mixDatabaseName = request.Query["mixDatabaseName"].ToString().Trim();
             var orderBy = "Id";
-            Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            Enum.TryParse(request.Query["direction"], out Heart.Enums.DisplayDirection direction);
             Enum.TryParse(request.Query["filterType"], out MixCompareOperatorKind filterType);
             bool.TryParse(request.Query["isGroup"], out bool isGroup);
             int.TryParse(request.Query["pageIndex"], out int pageIndex);

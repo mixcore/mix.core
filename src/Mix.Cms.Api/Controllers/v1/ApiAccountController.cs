@@ -12,7 +12,6 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
-using Mix.Domain.Core.ViewModels;
 using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
@@ -27,6 +26,8 @@ using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Identity.Helpers;
 using Mix.Cms.Lib.Dtos;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Api.Controllers.v1
 {

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.SignalR;
 using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.SignalR.Enums;
 using Mix.Cms.Lib.SignalR.Models;
-using Mix.Heart.Domain.SignalR;
+using Mix.Heart.Infrastructure.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
