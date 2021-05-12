@@ -9,8 +9,6 @@
 @if (Model != null)
 {
     <div>
-        <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup>
-
         <input type="hidden" id="view-type" value="Post" />
         <input type="hidden" id="view-id" value="@Model.Id" />
         @if (!string.IsNullOrEmpty(Model.TemplatePath))

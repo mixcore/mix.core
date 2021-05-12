@@ -112,7 +112,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
 
-            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, context, transaction);
+            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, null, context, transaction);
 
             if (isRoot)
             {

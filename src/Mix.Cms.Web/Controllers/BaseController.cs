@@ -43,7 +43,7 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 LoadCulture();
             }
@@ -128,7 +128,7 @@ namespace Mix.Cms.Web.Controllers
 
         #region Helper
 
-        protected async Task<IActionResult> AliasAsync(string seoName)
+        protected async Task<IActionResult> AliasAsync(string seoName, string keyword = null)
         {
             // Home Page
 
@@ -153,7 +153,7 @@ namespace Mix.Cms.Web.Controllers
                     switch (getAlias.Data.Type)
                     {
                         case MixUrlAliasType.Page:
-                            return await Page(int.Parse(getAlias.Data.SourceId));
+                            return await Page(int.Parse(getAlias.Data.SourceId), keyword);
 
                         case MixUrlAliasType.Post:
                             return await Post(int.Parse(getAlias.Data.SourceId));
@@ -166,7 +166,7 @@ namespace Mix.Cms.Web.Controllers
                 }
                 else
                 {
-                    return await Page(seoName);
+                    return await Page(seoName, keyword);
                 }
             }
         }
@@ -179,10 +179,7 @@ namespace Mix.Cms.Web.Controllers
             int orderDirection = MixService.GetConfig<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
-            if (keyword is not null)
-            {
-                ViewData["keyword"] = keyword;
-            }
+            ViewData["keyword"] = keyword;
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             Expression<Func<MixPage, bool>> predicate;
 
@@ -215,11 +212,13 @@ namespace Mix.Cms.Web.Controllers
             if (getPage.IsSucceed)
             {
                 ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Name"] = getPage.Data.SeoName;
                 ViewData["Description"] = getPage.Data.SeoDescription;
                 ViewData["Keywords"] = getPage.Data.SeoKeywords;
                 ViewData["Image"] = getPage.Data.ImageUrl;
                 ViewData["BodyClass"] = getPage.Data.CssClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
+                ViewData["Keyword"] = keyword;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
@@ -236,7 +235,7 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected async System.Threading.Tasks.Task<IActionResult> Page(int pageId)
+        protected async System.Threading.Tasks.Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
             int? pageSize = MixService.GetConfig<int?>("TagPageSize");
@@ -267,6 +266,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Layout"] = getPage.Data.Layout ?? "Masters/_Layout";
                 ViewData["BodyClass"] = getPage.Data.CssClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
+                ViewData["Keyword"] = keyword;
 
                 ViewBag.viewMode = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
@@ -308,10 +308,10 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
-        protected async System.Threading.Tasks.Task<IActionResult> Data(string attributeSetName, string seoName)
+        protected async System.Threading.Tasks.Task<IActionResult> Data(string mixDatabaseName, string seoName)
         {
             var getData = await Lib.ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel>(
-                culture, attributeSetName, "equal", "seo_url", seoName);
+                culture, mixDatabaseName, "equal", "seo_url", seoName);
 
             if (getData.IsSucceed && getData.Data.Count > 0)
             {

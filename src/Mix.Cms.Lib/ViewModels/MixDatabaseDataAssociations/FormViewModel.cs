@@ -115,6 +115,19 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == MixDatabaseId)?.Name;
         }
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = MixDatabaseId > 0 && !string.IsNullOrEmpty(MixDatabaseName);
+                if (!IsValid)
+                {
+                    Errors.Add("Invalid Mix Database");
+                }
+            }
+        }
+
         public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<FormViewModel>() { IsSucceed = true };
@@ -134,10 +147,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
                     {
                         DataId = saveData.Data.Id;
                     }
-                }
-                else
-                {
-                    DataId = AttributeData.Id;
                 }
                 if (result.IsSucceed)
                 {

@@ -225,10 +225,46 @@ namespace Mix.Cms.Lib.Helpers
             return getData.Data;
         }
 
-        public static async System.Threading.Tasks.Task<MixNavigation> GetNavigation(
+        public static async Task<MixNavigation> GetNavigationAsync(
             string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<ViewModels.MixDatabaseDatas.NavigationViewModel>(
+                culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+            var nav = navs.Data?.FirstOrDefault()?.Nav;
+            string activePath = Url.ActionContext.HttpContext.Request.Path;
+
+            if (nav != null)
+            {
+                foreach (var cate in nav.MenuItems)
+                {
+                    cate.IsActive = cate.Uri == activePath;
+                    if (cate.IsActive)
+                    {
+                        nav.ActivedMenuItem = cate;
+                        nav.ActivedMenuItems.Add(cate);
+                    }
+
+                    foreach (var item in cate.MenuItems)
+                    {
+                        item.IsActive = item.Uri == activePath;
+                        if (item.IsActive)
+                        {
+                            nav.ActivedMenuItem = item;
+                            nav.ActivedMenuItems.Add(cate);
+                            nav.ActivedMenuItems.Add(item);
+                        }
+                        cate.IsActive = cate.IsActive || item.IsActive;
+                    }
+                }
+            }
+
+            return nav;
+        }
+
+        public static MixNavigation GetNavigation(
+            string name, string culture, IUrlHelper Url)
+        {
+            var navs = ViewModels.MixDatabaseDatas.Helper.FilterByKeyword<ViewModels.MixDatabaseDatas.NavigationViewModel>(
                 culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
@@ -455,21 +491,24 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
-            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            keyword ??= context.Request.Query["keyword"];
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
-            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
-            page = (page > 0) ? page : 1;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
+            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            keyword ??= context.Request.Query["Keyword"];
+
+            PagingRequest pagingRequest = new PagingRequest(context.Request);
+            if (pageSize.HasValue)
+            {
+                pagingRequest.PageSize = pageSize.Value;
+            }
+            return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
-                culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
+                MixDatabaseNames.ADDITIONAL_FIELD_POST,
+                pagingRequest,
+                culture, _context, _transaction);
         }
 
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(

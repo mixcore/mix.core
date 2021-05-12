@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Models.Account;
 using Mix.Domain.Data.ViewModels;
 using Newtonsoft.Json;
+using System;
 
 namespace Mix.Cms.Lib.ViewModels.Account
 {
@@ -61,8 +62,15 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Role = RoleViewModel.Repository.GetSingleModel(r => r.Id == RoleId, _context, _transaction).Data;
-            Description = Role?.Name;
+            try
+            {
+                Role = RoleViewModel.Repository.GetSingleModel(r => r.Id == RoleId, _context, _transaction).Data;
+                Description = Role?.Name;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         #endregion Overrides

@@ -121,7 +121,7 @@
           "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -138,7 +138,7 @@
           "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -263,7 +263,7 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
-      "isHiden": true,
+      "isHiden": false,
       "subMenus": [
         {
           "title": "List Online",
@@ -278,7 +278,7 @@
       "icon": "mi mi-Settings  mi-spin",
       "subMenus": [
         {
-          "title": "Portal App Settings",
+          "title": "Global Settings",
           "icon": "mi mi-Apps",
           "path": "/portal/app-settings/details"
         },
@@ -289,7 +289,7 @@
         },
         {
           "path": "/portal/configuration/list",
-          "title": "List",
+          "title": "Local settings",
           "icon": "mi mi-List"
         }
       ]

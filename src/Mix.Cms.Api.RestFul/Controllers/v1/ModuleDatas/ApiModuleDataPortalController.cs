@@ -12,6 +12,8 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Common.Helper;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,7 +28,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataDataController :
         BaseAuthorizedRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
     {
-        
+        public ApiModuleDataDataController(
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> repo,
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
         {

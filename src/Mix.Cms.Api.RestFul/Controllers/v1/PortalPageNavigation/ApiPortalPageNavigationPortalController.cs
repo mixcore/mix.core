@@ -10,6 +10,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPortalPagePortalPages;
 using Mix.Domain.Core.ViewModels;
+using Mix.Domain.Data.Repository;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -21,7 +23,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPortalPageNavigationPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPortalPageNavigation, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
-        
+        public ApiPortalPageNavigationPortalController(
+            DefaultRepository<MixCmsContext, MixPortalPageNavigation, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixPortalPageNavigation, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPortalPageNavigation, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
