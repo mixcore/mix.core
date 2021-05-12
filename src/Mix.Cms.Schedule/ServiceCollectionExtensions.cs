@@ -3,12 +3,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Schedule.Jobs;
+using Mix.Cms.Schedule.Models;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Impl.Calendar;
-using Quartz.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Cms.Schedule.Extensions;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Schedule.Helpers;
 
 namespace Mix.Cms.Schedule
 {
@@ -33,7 +38,7 @@ namespace Mix.Cms.Schedule
                 });
 
                 // or for scoped service support like EF Core DbContext
-                // q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
                 // these are the defaults
                 q.UseSimpleTypeLoader();
@@ -43,22 +48,9 @@ namespace Mix.Cms.Schedule
                     tp.MaxConcurrency = 10;
                 });
 
-                if (!MixService.GetConfig<bool>("IsInit"))
+                if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
                 {
-                    // here's a known job for triggers
-                    var jobKey = new JobKey("PublishScheduledPostsJob", "Publish Scheduled Posts Job");
-                    q.AddJob<PublishScheduledPostsJob>(jobKey, j => j
-                        .WithDescription("Publish Scheduled Posts Job")
-                    );
-
-                    q.AddTrigger(t => t
-                        .WithIdentity("PublishScheduledPostsTrigger")
-                        .ForJob(jobKey)
-                        .StartAt(DateTime.UtcNow.AddSeconds(10))
-                        .WithSimpleSchedule(x => x.WithIntervalInMinutes(1)
-                        .RepeatForever())
-                        .WithDescription("Publish Scheduled Posts trigger")
-                    );
+                    q.AddMixJobsAsync().GetAwaiter().GetResult();
                 }
             });
             // ASP.NET Core hosting
@@ -70,69 +62,61 @@ namespace Mix.Cms.Schedule
             return services;
         }
 
+
+        private static async Task<IServiceCollectionQuartzConfigurator> AddMixJobsAsync(this IServiceCollectionQuartzConfigurator quartzConfiguration)
+        {
+            List<MixJobModel> jobConfiguraions = MixQuartzHelper.LoadJobConfiguraions();
+            var assembly = Assembly.GetExecutingAssembly();
+            var mixJobs = assembly
+                .GetExportedTypes()
+                .Where(m => m.BaseType.Name == typeof(BaseJob).Name);
+            StdSchedulerFactory factory = new StdSchedulerFactory();
+            IScheduler scheduler = await factory.GetScheduler();
+            foreach (var job in mixJobs)
+            {
+                var jobConfig = jobConfiguraions.FirstOrDefault(j => j.JobType == job);
+                if (jobConfig == null)
+                {
+                    jobConfig = GetDefaultJob(job);
+                }
+
+                var jobKey = new JobKey(jobConfig.Key, jobConfig.Group);
+                Action<IJobConfigurator> jobConfigurator = j => j.WithDescription(jobConfig.Description);
+
+
+                var applyGenericMethod = typeof(Quartz.ServiceCollectionExtensions)
+                   .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) &&  m.GetParameters()[1].ParameterType == typeof(JobKey));
+                var parameters = applyGenericMethod.GetParameters();
+                var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(jobConfig.JobType);
+                applyConcreteMethod.Invoke(quartzConfiguration, new object[] { quartzConfiguration, jobKey, jobConfigurator });
+
+                quartzConfiguration.AddTrigger(t => t
+                        .WithIdentity("trigger_" + jobConfig.Key, jobConfig.Group)
+                        .ForJob(jobKey)
+                        .StartNowIf(jobConfig.Trigger.IsStartNow)
+                        .StartAtIf(jobConfig.Trigger.StartAt.HasValue, jobConfig.Trigger.StartAt.Value)
+                        .WithMixSchedule(jobConfig.Trigger.Interval, jobConfig.Trigger.IntervalType, jobConfig.Trigger.RepeatCount)
+                        .WithDescription(jobConfig.Description));
+            }
+
+            return quartzConfiguration;
+        }
+
+        private static MixJobModel GetDefaultJob(Type job)
+        {
+            return new MixJobModel()
+            {
+                Key = job.Name,
+                Group = null,
+                Description = null,
+                JobType = job
+            };
+        }
+
         public static IApplicationBuilder UseMixScheduler(this IApplicationBuilder app)
         {
             return app;
-        }
-
-        public static async Task StartScheduler()
-        {
-            LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
-
-            // Grab the Scheduler instance from the Factory
-            StdSchedulerFactory factory = new StdSchedulerFactory();
-            IScheduler scheduler = await factory.GetScheduler();
-
-            // and start it off
-            await scheduler.Start();
-
-            // define the job and tie it to our HelloJob class
-            IJobDetail job = JobBuilder.Create<PublishScheduledPostsJob>()
-                .WithIdentity("job1", "group1")
-                .Build();
-
-            // Trigger the job to run now, and then repeat every 10 seconds
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger1", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(10)
-                    .RepeatForever())
-                .Build();
-            HolidayCalendar holidayCalendar = new HolidayCalendar();
-            // Tell quartz to schedule the job using our trigger
-            await scheduler.ScheduleJob(job, trigger);
-        }
-
-        // simple log provider to get something to the console
-        private class ConsoleLogProvider : ILogProvider
-        {
-            public Logger GetLogger(string name)
-            {
-                return (level, func, exception, parameters) =>
-                {
-                    if (level >= LogLevel.Info && func != null)
-                    {
-                        Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] [" + level + "] " + func(), parameters);
-                    }
-                    return true;
-                };
-            }
-
-            public IDisposable OpenNestedContext(string message)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IDisposable OpenMappedContext(string key, string value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IDisposable OpenMappedContext(string key, object value, bool destructure = false)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

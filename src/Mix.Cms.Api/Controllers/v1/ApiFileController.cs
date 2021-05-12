@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Domain.Core.ViewModels;
 using Mix.Services;
@@ -16,7 +17,7 @@ namespace Mix.Cms.Api.Controllers.v1
     [Route("api/v1/file")]
     public class ApiFileController : BaseApiController<MixCmsContext>
     {
-        public ApiFileController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiFileController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 
@@ -95,7 +96,6 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files
-
         [HttpPost, HttpOptions]
         [Route("list")]
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)

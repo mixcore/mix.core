@@ -97,8 +97,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 
         #region Views
 
-        [JsonProperty("fieldConfigurations")]
-        public FieldConfigurations FieldConfigurations { get; set; } = new FieldConfigurations();
+        [JsonProperty("columnConfigurations")]
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new ColumnConfigurations();
 
         #endregion Views
 
@@ -144,7 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
                 CreatedDateTime = DateTime.UtcNow;
             }
             Options = JOptions?.ToString();
-            Configurations = JObject.FromObject(FieldConfigurations).ToString(Formatting.None);
+            Configurations = JObject.FromObject(ColumnConfigurations).ToString(Formatting.None);
             return base.ParseModel(_context, _transaction);
         }
 
@@ -155,8 +155,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
                 JOptions = JArray.Parse(Options);
             }
 
-            FieldConfigurations = string.IsNullOrEmpty(Configurations) ? new FieldConfigurations()
-                    : JObject.Parse(Configurations).ToObject<FieldConfigurations>();
+            ColumnConfigurations = string.IsNullOrEmpty(Configurations) ? new ColumnConfigurations()
+                    : JObject.Parse(Configurations).ToObject<ColumnConfigurations>();
         }
 
         public override Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

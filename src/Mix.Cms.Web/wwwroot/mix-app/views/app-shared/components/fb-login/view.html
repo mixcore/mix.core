@@ -1,0 +1,1 @@
+<div ng-if="isInit" ng-init="$ctrl.init()"><div ng-if="$ctrl.showLogin"><a class="btn login-fb" ng-if="!$ctrl.loggedIn" ng-click="$ctrl.login()"><i class="mi mi-facebook-f"></i> {{$ctrl.translate('Login')}}</a><p ng-bind="$ctrl.profile.name"></p><a class="btn-link logout-fb" ng-if="$ctrl.loggedIn" ng-click="$ctrl.logout()" ng-bind="$ctrl.translate('Logout')"></a></div></div>

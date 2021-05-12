@@ -61,7 +61,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public List<MixDatabaseDataValues.NavigationViewModel> Values { get; set; }
 
-        public List<MixDatabaseColumns.ReadViewModel> Fields { get; set; }
+        public List<MixDatabaseColumns.ReadViewModel> Columns { get; set; }
 
         [JsonProperty("data")]
         public JObject Obj { get; set; }
@@ -102,12 +102,29 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(
                    _context, _transaction,
                    out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            
+            Columns ??= MixDatabaseColumns.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
+           , context, transaction).Data;
+            
             if (Obj == null)
             {
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
 
-            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, context, transaction);
+            if (Columns.Any(c =>c.DataType == MixDataType.Reference))
+            {
+                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture,
+                Columns
+                    .Where(c => c.DataType == MixDataType.Reference)
+                    .Select(c => new MixDatabaseColumn()
+                    {
+                        Name = c.Name,
+                        ReferenceId = c.ReferenceId,
+                        DataType = c.DataType
+                    })
+                    .ToList(),
+                context, transaction);
+            }
 
             if (isRoot)
             {
@@ -127,7 +144,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     if (result.IsSucceed)
                     {
-                        if (Fields.Any(f => f.Id == item.MixDatabaseColumnId))
+                        if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
                         {
                             item.Priority = item.Field.Priority;
                             item.DataId = parent.Id;

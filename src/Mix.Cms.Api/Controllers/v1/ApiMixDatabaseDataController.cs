@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiMixDatabaseDataController :
         BaseApiController<MixCmsContext>
     {
-        public ApiMixDatabaseDataController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiMixDatabaseDataController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

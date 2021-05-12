@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
             if (IsValid)
             {
                 if (Repository.CheckIsExists(o =>
-                    o.Alias == Alias && o.Specificulture == Specificulture && o.Id != Id))
+                    o.Alias == Alias && o.Specificulture == Specificulture && o.Id != Id, _context, _transaction))
                 {
                     Errors.Add("Alias Existed");
                     IsValid = false;

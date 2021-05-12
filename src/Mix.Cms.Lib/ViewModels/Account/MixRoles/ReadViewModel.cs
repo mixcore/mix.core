@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
             //Permissions = MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
-            //&& (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == "SuperAdmin")
+            //&& (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == MixRoles.SuperAdmin)
             //).Data;
             //foreach (var item in Permissions)
             //{

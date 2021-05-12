@@ -1,35 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <lastmod>2021-02-04T02:15:42.0489942Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5386081Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/page/en-us/maintenance</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/page/en-au/maintenance" />
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/maintenance" />
+    <loc>https://localhost:5001/</loc>
   </url>
   <url>
-    <lastmod>2021-02-04T02:15:42.0490816Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5402948Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/page/en-us/search</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/page/en-au/search" />
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/search" />
+    <loc>https://localhost:5001/tag/intro</loc>
   </url>
   <url>
-    <lastmod>2021-02-04T02:15:42.0490871Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5403228Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/page/en-us/home</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/en-au/home" />
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/page/vi-vn/home" />
+    <loc>https://localhost:5001/tag/getting-started</loc>
   </url>
   <url>
-    <lastmod>2021-02-04T02:15:42.069946Z</lastmod>
+    <lastmod>2021-04-28T15:42:01.5403261Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
-    <loc>https://localhost:5001/post/en-us/1/mixcore-cms</loc>
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="en-au" href="https://localhost:5001/post/en-au/1/mixcore-cms" />
-    <xhtml:link xmlns:xhtml="http://www.w3.org/1999/xhtml" rel="alternate" hreflang="vi-vn" href="https://localhost:5001/post/vi-vn/1/mixcore-cms" />
+    <loc>https://localhost:5001/about-us</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.5403282Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://mixcore.org/</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.54033Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://www.facebook.com/mixcore.org</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.5403418Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001https://twitter.com/mixcore_cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6838349Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/1/business-digital-transformation-with-mixcore-cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840157Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/2/the-future-of-cms-from-mixcore</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.684019Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/3/welcome-to-mixcore-world</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840215Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/4/top-open-source-asp-net-core-content-management-system-cms</loc>
+  </url>
+  <url>
+    <lastmod>2021-04-28T15:42:01.6840301Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+    <loc>https://localhost:5001/en-us/post/5/test-new-post</loc>
   </url>
 </urlset>

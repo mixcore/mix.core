@@ -34,8 +34,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         #endregion Change Password
 
-
-
         public MixUserViewModel(ApplicationUser user)
         {
             User = user;
