@@ -6,7 +6,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;

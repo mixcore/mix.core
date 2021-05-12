@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Services;
@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.Controllers
     public class BaseReadOnlyApiController<TDbContext, TModel, TView> : Controller
         where TDbContext : DbContext
         where TModel : class
-        where TView : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, TView>
+        where TView : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, TView>
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
@@ -48,7 +48,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -62,7 +62,7 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<PaginationModel<TView>> getData = null;
             if (!string.IsNullOrEmpty(_lang))
             {
-                predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.ExpressionMethod.Eq);
                 getData = await _repo.GetModelListByAsync(
                             predicate,
                             request.OrderBy, request.Direction,
@@ -169,12 +169,12 @@ namespace Mix.Cms.Lib.Controllers
         #region Helpers
 
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -183,10 +183,10 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, Heart.Enums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(Expression<Func<TModel, bool>> predicate = null)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             RepositoryResponse<T> data = null;
             if (predicate != null)
@@ -219,7 +219,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()

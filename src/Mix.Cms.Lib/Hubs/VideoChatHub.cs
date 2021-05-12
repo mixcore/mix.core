@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Lib.SignalR.Models.VideoChat;
-using Mix.Heart.Domain.SignalR;
+using Mix.Heart.Infrastructure.SignalR;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

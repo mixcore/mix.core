@@ -2,7 +2,8 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -25,7 +26,7 @@ namespace Mix.Rest.Api.Client.ViewModels
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("mixDatabaseId")]
         public int MixDatabaseId { get; set; }

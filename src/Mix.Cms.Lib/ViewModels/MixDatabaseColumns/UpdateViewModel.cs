@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

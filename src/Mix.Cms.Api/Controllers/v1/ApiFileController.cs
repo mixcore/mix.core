@@ -8,7 +8,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Mix.Services;
 
 namespace Mix.Cms.Api.Controllers.v1

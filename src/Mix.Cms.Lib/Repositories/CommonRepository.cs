@@ -5,7 +5,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixCultures;
-using Mix.Domain.Core.Models;
+using Mix.Heart.Models;
 using System;
 using System.Collections.Generic;
 

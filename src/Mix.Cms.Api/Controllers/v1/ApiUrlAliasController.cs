@@ -12,7 +12,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixUrlAliases;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;

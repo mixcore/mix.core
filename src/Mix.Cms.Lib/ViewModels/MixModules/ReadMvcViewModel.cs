@@ -5,8 +5,8 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
 using System;
@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

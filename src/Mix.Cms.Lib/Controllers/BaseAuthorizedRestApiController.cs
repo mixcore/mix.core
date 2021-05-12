@@ -7,15 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
@@ -30,6 +27,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -76,7 +75,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -279,11 +278,11 @@ namespace Mix.Cms.Lib.Controllers
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.ExpressionMethod.Eq);
             Expression<Func<TModel, bool>> idPre = null;
             foreach (var id in data.Data)
             {
-                var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
 
                 idPre = idPre != null
                     ? idPre.AndAlso(temp)
@@ -376,12 +375,12 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -391,10 +390,10 @@ namespace Mix.Cms.Lib.Controllers
         protected virtual async Task<RepositoryResponse<TUpdate>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(
-                MixQueryColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -412,7 +411,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(Expression<Func<TModel, bool>> predicate = null)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             RepositoryResponse<T> data = null;
             if (predicate != null)
@@ -423,7 +422,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(string id, bool isDeleteRelated = false)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             var data = await GetSingleAsync<T>(id);
             if (data.IsSucceed)
@@ -459,7 +458,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(T data, bool isDeleteRelated = false)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (data != null)
             {
@@ -534,7 +533,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)
             {
