@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.Models.Common
     public class PagingRequest
     {
         public string OrderBy { get; set; }
-        public MixHeartEnums.DisplayDirection Direction { get; set; }
+        public DisplayDirection Direction { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public int Page { get; set; }
@@ -24,7 +24,7 @@ namespace Mix.Cms.Lib.Models.Common
             OrderBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
                 ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";
             Direction = request.Query.TryGetValue(MixRequestQueryKeywords.Direction, out var direction)
-                ? Enum.Parse<MixHeartEnums.DisplayDirection>(direction) : MixHeartEnums.DisplayDirection.Desc;
+                ? Enum.Parse<DisplayDirection>(direction) : DisplayDirection.Desc;
             Page = request.Query.TryGetValue(MixRequestQueryKeywords.Page, out var page)
                 ? int.Parse(page) : 0;
             if (Page > 0)

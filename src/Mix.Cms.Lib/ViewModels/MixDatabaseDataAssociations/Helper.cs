@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

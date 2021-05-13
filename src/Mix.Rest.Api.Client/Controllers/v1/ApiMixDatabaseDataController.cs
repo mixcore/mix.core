@@ -5,10 +5,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using Mix.Rest.Api.Client.Helpers;
 using Mix.Rest.Api.Client.ViewModels;
 using Newtonsoft.Json.Linq;

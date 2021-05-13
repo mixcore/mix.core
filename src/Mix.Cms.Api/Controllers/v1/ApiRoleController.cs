@@ -12,7 +12,7 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Mix.Identity.Models;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Heart.Domain.SignalR;
+using Mix.Heart.Infrastructure.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

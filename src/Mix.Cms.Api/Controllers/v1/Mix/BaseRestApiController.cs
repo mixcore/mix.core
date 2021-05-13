@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
@@ -17,6 +17,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -156,7 +157,7 @@ namespace Mix.Cms.Api.Controllers.v1
             where TView : ViewModelBase<TDbContext, TModel, TView>
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query["direction"], out Heart.Enums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
 
             RequestPaging request = new RequestPaging()
