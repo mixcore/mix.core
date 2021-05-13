@@ -5,8 +5,9 @@ using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.SignalR.Enums;
 using Mix.Cms.Lib.SignalR.Models;
 using Mix.Cms.Messenger.Models.Data;
-using Mix.Domain.Core.ViewModels;
-using Mix.Heart.Domain.SignalR;
+using Mix.Heart.Enums;
+using Mix.Heart.Infrastructure.SignalR;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
@@ -93,7 +94,7 @@ namespace Mix.Cms.Lib.Hubs
             }
             var getPreviousMsgs = ViewModels.MixDatabaseDatas.ReadViewModel.Repository.GetModelListBy(
                         m => m.MixDatabaseName == request.Room && m.Specificulture == request.Specificulture
-                        , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0);
+                        , "CreatedDateTime", DisplayDirection.Desc, 10, 0);
             // Get previous messages
             if (getPreviousMsgs.IsSucceed)
             {

@@ -1,15 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Mix.Heart.Models;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabases
 {

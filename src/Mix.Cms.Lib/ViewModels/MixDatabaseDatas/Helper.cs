@@ -7,9 +7,9 @@ using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Services;
 using Newtonsoft.Json;
@@ -360,7 +360,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 var filterType = request.Query["filterType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["mixDatabaseId"], out int mixDatabaseId);
-                bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+                bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.DisplayDirection direction);
                 bool.TryParse(request.Query["isGroup"], out bool isGroup);
                 int.TryParse(request.Query["pageIndex"], out int pageIndex);
                 var isPageSize = int.TryParse(request.Query["pageSize"], out int pageSize);
@@ -811,7 +811,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string mixDatabaseName,
             string parentId, MixDatabaseParentType parentType,
-            string orderBy, Heart.Enums.MixHeartEnums.DisplayDirection direction,
+            string orderBy, Heart.Enums.DisplayDirection direction,
             int? pageSize, int? pageIndex,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
@@ -994,7 +994,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         List<string> datas = new List<string>();
                         var getData = await FormViewModel.Repository.GetModelListByAsync(
                         m => m.MixDatabaseName == getDatabase.Data.Name
-                        , "Id", Heart.Enums.MixHeartEnums.DisplayDirection.Asc
+                        , "Id", Heart.Enums.DisplayDirection.Asc
                         , pageSize, page, null, null
                         , ctx, null);
                         page++;

@@ -6,9 +6,9 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using System;
@@ -190,7 +190,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string valueId
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -249,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             List<string> valueIds
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -316,7 +316,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             , string keyword = null
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPagePost, TView>
@@ -355,7 +355,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string dataId
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -418,7 +418,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             List<string> dataIds
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -491,7 +491,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             , List<int> pageIds = null
             , string culture = null
             , string orderByPropertyName = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -603,7 +603,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByField<TView>(
             string fieldName, string value
             , string culture = null
-            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Desc
+            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Desc
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>

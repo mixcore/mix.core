@@ -17,7 +17,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 
 namespace Mix.Cms.Lib.MixDatabase.Repositories
 {
@@ -106,7 +106,7 @@ namespace Mix.Cms.Lib.MixDatabase.Repositories
             {
                 IEnumerable<QueryField> queryFields = ParseQuery(query);
                 List<OrderField> orderFields = new List<OrderField>() {
-                    new OrderField(pagingRequest.OrderBy, pagingRequest.Direction == MixHeartEnums.DisplayDirection.Asc ? Order.Ascending: Order.Descending)
+                    new OrderField(pagingRequest.OrderBy, pagingRequest.Direction == DisplayDirection.Asc ? Order.Ascending: Order.Descending)
                 };
                 var count = (int)connection.Count(_tableName, queryFields);
                 var data = await connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,

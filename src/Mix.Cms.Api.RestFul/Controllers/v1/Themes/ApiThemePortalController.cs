@@ -9,8 +9,8 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixThemes;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Cms.Lib.Services;
 using Newtonsoft.Json.Linq;
-using Mix.Services;
 using Mix.Cms.Lib.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +27,7 @@ using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {

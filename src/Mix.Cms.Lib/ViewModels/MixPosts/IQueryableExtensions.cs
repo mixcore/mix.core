@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             IEnumerable<string> result;
             switch (pagingData.Direction)
             {
-                case Heart.Enums.MixHeartEnums.DisplayDirection.Asc:
+                case Heart.Enums.DisplayDirection.Asc:
                     result = (from association in
                             context.MixDatabaseDataAssociation.Where(
                                 m => m.ParentType == MixDatabaseParentType.Post
@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                               orderby nav.IntegerValue
                               select association.ParentId);
                     break;
-                case Heart.Enums.MixHeartEnums.DisplayDirection.Desc:
+                case Heart.Enums.DisplayDirection.Desc:
                 default:
                     result = (from association in
                                    context.MixDatabaseDataAssociation.Where(

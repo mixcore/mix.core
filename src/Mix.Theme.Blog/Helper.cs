@@ -5,7 +5,6 @@ using Mix.Heart.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MixDatas = Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using MixPosts = Mix.Cms.Lib.ViewModels.MixPosts;
@@ -19,7 +18,7 @@ namespace Mix.Theme.Blog
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
                 m => m.Status == MixContentStatus.Published,
                 "CreatedDateTime",
-                MixHeartEnums.DisplayDirection.Desc, pageSize, pageIndex);
+                DisplayDirection.Desc, pageSize, pageIndex);
         }
         public static async Task<dynamic> GetPostsByAuthor(string username, string culture, int? pageSize = 15, int? pageIndex = 0)
         {
@@ -27,7 +26,7 @@ namespace Mix.Theme.Blog
                 m => m.Status == MixContentStatus.Published
                 && m.CreatedBy == username,
                 "CreatedDateTime",
-                MixHeartEnums.DisplayDirection.Desc, pageSize, pageIndex);
+                DisplayDirection.Desc, pageSize, pageIndex);
         }
         public static async Task<dynamic> GetTagInfo(string keyword, string culture)
         {

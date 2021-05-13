@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
