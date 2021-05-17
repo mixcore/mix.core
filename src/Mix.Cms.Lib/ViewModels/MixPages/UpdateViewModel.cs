@@ -96,14 +96,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
-        [JsonProperty("createdDateTime")]
-        public DateTime CreatedDateTime { get; set; }
-
         [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
-
-        [JsonProperty("lastModified")]
-        public DateTime? LastModified { get; set; }
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
@@ -258,6 +252,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
+            this.View.SetMediator(this);
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
             // Load master views
