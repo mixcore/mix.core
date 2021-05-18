@@ -1,10 +1,10 @@
 ﻿using Mix.Cms.Lib.Enums;
-using Mix.Heart.Infrastructure.Interfaces;
+using Mix.Heart.Infrastructure.Entities;
 using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixTemplate : CachedEntity
+    public partial class MixTemplate : AuditedEntity
     {
         public int Id { get; set; }
         public string Content { get; set; }

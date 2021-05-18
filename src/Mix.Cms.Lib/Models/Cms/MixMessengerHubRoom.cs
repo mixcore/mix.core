@@ -1,10 +1,10 @@
-﻿using Mix.Heart.Infrastructure.Interfaces;
+﻿using Mix.Heart.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixMessengerHubRoom : CachedEntity
+    public partial class MixMessengerHubRoom : AuditedEntity
     {
         public MixMessengerHubRoom()
         {
