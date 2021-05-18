@@ -1,11 +1,11 @@
 ﻿using Mix.Cms.Lib.Enums;
-using Mix.Heart.Infrastructure.Interfaces;
+using Mix.Heart.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixPortalPage : CachedEntity
+    public partial class MixPortalPage : AuditedEntity
     {
         public MixPortalPage()
         {

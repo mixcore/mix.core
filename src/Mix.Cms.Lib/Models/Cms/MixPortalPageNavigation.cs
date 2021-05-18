@@ -1,10 +1,10 @@
 ﻿using Mix.Cms.Lib.Enums;
-using Mix.Heart.Infrastructure.Interfaces;
+using Mix.Heart.Infrastructure.Entities;
 using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixPortalPageNavigation : CachedEntity
+    public partial class MixPortalPageNavigation : AuditedEntity
     {
         public int Id { get; set; }
         public int PageId { get; set; }

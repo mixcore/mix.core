@@ -31,11 +31,13 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public RoleViewModel() : base()
         {
+            IsCache = false;
         }
 
         public RoleViewModel(AspNetRoles model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors
