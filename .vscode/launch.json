@@ -10,7 +10,7 @@
              "request": "launch",
              "preLaunchTask": "build",
              // If you have changed target frameworks, make sure to update the program path.
-             "program": "${workspaceFolder}/src/Mix.Cms.Web/bin/Debug/net5.0/Mix.Cms.Web.dll",
+             "program": "${workspaceFolder}/src/Mix.Cms.Web/bin/Debug/net5.0/Mixcore.dll",
              "args": [],
              "cwd": "${workspaceFolder}/src/Mix.Cms.Web",
              "stopAtEntry": false,

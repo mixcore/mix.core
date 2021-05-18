@@ -1,10 +1,11 @@
 ﻿using Mix.Cms.Lib.Enums;
+using Mix.Heart.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixPortalPage
+    public partial class MixPortalPage : AuditedEntity
     {
         public MixPortalPage()
         {
@@ -21,9 +22,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string TextDefault { get; set; }
         public int Level { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
         public MixContentStatus Status { get; set; }
 

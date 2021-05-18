@@ -39,10 +39,12 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public RefreshTokenViewModel() : base()
         {
+            IsCache = false;
         }
 
         public RefreshTokenViewModel(RefreshTokens model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors

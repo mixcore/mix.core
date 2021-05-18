@@ -1,10 +1,10 @@
 ﻿using Mix.Cms.Lib.Enums;
-using System;
+using Mix.Heart.Infrastructure.Entities;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixMedia
+    public partial class MixMedia: AuditedEntity
     {
         public MixMedia()
         {
@@ -25,9 +25,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Source { get; set; }
         public string TargetUrl { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime? LastModified { get; set; }
         public int Priority { get; set; }
         public MixContentStatus Status { get; set; }
 
