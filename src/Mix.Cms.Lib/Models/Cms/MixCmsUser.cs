@@ -1,9 +1,10 @@
 ﻿using Mix.Cms.Lib.Enums;
+using Mix.Heart.Infrastructure.Entities;
 using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCmsUser
+    public partial class MixCmsUser: AuditedEntity
     {
         public string Id { get; set; }
         public string Address { get; set; }
@@ -16,8 +17,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public string Email { get; set; }
         public string ModifiedBy { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime? LastModified { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public int Priority { get; set; }
         public MixUserStatus Status { get; set; }
     }

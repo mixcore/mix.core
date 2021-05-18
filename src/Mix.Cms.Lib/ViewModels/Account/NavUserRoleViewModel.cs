@@ -49,11 +49,13 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public NavUserRoleViewModel() : base()
         {
+            IsCache = false;
         }
 
         public NavUserRoleViewModel(AspNetUserRoles model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors
