@@ -463,10 +463,14 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
-                    {
+                    {                        
                         if (!context.MixDatabase.Any(m => m.Name == set.Name))
                         {
                             startId++;
+                            if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
+                            {
+                                dicMixDatabaseIds.Add(set.Id, startId);
+                            }
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
                             mixDatabaseColumns.AddRange(set.Fields
@@ -474,11 +478,7 @@ namespace Mix.Cms.Lib.ViewModels
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
-                        }
-                        if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
-                        {
-                            dicMixDatabaseIds.Add(set.Id, startId);
-                        }
+                        }                        
                     }
                     else
                     {
