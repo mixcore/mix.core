@@ -2,6 +2,7 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Heart.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -3,7 +3,7 @@ using Mix.Cms.Lib.MixDatabase.Repositories;
 using RepoDb.Interfaces;
 using RepoDb;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.Enums;
+using Mix.Heart.Enums;
 
 namespace Mix.Cms.Lib.MixDatabase.Extensions
 {
