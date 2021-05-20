@@ -36,21 +36,24 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
+            MixCacheDbContext cacheContext = null;
             try
             {
-                if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                if (!string.IsNullOrEmpty(cnn))
                 {
                     context = MixService.GetDbContext();
                     accountContext = MixService.GetAccountDbContext();
+                    cacheContext = new MixCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-
+                    await cacheContext.Database.MigrateAsync();
                     var countCulture = context.MixCulture.Count();
                     var pendingMigration = context.Database.GetPendingMigrations().Count();
                     if (pendingMigration == 0)
                     {
                         return await InitSiteData(siteName, culture);
-                    }
+                    }                    
                 }
                 return result;
             }

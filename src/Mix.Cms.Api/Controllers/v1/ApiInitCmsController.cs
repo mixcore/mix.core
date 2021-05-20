@@ -17,6 +17,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
+using Mix.Heart.Constants;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
@@ -260,6 +261,8 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider.ToString());
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
+            MixService.SetMixConfig<string>(WebConfiguration.MixCacheConnectionString, model.ConnectionString);
+            MixService.SetMixConfig<string>(WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
             MixService.SaveSettings();
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
 
