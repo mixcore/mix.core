@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
+using Mix.Heart.Enums;
 using Mix.Heart.Models;
 using Mix.Identity.Models;
 using Mix.Infrastructure.Repositories;
@@ -301,6 +302,7 @@ namespace Mix.Cms.Lib.Services
                     jsonSettings["Authentication"] = instance.Authentication;
                     jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
                     jsonSettings["Smtp"] = instance.Smtp;
+                    jsonSettings["MixConfigurations"] = instance.MixConfigurations;
                     settings.Content = jsonSettings.ToString();
                     return MixFileRepository.Instance.SaveFile(settings);
                 }

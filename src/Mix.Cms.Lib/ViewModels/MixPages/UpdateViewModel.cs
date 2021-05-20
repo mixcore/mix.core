@@ -92,7 +92,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
+        
+        [JsonProperty("createdDateTime")]
+        public DateTime CreatedDateTime { get; set; }
 
+        [JsonProperty("lastModified")]
+        public DateTime? LastModified { get; set; }
+        
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
