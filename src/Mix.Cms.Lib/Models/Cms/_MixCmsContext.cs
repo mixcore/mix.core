@@ -1,8 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
+using Mix.Heart.Enums;
 using MySqlConnector;
 
 namespace Mix.Cms.Lib.Models.Cms
@@ -14,7 +14,6 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixDatabaseData> MixDatabaseData { get; set; }
         public virtual DbSet<MixDatabaseDataAssociation> MixDatabaseDataAssociation { get; set; }
         public virtual DbSet<MixDatabaseDataValue> MixDatabaseDataValue { get; set; }
-        public virtual DbSet<MixCache> MixCache { get; set; }
         public virtual DbSet<MixCmsUser> MixCmsUser { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
         public virtual DbSet<MixCulture> MixCulture { get; set; }

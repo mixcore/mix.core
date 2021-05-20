@@ -40,7 +40,7 @@ namespace Mix.Rest.Api.Client.v1
             }
         }
         [HttpGet("search")]
-        public async Task<ActionResult<PaginationModel<JObject>>> Search()
+        public ActionResult<PaginationModel<JObject>> Search()
         {
             var getData = MixDatabaseHelper.GetListData<JObject>(Request, _lang);
             return Ok(getData);

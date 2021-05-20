@@ -1,4 +1,5 @@
 ﻿using Mix.Cms.Lib.Enums;
+using Mix.Heart.Enums;
 using Newtonsoft.Json;
 
 namespace Mix.Cms.Lib.ViewModels.MixInit
