@@ -912,7 +912,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         wsDt.Cells["A1"].LoadFromDataTable(dtable, true, TableStyles.None);
                         wsDt.Cells[wsDt.Dimension.Address].AutoFitColumns();
 
-                        CommonHelper.SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
+                        MixCommonHelper.SaveFileBytes(folderPath, filenameE, pck.GetAsByteArray());
                         result.IsSucceed = true;
 
                         return result;

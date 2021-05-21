@@ -101,7 +101,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
 
             string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
+            var result = MixCommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
 
             if (result.IsSucceed)
             {
