@@ -67,11 +67,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 ApiEncryptKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
                 IsEncryptApi = MixService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = CommonHelper.ParseEnumToObject(typeof(MixPageType)),
-                ModuleTypes = CommonHelper.ParseEnumToObject(typeof(MixModuleType)),
-                MixDatabaseTypes = CommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
-                DataTypes = CommonHelper.ParseEnumToObject(typeof(MixDataType)),
-                Statuses = CommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
+                PageTypes = MixCommonHelper.ParseEnumToObject(typeof(MixPageType)),
+                ModuleTypes = MixCommonHelper.ParseEnumToObject(typeof(MixModuleType)),
+                MixDatabaseTypes = MixCommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                DataTypes = MixCommonHelper.ParseEnumToObject(typeof(MixDataType)),
+                Statuses = MixCommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {

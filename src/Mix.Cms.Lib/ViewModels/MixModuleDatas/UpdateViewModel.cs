@@ -153,7 +153,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
+                result.Add(new JProperty(MixCommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result.ToString(Formatting.None);
         }
@@ -166,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
+                result.Add(new JProperty(MixCommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result;
         }

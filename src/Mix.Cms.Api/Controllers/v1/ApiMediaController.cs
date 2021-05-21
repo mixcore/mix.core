@@ -176,7 +176,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             if (file?.Length > 0)
             {
-                string fileName = await CommonHelper.UploadFileAsync(folderPath, file).ConfigureAwait(false);
+                string fileName = await MixCommonHelper.UploadFileAsync(folderPath, file).ConfigureAwait(false);
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     string filePath = string.Format("{0}/{1}", folderPath, fileName);
