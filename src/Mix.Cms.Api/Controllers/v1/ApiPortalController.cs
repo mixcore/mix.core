@@ -231,7 +231,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("app-settings/save")]
-        public RepositoryResponse<JObject> SaveAppSettings([FromBody] JObject model)
+        public async Task<RepositoryResponse<JObject>> SaveAppSettingsAsync([FromBody] JObject model)
         {
             var settings = MixFileRepository.Instance.GetFile("appsettings", MixFileExtensions.Json, string.Empty, true, "{}");
             if (model != null)
@@ -242,7 +242,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     MixService.Reload();
                     if (!MixService.GetMixConfig<bool>("IsCache"))
                     {
-                        Services.MixCacheService.RemoveCacheAsync();
+                        await Services.MixCacheService.RemoveCacheAsync();
                     }
                 }
                 MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);

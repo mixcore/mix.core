@@ -83,7 +83,7 @@ namespace Mix.Cms.Lib.Repositories
 
             if (File.Exists(fullPath))
             {
-                CommonHelper.RemoveFile(fullPath);
+                MixCommonHelper.RemoveFile(fullPath);
             }
 
             return true;

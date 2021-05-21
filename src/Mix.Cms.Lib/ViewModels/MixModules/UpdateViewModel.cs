@@ -307,7 +307,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 ModuleFieldViewModel thisField = new ModuleFieldViewModel()
                 {
-                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
+                    Name = MixCommonHelper.ParseJsonPropertyName(field["name"].ToString()),
                     Title = field["title"]?.ToString(),
                     Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
                     Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,

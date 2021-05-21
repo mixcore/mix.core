@@ -310,22 +310,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (ThumbnailFileStream != null)
             {
                 string folder = MixCmsHelper.GetUploadFolder(Specificulture);
-                string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
-                bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
+                string filename = MixCommonHelper.GetRandomName(ThumbnailFileStream.Name);
+                bool saveThumbnail = MixCommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
                 if (saveThumbnail)
                 {
-                    CommonHelper.RemoveFile(Thumbnail);
+                    MixCommonHelper.RemoveFile(Thumbnail);
                     Thumbnail = $"{folder}/{filename}";
                 }
             }
             if (ImageFileStream != null)
             {
                 string folder = MixCmsHelper.GetUploadFolder(Specificulture);
-                string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
-                bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
+                string filename = MixCommonHelper.GetRandomName(ImageFileStream.Name);
+                bool saveImage = MixCommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
                 if (saveImage)
                 {
-                    CommonHelper.RemoveFile(Image);
+                    MixCommonHelper.RemoveFile(Image);
                     Image = $"{folder}/{filename}";
                 }
             }
