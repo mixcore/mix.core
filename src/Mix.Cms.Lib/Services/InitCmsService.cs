@@ -6,9 +6,11 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
+using Mix.Heart.Infrastructure;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -44,7 +46,7 @@ namespace Mix.Cms.Lib.Services
                 {
                     context = MixService.GetDbContext();
                     accountContext = MixService.GetAccountDbContext();
-                    cacheContext = new MixCacheDbContext();
+                    cacheContext = MixCacheService.GetCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     await cacheContext.Database.MigrateAsync();

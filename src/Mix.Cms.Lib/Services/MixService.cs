@@ -112,7 +112,7 @@ namespace Mix.Cms.Lib.Services
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
             instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
-            CommonHelper.WebConfigInstance = jsonSettings;
+            MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
         private void LoadDefaultConfiggurations()
@@ -324,6 +324,7 @@ namespace Mix.Cms.Lib.Services
         public static void Reload()
         {
             Instance.LoadConfiggurations();
+            MixCommonHelper.ReloadWebConfig();
         }
 
         public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
