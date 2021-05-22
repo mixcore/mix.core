@@ -264,6 +264,7 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetMixConfig<string>(WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             MixService.SetMixConfig<string>(WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
             MixService.SaveSettings();
+            MixService.Reload();
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
 
             if (result.IsSucceed)
