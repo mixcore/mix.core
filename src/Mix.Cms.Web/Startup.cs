@@ -184,6 +184,10 @@ namespace Mix.Cms.Web
                     transaction.Commit();
                     transaction.Dispose();
                 }
+                using (var cacheCtx = MixCacheService.GetCacheDbContext())
+                {
+                    cacheCtx.Database.Migrate();
+                }
             }
 
             // Mix: Check if require ssl
