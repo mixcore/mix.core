@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,18 +11,19 @@ using Microsoft.Extensions.Hosting;
 using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
+using Mix.Cms.Lib.MixDatabase.Extensions;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
 using Mix.Cms.Schedule;
-using Mix.Cms.Service.SignalR;
+using Mix.Infrastructure.Repositories;
+using Mix.Rest.Api.Client;
 using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Cms.Web
 {
@@ -50,6 +53,8 @@ namespace Mix.Cms.Web
                                   });
             });
 
+            services.AddResponseCompression();
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
@@ -58,7 +63,16 @@ namespace Mix.Cms.Web
                 });
 
             #region Additionals Config for Mixcore Cms
-
+            services.AddHttpClient();
+            services.Configure<FormOptions>(x =>
+            {
+                x.ValueLengthLimit = int.MaxValue;
+                x.MultipartBodyLengthLimit = int.MaxValue; // In case of multipart
+            });
+            services.AddSingleton<HttpService>();
+            services.Configure<GzipCompressionProviderOptions>(
+                options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
+            services.AddResponseCompression(options => options.EnableForHttps = true);
             /* Additional Config for Mixcore Cms  */
 
             /* Mix: Add db contexts */
@@ -69,16 +83,20 @@ namespace Mix.Cms.Web
 
             /* Mix: Inject Services */
             services.AddControllers(mvcOptions => mvcOptions.EnableEndpointRouting = false);
+            services.AddRepositories();
+            services.AddRestClientServices();
             services.AddGenerateApis();
             services.AddMixRestApi();
+            services.AddMixDbRepository();
             services.AddMixSignalR();
             //services.AddMixGprc();
             services.AddMixScheduler(Configuration);
+
+            services.AddSingleton<MixCacheService>();
+            services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
+            services.AddScoped<MixIdentityService>();
             /* Mix: End Inject Services */
-
             VerifyInitData(services);
-
-            services.AddMixAuthorize(Configuration);
             /* End Additional Config for Mixcore Cms  */
 
             #endregion Additionals Config for Mixcore Cms
@@ -93,11 +111,10 @@ namespace Mix.Cms.Web
             }
             else
             {
-                app.UseExceptionHandler("/404");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 var context = MixService.GetDbContext();
                 var pendingMigration = context.Database.GetPendingMigrations();
@@ -106,12 +123,15 @@ namespace Mix.Cms.Web
                     context.Database.Migrate();
                 }
             }
+
+            app.UseResponseCompression();
+
             app.UseCors(MixcoreAllowSpecificOrigins);
 
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
+            app.UseDefaultFiles();
             provider.Mappings[".vue"] = "application/text";
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider
@@ -146,7 +166,7 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 using (var ctx = MixService.GetDbContext())
                 {
@@ -163,6 +183,10 @@ namespace Mix.Cms.Web
                     }
                     transaction.Commit();
                     transaction.Dispose();
+                }
+                using (var cacheCtx = MixCacheService.GetCacheDbContext())
+                {
+                    cacheCtx.Database.Migrate();
                 }
             }
 

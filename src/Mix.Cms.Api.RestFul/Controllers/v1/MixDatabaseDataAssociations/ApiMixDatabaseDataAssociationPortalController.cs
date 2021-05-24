@@ -7,7 +7,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -19,6 +21,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabaseDataAssociationPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseDataAssociation, FormViewModel, FormViewModel, DeleteViewModel>
     {
+        public ApiMixDatabaseDataAssociationPortalController(
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, DeleteViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         // GET: api/v1/rest/{culture}/mix-database-data-association
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()

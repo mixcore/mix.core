@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Services;
+using Mix.Infrastructure.Repositories;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -19,7 +21,7 @@ namespace Mix.Cms.Web.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (MixService.GetConfig<bool>("IsInit"))
+            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -87,9 +89,7 @@ namespace Mix.Cms.Web.Controllers
                         HandleSeoName(ref seoName, ref keyword);
                     }
                 }
-                ViewData["Layout"] = "Masters/_Layout";
-                ViewData["keyword"] = keyword;
-                return await AliasAsync(seoName);
+                return await AliasAsync(seoName, keyword);
             }
             else
             {
@@ -97,37 +97,57 @@ namespace Mix.Cms.Web.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("search")]
+        [Route("{culture}/search")]
+        public async Task<IActionResult> Search([FromBody] string keyword)
+        {
+            return await Page("search", keyword);
+        }
+
         private void HandleSeoName(ref string seoName, ref string keyword)
         {
-            // Check url is end with '/' or '?'
-            // Ex: en-us/page-name/ => seoName = en-us/page-name
-            string regex = @"(.*)[(\/|\?|#)]$";
-            System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
-            Match m = r.Match(seoName);
-            if (m.Success)
+            using (var ctx = new MixCmsContext())
             {
-                seoName = m.Groups[1].Value;
-            }
-
-            // Check first group is culture
-            // Ex: en-us/page-name => culture = en-us , seoName = page-name
-            regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
-            r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
-            m = r.Match(seoName);
-            if (m.Success)
-            {
-                if (MixService.Instance.CheckValidCulture(m.Groups[1].Value))
+                string temp = $"{seoName}/{keyword}";
+                if (ctx.MixUrlAlias.Any(u => u.Alias == temp))
                 {
-                    culture = m.Groups[1].Value;
-                    seoName = m.Groups[5].Value;
+                    seoName = temp;
+                    keyword = string.Empty;
                 }
-            }
+                else
+                {
+                    // Check url is end with '/' or '?'
+                    // Ex: en-us/page-name/ => seoName = en-us/page-name
+                    string regex = @"(.*)[(\/|\?|#)]$";
+                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
+                    Match m = r.Match(seoName);
+                    if (m.Success)
+                    {
+                        seoName = m.Groups[1].Value;
+                    }
 
-            if (MixService.Instance.CheckValidCulture(seoName))
-            {
-                culture = seoName;
-                seoName = keyword;
-                keyword = string.Empty;
+                    // Check first group is culture
+                    // Ex: en-us/page-name => culture = en-us , seoName = page-name
+                    regex = @"^([A-Za-z]{1,8}|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})|[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})(-[A-Za-z0-9]{1,8}))\/(.*)$";
+                    r = new System.Text.RegularExpressions.Regex(regex, RegexOptions.IgnoreCase);
+                    m = r.Match(seoName);
+                    if (m.Success)
+                    {
+                        if (MixService.Instance.CheckValidCulture(m.Groups[1].Value))
+                        {
+                            culture = m.Groups[1].Value;
+                            seoName = m.Groups[5].Value;
+                        }
+                    }
+
+                    if (MixService.Instance.CheckValidCulture(seoName))
+                    {
+                        culture = seoName;
+                        seoName = keyword;
+                        keyword = string.Empty;
+                    }
+                }
             }
         }
 

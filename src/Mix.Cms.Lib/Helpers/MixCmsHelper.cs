@@ -7,12 +7,11 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
-using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,6 +21,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.Helpers
 {
@@ -176,7 +176,7 @@ namespace Mix.Cms.Lib.Helpers
         public static System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture, IUrlHelper url = null)
         {
             var cacheKey = $"vm_{culture}_module_{name}_mvc";
-            var module = new Domain.Core.ViewModels.RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
+            var module = new RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
 
             // If not cached yet => load from db
             if (module == null || !module.IsSucceed)
@@ -225,7 +225,7 @@ namespace Mix.Cms.Lib.Helpers
             return getData.Data;
         }
 
-        public static async System.Threading.Tasks.Task<MixNavigation> GetNavigation(
+        public static async Task<MixNavigation> GetNavigationAsync(
             string name, string culture, IUrlHelper Url)
         {
             var navs = await ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<ViewModels.MixDatabaseDatas.NavigationViewModel>(
@@ -261,10 +261,46 @@ namespace Mix.Cms.Lib.Helpers
             return nav;
         }
 
+        public static MixNavigation GetNavigation(
+            string name, string culture, IUrlHelper Url)
+        {
+            var navs = ViewModels.MixDatabaseDatas.Helper.FilterByKeyword<ViewModels.MixDatabaseDatas.NavigationViewModel>(
+                culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+            var nav = navs.Data?.FirstOrDefault()?.Nav;
+            string activePath = Url.ActionContext.HttpContext.Request.Path;
+
+            if (nav != null)
+            {
+                foreach (var cate in nav.MenuItems)
+                {
+                    cate.IsActive = cate.Uri == activePath;
+                    if (cate.IsActive)
+                    {
+                        nav.ActivedMenuItem = cate;
+                        nav.ActivedMenuItems.Add(cate);
+                    }
+
+                    foreach (var item in cate.MenuItems)
+                    {
+                        item.IsActive = item.Uri == activePath;
+                        if (item.IsActive)
+                        {
+                            nav.ActivedMenuItem = item;
+                            nav.ActivedMenuItems.Add(cate);
+                            nav.ActivedMenuItems.Add(item);
+                        }
+                        cate.IsActive = cate.IsActive || item.IsActive;
+                    }
+                }
+            }
+
+            return nav;
+        }
+
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAdditionalField<TView>(
             string fieldName, object fieldValue, string culture, MixDataType dataType
             , MixCompareOperatorKind filterType = MixCompareOperatorKind.Equal
-            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = Heart.Enums.MixHeartEnums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
+            , string orderByPropertyName = null, Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
@@ -455,27 +491,30 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
-            , string orderByPropertyName = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , int? pageSize = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            keyword ??= context.Request.Query["keyword"];
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
-            int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
-            pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
-            page = (page > 0) ? page : 1;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
+            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            keyword ??= context.Request.Query["Keyword"];
+
+            PagingRequest pagingRequest = new PagingRequest(context.Request);
+            if (pageSize.HasValue)
+            {
+                pagingRequest.PageSize = pageSize.Value;
+            }
+            return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
-                culture, orderByPropertyName, direction, pageSize, page - 1, _context, _transaction);
+                MixDatabaseNames.ADDITIONAL_FIELD_POST,
+                pagingRequest,
+                culture, _context, _transaction);
         }
 
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(
 
             string fieldName, string value, string culture
-            , string orderByPropertyName = null, Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Asc
+            , string orderByPropertyName = null, DisplayDirection direction = DisplayDirection.Asc
             , int? pageSize = null, int? pageIndex = 0
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -493,7 +532,7 @@ namespace Mix.Cms.Lib.Helpers
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
             string culture, string mixDatabaseName,
             string parentId, MixDatabaseParentType parentType,
-            string orderBy = "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc,
+            string orderBy = "CreatedDateTime", DisplayDirection direction = DisplayDirection.Desc,
             int? pageSize = null, int? pageIndex = 0,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
@@ -509,7 +548,7 @@ namespace Mix.Cms.Lib.Helpers
             , string keyword = null
             , string culture = null
             , string orderBy = "CreatedDateTime"
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null
             )
         {
@@ -527,7 +566,7 @@ namespace Mix.Cms.Lib.Helpers
             HttpContext context
             , string mixDatabaseName
             , string culture = null
-            , Heart.Enums.MixHeartEnums.DisplayDirection direction = MixHeartEnums.DisplayDirection.Desc
+            , Heart.Enums.DisplayDirection direction = DisplayDirection.Desc
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null
             )
         {

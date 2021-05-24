@@ -4,8 +4,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
         public string DataId { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         /*
          * Parent Id: PostId / PageId / Module Id / Data Id / Attr Set Id
@@ -115,6 +115,19 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == MixDatabaseId)?.Name;
         }
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = MixDatabaseId > 0 && !string.IsNullOrEmpty(MixDatabaseName);
+                if (!IsValid)
+                {
+                    Errors.Add("Invalid Mix Database");
+                }
+            }
+        }
+
         public override async Task<RepositoryResponse<FormViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<FormViewModel>() { IsSucceed = true };
@@ -134,10 +147,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
                     {
                         DataId = saveData.Data.Id;
                     }
-                }
-                else
-                {
-                    DataId = AttributeData.Id;
                 }
                 if (result.IsSucceed)
                 {

@@ -1,6 +1,6 @@
-﻿using Mix.Identity.Models;
+﻿using Mix.Heart.Models;
+using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -33,8 +33,6 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public ChangePasswordViewModel ChangePassword { get; set; }
 
         #endregion Change Password
-
-
 
         public MixUserViewModel(ApplicationUser user)
         {

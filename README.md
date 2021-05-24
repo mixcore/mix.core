@@ -2,14 +2,13 @@
 
 [![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) 
 
-## Fully Open Source UI Tools to create multi-purpose Web Apps, Mobile Apps & Application Services
+## Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
 
-### CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular.JS and Bootstrap.
-
-![Mixcore CMS](https://github.com/mixcore/mix.core/blob/master/assets/mixcore.png?raw=true "What is Mixcore CMS?")
+### CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular / Bootstrap / React / Vue / Svelte.
  
 |Services  |Result  |Services  |Result  |
 |---------|---------|---------|---------|
+|Github workflow     |[![Build Status](https://github.com/mixcore/mix.core/actions/workflows/build-check.yml/badge.svg)](https://github.com/mixcore/mix.core/actions/workflows/build-check.yml)|
 |Travis CI     |[![Build Status](https://travis-ci.org/mixcore/mix.core.svg?branch=master)](https://travis-ci.org/mixcore/mix.core)|AppVeyor CI     |[![Build status](https://ci.appveyor.com/api/projects/status/8o02frivdxa0dgpl/branch/master?svg=true)](https://ci.appveyor.com/project/Smilefounder/mix-core/branch/master)          |
 Gitter     |[![Join the chat at https://gitter.im/mix-core/Lobby](https://badges.gitter.im/mix-core/Lobby.svg)](https://gitter.im/mix-core/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)|Licenses status     |[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core?ref=badge_shield)         |
 Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixcore/mix.core/badge)](https://www.codefactor.io/repository/github/mixcore/mix.core)         |Azure|[![Build Status](https://dev.azure.com/mixcore/mix.core/_apis/build/status/mixcore.mix.core?branchName=master)](https://dev.azure.com/mixcore/mix.core/_build/latest?definitionId=1&branchName=master)|
@@ -20,7 +19,7 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |https://demo.mixcore.org or https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd)  Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
+|STAG / Demo     |https://demo.mixcore.org or https://dev.mixcore.org or https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd)  Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Community     |https://community.mixcore.org|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
@@ -107,26 +106,21 @@ gulp build
 - [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
 
 ## UI Screenshots 
-### Default Theme: 
-
-> [Shards UI Kit](https://designrevision.com/demo/shards/) Shards is a modern design system based on Bootstrap 4 that comes packed with **10 extra custom components** and **two pre-built landing pages**. It’s also lightweight with its stylesheet weighting only **~13kb minified and gzipped**.
-
-![Mixcore CMS default template with Shards UI Kit](https://docs.mixcore.org/img/basic-usage/first-step.png "Mixcore CMS default template with Shards UI Kit")
 
 ### Admin Portal
 
-> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 4. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 4 project.
+> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 4. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
 
-![Mixcore Admin Portal Bootstrap 4.x](https://docs.mixcore.org/img/screencapture-stag-mixcore-org-portal-2019-08-04-16_04_15.jpg "Mixcore CMS Admin Portal Bootstrap 4")
+(New Portal in Angular / Svelte will be coming soon)
+
+![Mixcore Admin Portal Bootstrap 5.x](https://docs.mixcore.org/img/screencapture-stag-mixcore-org-portal-2019-08-04-16_04_15.jpg "Mixcore CMS Admin Portal Bootstrap 5")
 
 ## Thanks to
 
 > This project has been developed using:
-* [Creative Tim](https://www.creative-tim.com/)
+* [.NET](https://www.microsoft.com/net/core)
 * [Bootstrap](https://getbootstrap.com/)
 * [BrowserStack](https://www.browserstack.com/)
-* [Micon](http://xtoolkit.github.io/Micon/icons/)
-* [.NET](https://www.microsoft.com/net/core)
 * [Designed by Freepik](https://www.freepik.com)
 * And more...
 

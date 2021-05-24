@@ -2,8 +2,8 @@
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using System;
 
@@ -84,8 +84,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
         #region Views
 
-        [JsonProperty("field")]
-        public MixDatabaseColumns.ReadViewModel Field { get; set; }
+        [JsonProperty("columns")]
+        public MixDatabaseColumns.ReadViewModel Column { get; set; }
 
         #endregion Views
 

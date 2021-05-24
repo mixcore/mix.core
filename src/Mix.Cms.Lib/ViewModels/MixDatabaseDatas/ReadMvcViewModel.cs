@@ -6,7 +6,8 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -28,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("mixDatabaseId")]
         public int MixDatabaseId { get; set; }
@@ -112,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 Obj = Helper.ParseData(Id, Specificulture, context, transaction);
             }
 
-            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, context, transaction);
+            Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, null, context, transaction);
 
             if (isRoot)
             {

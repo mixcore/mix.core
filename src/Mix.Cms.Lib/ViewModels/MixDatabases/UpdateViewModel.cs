@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Heart.Models;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabases
 {
@@ -39,17 +39,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("formTemplate")]
         public string FormTemplate { get; set; }
 
-        [JsonProperty("edmTemplate")]
-        public string EdmTemplate { get; set; }
+        //[JsonProperty("edmTemplate")]
+        //public string EdmTemplate { get; set; }
 
-        [JsonProperty("edmSubject")]
-        public string EdmSubject { get; set; }
+        //[JsonProperty("edmSubject")]
+        //public string EdmSubject { get; set; }
 
-        [JsonProperty("edmFrom")]
-        public string EdmFrom { get; set; }
+        //[JsonProperty("edmFrom")]
+        //public string EdmFrom { get; set; }
 
-        [JsonProperty("edmAutoSend")]
-        public bool? EdmAutoSend { get; set; }
+        //[JsonProperty("edmAutoSend")]
+        //public bool? EdmAutoSend { get; set; }
 
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
@@ -76,14 +76,14 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
-        [JsonProperty("fields")]
-        public List<MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
-        [JsonProperty("formView")]
-        public MixTemplates.UpdateViewModel FormView { get; set; }
+        //[JsonProperty("formView")]
+        //public MixTemplates.UpdateViewModel FormView { get; set; }
 
-        [JsonProperty("edmView")]
-        public MixTemplates.UpdateViewModel EdmView { get; set; }
+        //[JsonProperty("edmView")]
+        //public MixTemplates.UpdateViewModel EdmView { get; set; }
 
         #endregion Views
 
@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         {
             if (Id > 0)
             {
-                Fields ??= MixDatabaseColumns.UpdateViewModel
+                Columns ??= MixDatabaseColumns.UpdateViewModel
                 .Repository.GetModelListBy(a => a.MixDatabaseId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixDatabaseColumns.UpdateViewModel>();
                 //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
@@ -115,7 +115,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             }
             else
             {
-                Fields = new List<MixDatabaseColumns.UpdateViewModel>();
+                Columns = new List<MixDatabaseColumns.UpdateViewModel>();
             }
         }
 
@@ -126,8 +126,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
-            EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
+            //FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
+            //EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
             return base.ParseModel(_context, _transaction);
         }
 
@@ -149,7 +149,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {
@@ -172,7 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {
@@ -189,29 +189,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             }
             return result;
         }
-
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    var attrDatas = context.MixDatabaseData.Where(m => m.MixDatabaseId == Id);
-        //    var attrFields = context.MixDatabaseColumn.Where(m => m.MixDatabaseId == Id);
-
-        //    foreach (var item in attrDatas)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixDatabaseDatas.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    foreach (var item in attrFields)
-        //    {
-        //        tasks.Add(Task.Run(() =>
-        //        {
-        //            MixDatabaseColumns.UpdateViewModel.Repository.RemoveCache(item, context, transaction);
-        //        }));
-        //    }
-        //    return tasks;
-        //}
 
         #endregion Overrides
     }

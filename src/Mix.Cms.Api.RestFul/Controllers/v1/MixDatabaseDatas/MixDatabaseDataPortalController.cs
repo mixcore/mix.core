@@ -10,7 +10,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class MixDatabaseDataPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseData, FormViewModel, FormViewModel, DeleteViewModel>
     {
-        // GET: api/v1/rest/{culture}/mix-database-data
+        public MixDatabaseDataPortalController(
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo, 
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<FormViewModel>>> Get()
         {
@@ -37,7 +46,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data/additional-data
         [HttpGet("additional-data")]
         public async Task<ActionResult<PaginationModel<AdditionalViewModel>>> GetAdditionalData()
         {
@@ -62,11 +70,12 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     AdditionalViewModel result = new AdditionalViewModel()
                     {
+                        Id = Guid.NewGuid().ToString(),
                         Specificulture = _lang,
                         MixDatabaseId = getAttrSet.Data.Id,
                         MixDatabaseName = getAttrSet.Data.Name,
                         Status = MixContentStatus.Published,
-                        Fields = getAttrSet.Data.Fields,
+                        Columns = getAttrSet.Data.Columns,
                         ParentType = parentType
                     };
                     result.ExpandView();
@@ -76,9 +85,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // PUT: api/s/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-additional-data")]
         public async Task<IActionResult> SaveAdditionalData([FromBody] AdditionalViewModel data)
         {
@@ -111,7 +117,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET: api/v1/rest/{culture}/mix-database-data
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
@@ -125,7 +130,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     MixDatabaseId = getAttrSet.Data.Id,
                     MixDatabaseName = getAttrSet.Data.Name,
                     Status = MixContentStatus.Published,
-                    Fields = getAttrSet.Data.Fields
+                    Columns = getAttrSet.Data.Columns
                 };
                 result.ExpandView();
                 return Ok(result);
@@ -136,7 +141,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // GET api/mix-database-data
         [HttpGet("export")]
         public async Task<ActionResult> Export()
         {
@@ -160,7 +164,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        // POST api/mix-database-data
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [Route("import-data/{mixDatabaseName}")]
@@ -179,7 +182,6 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return new RepositoryResponse<ImportViewModel>() { Status = 501 };
         }
 
-        // DELETE: api/v1/rest/en-us/mix-database/portal/5
         [HttpDelete("{id}")]
         public override async Task<ActionResult<MixDatabaseData>> Delete(string id)
         {
@@ -192,6 +194,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(result.Errors);
             }
+
+        }
+
+        [HttpGet("migrate-data/{databaseId}")]
+        public async Task<ActionResult> MigrateData(int databaseId)
+        {
+            var result = await Helper.MigrateData(databaseId);
+            return result ? Ok() : BadRequest();
         }
     }
 }

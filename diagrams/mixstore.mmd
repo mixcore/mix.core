@@ -1,0 +1,22 @@
+stateDiagram-v2
+    [*] --> MixcoreCms
+    MixcoreCms --> Init
+    Init --> InstallTheme
+    MixcoreCms --> MixPortal
+    MixPortal --> MixPage
+    MixPortal --> MixPost
+    MixPortal --> MixModule
+    MixPortal --> MixDatabase
+    MixDatabase --> MixNavigation
+    MixDatabase --> MixCategory
+    MixDatabase --> MixTag
+    MixPortal --> MixTheme
+    MixTheme --> InstallTheme
+    InstallTheme --> MixStore
+    MixStore --> Checkout: select theme
+    Checkout --> Install: free theme
+    Checkout --> Paypal: not free theme
+    Paypal --> Install: checkout completed
+    Install --> Success: no error during install
+    Install --> Error: error during install
+    Error --> Refund

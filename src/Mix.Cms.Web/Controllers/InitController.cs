@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Web.Controllers
@@ -11,7 +12,7 @@ namespace Mix.Cms.Web.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!MixService.GetConfig<bool>("IsInit"))
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 return Redirect("/");
             }

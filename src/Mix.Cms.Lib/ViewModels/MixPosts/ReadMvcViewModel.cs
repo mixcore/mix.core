@@ -5,7 +5,8 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Interfaces;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -28,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -160,9 +161,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
-        //[JsonProperty("properties")]
-        //public List<ExtraProperty> Properties { get; set; }
-
         [JsonProperty("mediaNavs")]
         public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
 
@@ -185,10 +183,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }

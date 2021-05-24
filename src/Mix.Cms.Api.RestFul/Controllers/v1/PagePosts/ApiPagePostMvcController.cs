@@ -8,7 +8,8 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPagePosts;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,7 +21,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPagePostMvcController :
         BaseRestApiController<MixCmsContext, MixPagePost, ReadMvcViewModel>
     {
-        
+        public ApiPagePostMvcController(DefaultRepository<MixCmsContext, MixPagePost, ReadMvcViewModel> repo) 
+            : base(repo)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {

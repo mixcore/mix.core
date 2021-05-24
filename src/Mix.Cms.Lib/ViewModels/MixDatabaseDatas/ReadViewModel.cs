@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("mixDatabaseId")]
         public int MixDatabaseId { get; set; }
@@ -56,8 +57,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         [JsonProperty("values")]
         public List<MixDatabaseDataValues.ReadViewModel> Values { get; set; }
 
-        [JsonProperty("fields")]
-        public List<MixDatabaseColumns.ReadViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.ReadViewModel> Columns { get; set; }
 
         #endregion Views
 
@@ -90,8 +91,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 Console.WriteLine(getValues.Exception);
             }
 
-            Fields = MixDatabaseColumns.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId, _context, _transaction).Data;
-            foreach (var field in Fields.OrderBy(f => f.Priority))
+            Columns = MixDatabaseColumns.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId, _context, _transaction).Data;
+            foreach (var field in Columns.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
                 if (val == null)
@@ -100,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         new MixDatabaseDataValue() { MixDatabaseColumnId = field.Id }
                         , _context, _transaction)
                     {
-                        Field = field,
+                        Column = field,
                         MixDatabaseColumnName = field.Name,
                         StringValue = field.DefaultValue,
                         Priority = field.Priority
@@ -109,7 +110,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 val.MixDatabaseName = MixDatabaseName;
                 val.Priority = field.Priority;
-                val.Field = field;
+                val.Column = field;
             };
         }
 

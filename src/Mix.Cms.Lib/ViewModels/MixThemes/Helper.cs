@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Services;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixThemes
@@ -81,10 +86,11 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string userName, string culture, IFormFile assets, IFormFile theme)
         {
             var json = JObject.Parse(model);
-            var data = json.ToObject<Lib.ViewModels.MixThemes.InitViewModel>();
+            var data = json.ToObject<InitViewModel>();
             if (data != null)
             {
                 data.CreatedBy = userName;
+                data.Status = MixContentStatus.Published;
                 string importFolder = $"{MixFolders.ImportFolder}/" +
                     $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
                 if (theme != null)
@@ -123,7 +129,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
                     MixService.LoadFromDatabase();
                     MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig("IsInit", false);
+                    MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
                     MixService.SaveSettings();
                     _ = Mix.Services.MixCacheService.RemoveCacheAsync();
                     MixService.Reload();
@@ -131,6 +137,96 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 return result;
             }
             return new RepositoryResponse<InitViewModel>();
+        }
+
+        public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<int> progress, HttpService httpService)
+        {
+            string name = theme.Value<string>("title");
+            var newtheme = new UpdateViewModel()
+            {
+                Title = name,
+                CreatedBy = createdBy,
+                Specificulture = culture,
+                Status = MixContentStatus.Published,
+                TemplateAsset = new FileViewModel()
+                {
+                    Filename = name,
+                    Extension = MixFileExtensions.Zip,
+                    FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{name}"
+                }
+            };
+
+            var cancellationToken = new CancellationToken();
+
+            await httpService.DownloadAsync(
+                theme.Value<string>("source"),
+                newtheme.TemplateAsset.FileFolder,
+                newtheme.TemplateAsset.Filename, MixFileExtensions.Zip,
+                progress, cancellationToken);
+            return await newtheme.SaveModelAsync(true);
+        }
+
+        public static async Task<RepositoryResponse<bool>> ActivedThemeAsync(
+            int themeId,
+            string themeName,
+            string culture,
+            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var result = new RepositoryResponse<bool>() { IsSucceed = true };
+                var saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeName, themeName, culture, context, transaction);
+                if (saveResult.IsSucceed)
+                {
+                    saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeFolder, themeName, culture, context, transaction);
+                }
+
+                ViewModelHelper.HandleResult(saveResult, ref result);
+
+                if (result.IsSucceed)
+                {
+                    saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeId, themeId.ToString(), culture, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    context.Dispose();
+                }
+            }
+        }
+
+        private static async Task<RepositoryResponse<MixConfigurations.UpdateViewModel>> SaveNewConfigAsync(string keyword, string value, string culture, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            MixConfigurations.UpdateViewModel config = (await MixConfigurations.UpdateViewModel.Repository.GetSingleModelAsync(
+                           c => c.Keyword == keyword && c.Specificulture == culture
+                           , context, transaction)).Data;
+            if (config == null)
+            {
+                config = new MixConfigurations.UpdateViewModel()
+                {
+                    Keyword = keyword,
+                    Specificulture = culture,
+                    Category = "Site",
+                    DataType = MixDataType.Text,
+                    Description = "Cms Theme",
+                    Value = value
+                };
+            }
+            else
+            {
+                config.Property.Value = value;
+            }
+            return await config.SaveModelAsync(false, context, transaction);
         }
     }
 }

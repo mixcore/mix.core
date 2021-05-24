@@ -2,20 +2,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
 using Mix.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -23,6 +27,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -39,6 +45,22 @@ namespace Mix.Cms.Lib.Controllers
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
+        protected DefaultRepository<TDbContext, TModel, TRead> _repo;
+        protected DefaultRepository<TDbContext, TModel, TUpdate> _updRepo;
+        protected DefaultRepository<TDbContext, TModel, TDelete> _delRepo;
+        protected MixIdentityHelper _mixIdentityHelper;
+
+        public BaseAuthorizedRestApiController(
+            DefaultRepository<TDbContext, TModel, TRead> repo,
+            DefaultRepository<TDbContext, TModel, TUpdate> updRepo,
+            DefaultRepository<TDbContext, TModel, TDelete> delRepo, 
+            MixIdentityHelper mixIdentityHelper)
+        {
+            _repo = repo;
+            _updRepo = updRepo;
+            _delRepo = delRepo;
+            _mixIdentityHelper = mixIdentityHelper;
+        }
 
         /// <summary>
         /// The domain
@@ -53,7 +75,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -64,7 +86,7 @@ namespace Mix.Cms.Lib.Controllers
                 Direction = direction
             };
 
-            RepositoryResponse<PaginationModel<TRead>> getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListAsync(
+            RepositoryResponse<PaginationModel<TRead>> getData = await _repo.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
 
             if (getData.IsSucceed)
@@ -98,7 +120,7 @@ namespace Mix.Cms.Lib.Controllers
             if (getData.IsSucceed)
             {
                 var data = getData.Data;
-                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixColumnName.Id);
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixQueryColumnName.Id);
                 switch (idProperty.Name.ToLower())
                 {
                     case "int32":
@@ -182,10 +204,9 @@ namespace Mix.Cms.Lib.Controllers
         {
             if (data != null)
             {
-                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
-                    c => c.Type == "Username")?.Value));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", _mixIdentityHelper.GetClaim(User, MixClaims.Username)));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
-                var currentId = ReflectionHelper.GetPropertyValue(data, MixColumnName.Id).ToString();
+                var currentId = ReflectionHelper.GetPropertyValue(data, MixQueryColumnName.Id).ToString();
                 if (id != currentId)
                 {
                     return BadRequest();
@@ -257,11 +278,11 @@ namespace Mix.Cms.Lib.Controllers
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.ExpressionMethod.Eq);
             Expression<Func<TModel, bool>> idPre = null;
             foreach (var id in data.Data)
             {
-                var temp = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
 
                 idPre = idPre != null
                     ? idPre.AndAlso(temp)
@@ -323,13 +344,25 @@ namespace Mix.Cms.Lib.Controllers
 
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : null;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
 
         #endregion Overrides
 
         #region Helpers
+
+        protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result)
+        {
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
 
         private async Task<RepositoryResponse<List<TUpdate>>> PublishListAsync(Expression<Func<TModel, bool>> predicate)
         {
@@ -341,25 +374,26 @@ namespace Mix.Cms.Lib.Controllers
             return await SaveListAsync(data.Data.Items, false);
         }
 
-        protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+        protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
             return await GetSingleAsync<T>(predicate);
         }
 
-        protected async Task<RepositoryResponse<TUpdate>> GetSingleAsync(string id)
+        protected virtual async Task<RepositoryResponse<TUpdate>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(
+                MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>("Specificulture", _lang, Heart.Enums.ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -371,13 +405,13 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<TUpdate> data = null;
             if (predicate != null)
             {
-                data = await DefaultRepository<TDbContext, TModel, TUpdate>.Instance.GetSingleModelAsync(predicate);
+                data = await _updRepo.GetSingleModelAsync(predicate);
             }
             return data;
         }
 
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(Expression<Func<TModel, bool>> predicate = null)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             RepositoryResponse<T> data = null;
             if (predicate != null)
@@ -388,7 +422,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(string id, bool isDeleteRelated = false)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             var data = await GetSingleAsync<T>(id);
             if (data.IsSucceed)
@@ -424,7 +458,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<TModel>> DeleteAsync<T>(T data, bool isDeleteRelated = false)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (data != null)
             {
@@ -437,7 +471,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
         {
-            var data = await DefaultRepository<TDbContext, TModel, TDelete>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            var data = await _delRepo.RemoveListModelAsync(isRemoveRelatedModel, predicate);
 
             return data;
         }
@@ -445,7 +479,7 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
             string type = typeof(TModel).Name;
-            var getData = await DefaultRepository<TDbContext, TModel, TRead>.Instance.GetModelListByAsync(predicate, _context);
+            var getData = await _repo.GetModelListByAsync(predicate, _context);
             var jData = new List<JObject>();
             if (getData.IsSucceed)
             {
@@ -469,21 +503,16 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
-        protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+        protected async Task<RepositoryResponse<PaginationModel<T>>> GetListAsync<T>(Expression<Func<TModel, bool>> predicate = null, SearchQueryModel searchQuery = null)
+            where T : ViewModelBase<TDbContext, TModel, T>
         {
-            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
-            int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
-            bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
-
+            searchQuery ??= new SearchQueryModel(Request);
             RequestPaging request = new RequestPaging()
             {
-                PageIndex = pageIndex,
-                PageSize = isPageSize ? pageSize : 100,
-                OrderBy = Request.Query[MixRequestQueryKeywords.OrderBy].ToString().ToTitleCase(),
-                Direction = direction
+                PageIndex = searchQuery.PagingData.PageIndex,
+                PageSize = searchQuery.PagingData.PageSize,
+                OrderBy = searchQuery.PagingData.OrderBy,
+                Direction = searchQuery.PagingData.Direction
             };
 
             RepositoryResponse<PaginationModel<T>> data = null;
@@ -504,7 +533,7 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
-            where T : Mix.Domain.Data.ViewModels.ViewModelBase<TDbContext, TModel, T>
+            where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)
             {
@@ -571,6 +600,32 @@ namespace Mix.Cms.Lib.Controllers
             }
 
             return result;
+        }
+
+        public virtual async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
+        {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (string.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
+            var logMsg = new JObject()
+                {
+                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
+                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    new JProperty("user", _mixIdentityHelper.GetClaim(User, MixClaims.Username)),
+                    new JProperty("request_url", Request.Path.Value),
+                    new JProperty("action", action),
+                    new JProperty("status", status),
+                    new JProperty("message", message)
+                };
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+            await clients.SendAsync(
+                HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
         }
 
         #endregion Helpers

@@ -3,7 +3,8 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,7 +27,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -45,6 +46,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("excerpt")]
         public string Excerpt { get; set; }
+
+        [JsonProperty("content")]
+        public string Content { get; set; }
 
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
@@ -104,10 +108,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Specificulture}/post/{Id}/{SeoName}" : null; }
@@ -150,6 +154,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
 
+        [JsonProperty("author")]
+        public JObject Author { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -174,6 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadPages(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
+            LoadAuthor(_context, _transaction);
         }
 
         private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)
@@ -185,6 +192,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #endregion Overrides
 
         #region Expands
+
+        private void LoadAuthor(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            if (!string.IsNullOrEmpty(CreatedBy))
+            {
+                var getAuthor = MixDatabaseDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
+                    , Specificulture, context, transaction);
+                if (getAuthor.IsSucceed)
+                {
+                    Author = getAuthor.Data.Obj;
+                }
+            }
+        }
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {

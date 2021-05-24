@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Service.SignalR.Hubs;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Cms.Lib.SignalR.Hubs;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
@@ -20,7 +20,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class BaseApiController<TDbContext> : Controller
         where TDbContext : DbContext
     {
-        protected readonly IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> _hubContext;
+        protected readonly IHubContext<PortalHub> _hubContext;
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
         protected readonly IMemoryCache _memoryCache;

@@ -7,9 +7,8 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -34,7 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -302,22 +301,22 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (ThumbnailFileStream != null)
             {
                 string folder = MixCmsHelper.GetUploadFolder(Specificulture);
-                string filename = CommonHelper.GetRandomName(ThumbnailFileStream.Name);
-                bool saveThumbnail = CommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
+                string filename = MixCommonHelper.GetRandomName(ThumbnailFileStream.Name);
+                bool saveThumbnail = MixCommonHelper.SaveFileBase64(folder, filename, ThumbnailFileStream.Base64);
                 if (saveThumbnail)
                 {
-                    CommonHelper.RemoveFile(Thumbnail);
+                    MixCommonHelper.RemoveFile(Thumbnail);
                     Thumbnail = $"{folder}/{filename}";
                 }
             }
             if (ImageFileStream != null)
             {
                 string folder = MixCmsHelper.GetUploadFolder(Specificulture);
-                string filename = CommonHelper.GetRandomName(ImageFileStream.Name);
-                bool saveImage = CommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
+                string filename = MixCommonHelper.GetRandomName(ImageFileStream.Name);
+                bool saveImage = MixCommonHelper.SaveFileBase64(folder, filename, ImageFileStream.Base64);
                 if (saveImage)
                 {
-                    CommonHelper.RemoveFile(Image);
+                    MixCommonHelper.RemoveFile(Image);
                     Image = $"{folder}/{filename}";
                 }
             }
@@ -916,7 +915,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var otherPosts = MixPosts.ReadListItemViewModel.Repository.GetModelListBy(
                 m => m.Id != Id && m.Specificulture == Specificulture
                     && !PostNavs.Any(n => n.DestinationId == m.Id)
-                    , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, 10, 0, _context, _transaction);
+                    , "CreatedDateTime", Heart.Enums.DisplayDirection.Desc, 10, 0, _context, _transaction);
             foreach (var item in otherPosts.Data.Items)
             {
                 PostNavs.Add(new MixPostPosts.ReadViewModel()
@@ -954,7 +953,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 m => (m.Type == (int)MixModuleType.Content || m.Type == (int)MixModuleType.ListPost)
                 && m.Specificulture == Specificulture
                 && !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", Heart.Enums.MixHeartEnums.DisplayDirection.Desc, null, 0, _context, _transaction);
+                , "CreatedDateTime", Heart.Enums.DisplayDirection.Desc, null, 0, _context, _transaction);
             foreach (var item in otherModules.Data.Items)
             {
                 Modules.Add(new MixModulePosts.ReadViewModel()
@@ -998,7 +997,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
                 ModuleFieldViewModel thisField = new ModuleFieldViewModel()
                 {
-                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
+                    Name = MixCommonHelper.ParseJsonPropertyName(field["name"].ToString()),
                     Title = field["title"]?.ToString(),
                     DefaultValue = field["defaultValue"]?.ToString(),
                     Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),

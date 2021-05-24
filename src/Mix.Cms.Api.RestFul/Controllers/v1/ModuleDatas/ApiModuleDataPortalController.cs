@@ -11,8 +11,9 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Services;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataDataController :
         BaseAuthorizedRestApiController<MixCmsContext, MixModuleData, UpdateViewModel, UpdateViewModel, UpdateViewModel>
     {
-        
+        public ApiModuleDataDataController(
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> repo,
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<UpdateViewModel>>> Get()
         {
@@ -93,7 +101,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
 
             string exportPath = $"Exports/Module/{moduleId}";
-            var result = CommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
+            var result = MixCommonHelper.ExportJObjectToExcel(exportData, string.Empty, exportPath, Guid.NewGuid().ToString(), null);
 
             if (result.IsSucceed)
             {

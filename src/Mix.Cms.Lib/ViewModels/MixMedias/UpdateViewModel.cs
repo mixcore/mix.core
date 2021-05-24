@@ -4,16 +4,12 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Common.Helper;
-using Mix.Domain.Core.Models;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
-using Mix.Services;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixMedias
@@ -87,8 +83,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("fullPath")]
-        public string FullPath {
-            get {
+        public string FullPath
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -102,8 +100,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         }
 
         [JsonProperty("filePath")]
-        public string FilePath {
-            get {
+        public string FilePath
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(FileName) && string.IsNullOrEmpty(TargetUrl))
                 {
                     return FileFolder.IndexOf("http") > 0 ? $"{FileFolder}/{FileName}{Extension}"
@@ -157,6 +157,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (!FileFolder.StartsWith(MixFolders.UploadsFolder))
+            {
+                FileFolder = $"{MixFolders.UploadsFolder}/{FileFolder}";
+            }
             if (MediaFile?.FileStream != null)
             {
                 FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
@@ -182,7 +186,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 if (File != null)
                 {
-                    var saveFile = MixFileRepository.Instance.SaveWebFile(File, $"{FileFolder}");
+                    var saveFile = MixFileRepository.Instance.SaveWebFile(File, FileFolder);
                     if (saveFile == null)
                     {
                         IsValid = false;
@@ -232,32 +236,6 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         #endregion Overrides
 
         #region Expand
-
-        private List<SupportedCulture> LoadCultures(string initCulture = null, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var getCultures = SystemCultureViewModel.Repository.GetModelList(_context, _transaction);
-            var result = new List<SupportedCulture>();
-            if (getCultures.IsSucceed)
-            {
-                foreach (var culture in getCultures.Data)
-                {
-                    result.Add(
-                        new SupportedCulture()
-                        {
-                            Icon = culture.Icon,
-                            Specificulture = culture.Specificulture,
-                            Alias = culture.Alias,
-                            FullName = culture.FullName,
-                            Description = culture.FullName,
-                            Id = culture.Id,
-                            Lcid = culture.Lcid,
-                            IsSupported = culture.Specificulture == initCulture || _context.MixMedia.Any(p => p.Id == Id && p.Specificulture == culture.Specificulture)
-                        });
-                }
-            }
-            return result;
-        }
-
         #endregion Expand
     }
 }

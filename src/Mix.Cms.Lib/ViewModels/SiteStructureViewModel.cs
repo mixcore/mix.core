@@ -2,7 +2,8 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
+        [JsonProperty("posts")]
+        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
+        
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }
 
@@ -43,9 +47,6 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("modulePostNavs")]
         public List<MixModulePosts.ImportViewModel> ModulePostNavs { get; set; } = new List<MixModulePosts.ImportViewModel>();
 
-        [JsonProperty("posts")]
-        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
-
         [JsonProperty("moduleDatas")]
         public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
 
@@ -65,6 +66,7 @@ namespace Mix.Cms.Lib.ViewModels
         public async Task InitAsync(string culture)
         {
             Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
+            Posts = (await MixPosts.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             MixDatabases = (await ViewModels.MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
         }
@@ -312,7 +314,8 @@ namespace Mix.Cms.Lib.ViewModels
         private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
-        public async Task<RepositoryResponse<bool>> ImportAsync(string destCulture,
+        public async Task<RepositoryResponse<bool>> ImportAsync(
+            string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -460,10 +463,14 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
-                    {
+                    {                        
                         if (!context.MixDatabase.Any(m => m.Name == set.Name))
                         {
                             startId++;
+                            if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
+                            {
+                                dicMixDatabaseIds.Add(set.Id, startId);
+                            }
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
                             mixDatabaseColumns.AddRange(set.Fields
@@ -471,11 +478,7 @@ namespace Mix.Cms.Lib.ViewModels
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
-                        }
-                        if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
-                        {
-                            dicMixDatabaseIds.Add(set.Id, startId);
-                        }
+                        }                        
                     }
                     else
                     {
@@ -713,9 +716,9 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Fields = item.Fields ?? MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
+                        item.Columns = item.Columns ?? MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
                             m => m.MixDatabaseId == item.MixDatabaseId, context, transaction).Data;
-                        foreach (var field in item.Fields)
+                        foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;
                             var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);

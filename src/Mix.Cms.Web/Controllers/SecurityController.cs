@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Web.Controllers
@@ -14,7 +15,7 @@ namespace Mix.Cms.Web.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (MixService.GetConfig<bool>("IsInit"))
+            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))

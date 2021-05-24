@@ -10,7 +10,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
@@ -23,6 +24,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataMvcController :
         BaseRestApiController<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {
+        public ApiModuleDataMvcController(DefaultRepository<MixCmsContext, MixModuleData, ReadMvcViewModel> repo) 
+            : base(repo)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {

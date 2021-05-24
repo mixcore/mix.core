@@ -7,13 +7,34 @@
   "MixConfigurations": {
     "IsCache": true,
     "MixCacheMode": "Json",
+    "MixCacheConnectionString": "",
+    "MixCacheDbProvider": "",
     "MixCacheFolder": "MixContent/cache",
     "JsonDataFolder": "MixContent/data",
-    "MixLogsFolder": "MixContent/logs"
+    "MixLogsFolder": "MixContent/logs",
+    "ImageSizes": {
+      "XXS": {
+        "width": 30
+      },
+      "XS": {
+        "width": 100
+      },
+      "S": {
+        "width": 300
+      },
+      "M": {
+        "width": 600
+      },
+      "L": {
+        "width": 1000
+      },
+      "XL": {
+        "width": 2000
+      }
+    }
   },
   "Authentication": {
-    "ClockSkew": 20,
-    "CookieExpiration": 20,
+    "AccessTokenExpiration": 20,
     "RefreshTokenExpiration": 120,
     "ValidateIssuer": false,
     "ValidateAudience": false,
@@ -25,7 +46,22 @@
     "Issuer": "mix-core",
     "Issuers": "mix-core",
     "Audiences": "mix-core",
-    "AllowedIps": ""
+    "Facebook": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Google": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Twitter": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Microsoft": {
+      "AppId": "",
+      "AppSecret": ""
+    }
   },
   "IpSecuritySettings": {
     "IsRetrictIp": true,
@@ -86,6 +122,7 @@
     "TagPageSize": "20",
     "SearchPageSize": "20",
     "IsEncryptApi": true,
+    "ApiEncryptKey": "RHZhMEFvckY0VUF3Ynd2YUZZTnRIdz09LGx3dk82QlR0WHlPUG5FWC8rUFV2bU1pdUpIMnVQTEF5TW9kMFpPdU5aMlU9",
     "LastUpdateConfiguration": null,
     "DatabaseProvider": "MSSQL",
     "AllowedHosts": [],

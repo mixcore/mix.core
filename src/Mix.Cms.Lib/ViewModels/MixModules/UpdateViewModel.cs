@@ -4,8 +4,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -307,7 +307,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 ModuleFieldViewModel thisField = new ModuleFieldViewModel()
                 {
-                    Name = CommonHelper.ParseJsonPropertyName(field["name"].ToString()),
+                    Name = MixCommonHelper.ParseJsonPropertyName(field["name"].ToString()),
                     Title = field["title"]?.ToString(),
                     Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
                     Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,

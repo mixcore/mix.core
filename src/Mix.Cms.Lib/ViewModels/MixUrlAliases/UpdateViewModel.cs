@@ -2,8 +2,8 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixCultures;
-using Mix.Domain.Core.Models;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("sourceId")]
         public string SourceId { get; set; }
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
             if (IsValid)
             {
                 if (Repository.CheckIsExists(o =>
-                    o.Alias == Alias && o.Specificulture == Specificulture && o.Id != Id))
+                    o.Alias == Alias && o.Specificulture == Specificulture && o.Id != Id, _context, _transaction))
                 {
                     Errors.Add("Alias Existed");
                     IsValid = false;

@@ -8,7 +8,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,7 +22,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiConfigurationPortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixConfiguration, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
-        
+        public ApiConfigurationPortalController(
+            DefaultRepository<MixCmsContext, MixConfiguration, ReadMvcViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : 
+            base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {

@@ -4,7 +4,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -89,8 +89,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
         #region Views
 
-        [JsonProperty("field")]
-        public MixDatabaseColumns.UpdateViewModel Field { get; set; }
+        [JsonProperty("column")]
+        public MixDatabaseColumns.UpdateViewModel Column { get; set; }
 
         #endregion Views
 
@@ -119,14 +119,14 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Priority = Field?.Priority ?? Priority;
-            DataType = Field?.DataType ?? DataType;
+            Priority = Column?.Priority ?? Priority;
+            DataType = Column?.DataType ?? DataType;
 
-            MixDatabaseColumnName = Field?.Name;
-            MixDatabaseColumnId = Field?.Id ?? 0;
-            if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Field?.DefaultValue))
+            MixDatabaseColumnName = Column?.Name;
+            MixDatabaseColumnId = Column?.Id ?? 0;
+            if (string.IsNullOrEmpty(StringValue) && !string.IsNullOrEmpty(Column?.DefaultValue))
             {
-                ParseDefaultValue(Field.DefaultValue);
+                ParseDefaultValue(Column.DefaultValue);
             }
             return base.ParseModel(_context, _transaction);
         }
@@ -172,17 +172,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
             if (MixDatabaseColumnId > 0)
             {
-                Field ??= MixDatabaseColumns.UpdateViewModel.Repository.GetSingleModel(
+                Column ??= MixDatabaseColumns.UpdateViewModel.Repository.GetSingleModel(
                     f => f.Id == MixDatabaseColumnId
                     , _context, _transaction).Data;
-                if (Field != null && DataType == MixDataType.Reference)
+                if (Column != null && DataType == MixDataType.Reference)
                 {
-                    MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == Field.ReferenceId)?.Name;
+                    MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == Column.ReferenceId)?.Name;
                 }
             }
             else // additional field for page / post / module => id = 0
             {
-                Field = new MixDatabaseColumns.UpdateViewModel()
+                Column = new MixDatabaseColumns.UpdateViewModel()
                 {
                     DataType = DataType,
                     Title = MixDatabaseColumnName,
@@ -191,9 +191,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                 };
             }
 
-            if (string.IsNullOrEmpty(Id) && Field != null)
+            if (string.IsNullOrEmpty(Id) && Column != null)
             {
-                ParseDefaultValue(Field.DefaultValue);
+                ParseDefaultValue(Column.DefaultValue);
             }
         }
 
@@ -204,9 +204,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
-            if (IsValid && Field != null)
+            if (IsValid && Column != null)
             {
-                if (Field.IsUnique)
+                if (Column.IsUnique)
                 {
                     var exist = _context.MixDatabaseDataValue.Any(d => d.Specificulture == Specificulture
                         && d.MixDatabaseName == MixDatabaseName
@@ -214,25 +214,25 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (exist)
                     {
                         IsValid = false;
-                        Errors.Add($"{Field.Title} = {StringValue} is existed");
+                        Errors.Add($"{Column.Title} = {StringValue} is existed");
                     }
                 }
-                if (Field.IsRequire)
+                if (Column.IsRequire)
                 {
                     if (string.IsNullOrEmpty(StringValue))
                     {
                         IsValid = false;
-                        Errors.Add($"{Field.Title} is required");
+                        Errors.Add($"{Column.Title} is required");
                     }
                 }
-                if (!string.IsNullOrEmpty(Field.Regex))
+                if (!string.IsNullOrEmpty(Column.Regex))
                 {
-                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(Field.Regex, RegexOptions.IgnoreCase);
+                    System.Text.RegularExpressions.Regex r = new System.Text.RegularExpressions.Regex(Column.Regex, RegexOptions.IgnoreCase);
                     Match m = r.Match(StringValue);
                     if (!m.Success)
                     {
                         IsValid = false;
-                        Errors.Add($"{Field.Title} is invalid");
+                        Errors.Add($"{Column.Title} is invalid");
                     }
                 }
             }

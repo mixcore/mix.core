@@ -81,22 +81,42 @@
       "status": "Published"
     },
     {
-      "keyword": "post_image_width",
+      "keyword": "DefaultThumbnailImgWidth",
       "scope": "Shared",
       "category": "Site",
-      "value": "",
+      "value": "1000",
       "dataType": "Integer",
-      "description": "Post Image Width",
+      "description": "Default Thumbnail Image Width",
       "priority": 0,
       "status": "Published"
     },
     {
-      "keyword": "post_image_height",
+      "keyword": "DefaultThumbnailImgHeight",
       "scope": "Shared",
       "category": "Site",
-      "value": "",
+      "value": "608",
       "dataType": "Integer",
-      "description": "Post Image Width",
+      "description": "Default Thumbnail Image Height",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultFeatureImgWidth",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "2000",
+      "dataType": "Integer",
+      "description": "Default Feature Image Width",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultFeatureImgHeight",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "1216",
+      "dataType": "Integer",
+      "description": "Default Feature Image Height",
       "priority": 0,
       "status": "Published"
     }

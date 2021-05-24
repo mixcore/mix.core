@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Models.Account;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -31,11 +31,13 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public RoleViewModel() : base()
         {
+            IsCache = false;
         }
 
         public RoleViewModel(AspNetRoles model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors

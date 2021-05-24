@@ -2,6 +2,7 @@
 {
     public class MixAppSettingKeywords
     {
+        public const string IsInit = "IsInit";
         public const string SiteName = "SiteName";
         public const string ConnectionString = "ConnectionString";
         public const string OrderBy = "OrderBy";
@@ -16,7 +17,6 @@
         public const string ThemeName = "ThemeName";
         public const string ThemeFolder = "ThemeFolder";
         public const string ApiEncryptKey = "ApiEncryptKey";
-        public const string ApiEncryptIV = "ApiEncryptIV";
         public const string IsEncryptApi = "IsEncryptApi";
         public const string TemplateExtension = "TemplateExtension";
         public const string DefaultTheme = "DefaultTheme";
@@ -26,5 +26,7 @@
         public const string NextSyncContent = "NextSyncContent";
         public const string AllowedHosts = "AllowedHosts";
         public const string MaxPageSize = "MaxPageSize";
+        public const string ImageSizes = "ImageSizes";
+        public const string LastUpdateConfiguration = "LastUpdateConfiguration";
     }
 }

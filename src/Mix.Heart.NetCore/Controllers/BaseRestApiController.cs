@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Services;
@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Heart.NetCore.Controllers
 {
@@ -40,7 +41,7 @@ namespace Mix.Heart.NetCore.Controllers
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.ExpressionMethod.Eq);
             RepositoryResponse<TView> data = null;
             if (predicate != null)
             {
@@ -121,7 +122,7 @@ namespace Mix.Heart.NetCore.Controllers
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            Enum.TryParse(Request.Query["direction"], out Heart.Enums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -227,7 +228,7 @@ namespace Mix.Heart.NetCore.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
             int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            Enum.TryParse(Request.Query["direction"], out Heart.Enums.MixHeartEnums.DisplayDirection direction);
+            Enum.TryParse(Request.Query["direction"], out Heart.Enums.DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -340,7 +341,7 @@ namespace Mix.Heart.NetCore.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<TModel>> Delete(string id)
         {
-            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Enums.MixHeartEnums.ExpressionMethod.Eq);
+            var predicate = ReflectionHelper.GetExpression<TModel>("id", id, Enums.ExpressionMethod.Eq);
             var result = await DeleteAsync(predicate, false);
             if (result.IsSucceed)
             {

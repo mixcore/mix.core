@@ -6,57 +6,12 @@
 @using System.Globalization
 @using System.Linq
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Mix.Domain.Core.ViewModels
 @using Mix.Cms.Lib.ViewModels
 @using Mix.Cms.Lib
 @using Mix.Cms.Web.Models
 @using Mix.Cms.Lib.Services
-@using Mix.Heart.Enums;
-@using System.Security.Claims;
+@using Mix.Heart.Models
+@using Mix.Heart.Enums
+@using System.Security.Claims
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-@{
-//if (!MixService.GetConfig<bool>("IsInit"))
-//{
-
-//    string culture = ViewBag.culture;
-//    var globalConfig = MixService.GetGlobalSetting();
-//    var localConfig = MixService.GetLocalSettings(culture);
-//    string master = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, ViewBag.culture) ?? "Default";
-//    Layout = $"Templates/{master}/Masters/{"_Layout"}";
-//    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-//    User.IsInRole("SuperAdmin");
-//    // Get by paging
-//    int.TryParse(Context.Request.Query["pIndex"], out int pIndex);
-//    //var pagingReq = new RequestPaging()
-//    var posts = MixPosts.UpdateViewModel.Repository.GetModelListAsync(
-//        "CreatedDateTime",
-//        MixHeartEnums.DisplayDirection.Asc,
-//        MixService.GetConfig<int>(MixAppSettingKeywords.MaxPageSize),
-//        pIndex);
-
-//    int.TryParse(Context.Request.Query["pId"], out int pId);
-
-//    var getPost = await MixPosts.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == pId && m.Specificulture == culture);
-//    MixPosts.UpdateViewModel post = null;
-//    if (getPost.IsSucceed)
-//    {
-//        post = getPost.Data;
-//    }
-
-//    //
-
-//    // Insert by
-
-
-//    var navs = await MixDatas.Helper.FilterByKeywordAsync<MixDatas.ReadMvcViewModel>(culture, MixDatabaseNames.NAVIGATION, "equal", "name", "top");
-
-//    //var dynamicDb = await MixDatas.Helper.FilterByKeywordAsync<MixDatas.ReadMvcViewModel>(culture, MixDatabaseNames.NAVIGATION, "equal", "name", "top");
-
-//    //async Task UpdatePost(MixPosts.UpdateViewModel post, bool isSaveSubModel = false)
-//    //{
-//    //    await post.SaveModelAsync(isSaveSubModel);
-//    //}
-//}
-}

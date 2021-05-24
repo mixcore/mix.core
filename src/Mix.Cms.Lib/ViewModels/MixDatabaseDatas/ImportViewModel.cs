@@ -3,8 +3,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -28,7 +28,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("mixDatabaseId")]
         public int MixDatabaseId { get; set; }
@@ -73,8 +73,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         [JsonIgnore]
         public List<MixDatabaseDataValues.UpdateViewModel> Values { get; set; }
 
-        [JsonProperty("fields")]
-        public List<MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
         [JsonIgnore]
         public List<MixDatabaseDatas.ImportViewModel> RefData { get; set; } = new List<ImportViewModel>();
@@ -127,11 +127,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 , _context, _transaction)
                 .Data.OrderBy(a => a.Priority).ToList();
 
-            Fields ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
+            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
                     f => f.MixDatabaseId == MixDatabaseId,
                     _context, _transaction).Data;
 
-            foreach (var field in Fields.OrderBy(f => f.Priority))
+            foreach (var field in Columns.OrderBy(f => f.Priority))
             {
                 var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
                 if (val == null)
@@ -146,7 +146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     {
                         StringValue = field.DefaultValue,
                         Priority = field.Priority,
-                        Field = field
+                        Column = field
                     };
                     Values.Add(val);
                 }
@@ -160,7 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 val.MixDatabaseName = MixDatabaseName;
                 if (Obj[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Field.DataType == MixDataType.Reference)
+                    if (val.Column.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.MixDatabaseColumnName].Value<JArray>();
                         if (arr != null)
@@ -305,11 +305,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (result.IsSucceed)
                 {
-                    if (Fields.Any(f => f.Id == item.MixDatabaseColumnId))
+                    if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
                     {
                         item.DataId = parent.Id;
                         item.Specificulture = parent.Specificulture;
-                        item.Priority = item.Field.Priority;
+                        item.Priority = item.Column.Priority;
                         item.Status = MixContentStatus.Published;
                         var saveResult = await item.SaveModelAsync(false, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);

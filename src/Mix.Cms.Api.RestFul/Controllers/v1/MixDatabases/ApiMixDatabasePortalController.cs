@@ -9,7 +9,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabases;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -22,6 +24,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabasePortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabase, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
+        public ApiMixDatabasePortalController(
+            DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : 
+            base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         // GET: api/v1/rest/en-us/mix-database/portal
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
@@ -49,6 +60,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(getData.Errors);
             }
+        }
+
+        [HttpGet("{id}")]
+        public override async Task<ActionResult<UpdateViewModel>> Get(string id)
+        {
+            int.TryParse(id, out int dbId);
+            var result = await _updRepo.GetSingleModelAsync(
+                    m => (m.Id == dbId || m.Name == id));
+            return Ok(result.Data);
+        }
+        
+        [HttpPost("migrate/{id}")]
+        public async Task<ActionResult> Migrate([FromBody] UpdateViewModel database)
+        {
+            var result = await Helper.MigrateDatabase(database);
+            return result ? Ok() : BadRequest();
         }
 
         // DELETE: api/v1/rest/en-us/mix-database/portal/5

@@ -4,8 +4,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -92,18 +92,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
-
-        [JsonProperty("createdBy")]
-        public string CreatedBy { get; set; }
-
+        
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonProperty("modifiedBy")]
-        public string ModifiedBy { get; set; }
-
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
+        
+        [JsonProperty("createdBy")]
+        public string CreatedBy { get; set; }
+
+        [JsonProperty("modifiedBy")]
+        public string ModifiedBy { get; set; }
 
         [JsonProperty("priority")]
         public int Priority { get; set; }
@@ -258,6 +258,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
+            this.View.SetMediator(this);
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
             // Load master views

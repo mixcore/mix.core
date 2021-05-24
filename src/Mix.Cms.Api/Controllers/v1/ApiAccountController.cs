@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
@@ -13,20 +12,25 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
+using Mix.Identity.Helpers;
+using Mix.Cms.Lib.Dtos;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
-    //[Authorize(Roles = "SuperAdmin,Admin")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/account")]
     public class ApiAccountController : Controller
     {
@@ -34,19 +38,20 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger _logger;
-        private readonly IdentityHelper _helper;
+        private readonly MixIdentityService _idService;
 
         public ApiAccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
+            MixIdentityService helper,
             ILogger<ApiAccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
-            _helper = new IdentityHelper(userManager, signInManager, roleManager);
+            _idService = helper;
         }
 
         [TempData]
@@ -54,6 +59,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         //
         // POST: /Account/Logout
+
         [Route("Logout")]
         [HttpGet, HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> Logout()
@@ -67,102 +73,43 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("login")]
         [HttpPost, HttpOptions]
         [AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Login([FromBody] LoginViewModel model)
+        public async Task<ActionResult> Login([FromBody] JObject data)
         {
-            RepositoryResponse<AccessTokenViewModel> loginResult = new RepositoryResponse<AccessTokenViewModel>();
-            if (ModelState.IsValid)
+            string message = data.Value<string>("message");
+            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
+            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+            loginResult = await _idService.Login(model);
+            if (loginResult.IsSucceed)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(
-                    model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
-                if (result.Succeeded)
-                {
-                    var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-
-                    var token = await _helper.GenerateAccessTokenAsync(user, model.RememberMe);
-                    if (token != null)
-                    {
-                        token.Info = new MixUserViewModel(user);
-                        await token.Info.LoadUserDataAsync();
-
-                        loginResult.IsSucceed = true;
-                        loginResult.Status = 1;
-                        loginResult.Data = token;
-                        _logger.LogInformation("User logged in.");
-                        return Ok(loginResult);
-                    }
-                    else
-                    {
-                        return Ok(loginResult);
-                    }
-                }
-                if (result.IsLockedOut)
-                {
-                    loginResult.Errors.Add("This account has been locked out, please try again later.");
-                    return BadRequest(loginResult);
-                }
-                else
-                {
-                    loginResult.Errors.Add("Login failed");
-                    return BadRequest(loginResult);
-                }
+                return Ok(loginResult.Data);
             }
-            else
-            {
-                return BadRequest(loginResult);
-            }
+            return BadRequest(loginResult.Errors);
         }
 
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Route("refresh-token/{refreshTokenId}")]
-        [HttpGet, HttpOptions]
-        public async Task<RepositoryResponse<AccessTokenViewModel>> RefreshToken(string refreshTokenId)
+        [Route("external-login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<JObject>> ExternalLogin([FromBody] JObject data)
         {
-            RepositoryResponse<AccessTokenViewModel> result = new RepositoryResponse<AccessTokenViewModel>();
-            var getRefreshToken = await RefreshTokenViewModel.Repository.GetSingleModelAsync(t => t.Id == refreshTokenId);
-            if (getRefreshToken.IsSucceed)
+            string message = data.Value<string>("message");
+            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
+            var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
+            RepositoryResponse<JObject> loginResult = await _idService.ExternalLogin(model);
+            if (loginResult.IsSucceed)
             {
-                var oldToken = getRefreshToken.Data;
-                if (oldToken.ExpiresUtc > DateTime.UtcNow)
-                {
-                    var user = await _userManager.FindByEmailAsync(oldToken.Email);
-                    await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
-
-                    var token = await _helper.GenerateAccessTokenAsync(user, true);
-                    if (token != null)
-                    {
-                        await oldToken.RemoveModelAsync();
-
-                        token.Info = new MixUserViewModel(user);
-                        await token.Info.LoadUserDataAsync();
-
-                        result.IsSucceed = true;
-                        result.Status = 1;
-                        result.Data = token;
-                        _logger.LogInformation("User refresh token.");
-                        return result;
-                    }
-                    else
-                    {
-                        result.IsSucceed = false;
-                        result.Data = token;
-                        return result;
-                    }
-                }
-                else
-                {
-                    await oldToken.RemoveModelAsync();
-                    result.Errors.Add("Token expired");
-                    return result;
-                }
+                return Ok(loginResult.Data);
             }
-            else
-            {
-                result.Errors.Add("Token expired");
-                return result;
-            }
+            return BadRequest(loginResult.Errors);
+        }
+
+        [Route("refresh-token")]
+        [HttpPost]
+        public async Task<RepositoryResponse<JObject>> RefreshToken([FromBody] RenewTokenDto refreshTokenDto)
+        {
+            return await _idService.RenewTokenAsync(refreshTokenDto);
         }
 
         [Route("Register")]
@@ -188,7 +135,9 @@ namespace Mix.Cms.Api.Controllers.v1
                 {
                     _logger.LogInformation("User created a new account with password.");
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
-                    var token = await _helper.GenerateAccessTokenAsync(user, true);
+                    var rsaKeys = RSAEncryptionHelper.GenerateKeys();
+                    var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                    var token = await _idService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
                         result.IsSucceed = true;
@@ -215,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = "SuperAdmin")]
+        Roles = MixRoles.SuperAdmin)]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
@@ -361,7 +310,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/account/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
@@ -465,7 +414,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {
@@ -490,5 +439,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             return result;
         }
+
+
     }
 }

@@ -3,8 +3,10 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Services;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Infrastructure.Repositories;
 using Mix.Services;
 using Newtonsoft.Json;
 using System;
@@ -95,11 +97,13 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public UserInfoViewModel() : base()
         {
+            IsCache = false;
         }
 
         public UserInfoViewModel(AspNetUsers model, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
+            IsCache = false;
         }
 
         #endregion Contructors

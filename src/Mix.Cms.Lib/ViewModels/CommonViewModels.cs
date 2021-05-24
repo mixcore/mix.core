@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Core.Models;
-using Mix.Domain.Core.ViewModels;
-using Mix.Services;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -36,8 +34,8 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("apiEncryptKey")]
         public string ApiEncryptKey { get; set; }
 
-        [JsonProperty("apiEncryptIV")]
-        public string ApiEncryptIV { get; set; }
+        [JsonProperty("rsaKeys")]
+        public Dictionary<string, string> RSAKeys { get; set; }
 
         [JsonProperty("isEncryptApi")]
         public bool IsEncryptApi { get; set; }
@@ -59,6 +57,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("statuses")]
         public List<object> Statuses { get; set; }
+
+        [JsonProperty("externalLoginProviders")]
+        public JObject ExternalLoginProviders { get; set; }
 
         [JsonProperty("lastUpdateConfiguration")]
         public DateTime? LastUpdateConfiguration { get; set; }

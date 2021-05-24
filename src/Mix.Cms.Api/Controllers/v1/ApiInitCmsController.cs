@@ -7,14 +7,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
-using Mix.Cms.Api.Helpers;
 using Mix.Cms.Lib;
+using Mix.Cms.Lib.Constants;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Constants;
+using Mix.Heart.Helpers;
+using Mix.Heart.Models;
+using Mix.Identity.Constants;
 using Mix.Identity.Models;
 using System;
 using System.Collections.Generic;
@@ -31,21 +37,21 @@ namespace Mix.Cms.Api.Controllers.v1
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IdentityHelper _idHelper;
+        private readonly MixIdentityService _idHelper;
 
         public ApiInitCmsController(
            UserManager<ApplicationUser> userManager,
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
-            Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext,
-            IMemoryCache memoryCache
-            )
+            IHubContext<PortalHub> hubContext,
+            IMemoryCache memoryCache, 
+            MixIdentityService idHelper)
             : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _idHelper = new IdentityHelper(userManager, signInManager, roleManager);
+            _idHelper = idHelper;
         }
 
         #region Post
@@ -103,12 +109,17 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (createResult.Succeeded)
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                        await _userManager.AddToRoleAsync(user, "SuperAdmin");
-                        var token = await _idHelper.GenerateAccessTokenAsync(user, true);
+                        await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                        await MixAccountHelper.LoadUserInfoAsync(user.UserName);
+                        var rsaKeys = RSAEncryptionHelper.GenerateKeys();
+                        var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                        
+                        var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
                         {
                             result.IsSucceed = true;
                             MixService.LoadFromDatabase();
+                            MixService.SetConfig<string>(MixAppSettingKeywords.ApiEncryptKey, aesKey);
                             MixService.SetConfig("InitStatus", 2);
                             MixService.SaveSettings();
                             MixService.Reload();
@@ -187,7 +198,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     {
                         MixService.LoadFromDatabase();
                         MixService.SetConfig("InitStatus", 4);
-                        MixService.SetConfig("IsInit", true);
+                        MixService.SetConfig(MixAppSettingKeywords.IsInit, true);
                         MixService.SaveSettings();
                         _ = Services.MixCacheService.RemoveCacheAsync();
                         MixService.Reload();
@@ -199,19 +210,44 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Step 5 when status = 4 (Finished)
+        /// Step 3 when status = 3 (Finished)
         ///     - Init default theme
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
-        //[RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = User.Claims.FirstOrDefault(c => c.Type == "Username")?.Value;
+            string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
+        }
+        
+        /// <summary>
+        /// Step 3 when status = 3 (Finished)
+        ///     - Init default theme
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost, HttpOptions]
+        [Route("init-cms/step-3/active")]
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult<bool>> Active([FromBody] Lib.ViewModels.MixThemes.UpdateViewModel model)
+        {
+            model.IsActived = true;
+            var result = await Cms.Lib.ViewModels.MixThemes.Helper.ActivedThemeAsync(model.Id, model.Name, model.Specificulture);
+            if (result.IsSucceed)
+            {
+                // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
+                MixService.LoadFromDatabase();
+                MixService.SetConfig("InitStatus", 3);
+                MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
+                MixService.SaveSettings();
+                _ = Mix.Services.MixCacheService.RemoveCacheAsync();
+                MixService.Reload();
+            }
+            return Ok(result);
         }
 
         #endregion Post
@@ -225,7 +261,10 @@ namespace Mix.Cms.Api.Controllers.v1
             MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
             MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider.ToString());
             MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
+            MixService.SetMixConfig<string>(WebConfiguration.MixCacheConnectionString, model.ConnectionString);
+            MixService.SetMixConfig<string>(WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
             MixService.SaveSettings();
+            MixService.Reload();
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
 
             if (result.IsSucceed)
@@ -258,7 +297,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 var saveResult = await _roleManager.CreateAsync(new IdentityRole()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Name = "SuperAdmin"
+                    Name = MixRoles.SuperAdmin
                 });
                 isSucceed = saveResult.Succeeded;
             }

@@ -6,7 +6,10 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -35,21 +38,24 @@ namespace Mix.Cms.Lib.Services
             RepositoryResponse<bool> result = new RepositoryResponse<bool>();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
+            MixCacheDbContext cacheContext = null;
             try
             {
-                if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                if (!string.IsNullOrEmpty(cnn))
                 {
                     context = MixService.GetDbContext();
                     accountContext = MixService.GetAccountDbContext();
+                    cacheContext = MixCacheService.GetCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
-
+                    await cacheContext.Database.MigrateAsync();
                     var countCulture = context.MixCulture.Count();
                     var pendingMigration = context.Database.GetPendingMigrations().Count();
                     if (pendingMigration == 0)
                     {
                         return await InitSiteData(siteName, culture);
-                    }
+                    }                    
                 }
                 return result;
             }
@@ -293,7 +299,7 @@ namespace Mix.Cms.Lib.Services
                 page.SeoDescription = page.Title.ToLower();
                 page.SeoKeywords = page.Title.ToLower();
                 page.CreatedDateTime = DateTime.UtcNow;
-                page.CreatedBy = "SuperAdmin";
+                page.CreatedBy = MixRoles.SuperAdmin;
                 context.Entry(page).State = EntityState.Added;
                 var alias = new MixUrlAlias()
                 {

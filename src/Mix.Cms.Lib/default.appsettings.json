@@ -12,11 +12,10 @@
   },
   "Authentication": {
     "ClockSkew": 20,
-    "CookieExpiration": 20,
+    "AccessTokenExpiration": 20,
     "RefreshTokenExpiration": 120,
     "ValidateIssuer": false,
     "ValidateAudience": false,
-    "ValidateLifetime": true,
     "ValidateIssuerSigningKey": true,
     "TokenType": "Bearer",
     "Audience": "mix-core",

@@ -4,6 +4,12 @@ a,
     color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
 }
 
+.btn-check:active + .btn-outline-primary, .btn-check:checked + .btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active {
+    color: #fff !important;
+    text-decoration: none;
+    background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+}
+
 .dropdown-item.active, .dropdown-item:active {
     color: #fff !important;
     text-decoration: none;
@@ -14,6 +20,16 @@ a,
 .text-primary {
     color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
 }
+
+.btn-primary {
+    background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+    border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+}
+
+    .btn-primary:hover {
+        background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 40%, 1) !important;
+        border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 33%, 1) !important;
+    }
 
 .btn-outline-primary {
     color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
@@ -26,10 +42,14 @@ a,
         border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
     }
 
+.accordion-button:not(.collapsed) {
+    color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
+    background-color: #e7f1ff;
+}
+
 .form-check-input:checked,
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link,
-.page-item.active .page-link,
-.btn-primary {
+.page-item.active .page-link {
     color: #fff !important;
     background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
     border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
@@ -63,9 +83,10 @@ a,
 .main-sidebar {
     width: 15%;
     background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
-    -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    -webkit-box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
+    box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
     border-right: 1px solid rgba(0, 0, 0, 0.125);
+    z-index: 1;
 }
 
     .main-sidebar .btn {

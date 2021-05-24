@@ -10,8 +10,9 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixModulePosts;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiModulePostController :
         BaseGenericApiController<MixCmsContext, MixModulePost>
     {
-        public ApiModulePostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiModulePostController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

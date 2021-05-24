@@ -8,7 +8,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixLanguages;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,7 +22,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiLanguageController :
         BaseAuthorizedRestApiController<MixCmsContext, MixLanguage, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
-        
+        public ApiLanguageController(
+            DefaultRepository<MixCmsContext, MixLanguage, ReadMvcViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixLanguage, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixLanguage, UpdateViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {

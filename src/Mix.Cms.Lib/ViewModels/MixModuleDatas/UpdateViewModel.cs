@@ -2,7 +2,8 @@
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -24,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("moduleId")]
         public int ModuleId { get; set; }
@@ -152,7 +153,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
+                result.Add(new JProperty(MixCommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result.ToString(Formatting.None);
         }
@@ -165,7 +166,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                 JObject obj = new JObject();
                 obj.Add(new JProperty("dataType", prop.DataType));
                 obj.Add(new JProperty("value", prop.Value));
-                result.Add(new JProperty(CommonHelper.ParseJsonPropertyName(prop.Name), obj));
+                result.Add(new JProperty(MixCommonHelper.ParseJsonPropertyName(prop.Name), obj));
             }
             return result;
         }

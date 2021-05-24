@@ -35,6 +35,16 @@ namespace Mix.Cms.Web
                 //$"Rewritten or Redirected Url: " +
                 //$"{context.Request.Path + context.Request.QueryString}"));
             }
+            app.MapWhen(
+                context =>
+                {
+                    var path = context.Request.Path.Value.ToLower();
+                    return
+                        path.StartsWith("/mix-app") ||
+                        path.StartsWith("/mix-content");
+                },
+                config => config.UseStaticFiles());
+
             app.UseEndpoints(routes =>
             {
                 routes.MapControllerRoute(

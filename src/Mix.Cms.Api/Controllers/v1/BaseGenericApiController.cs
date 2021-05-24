@@ -8,10 +8,10 @@ using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Constants;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Helpers;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
@@ -22,6 +22,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -31,7 +34,7 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
-        protected readonly IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> _hubContext;
+        protected readonly IHubContext<PortalHub> _hubContext;
 
         protected IMemoryCache _memoryCache;
 
@@ -65,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseApiController"/> class.
         /// </summary>
-        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext)
+        public BaseGenericApiController(TDbContext context, IMemoryCache memoryCache, IHubContext<PortalHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
@@ -312,27 +315,6 @@ namespace Mix.Cms.Api.Controllers.v1
             return result;
         }
 
-        public JObject SaveEncrypt([FromBody] RequestEncrypted request)
-        {
-            //var key = Convert.FromBase64String(request.Key); //Encoding.UTF8.GetBytes(request.Key);
-            //var iv = Convert.FromBase64String(request.IV); //Encoding.UTF8.GetBytes(request.IV);
-            string encrypted = string.Empty;
-            string decrypt = string.Empty;
-            if (!string.IsNullOrEmpty(request.PlainText))
-            {
-                encrypted = AesEncryptionHelper.EncryptStringToBytes_Aes(new JObject()).ToString();
-            }
-            if (!string.IsNullOrEmpty(request.Encrypted))
-            {
-                //decrypt = MixService.DecryptStringFromBytes_Aes(request.Encrypted, request.Key, request.IV);
-            }
-            JObject data = new JObject(
-                new JProperty("key", request.Key),
-                new JProperty("encrypted", encrypted),
-                new JProperty("plainText", decrypt));
-            return data;
-        }
-
         protected void AlertAsync(string action, int status, string message = null)
         {
             var address = Request.Headers["X-Forwarded-For"];
@@ -356,7 +338,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
             //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
 
-            _hubContext.Clients.All.SendAsync(Mix.Cms.Service.SignalR.Constants.HubMethods.ReceiveMethod, logMsg.ToString(Newtonsoft.Json.Formatting.None));
+            _hubContext.Clients.All.SendAsync(HubMethods.ReceiveMethod, logMsg.ToString(Newtonsoft.Json.Formatting.None));
         }
 
         public static void Log(dynamic request, dynamic response)

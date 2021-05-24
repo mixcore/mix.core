@@ -5,8 +5,8 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -31,7 +31,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string Specificulture { get; set; }
 
         [JsonProperty("cultures")]
-        public List<Domain.Core.Models.SupportedCulture> Cultures { get; set; }
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("template")]
         public string Template { get; set; }
@@ -162,11 +162,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
 
         [JsonProperty("listTag")]
-        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListTag { get => SysTags.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("listCategory")]
-        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData.Property<string>("title")).Distinct().ToList(); }
+        public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
+        [JsonProperty("author")]
+        public JObject Author { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -194,7 +196,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static async Task<RepositoryResponse<PaginationModel<ReadViewModel>>> GetModelListByCategoryAsync(
             int pageId, string specificulture
-            , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+            , string orderByPropertyName, Heart.Enums.DisplayDirection direction
             , int? pageSize = 1, int? pageIndex = 0, int? skip = null, int? top = null
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -247,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByCategory(
            int pageId, string specificulture
-           , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+           , string orderByPropertyName, Heart.Enums.DisplayDirection direction
            , int? pageSize = 1, int? pageIndex = 0
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -299,7 +301,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public static RepositoryResponse<PaginationModel<ReadViewModel>> GetModelListByModule(
           int ModuleId, string specificulture
-          , string orderByPropertyName, Heart.Enums.MixHeartEnums.DisplayDirection direction
+          , string orderByPropertyName, Heart.Enums.DisplayDirection direction
           , int? pageSize = 1, int? pageIndex = 0
           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -360,6 +362,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAttributes(_context, _transaction);
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
+            LoadAuthor(_context, _transaction);
         }
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
@@ -371,6 +374,19 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             if (getTags.IsSucceed)
             {
                 SysTags = getTags.Data;
+            }
+        }
+
+        private void LoadAuthor(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            if (!string.IsNullOrEmpty(CreatedBy))
+            {
+                var getAuthor = MixDatabaseDatas.Helper.LoadAdditionalData(MixDatabaseParentType.User, CreatedBy, MixDatabaseNames.SYSTEM_USER_DATA
+                    , Specificulture, context, transaction);
+                if (getAuthor.IsSucceed)
+                {
+                    Author = getAuthor.Data.Obj;
+                }
             }
         }
 

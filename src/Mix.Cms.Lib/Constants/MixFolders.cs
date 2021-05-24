@@ -9,6 +9,7 @@
         public const string MixLogsFolder = "MixContent/logs";
         public const string ExportFolder = "mix-content/exports";
         public const string ImportFolder = "mix-content/imports/themes";
+        public const string UploadsFolder = "mix-content/uploads";
         public const string SiteContentAssetsFolder = "mix-content/assets";
     }
 }

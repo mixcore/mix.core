@@ -5,8 +5,8 @@ WORKDIR /app
 
 # Copy everything else and build
 COPY src/. ./
-# RUN dotnet restore Mix.Cms.Web/Mix.Cms.Web.csproj
-RUN dotnet publish Mix.Cms.Web/Mix.Cms.Web.csproj -c Release
+# RUN dotnet restore Mix.Cms.Web/Mixcore.csproj
+RUN dotnet publish Mix.Cms.Web/Mixcore.csproj -c Release
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS runtime
@@ -14,7 +14,7 @@ WORKDIR /app
 # COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
 COPY --from=build-env /app/Mix.Cms.Web/bin/Release/net5.0/publish .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "Mix.Cms.Web.dll"]
+ENTRYPOINT ["dotnet", "mixcore.dll"]
 
 
 #############################

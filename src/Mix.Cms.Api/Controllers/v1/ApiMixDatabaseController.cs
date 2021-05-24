@@ -11,8 +11,9 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.MixDatabases;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq.Expressions;
@@ -25,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
     public class ApiMixDatabaseController :
         BaseGenericApiController<MixCmsContext, MixDatabase>
     {
-        public ApiMixDatabaseController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<Mix.Cms.Service.SignalR.Hubs.PortalHub> hubContext) : base(context, memoryCache, hubContext)
+        public ApiMixDatabaseController(MixCmsContext context, IMemoryCache memoryCache, Microsoft.AspNetCore.SignalR.IHubContext<PortalHub> hubContext) : base(context, memoryCache, hubContext)
         {
         }
 

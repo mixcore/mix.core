@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Services;
+using Mix.Heart.Enums;
 using Mix.Identity.Data;
 using MySqlConnector;
 

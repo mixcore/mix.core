@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -70,7 +70,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 
         #region Views
 
-        public List<MixDatabaseColumns.ReadViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<MixDatabaseColumns.ReadViewModel> Columns { get; set; }
 
         #endregion Views
 
@@ -92,7 +93,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Fields = MixDatabaseColumns.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == Id, _context, _transaction).Data;
+            Columns ??= MixDatabaseColumns.ReadViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == Id, _context, _transaction).Data;
         }
 
         #endregion Overrides

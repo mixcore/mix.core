@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
 
         #region Expand
 
-        public static RepositoryResponse<List<MixModulePosts.ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
+        public static RepositoryResponse<List<ReadViewModel>> GetModulePostNavAsync(int postId, string specificulture
            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -124,7 +124,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModulePosts
                     && (a.Type == (int)MixModuleType.ListPost)
                     )
                     .AsEnumerable()
-                    .Select(p => new MixModulePosts.ReadViewModel(
+                    .Select(p => new ReadViewModel(
                         new MixModulePost()
                         {
                             PostId = postId,

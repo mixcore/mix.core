@@ -7,9 +7,7 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Domain.Core.ViewModels;
-using Mix.Domain.Data.Repository;
-using Mix.Domain.Data.ViewModels;
+using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
@@ -21,6 +19,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Heart.Models;
+using Mix.Heart.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -32,6 +32,13 @@ namespace Mix.Cms.Lib.Controllers
     {
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
+        protected DefaultRepository<TDbContext, TModel, TView> _repo;
+
+        public BaseRestApiController(DefaultRepository<TDbContext, TModel, TView> repo)
+        {
+            _repo = repo;
+        }
+
         protected string _lang;
         protected bool _forbidden;
 
@@ -48,7 +55,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -59,7 +66,7 @@ namespace Mix.Cms.Lib.Controllers
                 Direction = direction
             };
 
-            RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+            RepositoryResponse<PaginationModel<TView>> getData = await _repo.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
 
             if (getData.IsSucceed)
@@ -93,7 +100,7 @@ namespace Mix.Cms.Lib.Controllers
             if (getData.IsSucceed)
             {
                 var data = getData.Data;
-                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixColumnName.Id);
+                var idProperty = ReflectionHelper.GetPropertyType(data.GetType(), MixQueryColumnName.Id);
                 switch (idProperty.Name.ToLower())
                 {
                     case "int32":
@@ -131,8 +138,8 @@ namespace Mix.Cms.Lib.Controllers
             {
                 var transaction = context.Database.BeginTransaction();
                 TView data = ReflectionHelper.InitModel<TView>();
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Specificulture, _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }
@@ -159,8 +166,8 @@ namespace Mix.Cms.Lib.Controllers
         {
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
-            ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Specificulture, _lang));
-            ReflectionHelper.SetPropertyValue(data, new JProperty(MixColumnName.Status, MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
+            ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
+            ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
 
             var result = await SaveAsync(data, true);
             if (result.IsSucceed)
@@ -181,7 +188,7 @@ namespace Mix.Cms.Lib.Controllers
                 ReflectionHelper.SetPropertyValue(data, new JProperty("ModifiedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
                 ReflectionHelper.SetPropertyValue(data, new JProperty("LastModified", DateTime.UtcNow));
-                var currentId = ReflectionHelper.GetPropertyValue(data, MixColumnName.Id).ToString();
+                var currentId = ReflectionHelper.GetPropertyValue(data, MixQueryColumnName.Id).ToString();
                 if (id != currentId)
                 {
                     return BadRequest();
@@ -254,13 +261,13 @@ namespace Mix.Cms.Lib.Controllers
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(
-                MixColumnName.Specificulture,
+                MixQueryColumnName.Specificulture,
                 _lang,
-                MixHeartEnums.ExpressionMethod.Eq);
+                ExpressionMethod.Eq);
             Expression<Func<TModel, bool>> idPre = null;
             foreach (var id in data.Data)
             {
-                var temp = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+                var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, ExpressionMethod.Eq);
 
                 idPre = idPre != null
                     ? idPre.AndAlso(temp)
@@ -320,7 +327,7 @@ namespace Mix.Cms.Lib.Controllers
             base.OnActionExecuting(context);
         }
 
-        protected void GetLanguage()
+        protected virtual void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : string.Empty;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
@@ -330,12 +337,24 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Helpers
 
+        protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result)
+        {
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data);
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
         private async Task<RepositoryResponse<List<TView>>> PublishListAsync(Expression<Func<TModel, bool>> predicate)
         {
             var data = await GetListAsync<TView>(predicate);
             foreach (var item in data.Data.Items)
             {
-                ReflectionHelper.SetPropertyValue(item, new JProperty(MixColumnName.Status, MixContentStatus.Published));
+                ReflectionHelper.SetPropertyValue(item, new JProperty(MixQueryColumnName.Status, MixContentStatus.Published));
             }
             return await SaveListAsync(data.Data.Items, false);
         }
@@ -343,10 +362,10 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : ViewModelBase<TDbContext, TModel, T>
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -355,10 +374,10 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixColumnName.Id, id, MixHeartEnums.ExpressionMethod.Eq);
+            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))
             {
-                var idPre = ReflectionHelper.GetExpression<TModel>(MixColumnName.Specificulture, _lang, MixHeartEnums.ExpressionMethod.Eq);
+                var idPre = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Specificulture, _lang, ExpressionMethod.Eq);
                 predicate = predicate.AndAlso(idPre);
             }
 
@@ -370,7 +389,7 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<TView> data = null;
             if (predicate != null)
             {
-                data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetSingleModelAsync(predicate);
+                data = await _repo.GetSingleModelAsync(predicate);
             }
             return data;
         }
@@ -436,7 +455,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
         {
-            var data = await DefaultRepository<TDbContext, TModel, TView>.Instance.RemoveListModelAsync(isRemoveRelatedModel, predicate);
+            var data = await _repo.RemoveListModelAsync(isRemoveRelatedModel, predicate);
 
             return data;
         }
@@ -444,7 +463,7 @@ namespace Mix.Cms.Lib.Controllers
         protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate)
         {
             string type = typeof(TModel).Name;
-            var getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(predicate, _context);
+            var getData = await _repo.GetModelListByAsync(predicate, _context);
             var jData = new List<JObject>();
             if (getData.IsSucceed)
             {
@@ -474,7 +493,7 @@ namespace Mix.Cms.Lib.Controllers
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             int.TryParse(Request.Query[MixRequestQueryKeywords.PageIndex], out int pageIndex);
-            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out MixHeartEnums.DisplayDirection direction);
+            bool isDirection = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Direction], out DisplayDirection direction);
             bool isPageSize = int.TryParse(Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
 
             RequestPaging request = new RequestPaging()
@@ -536,7 +555,7 @@ namespace Mix.Cms.Lib.Controllers
                     }
                 }
 
-                var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.UpdateFieldsAsync(predicate, fields);
+                var result = await _repo.UpdateFieldsAsync(predicate, fields);
 
                 return result;
             }
@@ -545,7 +564,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         {
-            var result = await DefaultRepository<TDbContext, TModel, TView>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
+            var result = await _repo.SaveListModelAsync(lstVm, isSaveSubModel);
 
             return result;
         }

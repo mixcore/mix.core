@@ -9,7 +9,9 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixPages;
-using Mix.Domain.Core.ViewModels;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
+using Mix.Identity.Helpers;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -22,6 +24,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPageController :
         BaseAuthorizedRestApiController<MixCmsContext, MixPage, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
+        public ApiPageController(
+            DefaultRepository<MixCmsContext, MixPage, ReadViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixPage, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPage, DeleteViewModel> delRepo,
+            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+        {
+        }
+
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadViewModel>>> Get()
         {
@@ -31,7 +41,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             Expression<Func<MixPage, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (User.IsInRole("SuperAdmin") || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
+                && (User.IsInRole(MixRoles.SuperAdmin) || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
                 && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)

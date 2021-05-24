@@ -4,6 +4,10 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
+using Mix.Heart.Enums;
+using Mix.Heart.Models;
+using Mix.Identity.Models;
+using Mix.Infrastructure.Repositories;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -41,7 +45,7 @@ namespace Mix.Cms.Lib.Services
         private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         private readonly FileSystemWatcher watcher = new FileSystemWatcher();
-
+        public MixAuthenticationConfigurations MixAuthentications { get => Authentication.ToObject<MixAuthenticationConfigurations>(); }
         public MixService()
         {
             watcher.Path = System.IO.Directory.GetCurrentDirectory();
@@ -108,7 +112,7 @@ namespace Mix.Cms.Lib.Services
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
             instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
-            CommonHelper.WebConfigInstance = jsonSettings;
+            MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
         private void LoadDefaultConfiggurations()
@@ -158,14 +162,14 @@ namespace Mix.Cms.Lib.Services
             return Instance.Cultures.Any(c => c == specificulture);
         }
 
-        public static T GetAuthConfig<T>(string name)
+        public static T GetAuthConfig<T>(string name, T defaultValue = default)
         {
             var result = Instance.Authentication[name];
             if (result == null)
             {
                 result = DefaultInstance.Authentication[name];
             }
-            return result != null ? result.Value<T>() : default;
+            return result != null ? result.Value<T>() : defaultValue;
         }
 
         public static void SetAuthConfig<T>(string name, T value)
@@ -239,14 +243,14 @@ namespace Mix.Cms.Lib.Services
             Instance.LocalSettings[culture][name] = value.ToString();
         }
 
-        public static T Translate<T>(string name, string culture)
+        public static T Translate<T>(string name, string culture, T defaultVaule = default)
         {
             var result = Instance.Translator[culture][name];
             //if (result == null)
             //{
             //    result = DefaultInstance.Translator[culture][name];
             //}
-            return result != null ? result.Value<T>() : default;
+            return result != null ? result.Value<T>() : defaultVaule;
         }
 
         public static string TranslateString(string name, string culture)
@@ -260,7 +264,7 @@ namespace Mix.Cms.Lib.Services
             return JObject.FromObject(Instance.Translator[culture] ?? new JObject());
         }
 
-        public static JObject GetLocalSettings(string culture)
+        public static JObject GetLocalizeSettings(string culture)
         {
             return JObject.FromObject(Instance.LocalSettings[culture] ?? new JObject());
         }
@@ -298,6 +302,7 @@ namespace Mix.Cms.Lib.Services
                     jsonSettings["Authentication"] = instance.Authentication;
                     jsonSettings["IpSecuritySettings"] = instance.IpSecuritySettings;
                     jsonSettings["Smtp"] = instance.Smtp;
+                    jsonSettings["MixConfigurations"] = instance.MixConfigurations;
                     settings.Content = jsonSettings.ToString();
                     return MixFileRepository.Instance.SaveFile(settings);
                 }
@@ -319,6 +324,7 @@ namespace Mix.Cms.Lib.Services
         public static void Reload()
         {
             Instance.LoadConfiggurations();
+            MixCommonHelper.ReloadWebConfig();
         }
 
         public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
