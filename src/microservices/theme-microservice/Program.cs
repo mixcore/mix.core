@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace mix.theme
+namespace Mix.theme
 {
     public class Program
     {

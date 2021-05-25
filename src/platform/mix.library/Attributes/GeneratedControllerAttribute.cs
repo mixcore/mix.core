@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mix.library.Attributes
+namespace Mix.Lib.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class GeneratedControllerAttribute: Attribute

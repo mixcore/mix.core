@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using mix.library.Extensions;
+using Mix.Lib.Extensions;
 
-namespace mix.theme
+namespace Mix.theme
 {
     public class Startup
     {
@@ -25,12 +25,7 @@ namespace mix.theme
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "mix.theme v1"));
-            }
+            app.UseMixApps(env.IsDevelopment());
 
             app.UseHttpsRedirection();
 
@@ -43,7 +38,6 @@ namespace mix.theme
                 endpoints.MapControllers();
             });
 
-            app.UseMixApps();
         }
     }
 }
