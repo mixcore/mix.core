@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "theme-microservice", "theme
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "portal-microservice", "portal-microservice", "{F09C9B82-734C-4CBE-8B4A-C3F17F4AE84B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.heart", "..\mix.heart\src\Mix.Heart\mix.heart.csproj", "{93154D3A-922B-456C-AAC6-08D68CC64EDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart", "..\mix.heart\src\Mix.Heart\Mix.Heart.csproj", "{93154D3A-922B-456C-AAC6-08D68CC64EDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "applications", "applications", "{4E880812-C336-4EB2-9FED-2E437957F50A}"
 EndProject

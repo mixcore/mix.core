@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mix.library
+namespace Mix.Lib
 {
     public class Class1
     {
