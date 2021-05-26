@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\microservices\theme-microservice\mix.theme.csproj" />
+    <ProjectReference Include="..\..\modules\theme-module\mix.theme.csproj" />
   </ItemGroup>
 
 </Project>

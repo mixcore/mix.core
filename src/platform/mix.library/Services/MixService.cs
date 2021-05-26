@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Lib.Constants;
-using Mix.Lib.Models.Cms;
+using Mix.Lib.Entities.Cms;
 using Mix.Common.Helper;
 using Mix.Heart.Enums;
 using Mix.Heart.Models;

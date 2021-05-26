@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Account\**" />
-    <EmbeddedResource Remove="Models\Account\**" />
-    <None Remove="Models\Account\**" />
+    <Compile Remove="Entities\Account\**" />
+    <EmbeddedResource Remove="Entities\Account\**" />
+    <None Remove="Entities\Account\**" />
   </ItemGroup>
 
   <ItemGroup>
