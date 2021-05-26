@@ -16,6 +16,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Infrastructure.Repositories;
 using Mix.Heart.Enums;
+using Mix.Lib.Models.Common;
+using Mix.Lib.Dtos;
 
 namespace Mix.Lib.Controllers
 {
@@ -34,8 +36,6 @@ namespace Mix.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
-
-
 
         #region Helpers
 
@@ -121,17 +121,7 @@ namespace Mix.Lib.Controllers
 
         protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
         {
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            Enum.TryParse(Request.Query["direction"], out Heart.Enums.DisplayDirection direction);
-            bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
-
-            RequestPaging request = new RequestPaging()
-            {
-                PageIndex = pageIndex,
-                PageSize = isPageSize ? pageSize : 100,
-                OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
-                Direction = direction
-            };
+            var query = new SearchQueryModel(Request);
             RepositoryResponse<PaginationModel<TView>> data = null;
 
             if (data == null)
@@ -139,11 +129,12 @@ namespace Mix.Lib.Controllers
                 if (predicate != null)
                 {
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListByAsync(
-                        predicate, request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null);
+                        predicate, query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null);
                 }
                 else
                 {
-                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+                    data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
+                        query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null).ConfigureAwait(false);
                 }
             }
             return data;
@@ -223,24 +214,12 @@ namespace Mix.Lib.Controllers
         #region Routes
 
         [HttpGet]
-        public virtual async Task<ActionResult<PaginationModel<TView>>> Get()
+        public virtual async Task<ActionResult<PaginationModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
-            bool isFromDate = DateTime.TryParse(Request.Query["fromDate"], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query["toDate"], out DateTime toDate);
-            int.TryParse(Request.Query["pageIndex"], out int pageIndex);
-            Enum.TryParse(Request.Query["direction"], out Heart.Enums.DisplayDirection direction);
-            bool isPageSize = int.TryParse(Request.Query["pageSize"], out int pageSize);
-
-            RequestPaging request = new RequestPaging()
-            {
-                PageIndex = pageIndex,
-                PageSize = isPageSize ? pageSize : 100,
-                OrderBy = Request.Query["orderBy"].ToString().ToTitleCase(),
-                Direction = direction
-            };
+            var query = new SearchQueryModel(Request, _lang);
 
             RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
-                request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
+                query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null).ConfigureAwait(false);
 
             if (getData.IsSucceed)
             {

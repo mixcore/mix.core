@@ -26,7 +26,13 @@ namespace Mix.Lib.Extensions
                 ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                 var instance = classConstructor.Invoke(Array.Empty<object>());
                 startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
+                
             }
+            foreach (var assembly in assemblies)
+            {
+                services.AddGeneratedRestApi(assembly);
+            }
+            
             return services;
         }
 
