@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Lib.Extensions;
+using System.Reflection;
 
 namespace Mix.Theme
 {
@@ -20,24 +21,14 @@ namespace Mix.Theme
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMixServices();
+            services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMixApps(env.IsDevelopment());
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
+            app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
         }
     }
 }

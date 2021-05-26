@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Lib.Extensions;
 using System.Reflection;
 
-namespace mixcore
+namespace mix.portal
 {
     public class Startup
     {
@@ -22,40 +22,13 @@ namespace mixcore
         {
             services.AddMixServices();
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
-            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
             app.UseMixApps(env.IsDevelopment());
             app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
         }
     }
 }

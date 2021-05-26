@@ -6,6 +6,10 @@ namespace Mix.Theme.Controllers.v2
     [ApiController]
     public class ThemeController : ControllerBase
     {
-
+        [HttpGet]
+        public ActionResult<string> Get()
+        {
+            return Ok("test");
+        }
     }
 }
