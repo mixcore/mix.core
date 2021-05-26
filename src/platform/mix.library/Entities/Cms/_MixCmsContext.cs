@@ -54,8 +54,6 @@ namespace Mix.Lib.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.EnableSensitiveDataLogging(true);
-            //define the database to use
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
@@ -108,19 +106,19 @@ namespace Mix.Lib.Entities.Cms
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:
-                    ns = "Mix.Lib.Models.EntityConfigurations.MSSQL";
+                    ns = "Mix.Lib.Entities.EntityConfigurations.MSSQL";
                     break;
 
                 case MixDatabaseProvider.MySQL:
-                    ns = "Mix.Lib.Models.EntityConfigurations.MySQL";
+                    ns = "Mix.Lib.Entities.EntityConfigurations.MySQL";
                     break;
 
                 case MixDatabaseProvider.SQLITE:
-                    ns = "Mix.Lib.Models.EntityConfigurations.SQLITE";
+                    ns = "Mix.Lib.Entities.EntityConfigurations.SQLITE";
                     break;
 
                 case MixDatabaseProvider.PostgreSQL:
-                    ns = "Mix.Lib.Models.EntityConfigurations.POSTGRESQL";
+                    ns = "Mix.Lib.Entities.EntityConfigurations.POSTGRESQL";
                     break;
 
                 default:

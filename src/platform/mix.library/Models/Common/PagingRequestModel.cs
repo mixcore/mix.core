@@ -5,9 +5,9 @@ using System;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 
-namespace Mix.Lib.Entities.Common
+namespace Mix.Lib.Models.Common
 {
-    public class PagingRequest
+    public class PagingRequestModel
     {
         public string OrderBy { get; set; }
         public DisplayDirection Direction { get; set; }
@@ -15,11 +15,11 @@ namespace Mix.Lib.Entities.Common
         public int PageSize { get; set; }
         public int Page { get; set; }
 
-        public PagingRequest()
+        public PagingRequestModel()
         {
 
         }
-        public PagingRequest(HttpRequest request)
+        public PagingRequestModel(HttpRequest request)
         {
             OrderBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
                 ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";

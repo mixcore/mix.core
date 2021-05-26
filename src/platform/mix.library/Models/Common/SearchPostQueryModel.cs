@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Lib.Constants;
-using Mix.Lib.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace Mix.Lib.Entities.Common
+namespace Mix.Lib.Models.Common
 {
     public class SearchPostQueryModel: SearchQueryModel
     {

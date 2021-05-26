@@ -7,7 +7,6 @@ using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -31,7 +30,6 @@ namespace Mix.Lib.Services
 
         private static volatile MixService defaultInstance;
 
-        private List<string> Cultures { get; set; }
         private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
@@ -319,7 +317,6 @@ namespace Mix.Lib.Services
             try
             {
                 Instance.Translator = new JObject();
-                Instance.Cultures = null;
                 var ListLanguage = context.MixLanguage.ToList();
                 var cultures = context.MixCulture.ToList();
                 foreach (var culture in cultures)

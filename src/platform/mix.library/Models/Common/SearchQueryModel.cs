@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Lib.Constants;
+using Mix.Lib.Dtos;
 using Mix.Lib.Enums;
 using Mix.Lib.Services;
 using System;
 
-namespace Mix.Lib.Entities.Common
+namespace Mix.Lib.Models.Common
 {
     public class SearchQueryModel
     {
@@ -13,12 +14,13 @@ namespace Mix.Lib.Entities.Common
         public DateTime? ToDate { get; set; }
         public MixContentStatus? Status { get; set; }
         public string Keyword { get; set; }
-        public PagingRequest PagingData { get; set; }
+        public PagingRequestModel PagingData { get; set; }
 
         public SearchQueryModel()
         {
 
         }
+        
         public SearchQueryModel(HttpRequest request, string culture = null)
         {
             Specificulture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
@@ -30,7 +32,22 @@ namespace Mix.Lib.Entities.Common
                 ? status : null;
             Keyword = request.Query.TryGetValue(MixRequestQueryKeywords.Keyword, out var orderBy)
                 ? orderBy : string.Empty;
-            PagingData = new PagingRequest(request);
+            PagingData = new PagingRequestModel(request);
+        }
+        
+        public SearchQueryModel(SearchRequestDto request, string culture = null)
+        {
+            Specificulture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            FromDate = request.FromDate;
+            ToDate = request.ToDate;
+            Status = request.Status;
+            Keyword = request.Keyword;
+            PagingData = new PagingRequestModel() {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                Direction = request.Direction,
+                OrderBy = request.OrderBy
+            };
         }
     }
 }
