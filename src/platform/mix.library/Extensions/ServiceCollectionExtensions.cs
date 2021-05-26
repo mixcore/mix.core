@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Lib.Conventions;
@@ -9,6 +10,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mix.Heart.Extensions;
 
 namespace Mix.Lib.Extensions
 {
@@ -24,8 +26,8 @@ namespace Mix.Lib.Extensions
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
-                    ConstructorInfo classConstructor = startup.GetConstructor(new Type[] { typeof(Assembly) });
-                    var instance = classConstructor.Invoke(new[] { assembly });
+                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                    var instance = classConstructor.Invoke(Array.Empty<Type>());
                     startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
 
                 }
@@ -44,12 +46,51 @@ namespace Mix.Lib.Extensions
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
-                    ConstructorInfo classConstructor = startup.GetConstructor(new Type[] { typeof(Assembly) });
-                    var instance = classConstructor.Invoke(new[] { assembly });
+                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                    var instance = classConstructor.Invoke(Array.Empty<Type>());
                     startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
                 }
             }
             return app;
+        }
+
+        public static void AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
+        {
+            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
+            string version = "v2";
+            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+            });
+        }
+
+        public static void UseMixSwaggerApps(this IApplicationBuilder app, bool isDevelop, Assembly assembly)
+        {
+            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
+            string version = "v2";
+            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            if (isDevelop)
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger(opt => opt.RouteTemplate = swaggerBasePath + "/swagger/{documentName}/swagger.json");
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint($"/{swaggerBasePath}/swagger/{version}/swagger.json", $"{title} {version}");
+                    c.RoutePrefix = $"{swaggerBasePath}/swagger";
+                });
+            }
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Assembly assembly, Type baseType = null)

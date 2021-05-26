@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
 
-namespace Mix.Theme.Domain
+namespace Mix.Portal.Domain
 {
     public class StartupService : IStartupService
     {

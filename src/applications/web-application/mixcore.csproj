@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\portal-module\mix.portal\mix.portal.csproj" />
     <ProjectReference Include="..\..\modules\theme-module\mix.theme.csproj" />
   </ItemGroup>
 

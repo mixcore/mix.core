@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\mix.heart.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstracts\" />
+  </ItemGroup>
+
 </Project>
