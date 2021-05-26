@@ -1,18 +1,14 @@
 ﻿using Mix.Lib.Enums;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Mix.Lib.Entities
+namespace Mix.Lib.Models.Common
 {
     public class ExpressionModel
     {
-        [JsonProperty("expressionType")]
         public MixLogicalOperatorKind ExpressionType { get; set; }
 
-        [JsonProperty("functions")]
         public List<FunctionModel> Functions { get; set; }
 
-        [JsonProperty("expressions")]
         public List<ExpressionModel> Expressions { get; set; }
 
         public static ExpressionModel Create(MixLogicalOperatorKind expressType)

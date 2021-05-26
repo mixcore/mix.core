@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Lib.Conventions;
-using Mix.Lib.Modules;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Providers;
 using System;
 using System.IO;
@@ -18,19 +18,19 @@ namespace Mix.Lib.Extensions
         public static IServiceCollection AddMixServices(this IServiceCollection services)
         {
             var assemblies = GetMixAssemblies();
-            var startupServices = assemblies.SelectMany(
-                                        assembly => assembly.GetExportedTypes()
-                                            .Where(IsStartupService));
-            foreach (var startup in startupServices)
-            {
-                ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                var instance = classConstructor.Invoke(Array.Empty<object>());
-                startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
-                
-            }
+           
             foreach (var assembly in assemblies)
             {
+                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
+                foreach (var startup in startupServices)
+                {
+                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                    var instance = classConstructor.Invoke(Array.Empty<object>());
+                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
+
+                }
                 services.AddGeneratedRestApi(assembly);
+                services.AddRepositories(assembly);
             }
             
             return services;
@@ -51,7 +51,7 @@ namespace Mix.Lib.Extensions
             return app;
         }
 
-        public static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Assembly assembly, Type baseType = null)
+        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Assembly assembly, Type baseType = null)
         {
             services.
                 AddMvc(o => o.Conventions.Add(
@@ -63,7 +63,7 @@ namespace Mix.Lib.Extensions
             return services;
         }
 
-        public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
+        private static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
             var candidates = assembly
                 .GetExportedTypes()

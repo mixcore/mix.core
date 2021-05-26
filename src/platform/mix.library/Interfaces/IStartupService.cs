@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mix.Lib.Modules
+namespace Mix.Lib.Interfaces
 {
     public interface IStartupService
     {

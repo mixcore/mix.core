@@ -5,7 +5,6 @@ using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
 using Mix.Heart.Infrastructure.ViewModels;
-using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
@@ -16,8 +15,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Infrastructure.Repositories;
 using Mix.Heart.Enums;
-using Mix.Lib.Entities.Common;
 using Mix.Lib.Dtos;
+using Mix.Lib.Models.Common;
 
 namespace Mix.Lib.Controllers
 {
@@ -216,7 +215,7 @@ namespace Mix.Lib.Controllers
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
-            var query = new SearchQueryModel(Request, _lang);
+            var query = new SearchQueryModel(req, _lang);
 
             RepositoryResponse<PaginationModel<TView>> getData = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(
                 query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null).ConfigureAwait(false);
