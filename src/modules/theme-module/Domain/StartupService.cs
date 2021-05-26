@@ -1,37 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Mix.Lib.Interfaces;
+﻿using Mix.Lib.Abstracts;
+using System.Reflection;
 
 namespace Mix.Theme.Domain
 {
-    public class StartupService : IStartupService
+    public class StartupService : StartupApi
     {
-        private readonly string Title = "Mix Theme";
-        private readonly string Version = "v2";
-        private readonly string SwaggerBasePath = "api/v2/mix-theme";
-
-        public void AddServices(IServiceCollection services)
+        public StartupService(Assembly assembly) : base(assembly)
         {
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc(Version, new OpenApiInfo { Title = Title, Version = Version });
-            });
-        }
-
-        public void UseApps(IApplicationBuilder app, bool isDevelop)
-        {
-            if (isDevelop)
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger(opt => opt.RouteTemplate = SwaggerBasePath + "/swagger/{documentName}/swagger.json");
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint($"/{SwaggerBasePath}/swagger/{Version}/swagger.json", $"{Title} {Version}");
-                    c.RoutePrefix = $"{SwaggerBasePath}/swagger";
-                });
-            }
         }
     }
 }

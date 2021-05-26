@@ -14,39 +14,40 @@ namespace Mix.Lib.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        
+
         public static IServiceCollection AddMixServices(this IServiceCollection services)
         {
             var assemblies = GetMixAssemblies();
-           
+
             foreach (var assembly in assemblies)
             {
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
-                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                    var instance = classConstructor.Invoke(Array.Empty<object>());
+                    ConstructorInfo classConstructor = startup.GetConstructor(new Type[] { typeof(Assembly) });
+                    var instance = classConstructor.Invoke(new[] { assembly });
                     startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
 
                 }
                 services.AddGeneratedRestApi(assembly);
                 services.AddRepositories(assembly);
             }
-            
+
             return services;
         }
 
         public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, bool isDevelop)
         {
             var assemblies = GetMixAssemblies();
-            var startupServices = assemblies.SelectMany(
-                                        assembly => assembly.GetExportedTypes()
-                                            .Where(IsStartupService));
-            foreach (var startup in startupServices)
+            foreach (var assembly in assemblies)
             {
-                ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                var instance = classConstructor.Invoke(Array.Empty<object>());
-                startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
+                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
+                foreach (var startup in startupServices)
+                {
+                    ConstructorInfo classConstructor = startup.GetConstructor(new Type[] { typeof(Assembly) });
+                    var instance = classConstructor.Invoke(new[] { assembly });
+                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
+                }
             }
             return app;
         }
