@@ -16,7 +16,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Infrastructure.Repositories;
 using Mix.Heart.Enums;
-using Mix.Lib.Models.Common;
+using Mix.Lib.Entities.Common;
 using Mix.Lib.Dtos;
 
 namespace Mix.Lib.Controllers
