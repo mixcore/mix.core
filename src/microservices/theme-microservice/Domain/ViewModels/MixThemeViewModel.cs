@@ -10,7 +10,7 @@ using Mix.Lib.Attributes;
 
 namespace Mix.theme.Domain.ViewModels
 {
-    [GeneratedController("api/v2/rest/{culture}/mix-theme")]
+    [GeneratedController("api/v2/rest/{culture}/mix-theme", "Mix Theme Portal")]
     public class MixThemeViewModel : ViewModelBase<MixCmsContext, MixTheme, MixThemeViewModel>
     {
         #region Properties

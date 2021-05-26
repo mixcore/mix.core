@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Mix.Heart.Extensions;
 using Mix.Lib.Attributes;
+using System.Linq;
 using System.Reflection;
 
 
@@ -13,16 +14,19 @@ namespace Mix.Lib.Conventions
         {
             if (controller.ControllerType.IsGenericType)
             {
-                // BaseController Generic Type <TDbContext, TModel, TView>
                 var genericType = controller.ControllerType.GenericTypeArguments[2];
                 var customNameAttribute = genericType.GetCustomAttribute<GeneratedControllerAttribute>();
 
                 if (customNameAttribute?.Route != null)
                 {
-                    controller.Selectors.Add(new SelectorModel
+                    if (!controller.Selectors.Any(s => s.AttributeRouteModel?.Template == customNameAttribute.Route))
                     {
-                        AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(customNameAttribute.Route)),
-                    });
+                        controller.Selectors.Add(new SelectorModel
+                        {
+                            AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(customNameAttribute.Route)),
+                        });
+                        controller.ControllerName = customNameAttribute.Name;
+                    }
                 }
                 else
                 {
