@@ -37,8 +37,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Theme.Common", "Mix.The
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Cms.Api.MixDatabase", "Mix.Cms.Api.MixDatabase\Mix.Cms.Api.MixDatabase.csproj", "{B748070F-EF13-43FD-B126-C6D396455DD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart", "..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj", "{1F04C91E-CADF-48A6-AD08-828982788C6F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,10 +95,6 @@ Global
 		{B748070F-EF13-43FD-B126-C6D396455DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B748070F-EF13-43FD-B126-C6D396455DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B748070F-EF13-43FD-B126-C6D396455DD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F04C91E-CADF-48A6-AD08-828982788C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F04C91E-CADF-48A6-AD08-828982788C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F04C91E-CADF-48A6-AD08-828982788C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F04C91E-CADF-48A6-AD08-828982788C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,7 +112,6 @@ Global
 		{9D78FCAE-D1D0-411D-96D4-6AF1E115FE0C} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
 		{F320968E-8CB9-4AB1-93EB-B26BFE707986} = {43479FD0-1591-4621-81DD-3B13CC11E3CD}
 		{B748070F-EF13-43FD-B126-C6D396455DD6} = {C45D03E7-0453-4199-A5DE-E61B5FF29AF4}
-		{1F04C91E-CADF-48A6-AD08-828982788C6F} = {CCA797E2-3092-4C49-8839-C052D0D54B3B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B133AF3-4413-4B56-9BEC-8C4509008F85}
