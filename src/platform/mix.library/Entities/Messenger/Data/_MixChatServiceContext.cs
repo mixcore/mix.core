@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Cms.Lib;
+using Mix.Lib;
 using Mix.Lib.Enums;
 using Mix.Lib.Services;
 using Mix.Heart.Enums;
