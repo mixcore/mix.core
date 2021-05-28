@@ -12,7 +12,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading;
-using Mix.Cms.Lib;
+using Mix.Lib;
+using Mix.Identity.Models;
 
 namespace Mix.Lib.Services
 {
@@ -39,6 +40,8 @@ namespace Mix.Lib.Services
         private JObject IpSecuritySettings { get; set; }
         private JObject Smtp { get; set; }
         private readonly FileSystemWatcher watcher = new FileSystemWatcher();
+        public MixAuthenticationConfigurations MixAuthentications { get => Authentication.ToObject<MixAuthenticationConfigurations>(); }
+
         public MixService()
         {
             watcher.Path = System.IO.Directory.GetCurrentDirectory();

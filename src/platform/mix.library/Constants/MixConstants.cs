@@ -1,4 +1,4 @@
-﻿namespace Mix.Cms.Lib
+﻿namespace Mix.Lib
 {
     public class MixConstants
     {
