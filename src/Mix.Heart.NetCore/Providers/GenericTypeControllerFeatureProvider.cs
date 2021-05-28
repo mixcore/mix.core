@@ -16,7 +16,7 @@ namespace Mix.Heart.Providers
 
         public GenericTypeControllerFeatureProvider(Assembly assembly, Type baseType = null)
         {
-            this.Assembly = assembly;
+            Assembly = assembly;
             BaseType = baseType != null ? baseType : typeof(BaseRestApiController<,,>);
         }
 
@@ -27,7 +27,7 @@ namespace Mix.Heart.Providers
             foreach (var candidate in candidates)
             {
                 if (candidate.BaseType.IsGenericType
-                    && candidate.BaseType.GenericTypeArguments.Length == this.BaseType.GetGenericArguments().Length)
+                    && candidate.BaseType.GenericTypeArguments.Length == BaseType.GetGenericArguments().Length)
                 {
                     Type[] types = candidate.BaseType.GenericTypeArguments;
                     feature.Controllers.Add(
