@@ -7,6 +7,7 @@ using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
 using Mix.Lib.Services;
+using Mix.Lib.ViewModels.Cms;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -230,12 +231,12 @@ namespace Mix.Theme.Domain.ViewModels.Init
         private async Task<RepositoryResponse<bool>> ActivedThemeAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            SystemConfigurationViewModel config = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+            MixConfigurationViewModel config = (await MixConfigurationViewModel.Repository.GetSingleModelAsync(
                     c => c.Keyword == MixAppSettingKeywords.ThemeName && c.Specificulture == Specificulture
                     , _context, _transaction)).Data;
             if (config == null)
             {
-                config = new SystemConfigurationViewModel()
+                config = new MixConfigurationViewModel()
                 {
                     Keyword = MixAppSettingKeywords.ThemeName,
                     Specificulture = Specificulture,
@@ -252,7 +253,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             var saveConfigResult = await config.SaveModelAsync(false, _context, _transaction);
             if (saveConfigResult.IsSucceed)
             {
-                SystemConfigurationViewModel configFolder = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                MixConfigurationViewModel configFolder = (await MixConfigurationViewModel.Repository.GetSingleModelAsync(
                 c => c.Keyword == MixAppSettingKeywords.ThemeFolder && c.Specificulture == Specificulture
                 , _context, _transaction)).Data;
                 configFolder.Value = Name;
@@ -264,11 +265,11 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
             if (result.IsSucceed)
             {
-                SystemConfigurationViewModel configId = (await SystemConfigurationViewModel.Repository.GetSingleModelAsync(
+                MixConfigurationViewModel configId = (await MixConfigurationViewModel.Repository.GetSingleModelAsync(
                       c => c.Keyword == MixAppSettingKeywords.ThemeId && c.Specificulture == Specificulture, _context, _transaction)).Data;
                 if (configId == null)
                 {
-                    configId = new SystemConfigurationViewModel()
+                    configId = new MixConfigurationViewModel()
                     {
                         Keyword = MixAppSettingKeywords.ThemeId,
                         Specificulture = Specificulture,
@@ -333,5 +334,4 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         #endregion Overrides
     }
-}
 }

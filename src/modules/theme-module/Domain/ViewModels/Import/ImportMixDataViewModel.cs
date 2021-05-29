@@ -4,16 +4,18 @@ using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
+using Mix.Lib.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Mix.Lib.Extensions;
 
 namespace Mix.Theme.Domain.ViewModels.Import
 {
-    public class ImportDataViewModel: ViewModelBase<MixCmsContext, MixDatabaseData, ImportDataViewModel>
+    public class ImportMixDataViewModel: ViewModelBase<MixCmsContext, MixDatabaseData, ImportMixDataViewModel>
     {
         #region Properties
 
@@ -51,14 +53,14 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         public MixDatabaseParentType ParentType { get; set; }
 
-        public List<ImportDataAssociationViewModel> RelatedData { get; set; } = new List<ImportDataAssociationViewModel>();
+        public List<ImportMixDataAssociationViewModel> RelatedData { get; set; } = new List<ImportMixDataAssociationViewModel>();
 
-        public List<ImportDataValueViewModel> Values { get; set; }
+        public List<ImportMixDataValueViewModel> Values { get; set; }
 
-        public List<ImportaColumnViewModel> Columns { get; set; }
+        public List<ImportaMixDatabaseColumnViewModel> Columns { get; set; }
 
         [JsonIgnore]
-        public List<ImportDataViewModel> RefData { get; set; } = new List<ImportDataViewModel>();
+        public List<ImportMixDataViewModel> RefData { get; set; } = new List<ImportMixDataViewModel>();
 
         #endregion Views
 
@@ -66,11 +68,11 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Contructors
 
-        public ImportDataViewModel() : base()
+        public ImportMixDataViewModel() : base()
         {
         }
 
-        public ImportDataViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ImportMixDataViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -82,7 +84,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
         {
             if (Obj == null)
             {
-                Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
+                Obj = MixDataHelper.ParseData(Id, Specificulture, _context, _transaction);
             }
         }
 
@@ -103,12 +105,12 @@ namespace Mix.Theme.Domain.ViewModels.Import
             {
                 MixDatabaseId = _context.MixDatabase.First(m => m.Name == MixDatabaseName)?.Id ?? 0;
             }
-            Values ??= ImportDataValueViewModel
+            Values ??= ImportMixDataValueViewModel
                 .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
                 , _context, _transaction)
                 .Data.OrderBy(a => a.Priority).ToList();
 
-            Columns ??= ImportaColumnViewModel.Repository.GetModelListBy(
+            Columns ??= ImportaMixDatabaseColumnViewModel.Repository.GetModelListBy(
                     f => f.MixDatabaseId == MixDatabaseId,
                     _context, _transaction).Data;
 
@@ -117,7 +119,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
                 var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
                 if (val == null)
                 {
-                    val = new ImportDataValueViewModel(
+                    val = new ImportMixDataValueViewModel(
                         new MixDatabaseDataValue()
                         {
                             MixDatabaseColumnId = field.Id,
@@ -163,7 +165,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
                                 }
                                 else
                                 {
-                                    RefData.Add(new ImportDataViewModel()
+                                    RefData.Add(new ImportMixDataViewModel()
                                     {
                                         Specificulture = Specificulture,
                                         MixDatabaseId = field.ReferenceId.Value,
@@ -180,7 +182,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
                 }
                 else
                 {
-                    Obj.Add(val.Model.ToJProperty(_context, _transaction));
+                    Obj.Add(val.Model.ToJProperty());
                 }
             }
 
@@ -189,7 +191,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Async
 
-        public override async Task<RepositoryResponse<ImportDataViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<ImportMixDataViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -197,12 +199,12 @@ namespace Mix.Theme.Domain.ViewModels.Import
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId))
                 {
-                    var getNav = ImportDataAssociationViewModel.Repository.CheckIsExists(
+                    var getNav = ImportMixDataAssociationViewModel.Repository.CheckIsExists(
                         m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
                     if (!getNav)
                     {
-                        var nav = new ImportDataAssociationViewModel()
+                        var nav = new ImportMixDataAssociationViewModel()
                         {
                             DataId = Id,
                             Specificulture = Specificulture,
@@ -225,13 +227,13 @@ namespace Mix.Theme.Domain.ViewModels.Import
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 if (result.IsSucceed)
                 {
-                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+                    Obj = MixDataHelper.ParseData(Id, Specificulture, context, transaction);
                 }
                 return result;
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<ImportDataViewModel>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<ImportMixDataViewModel>(ex, isRoot, transaction);
             }
             finally
             {
@@ -243,12 +245,12 @@ namespace Mix.Theme.Domain.ViewModels.Import
             }
         }
 
-        public override RepositoryResponse<ImportDataViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<ImportMixDataViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
+                Obj = MixDataHelper.ParseData(Id, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -323,7 +325,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
                     var saveRef = await item.SaveModelAsync(true, context, transaction);
                     if (saveRef.IsSucceed)
                     {
-                        RelatedData.Add(new ImportDataAssociationViewModel()
+                        RelatedData.Add(new ImportMixDataAssociationViewModel()
                         {
                             DataId = saveRef.Data.Id,
                             ParentId = Id,
@@ -350,9 +352,9 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Expands
 
-        public static async Task<RepositoryResponse<ImportDataViewModel>> SaveObjectAsync(JObject data, string mixDatabaseName)
+        public static async Task<RepositoryResponse<ImportMixDataViewModel>> SaveObjectAsync(JObject data, string mixDatabaseName)
         {
-            var vm = new ImportDataViewModel()
+            var vm = new ImportMixDataViewModel()
             {
                 Id = data["id"]?.Value<string>(),
                 Specificulture = data["specificulture"]?.Value<string>(),

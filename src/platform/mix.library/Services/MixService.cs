@@ -14,6 +14,7 @@ using System.Net.Mail;
 using System.Threading;
 using Mix.Lib;
 using Mix.Identity.Models;
+using Mix.Lib.Entities.Account;
 
 namespace Mix.Lib.Services
 {
@@ -474,6 +475,23 @@ namespace Mix.Lib.Services
 
                 case MixDatabaseProvider.PostgreSQL:
                     return new PostgresqlMixCmsContext();
+
+                default:
+                    return null;
+            }
+        }
+        public static MixCmsAccountContext GetAccountDbContext()
+        {
+            var provider = GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            switch (provider)
+            {
+                case MixDatabaseProvider.MSSQL:
+                case MixDatabaseProvider.MySQL:
+                case MixDatabaseProvider.SQLITE:
+                    return new SQLAccountContext();
+
+                case MixDatabaseProvider.PostgreSQL:
+                    return new PostgresSQLAccountContext();
 
                 default:
                     return null;

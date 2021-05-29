@@ -3,60 +3,46 @@ using Mix.Lib.Enums;
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mix.Theme.Domain.ViewModels.Import;
+using Mix.Lib.Entities.Cms;
+using Mix.Lib.ViewModels.Cms;
 
 namespace Mix.Theme.Domain.ViewModels
 {
     public class SiteStructureViewModel
     {
-        [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
-        [JsonProperty("posts")]
         public List<ImportPostViewModel> Posts { get; set; } = new List<ImportPostViewModel>();
         
-        [JsonProperty("pages")]
-        public List<MixPages.ImportViewModel> Pages { get; set; }
+        public List<ImportPageViewModel> Pages { get; set; }
 
-        [JsonProperty("modules")]
-        public List<MixModules.ImportViewModel> Modules { get; set; }
+        public List<ImportModuleViewModel> Modules { get; set; }
 
-        [JsonProperty("mixDatabases")]
-        public List<MixDatabases.ImportViewModel> MixDatabases { get; set; }
+        public List<ImportMixDatabaseViewModel> MixDatabases { get; set; }
 
-        [JsonProperty("configurations")]
-        public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
+        public List<MixConfigurationViewModel> Configurations { get; set; }
 
-        [JsonProperty("languages")]
-        public List<MixLanguages.ImportViewModel> Languages { get; set; }
+        public List<MixLanguageViewModel> Languages { get; set; }
 
-        [JsonProperty("relatedData")]
-        public List<MixDatabaseDataAssociations.ImportViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.ImportViewModel>();
+        public List<ImportMixDataAssociationViewModel> RelatedData { get; set; } = new List<ImportMixDataAssociationViewModel>();
 
-        [JsonProperty("pagePostNavs")]
-        public List<MixPagePosts.ImportViewModel> PagePostNavs { get; set; } = new List<MixPagePosts.ImportViewModel>();
+        public List<MixPagePostViewModel> PagePostNavs { get; set; } = new List<MixPagePostViewModel>();
 
-        [JsonProperty("pageModuleNavs")]
-        public List<MixPageModules.ImportViewModel> PageModuleNavs { get; set; } = new List<MixPageModules.ImportViewModel>();
+        public List<MixPageModuleViewModel> PageModuleNavs { get; set; } = new List<MixPageModuleViewModel>();
 
-        [JsonProperty("modulePostNavs")]
-        public List<MixModulePosts.ImportViewModel> ModulePostNavs { get; set; } = new List<MixModulePosts.ImportViewModel>();
+        public List<MixModulePostViewModel> ModulePostNavs { get; set; } = new List<MixModulePostViewModel>();
 
-        [JsonProperty("moduleDatas")]
-        public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
+        public List<MixModuleDataViewModel> ModuleDatas { get; set; } = new List<MixModuleDataViewModel>();
 
-        [JsonProperty("mixDatabaseDatas")]
-        public List<MixDatabaseDatas.ImportViewModel> MixDatabaseDatas { get; set; } = new List<MixDatabaseDatas.ImportViewModel>();
+        public List<ImportMixDataViewModel> MixDatabaseDatas { get; set; } = new List<ImportMixDataViewModel>();
 
-        [JsonProperty("specificulture")]
         public string Specificulture { get; set; }
 
-        [JsonProperty("themeName")]
         public string ThemeName { get; set; }
 
         public SiteStructureViewModel()
@@ -65,10 +51,10 @@ namespace Mix.Theme.Domain.ViewModels
 
         public async Task InitAsync(string culture)
         {
-            Pages = (await MixPages.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
+            Pages = (await ImportPageViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
             Posts = (await ImportPostViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            Modules = (await MixModules.ImportViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
-            MixDatabases = (await ViewModels.MixDatabases.ImportViewModel.Repository.GetModelListAsync()).Data;
+            Modules = (await ImportModuleViewModel.Repository.GetModelListByAsync(p => p.Specificulture == culture)).Data;
+            MixDatabases = (await ImportMixDatabaseViewModel.Repository.GetModelListAsync()).Data;
         }
 
         #region Export
@@ -79,9 +65,9 @@ namespace Mix.Theme.Domain.ViewModels
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             try
             {
-                Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
+                Configurations = MixConfigurationViewModel.Repository.GetModelListBy(
                     m => m.Specificulture == Specificulture, context, transaction).Data;
-                Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
+                Languages = MixLanguageViewModel.Repository.GetModelListBy(
                     m => m.Specificulture == Specificulture, context, transaction).Data;
 
                 ExportPages(context, transaction);
@@ -92,7 +78,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ImportPageViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = ex;
@@ -118,7 +104,7 @@ namespace Mix.Theme.Domain.ViewModels
         {
             foreach (var item in MixDatabases)
             {
-                item.Fields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
+                item.Fields = ImportaMixDatabaseColumnViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
                 var refFields = item.Fields.Where(f => f.DataType == MixDataType.Reference);
 
@@ -127,7 +113,7 @@ namespace Mix.Theme.Domain.ViewModels
                     var refSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                     if (refSet == null)
                     {
-                        var getSet = ViewModels.MixDatabases.ImportViewModel.Repository.GetSingleModel(m => m.Name == field.MixDatabaseName, context, transaction);
+                        var getSet = ImportMixDatabaseViewModel.Repository.GetSingleModel(m => m.Name == field.MixDatabaseName, context, transaction);
                         if (getSet.IsSucceed)
                         {
                             refSet = getSet.Data;
@@ -163,7 +149,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
         }
 
-        private void ExportPageModuleNav(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportPageModuleNav(ImportPageViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             PageModuleNavs.AddRange(item.GetModuleNavs(context, transaction)
                 .Where(m => !PageModuleNavs.Any(n => n.ModuleId == m.ModuleId && n.PageId == m.PageId)));
@@ -171,20 +157,32 @@ namespace Mix.Theme.Domain.ViewModels
             {
                 if (!Modules.Any(m => m.Id == nav.ModuleId && m.Specificulture == Specificulture))
                 {
-                    Modules.Add(nav.Module);
+                    var getModule = ImportModuleViewModel.Repository.GetSingleModel(
+                        m => m.Id == nav.ModuleId && m.Specificulture == nav.Specificulture
+                        , context, transaction);
+                    if (getModule.IsSucceed)
+                    {
+                        Modules.Add(getModule.Data);
+                    }
                 }
             }
         }
 
-        private void ExportPagePostNav(MixPages.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportPagePostNav(ImportPageViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             PagePostNavs.AddRange(item.GetPostNavs(context, transaction)
                 .Where(m => !PagePostNavs.Any(n => n.PostId == m.PostId && n.PageId == m.PageId)));
             foreach (var nav in PagePostNavs)
             {
-                if (!Posts.Any(m => m.Id == nav.Post.Id && m.Specificulture == Specificulture))
+                if (!Posts.Any(m => m.Id == nav.PostId && m.Specificulture == Specificulture))
                 {
-                    Posts.Add(nav.Post);
+                    var getPost = ImportPostViewModel.Repository.GetSingleModel(
+                        m => m.Id == nav.PostId && m.Specificulture == nav.Specificulture
+                        , context, transaction);
+                    if (getPost.IsSucceed)
+                    {
+                        Posts.Add(getPost.Data);
+                    }
                 }
             }
         }
@@ -206,9 +204,9 @@ namespace Mix.Theme.Domain.ViewModels
             }
         }
 
-        private void ExportModuleDatas(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportModuleDatas(ImportModuleViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getDataResult = MixModuleDatas.ImportViewModel.Repository
+            var getDataResult = MixModuleDataViewModel.Repository
                                .GetModelListBy(m => m.ModuleId == item.Id
                                     && m.Specificulture == item.Specificulture
                                , context, transaction);
@@ -219,15 +217,21 @@ namespace Mix.Theme.Domain.ViewModels
             }
         }
 
-        private void ExportModulePostNavs(MixModules.ImportViewModel item, MixCmsContext context, IDbContextTransaction transaction)
+        private void ExportModulePostNavs(ImportModuleViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
             ModulePostNavs.AddRange(item.GetPostNavs(context, transaction)
                 .Where(m => !ModulePostNavs.Any(n => n.PostId == m.PostId && n.ModuleId == m.ModuleId)));
             foreach (var nav in ModulePostNavs)
             {
-                if (!Posts.Any(m => m.Id == nav.Post.Id && m.Specificulture == Specificulture))
+                if (!Posts.Any(m => m.Id == nav.PostId && m.Specificulture == Specificulture))
                 {
-                    Posts.Add(nav.Post);
+                    var getPost = ImportPostViewModel.Repository.GetSingleModel(
+                        m => m.Id == nav.PostId && m.Specificulture == nav.Specificulture
+                        , context, transaction);
+                    if (getPost.IsSucceed)
+                    {
+                        Posts.Add(getPost.Data);
+                    }
                 }
             }
         }
@@ -238,7 +242,7 @@ namespace Mix.Theme.Domain.ViewModels
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
-                var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetSingleModel(
+                var getRelatedData = ImportMixDataAssociationViewModel.Repository.GetSingleModel(
                             m => m.Specificulture == Specificulture && m.ParentType == type
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
@@ -250,13 +254,13 @@ namespace Mix.Theme.Domain.ViewModels
 
         private void ExportMixDatabaseData(MixCmsContext context, IDbContextTransaction transaction)
         {
-            MixDatabaseDatas = new List<MixDatabaseDatas.ImportViewModel>();
+            MixDatabaseDatas = new List<ImportMixDataViewModel>();
             // Load MixDatabase data
             foreach (var item in MixDatabases)
             {
                 if (item.IsExportData)
                 {
-                    var getData = ViewModels.MixDatabaseDatas.ImportViewModel.Repository.GetModelListBy(
+                    var getData = ImportMixDataViewModel.Repository.GetModelListBy(
                         a => a.Specificulture == Specificulture && a.MixDatabaseId == item.Id, context, transaction)
                         .Data?.OrderBy(a => a.Priority).ToList();
                     if (getData != null)
@@ -273,7 +277,7 @@ namespace Mix.Theme.Domain.ViewModels
             {
                 if (!MixDatabaseDatas.Any(m => m.Id == item.Id))
                 {
-                    var getData = ViewModels.MixDatabaseDatas.ImportViewModel.Repository.GetSingleModel(
+                    var getData = ImportMixDataViewModel.Repository.GetSingleModel(
                         m => m.Id == item.Id, context, transaction);
                     if (getData.IsSucceed)
                     {
@@ -287,7 +291,7 @@ namespace Mix.Theme.Domain.ViewModels
         {
             foreach (var item in MixDatabaseDatas)
             {
-                var getDataResult = MixDatabaseDataAssociations.ImportViewModel.Repository
+                var getDataResult = ImportMixDataAssociationViewModel.Repository
                                    .GetModelListBy(m => m.ParentId == item.Id && m.Specificulture == item.Specificulture
                                    , context, transaction);
 
@@ -364,7 +368,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ImportPageViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -456,9 +460,9 @@ namespace Mix.Theme.Domain.ViewModels
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (MixDatabases != null)
             {
-                var startId = ViewModels.MixDatabases.ImportViewModel.Repository.Max(m => m.Id, context, transaction).Data;
-                var startFieldId = MixDatabaseColumns.UpdateViewModel.Repository.Max(m => m.Id, context, transaction).Data;
-                var mixDatabaseColumns = new List<MixDatabaseColumns.UpdateViewModel>();
+                var startId = ImportMixDatabaseViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var startFieldId = ImportaMixDatabaseColumnViewModel.Repository.Max(m => m.Id, context, transaction).Data;
+                var mixDatabaseColumns = new List<ImportaMixDatabaseColumnViewModel>();
                 foreach (var set in MixDatabases)
                 {
                     set.CreatedBy = CreatedBy;
@@ -534,7 +538,7 @@ namespace Mix.Theme.Domain.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = MixConfigurations.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startId = MixConfigurationViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 foreach (var item in Configurations)
                 {
                     var oldId = item.Id;
@@ -565,7 +569,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ImportPageViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -589,7 +593,7 @@ namespace Mix.Theme.Domain.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = MixLanguages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startId = MixLanguageViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 foreach (var item in Languages)
                 {
                     var oldId = item.Id;
@@ -620,7 +624,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ImportPageViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -644,8 +648,8 @@ namespace Mix.Theme.Domain.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                int startId = MixPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
-                int startModuleId = MixModules.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startId = MixPageViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                int startModuleId = MixModuleViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
                 //var pages = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
                 //var obj = JObject.Parse(pages.Content);
                 //var initPages = obj["data"].ToObject<JArray>();
@@ -682,7 +686,7 @@ namespace Mix.Theme.Domain.ViewModels
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<ImportPageViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -716,7 +720,7 @@ namespace Mix.Theme.Domain.ViewModels
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Columns = item.Columns ?? MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
+                        item.Columns = item.Columns ?? ImportaMixDatabaseColumnViewModel.Repository.GetModelListBy(
                             m => m.MixDatabaseId == item.MixDatabaseId, context, transaction).Data;
                         foreach (var field in item.Columns)
                         {

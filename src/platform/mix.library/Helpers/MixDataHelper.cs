@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Common.Helper;
 using Mix.Lib.Entities.Cms;
+using Mix.Lib.Extensions;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -21,7 +22,7 @@ namespace Mix.Lib.Helpers
             var values = context.MixDatabaseDataValue.Where(
                 m => m.DataId == dataId && m.Specificulture == culture
                     && !string.IsNullOrEmpty(m.MixDatabaseColumnName));
-            var properties = values.Select(m => m.ToJProperty(_context, _transaction));
+            var properties = values.Select(m => m.ToJProperty());
             var obj = new JObject(
                 new JProperty("id", dataId),
                 properties
