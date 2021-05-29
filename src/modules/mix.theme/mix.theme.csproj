@@ -1,28 +1,31 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <RootNamespace>Mix.Theme</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.6" />
+    <Compile Remove="Domain\ViewModels\Import\Default.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\..\shared\default.appsettings.json" Link="default.appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>   
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\shared\MixContent\data\enums.json" Link="MixContent\data\enums.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>
-      <Content Include="..\..\shared\MixContent\data\sys_databases.json" Link="MixContent\data\sys_databases.json">
+    <Content Include="..\..\shared\MixContent\data\sys_databases.json" Link="MixContent\data\sys_databases.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>

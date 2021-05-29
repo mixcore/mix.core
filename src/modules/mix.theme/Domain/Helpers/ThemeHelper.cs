@@ -9,6 +9,7 @@ using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels.Cms;
+using Mix.Theme.Domain.Dtos;
 using Mix.Theme.Domain.ViewModels;
 using Mix.Theme.Domain.ViewModels.Init;
 using Newtonsoft.Json.Linq;
@@ -87,21 +88,19 @@ namespace Mix.Theme.Domain.Helpers
             }
         }
 
-        public static async Task<RepositoryResponse<InitThemeViewModel>> InitTheme(
-            string model, string userName, string culture, IFormFile assets, IFormFile theme)
+        public static async Task<RepositoryResponse<InitThemeViewModel>> InitTheme(InitThemePackageDto request, string userName, string culture)
         {
-            var json = JObject.Parse(model);
-            var data = json.ToObject<InitThemeViewModel>();
+            var data = request.Model;
             if (data != null)
             {
                 data.CreatedBy = userName;
                 data.Status = MixContentStatus.Published;
                 string importFolder = $"{MixFolders.ImportFolder}/" +
                     $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
-                if (theme != null)
+                if (request.Theme != null)
                 {
-                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}");
-                    data.TemplateAsset = new FileViewModel(theme, importFolder);
+                    MixFileRepository.Instance.SaveWebFile(request.Theme, $"{importFolder}");
+                    data.TemplateAsset = new FileViewModel(request.Theme, importFolder);
                 }
                 else
                 {

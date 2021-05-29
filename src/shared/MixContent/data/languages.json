@@ -1,0 +1,257 @@
+{
+  "data": [
+    {
+      "keyword": "read_more",
+      "category": "Common",
+      "dataType": 7,
+      "description": "Read More",
+      "value": "Read more",
+      "defaultValue": "Read more",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "success",
+      "category": "Common",
+      "dataType": 7,
+      "description": "Success",
+      "value": "Success",
+      "defaultValue": "Success",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "fail",
+      "category": "Common",
+      "dataType": 7,
+      "description": "Fail",
+      "value": "Fail",
+      "defaultValue": "Fail",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_import",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Import",
+      "defaultValue": "Import",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_attributes",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Attributes",
+      "defaultValue": "Attributes",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_list",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "List",
+      "defaultValue": "List",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_create",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Create",
+      "defaultValue": "Create",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_title",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Title",
+      "defaultValue": "Title",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_permissions",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Permissions",
+      "defaultValue": "Permissions",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_users",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Users",
+      "defaultValue": "Users",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_themes",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Themes",
+      "defaultValue": "Themes",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_settings",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Settings",
+      "defaultValue": "Settings",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_products",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Products",
+      "defaultValue": "Products",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_pages",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Pages",
+      "defaultValue": "Pages",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_orders",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Orders",
+      "defaultValue": "Orders",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_modules",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Modules",
+      "defaultValue": "Modules",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_media",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Media",
+      "defaultValue": "Media",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_file",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "File",
+      "defaultValue": "File",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_dashboard",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Dashboard",
+      "defaultValue": "Dashboard",
+      "cultures": null,
+      "priority": 0,
+      "status": 0
+    },
+    {
+      "keyword": "portal_cultures",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Cultures",
+      "defaultValue": "Cultures",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_posts",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Posts",
+      "defaultValue": "Posts",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "portal_menus",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Menus",
+      "defaultValue": "Menus",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "language",
+      "category": "Portal",
+      "dataType": 7,
+      "description": null,
+      "value": "Languages",
+      "defaultValue": "Languages",
+      "cultures": null,
+      "priority": 0,
+      "status": "Published"
+    }
+  ]
+}

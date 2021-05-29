@@ -11,6 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mix.Heart.Extensions;
+using Mix.Cms.Web;
+using Mix.Lib.Entities.Account;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Extensions
 {
@@ -19,6 +22,9 @@ namespace Mix.Lib.Extensions
 
         public static IServiceCollection AddMixServices(this IServiceCollection services)
         {
+            services.AddDbContext<MixDbContext>();
+            services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
+
             var assemblies = GetMixAssemblies();
 
             foreach (var assembly in assemblies)
