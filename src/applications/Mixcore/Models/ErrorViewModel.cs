@@ -1,6 +1,6 @@
 using System;
 
-namespace mixcore.Models
+namespace Mixcore.Models
 {
     public class ErrorViewModel
     {
