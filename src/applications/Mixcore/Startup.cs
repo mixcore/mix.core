@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Lib.Extensions;
 using System.Reflection;
 
-namespace mixcore
+namespace Mixcore
 {
     public class Startup
     {
@@ -38,7 +38,6 @@ namespace mixcore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseMixApps(env.IsDevelopment());
             app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
 
@@ -55,7 +54,6 @@ namespace mixcore
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
         }
     }
 }
