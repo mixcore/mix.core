@@ -26,14 +26,16 @@ namespace Mix.Theme.Controllers.v2
     [ApiController]
     public class InitController: Controller
     {
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MixIdentityService _idService;
 
-        public InitController(UserManager<ApplicationUser> userManager)
+        public InitController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, MixIdentityService idService)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
+            _idService = idService;
         }
-
         #region Post
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace Mix.Theme.Controllers.v2
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-1")]
         public async Task<RepositoryResponse<bool>> Step1([FromBody] InitCmsDto model)
         {
@@ -67,7 +69,7 @@ namespace Mix.Theme.Controllers.v2
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-2")]
         public async Task<RepositoryResponse<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
         {
@@ -120,7 +122,24 @@ namespace Mix.Theme.Controllers.v2
             }
             return result;
         }
+        
+        /// <summary>
+        /// Step 3 when status = 3 (Finished)
+        ///     - Init default theme
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("init-cms/step-3")]
+        [DisableRequestSizeLimit]
+        public async Task<RepositoryResponse<InitThemeViewModel>> Save(InitThemePackageDto request)
+        {
+            string _lang = MixService.GetConfig<string>("Language");
+            string user = _idService._helper.GetClaim(User, MixClaims.Username);
+            return await ThemeHelper.InitTheme(request, user, _lang);
+        }
 
+        
         /// <summary>
         /// Step 4 when status = 3
         ///     - Init Languages for translate from languages.json
@@ -161,22 +180,6 @@ namespace Mix.Theme.Controllers.v2
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost, HttpOptions]
-        [Route("init-cms/step-3")]
-        [DisableRequestSizeLimit]
-        public async Task<RepositoryResponse<InitThemeViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
-        {
-            string _lang = MixService.GetConfig<string>("Language");
-            string user = _idService._helper.GetClaim(User, MixClaims.Username);
-            return await ThemeHelper.InitTheme(model, user, _lang, assets, theme);
-        }
-
-        /// <summary>
-        /// Step 3 when status = 3 (Finished)
-        ///     - Init default theme
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost, HttpOptions]
         [Route("init-cms/step-3/active")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult<bool>> Active([FromBody] InitThemeViewModel model)
@@ -195,7 +198,6 @@ namespace Mix.Theme.Controllers.v2
             }
             return Ok(result);
         }
-
         #endregion Post
 
         #region Helpers

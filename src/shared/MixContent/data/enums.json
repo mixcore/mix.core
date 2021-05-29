@@ -1,0 +1,9 @@
+{
+  "data": {
+    "configuration_cates": [ "Common", "Version", "Site" ],
+    "configuration_scope": [ "System", "Site", "Shared" ],
+    "language_cates": [ "System", "Site", "Mobile" ],
+    "database_providers": [ "MSSQL", "MySQL", "PostgreSQL", "SQLITE" ],
+    "cache_modes": [ "Json", "Database"]
+  }
+}

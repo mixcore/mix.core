@@ -1,0 +1,124 @@
+﻿{
+  "data": [
+    {
+      "keyword": "SiteName",
+      "scope": "Site",
+      "category": "Common",
+      "value": "Mix Core",
+      "dataType": "Text",
+      "description": "Site Name",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "LanguageVersion",
+      "scope": "System",
+      "category": "Version",
+      "value": 1,
+      "dataType": "Text",
+      "description": "Language Version",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "SettingVersion",
+      "scope": "System",
+      "category": "Version",
+      "value": 1,
+      "dataType": "Text",
+      "description": "Settings Version",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "ThemeName",
+      "scope": "System",
+      "category": "Site",
+      "value": "Default",
+      "dataType": "Text",
+      "description": "Theme Name",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "ThemeFolder",
+      "scope": "System",
+      "category": "Site",
+      "value": "Default",
+      "dataType": "Text",
+      "description": "Theme Folder",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "ThemeId",
+      "scope": "System",
+      "category": "Site",
+      "value": "1",
+      "dataType": "Text",
+      "description": "Theme Id",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DateTimeFormat",
+      "scope": "Shared",
+      "category": "Common",
+      "value": "dd-MM-yyyy HH:mm:ss",
+      "dataType": "Text",
+      "description": "Date Time Format",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "StartWeekOn",
+      "scope": "Shared",
+      "category": "Common",
+      "value": "Monday",
+      "dataType": "Text",
+      "description": "Day",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultThumbnailImgWidth",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "1000",
+      "dataType": "Integer",
+      "description": "Default Thumbnail Image Width",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultThumbnailImgHeight",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "608",
+      "dataType": "Integer",
+      "description": "Default Thumbnail Image Height",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultFeatureImgWidth",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "2000",
+      "dataType": "Integer",
+      "description": "Default Feature Image Width",
+      "priority": 0,
+      "status": "Published"
+    },
+    {
+      "keyword": "DefaultFeatureImgHeight",
+      "scope": "Shared",
+      "category": "Site",
+      "value": "1216",
+      "dataType": "Integer",
+      "description": "Default Feature Image Height",
+      "priority": 0,
+      "status": "Published"
+    }
+  ]
+}

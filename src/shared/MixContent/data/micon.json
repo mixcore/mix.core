@@ -1,0 +1,7036 @@
+{
+  "data": [
+    {
+      "title": "Accept",
+      "class": "mi mi-Accept"
+    },
+    {
+      "title": "Accident",
+      "class": "mi mi-Accident"
+    },
+    {
+      "title": "AccidentSolid",
+      "class": "mi mi-AccidentSolid"
+    },
+    {
+      "title": "Accounts",
+      "class": "mi mi-Accounts"
+    },
+    {
+      "title": "ActionCenter",
+      "class": "mi mi-ActionCenter"
+    },
+    {
+      "title": "ActionCenterAsterisk",
+      "class": "mi mi-ActionCenterAsterisk"
+    },
+    {
+      "title": "ActionCenterMirrored",
+      "class": "mi mi-ActionCenterMirrored"
+    },
+    {
+      "title": "ActionCenterNotification",
+      "class": "mi mi-ActionCenterNotification"
+    },
+    {
+      "title": "ActionCenterNotificationMirrored",
+      "class": "mi mi-ActionCenterNotificationMirrored"
+    },
+    {
+      "title": "ActionCenterQuiet",
+      "class": "mi mi-ActionCenterQuiet"
+    },
+    {
+      "title": "ActionCenterQuietNotification",
+      "class": "mi mi-ActionCenterQuietNotification"
+    },
+    {
+      "title": "Add",
+      "class": "mi mi-Add"
+    },
+    {
+      "title": "AddFriend",
+      "class": "mi mi-AddFriend"
+    },
+    {
+      "title": "AddRemoteDevice",
+      "class": "mi mi-AddRemoteDevice"
+    },
+    {
+      "title": "AddSurfaceHub",
+      "class": "mi mi-AddSurfaceHub"
+    },
+    {
+      "title": "AddTo",
+      "class": "mi mi-AddTo"
+    },
+    {
+      "title": "AdjustHologram",
+      "class": "mi mi-AdjustHologram"
+    },
+    {
+      "title": "Admin",
+      "class": "mi mi-Admin"
+    },
+    {
+      "title": "Airplane",
+      "class": "mi mi-Airplane"
+    },
+    {
+      "title": "AirplaneSolid",
+      "class": "mi mi-AirplaneSolid"
+    },
+    {
+      "title": "AlignCenter",
+      "class": "mi mi-AlignCenter"
+    },
+    {
+      "title": "AlignLeft",
+      "class": "mi mi-AlignLeft"
+    },
+    {
+      "title": "AlignRight",
+      "class": "mi mi-AlignRight"
+    },
+    {
+      "title": "AllApps",
+      "class": "mi mi-AllApps"
+    },
+    {
+      "title": "AllAppsMirrored",
+      "class": "mi mi-AllAppsMirrored"
+    },
+    {
+      "title": "Annotation",
+      "class": "mi mi-Annotation"
+    },
+    {
+      "title": "AppIconDefault",
+      "class": "mi mi-AppIconDefault"
+    },
+    {
+      "title": "Apps",
+      "class": "mi mi-Apps"
+    },
+    {
+      "title": "AreaChart",
+      "class": "mi mi-AreaChart"
+    },
+    {
+      "title": "ArrowDown8",
+      "class": "mi mi-ArrowDown8"
+    },
+    {
+      "title": "ArrowLeft8",
+      "class": "mi mi-ArrowLeft8"
+    },
+    {
+      "title": "ArrowRight8",
+      "class": "mi mi-ArrowRight8"
+    },
+    {
+      "title": "ArrowUp8",
+      "class": "mi mi-ArrowUp8"
+    },
+    {
+      "title": "AspectRatio",
+      "class": "mi mi-AspectRatio"
+    },
+    {
+      "title": "Asterisk",
+      "class": "mi mi-Asterisk"
+    },
+    {
+      "title": "AsteriskBadge12",
+      "class": "mi mi-AsteriskBadge12"
+    },
+    {
+      "title": "Attach",
+      "class": "mi mi-Attach"
+    },
+    {
+      "title": "AttachCamera",
+      "class": "mi mi-AttachCamera"
+    },
+    {
+      "title": "Audio",
+      "class": "mi mi-Audio"
+    },
+    {
+      "title": "Back",
+      "class": "mi mi-Back"
+    },
+    {
+      "title": "BackMirrored",
+      "class": "mi mi-BackMirrored"
+    },
+    {
+      "title": "BackSpaceQWERTYLg",
+      "class": "mi mi-BackSpaceQWERTYLg"
+    },
+    {
+      "title": "BackSpaceQWERTYMd",
+      "class": "mi mi-BackSpaceQWERTYMd"
+    },
+    {
+      "title": "BackSpaceQWERTYSm",
+      "class": "mi mi-BackSpaceQWERTYSm"
+    },
+    {
+      "title": "BackToWindow",
+      "class": "mi mi-BackToWindow"
+    },
+    {
+      "title": "BackgroundToggle",
+      "class": "mi mi-BackgroundToggle"
+    },
+    {
+      "title": "Badge",
+      "class": "mi mi-Badge"
+    },
+    {
+      "title": "BandBattery0",
+      "class": "mi mi-BandBattery0"
+    },
+    {
+      "title": "BandBattery1",
+      "class": "mi mi-BandBattery1"
+    },
+    {
+      "title": "BandBattery2",
+      "class": "mi mi-BandBattery2"
+    },
+    {
+      "title": "BandBattery3",
+      "class": "mi mi-BandBattery3"
+    },
+    {
+      "title": "BandBattery4",
+      "class": "mi mi-BandBattery4"
+    },
+    {
+      "title": "BandBattery5",
+      "class": "mi mi-BandBattery5"
+    },
+    {
+      "title": "BandBattery6",
+      "class": "mi mi-BandBattery6"
+    },
+    {
+      "title": "Bank",
+      "class": "mi mi-Bank"
+    },
+    {
+      "title": "BarcodeScanner",
+      "class": "mi mi-BarcodeScanner"
+    },
+    {
+      "title": "Battery0",
+      "class": "mi mi-Battery0"
+    },
+    {
+      "title": "Battery1",
+      "class": "mi mi-Battery1"
+    },
+    {
+      "title": "Battery10",
+      "class": "mi mi-Battery10"
+    },
+    {
+      "title": "Battery2",
+      "class": "mi mi-Battery2"
+    },
+    {
+      "title": "Battery3",
+      "class": "mi mi-Battery3"
+    },
+    {
+      "title": "Battery4",
+      "class": "mi mi-Battery4"
+    },
+    {
+      "title": "Battery5",
+      "class": "mi mi-Battery5"
+    },
+    {
+      "title": "Battery6",
+      "class": "mi mi-Battery6"
+    },
+    {
+      "title": "Battery7",
+      "class": "mi mi-Battery7"
+    },
+    {
+      "title": "Battery8",
+      "class": "mi mi-Battery8"
+    },
+    {
+      "title": "Battery9",
+      "class": "mi mi-Battery9"
+    },
+    {
+      "title": "BatteryCharging0",
+      "class": "mi mi-BatteryCharging0"
+    },
+    {
+      "title": "BatteryCharging1",
+      "class": "mi mi-BatteryCharging1"
+    },
+    {
+      "title": "BatteryCharging10",
+      "class": "mi mi-BatteryCharging10"
+    },
+    {
+      "title": "BatteryCharging2",
+      "class": "mi mi-BatteryCharging2"
+    },
+    {
+      "title": "BatteryCharging3",
+      "class": "mi mi-BatteryCharging3"
+    },
+    {
+      "title": "BatteryCharging4",
+      "class": "mi mi-BatteryCharging4"
+    },
+    {
+      "title": "BatteryCharging5",
+      "class": "mi mi-BatteryCharging5"
+    },
+    {
+      "title": "BatteryCharging6",
+      "class": "mi mi-BatteryCharging6"
+    },
+    {
+      "title": "BatteryCharging7",
+      "class": "mi mi-BatteryCharging7"
+    },
+    {
+      "title": "BatteryCharging8",
+      "class": "mi mi-BatteryCharging8"
+    },
+    {
+      "title": "BatteryCharging9",
+      "class": "mi mi-BatteryCharging9"
+    },
+    {
+      "title": "BatterySaver0",
+      "class": "mi mi-BatterySaver0"
+    },
+    {
+      "title": "BatterySaver1",
+      "class": "mi mi-BatterySaver1"
+    },
+    {
+      "title": "BatterySaver10",
+      "class": "mi mi-BatterySaver10"
+    },
+    {
+      "title": "BatterySaver2",
+      "class": "mi mi-BatterySaver2"
+    },
+    {
+      "title": "BatterySaver3",
+      "class": "mi mi-BatterySaver3"
+    },
+    {
+      "title": "BatterySaver4",
+      "class": "mi mi-BatterySaver4"
+    },
+    {
+      "title": "BatterySaver5",
+      "class": "mi mi-BatterySaver5"
+    },
+    {
+      "title": "BatterySaver6",
+      "class": "mi mi-BatterySaver6"
+    },
+    {
+      "title": "BatterySaver7",
+      "class": "mi mi-BatterySaver7"
+    },
+    {
+      "title": "BatterySaver8",
+      "class": "mi mi-BatterySaver8"
+    },
+    {
+      "title": "BatterySaver9",
+      "class": "mi mi-BatterySaver9"
+    },
+    {
+      "title": "BatteryUnknown",
+      "class": "mi mi-BatteryUnknown"
+    },
+    {
+      "title": "Beta",
+      "class": "mi mi-Beta"
+    },
+    {
+      "title": "BidiLtr",
+      "class": "mi mi-BidiLtr"
+    },
+    {
+      "title": "BidiRtl",
+      "class": "mi mi-BidiRtl"
+    },
+    {
+      "title": "BlockContact",
+      "class": "mi mi-BlockContact"
+    },
+    {
+      "title": "Blocked",
+      "class": "mi mi-Blocked"
+    },
+    {
+      "title": "BlueLight",
+      "class": "mi mi-BlueLight"
+    },
+    {
+      "title": "Bluetooth",
+      "class": "mi mi-Bluetooth"
+    },
+    {
+      "title": "BodyCam",
+      "class": "mi mi-BodyCam"
+    },
+    {
+      "title": "Bold",
+      "class": "mi mi-Bold"
+    },
+    {
+      "title": "BoldF",
+      "class": "mi mi-BoldF"
+    },
+    {
+      "title": "BoldG",
+      "class": "mi mi-BoldG"
+    },
+    {
+      "title": "BoldKorean",
+      "class": "mi mi-BoldKorean"
+    },
+    {
+      "title": "BoldN",
+      "class": "mi mi-BoldN"
+    },
+    {
+      "title": "BoldRussion",
+      "class": "mi mi-BoldRussion"
+    },
+    {
+      "title": "Bookmarks",
+      "class": "mi mi-Bookmarks"
+    },
+    {
+      "title": "BookmarksMirrored",
+      "class": "mi mi-BookmarksMirrored"
+    },
+    {
+      "title": "Brightness",
+      "class": "mi mi-Brightness"
+    },
+    {
+      "title": "Broom",
+      "class": "mi mi-Broom"
+    },
+    {
+      "title": "BrowsePhotos",
+      "class": "mi mi-BrowsePhotos"
+    },
+    {
+      "title": "BrushSize",
+      "class": "mi mi-BrushSize"
+    },
+    {
+      "title": "Bug",
+      "class": "mi mi-Bug"
+    },
+    {
+      "title": "BuildingEnergy",
+      "class": "mi mi-BuildingEnergy"
+    },
+    {
+      "title": "BulletedList",
+      "class": "mi mi-BulletedList"
+    },
+    {
+      "title": "BulletedListMirrored",
+      "class": "mi mi-BulletedListMirrored"
+    },
+    {
+      "title": "Bullseye",
+      "class": "mi mi-Bullseye"
+    },
+    {
+      "title": "BumperLeft",
+      "class": "mi mi-BumperLeft"
+    },
+    {
+      "title": "BumperRight",
+      "class": "mi mi-BumperRight"
+    },
+    {
+      "title": "Bus",
+      "class": "mi mi-Bus"
+    },
+    {
+      "title": "BusSolid",
+      "class": "mi mi-BusSolid"
+    },
+    {
+      "title": "ButtonA",
+      "class": "mi mi-ButtonA"
+    },
+    {
+      "title": "ButtonB",
+      "class": "mi mi-ButtonB"
+    },
+    {
+      "title": "ButtonMenu",
+      "class": "mi mi-ButtonMenu"
+    },
+    {
+      "title": "ButtonView2",
+      "class": "mi mi-ButtonView2"
+    },
+    {
+      "title": "ButtonX",
+      "class": "mi mi-ButtonX"
+    },
+    {
+      "title": "ButtonY",
+      "class": "mi mi-ButtonY"
+    },
+    {
+      "title": "CC",
+      "class": "mi mi-CC"
+    },
+    {
+      "title": "CCEuro",
+      "class": "mi mi-CCEuro"
+    },
+    {
+      "title": "CCJapan",
+      "class": "mi mi-CCJapan"
+    },
+    {
+      "title": "Cafe",
+      "class": "mi mi-Cafe"
+    },
+    {
+      "title": "Calculator",
+      "class": "mi mi-Calculator"
+    },
+    {
+      "title": "CalculatorAddition",
+      "class": "mi mi-CalculatorAddition"
+    },
+    {
+      "title": "CalculatorBackspace",
+      "class": "mi mi-CalculatorBackspace"
+    },
+    {
+      "title": "CalculatorDivide",
+      "class": "mi mi-CalculatorDivide"
+    },
+    {
+      "title": "CalculatorEqualTo",
+      "class": "mi mi-CalculatorEqualTo"
+    },
+    {
+      "title": "CalculatorMultiply",
+      "class": "mi mi-CalculatorMultiply"
+    },
+    {
+      "title": "CalculatorNegate",
+      "class": "mi mi-CalculatorNegate"
+    },
+    {
+      "title": "CalculatorPercentage",
+      "class": "mi mi-CalculatorPercentage"
+    },
+    {
+      "title": "CalculatorSquareroot",
+      "class": "mi mi-CalculatorSquareroot"
+    },
+    {
+      "title": "CalculatorSubtract",
+      "class": "mi mi-CalculatorSubtract"
+    },
+    {
+      "title": "Calendar",
+      "class": "mi mi-Calendar"
+    },
+    {
+      "title": "CalendarDay",
+      "class": "mi mi-CalendarDay"
+    },
+    {
+      "title": "CalendarMirrored",
+      "class": "mi mi-CalendarMirrored"
+    },
+    {
+      "title": "CalendarReply",
+      "class": "mi mi-CalendarReply"
+    },
+    {
+      "title": "CalendarSolid",
+      "class": "mi mi-CalendarSolid"
+    },
+    {
+      "title": "CalendarWeek",
+      "class": "mi mi-CalendarWeek"
+    },
+    {
+      "title": "CallForwardInternational",
+      "class": "mi mi-CallForwardInternational"
+    },
+    {
+      "title": "CallForwardInternationalMirrored",
+      "class": "mi mi-CallForwardInternationalMirrored"
+    },
+    {
+      "title": "CallForwardRoaming",
+      "class": "mi mi-CallForwardRoaming"
+    },
+    {
+      "title": "CallForwardRoamingMirrored",
+      "class": "mi mi-CallForwardRoamingMirrored"
+    },
+    {
+      "title": "CallForwarding",
+      "class": "mi mi-CallForwarding"
+    },
+    {
+      "title": "CallForwardingMirrored",
+      "class": "mi mi-CallForwardingMirrored"
+    },
+    {
+      "title": "CalligraphyFill",
+      "class": "mi mi-CalligraphyFill"
+    },
+    {
+      "title": "CalligraphyPen",
+      "class": "mi mi-CalligraphyPen"
+    },
+    {
+      "title": "Calories",
+      "class": "mi mi-Calories"
+    },
+    {
+      "title": "Camera",
+      "class": "mi mi-Camera"
+    },
+    {
+      "title": "Cancel",
+      "class": "mi mi-Cancel"
+    },
+    {
+      "title": "Caption",
+      "class": "mi mi-Caption"
+    },
+    {
+      "title": "Car",
+      "class": "mi mi-Car"
+    },
+    {
+      "title": "CaretBottomRightSolidCenter8",
+      "class": "mi mi-CaretBottomRightSolidCenter8"
+    },
+    {
+      "title": "CaretDownSolid8",
+      "class": "mi mi-CaretDownSolid8"
+    },
+    {
+      "title": "CaretLeftSolid8",
+      "class": "mi mi-CaretLeftSolid8"
+    },
+    {
+      "title": "CaretRight8",
+      "class": "mi mi-CaretRight8"
+    },
+    {
+      "title": "CaretRightSolid8",
+      "class": "mi mi-CaretRightSolid8"
+    },
+    {
+      "title": "CaretUpSolid8",
+      "class": "mi mi-CaretUpSolid8"
+    },
+    {
+      "title": "CashDrawer",
+      "class": "mi mi-CashDrawer"
+    },
+    {
+      "title": "CellPhone",
+      "class": "mi mi-CellPhone"
+    },
+    {
+      "title": "Certificate",
+      "class": "mi mi-Certificate"
+    },
+    {
+      "title": "CharacterAppearance",
+      "class": "mi mi-CharacterAppearance"
+    },
+    {
+      "title": "Characters",
+      "class": "mi mi-Characters"
+    },
+    {
+      "title": "ChatBubbles",
+      "class": "mi mi-ChatBubbles"
+    },
+    {
+      "title": "CheckList",
+      "class": "mi mi-CheckList"
+    },
+    {
+      "title": "CheckMark",
+      "class": "mi mi-CheckMark"
+    },
+    {
+      "title": "Checkbox",
+      "class": "mi mi-Checkbox"
+    },
+    {
+      "title": "Checkbox14",
+      "class": "mi mi-Checkbox14"
+    },
+    {
+      "title": "CheckboxComposite",
+      "class": "mi mi-CheckboxComposite"
+    },
+    {
+      "title": "CheckboxComposite14",
+      "class": "mi mi-CheckboxComposite14"
+    },
+    {
+      "title": "CheckboxCompositeReversed",
+      "class": "mi mi-CheckboxCompositeReversed"
+    },
+    {
+      "title": "CheckboxFill",
+      "class": "mi mi-CheckboxFill"
+    },
+    {
+      "title": "CheckboxIndeterminate",
+      "class": "mi mi-CheckboxIndeterminate"
+    },
+    {
+      "title": "CheckboxIndeterminateCombo",
+      "class": "mi mi-CheckboxIndeterminateCombo"
+    },
+    {
+      "title": "CheckboxIndeterminateCombo14",
+      "class": "mi mi-CheckboxIndeterminateCombo14"
+    },
+    {
+      "title": "ChecklistMirrored",
+      "class": "mi mi-ChecklistMirrored"
+    },
+    {
+      "title": "ChevronDown",
+      "class": "mi mi-ChevronDown"
+    },
+    {
+      "title": "ChevronDownMed",
+      "class": "mi mi-ChevronDownMed"
+    },
+    {
+      "title": "ChevronDownSmall",
+      "class": "mi mi-ChevronDownSmall"
+    },
+    {
+      "title": "ChevronLeft",
+      "class": "mi mi-ChevronLeft"
+    },
+    {
+      "title": "ChevronLeftMed",
+      "class": "mi mi-ChevronLeftMed"
+    },
+    {
+      "title": "ChevronLeftSmall",
+      "class": "mi mi-ChevronLeftSmall"
+    },
+    {
+      "title": "ChevronRight",
+      "class": "mi mi-ChevronRight"
+    },
+    {
+      "title": "ChevronRightMed",
+      "class": "mi mi-ChevronRightMed"
+    },
+    {
+      "title": "ChevronRightSmall",
+      "class": "mi mi-ChevronRightSmall"
+    },
+    {
+      "title": "ChevronUp",
+      "class": "mi mi-ChevronUp"
+    },
+    {
+      "title": "ChevronUpMed",
+      "class": "mi mi-ChevronUpMed"
+    },
+    {
+      "title": "ChevronUpSmall",
+      "class": "mi mi-ChevronUpSmall"
+    },
+    {
+      "title": "ChineseBoPoMoFo",
+      "class": "mi mi-ChineseBoPoMoFo"
+    },
+    {
+      "title": "ChineseChangjie",
+      "class": "mi mi-ChineseChangjie"
+    },
+    {
+      "title": "ChinesePinyin",
+      "class": "mi mi-ChinesePinyin"
+    },
+    {
+      "title": "ChinesePunctuation",
+      "class": "mi mi-ChinesePunctuation"
+    },
+    {
+      "title": "ChineseQuick",
+      "class": "mi mi-ChineseQuick"
+    },
+    {
+      "title": "ChipCardCreditCardReader",
+      "class": "mi mi-ChipCardCreditCardReader"
+    },
+    {
+      "title": "ChromeAnnotate",
+      "class": "mi mi-ChromeAnnotate"
+    },
+    {
+      "title": "ChromeAnnotateContrast",
+      "class": "mi mi-ChromeAnnotateContrast"
+    },
+    {
+      "title": "ChromeBack",
+      "class": "mi mi-ChromeBack"
+    },
+    {
+      "title": "ChromeBackContrast",
+      "class": "mi mi-ChromeBackContrast"
+    },
+    {
+      "title": "ChromeBackContrastMirrored",
+      "class": "mi mi-ChromeBackContrastMirrored"
+    },
+    {
+      "title": "ChromeBackMirrored",
+      "class": "mi mi-ChromeBackMirrored"
+    },
+    {
+      "title": "ChromeBackToWindow",
+      "class": "mi mi-ChromeBackToWindow"
+    },
+    {
+      "title": "ChromeBackToWindowContrast",
+      "class": "mi mi-ChromeBackToWindowContrast"
+    },
+    {
+      "title": "ChromeClose",
+      "class": "mi mi-ChromeClose"
+    },
+    {
+      "title": "ChromeCloseContrast",
+      "class": "mi mi-ChromeCloseContrast"
+    },
+    {
+      "title": "ChromeFullScreen",
+      "class": "mi mi-ChromeFullScreen"
+    },
+    {
+      "title": "ChromeFullScreenContrast",
+      "class": "mi mi-ChromeFullScreenContrast"
+    },
+    {
+      "title": "ChromeMaximize",
+      "class": "mi mi-ChromeMaximize"
+    },
+    {
+      "title": "ChromeMaximizeContrast",
+      "class": "mi mi-ChromeMaximizeContrast"
+    },
+    {
+      "title": "ChromeMinimize",
+      "class": "mi mi-ChromeMinimize"
+    },
+    {
+      "title": "ChromeMinimizeContrast",
+      "class": "mi mi-ChromeMinimizeContrast"
+    },
+    {
+      "title": "ChromeRestore",
+      "class": "mi mi-ChromeRestore"
+    },
+    {
+      "title": "ChromeRestoreContrast",
+      "class": "mi mi-ChromeRestoreContrast"
+    },
+    {
+      "title": "ChromeSwitch",
+      "class": "mi mi-ChromeSwitch"
+    },
+    {
+      "title": "ChromeSwitchContast",
+      "class": "mi mi-ChromeSwitchContast"
+    },
+    {
+      "title": "CircleFill",
+      "class": "mi mi-CircleFill"
+    },
+    {
+      "title": "CircleFillBadge12",
+      "class": "mi mi-CircleFillBadge12"
+    },
+    {
+      "title": "CircleRing",
+      "class": "mi mi-CircleRing"
+    },
+    {
+      "title": "CircleRingBadge12",
+      "class": "mi mi-CircleRingBadge12"
+    },
+    {
+      "title": "CityNext",
+      "class": "mi mi-CityNext"
+    },
+    {
+      "title": "CityNext2",
+      "class": "mi mi-CityNext2"
+    },
+    {
+      "title": "Clear",
+      "class": "mi mi-Clear"
+    },
+    {
+      "title": "ClearAllInk",
+      "class": "mi mi-ClearAllInk"
+    },
+    {
+      "title": "ClearAllInkMirrored",
+      "class": "mi mi-ClearAllInkMirrored"
+    },
+    {
+      "title": "ClearSelection",
+      "class": "mi mi-ClearSelection"
+    },
+    {
+      "title": "ClearSelectionMirrored",
+      "class": "mi mi-ClearSelectionMirrored"
+    },
+    {
+      "title": "Click",
+      "class": "mi mi-Click"
+    },
+    {
+      "title": "ClipboardList",
+      "class": "mi mi-ClipboardList"
+    },
+    {
+      "title": "ClipboardListMirrored",
+      "class": "mi mi-ClipboardListMirrored"
+    },
+    {
+      "title": "ClippingTool",
+      "class": "mi mi-ClippingTool"
+    },
+    {
+      "title": "Clock",
+      "class": "mi mi-Clock"
+    },
+    {
+      "title": "ClosePane",
+      "class": "mi mi-ClosePane"
+    },
+    {
+      "title": "ClosePaneMirrored",
+      "class": "mi mi-ClosePaneMirrored"
+    },
+    {
+      "title": "Cloud",
+      "class": "mi mi-Cloud"
+    },
+    {
+      "title": "CloudPrinter",
+      "class": "mi mi-CloudPrinter"
+    },
+    {
+      "title": "CloudSeach",
+      "class": "mi mi-CloudSeach"
+    },
+    {
+      "title": "Code",
+      "class": "mi mi-Code"
+    },
+    {
+      "title": "CollapseContent",
+      "class": "mi mi-CollapseContent"
+    },
+    {
+      "title": "CollapseContentSingle",
+      "class": "mi mi-CollapseContentSingle"
+    },
+    {
+      "title": "CollateLandscape",
+      "class": "mi mi-CollateLandscape"
+    },
+    {
+      "title": "CollateLandscapeSeparated",
+      "class": "mi mi-CollateLandscapeSeparated"
+    },
+    {
+      "title": "CollatePortrait",
+      "class": "mi mi-CollatePortrait"
+    },
+    {
+      "title": "CollatePortraitSeparated",
+      "class": "mi mi-CollatePortraitSeparated"
+    },
+    {
+      "title": "Color",
+      "class": "mi mi-Color"
+    },
+    {
+      "title": "ColorOff",
+      "class": "mi mi-ColorOff"
+    },
+    {
+      "title": "CommaKey",
+      "class": "mi mi-CommaKey"
+    },
+    {
+      "title": "CommandPrompt",
+      "class": "mi mi-CommandPrompt"
+    },
+    {
+      "title": "Comment",
+      "class": "mi mi-Comment"
+    },
+    {
+      "title": "Communications",
+      "class": "mi mi-Communications"
+    },
+    {
+      "title": "CompanionApp",
+      "class": "mi mi-CompanionApp"
+    },
+    {
+      "title": "CompanionDeviceFramework",
+      "class": "mi mi-CompanionDeviceFramework"
+    },
+    {
+      "title": "Completed",
+      "class": "mi mi-Completed"
+    },
+    {
+      "title": "CompletedSolid",
+      "class": "mi mi-CompletedSolid"
+    },
+    {
+      "title": "Component",
+      "class": "mi mi-Component"
+    },
+    {
+      "title": "Connect",
+      "class": "mi mi-Connect"
+    },
+    {
+      "title": "ConnectApp",
+      "class": "mi mi-ConnectApp"
+    },
+    {
+      "title": "Connected",
+      "class": "mi mi-Connected"
+    },
+    {
+      "title": "Construction",
+      "class": "mi mi-Construction"
+    },
+    {
+      "title": "ConstructionCone",
+      "class": "mi mi-ConstructionCone"
+    },
+    {
+      "title": "ConstructionSolid",
+      "class": "mi mi-ConstructionSolid"
+    },
+    {
+      "title": "Contact",
+      "class": "mi mi-Contact"
+    },
+    {
+      "title": "Contact2",
+      "class": "mi mi-Contact2"
+    },
+    {
+      "title": "ContactInfo",
+      "class": "mi mi-ContactInfo"
+    },
+    {
+      "title": "ContactInfoMirrored",
+      "class": "mi mi-ContactInfoMirrored"
+    },
+    {
+      "title": "ContactPresence",
+      "class": "mi mi-ContactPresence"
+    },
+    {
+      "title": "ContactSolid",
+      "class": "mi mi-ContactSolid"
+    },
+    {
+      "title": "Copy",
+      "class": "mi mi-Copy"
+    },
+    {
+      "title": "CopyTo",
+      "class": "mi mi-CopyTo"
+    },
+    {
+      "title": "Courthouse",
+      "class": "mi mi-Courthouse"
+    },
+    {
+      "title": "Crop",
+      "class": "mi mi-Crop"
+    },
+    {
+      "title": "CtrlSpatialLeft",
+      "class": "mi mi-CtrlSpatialLeft"
+    },
+    {
+      "title": "CtrlSpatialRight",
+      "class": "mi mi-CtrlSpatialRight"
+    },
+    {
+      "title": "Cut",
+      "class": "mi mi-Cut"
+    },
+    {
+      "title": "DMC",
+      "class": "mi mi-DMC"
+    },
+    {
+      "title": "DashKey",
+      "class": "mi mi-DashKey"
+    },
+    {
+      "title": "DataSense",
+      "class": "mi mi-DataSense"
+    },
+    {
+      "title": "DataSenseBar",
+      "class": "mi mi-DataSenseBar"
+    },
+    {
+      "title": "DateTime",
+      "class": "mi mi-DateTime"
+    },
+    {
+      "title": "DateTimeMirrored",
+      "class": "mi mi-DateTimeMirrored"
+    },
+    {
+      "title": "DecreaseIndent",
+      "class": "mi mi-DecreaseIndent"
+    },
+    {
+      "title": "DecreaseIndentMirrored",
+      "class": "mi mi-DecreaseIndentMirrored"
+    },
+    {
+      "title": "DefaultAPN",
+      "class": "mi mi-DefaultAPN"
+    },
+    {
+      "title": "DefenderApp",
+      "class": "mi mi-DefenderApp"
+    },
+    {
+      "title": "DefenderBadge12",
+      "class": "mi mi-DefenderBadge12"
+    },
+    {
+      "title": "Delete",
+      "class": "mi mi-Delete"
+    },
+    {
+      "title": "Design",
+      "class": "mi mi-Design"
+    },
+    {
+      "title": "DetachablePC",
+      "class": "mi mi-DetachablePC"
+    },
+    {
+      "title": "DevUpdate",
+      "class": "mi mi-DevUpdate"
+    },
+    {
+      "title": "DeveloperTools",
+      "class": "mi mi-DeveloperTools"
+    },
+    {
+      "title": "DeviceDiscovery",
+      "class": "mi mi-DeviceDiscovery"
+    },
+    {
+      "title": "DeviceLaptopNoPic",
+      "class": "mi mi-DeviceLaptopNoPic"
+    },
+    {
+      "title": "DeviceLaptopPic",
+      "class": "mi mi-DeviceLaptopPic"
+    },
+    {
+      "title": "DeviceMonitorLeftPic",
+      "class": "mi mi-DeviceMonitorLeftPic"
+    },
+    {
+      "title": "DeviceMonitorNoPic",
+      "class": "mi mi-DeviceMonitorNoPic"
+    },
+    {
+      "title": "DeviceMonitorRightPic",
+      "class": "mi mi-DeviceMonitorRightPic"
+    },
+    {
+      "title": "Devices",
+      "class": "mi mi-Devices"
+    },
+    {
+      "title": "Devices2",
+      "class": "mi mi-Devices2"
+    },
+    {
+      "title": "Devices3",
+      "class": "mi mi-Devices3"
+    },
+    {
+      "title": "Devices4",
+      "class": "mi mi-Devices4"
+    },
+    {
+      "title": "Diagnostic",
+      "class": "mi mi-Diagnostic"
+    },
+    {
+      "title": "Dial1",
+      "class": "mi mi-Dial1"
+    },
+    {
+      "title": "Dial10",
+      "class": "mi mi-Dial10"
+    },
+    {
+      "title": "Dial11",
+      "class": "mi mi-Dial11"
+    },
+    {
+      "title": "Dial12",
+      "class": "mi mi-Dial12"
+    },
+    {
+      "title": "Dial13",
+      "class": "mi mi-Dial13"
+    },
+    {
+      "title": "Dial14",
+      "class": "mi mi-Dial14"
+    },
+    {
+      "title": "Dial15",
+      "class": "mi mi-Dial15"
+    },
+    {
+      "title": "Dial16",
+      "class": "mi mi-Dial16"
+    },
+    {
+      "title": "Dial2",
+      "class": "mi mi-Dial2"
+    },
+    {
+      "title": "Dial3",
+      "class": "mi mi-Dial3"
+    },
+    {
+      "title": "Dial4",
+      "class": "mi mi-Dial4"
+    },
+    {
+      "title": "Dial5",
+      "class": "mi mi-Dial5"
+    },
+    {
+      "title": "Dial6",
+      "class": "mi mi-Dial6"
+    },
+    {
+      "title": "Dial7",
+      "class": "mi mi-Dial7"
+    },
+    {
+      "title": "Dial8",
+      "class": "mi mi-Dial8"
+    },
+    {
+      "title": "Dial9",
+      "class": "mi mi-Dial9"
+    },
+    {
+      "title": "DialShape1",
+      "class": "mi mi-DialShape1"
+    },
+    {
+      "title": "DialShape2",
+      "class": "mi mi-DialShape2"
+    },
+    {
+      "title": "DialShape3",
+      "class": "mi mi-DialShape3"
+    },
+    {
+      "title": "DialShape4",
+      "class": "mi mi-DialShape4"
+    },
+    {
+      "title": "DialUp",
+      "class": "mi mi-DialUp"
+    },
+    {
+      "title": "Dialpad",
+      "class": "mi mi-Dialpad"
+    },
+    {
+      "title": "Dictionary",
+      "class": "mi mi-Dictionary"
+    },
+    {
+      "title": "DictionaryAdd",
+      "class": "mi mi-DictionaryAdd"
+    },
+    {
+      "title": "DictionaryCloud",
+      "class": "mi mi-DictionaryCloud"
+    },
+    {
+      "title": "DirectAccess",
+      "class": "mi mi-DirectAccess"
+    },
+    {
+      "title": "Directions",
+      "class": "mi mi-Directions"
+    },
+    {
+      "title": "DisableUpdates",
+      "class": "mi mi-DisableUpdates"
+    },
+    {
+      "title": "DisconnectDisplay",
+      "class": "mi mi-DisconnectDisplay"
+    },
+    {
+      "title": "DisconnectDrive",
+      "class": "mi mi-DisconnectDrive"
+    },
+    {
+      "title": "Dislike",
+      "class": "mi mi-Dislike"
+    },
+    {
+      "title": "Dock",
+      "class": "mi mi-Dock"
+    },
+    {
+      "title": "DockBottom",
+      "class": "mi mi-DockBottom"
+    },
+    {
+      "title": "DockLeft",
+      "class": "mi mi-DockLeft"
+    },
+    {
+      "title": "DockLeftMirrored",
+      "class": "mi mi-DockLeftMirrored"
+    },
+    {
+      "title": "DockRight",
+      "class": "mi mi-DockRight"
+    },
+    {
+      "title": "DockRightMirrored",
+      "class": "mi mi-DockRightMirrored"
+    },
+    {
+      "title": "Document",
+      "class": "mi mi-Document"
+    },
+    {
+      "title": "DoublePinyin",
+      "class": "mi mi-DoublePinyin"
+    },
+    {
+      "title": "Down",
+      "class": "mi mi-Down"
+    },
+    {
+      "title": "DownShiftKey",
+      "class": "mi mi-DownShiftKey"
+    },
+    {
+      "title": "Download",
+      "class": "mi mi-Download"
+    },
+    {
+      "title": "DownloadMap",
+      "class": "mi mi-DownloadMap"
+    },
+    {
+      "title": "Dpad",
+      "class": "mi mi-Dpad"
+    },
+    {
+      "title": "Draw",
+      "class": "mi mi-Draw"
+    },
+    {
+      "title": "DrawSolid",
+      "class": "mi mi-DrawSolid"
+    },
+    {
+      "title": "Drop",
+      "class": "mi mi-Drop"
+    },
+    {
+      "title": "DullSound",
+      "class": "mi mi-DullSound"
+    },
+    {
+      "title": "DullSoundKey",
+      "class": "mi mi-DullSoundKey"
+    },
+    {
+      "title": "DuplexLandscapeOneSided",
+      "class": "mi mi-DuplexLandscapeOneSided"
+    },
+    {
+      "title": "DuplexLandscapeOneSidedMirrored",
+      "class": "mi mi-DuplexLandscapeOneSidedMirrored"
+    },
+    {
+      "title": "DuplexLandscapeTwoSidedLongEdge",
+      "class": "mi mi-DuplexLandscapeTwoSidedLongEdge"
+    },
+    {
+      "title": "DuplexLandscapeTwoSidedLongEdgeMirrored",
+      "class": "mi mi-DuplexLandscapeTwoSidedLongEdgeMirrored"
+    },
+    {
+      "title": "DuplexLandscapeTwoSidedShortEdge",
+      "class": "mi mi-DuplexLandscapeTwoSidedShortEdge"
+    },
+    {
+      "title": "DuplexLandscapeTwoSidedShortEdgeMirrored",
+      "class": "mi mi-DuplexLandscapeTwoSidedShortEdgeMirrored"
+    },
+    {
+      "title": "DuplexPortraitOneSided",
+      "class": "mi mi-DuplexPortraitOneSided"
+    },
+    {
+      "title": "DuplexPortraitOneSidedMirrored",
+      "class": "mi mi-DuplexPortraitOneSidedMirrored"
+    },
+    {
+      "title": "DuplexPortraitTwoSidedLongEdge",
+      "class": "mi mi-DuplexPortraitTwoSidedLongEdge"
+    },
+    {
+      "title": "DuplexPortraitTwoSidedLongEdgeMirrored",
+      "class": "mi mi-DuplexPortraitTwoSidedLongEdgeMirrored"
+    },
+    {
+      "title": "DuplexPortraitTwoSidedShortEdge",
+      "class": "mi mi-DuplexPortraitTwoSidedShortEdge"
+    },
+    {
+      "title": "DuplexPortraitTwoSidedShortEdgeMirrored",
+      "class": "mi mi-DuplexPortraitTwoSidedShortEdgeMirrored"
+    },
+    {
+      "title": "DynamicLock",
+      "class": "mi mi-DynamicLock"
+    },
+    {
+      "title": "EMI",
+      "class": "mi mi-EMI"
+    },
+    {
+      "title": "Ear",
+      "class": "mi mi-Ear"
+    },
+    {
+      "title": "Earbud",
+      "class": "mi mi-Earbud"
+    },
+    {
+      "title": "EaseOfAccess",
+      "class": "mi mi-EaseOfAccess"
+    },
+    {
+      "title": "Edit",
+      "class": "mi mi-Edit"
+    },
+    {
+      "title": "EditMirrored",
+      "class": "mi mi-EditMirrored"
+    },
+    {
+      "title": "Education",
+      "class": "mi mi-Education"
+    },
+    {
+      "title": "Emoji",
+      "class": "mi mi-Emoji"
+    },
+    {
+      "title": "Emoji2",
+      "class": "mi mi-Emoji2"
+    },
+    {
+      "title": "EmojiSwatch",
+      "class": "mi mi-EmojiSwatch"
+    },
+    {
+      "title": "EmojiTabCelebrationObjects",
+      "class": "mi mi-EmojiTabCelebrationObjects"
+    },
+    {
+      "title": "EmojiTabFavorites",
+      "class": "mi mi-EmojiTabFavorites"
+    },
+    {
+      "title": "EmojiTabFoodPlants",
+      "class": "mi mi-EmojiTabFoodPlants"
+    },
+    {
+      "title": "EmojiTabPeople",
+      "class": "mi mi-EmojiTabPeople"
+    },
+    {
+      "title": "EmojiTabSmilesAnimals",
+      "class": "mi mi-EmojiTabSmilesAnimals"
+    },
+    {
+      "title": "EmojiTabSymbols",
+      "class": "mi mi-EmojiTabSymbols"
+    },
+    {
+      "title": "EmojiTabTextSmiles",
+      "class": "mi mi-EmojiTabTextSmiles"
+    },
+    {
+      "title": "EmojiTabTransitPlaces",
+      "class": "mi mi-EmojiTabTransitPlaces"
+    },
+    {
+      "title": "EndPointSolid",
+      "class": "mi mi-EndPointSolid"
+    },
+    {
+      "title": "EnglishPunctuation",
+      "class": "mi mi-EnglishPunctuation"
+    },
+    {
+      "title": "Equalizer",
+      "class": "mi mi-Equalizer"
+    },
+    {
+      "title": "EraseTool",
+      "class": "mi mi-EraseTool"
+    },
+    {
+      "title": "EraseToolFill",
+      "class": "mi mi-EraseToolFill"
+    },
+    {
+      "title": "EraseToolFill2",
+      "class": "mi mi-EraseToolFill2"
+    },
+    {
+      "title": "Error",
+      "class": "mi mi-Error"
+    },
+    {
+      "title": "ErrorBadge",
+      "class": "mi mi-ErrorBadge"
+    },
+    {
+      "title": "ErrorBadge12",
+      "class": "mi mi-ErrorBadge12"
+    },
+    {
+      "title": "Ethernet",
+      "class": "mi mi-Ethernet"
+    },
+    {
+      "title": "EthernetError",
+      "class": "mi mi-EthernetError"
+    },
+    {
+      "title": "EthernetWarning",
+      "class": "mi mi-EthernetWarning"
+    },
+    {
+      "title": "ExpandTile",
+      "class": "mi mi-ExpandTile"
+    },
+    {
+      "title": "ExpandTileMirrored",
+      "class": "mi mi-ExpandTileMirrored"
+    },
+    {
+      "title": "ExploitProtectionSettings",
+      "class": "mi mi-ExploitProtectionSettings"
+    },
+    {
+      "title": "ExploreContent",
+      "class": "mi mi-ExploreContent"
+    },
+    {
+      "title": "ExploreContentSingle",
+      "class": "mi mi-ExploreContentSingle"
+    },
+    {
+      "title": "Export",
+      "class": "mi mi-Export"
+    },
+    {
+      "title": "EyeGaze",
+      "class": "mi mi-EyeGaze"
+    },
+    {
+      "title": "Eyedropper",
+      "class": "mi mi-Eyedropper"
+    },
+    {
+      "title": "Family",
+      "class": "mi mi-Family"
+    },
+    {
+      "title": "FastForward",
+      "class": "mi mi-FastForward"
+    },
+    {
+      "title": "Favicon",
+      "class": "mi mi-Favicon"
+    },
+    {
+      "title": "FavoriteList",
+      "class": "mi mi-FavoriteList"
+    },
+    {
+      "title": "FavoriteStar",
+      "class": "mi mi-FavoriteStar"
+    },
+    {
+      "title": "FavoriteStarFill",
+      "class": "mi mi-FavoriteStarFill"
+    },
+    {
+      "title": "Feedback",
+      "class": "mi mi-Feedback"
+    },
+    {
+      "title": "FeedbackApp",
+      "class": "mi mi-FeedbackApp"
+    },
+    {
+      "title": "Ferry",
+      "class": "mi mi-Ferry"
+    },
+    {
+      "title": "FerrySolid",
+      "class": "mi mi-FerrySolid"
+    },
+    {
+      "title": "FileExplorer",
+      "class": "mi mi-FileExplorer"
+    },
+    {
+      "title": "FileExplorerApp",
+      "class": "mi mi-FileExplorerApp"
+    },
+    {
+      "title": "Filter",
+      "class": "mi mi-Filter"
+    },
+    {
+      "title": "FingerInking",
+      "class": "mi mi-FingerInking"
+    },
+    {
+      "title": "Fingerprint",
+      "class": "mi mi-Fingerprint"
+    },
+    {
+      "title": "FitPage",
+      "class": "mi mi-FitPage"
+    },
+    {
+      "title": "Flag",
+      "class": "mi mi-Flag"
+    },
+    {
+      "title": "Flashlight",
+      "class": "mi mi-Flashlight"
+    },
+    {
+      "title": "FlickDown",
+      "class": "mi mi-FlickDown"
+    },
+    {
+      "title": "FlickLeft",
+      "class": "mi mi-FlickLeft"
+    },
+    {
+      "title": "FlickRight",
+      "class": "mi mi-FlickRight"
+    },
+    {
+      "title": "FlickUp",
+      "class": "mi mi-FlickUp"
+    },
+    {
+      "title": "Folder",
+      "class": "mi mi-Folder"
+    },
+    {
+      "title": "FolderFill",
+      "class": "mi mi-FolderFill"
+    },
+    {
+      "title": "FolderHorizontal",
+      "class": "mi mi-FolderHorizontal"
+    },
+    {
+      "title": "FolderOpen",
+      "class": "mi mi-FolderOpen"
+    },
+    {
+      "title": "Font",
+      "class": "mi mi-Font"
+    },
+    {
+      "title": "FontColor",
+      "class": "mi mi-FontColor"
+    },
+    {
+      "title": "FontColorKorean",
+      "class": "mi mi-FontColorKorean"
+    },
+    {
+      "title": "FontDecrease",
+      "class": "mi mi-FontDecrease"
+    },
+    {
+      "title": "FontIncrease",
+      "class": "mi mi-FontIncrease"
+    },
+    {
+      "title": "FontSize",
+      "class": "mi mi-FontSize"
+    },
+    {
+      "title": "FontStyleKorean",
+      "class": "mi mi-FontStyleKorean"
+    },
+    {
+      "title": "Forward",
+      "class": "mi mi-Forward"
+    },
+    {
+      "title": "ForwardMirrored",
+      "class": "mi mi-ForwardMirrored"
+    },
+    {
+      "title": "ForwardSm",
+      "class": "mi mi-ForwardSm"
+    },
+    {
+      "title": "FourBars",
+      "class": "mi mi-FourBars"
+    },
+    {
+      "title": "FreeFormClipping",
+      "class": "mi mi-FreeFormClipping"
+    },
+    {
+      "title": "Frigid",
+      "class": "mi mi-Frigid"
+    },
+    {
+      "title": "FullAlpha",
+      "class": "mi mi-FullAlpha"
+    },
+    {
+      "title": "FullCircleMask",
+      "class": "mi mi-FullCircleMask"
+    },
+    {
+      "title": "FullHiragana",
+      "class": "mi mi-FullHiragana"
+    },
+    {
+      "title": "FullKatakana",
+      "class": "mi mi-FullKatakana"
+    },
+    {
+      "title": "FullScreen",
+      "class": "mi mi-FullScreen"
+    },
+    {
+      "title": "FuzzyReading",
+      "class": "mi mi-FuzzyReading"
+    },
+    {
+      "title": "GIF",
+      "class": "mi mi-GIF"
+    },
+    {
+      "title": "Game",
+      "class": "mi mi-Game"
+    },
+    {
+      "title": "GameConsole",
+      "class": "mi mi-GameConsole"
+    },
+    {
+      "title": "GiftboxOpen",
+      "class": "mi mi-GiftboxOpen"
+    },
+    {
+      "title": "GlobalNavigationButton",
+      "class": "mi mi-GlobalNavigationButton"
+    },
+    {
+      "title": "Globe",
+      "class": "mi mi-Globe"
+    },
+    {
+      "title": "Go",
+      "class": "mi mi-Go"
+    },
+    {
+      "title": "GoMirrored",
+      "class": "mi mi-GoMirrored"
+    },
+    {
+      "title": "GoToStart",
+      "class": "mi mi-GoToStart"
+    },
+    {
+      "title": "GotoToday",
+      "class": "mi mi-GotoToday"
+    },
+    {
+      "title": "GridView",
+      "class": "mi mi-GridView"
+    },
+    {
+      "title": "GripperBarHorizontal",
+      "class": "mi mi-GripperBarHorizontal"
+    },
+    {
+      "title": "GripperBarVertical",
+      "class": "mi mi-GripperBarVertical"
+    },
+    {
+      "title": "GripperResize",
+      "class": "mi mi-GripperResize"
+    },
+    {
+      "title": "GripperResizeMirrored",
+      "class": "mi mi-GripperResizeMirrored"
+    },
+    {
+      "title": "GripperTool",
+      "class": "mi mi-GripperTool"
+    },
+    {
+      "title": "Groceries",
+      "class": "mi mi-Groceries"
+    },
+    {
+      "title": "Group",
+      "class": "mi mi-Group"
+    },
+    {
+      "title": "GroupList",
+      "class": "mi mi-GroupList"
+    },
+    {
+      "title": "GuestUser",
+      "class": "mi mi-GuestUser"
+    },
+    {
+      "title": "HMD",
+      "class": "mi mi-HMD"
+    },
+    {
+      "title": "HWPInsert",
+      "class": "mi mi-HWPInsert"
+    },
+    {
+      "title": "HWPJoin",
+      "class": "mi mi-HWPJoin"
+    },
+    {
+      "title": "HWPNewLine",
+      "class": "mi mi-HWPNewLine"
+    },
+    {
+      "title": "HWPOverwrite",
+      "class": "mi mi-HWPOverwrite"
+    },
+    {
+      "title": "HWPScratchOut",
+      "class": "mi mi-HWPScratchOut"
+    },
+    {
+      "title": "HWPSplit",
+      "class": "mi mi-HWPSplit"
+    },
+    {
+      "title": "HWPStrikeThrough",
+      "class": "mi mi-HWPStrikeThrough"
+    },
+    {
+      "title": "HalfAlpha",
+      "class": "mi mi-HalfAlpha"
+    },
+    {
+      "title": "HalfDullSound",
+      "class": "mi mi-HalfDullSound"
+    },
+    {
+      "title": "HalfKatakana",
+      "class": "mi mi-HalfKatakana"
+    },
+    {
+      "title": "HalfStarLeft",
+      "class": "mi mi-HalfStarLeft"
+    },
+    {
+      "title": "HalfStarRight",
+      "class": "mi mi-HalfStarRight"
+    },
+    {
+      "title": "Handwriting",
+      "class": "mi mi-Handwriting"
+    },
+    {
+      "title": "HangUp",
+      "class": "mi mi-HangUp"
+    },
+    {
+      "title": "HardDrive",
+      "class": "mi mi-HardDrive"
+    },
+    {
+      "title": "HeadlessDevice",
+      "class": "mi mi-HeadlessDevice"
+    },
+    {
+      "title": "Headphone",
+      "class": "mi mi-Headphone"
+    },
+    {
+      "title": "Headphone0",
+      "class": "mi mi-Headphone0"
+    },
+    {
+      "title": "Headphone1",
+      "class": "mi mi-Headphone1"
+    },
+    {
+      "title": "Headphone2",
+      "class": "mi mi-Headphone2"
+    },
+    {
+      "title": "Headphone3",
+      "class": "mi mi-Headphone3"
+    },
+    {
+      "title": "Headset",
+      "class": "mi mi-Headset"
+    },
+    {
+      "title": "Health",
+      "class": "mi mi-Health"
+    },
+    {
+      "title": "Heart",
+      "class": "mi mi-Heart"
+    },
+    {
+      "title": "HeartBroken",
+      "class": "mi mi-HeartBroken"
+    },
+    {
+      "title": "HeartBrokenLegacy",
+      "class": "mi mi-HeartBrokenLegacy"
+    },
+    {
+      "title": "HeartFill",
+      "class": "mi mi-HeartFill"
+    },
+    {
+      "title": "Help",
+      "class": "mi mi-Help"
+    },
+    {
+      "title": "HelpMirrored",
+      "class": "mi mi-HelpMirrored"
+    },
+    {
+      "title": "HideBcc",
+      "class": "mi mi-HideBcc"
+    },
+    {
+      "title": "Highlight",
+      "class": "mi mi-Highlight"
+    },
+    {
+      "title": "HighlightFill",
+      "class": "mi mi-HighlightFill"
+    },
+    {
+      "title": "HighlightFill2",
+      "class": "mi mi-HighlightFill2"
+    },
+    {
+      "title": "History",
+      "class": "mi mi-History"
+    },
+    {
+      "title": "HolePunchLandscapeBottom",
+      "class": "mi mi-HolePunchLandscapeBottom"
+    },
+    {
+      "title": "HolePunchLandscapeLeft",
+      "class": "mi mi-HolePunchLandscapeLeft"
+    },
+    {
+      "title": "HolePunchLandscapeRight",
+      "class": "mi mi-HolePunchLandscapeRight"
+    },
+    {
+      "title": "HolePunchLandscapeTop",
+      "class": "mi mi-HolePunchLandscapeTop"
+    },
+    {
+      "title": "HolePunchOff",
+      "class": "mi mi-HolePunchOff"
+    },
+    {
+      "title": "HolePunchPortraitBottom",
+      "class": "mi mi-HolePunchPortraitBottom"
+    },
+    {
+      "title": "HolePunchPortraitLeft",
+      "class": "mi mi-HolePunchPortraitLeft"
+    },
+    {
+      "title": "HolePunchPortraitRight",
+      "class": "mi mi-HolePunchPortraitRight"
+    },
+    {
+      "title": "HolePunchPortraitTop",
+      "class": "mi mi-HolePunchPortraitTop"
+    },
+    {
+      "title": "HoloLensSelected",
+      "class": "mi mi-HoloLensSelected"
+    },
+    {
+      "title": "Home",
+      "class": "mi mi-Home"
+    },
+    {
+      "title": "HomeGroup",
+      "class": "mi mi-HomeGroup"
+    },
+    {
+      "title": "HomeSolid",
+      "class": "mi mi-HomeSolid"
+    },
+    {
+      "title": "HorizontalTabKey",
+      "class": "mi mi-HorizontalTabKey"
+    },
+    {
+      "title": "IBeam",
+      "class": "mi mi-IBeam"
+    },
+    {
+      "title": "IBeamOutline",
+      "class": "mi mi-IBeamOutline"
+    },
+    {
+      "title": "IOT",
+      "class": "mi mi-IOT"
+    },
+    {
+      "title": "ImageExport",
+      "class": "mi mi-ImageExport"
+    },
+    {
+      "title": "Import",
+      "class": "mi mi-Import"
+    },
+    {
+      "title": "ImportAll",
+      "class": "mi mi-ImportAll"
+    },
+    {
+      "title": "ImportAllMirrored",
+      "class": "mi mi-ImportAllMirrored"
+    },
+    {
+      "title": "Important",
+      "class": "mi mi-Important"
+    },
+    {
+      "title": "ImportantBadge12",
+      "class": "mi mi-ImportantBadge12"
+    },
+    {
+      "title": "InPrivate",
+      "class": "mi mi-InPrivate"
+    },
+    {
+      "title": "IncidentTriangle",
+      "class": "mi mi-IncidentTriangle"
+    },
+    {
+      "title": "IncreaseIndent",
+      "class": "mi mi-IncreaseIndent"
+    },
+    {
+      "title": "IncreaseIndentMirrored",
+      "class": "mi mi-IncreaseIndentMirrored"
+    },
+    {
+      "title": "Info",
+      "class": "mi mi-Info"
+    },
+    {
+      "title": "Info2",
+      "class": "mi mi-Info2"
+    },
+    {
+      "title": "InfoSolid",
+      "class": "mi mi-InfoSolid"
+    },
+    {
+      "title": "InkingCaret",
+      "class": "mi mi-InkingCaret"
+    },
+    {
+      "title": "InkingColorFill",
+      "class": "mi mi-InkingColorFill"
+    },
+    {
+      "title": "InkingColorOutline",
+      "class": "mi mi-InkingColorOutline"
+    },
+    {
+      "title": "InkingTool",
+      "class": "mi mi-InkingTool"
+    },
+    {
+      "title": "InkingToolFill",
+      "class": "mi mi-InkingToolFill"
+    },
+    {
+      "title": "InkingToolFill2",
+      "class": "mi mi-InkingToolFill2"
+    },
+    {
+      "title": "Input",
+      "class": "mi mi-Input"
+    },
+    {
+      "title": "InsiderHubApp",
+      "class": "mi mi-InsiderHubApp"
+    },
+    {
+      "title": "InteractiveDashboard",
+      "class": "mi mi-InteractiveDashboard"
+    },
+    {
+      "title": "Italic",
+      "class": "mi mi-Italic"
+    },
+    {
+      "title": "ItalicC",
+      "class": "mi mi-ItalicC"
+    },
+    {
+      "title": "ItalicI",
+      "class": "mi mi-ItalicI"
+    },
+    {
+      "title": "ItalicK",
+      "class": "mi mi-ItalicK"
+    },
+    {
+      "title": "ItalicKorean",
+      "class": "mi mi-ItalicKorean"
+    },
+    {
+      "title": "ItalicRussian",
+      "class": "mi mi-ItalicRussian"
+    },
+    {
+      "title": "Japanese",
+      "class": "mi mi-Japanese"
+    },
+    {
+      "title": "JpnRomanji",
+      "class": "mi mi-JpnRomanji"
+    },
+    {
+      "title": "JpnRomanjiLock",
+      "class": "mi mi-JpnRomanjiLock"
+    },
+    {
+      "title": "JpnRomanjiShift",
+      "class": "mi mi-JpnRomanjiShift"
+    },
+    {
+      "title": "JpnRomanjiShiftLock",
+      "class": "mi mi-JpnRomanjiShiftLock"
+    },
+    {
+      "title": "Key12On",
+      "class": "mi mi-Key12On"
+    },
+    {
+      "title": "Keyboard12Key",
+      "class": "mi mi-Keyboard12Key"
+    },
+    {
+      "title": "KeyboardBrightness",
+      "class": "mi mi-KeyboardBrightness"
+    },
+    {
+      "title": "KeyboardClassic",
+      "class": "mi mi-KeyboardClassic"
+    },
+    {
+      "title": "KeyboardDismiss",
+      "class": "mi mi-KeyboardDismiss"
+    },
+    {
+      "title": "KeyboardDock",
+      "class": "mi mi-KeyboardDock"
+    },
+    {
+      "title": "KeyboardFull",
+      "class": "mi mi-KeyboardFull"
+    },
+    {
+      "title": "KeyboardLeftAligned",
+      "class": "mi mi-KeyboardLeftAligned"
+    },
+    {
+      "title": "KeyboardLeftDock",
+      "class": "mi mi-KeyboardLeftDock"
+    },
+    {
+      "title": "KeyboardLeftHanded",
+      "class": "mi mi-KeyboardLeftHanded"
+    },
+    {
+      "title": "KeyboardLowerBrightness",
+      "class": "mi mi-KeyboardLowerBrightness"
+    },
+    {
+      "title": "KeyboardNarrow",
+      "class": "mi mi-KeyboardNarrow"
+    },
+    {
+      "title": "KeyboardOneHanded",
+      "class": "mi mi-KeyboardOneHanded"
+    },
+    {
+      "title": "KeyboardRightAligned",
+      "class": "mi mi-KeyboardRightAligned"
+    },
+    {
+      "title": "KeyboardRightDock",
+      "class": "mi mi-KeyboardRightDock"
+    },
+    {
+      "title": "KeyboardRightHanded",
+      "class": "mi mi-KeyboardRightHanded"
+    },
+    {
+      "title": "KeyboardSettings",
+      "class": "mi mi-KeyboardSettings"
+    },
+    {
+      "title": "KeyboardShortcut",
+      "class": "mi mi-KeyboardShortcut"
+    },
+    {
+      "title": "KeyboardSplit",
+      "class": "mi mi-KeyboardSplit"
+    },
+    {
+      "title": "KeyboardStandard",
+      "class": "mi mi-KeyboardStandard"
+    },
+    {
+      "title": "KeyboardUndock",
+      "class": "mi mi-KeyboardUndock"
+    },
+    {
+      "title": "KnowledgeArticle",
+      "class": "mi mi-KnowledgeArticle"
+    },
+    {
+      "title": "Korean",
+      "class": "mi mi-Korean"
+    },
+    {
+      "title": "LEDLight",
+      "class": "mi mi-LEDLight"
+    },
+    {
+      "title": "Label",
+      "class": "mi mi-Label"
+    },
+    {
+      "title": "LandscapeOrientation",
+      "class": "mi mi-LandscapeOrientation"
+    },
+    {
+      "title": "LandscapeOrientationMirrored",
+      "class": "mi mi-LandscapeOrientationMirrored"
+    },
+    {
+      "title": "LangJPN",
+      "class": "mi mi-LangJPN"
+    },
+    {
+      "title": "LanguageChs",
+      "class": "mi mi-LanguageChs"
+    },
+    {
+      "title": "LanguageCht",
+      "class": "mi mi-LanguageCht"
+    },
+    {
+      "title": "LanguageJpn",
+      "class": "mi mi-LanguageJpn"
+    },
+    {
+      "title": "LanguageKor",
+      "class": "mi mi-LanguageKor"
+    },
+    {
+      "title": "LaptopSecure",
+      "class": "mi mi-LaptopSecure"
+    },
+    {
+      "title": "LaptopSelected",
+      "class": "mi mi-LaptopSelected"
+    },
+    {
+      "title": "LargeErase",
+      "class": "mi mi-LargeErase"
+    },
+    {
+      "title": "Layout",
+      "class": "mi mi-Layout"
+    },
+    {
+      "title": "Leaf",
+      "class": "mi mi-Leaf"
+    },
+    {
+      "title": "LeaveChat",
+      "class": "mi mi-LeaveChat"
+    },
+    {
+      "title": "LeaveChatMirrored",
+      "class": "mi mi-LeaveChatMirrored"
+    },
+    {
+      "title": "LeftArrowKeyTime0",
+      "class": "mi mi-LeftArrowKeyTime0"
+    },
+    {
+      "title": "LeftDoubleQuote",
+      "class": "mi mi-LeftDoubleQuote"
+    },
+    {
+      "title": "LeftQuote",
+      "class": "mi mi-LeftQuote"
+    },
+    {
+      "title": "LeftStick",
+      "class": "mi mi-LeftStick"
+    },
+    {
+      "title": "Lexicon",
+      "class": "mi mi-Lexicon"
+    },
+    {
+      "title": "Library",
+      "class": "mi mi-Library"
+    },
+    {
+      "title": "Light",
+      "class": "mi mi-Light"
+    },
+    {
+      "title": "LightningBolt",
+      "class": "mi mi-LightningBolt"
+    },
+    {
+      "title": "Like",
+      "class": "mi mi-Like"
+    },
+    {
+      "title": "LikeDislike",
+      "class": "mi mi-LikeDislike"
+    },
+    {
+      "title": "LineDisplay",
+      "class": "mi mi-LineDisplay"
+    },
+    {
+      "title": "Link",
+      "class": "mi mi-Link"
+    },
+    {
+      "title": "List",
+      "class": "mi mi-List"
+    },
+    {
+      "title": "ListMirrored",
+      "class": "mi mi-ListMirrored"
+    },
+    {
+      "title": "Location",
+      "class": "mi mi-Location"
+    },
+    {
+      "title": "Lock",
+      "class": "mi mi-Lock"
+    },
+    {
+      "title": "LockFeedback",
+      "class": "mi mi-LockFeedback"
+    },
+    {
+      "title": "LockScreenGlance",
+      "class": "mi mi-LockScreenGlance"
+    },
+    {
+      "title": "LockscreenDesktop",
+      "class": "mi mi-LockscreenDesktop"
+    },
+    {
+      "title": "LowerBrightness",
+      "class": "mi mi-LowerBrightness"
+    },
+    {
+      "title": "MagStripeReader",
+      "class": "mi mi-MagStripeReader"
+    },
+    {
+      "title": "Mail",
+      "class": "mi mi-Mail"
+    },
+    {
+      "title": "MailBadge12",
+      "class": "mi mi-MailBadge12"
+    },
+    {
+      "title": "MailFill",
+      "class": "mi mi-MailFill"
+    },
+    {
+      "title": "MailForward",
+      "class": "mi mi-MailForward"
+    },
+    {
+      "title": "MailForwardMirrored",
+      "class": "mi mi-MailForwardMirrored"
+    },
+    {
+      "title": "MailReply",
+      "class": "mi mi-MailReply"
+    },
+    {
+      "title": "MailReplyAll",
+      "class": "mi mi-MailReplyAll"
+    },
+    {
+      "title": "MailReplyAllMirrored",
+      "class": "mi mi-MailReplyAllMirrored"
+    },
+    {
+      "title": "MailReplyMirrored",
+      "class": "mi mi-MailReplyMirrored"
+    },
+    {
+      "title": "Manage",
+      "class": "mi mi-Manage"
+    },
+    {
+      "title": "MapCompassBottom",
+      "class": "mi mi-MapCompassBottom"
+    },
+    {
+      "title": "MapCompassTop",
+      "class": "mi mi-MapCompassTop"
+    },
+    {
+      "title": "MapDirections",
+      "class": "mi mi-MapDirections"
+    },
+    {
+      "title": "MapDrive",
+      "class": "mi mi-MapDrive"
+    },
+    {
+      "title": "MapLayers",
+      "class": "mi mi-MapLayers"
+    },
+    {
+      "title": "MapPin",
+      "class": "mi mi-MapPin"
+    },
+    {
+      "title": "MapPin2",
+      "class": "mi mi-MapPin2"
+    },
+    {
+      "title": "Marker",
+      "class": "mi mi-Marker"
+    },
+    {
+      "title": "Marquee",
+      "class": "mi mi-Marquee"
+    },
+    {
+      "title": "Media",
+      "class": "mi mi-Media"
+    },
+    {
+      "title": "MediaStorageTower",
+      "class": "mi mi-MediaStorageTower"
+    },
+    {
+      "title": "Megaphone",
+      "class": "mi mi-Megaphone"
+    },
+    {
+      "title": "Memo",
+      "class": "mi mi-Memo"
+    },
+    {
+      "title": "Message",
+      "class": "mi mi-Message"
+    },
+    {
+      "title": "MicClipping",
+      "class": "mi mi-MicClipping"
+    },
+    {
+      "title": "MicError",
+      "class": "mi mi-MicError"
+    },
+    {
+      "title": "MicOff",
+      "class": "mi mi-MicOff"
+    },
+    {
+      "title": "MicOn",
+      "class": "mi mi-MicOn"
+    },
+    {
+      "title": "MicSleep",
+      "class": "mi mi-MicSleep"
+    },
+    {
+      "title": "Microphone",
+      "class": "mi mi-Microphone"
+    },
+    {
+      "title": "MicrophoneListening",
+      "class": "mi mi-MicrophoneListening"
+    },
+    {
+      "title": "MiracastLogoSmall",
+      "class": "mi mi-MiracastLogoSmall"
+    },
+    {
+      "title": "MixVolumes",
+      "class": "mi mi-MixVolumes"
+    },
+    {
+      "title": "MobActionCenter",
+      "class": "mi mi-MobActionCenter"
+    },
+    {
+      "title": "MobAirplane",
+      "class": "mi mi-MobAirplane"
+    },
+    {
+      "title": "MobBattery0",
+      "class": "mi mi-MobBattery0"
+    },
+    {
+      "title": "MobBattery1",
+      "class": "mi mi-MobBattery1"
+    },
+    {
+      "title": "MobBattery10",
+      "class": "mi mi-MobBattery10"
+    },
+    {
+      "title": "MobBattery2",
+      "class": "mi mi-MobBattery2"
+    },
+    {
+      "title": "MobBattery3",
+      "class": "mi mi-MobBattery3"
+    },
+    {
+      "title": "MobBattery4",
+      "class": "mi mi-MobBattery4"
+    },
+    {
+      "title": "MobBattery5",
+      "class": "mi mi-MobBattery5"
+    },
+    {
+      "title": "MobBattery6",
+      "class": "mi mi-MobBattery6"
+    },
+    {
+      "title": "MobBattery7",
+      "class": "mi mi-MobBattery7"
+    },
+    {
+      "title": "MobBattery8",
+      "class": "mi mi-MobBattery8"
+    },
+    {
+      "title": "MobBattery9",
+      "class": "mi mi-MobBattery9"
+    },
+    {
+      "title": "MobBatteryCharging0",
+      "class": "mi mi-MobBatteryCharging0"
+    },
+    {
+      "title": "MobBatteryCharging1",
+      "class": "mi mi-MobBatteryCharging1"
+    },
+    {
+      "title": "MobBatteryCharging10",
+      "class": "mi mi-MobBatteryCharging10"
+    },
+    {
+      "title": "MobBatteryCharging2",
+      "class": "mi mi-MobBatteryCharging2"
+    },
+    {
+      "title": "MobBatteryCharging3",
+      "class": "mi mi-MobBatteryCharging3"
+    },
+    {
+      "title": "MobBatteryCharging4",
+      "class": "mi mi-MobBatteryCharging4"
+    },
+    {
+      "title": "MobBatteryCharging5",
+      "class": "mi mi-MobBatteryCharging5"
+    },
+    {
+      "title": "MobBatteryCharging6",
+      "class": "mi mi-MobBatteryCharging6"
+    },
+    {
+      "title": "MobBatteryCharging7",
+      "class": "mi mi-MobBatteryCharging7"
+    },
+    {
+      "title": "MobBatteryCharging8",
+      "class": "mi mi-MobBatteryCharging8"
+    },
+    {
+      "title": "MobBatteryCharging9",
+      "class": "mi mi-MobBatteryCharging9"
+    },
+    {
+      "title": "MobBatterySaver0",
+      "class": "mi mi-MobBatterySaver0"
+    },
+    {
+      "title": "MobBatterySaver1",
+      "class": "mi mi-MobBatterySaver1"
+    },
+    {
+      "title": "MobBatterySaver10",
+      "class": "mi mi-MobBatterySaver10"
+    },
+    {
+      "title": "MobBatterySaver2",
+      "class": "mi mi-MobBatterySaver2"
+    },
+    {
+      "title": "MobBatterySaver3",
+      "class": "mi mi-MobBatterySaver3"
+    },
+    {
+      "title": "MobBatterySaver4",
+      "class": "mi mi-MobBatterySaver4"
+    },
+    {
+      "title": "MobBatterySaver5",
+      "class": "mi mi-MobBatterySaver5"
+    },
+    {
+      "title": "MobBatterySaver6",
+      "class": "mi mi-MobBatterySaver6"
+    },
+    {
+      "title": "MobBatterySaver7",
+      "class": "mi mi-MobBatterySaver7"
+    },
+    {
+      "title": "MobBatterySaver8",
+      "class": "mi mi-MobBatterySaver8"
+    },
+    {
+      "title": "MobBatterySaver9",
+      "class": "mi mi-MobBatterySaver9"
+    },
+    {
+      "title": "MobBatteryUnknown",
+      "class": "mi mi-MobBatteryUnknown"
+    },
+    {
+      "title": "MobBluetooth",
+      "class": "mi mi-MobBluetooth"
+    },
+    {
+      "title": "MobCallForwarding",
+      "class": "mi mi-MobCallForwarding"
+    },
+    {
+      "title": "MobCallForwardingMirrored",
+      "class": "mi mi-MobCallForwardingMirrored"
+    },
+    {
+      "title": "MobDrivingMode",
+      "class": "mi mi-MobDrivingMode"
+    },
+    {
+      "title": "MobLocation",
+      "class": "mi mi-MobLocation"
+    },
+    {
+      "title": "MobQuietHours",
+      "class": "mi mi-MobQuietHours"
+    },
+    {
+      "title": "MobSIMError",
+      "class": "mi mi-MobSIMError"
+    },
+    {
+      "title": "MobSIMLock",
+      "class": "mi mi-MobSIMLock"
+    },
+    {
+      "title": "MobSIMMissing",
+      "class": "mi mi-MobSIMMissing"
+    },
+    {
+      "title": "MobSignal1",
+      "class": "mi mi-MobSignal1"
+    },
+    {
+      "title": "MobSignal2",
+      "class": "mi mi-MobSignal2"
+    },
+    {
+      "title": "MobSignal3",
+      "class": "mi mi-MobSignal3"
+    },
+    {
+      "title": "MobSignal4",
+      "class": "mi mi-MobSignal4"
+    },
+    {
+      "title": "MobSignal5",
+      "class": "mi mi-MobSignal5"
+    },
+    {
+      "title": "MobWifi1",
+      "class": "mi mi-MobWifi1"
+    },
+    {
+      "title": "MobWifi2",
+      "class": "mi mi-MobWifi2"
+    },
+    {
+      "title": "MobWifi3",
+      "class": "mi mi-MobWifi3"
+    },
+    {
+      "title": "MobWifi4",
+      "class": "mi mi-MobWifi4"
+    },
+    {
+      "title": "MobWifiHotspot",
+      "class": "mi mi-MobWifiHotspot"
+    },
+    {
+      "title": "MobWifiWarning1",
+      "class": "mi mi-MobWifiWarning1"
+    },
+    {
+      "title": "MobWifiWarning2",
+      "class": "mi mi-MobWifiWarning2"
+    },
+    {
+      "title": "MobWifiWarning3",
+      "class": "mi mi-MobWifiWarning3"
+    },
+    {
+      "title": "MobWifiWarning4",
+      "class": "mi mi-MobWifiWarning4"
+    },
+    {
+      "title": "MobeSIM",
+      "class": "mi mi-MobeSIM"
+    },
+    {
+      "title": "MobeSIMBusy",
+      "class": "mi mi-MobeSIMBusy"
+    },
+    {
+      "title": "MobeSIMLocked",
+      "class": "mi mi-MobeSIMLocked"
+    },
+    {
+      "title": "MobeSIMNoProfile",
+      "class": "mi mi-MobeSIMNoProfile"
+    },
+    {
+      "title": "MobileLocked",
+      "class": "mi mi-MobileLocked"
+    },
+    {
+      "title": "MobileSelected",
+      "class": "mi mi-MobileSelected"
+    },
+    {
+      "title": "MobileTablet",
+      "class": "mi mi-MobileTablet"
+    },
+    {
+      "title": "More",
+      "class": "mi mi-More"
+    },
+    {
+      "title": "Mouse",
+      "class": "mi mi-Mouse"
+    },
+    {
+      "title": "MoveToFolder",
+      "class": "mi mi-MoveToFolder"
+    },
+    {
+      "title": "Movies",
+      "class": "mi mi-Movies"
+    },
+    {
+      "title": "MultiSelect",
+      "class": "mi mi-MultiSelect"
+    },
+    {
+      "title": "MultiSelectMirrored",
+      "class": "mi mi-MultiSelectMirrored"
+    },
+    {
+      "title": "MultimediaDMP",
+      "class": "mi mi-MultimediaDMP"
+    },
+    {
+      "title": "MultimediaDMS",
+      "class": "mi mi-MultimediaDMS"
+    },
+    {
+      "title": "MultimediaDVR",
+      "class": "mi mi-MultimediaDVR"
+    },
+    {
+      "title": "MultimediaPMP",
+      "class": "mi mi-MultimediaPMP"
+    },
+    {
+      "title": "Multitask",
+      "class": "mi mi-Multitask"
+    },
+    {
+      "title": "Multitask16",
+      "class": "mi mi-Multitask16"
+    },
+    {
+      "title": "MultitaskExpanded",
+      "class": "mi mi-MultitaskExpanded"
+    },
+    {
+      "title": "MusicAlbum",
+      "class": "mi mi-MusicAlbum"
+    },
+    {
+      "title": "MusicInfo",
+      "class": "mi mi-MusicInfo"
+    },
+    {
+      "title": "MusicNote",
+      "class": "mi mi-MusicNote"
+    },
+    {
+      "title": "MusicSharing",
+      "class": "mi mi-MusicSharing"
+    },
+    {
+      "title": "MusicSharingOff",
+      "class": "mi mi-MusicSharingOff"
+    },
+    {
+      "title": "Mute",
+      "class": "mi mi-Mute"
+    },
+    {
+      "title": "MyNetwork",
+      "class": "mi mi-MyNetwork"
+    },
+    {
+      "title": "NUIFPContinueSlideAction",
+      "class": "mi mi-NUIFPContinueSlideAction"
+    },
+    {
+      "title": "NUIFPContinueSlideHand",
+      "class": "mi mi-NUIFPContinueSlideHand"
+    },
+    {
+      "title": "NUIFPPressAction",
+      "class": "mi mi-NUIFPPressAction"
+    },
+    {
+      "title": "NUIFPPressHand",
+      "class": "mi mi-NUIFPPressHand"
+    },
+    {
+      "title": "NUIFPPressRepeatAction",
+      "class": "mi mi-NUIFPPressRepeatAction"
+    },
+    {
+      "title": "NUIFPRollLeftAction",
+      "class": "mi mi-NUIFPRollLeftAction"
+    },
+    {
+      "title": "NUIFPRollLeftHand",
+      "class": "mi mi-NUIFPRollLeftHand"
+    },
+    {
+      "title": "NUIFPRollRightHand",
+      "class": "mi mi-NUIFPRollRightHand"
+    },
+    {
+      "title": "NUIFPRollRightHandAction",
+      "class": "mi mi-NUIFPRollRightHandAction"
+    },
+    {
+      "title": "NUIFPStartSlideAction",
+      "class": "mi mi-NUIFPStartSlideAction"
+    },
+    {
+      "title": "NUIFPStartSlideHand",
+      "class": "mi mi-NUIFPStartSlideHand"
+    },
+    {
+      "title": "NUIFace",
+      "class": "mi mi-NUIFace"
+    },
+    {
+      "title": "NUIIris",
+      "class": "mi mi-NUIIris"
+    },
+    {
+      "title": "Narrator",
+      "class": "mi mi-Narrator"
+    },
+    {
+      "title": "NarratorForward",
+      "class": "mi mi-NarratorForward"
+    },
+    {
+      "title": "NarratorForwardMirrored",
+      "class": "mi mi-NarratorForwardMirrored"
+    },
+    {
+      "title": "NearbySharing",
+      "class": "mi mi-NearbySharing"
+    },
+    {
+      "title": "Network",
+      "class": "mi mi-Network"
+    },
+    {
+      "title": "NetworkAdapter",
+      "class": "mi mi-NetworkAdapter"
+    },
+    {
+      "title": "NetworkConnected",
+      "class": "mi mi-NetworkConnected"
+    },
+    {
+      "title": "NetworkConnectedCheckmark",
+      "class": "mi mi-NetworkConnectedCheckmark"
+    },
+    {
+      "title": "NetworkOffline",
+      "class": "mi mi-NetworkOffline"
+    },
+    {
+      "title": "NetworkPrinter",
+      "class": "mi mi-NetworkPrinter"
+    },
+    {
+      "title": "NetworkSharing",
+      "class": "mi mi-NetworkSharing"
+    },
+    {
+      "title": "NetworkTower",
+      "class": "mi mi-NetworkTower"
+    },
+    {
+      "title": "NewFolder",
+      "class": "mi mi-NewFolder"
+    },
+    {
+      "title": "NewWindow",
+      "class": "mi mi-NewWindow"
+    },
+    {
+      "title": "Next",
+      "class": "mi mi-Next"
+    },
+    {
+      "title": "NoiseCancelation",
+      "class": "mi mi-NoiseCancelation"
+    },
+    {
+      "title": "NoiseCancelationOff",
+      "class": "mi mi-NoiseCancelationOff"
+    },
+    {
+      "title": "OEM",
+      "class": "mi mi-OEM"
+    },
+    {
+      "title": "OneBar",
+      "class": "mi mi-OneBar"
+    },
+    {
+      "title": "OpenFile",
+      "class": "mi mi-OpenFile"
+    },
+    {
+      "title": "OpenFolderHorizontal",
+      "class": "mi mi-OpenFolderHorizontal"
+    },
+    {
+      "title": "OpenInNewWindow",
+      "class": "mi mi-OpenInNewWindow"
+    },
+    {
+      "title": "OpenLocal",
+      "class": "mi mi-OpenLocal"
+    },
+    {
+      "title": "OpenPane",
+      "class": "mi mi-OpenPane"
+    },
+    {
+      "title": "OpenPaneMirrored",
+      "class": "mi mi-OpenPaneMirrored"
+    },
+    {
+      "title": "OpenWith",
+      "class": "mi mi-OpenWith"
+    },
+    {
+      "title": "OpenWithMirrored",
+      "class": "mi mi-OpenWithMirrored"
+    },
+    {
+      "title": "Orientation",
+      "class": "mi mi-Orientation"
+    },
+    {
+      "title": "OtherUser",
+      "class": "mi mi-OtherUser"
+    },
+    {
+      "title": "OutlineHalfStarLeft",
+      "class": "mi mi-OutlineHalfStarLeft"
+    },
+    {
+      "title": "OutlineHalfStarRight",
+      "class": "mi mi-OutlineHalfStarRight"
+    },
+    {
+      "title": "OutlineQuarterStarLeft",
+      "class": "mi mi-OutlineQuarterStarLeft"
+    },
+    {
+      "title": "OutlineQuarterStarRight",
+      "class": "mi mi-OutlineQuarterStarRight"
+    },
+    {
+      "title": "OutlineStarLeftHalf",
+      "class": "mi mi-OutlineStarLeftHalf"
+    },
+    {
+      "title": "OutlineStarRightHalf",
+      "class": "mi mi-OutlineStarRightHalf"
+    },
+    {
+      "title": "OutlineThreeQuarterStarLeft",
+      "class": "mi mi-OutlineThreeQuarterStarLeft"
+    },
+    {
+      "title": "OutlineThreeQuarterStarRight",
+      "class": "mi mi-OutlineThreeQuarterStarRight"
+    },
+    {
+      "title": "PC1",
+      "class": "mi mi-PC1"
+    },
+    {
+      "title": "PINPad",
+      "class": "mi mi-PINPad"
+    },
+    {
+      "title": "PLAP",
+      "class": "mi mi-PLAP"
+    },
+    {
+      "title": "PPSFourLandscape",
+      "class": "mi mi-PPSFourLandscape"
+    },
+    {
+      "title": "PPSFourPortrait",
+      "class": "mi mi-PPSFourPortrait"
+    },
+    {
+      "title": "PPSOneLandscape",
+      "class": "mi mi-PPSOneLandscape"
+    },
+    {
+      "title": "PPSOnePortrait",
+      "class": "mi mi-PPSOnePortrait"
+    },
+    {
+      "title": "PPSTwoLandscape",
+      "class": "mi mi-PPSTwoLandscape"
+    },
+    {
+      "title": "PPSTwoPortrait",
+      "class": "mi mi-PPSTwoPortrait"
+    },
+    {
+      "title": "Package",
+      "class": "mi mi-Package"
+    },
+    {
+      "title": "Page",
+      "class": "mi mi-Page"
+    },
+    {
+      "title": "PageLeft",
+      "class": "mi mi-PageLeft"
+    },
+    {
+      "title": "PageMarginLandscapeModerate",
+      "class": "mi mi-PageMarginLandscapeModerate"
+    },
+    {
+      "title": "PageMarginLandscapeNarrow",
+      "class": "mi mi-PageMarginLandscapeNarrow"
+    },
+    {
+      "title": "PageMarginLandscapeNormal",
+      "class": "mi mi-PageMarginLandscapeNormal"
+    },
+    {
+      "title": "PageMarginLandscapeWide",
+      "class": "mi mi-PageMarginLandscapeWide"
+    },
+    {
+      "title": "PageMarginPortraitModerate",
+      "class": "mi mi-PageMarginPortraitModerate"
+    },
+    {
+      "title": "PageMarginPortraitNarrow",
+      "class": "mi mi-PageMarginPortraitNarrow"
+    },
+    {
+      "title": "PageMarginPortraitNormal",
+      "class": "mi mi-PageMarginPortraitNormal"
+    },
+    {
+      "title": "PageMarginPortraitWide",
+      "class": "mi mi-PageMarginPortraitWide"
+    },
+    {
+      "title": "PageMirrored",
+      "class": "mi mi-PageMirrored"
+    },
+    {
+      "title": "PageRight",
+      "class": "mi mi-PageRight"
+    },
+    {
+      "title": "PageSolid",
+      "class": "mi mi-PageSolid"
+    },
+    {
+      "title": "PaginationDotOutline10",
+      "class": "mi mi-PaginationDotOutline10"
+    },
+    {
+      "title": "PaginationDotSolid10",
+      "class": "mi mi-PaginationDotSolid10"
+    },
+    {
+      "title": "PanMode",
+      "class": "mi mi-PanMode"
+    },
+    {
+      "title": "ParkingLocation",
+      "class": "mi mi-ParkingLocation"
+    },
+    {
+      "title": "ParkingLocationMirrored",
+      "class": "mi mi-ParkingLocationMirrored"
+    },
+    {
+      "title": "ParkingLocationSolid",
+      "class": "mi mi-ParkingLocationSolid"
+    },
+    {
+      "title": "PartyLeader",
+      "class": "mi mi-PartyLeader"
+    },
+    {
+      "title": "PassiveAuthentication",
+      "class": "mi mi-PassiveAuthentication"
+    },
+    {
+      "title": "PasswordKeyHide",
+      "class": "mi mi-PasswordKeyHide"
+    },
+    {
+      "title": "PasswordKeyShow",
+      "class": "mi mi-PasswordKeyShow"
+    },
+    {
+      "title": "Paste",
+      "class": "mi mi-Paste"
+    },
+    {
+      "title": "Pause",
+      "class": "mi mi-Pause"
+    },
+    {
+      "title": "PauseBadge12",
+      "class": "mi mi-PauseBadge12"
+    },
+    {
+      "title": "PaymentCard",
+      "class": "mi mi-PaymentCard"
+    },
+    {
+      "title": "PenPalette",
+      "class": "mi mi-PenPalette"
+    },
+    {
+      "title": "PenPaletteMirrored",
+      "class": "mi mi-PenPaletteMirrored"
+    },
+    {
+      "title": "PenTips",
+      "class": "mi mi-PenTips"
+    },
+    {
+      "title": "PenTipsMirrored",
+      "class": "mi mi-PenTipsMirrored"
+    },
+    {
+      "title": "PenWorkspace",
+      "class": "mi mi-PenWorkspace"
+    },
+    {
+      "title": "PenWorkspaceMirrored",
+      "class": "mi mi-PenWorkspaceMirrored"
+    },
+    {
+      "title": "Pencil",
+      "class": "mi mi-Pencil"
+    },
+    {
+      "title": "PencilFill",
+      "class": "mi mi-PencilFill"
+    },
+    {
+      "title": "People",
+      "class": "mi mi-People"
+    },
+    {
+      "title": "PeriodKey",
+      "class": "mi mi-PeriodKey"
+    },
+    {
+      "title": "Permissions",
+      "class": "mi mi-Permissions"
+    },
+    {
+      "title": "PersonalFolder",
+      "class": "mi mi-PersonalFolder"
+    },
+    {
+      "title": "Personalize",
+      "class": "mi mi-Personalize"
+    },
+    {
+      "title": "Phone",
+      "class": "mi mi-Phone"
+    },
+    {
+      "title": "PhoneBook",
+      "class": "mi mi-PhoneBook"
+    },
+    {
+      "title": "Photo",
+      "class": "mi mi-Photo"
+    },
+    {
+      "title": "Photo2",
+      "class": "mi mi-Photo2"
+    },
+    {
+      "title": "Picture",
+      "class": "mi mi-Picture"
+    },
+    {
+      "title": "PieSingle",
+      "class": "mi mi-PieSingle"
+    },
+    {
+      "title": "Pin",
+      "class": "mi mi-Pin"
+    },
+    {
+      "title": "PinFill",
+      "class": "mi mi-PinFill"
+    },
+    {
+      "title": "Pinned",
+      "class": "mi mi-Pinned"
+    },
+    {
+      "title": "PinnedFill",
+      "class": "mi mi-PinnedFill"
+    },
+    {
+      "title": "PinyinIMELogo",
+      "class": "mi mi-PinyinIMELogo"
+    },
+    {
+      "title": "PlaceFolder",
+      "class": "mi mi-PlaceFolder"
+    },
+    {
+      "title": "Play",
+      "class": "mi mi-Play"
+    },
+    {
+      "title": "Play36",
+      "class": "mi mi-Play36"
+    },
+    {
+      "title": "PlayBadge12",
+      "class": "mi mi-PlayBadge12"
+    },
+    {
+      "title": "PlayOn",
+      "class": "mi mi-PlayOn"
+    },
+    {
+      "title": "PlaySolid",
+      "class": "mi mi-PlaySolid"
+    },
+    {
+      "title": "PlaybackRate1x",
+      "class": "mi mi-PlaybackRate1x"
+    },
+    {
+      "title": "PlaybackRateOther",
+      "class": "mi mi-PlaybackRateOther"
+    },
+    {
+      "title": "PlayerSettings",
+      "class": "mi mi-PlayerSettings"
+    },
+    {
+      "title": "PointErase",
+      "class": "mi mi-PointErase"
+    },
+    {
+      "title": "PointEraseMirrored",
+      "class": "mi mi-PointEraseMirrored"
+    },
+    {
+      "title": "PointerHand",
+      "class": "mi mi-PointerHand"
+    },
+    {
+      "title": "PoliceCar",
+      "class": "mi mi-PoliceCar"
+    },
+    {
+      "title": "PostUpdate",
+      "class": "mi mi-PostUpdate"
+    },
+    {
+      "title": "PowerButton",
+      "class": "mi mi-PowerButton"
+    },
+    {
+      "title": "PresenceChickletVideo",
+      "class": "mi mi-PresenceChickletVideo"
+    },
+    {
+      "title": "Preview",
+      "class": "mi mi-Preview"
+    },
+    {
+      "title": "PreviewLink",
+      "class": "mi mi-PreviewLink"
+    },
+    {
+      "title": "Previous",
+      "class": "mi mi-Previous"
+    },
+    {
+      "title": "Print",
+      "class": "mi mi-Print"
+    },
+    {
+      "title": "PrintAllPages",
+      "class": "mi mi-PrintAllPages"
+    },
+    {
+      "title": "PrintCustomRange",
+      "class": "mi mi-PrintCustomRange"
+    },
+    {
+      "title": "PrintDefault",
+      "class": "mi mi-PrintDefault"
+    },
+    {
+      "title": "Printer3D",
+      "class": "mi mi-Printer3D"
+    },
+    {
+      "title": "Printer3DLegacy",
+      "class": "mi mi-Printer3DLegacy"
+    },
+    {
+      "title": "PrintfaxPrinterFile",
+      "class": "mi mi-PrintfaxPrinterFile"
+    },
+    {
+      "title": "Priority",
+      "class": "mi mi-Priority"
+    },
+    {
+      "title": "Process",
+      "class": "mi mi-Process"
+    },
+    {
+      "title": "Processing",
+      "class": "mi mi-Processing"
+    },
+    {
+      "title": "ProgressRingDots",
+      "class": "mi mi-ProgressRingDots"
+    },
+    {
+      "title": "Project",
+      "class": "mi mi-Project"
+    },
+    {
+      "title": "Projector",
+      "class": "mi mi-Projector"
+    },
+    {
+      "title": "ProtectedDocument",
+      "class": "mi mi-ProtectedDocument"
+    },
+    {
+      "title": "Protractor",
+      "class": "mi mi-Protractor"
+    },
+    {
+      "title": "ProvisioningPackage",
+      "class": "mi mi-ProvisioningPackage"
+    },
+    {
+      "title": "PuncKey",
+      "class": "mi mi-PuncKey"
+    },
+    {
+      "title": "PuncKey0",
+      "class": "mi mi-PuncKey0"
+    },
+    {
+      "title": "PuncKey1",
+      "class": "mi mi-PuncKey1"
+    },
+    {
+      "title": "PuncKey2",
+      "class": "mi mi-PuncKey2"
+    },
+    {
+      "title": "PuncKey3",
+      "class": "mi mi-PuncKey3"
+    },
+    {
+      "title": "PuncKey4",
+      "class": "mi mi-PuncKey4"
+    },
+    {
+      "title": "PuncKey5",
+      "class": "mi mi-PuncKey5"
+    },
+    {
+      "title": "PuncKey6",
+      "class": "mi mi-PuncKey6"
+    },
+    {
+      "title": "PuncKey7",
+      "class": "mi mi-PuncKey7"
+    },
+    {
+      "title": "PuncKey8",
+      "class": "mi mi-PuncKey8"
+    },
+    {
+      "title": "PuncKey9",
+      "class": "mi mi-PuncKey9"
+    },
+    {
+      "title": "PuncKeyLeftBottom",
+      "class": "mi mi-PuncKeyLeftBottom"
+    },
+    {
+      "title": "PuncKeyRightBottom",
+      "class": "mi mi-PuncKeyRightBottom"
+    },
+    {
+      "title": "Puzzle",
+      "class": "mi mi-Puzzle"
+    },
+    {
+      "title": "QWERTYOff",
+      "class": "mi mi-QWERTYOff"
+    },
+    {
+      "title": "QWERTYOn",
+      "class": "mi mi-QWERTYOn"
+    },
+    {
+      "title": "QuarentinedItems",
+      "class": "mi mi-QuarentinedItems"
+    },
+    {
+      "title": "QuarentinedItemsMirrored",
+      "class": "mi mi-QuarentinedItemsMirrored"
+    },
+    {
+      "title": "QuarterStarLeft",
+      "class": "mi mi-QuarterStarLeft"
+    },
+    {
+      "title": "QuarterStarRight",
+      "class": "mi mi-QuarterStarRight"
+    },
+    {
+      "title": "QuickNote",
+      "class": "mi mi-QuickNote"
+    },
+    {
+      "title": "QuietHours",
+      "class": "mi mi-QuietHours"
+    },
+    {
+      "title": "QuietHoursBadge12",
+      "class": "mi mi-QuietHoursBadge12"
+    },
+    {
+      "title": "Radar",
+      "class": "mi mi-Radar"
+    },
+    {
+      "title": "RadioBtnOff",
+      "class": "mi mi-RadioBtnOff"
+    },
+    {
+      "title": "RadioBtnOn",
+      "class": "mi mi-RadioBtnOn"
+    },
+    {
+      "title": "RadioBullet",
+      "class": "mi mi-RadioBullet"
+    },
+    {
+      "title": "RadioBullet2",
+      "class": "mi mi-RadioBullet2"
+    },
+    {
+      "title": "Read",
+      "class": "mi mi-Read"
+    },
+    {
+      "title": "ReadingList",
+      "class": "mi mi-ReadingList"
+    },
+    {
+      "title": "ReceiptPrinter",
+      "class": "mi mi-ReceiptPrinter"
+    },
+    {
+      "title": "Recent",
+      "class": "mi mi-Recent"
+    },
+    {
+      "title": "Record",
+      "class": "mi mi-Record"
+    },
+    {
+      "title": "RectangularClipping",
+      "class": "mi mi-RectangularClipping"
+    },
+    {
+      "title": "RedEye",
+      "class": "mi mi-RedEye"
+    },
+    {
+      "title": "Redo",
+      "class": "mi mi-Redo"
+    },
+    {
+      "title": "ReduceTile",
+      "class": "mi mi-ReduceTile"
+    },
+    {
+      "title": "ReduceTileMirrored",
+      "class": "mi mi-ReduceTileMirrored"
+    },
+    {
+      "title": "Refresh",
+      "class": "mi mi-Refresh"
+    },
+    {
+      "title": "Relationship",
+      "class": "mi mi-Relationship"
+    },
+    {
+      "title": "RememberedDevice",
+      "class": "mi mi-RememberedDevice"
+    },
+    {
+      "title": "Reminder",
+      "class": "mi mi-Reminder"
+    },
+    {
+      "title": "ReminderFill",
+      "class": "mi mi-ReminderFill"
+    },
+    {
+      "title": "Remote",
+      "class": "mi mi-Remote"
+    },
+    {
+      "title": "Remove",
+      "class": "mi mi-Remove"
+    },
+    {
+      "title": "RemoveFrom",
+      "class": "mi mi-RemoveFrom"
+    },
+    {
+      "title": "Rename",
+      "class": "mi mi-Rename"
+    },
+    {
+      "title": "Repair",
+      "class": "mi mi-Repair"
+    },
+    {
+      "title": "RepeatOne",
+      "class": "mi mi-RepeatOne"
+    },
+    {
+      "title": "Replay",
+      "class": "mi mi-Replay"
+    },
+    {
+      "title": "Reply",
+      "class": "mi mi-Reply"
+    },
+    {
+      "title": "ReplyMirrored",
+      "class": "mi mi-ReplyMirrored"
+    },
+    {
+      "title": "ReportDocument",
+      "class": "mi mi-ReportDocument"
+    },
+    {
+      "title": "ReportHacked",
+      "class": "mi mi-ReportHacked"
+    },
+    {
+      "title": "ResetDevice",
+      "class": "mi mi-ResetDevice"
+    },
+    {
+      "title": "ResetDrive",
+      "class": "mi mi-ResetDrive"
+    },
+    {
+      "title": "Reshare",
+      "class": "mi mi-Reshare"
+    },
+    {
+      "title": "ResizeMouseMedium",
+      "class": "mi mi-ResizeMouseMedium"
+    },
+    {
+      "title": "ResizeMouseMediumMirrored",
+      "class": "mi mi-ResizeMouseMediumMirrored"
+    },
+    {
+      "title": "ResizeMouseSmall",
+      "class": "mi mi-ResizeMouseSmall"
+    },
+    {
+      "title": "ResizeMouseSmallMirrored",
+      "class": "mi mi-ResizeMouseSmallMirrored"
+    },
+    {
+      "title": "ResizeMouseTall",
+      "class": "mi mi-ResizeMouseTall"
+    },
+    {
+      "title": "ResizeMouseTallMirrored",
+      "class": "mi mi-ResizeMouseTallMirrored"
+    },
+    {
+      "title": "ResizeMouseWide",
+      "class": "mi mi-ResizeMouseWide"
+    },
+    {
+      "title": "ResizeTouchLarger",
+      "class": "mi mi-ResizeTouchLarger"
+    },
+    {
+      "title": "ResizeTouchNarrower",
+      "class": "mi mi-ResizeTouchNarrower"
+    },
+    {
+      "title": "ResizeTouchNarrowerMirrored",
+      "class": "mi mi-ResizeTouchNarrowerMirrored"
+    },
+    {
+      "title": "ResizeTouchShorter",
+      "class": "mi mi-ResizeTouchShorter"
+    },
+    {
+      "title": "ResizeTouchSmaller",
+      "class": "mi mi-ResizeTouchSmaller"
+    },
+    {
+      "title": "Resolution",
+      "class": "mi mi-Resolution"
+    },
+    {
+      "title": "ReturnKey",
+      "class": "mi mi-ReturnKey"
+    },
+    {
+      "title": "ReturnKeyLg",
+      "class": "mi mi-ReturnKeyLg"
+    },
+    {
+      "title": "ReturnKeySm",
+      "class": "mi mi-ReturnKeySm"
+    },
+    {
+      "title": "ReturnToWindow",
+      "class": "mi mi-ReturnToWindow"
+    },
+    {
+      "title": "RevToggleKey",
+      "class": "mi mi-RevToggleKey"
+    },
+    {
+      "title": "Rewind",
+      "class": "mi mi-Rewind"
+    },
+    {
+      "title": "RightArrowKeyTime0",
+      "class": "mi mi-RightArrowKeyTime0"
+    },
+    {
+      "title": "RightArrowKeyTime1",
+      "class": "mi mi-RightArrowKeyTime1"
+    },
+    {
+      "title": "RightArrowKeyTime2",
+      "class": "mi mi-RightArrowKeyTime2"
+    },
+    {
+      "title": "RightArrowKeyTime3",
+      "class": "mi mi-RightArrowKeyTime3"
+    },
+    {
+      "title": "RightArrowKeyTime4",
+      "class": "mi mi-RightArrowKeyTime4"
+    },
+    {
+      "title": "RightDoubleQuote",
+      "class": "mi mi-RightDoubleQuote"
+    },
+    {
+      "title": "RightQuote",
+      "class": "mi mi-RightQuote"
+    },
+    {
+      "title": "RightStick",
+      "class": "mi mi-RightStick"
+    },
+    {
+      "title": "Ringer",
+      "class": "mi mi-Ringer"
+    },
+    {
+      "title": "RingerBadge12",
+      "class": "mi mi-RingerBadge12"
+    },
+    {
+      "title": "RingerSilent",
+      "class": "mi mi-RingerSilent"
+    },
+    {
+      "title": "RoamingDomestic",
+      "class": "mi mi-RoamingDomestic"
+    },
+    {
+      "title": "RoamingInternational",
+      "class": "mi mi-RoamingInternational"
+    },
+    {
+      "title": "Robot",
+      "class": "mi mi-Robot"
+    },
+    {
+      "title": "Rotate",
+      "class": "mi mi-Rotate"
+    },
+    {
+      "title": "RotateCamera",
+      "class": "mi mi-RotateCamera"
+    },
+    {
+      "title": "RotateLegacy",
+      "class": "mi mi-RotateLegacy"
+    },
+    {
+      "title": "RotateMapLeft",
+      "class": "mi mi-RotateMapLeft"
+    },
+    {
+      "title": "RotateMapRight",
+      "class": "mi mi-RotateMapRight"
+    },
+    {
+      "title": "RotationLock",
+      "class": "mi mi-RotationLock"
+    },
+    {
+      "title": "Ruler",
+      "class": "mi mi-Ruler"
+    },
+    {
+      "title": "SDCard",
+      "class": "mi mi-SDCard"
+    },
+    {
+      "title": "SIMError",
+      "class": "mi mi-SIMError"
+    },
+    {
+      "title": "SIMLock",
+      "class": "mi mi-SIMLock"
+    },
+    {
+      "title": "SIMMissing",
+      "class": "mi mi-SIMMissing"
+    },
+    {
+      "title": "SIPMove",
+      "class": "mi mi-SIPMove"
+    },
+    {
+      "title": "SIPRedock",
+      "class": "mi mi-SIPRedock"
+    },
+    {
+      "title": "SIPUndock",
+      "class": "mi mi-SIPUndock"
+    },
+    {
+      "title": "Safe",
+      "class": "mi mi-Safe"
+    },
+    {
+      "title": "Save",
+      "class": "mi mi-Save"
+    },
+    {
+      "title": "SaveAs",
+      "class": "mi mi-SaveAs"
+    },
+    {
+      "title": "SaveCopy",
+      "class": "mi mi-SaveCopy"
+    },
+    {
+      "title": "SaveLocal",
+      "class": "mi mi-SaveLocal"
+    },
+    {
+      "title": "Scan",
+      "class": "mi mi-Scan"
+    },
+    {
+      "title": "ScreenTime",
+      "class": "mi mi-ScreenTime"
+    },
+    {
+      "title": "ScrollMode",
+      "class": "mi mi-ScrollMode"
+    },
+    {
+      "title": "ScrollUpDown",
+      "class": "mi mi-ScrollUpDown"
+    },
+    {
+      "title": "Search",
+      "class": "mi mi-Search"
+    },
+    {
+      "title": "SearchAndApps",
+      "class": "mi mi-SearchAndApps"
+    },
+    {
+      "title": "SelectAll",
+      "class": "mi mi-SelectAll"
+    },
+    {
+      "title": "SemanticZoom",
+      "class": "mi mi-SemanticZoom"
+    },
+    {
+      "title": "Send",
+      "class": "mi mi-Send"
+    },
+    {
+      "title": "SendFill",
+      "class": "mi mi-SendFill"
+    },
+    {
+      "title": "SendFillMirrored",
+      "class": "mi mi-SendFillMirrored"
+    },
+    {
+      "title": "SendMirrored",
+      "class": "mi mi-SendMirrored"
+    },
+    {
+      "title": "Sensor",
+      "class": "mi mi-Sensor"
+    },
+    {
+      "title": "Set",
+      "class": "mi mi-Set"
+    },
+    {
+      "title": "SetSolid",
+      "class": "mi mi-SetSolid"
+    },
+    {
+      "title": "SetTile",
+      "class": "mi mi-SetTile"
+    },
+    {
+      "title": "SetlockScreen",
+      "class": "mi mi-SetlockScreen"
+    },
+    {
+      "title": "Settings",
+      "class": "mi mi-Settings"
+    },
+    {
+      "title": "SettingsBattery",
+      "class": "mi mi-SettingsBattery"
+    },
+    {
+      "title": "SettingsDisplaySound",
+      "class": "mi mi-SettingsDisplaySound"
+    },
+    {
+      "title": "Share",
+      "class": "mi mi-Share"
+    },
+    {
+      "title": "ShareBroadband",
+      "class": "mi mi-ShareBroadband"
+    },
+    {
+      "title": "Shield",
+      "class": "mi mi-Shield"
+    },
+    {
+      "title": "Shop",
+      "class": "mi mi-Shop"
+    },
+    {
+      "title": "ShoppingCart",
+      "class": "mi mi-ShoppingCart"
+    },
+    {
+      "title": "ShowAllFiles1",
+      "class": "mi mi-ShowAllFiles1"
+    },
+    {
+      "title": "ShowAllFiles3",
+      "class": "mi mi-ShowAllFiles3"
+    },
+    {
+      "title": "ShowBcc",
+      "class": "mi mi-ShowBcc"
+    },
+    {
+      "title": "ShowResults",
+      "class": "mi mi-ShowResults"
+    },
+    {
+      "title": "ShowResultsMirrored",
+      "class": "mi mi-ShowResultsMirrored"
+    },
+    {
+      "title": "Shuffle",
+      "class": "mi mi-Shuffle"
+    },
+    {
+      "title": "SignalBars1",
+      "class": "mi mi-SignalBars1"
+    },
+    {
+      "title": "SignalBars2",
+      "class": "mi mi-SignalBars2"
+    },
+    {
+      "title": "SignalBars3",
+      "class": "mi mi-SignalBars3"
+    },
+    {
+      "title": "SignalBars4",
+      "class": "mi mi-SignalBars4"
+    },
+    {
+      "title": "SignalBars5",
+      "class": "mi mi-SignalBars5"
+    },
+    {
+      "title": "SignalError",
+      "class": "mi mi-SignalError"
+    },
+    {
+      "title": "SignalNotConnected",
+      "class": "mi mi-SignalNotConnected"
+    },
+    {
+      "title": "SignalRoaming",
+      "class": "mi mi-SignalRoaming"
+    },
+    {
+      "title": "SignatureCapture",
+      "class": "mi mi-SignatureCapture"
+    },
+    {
+      "title": "Size",
+      "class": "mi mi-Size"
+    },
+    {
+      "title": "SkipBack10",
+      "class": "mi mi-SkipBack10"
+    },
+    {
+      "title": "SkipForward30",
+      "class": "mi mi-SkipForward30"
+    },
+    {
+      "title": "SliderThumb",
+      "class": "mi mi-SliderThumb"
+    },
+    {
+      "title": "Slideshow",
+      "class": "mi mi-Slideshow"
+    },
+    {
+      "title": "SlowMotionOn",
+      "class": "mi mi-SlowMotionOn"
+    },
+    {
+      "title": "SmallErase",
+      "class": "mi mi-SmallErase"
+    },
+    {
+      "title": "Smartcard",
+      "class": "mi mi-Smartcard"
+    },
+    {
+      "title": "SmartcardVirtual",
+      "class": "mi mi-SmartcardVirtual"
+    },
+    {
+      "title": "Sort",
+      "class": "mi mi-Sort"
+    },
+    {
+      "title": "SpatialVolume0",
+      "class": "mi mi-SpatialVolume0"
+    },
+    {
+      "title": "SpatialVolume1",
+      "class": "mi mi-SpatialVolume1"
+    },
+    {
+      "title": "SpatialVolume2",
+      "class": "mi mi-SpatialVolume2"
+    },
+    {
+      "title": "SpatialVolume3",
+      "class": "mi mi-SpatialVolume3"
+    },
+    {
+      "title": "Speakers",
+      "class": "mi mi-Speakers"
+    },
+    {
+      "title": "Speech",
+      "class": "mi mi-Speech"
+    },
+    {
+      "title": "SpeedHigh",
+      "class": "mi mi-SpeedHigh"
+    },
+    {
+      "title": "SpeedMedium",
+      "class": "mi mi-SpeedMedium"
+    },
+    {
+      "title": "SpeedOff",
+      "class": "mi mi-SpeedOff"
+    },
+    {
+      "title": "StaplingLandscapeBookBinding",
+      "class": "mi mi-StaplingLandscapeBookBinding"
+    },
+    {
+      "title": "StaplingLandscapeBottomLeft",
+      "class": "mi mi-StaplingLandscapeBottomLeft"
+    },
+    {
+      "title": "StaplingLandscapeBottomRight",
+      "class": "mi mi-StaplingLandscapeBottomRight"
+    },
+    {
+      "title": "StaplingLandscapeTopLeft",
+      "class": "mi mi-StaplingLandscapeTopLeft"
+    },
+    {
+      "title": "StaplingLandscapeTopRight",
+      "class": "mi mi-StaplingLandscapeTopRight"
+    },
+    {
+      "title": "StaplingLandscapeTwoBottom",
+      "class": "mi mi-StaplingLandscapeTwoBottom"
+    },
+    {
+      "title": "StaplingLandscapeTwoLeft",
+      "class": "mi mi-StaplingLandscapeTwoLeft"
+    },
+    {
+      "title": "StaplingLandscapeTwoRight",
+      "class": "mi mi-StaplingLandscapeTwoRight"
+    },
+    {
+      "title": "StaplingLandscapeTwoTop",
+      "class": "mi mi-StaplingLandscapeTwoTop"
+    },
+    {
+      "title": "StaplingOff",
+      "class": "mi mi-StaplingOff"
+    },
+    {
+      "title": "StaplingPortraitBookBinding",
+      "class": "mi mi-StaplingPortraitBookBinding"
+    },
+    {
+      "title": "StaplingPortraitBottomLeft",
+      "class": "mi mi-StaplingPortraitBottomLeft"
+    },
+    {
+      "title": "StaplingPortraitBottomRight",
+      "class": "mi mi-StaplingPortraitBottomRight"
+    },
+    {
+      "title": "StaplingPortraitTopLeft",
+      "class": "mi mi-StaplingPortraitTopLeft"
+    },
+    {
+      "title": "StaplingPortraitTopRight",
+      "class": "mi mi-StaplingPortraitTopRight"
+    },
+    {
+      "title": "StaplingPortraitTwoBottom",
+      "class": "mi mi-StaplingPortraitTwoBottom"
+    },
+    {
+      "title": "StaplingPortraitTwoLeft",
+      "class": "mi mi-StaplingPortraitTwoLeft"
+    },
+    {
+      "title": "StaplingPortraitTwoRight",
+      "class": "mi mi-StaplingPortraitTwoRight"
+    },
+    {
+      "title": "StaplingPortraitTwoTop",
+      "class": "mi mi-StaplingPortraitTwoTop"
+    },
+    {
+      "title": "StartPoint",
+      "class": "mi mi-StartPoint"
+    },
+    {
+      "title": "StartPointSolid",
+      "class": "mi mi-StartPointSolid"
+    },
+    {
+      "title": "StatusCheckmark",
+      "class": "mi mi-StatusCheckmark"
+    },
+    {
+      "title": "StatusCheckmark7",
+      "class": "mi mi-StatusCheckmark7"
+    },
+    {
+      "title": "StatusCheckmarkLeft",
+      "class": "mi mi-StatusCheckmarkLeft"
+    },
+    {
+      "title": "StatusCircle",
+      "class": "mi mi-StatusCircle"
+    },
+    {
+      "title": "StatusCircle7",
+      "class": "mi mi-StatusCircle7"
+    },
+    {
+      "title": "StatusCircleBlock",
+      "class": "mi mi-StatusCircleBlock"
+    },
+    {
+      "title": "StatusCircleBlock2",
+      "class": "mi mi-StatusCircleBlock2"
+    },
+    {
+      "title": "StatusCircleCheckmark",
+      "class": "mi mi-StatusCircleCheckmark"
+    },
+    {
+      "title": "StatusCircleErrorX",
+      "class": "mi mi-StatusCircleErrorX"
+    },
+    {
+      "title": "StatusCircleExclamation",
+      "class": "mi mi-StatusCircleExclamation"
+    },
+    {
+      "title": "StatusCircleInfo",
+      "class": "mi mi-StatusCircleInfo"
+    },
+    {
+      "title": "StatusCircleInner",
+      "class": "mi mi-StatusCircleInner"
+    },
+    {
+      "title": "StatusCircleLeft",
+      "class": "mi mi-StatusCircleLeft"
+    },
+    {
+      "title": "StatusCircleOuter",
+      "class": "mi mi-StatusCircleOuter"
+    },
+    {
+      "title": "StatusCircleQuestionMark",
+      "class": "mi mi-StatusCircleQuestionMark"
+    },
+    {
+      "title": "StatusCircleRing",
+      "class": "mi mi-StatusCircleRing"
+    },
+    {
+      "title": "StatusCircleSync",
+      "class": "mi mi-StatusCircleSync"
+    },
+    {
+      "title": "StatusConnecting1",
+      "class": "mi mi-StatusConnecting1"
+    },
+    {
+      "title": "StatusConnecting2",
+      "class": "mi mi-StatusConnecting2"
+    },
+    {
+      "title": "StatusDataTransfer",
+      "class": "mi mi-StatusDataTransfer"
+    },
+    {
+      "title": "StatusDataTransferVPN",
+      "class": "mi mi-StatusDataTransferVPN"
+    },
+    {
+      "title": "StatusDualSIM1",
+      "class": "mi mi-StatusDualSIM1"
+    },
+    {
+      "title": "StatusDualSIM1VPN",
+      "class": "mi mi-StatusDualSIM1VPN"
+    },
+    {
+      "title": "StatusDualSIM2",
+      "class": "mi mi-StatusDualSIM2"
+    },
+    {
+      "title": "StatusDualSIM2VPN",
+      "class": "mi mi-StatusDualSIM2VPN"
+    },
+    {
+      "title": "StatusError",
+      "class": "mi mi-StatusError"
+    },
+    {
+      "title": "StatusErrorCircle7",
+      "class": "mi mi-StatusErrorCircle7"
+    },
+    {
+      "title": "StatusErrorFull",
+      "class": "mi mi-StatusErrorFull"
+    },
+    {
+      "title": "StatusErrorLeft",
+      "class": "mi mi-StatusErrorLeft"
+    },
+    {
+      "title": "StatusExclamationCircle7",
+      "class": "mi mi-StatusExclamationCircle7"
+    },
+    {
+      "title": "StatusInfo",
+      "class": "mi mi-StatusInfo"
+    },
+    {
+      "title": "StatusInfoLeft",
+      "class": "mi mi-StatusInfoLeft"
+    },
+    {
+      "title": "StatusPause7",
+      "class": "mi mi-StatusPause7"
+    },
+    {
+      "title": "StatusSGLTE",
+      "class": "mi mi-StatusSGLTE"
+    },
+    {
+      "title": "StatusSGLTECell",
+      "class": "mi mi-StatusSGLTECell"
+    },
+    {
+      "title": "StatusSGLTEDataVPN",
+      "class": "mi mi-StatusSGLTEDataVPN"
+    },
+    {
+      "title": "StatusTriangle",
+      "class": "mi mi-StatusTriangle"
+    },
+    {
+      "title": "StatusTriangleExclamation",
+      "class": "mi mi-StatusTriangleExclamation"
+    },
+    {
+      "title": "StatusTriangleInner",
+      "class": "mi mi-StatusTriangleInner"
+    },
+    {
+      "title": "StatusTriangleLeft",
+      "class": "mi mi-StatusTriangleLeft"
+    },
+    {
+      "title": "StatusTriangleOuter",
+      "class": "mi mi-StatusTriangleOuter"
+    },
+    {
+      "title": "StatusUnsecure",
+      "class": "mi mi-StatusUnsecure"
+    },
+    {
+      "title": "StatusVPN",
+      "class": "mi mi-StatusVPN"
+    },
+    {
+      "title": "StatusWarning",
+      "class": "mi mi-StatusWarning"
+    },
+    {
+      "title": "StatusWarningLeft",
+      "class": "mi mi-StatusWarningLeft"
+    },
+    {
+      "title": "Sticker2",
+      "class": "mi mi-Sticker2"
+    },
+    {
+      "title": "StockDown",
+      "class": "mi mi-StockDown"
+    },
+    {
+      "title": "StockUp",
+      "class": "mi mi-StockUp"
+    },
+    {
+      "title": "Stop",
+      "class": "mi mi-Stop"
+    },
+    {
+      "title": "StopPoint",
+      "class": "mi mi-StopPoint"
+    },
+    {
+      "title": "StopPointSolid",
+      "class": "mi mi-StopPointSolid"
+    },
+    {
+      "title": "StopSlideshow",
+      "class": "mi mi-StopSlideshow"
+    },
+    {
+      "title": "Stopwatch",
+      "class": "mi mi-Stopwatch"
+    },
+    {
+      "title": "StorageNetworkWireless",
+      "class": "mi mi-StorageNetworkWireless"
+    },
+    {
+      "title": "StorageOptical",
+      "class": "mi mi-StorageOptical"
+    },
+    {
+      "title": "StorageTape",
+      "class": "mi mi-StorageTape"
+    },
+    {
+      "title": "Streaming",
+      "class": "mi mi-Streaming"
+    },
+    {
+      "title": "StreamingEnterprise",
+      "class": "mi mi-StreamingEnterprise"
+    },
+    {
+      "title": "Street",
+      "class": "mi mi-Street"
+    },
+    {
+      "title": "StreetsideSplitExpand",
+      "class": "mi mi-StreetsideSplitExpand"
+    },
+    {
+      "title": "StreetsideSplitMinimize",
+      "class": "mi mi-StreetsideSplitMinimize"
+    },
+    {
+      "title": "StrokeErase",
+      "class": "mi mi-StrokeErase"
+    },
+    {
+      "title": "StrokeErase2",
+      "class": "mi mi-StrokeErase2"
+    },
+    {
+      "title": "StrokeEraseMirrored",
+      "class": "mi mi-StrokeEraseMirrored"
+    },
+    {
+      "title": "Subtitles",
+      "class": "mi mi-Subtitles"
+    },
+    {
+      "title": "SubtitlesAudio",
+      "class": "mi mi-SubtitlesAudio"
+    },
+    {
+      "title": "SurfaceHub",
+      "class": "mi mi-SurfaceHub"
+    },
+    {
+      "title": "SurfaceHubSelected",
+      "class": "mi mi-SurfaceHubSelected"
+    },
+    {
+      "title": "Sustainable",
+      "class": "mi mi-Sustainable"
+    },
+    {
+      "title": "Swipe",
+      "class": "mi mi-Swipe"
+    },
+    {
+      "title": "SwipeRevealArt",
+      "class": "mi mi-SwipeRevealArt"
+    },
+    {
+      "title": "Switch",
+      "class": "mi mi-Switch"
+    },
+    {
+      "title": "SwitchApps",
+      "class": "mi mi-SwitchApps"
+    },
+    {
+      "title": "SwitchUser",
+      "class": "mi mi-SwitchUser"
+    },
+    {
+      "title": "Sync",
+      "class": "mi mi-Sync"
+    },
+    {
+      "title": "SyncBadge12",
+      "class": "mi mi-SyncBadge12"
+    },
+    {
+      "title": "SyncError",
+      "class": "mi mi-SyncError"
+    },
+    {
+      "title": "SyncFolder",
+      "class": "mi mi-SyncFolder"
+    },
+    {
+      "title": "System",
+      "class": "mi mi-System"
+    },
+    {
+      "title": "TVMonitor",
+      "class": "mi mi-TVMonitor"
+    },
+    {
+      "title": "TVMonitorSelected",
+      "class": "mi mi-TVMonitorSelected"
+    },
+    {
+      "title": "Tablet",
+      "class": "mi mi-Tablet"
+    },
+    {
+      "title": "TabletMode",
+      "class": "mi mi-TabletMode"
+    },
+    {
+      "title": "TabletSelected",
+      "class": "mi mi-TabletSelected"
+    },
+    {
+      "title": "Tag",
+      "class": "mi mi-Tag"
+    },
+    {
+      "title": "TapAndSend",
+      "class": "mi mi-TapAndSend"
+    },
+    {
+      "title": "TaskView",
+      "class": "mi mi-TaskView"
+    },
+    {
+      "title": "TaskViewExpanded",
+      "class": "mi mi-TaskViewExpanded"
+    },
+    {
+      "title": "TaskViewSettings",
+      "class": "mi mi-TaskViewSettings"
+    },
+    {
+      "title": "TaskbarPhone",
+      "class": "mi mi-TaskbarPhone"
+    },
+    {
+      "title": "ThisPC",
+      "class": "mi mi-ThisPC"
+    },
+    {
+      "title": "ThoughtBubble",
+      "class": "mi mi-ThoughtBubble"
+    },
+    {
+      "title": "ThreeBars",
+      "class": "mi mi-ThreeBars"
+    },
+    {
+      "title": "ThreeQuarterStarLeft",
+      "class": "mi mi-ThreeQuarterStarLeft"
+    },
+    {
+      "title": "ThreeQuarterStarRight",
+      "class": "mi mi-ThreeQuarterStarRight"
+    },
+    {
+      "title": "Tiles",
+      "class": "mi mi-Tiles"
+    },
+    {
+      "title": "TiltDown",
+      "class": "mi mi-TiltDown"
+    },
+    {
+      "title": "TiltUp",
+      "class": "mi mi-TiltUp"
+    },
+    {
+      "title": "TimeLanguage",
+      "class": "mi mi-TimeLanguage"
+    },
+    {
+      "title": "ToggleBorder",
+      "class": "mi mi-ToggleBorder"
+    },
+    {
+      "title": "ToggleFilled",
+      "class": "mi mi-ToggleFilled"
+    },
+    {
+      "title": "ToggleThumb",
+      "class": "mi mi-ToggleThumb"
+    },
+    {
+      "title": "TollSolid",
+      "class": "mi mi-TollSolid"
+    },
+    {
+      "title": "ToolTip",
+      "class": "mi mi-ToolTip"
+    },
+    {
+      "title": "Touch",
+      "class": "mi mi-Touch"
+    },
+    {
+      "title": "TouchPointer",
+      "class": "mi mi-TouchPointer"
+    },
+    {
+      "title": "Touchpad",
+      "class": "mi mi-Touchpad"
+    },
+    {
+      "title": "Touchscreen",
+      "class": "mi mi-Touchscreen"
+    },
+    {
+      "title": "Trackers",
+      "class": "mi mi-Trackers"
+    },
+    {
+      "title": "TrackersMirrored",
+      "class": "mi mi-TrackersMirrored"
+    },
+    {
+      "title": "TrafficCongestionSolid",
+      "class": "mi mi-TrafficCongestionSolid"
+    },
+    {
+      "title": "TrafficLight",
+      "class": "mi mi-TrafficLight"
+    },
+    {
+      "title": "Train",
+      "class": "mi mi-Train"
+    },
+    {
+      "title": "TrainSolid",
+      "class": "mi mi-TrainSolid"
+    },
+    {
+      "title": "TreeFolderFolder",
+      "class": "mi mi-TreeFolderFolder"
+    },
+    {
+      "title": "TreeFolderFolderFill",
+      "class": "mi mi-TreeFolderFolderFill"
+    },
+    {
+      "title": "TreeFolderFolderOpen",
+      "class": "mi mi-TreeFolderFolderOpen"
+    },
+    {
+      "title": "TreeFolderFolderOpenFill",
+      "class": "mi mi-TreeFolderFolderOpenFill"
+    },
+    {
+      "title": "TriggerLeft",
+      "class": "mi mi-TriggerLeft"
+    },
+    {
+      "title": "TriggerRight",
+      "class": "mi mi-TriggerRight"
+    },
+    {
+      "title": "Trim",
+      "class": "mi mi-Trim"
+    },
+    {
+      "title": "TwoBars",
+      "class": "mi mi-TwoBars"
+    },
+    {
+      "title": "TwoPage",
+      "class": "mi mi-TwoPage"
+    },
+    {
+      "title": "Type",
+      "class": "mi mi-Type"
+    },
+    {
+      "title": "TypingIndicatorLegacy",
+      "class": "mi mi-TypingIndicatorLegacy"
+    },
+    {
+      "title": "USB",
+      "class": "mi mi-USB"
+    },
+    {
+      "title": "USBSafeConnect",
+      "class": "mi mi-USBSafeConnect"
+    },
+    {
+      "title": "Underline",
+      "class": "mi mi-Underline"
+    },
+    {
+      "title": "UnderlineLKorean",
+      "class": "mi mi-UnderlineLKorean"
+    },
+    {
+      "title": "UnderlineRussian",
+      "class": "mi mi-UnderlineRussian"
+    },
+    {
+      "title": "UnderlineS",
+      "class": "mi mi-UnderlineS"
+    },
+    {
+      "title": "UnderlineU",
+      "class": "mi mi-UnderlineU"
+    },
+    {
+      "title": "UnderscoreSpace",
+      "class": "mi mi-UnderscoreSpace"
+    },
+    {
+      "title": "Undo",
+      "class": "mi mi-Undo"
+    },
+    {
+      "title": "Unfavorite",
+      "class": "mi mi-Unfavorite"
+    },
+    {
+      "title": "Unit",
+      "class": "mi mi-Unit"
+    },
+    {
+      "title": "Unknown",
+      "class": "mi mi-Unknown"
+    },
+    {
+      "title": "UnknownMirrored",
+      "class": "mi mi-UnknownMirrored"
+    },
+    {
+      "title": "Unlock",
+      "class": "mi mi-Unlock"
+    },
+    {
+      "title": "Unpin",
+      "class": "mi mi-Unpin"
+    },
+    {
+      "title": "UnsyncFolder",
+      "class": "mi mi-UnsyncFolder"
+    },
+    {
+      "title": "Up",
+      "class": "mi mi-Up"
+    },
+    {
+      "title": "UpArrowShiftKey",
+      "class": "mi mi-UpArrowShiftKey"
+    },
+    {
+      "title": "UpShiftKey",
+      "class": "mi mi-UpShiftKey"
+    },
+    {
+      "title": "UpdateRestore",
+      "class": "mi mi-UpdateRestore"
+    },
+    {
+      "title": "Upload",
+      "class": "mi mi-Upload"
+    },
+    {
+      "title": "UserAPN",
+      "class": "mi mi-UserAPN"
+    },
+    {
+      "title": "VPN",
+      "class": "mi mi-VPN"
+    },
+    {
+      "title": "VerticalBattery0",
+      "class": "mi mi-VerticalBattery0"
+    },
+    {
+      "title": "VerticalBattery1",
+      "class": "mi mi-VerticalBattery1"
+    },
+    {
+      "title": "VerticalBattery10",
+      "class": "mi mi-VerticalBattery10"
+    },
+    {
+      "title": "VerticalBattery2",
+      "class": "mi mi-VerticalBattery2"
+    },
+    {
+      "title": "VerticalBattery3",
+      "class": "mi mi-VerticalBattery3"
+    },
+    {
+      "title": "VerticalBattery4",
+      "class": "mi mi-VerticalBattery4"
+    },
+    {
+      "title": "VerticalBattery5",
+      "class": "mi mi-VerticalBattery5"
+    },
+    {
+      "title": "VerticalBattery6",
+      "class": "mi mi-VerticalBattery6"
+    },
+    {
+      "title": "VerticalBattery7",
+      "class": "mi mi-VerticalBattery7"
+    },
+    {
+      "title": "VerticalBattery8",
+      "class": "mi mi-VerticalBattery8"
+    },
+    {
+      "title": "VerticalBattery9",
+      "class": "mi mi-VerticalBattery9"
+    },
+    {
+      "title": "VerticalBatteryCharging0",
+      "class": "mi mi-VerticalBatteryCharging0"
+    },
+    {
+      "title": "VerticalBatteryCharging1",
+      "class": "mi mi-VerticalBatteryCharging1"
+    },
+    {
+      "title": "VerticalBatteryCharging10",
+      "class": "mi mi-VerticalBatteryCharging10"
+    },
+    {
+      "title": "VerticalBatteryCharging2",
+      "class": "mi mi-VerticalBatteryCharging2"
+    },
+    {
+      "title": "VerticalBatteryCharging3",
+      "class": "mi mi-VerticalBatteryCharging3"
+    },
+    {
+      "title": "VerticalBatteryCharging4",
+      "class": "mi mi-VerticalBatteryCharging4"
+    },
+    {
+      "title": "VerticalBatteryCharging5",
+      "class": "mi mi-VerticalBatteryCharging5"
+    },
+    {
+      "title": "VerticalBatteryCharging6",
+      "class": "mi mi-VerticalBatteryCharging6"
+    },
+    {
+      "title": "VerticalBatteryCharging7",
+      "class": "mi mi-VerticalBatteryCharging7"
+    },
+    {
+      "title": "VerticalBatteryCharging8",
+      "class": "mi mi-VerticalBatteryCharging8"
+    },
+    {
+      "title": "VerticalBatteryCharging9",
+      "class": "mi mi-VerticalBatteryCharging9"
+    },
+    {
+      "title": "VerticalBatteryUnknown",
+      "class": "mi mi-VerticalBatteryUnknown"
+    },
+    {
+      "title": "Vibrate",
+      "class": "mi mi-Vibrate"
+    },
+    {
+      "title": "Video",
+      "class": "mi mi-Video"
+    },
+    {
+      "title": "Video360",
+      "class": "mi mi-Video360"
+    },
+    {
+      "title": "VideoChat",
+      "class": "mi mi-VideoChat"
+    },
+    {
+      "title": "VideoSolid",
+      "class": "mi mi-VideoSolid"
+    },
+    {
+      "title": "View",
+      "class": "mi mi-View"
+    },
+    {
+      "title": "ViewAll",
+      "class": "mi mi-ViewAll"
+    },
+    {
+      "title": "ViewDashboard",
+      "class": "mi mi-ViewDashboard"
+    },
+    {
+      "title": "Volume",
+      "class": "mi mi-Volume"
+    },
+    {
+      "title": "Volume0",
+      "class": "mi mi-Volume0"
+    },
+    {
+      "title": "Volume1",
+      "class": "mi mi-Volume1"
+    },
+    {
+      "title": "Volume2",
+      "class": "mi mi-Volume2"
+    },
+    {
+      "title": "Volume3",
+      "class": "mi mi-Volume3"
+    },
+    {
+      "title": "VolumeBars",
+      "class": "mi mi-VolumeBars"
+    },
+    {
+      "title": "Walk",
+      "class": "mi mi-Walk"
+    },
+    {
+      "title": "WalkSolid",
+      "class": "mi mi-WalkSolid"
+    },
+    {
+      "title": "Warning",
+      "class": "mi mi-Warning"
+    },
+    {
+      "title": "Webcam",
+      "class": "mi mi-Webcam"
+    },
+    {
+      "title": "Webcam2",
+      "class": "mi mi-Webcam2"
+    },
+    {
+      "title": "Website",
+      "class": "mi mi-Website"
+    },
+    {
+      "title": "Wheel",
+      "class": "mi mi-Wheel"
+    },
+    {
+      "title": "Wifi",
+      "class": "mi mi-Wifi"
+    },
+    {
+      "title": "Wifi1",
+      "class": "mi mi-Wifi1"
+    },
+    {
+      "title": "Wifi2",
+      "class": "mi mi-Wifi2"
+    },
+    {
+      "title": "Wifi3",
+      "class": "mi mi-Wifi3"
+    },
+    {
+      "title": "WifiAttentionOverlay",
+      "class": "mi mi-WifiAttentionOverlay"
+    },
+    {
+      "title": "WifiCall0",
+      "class": "mi mi-WifiCall0"
+    },
+    {
+      "title": "WifiCall1",
+      "class": "mi mi-WifiCall1"
+    },
+    {
+      "title": "WifiCall2",
+      "class": "mi mi-WifiCall2"
+    },
+    {
+      "title": "WifiCall3",
+      "class": "mi mi-WifiCall3"
+    },
+    {
+      "title": "WifiCall4",
+      "class": "mi mi-WifiCall4"
+    },
+    {
+      "title": "WifiCallBars",
+      "class": "mi mi-WifiCallBars"
+    },
+    {
+      "title": "WifiError0",
+      "class": "mi mi-WifiError0"
+    },
+    {
+      "title": "WifiError1",
+      "class": "mi mi-WifiError1"
+    },
+    {
+      "title": "WifiError2",
+      "class": "mi mi-WifiError2"
+    },
+    {
+      "title": "WifiError3",
+      "class": "mi mi-WifiError3"
+    },
+    {
+      "title": "WifiError4",
+      "class": "mi mi-WifiError4"
+    },
+    {
+      "title": "WifiEthernet",
+      "class": "mi mi-WifiEthernet"
+    },
+    {
+      "title": "WifiHotspot",
+      "class": "mi mi-WifiHotspot"
+    },
+    {
+      "title": "WifiWarning0",
+      "class": "mi mi-WifiWarning0"
+    },
+    {
+      "title": "WifiWarning1",
+      "class": "mi mi-WifiWarning1"
+    },
+    {
+      "title": "WifiWarning2",
+      "class": "mi mi-WifiWarning2"
+    },
+    {
+      "title": "WifiWarning3",
+      "class": "mi mi-WifiWarning3"
+    },
+    {
+      "title": "WifiWarning4",
+      "class": "mi mi-WifiWarning4"
+    },
+    {
+      "title": "WindDirection",
+      "class": "mi mi-WindDirection"
+    },
+    {
+      "title": "WindowsInsider",
+      "class": "mi mi-WindowsInsider"
+    },
+    {
+      "title": "WiredUSB",
+      "class": "mi mi-WiredUSB"
+    },
+    {
+      "title": "WirelessUSB",
+      "class": "mi mi-WirelessUSB"
+    },
+    {
+      "title": "Work",
+      "class": "mi mi-Work"
+    },
+    {
+      "title": "WorkSolid",
+      "class": "mi mi-WorkSolid"
+    },
+    {
+      "title": "World",
+      "class": "mi mi-World"
+    },
+    {
+      "title": "XboxOneConsole",
+      "class": "mi mi-XboxOneConsole"
+    },
+    {
+      "title": "ZeroBars",
+      "class": "mi mi-ZeroBars"
+    },
+    {
+      "title": "Zoom",
+      "class": "mi mi-Zoom"
+    },
+    {
+      "title": "ZoomIn",
+      "class": "mi mi-ZoomIn"
+    },
+    {
+      "title": "ZoomMode",
+      "class": "mi mi-ZoomMode"
+    },
+    {
+      "title": "ZoomOut",
+      "class": "mi mi-ZoomOut"
+    },
+    {
+      "title": "eSIM",
+      "class": "mi mi-eSIM"
+    },
+    {
+      "title": "eSIMBusy",
+      "class": "mi mi-eSIMBusy"
+    },
+    {
+      "title": "eSIMLocked",
+      "class": "mi mi-eSIMLocked"
+    },
+    {
+      "title": "eSIMNoProfile",
+      "class": "mi mi-eSIMNoProfile"
+    },
+    {
+      "title": "E80B",
+      "class": "mi mi-E80B"
+    },
+    {
+      "title": "EA0D",
+      "class": "mi mi-EA0D"
+    },
+    {
+      "title": "EA3F",
+      "class": "mi mi-EA3F"
+    },
+    {
+      "title": "EA90",
+      "class": "mi mi-EA90"
+    },
+    {
+      "title": "EAC2",
+      "class": "mi mi-EAC2"
+    },
+    {
+      "title": "EC6C",
+      "class": "mi mi-EC6C"
+    },
+    {
+      "title": "EEA3",
+      "class": "mi mi-EEA3"
+    },
+    {
+      "title": "F2B7",
+      "class": "mi mi-F2B7"
+    },
+    {
+      "title": "F5AA",
+      "class": "mi mi-F5AA"
+    },
+    {
+      "title": "F614",
+      "class": "mi mi-F614"
+    },
+    {
+      "title": "F615",
+      "class": "mi mi-F615"
+    },
+    {
+      "title": "F616",
+      "class": "mi mi-F616"
+    },
+    {
+      "title": "F617",
+      "class": "mi mi-F617"
+    },
+    {
+      "title": "F657",
+      "class": "mi mi-F657"
+    },
+    {
+      "title": "F658",
+      "class": "mi mi-F658"
+    },
+    {
+      "title": "F659",
+      "class": "mi mi-F659"
+    },
+    {
+      "title": "F65A",
+      "class": "mi mi-F65A"
+    },
+    {
+      "title": "F65B",
+      "class": "mi mi-F65B"
+    },
+    {
+      "title": "F65C",
+      "class": "mi mi-F65C"
+    },
+    {
+      "title": "F69E",
+      "class": "mi mi-F69E"
+    },
+    {
+      "title": "F6FA",
+      "class": "mi mi-F6FA"
+    },
+    {
+      "title": "F712",
+      "class": "mi mi-F712"
+    },
+    {
+      "title": "F71C",
+      "class": "mi mi-F71C"
+    },
+    {
+      "title": "F71D",
+      "class": "mi mi-F71D"
+    },
+    {
+      "title": "F71E",
+      "class": "mi mi-F71E"
+    },
+    {
+      "title": "F738",
+      "class": "mi mi-F738"
+    },
+    {
+      "title": "F739",
+      "class": "mi mi-F739"
+    },
+    {
+      "title": "F73D",
+      "class": "mi mi-F73D"
+    },
+    {
+      "title": "F73E",
+      "class": "mi mi-F73E"
+    },
+    {
+      "title": "F73F",
+      "class": "mi mi-F73F"
+    },
+    {
+      "title": "F740",
+      "class": "mi mi-F740"
+    },
+    {
+      "title": "F741",
+      "class": "mi mi-F741"
+    },
+    {
+      "title": "F742",
+      "class": "mi mi-F742"
+    },
+    {
+      "title": "F743",
+      "class": "mi mi-F743"
+    },
+    {
+      "title": "F744",
+      "class": "mi mi-F744"
+    },
+    {
+      "title": "F745",
+      "class": "mi mi-F745"
+    },
+    {
+      "title": "F746",
+      "class": "mi mi-F746"
+    },
+    {
+      "title": "F785",
+      "class": "mi mi-F785"
+    },
+    {
+      "title": "500px",
+      "class": "mi mi-500px"
+    },
+    {
+      "title": "adn",
+      "class": "mi mi-adn"
+    },
+    {
+      "title": "amazon",
+      "class": "mi mi-amazon"
+    },
+    {
+      "title": "android",
+      "class": "mi mi-android"
+    },
+    {
+      "title": "angellist",
+      "class": "mi mi-angellist"
+    },
+    {
+      "title": "apple",
+      "class": "mi mi-apple"
+    },
+    {
+      "title": "bandcamp",
+      "class": "mi mi-bandcamp"
+    },
+    {
+      "title": "behance-square",
+      "class": "mi mi-behance-square"
+    },
+    {
+      "title": "behance",
+      "class": "mi mi-behance"
+    },
+    {
+      "title": "bitbucket",
+      "class": "mi mi-bitbucket"
+    },
+    {
+      "title": "black-tie",
+      "class": "mi mi-black-tie"
+    },
+    {
+      "title": "bluetooth-b",
+      "class": "mi mi-bluetooth-b"
+    },
+    {
+      "title": "bluetooth",
+      "class": "mi mi-bluetooth"
+    },
+    {
+      "title": "btc",
+      "class": "mi mi-btc"
+    },
+    {
+      "title": "buysellads",
+      "class": "mi mi-buysellads"
+    },
+    {
+      "title": "cc-amex",
+      "class": "mi mi-cc-amex"
+    },
+    {
+      "title": "cc-diners-club",
+      "class": "mi mi-cc-diners-club"
+    },
+    {
+      "title": "cc-discover",
+      "class": "mi mi-cc-discover"
+    },
+    {
+      "title": "cc-jcb",
+      "class": "mi mi-cc-jcb"
+    },
+    {
+      "title": "cc-mastercard",
+      "class": "mi mi-cc-mastercard"
+    },
+    {
+      "title": "cc-paypal",
+      "class": "mi mi-cc-paypal"
+    },
+    {
+      "title": "cc-stripe",
+      "class": "mi mi-cc-stripe"
+    },
+    {
+      "title": "cc-visa",
+      "class": "mi mi-cc-visa"
+    },
+    {
+      "title": "chrome",
+      "class": "mi mi-chrome"
+    },
+    {
+      "title": "codepen",
+      "class": "mi mi-codepen"
+    },
+    {
+      "title": "codiepie",
+      "class": "mi mi-codiepie"
+    },
+    {
+      "title": "connectdevelop",
+      "class": "mi mi-connectdevelop"
+    },
+    {
+      "title": "contao",
+      "class": "mi mi-contao"
+    },
+    {
+      "title": "css3",
+      "class": "mi mi-css3"
+    },
+    {
+      "title": "dashcube",
+      "class": "mi mi-dashcube"
+    },
+    {
+      "title": "delicious",
+      "class": "mi mi-delicious"
+    },
+    {
+      "title": "deviantart",
+      "class": "mi mi-deviantart"
+    },
+    {
+      "title": "digg",
+      "class": "mi mi-digg"
+    },
+    {
+      "title": "dribbble",
+      "class": "mi mi-dribbble"
+    },
+    {
+      "title": "dropbox",
+      "class": "mi mi-dropbox"
+    },
+    {
+      "title": "drupal",
+      "class": "mi mi-drupal"
+    },
+    {
+      "title": "edge",
+      "class": "mi mi-edge"
+    },
+    {
+      "title": "eercast",
+      "class": "mi mi-eercast"
+    },
+    {
+      "title": "empire",
+      "class": "mi mi-empire"
+    },
+    {
+      "title": "envira",
+      "class": "mi mi-envira"
+    },
+    {
+      "title": "expeditedssl",
+      "class": "mi mi-expeditedssl"
+    },
+    {
+      "title": "facebook-official",
+      "class": "mi mi-facebook-official"
+    },
+    {
+      "title": "facebook",
+      "class": "mi mi-facebook"
+    },
+    {
+      "title": "firefox",
+      "class": "mi mi-firefox"
+    },
+    {
+      "title": "first-order",
+      "class": "mi mi-first-order"
+    },
+    {
+      "title": "flickr",
+      "class": "mi mi-flickr"
+    },
+    {
+      "title": "forumbee",
+      "class": "mi mi-forumbee"
+    },
+    {
+      "title": "foursquare",
+      "class": "mi mi-foursquare"
+    },
+    {
+      "title": "free-code-camp",
+      "class": "mi mi-free-code-camp"
+    },
+    {
+      "title": "get-pocket",
+      "class": "mi mi-get-pocket"
+    },
+    {
+      "title": "gg",
+      "class": "mi mi-gg"
+    },
+    {
+      "title": "git",
+      "class": "mi mi-git"
+    },
+    {
+      "title": "github-alt",
+      "class": "mi mi-github-alt"
+    },
+    {
+      "title": "github",
+      "class": "mi mi-github"
+    },
+    {
+      "title": "gitlab",
+      "class": "mi mi-gitlab"
+    },
+    {
+      "title": "glide-g",
+      "class": "mi mi-glide-g"
+    },
+    {
+      "title": "google-plus",
+      "class": "mi mi-google-plus"
+    },
+    {
+      "title": "google-wallet",
+      "class": "mi mi-google-wallet"
+    },
+    {
+      "title": "google",
+      "class": "mi mi-google"
+    },
+    {
+      "title": "gratipay",
+      "class": "mi mi-gratipay"
+    },
+    {
+      "title": "hacker-news",
+      "class": "mi mi-hacker-news"
+    },
+    {
+      "title": "houzz",
+      "class": "mi mi-houzz"
+    },
+    {
+      "title": "html5",
+      "class": "mi mi-html5"
+    },
+    {
+      "title": "instagram",
+      "class": "mi mi-instagram"
+    },
+    {
+      "title": "internet-explorer",
+      "class": "mi mi-internet-explorer"
+    },
+    {
+      "title": "ioxhost",
+      "class": "mi mi-ioxhost"
+    },
+    {
+      "title": "joomla",
+      "class": "mi mi-joomla"
+    },
+    {
+      "title": "jsfiddle",
+      "class": "mi mi-jsfiddle"
+    },
+    {
+      "title": "lastfm",
+      "class": "mi mi-lastfm"
+    },
+    {
+      "title": "leanpub",
+      "class": "mi mi-leanpub"
+    },
+    {
+      "title": "linkedin",
+      "class": "mi mi-linkedin"
+    },
+    {
+      "title": "linode",
+      "class": "mi mi-linode"
+    },
+    {
+      "title": "linux",
+      "class": "mi mi-linux"
+    },
+    {
+      "title": "maxcdn",
+      "class": "mi mi-maxcdn"
+    },
+    {
+      "title": "meanpath",
+      "class": "mi mi-meanpath"
+    },
+    {
+      "title": "medium",
+      "class": "mi mi-medium"
+    },
+    {
+      "title": "meetup",
+      "class": "mi mi-meetup"
+    },
+    {
+      "title": "mixcloud",
+      "class": "mi mi-mixcloud"
+    },
+    {
+      "title": "modx",
+      "class": "mi mi-modx"
+    },
+    {
+      "title": "odnoklassniki",
+      "class": "mi mi-odnoklassniki"
+    },
+    {
+      "title": "opencart",
+      "class": "mi mi-opencart"
+    },
+    {
+      "title": "openid",
+      "class": "mi mi-openid"
+    },
+    {
+      "title": "opera",
+      "class": "mi mi-opera"
+    },
+    {
+      "title": "optin-monster",
+      "class": "mi mi-optin-monster"
+    },
+    {
+      "title": "pagelines",
+      "class": "mi mi-pagelines"
+    },
+    {
+      "title": "paypal",
+      "class": "mi mi-paypal"
+    },
+    {
+      "title": "pied-piper-alt",
+      "class": "mi mi-pied-piper-alt"
+    },
+    {
+      "title": "pied-piper",
+      "class": "mi mi-pied-piper"
+    },
+    {
+      "title": "pinterest-p",
+      "class": "mi mi-pinterest-p"
+    },
+    {
+      "title": "product-hunt",
+      "class": "mi mi-product-hunt"
+    },
+    {
+      "title": "qq",
+      "class": "mi mi-qq"
+    },
+    {
+      "title": "quora",
+      "class": "mi mi-quora"
+    },
+    {
+      "title": "ravelry",
+      "class": "mi mi-ravelry"
+    },
+    {
+      "title": "rebel",
+      "class": "mi mi-rebel"
+    },
+    {
+      "title": "reddit-alien",
+      "class": "mi mi-reddit-alien"
+    },
+    {
+      "title": "renren",
+      "class": "mi mi-renren"
+    },
+    {
+      "title": "safari",
+      "class": "mi mi-safari"
+    },
+    {
+      "title": "scribd",
+      "class": "mi mi-scribd"
+    },
+    {
+      "title": "sellsy",
+      "class": "mi mi-sellsy"
+    },
+    {
+      "title": "shirtsinbulk",
+      "class": "mi mi-shirtsinbulk"
+    },
+    {
+      "title": "simplybuilt",
+      "class": "mi mi-simplybuilt"
+    },
+    {
+      "title": "skyatlas",
+      "class": "mi mi-skyatlas"
+    },
+    {
+      "title": "skype",
+      "class": "mi mi-skype"
+    },
+    {
+      "title": "slack",
+      "class": "mi mi-slack"
+    },
+    {
+      "title": "slideshare",
+      "class": "mi mi-slideshare"
+    },
+    {
+      "title": "snapchat-ghost",
+      "class": "mi mi-snapchat-ghost"
+    },
+    {
+      "title": "soundcloud",
+      "class": "mi mi-soundcloud"
+    },
+    {
+      "title": "spotify",
+      "class": "mi mi-spotify"
+    },
+    {
+      "title": "stack-exchange",
+      "class": "mi mi-stack-exchange"
+    },
+    {
+      "title": "stack-overflow",
+      "class": "mi mi-stack-overflow"
+    },
+    {
+      "title": "steam",
+      "class": "mi mi-steam"
+    },
+    {
+      "title": "stumbleupon",
+      "class": "mi mi-stumbleupon"
+    },
+    {
+      "title": "superpowers",
+      "class": "mi mi-superpowers"
+    },
+    {
+      "title": "telegram",
+      "class": "mi mi-telegram"
+    },
+    {
+      "title": "tencent-weibo",
+      "class": "mi mi-tencent-weibo"
+    },
+    {
+      "title": "themeisle",
+      "class": "mi mi-themeisle"
+    },
+    {
+      "title": "trello",
+      "class": "mi mi-trello"
+    },
+    {
+      "title": "tripadvisor",
+      "class": "mi mi-tripadvisor"
+    },
+    {
+      "title": "tumblr",
+      "class": "mi mi-tumblr"
+    },
+    {
+      "title": "twitch",
+      "class": "mi mi-twitch"
+    },
+    {
+      "title": "twitter",
+      "class": "mi mi-twitter"
+    },
+    {
+      "title": "viacoin",
+      "class": "mi mi-viacoin"
+    },
+    {
+      "title": "viadeo",
+      "class": "mi mi-viadeo"
+    },
+    {
+      "title": "vimeo",
+      "class": "mi mi-vimeo"
+    },
+    {
+      "title": "vine",
+      "class": "mi mi-vine"
+    },
+    {
+      "title": "vk",
+      "class": "mi mi-vk"
+    },
+    {
+      "title": "weibo",
+      "class": "mi mi-weibo"
+    },
+    {
+      "title": "weixin",
+      "class": "mi mi-weixin"
+    },
+    {
+      "title": "whatsapp",
+      "class": "mi mi-whatsapp"
+    },
+    {
+      "title": "wikipedia-w",
+      "class": "mi mi-wikipedia-w"
+    },
+    {
+      "title": "windows",
+      "class": "mi mi-windows"
+    },
+    {
+      "title": "wordpress",
+      "class": "mi mi-wordpress"
+    },
+    {
+      "title": "wpbeginner",
+      "class": "mi mi-wpbeginner"
+    },
+    {
+      "title": "wpexplorer",
+      "class": "mi mi-wpexplorer"
+    },
+    {
+      "title": "wpform",
+      "class": "mi mi-wpform"
+    },
+    {
+      "title": "xing",
+      "class": "mi mi-xing"
+    },
+    {
+      "title": "yahoo",
+      "class": "mi mi-yahoo"
+    },
+    {
+      "title": "yelp",
+      "class": "mi mi-yelp"
+    },
+    {
+      "title": "yoast",
+      "class": "mi mi-yoast"
+    },
+    {
+      "title": "youtube-play",
+      "class": "mi mi-youtube-play"
+    },
+    {
+      "title": "youtube",
+      "class": "mi mi-youtube"
+    },
+    {
+      "title": "accessible-icon",
+      "class": "mi mi-accessible-icon"
+    },
+    {
+      "title": "accusoft",
+      "class": "mi mi-accusoft"
+    },
+    {
+      "title": "acquisitions-incorporated",
+      "class": "mi mi-acquisitions-incorporated"
+    },
+    {
+      "title": "adobe",
+      "class": "mi mi-adobe"
+    },
+    {
+      "title": "adversal",
+      "class": "mi mi-adversal"
+    },
+    {
+      "title": "affiliatetheme",
+      "class": "mi mi-affiliatetheme"
+    },
+    {
+      "title": "algolia",
+      "class": "mi mi-algolia"
+    },
+    {
+      "title": "alipay",
+      "class": "mi mi-alipay"
+    },
+    {
+      "title": "amazon-pay",
+      "class": "mi mi-amazon-pay"
+    },
+    {
+      "title": "amilia",
+      "class": "mi mi-amilia"
+    },
+    {
+      "title": "angrycreative",
+      "class": "mi mi-angrycreative"
+    },
+    {
+      "title": "angular",
+      "class": "mi mi-angular"
+    },
+    {
+      "title": "app-store",
+      "class": "mi mi-app-store"
+    },
+    {
+      "title": "app-store-ios",
+      "class": "mi mi-app-store-ios"
+    },
+    {
+      "title": "apper",
+      "class": "mi mi-apper"
+    },
+    {
+      "title": "apple-pay",
+      "class": "mi mi-apple-pay"
+    },
+    {
+      "title": "artstation",
+      "class": "mi mi-artstation"
+    },
+    {
+      "title": "asymmetrik",
+      "class": "mi mi-asymmetrik"
+    },
+    {
+      "title": "atlassian",
+      "class": "mi mi-atlassian"
+    },
+    {
+      "title": "audible",
+      "class": "mi mi-audible"
+    },
+    {
+      "title": "autoprefixer",
+      "class": "mi mi-autoprefixer"
+    },
+    {
+      "title": "avianex",
+      "class": "mi mi-avianex"
+    },
+    {
+      "title": "aviato",
+      "class": "mi mi-aviato"
+    },
+    {
+      "title": "aws",
+      "class": "mi mi-aws"
+    },
+    {
+      "title": "bimobject",
+      "class": "mi mi-bimobject"
+    },
+    {
+      "title": "bitcoin",
+      "class": "mi mi-bitcoin"
+    },
+    {
+      "title": "bity",
+      "class": "mi mi-bity"
+    },
+    {
+      "title": "blackberry",
+      "class": "mi mi-blackberry"
+    },
+    {
+      "title": "blogger",
+      "class": "mi mi-blogger"
+    },
+    {
+      "title": "blogger-b",
+      "class": "mi mi-blogger-b"
+    },
+    {
+      "title": "buromobelexperte",
+      "class": "mi mi-buromobelexperte"
+    },
+    {
+      "title": "canadian-maple-leaf",
+      "class": "mi mi-canadian-maple-leaf"
+    },
+    {
+      "title": "cc-amazon-pay",
+      "class": "mi mi-cc-amazon-pay"
+    },
+    {
+      "title": "cc-apple-pay",
+      "class": "mi mi-cc-apple-pay"
+    },
+    {
+      "title": "centercode",
+      "class": "mi mi-centercode"
+    },
+    {
+      "title": "centos",
+      "class": "mi mi-centos"
+    },
+    {
+      "title": "cloudscale",
+      "class": "mi mi-cloudscale"
+    },
+    {
+      "title": "cloudsmith",
+      "class": "mi mi-cloudsmith"
+    },
+    {
+      "title": "cloudversify",
+      "class": "mi mi-cloudversify"
+    },
+    {
+      "title": "confluence",
+      "class": "mi mi-confluence"
+    },
+    {
+      "title": "cpanel",
+      "class": "mi mi-cpanel"
+    },
+    {
+      "title": "creative-commons",
+      "class": "mi mi-creative-commons"
+    },
+    {
+      "title": "creative-commons-by",
+      "class": "mi mi-creative-commons-by"
+    },
+    {
+      "title": "creative-commons-nc",
+      "class": "mi mi-creative-commons-nc"
+    },
+    {
+      "title": "creative-commons-nc-eu",
+      "class": "mi mi-creative-commons-nc-eu"
+    },
+    {
+      "title": "creative-commons-nc-jp",
+      "class": "mi mi-creative-commons-nc-jp"
+    },
+    {
+      "title": "creative-commons-nd",
+      "class": "mi mi-creative-commons-nd"
+    },
+    {
+      "title": "creative-commons-pd",
+      "class": "mi mi-creative-commons-pd"
+    },
+    {
+      "title": "creative-commons-pd-alt",
+      "class": "mi mi-creative-commons-pd-alt"
+    },
+    {
+      "title": "creative-commons-remix",
+      "class": "mi mi-creative-commons-remix"
+    },
+    {
+      "title": "creative-commons-sa",
+      "class": "mi mi-creative-commons-sa"
+    },
+    {
+      "title": "creative-commons-sampling",
+      "class": "mi mi-creative-commons-sampling"
+    },
+    {
+      "title": "creative-commons-sampling-plus",
+      "class": "mi mi-creative-commons-sampling-plus"
+    },
+    {
+      "title": "creative-commons-share",
+      "class": "mi mi-creative-commons-share"
+    },
+    {
+      "title": "creative-commons-zero",
+      "class": "mi mi-creative-commons-zero"
+    },
+    {
+      "title": "critical-role",
+      "class": "mi mi-critical-role"
+    },
+    {
+      "title": "css3-alt",
+      "class": "mi mi-css3-alt"
+    },
+    {
+      "title": "cuttlefish",
+      "class": "mi mi-cuttlefish"
+    },
+    {
+      "title": "d-and-d",
+      "class": "mi mi-d-and-d"
+    },
+    {
+      "title": "d-and-d-beyond",
+      "class": "mi mi-d-and-d-beyond"
+    },
+    {
+      "title": "deploydog",
+      "class": "mi mi-deploydog"
+    },
+    {
+      "title": "deskpro",
+      "class": "mi mi-deskpro"
+    },
+    {
+      "title": "dev",
+      "class": "mi mi-dev"
+    },
+    {
+      "title": "dhl",
+      "class": "mi mi-dhl"
+    },
+    {
+      "title": "diaspora",
+      "class": "mi mi-diaspora"
+    },
+    {
+      "title": "digital-ocean",
+      "class": "mi mi-digital-ocean"
+    },
+    {
+      "title": "discord",
+      "class": "mi mi-discord"
+    },
+    {
+      "title": "discourse",
+      "class": "mi mi-discourse"
+    },
+    {
+      "title": "dochub",
+      "class": "mi mi-dochub"
+    },
+    {
+      "title": "docker",
+      "class": "mi mi-docker"
+    },
+    {
+      "title": "draft2digital",
+      "class": "mi mi-draft2digital"
+    },
+    {
+      "title": "dribbble-square",
+      "class": "mi mi-dribbble-square"
+    },
+    {
+      "title": "dyalog",
+      "class": "mi mi-dyalog"
+    },
+    {
+      "title": "earlybirds",
+      "class": "mi mi-earlybirds"
+    },
+    {
+      "title": "ebay",
+      "class": "mi mi-ebay"
+    },
+    {
+      "title": "elementor",
+      "class": "mi mi-elementor"
+    },
+    {
+      "title": "ello",
+      "class": "mi mi-ello"
+    },
+    {
+      "title": "ember",
+      "class": "mi mi-ember"
+    },
+    {
+      "title": "erlang",
+      "class": "mi mi-erlang"
+    },
+    {
+      "title": "ethereum",
+      "class": "mi mi-ethereum"
+    },
+    {
+      "title": "etsy",
+      "class": "mi mi-etsy"
+    },
+    {
+      "title": "facebook-f",
+      "class": "mi mi-facebook-f"
+    },
+    {
+      "title": "facebook-messenger",
+      "class": "mi mi-facebook-messenger"
+    },
+    {
+      "title": "facebook-square",
+      "class": "mi mi-facebook-square"
+    },
+    {
+      "title": "fantasy-flight-games",
+      "class": "mi mi-fantasy-flight-games"
+    },
+    {
+      "title": "fedex",
+      "class": "mi mi-fedex"
+    },
+    {
+      "title": "fedora",
+      "class": "mi mi-fedora"
+    },
+    {
+      "title": "figma",
+      "class": "mi mi-figma"
+    },
+    {
+      "title": "first-order-alt",
+      "class": "mi mi-first-order-alt"
+    },
+    {
+      "title": "firstdraft",
+      "class": "mi mi-firstdraft"
+    },
+    {
+      "title": "flipboard",
+      "class": "mi mi-flipboard"
+    },
+    {
+      "title": "fly",
+      "class": "mi mi-fly"
+    },
+    {
+      "title": "font-awesome",
+      "class": "mi mi-font-awesome"
+    },
+    {
+      "title": "font-awesome-alt",
+      "class": "mi mi-font-awesome-alt"
+    },
+    {
+      "title": "font-awesome-flag",
+      "class": "mi mi-font-awesome-flag"
+    },
+    {
+      "title": "fonticons",
+      "class": "mi mi-fonticons"
+    },
+    {
+      "title": "fonticons-fi",
+      "class": "mi mi-fonticons-fi"
+    },
+    {
+      "title": "fort-awesome",
+      "class": "mi mi-fort-awesome"
+    },
+    {
+      "title": "fort-awesome-alt",
+      "class": "mi mi-fort-awesome-alt"
+    },
+    {
+      "title": "freebsd",
+      "class": "mi mi-freebsd"
+    },
+    {
+      "title": "fulcrum",
+      "class": "mi mi-fulcrum"
+    },
+    {
+      "title": "galactic-republic",
+      "class": "mi mi-galactic-republic"
+    },
+    {
+      "title": "galactic-senate",
+      "class": "mi mi-galactic-senate"
+    },
+    {
+      "title": "gg-circle",
+      "class": "mi mi-gg-circle"
+    },
+    {
+      "title": "git-square",
+      "class": "mi mi-git-square"
+    },
+    {
+      "title": "github-square",
+      "class": "mi mi-github-square"
+    },
+    {
+      "title": "gitkraken",
+      "class": "mi mi-gitkraken"
+    },
+    {
+      "title": "gitter",
+      "class": "mi mi-gitter"
+    },
+    {
+      "title": "glide",
+      "class": "mi mi-glide"
+    },
+    {
+      "title": "gofore",
+      "class": "mi mi-gofore"
+    },
+    {
+      "title": "goodreads",
+      "class": "mi mi-goodreads"
+    },
+    {
+      "title": "goodreads-g",
+      "class": "mi mi-goodreads-g"
+    },
+    {
+      "title": "google-drive",
+      "class": "mi mi-google-drive"
+    },
+    {
+      "title": "google-play",
+      "class": "mi mi-google-play"
+    },
+    {
+      "title": "google-plus-g",
+      "class": "mi mi-google-plus-g"
+    },
+    {
+      "title": "google-plus-square",
+      "class": "mi mi-google-plus-square"
+    },
+    {
+      "title": "grav",
+      "class": "mi mi-grav"
+    },
+    {
+      "title": "gripfire",
+      "class": "mi mi-gripfire"
+    },
+    {
+      "title": "grunt",
+      "class": "mi mi-grunt"
+    },
+    {
+      "title": "gulp",
+      "class": "mi mi-gulp"
+    },
+    {
+      "title": "hacker-news-square",
+      "class": "mi mi-hacker-news-square"
+    },
+    {
+      "title": "hackerrank",
+      "class": "mi mi-hackerrank"
+    },
+    {
+      "title": "hips",
+      "class": "mi mi-hips"
+    },
+    {
+      "title": "hire-a-helper",
+      "class": "mi mi-hire-a-helper"
+    },
+    {
+      "title": "hooli",
+      "class": "mi mi-hooli"
+    },
+    {
+      "title": "hornbill",
+      "class": "mi mi-hornbill"
+    },
+    {
+      "title": "hotjar",
+      "class": "mi mi-hotjar"
+    },
+    {
+      "title": "hubspot",
+      "class": "mi mi-hubspot"
+    },
+    {
+      "title": "imdb",
+      "class": "mi mi-imdb"
+    },
+    {
+      "title": "intercom",
+      "class": "mi mi-intercom"
+    },
+    {
+      "title": "invision",
+      "class": "mi mi-invision"
+    },
+    {
+      "title": "itunes",
+      "class": "mi mi-itunes"
+    },
+    {
+      "title": "itunes-note",
+      "class": "mi mi-itunes-note"
+    },
+    {
+      "title": "java",
+      "class": "mi mi-java"
+    },
+    {
+      "title": "jedi-order",
+      "class": "mi mi-jedi-order"
+    },
+    {
+      "title": "jenkins",
+      "class": "mi mi-jenkins"
+    },
+    {
+      "title": "jira",
+      "class": "mi mi-jira"
+    },
+    {
+      "title": "joget",
+      "class": "mi mi-joget"
+    },
+    {
+      "title": "js",
+      "class": "mi mi-js"
+    },
+    {
+      "title": "js-square",
+      "class": "mi mi-js-square"
+    },
+    {
+      "title": "kaggle",
+      "class": "mi mi-kaggle"
+    },
+    {
+      "title": "keybase",
+      "class": "mi mi-keybase"
+    },
+    {
+      "title": "keycdn",
+      "class": "mi mi-keycdn"
+    },
+    {
+      "title": "kickstarter",
+      "class": "mi mi-kickstarter"
+    },
+    {
+      "title": "kickstarter-k",
+      "class": "mi mi-kickstarter-k"
+    },
+    {
+      "title": "korvue",
+      "class": "mi mi-korvue"
+    },
+    {
+      "title": "laravel",
+      "class": "mi mi-laravel"
+    },
+    {
+      "title": "lastfm-square",
+      "class": "mi mi-lastfm-square"
+    },
+    {
+      "title": "less",
+      "class": "mi mi-less"
+    },
+    {
+      "title": "line",
+      "class": "mi mi-line"
+    },
+    {
+      "title": "linkedin-in",
+      "class": "mi mi-linkedin-in"
+    },
+    {
+      "title": "lyft",
+      "class": "mi mi-lyft"
+    },
+    {
+      "title": "magento",
+      "class": "mi mi-magento"
+    },
+    {
+      "title": "mailchimp",
+      "class": "mi mi-mailchimp"
+    },
+    {
+      "title": "mandalorian",
+      "class": "mi mi-mandalorian"
+    },
+    {
+      "title": "markdown",
+      "class": "mi mi-markdown"
+    },
+    {
+      "title": "mastodon",
+      "class": "mi mi-mastodon"
+    },
+    {
+      "title": "medapps",
+      "class": "mi mi-medapps"
+    },
+    {
+      "title": "medium-m",
+      "class": "mi mi-medium-m"
+    },
+    {
+      "title": "medrt",
+      "class": "mi mi-medrt"
+    },
+    {
+      "title": "megaport",
+      "class": "mi mi-megaport"
+    },
+    {
+      "title": "mendeley",
+      "class": "mi mi-mendeley"
+    },
+    {
+      "title": "microsoft",
+      "class": "mi mi-microsoft"
+    },
+    {
+      "title": "mix",
+      "class": "mi mi-mix"
+    },
+    {
+      "title": "mizuni",
+      "class": "mi mi-mizuni"
+    },
+    {
+      "title": "monero",
+      "class": "mi mi-monero"
+    },
+    {
+      "title": "napster",
+      "class": "mi mi-napster"
+    },
+    {
+      "title": "neos",
+      "class": "mi mi-neos"
+    },
+    {
+      "title": "nimblr",
+      "class": "mi mi-nimblr"
+    },
+    {
+      "title": "nintendo-switch",
+      "class": "mi mi-nintendo-switch"
+    },
+    {
+      "title": "node",
+      "class": "mi mi-node"
+    },
+    {
+      "title": "node-js",
+      "class": "mi mi-node-js"
+    },
+    {
+      "title": "npm",
+      "class": "mi mi-npm"
+    },
+    {
+      "title": "ns8",
+      "class": "mi mi-ns8"
+    },
+    {
+      "title": "nutritionix",
+      "class": "mi mi-nutritionix"
+    },
+    {
+      "title": "odnoklassniki-square",
+      "class": "mi mi-odnoklassniki-square"
+    },
+    {
+      "title": "old-republic",
+      "class": "mi mi-old-republic"
+    },
+    {
+      "title": "osi",
+      "class": "mi mi-osi"
+    },
+    {
+      "title": "page4",
+      "class": "mi mi-page4"
+    },
+    {
+      "title": "palfed",
+      "class": "mi mi-palfed"
+    },
+    {
+      "title": "patreon",
+      "class": "mi mi-patreon"
+    },
+    {
+      "title": "penny-arcade",
+      "class": "mi mi-penny-arcade"
+    },
+    {
+      "title": "periscope",
+      "class": "mi mi-periscope"
+    },
+    {
+      "title": "phabricator",
+      "class": "mi mi-phabricator"
+    },
+    {
+      "title": "phoenix-framework",
+      "class": "mi mi-phoenix-framework"
+    },
+    {
+      "title": "phoenix-squadron",
+      "class": "mi mi-phoenix-squadron"
+    },
+    {
+      "title": "php",
+      "class": "mi mi-php"
+    },
+    {
+      "title": "pied-piper-hat",
+      "class": "mi mi-pied-piper-hat"
+    },
+    {
+      "title": "pied-piper-pp",
+      "class": "mi mi-pied-piper-pp"
+    },
+    {
+      "title": "pinterest",
+      "class": "mi mi-pinterest"
+    },
+    {
+      "title": "pinterest-square",
+      "class": "mi mi-pinterest-square"
+    },
+    {
+      "title": "playstation",
+      "class": "mi mi-playstation"
+    },
+    {
+      "title": "pushed",
+      "class": "mi mi-pushed"
+    },
+    {
+      "title": "python",
+      "class": "mi mi-python"
+    },
+    {
+      "title": "quinscape",
+      "class": "mi mi-quinscape"
+    },
+    {
+      "title": "r-project",
+      "class": "mi mi-r-project"
+    },
+    {
+      "title": "raspberry-pi",
+      "class": "mi mi-raspberry-pi"
+    },
+    {
+      "title": "react",
+      "class": "mi mi-react"
+    },
+    {
+      "title": "reacteurope",
+      "class": "mi mi-reacteurope"
+    },
+    {
+      "title": "readme",
+      "class": "mi mi-readme"
+    },
+    {
+      "title": "red-river",
+      "class": "mi mi-red-river"
+    },
+    {
+      "title": "reddit",
+      "class": "mi mi-reddit"
+    },
+    {
+      "title": "reddit-square",
+      "class": "mi mi-reddit-square"
+    },
+    {
+      "title": "redhat",
+      "class": "mi mi-redhat"
+    },
+    {
+      "title": "replyd",
+      "class": "mi mi-replyd"
+    },
+    {
+      "title": "researchgate",
+      "class": "mi mi-researchgate"
+    },
+    {
+      "title": "resolving",
+      "class": "mi mi-resolving"
+    },
+    {
+      "title": "rev",
+      "class": "mi mi-rev"
+    },
+    {
+      "title": "rocketchat",
+      "class": "mi mi-rocketchat"
+    },
+    {
+      "title": "rockrms",
+      "class": "mi mi-rockrms"
+    },
+    {
+      "title": "sass",
+      "class": "mi mi-sass"
+    },
+    {
+      "title": "schlix",
+      "class": "mi mi-schlix"
+    },
+    {
+      "title": "searchengin",
+      "class": "mi mi-searchengin"
+    },
+    {
+      "title": "sellcast",
+      "class": "mi mi-sellcast"
+    },
+    {
+      "title": "servicestack",
+      "class": "mi mi-servicestack"
+    },
+    {
+      "title": "shopware",
+      "class": "mi mi-shopware"
+    },
+    {
+      "title": "sistrix",
+      "class": "mi mi-sistrix"
+    },
+    {
+      "title": "sith",
+      "class": "mi mi-sith"
+    },
+    {
+      "title": "sketch",
+      "class": "mi mi-sketch"
+    },
+    {
+      "title": "slack-hash",
+      "class": "mi mi-slack-hash"
+    },
+    {
+      "title": "snapchat",
+      "class": "mi mi-snapchat"
+    },
+    {
+      "title": "snapchat-square",
+      "class": "mi mi-snapchat-square"
+    },
+    {
+      "title": "sourcetree",
+      "class": "mi mi-sourcetree"
+    },
+    {
+      "title": "speakap",
+      "class": "mi mi-speakap"
+    },
+    {
+      "title": "squarespace",
+      "class": "mi mi-squarespace"
+    },
+    {
+      "title": "staylinked",
+      "class": "mi mi-staylinked"
+    },
+    {
+      "title": "steam-square",
+      "class": "mi mi-steam-square"
+    },
+    {
+      "title": "steam-symbol",
+      "class": "mi mi-steam-symbol"
+    },
+    {
+      "title": "sticker-mule",
+      "class": "mi mi-sticker-mule"
+    },
+    {
+      "title": "strava",
+      "class": "mi mi-strava"
+    },
+    {
+      "title": "stripe",
+      "class": "mi mi-stripe"
+    },
+    {
+      "title": "stripe-s",
+      "class": "mi mi-stripe-s"
+    },
+    {
+      "title": "studiovinari",
+      "class": "mi mi-studiovinari"
+    },
+    {
+      "title": "stumbleupon-circle",
+      "class": "mi mi-stumbleupon-circle"
+    },
+    {
+      "title": "supple",
+      "class": "mi mi-supple"
+    },
+    {
+      "title": "suse",
+      "class": "mi mi-suse"
+    },
+    {
+      "title": "teamspeak",
+      "class": "mi mi-teamspeak"
+    },
+    {
+      "title": "telegram-plane",
+      "class": "mi mi-telegram-plane"
+    },
+    {
+      "title": "the-red-yeti",
+      "class": "mi mi-the-red-yeti"
+    },
+    {
+      "title": "themeco",
+      "class": "mi mi-themeco"
+    },
+    {
+      "title": "think-peaks",
+      "class": "mi mi-think-peaks"
+    },
+    {
+      "title": "trade-federation",
+      "class": "mi mi-trade-federation"
+    },
+    {
+      "title": "tumblr-square",
+      "class": "mi mi-tumblr-square"
+    },
+    {
+      "title": "twitter-square",
+      "class": "mi mi-twitter-square"
+    },
+    {
+      "title": "typo3",
+      "class": "mi mi-typo3"
+    },
+    {
+      "title": "uber",
+      "class": "mi mi-uber"
+    },
+    {
+      "title": "ubuntu",
+      "class": "mi mi-ubuntu"
+    },
+    {
+      "title": "uikit",
+      "class": "mi mi-uikit"
+    },
+    {
+      "title": "uniregistry",
+      "class": "mi mi-uniregistry"
+    },
+    {
+      "title": "untappd",
+      "class": "mi mi-untappd"
+    },
+    {
+      "title": "ups",
+      "class": "mi mi-ups"
+    },
+    {
+      "title": "usb",
+      "class": "mi mi-usb"
+    },
+    {
+      "title": "usps",
+      "class": "mi mi-usps"
+    },
+    {
+      "title": "ussunnah",
+      "class": "mi mi-ussunnah"
+    },
+    {
+      "title": "vaadin",
+      "class": "mi mi-vaadin"
+    },
+    {
+      "title": "viadeo-square",
+      "class": "mi mi-viadeo-square"
+    },
+    {
+      "title": "viber",
+      "class": "mi mi-viber"
+    },
+    {
+      "title": "vimeo-square",
+      "class": "mi mi-vimeo-square"
+    },
+    {
+      "title": "vimeo-v",
+      "class": "mi mi-vimeo-v"
+    },
+    {
+      "title": "vnv",
+      "class": "mi mi-vnv"
+    },
+    {
+      "title": "vuejs",
+      "class": "mi mi-vuejs"
+    },
+    {
+      "title": "weebly",
+      "class": "mi mi-weebly"
+    },
+    {
+      "title": "whatsapp-square",
+      "class": "mi mi-whatsapp-square"
+    },
+    {
+      "title": "whmcs",
+      "class": "mi mi-whmcs"
+    },
+    {
+      "title": "wix",
+      "class": "mi mi-wix"
+    },
+    {
+      "title": "wizards-of-the-coast",
+      "class": "mi mi-wizards-of-the-coast"
+    },
+    {
+      "title": "wolf-pack-battalion",
+      "class": "mi mi-wolf-pack-battalion"
+    },
+    {
+      "title": "wordpress-simple",
+      "class": "mi mi-wordpress-simple"
+    },
+    {
+      "title": "wpforms",
+      "class": "mi mi-wpforms"
+    },
+    {
+      "title": "wpressr",
+      "class": "mi mi-wpressr"
+    },
+    {
+      "title": "xbox",
+      "class": "mi mi-xbox"
+    },
+    {
+      "title": "xing-square",
+      "class": "mi mi-xing-square"
+    },
+    {
+      "title": "y-combinator",
+      "class": "mi mi-y-combinator"
+    },
+    {
+      "title": "yandex",
+      "class": "mi mi-yandex"
+    },
+    {
+      "title": "yandex-international",
+      "class": "mi mi-yandex-international"
+    },
+    {
+      "title": "yarn",
+      "class": "mi mi-yarn"
+    },
+    {
+      "title": "youtube-square",
+      "class": "mi mi-youtube-square"
+    },
+    {
+      "title": "zhihu",
+      "class": "mi mi-zhihu"
+    }
+  ]
+}
