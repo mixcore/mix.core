@@ -65,20 +65,20 @@ namespace Mix.Lib.Extensions
                 entity.Property(e => e.Id)
                     .HasColumnType("varchar(50)")
                     .HasCharSet("utf8")
-                    .HasCollation("und-x-icu");
+                    .UseCollation("und-x-icu");
 
                 entity.Property(e => e.ConcurrencyStamp)
                 .HasColumnType("varchar(400)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
                 entity.Property(e => e.Name).HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
                 entity.Property(e => e.NormalizedName).HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
             });
 
             modelBuilder.Entity<AspNetUserClaims>(entity =>

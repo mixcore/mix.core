@@ -20,7 +20,7 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                .HasConversion(new EnumToStringConverter<MixDataType>())
                .HasColumnType("varchar(50)")
                .HasCharSet("utf8")
-               .HasCollation("NOCASE");
+               .UseCollation("NOCASE");
 
             entity.Property(e => e.MixDatabaseName).HasMaxLength(250);
 
@@ -51,7 +51,7 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                .HasConversion(new EnumToStringConverter<MixContentStatus>())
                .HasColumnType("varchar(50)")
                .HasCharSet("utf8")
-               .HasCollation("NOCASE");
+               .UseCollation("NOCASE");
         }
     }
 }

@@ -71,7 +71,7 @@ namespace Mix.Lib.Services
             if (token != null)
             {
                 token.Info = new MixUserViewModel(user);
-                await token.Info.LoadUserDataAsync();
+                token.Info.LoadUserData();
 
                 var plainText = JObject.FromObject(token).ToString(Formatting.None).Replace("\r\n", string.Empty);
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);

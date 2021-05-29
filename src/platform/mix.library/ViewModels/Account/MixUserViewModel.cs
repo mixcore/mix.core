@@ -37,7 +37,7 @@ namespace Mix.Lib.ViewModels.Account
             User = user;
         }
 
-        public async Task LoadUserDataAsync()
+        public void LoadUserData()
         {
             // TODO: Update later
             //if (User != null)
