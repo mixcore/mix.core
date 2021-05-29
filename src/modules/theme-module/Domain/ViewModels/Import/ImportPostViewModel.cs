@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Mix.Lib.ViewModels.Cms;
 
 namespace Mix.Theme.Domain.ViewModels.Import
 {
@@ -97,41 +98,27 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Views
 
-        [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public List<MixPagePost> Pages { get; set; }
 
-        [JsonProperty("categories")]
-        public List<MixPagePosts.ReadViewModel> Pages { get; set; }
+        public List<MixModulePost> Modules { get; set; } // Parent to Modules
 
-        [JsonProperty("modules")]
-        public List<MixModulePosts.ReadViewModel> Modules { get; set; } // Parent to Modules
+        public List<MixPostMedia> MediaNavs { get; set; }
 
-        [JsonProperty("mediaNavs")]
-        public List<MixPostMedias.ReadViewModel> MediaNavs { get; set; }
+        public List<MixPostAssociation> PostNavs { get; set; }
 
-        [JsonProperty("postNavs")]
-        public List<MixPostPosts.ReadViewModel> PostNavs { get; set; }
-
-        [JsonProperty("listTag")]
         public JArray ListTag { get; set; } = new JArray();
 
-        [JsonProperty("attributes")]
-        public MixDatabases.ImportViewModel Attributes { get; set; }
+        public ImportMixDatabaseViewModel Attributes { get; set; }
+        
+        public ImportMixDataAssociationViewModel AttributeData { get; set; }
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.UpdateViewModel AttributeData { get; set; }
+        public List<ImportMixDataAssociationViewModel> SysCategories { get; set; }
 
-        [JsonProperty("sysCategories")]
-        public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; }
+        public List<ImportMixDataAssociationViewModel> SysTags { get; set; }
 
-        [JsonProperty("sysTags")]
-        public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; }
+        public List<UrlAliasViewModel> UrlAliases { get; set; }
 
-        [JsonProperty("urlAliases")]
-        public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
-
-        [JsonProperty("relatedData")]
-        public MixDatabaseDataAssociations.ImportViewModel RelatedData { get; set; }
+        public ImportMixDataAssociationViewModel RelatedData { get; set; }
 
         #endregion Views
 
@@ -158,7 +145,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         private void GetAdditionalData(string id, MixDatabaseParentType type, MixCmsContext context, IDbContextTransaction transaction)
         {
-            var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetFirstModel(
+            var getRelatedData = ImportMixDataAssociationViewModel.Repository.GetFirstModel(
                         m => m.Specificulture == Specificulture && m.ParentType == type
                             && m.ParentId == id, context, transaction);
             if (getRelatedData.IsSucceed)

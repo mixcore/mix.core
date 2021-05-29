@@ -6,6 +6,10 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Mix.Lib.Entities.Cms;
+using Mix.Lib.Enums;
+using Mix.Lib.Constants;
+using Mix.Lib.Repositories;
+using Mix.Lib.Models.Common;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -16,59 +20,41 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         #region Models
 
-        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [JsonProperty("themeId")]
         public int ThemeId { get; set; }
 
-        [JsonProperty("themeName")]
         public string ThemeName { get; set; }
 
-        [JsonProperty("folderType")]
         public string FolderType { get; set; }
 
-        [JsonProperty("fileFolder")]
         public string FileFolder { get; set; }
 
-        [JsonProperty("fileName")]
         public string FileName { get; set; }
 
-        [JsonProperty("extension")]
         public string Extension { get; set; }
 
         [Required]
-        [JsonProperty("content")]
         public string Content { get; set; }
 
-        [JsonProperty("mobileContent")]
         public string MobileContent { get; set; } = "{}";
 
-        [JsonProperty("spaContent")]
         public string SpaContent { get; set; } = "";
 
-        [JsonProperty("scripts")]
         public string Scripts { get; set; }
 
-        [JsonProperty("styles")]
         public string Styles { get; set; }
 
-        [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
-        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonProperty("modifiedBy")]
         public string ModifiedBy { get; set; }
 
-        [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
 
-        [JsonProperty("priority")]
         public int Priority { get; set; }
 
-        [JsonProperty("status")]
         public MixContentStatus Status { get; set; }
 
         #endregion Models
@@ -149,7 +135,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public override RepositoryResponse<bool> SaveSubModels(MixTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            TemplateRepository.Instance.SaveTemplate(new TemplateViewModel()
+            TemplateRepository.Instance.SaveTemplate(new TemplateModel()
             {
                 Filename = FileName,
                 Extension = Extension,
@@ -175,7 +161,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public override Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            TemplateRepository.Instance.SaveTemplate(new TemplateViewModel()
+            TemplateRepository.Instance.SaveTemplate(new TemplateModel()
             {
                 Filename = FileName,
                 Extension = Extension,

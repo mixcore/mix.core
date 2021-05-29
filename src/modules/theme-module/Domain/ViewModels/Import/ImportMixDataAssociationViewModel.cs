@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace Mix.Theme.Domain.ViewModels.Import
 {
-    public class ImportDataAssociationViewModel
-      : ViewModelBase<MixCmsContext, MixDatabaseDataAssociation, ImportDataAssociationViewModel>
+    public class ImportMixDataAssociationViewModel
+      : ViewModelBase<MixCmsContext, MixDatabaseDataAssociation, ImportMixDataAssociationViewModel>
     {
         #region Properties
 
@@ -65,11 +65,11 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Contructors
 
-        public ImportDataAssociationViewModel() : base()
+        public ImportMixDataAssociationViewModel() : base()
         {
         }
 
-        public ImportDataAssociationViewModel(MixDatabaseDataAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ImportMixDataAssociationViewModel(MixDatabaseDataAssociation model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 

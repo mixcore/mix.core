@@ -10,7 +10,9 @@ using Mix.Lib.Entities.Account;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
 using Mix.Services;
+using Mix.Theme.Domain.Helpers;
 using Mix.Theme.Domain.Models;
+using Mix.Theme.Domain.ViewModels.Import;
 using Mix.Theme.Domain.ViewModels.Init;
 using Newtonsoft.Json.Linq;
 using System;
@@ -158,7 +160,7 @@ namespace Mix.Lib.Services
                 configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeName).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
                 configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeFolder).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
             }
-            var result = await ViewModels.MixConfigurations.UpdateViewModel.ImportConfigurations(configurations, specifiCulture, context, transaction);
+            var result = await ThemeHelper.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
@@ -182,7 +184,7 @@ namespace Mix.Lib.Services
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             var getData = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getData.Content);
-            var data = obj["data"].ToObject<List<ViewModels.MixDatabases.UpdateViewModel>>();
+            var data = obj["data"].ToObject<List<ImportMixDatabaseViewModel>>();
             foreach (var item in data)
             {
                 if (result.IsSucceed)
@@ -216,7 +218,7 @@ namespace Mix.Lib.Services
             /* Init Languages */
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
 
-            var result = await ViewModels.MixLanguages.UpdateViewModel.ImportLanguages(languages, specificulture, context, transaction);
+            var result = await ThemeHelper.ImportLanguages(languages, specificulture, context, transaction);
 
             UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return result;

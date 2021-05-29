@@ -11,7 +11,10 @@ using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels.Account;
+using Mix.Services;
 using Mix.Theme.Domain.Dtos;
+using Mix.Theme.Domain.Helpers;
+using Mix.Theme.Domain.ViewModels.Init;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +24,8 @@ namespace Mix.Theme.Controllers.v2
 {
     [Route("api/v2/mix-theme/init")]
     [ApiController]
-    public class InitController
+    public class InitController: Controller
     {
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MixIdentityService _idService;
 
@@ -119,37 +121,6 @@ namespace Mix.Theme.Controllers.v2
             return result;
         }
 
-        // /// <summary>
-        // /// Step 3 Run when status = 2
-        // ///     - Init Cms Configurations from files data/configuration.json
-        // /// </summary>
-        // /// <param name="model"></param>
-        // /// <returns></returns>
-        // [HttpPost, HttpOptions]
-        // [Route("init-cms/step-5")]
-        // public async Task<RepositoryResponse<bool>> InitConfigurations([FromBody]List<MixConfiguration> model)
-        // {
-        //     if (model != null)
-        //     {
-        //         var result = new RepositoryResponse<bool>();
-        //         if (MixService.GetConfig<int>("InitStatus") == 4)
-        //         {
-        //             string culture = MixService.GetConfig<string>("DefaultCulture");
-        //             InitCmsService sv = new InitCmsService();
-        //             result = await sv.InitConfigurationsAsync(culture, model);
-        //             if (result.IsSucceed)
-        //             {
-        //                 MixService.LoadFromDatabase();
-        //                 MixService.SetConfig("InitStatus", 5);
-        //                 MixService.SaveSettings();
-        //                 MixService.Reload();
-        //             }
-        //         }
-        //         return result;
-        //     }
-        //     return new RepositoryResponse<bool>();
-        // }
-
         /// <summary>
         /// Step 4 when status = 3
         ///     - Init Languages for translate from languages.json
@@ -192,10 +163,11 @@ namespace Mix.Theme.Controllers.v2
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3")]
         [DisableRequestSizeLimit]
-        public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
+        public async Task<RepositoryResponse<InitThemeViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
+            string _lang = MixService.GetConfig<string>("Language");
             string user = _idService._helper.GetClaim(User, MixClaims.Username);
-            return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
+            return await ThemeHelper.InitTheme(model, user, _lang, assets, theme);
         }
 
         /// <summary>
@@ -207,10 +179,10 @@ namespace Mix.Theme.Controllers.v2
         [HttpPost, HttpOptions]
         [Route("init-cms/step-3/active")]
         [DisableRequestSizeLimit]
-        public async Task<ActionResult<bool>> Active([FromBody] Lib.ViewModels.MixThemes.UpdateViewModel model)
+        public async Task<ActionResult<bool>> Active([FromBody] InitThemeViewModel model)
         {
             model.IsActived = true;
-            var result = await Cms.Lib.ViewModels.MixThemes.Helper.ActivedThemeAsync(model.Id, model.Name, model.Specificulture);
+            var result = await ThemeHelper.ActivedThemeAsync(model.Id, model.Name, model.Specificulture);
             if (result.IsSucceed)
             {
                 // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
@@ -218,7 +190,7 @@ namespace Mix.Theme.Controllers.v2
                 MixService.SetConfig("InitStatus", 3);
                 MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
                 MixService.SaveSettings();
-                _ = Mix.Services.MixCacheService.RemoveCacheAsync();
+                _ = MixCacheService.RemoveCacheAsync();
                 MixService.Reload();
             }
             return Ok(result);
