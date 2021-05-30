@@ -38,7 +38,7 @@ namespace Mix.Lib.ViewModels.Cms
         public DateTime CreatedDateTime { get; set; }
         public DateTime? LastModified { get; set; }
 
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         public string FullPath
         {
@@ -115,7 +115,7 @@ namespace Mix.Lib.ViewModels.Cms
             }
             if (MediaFile?.FileStream != null)
             {
-                FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
+                FileFolder = $"{MixAppSettingService.GetTemplateUploadFolder(Specificulture)}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);

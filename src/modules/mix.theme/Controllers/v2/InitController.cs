@@ -9,6 +9,7 @@ using Mix.Identity.Models;
 using Mix.Lib;
 using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
+using Mix.Lib.Enums;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels.Account;
 using Mix.Services;
@@ -54,7 +55,7 @@ namespace Mix.Theme.Controllers.v2
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                if (MixService.GetConfig<int>("InitStatus") == 0)
+                if (MixAppSettingService.GetConfig<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
                 }
@@ -82,7 +83,7 @@ namespace Mix.Theme.Controllers.v2
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
+                    Avatar = model.Avatar ?? MixAppSettingService.GetConfig<string>("DefaultAvatar"),
                     JoinDate = DateTime.UtcNow
                 };
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
@@ -92,17 +93,17 @@ namespace Mix.Theme.Controllers.v2
                     await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
                     //await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                    var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                    var aesKey = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
 
                     var token = await _idService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
                         result.IsSucceed = true;
-                        MixService.LoadFromDatabase();
-                        MixService.SetConfig<string>(MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                        MixService.SetConfig("InitStatus", 2);
-                        MixService.SaveSettings();
-                        MixService.Reload();
+                        MixAppSettingService.LoadFromDatabase();
+                        MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
+                        MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 2);
+                        MixAppSettingService.SaveSettings();
+                        MixAppSettingService.Reload();
                         result.Data = token;
                         return result;
                     }
@@ -134,7 +135,7 @@ namespace Mix.Theme.Controllers.v2
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<InitThemeViewModel>> Save(InitThemePackageDto request)
         {
-            string _lang = MixService.GetConfig<string>("Language");
+            string _lang = MixAppSettingService.GetConfig<string>("Language");
             string user = _idService._helper.GetClaim(User, MixClaims.Username);
             return await ThemeHelper.InitTheme(request, user, _lang);
         }
@@ -153,19 +154,19 @@ namespace Mix.Theme.Controllers.v2
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>();
-                if (MixService.GetConfig<int>("InitStatus") == 3)
+                if (MixAppSettingService.GetConfig<int>("InitStatus") == 3)
                 {
-                    string culture = MixService.GetConfig<string>("DefaultCulture");
+                    string culture = MixAppSettingService.GetConfig<string>("DefaultCulture");
                     InitCmsService sv = new InitCmsService();
                     result = await sv.InitLanguagesAsync(culture, model);
                     if (result.IsSucceed)
                     {
-                        MixService.LoadFromDatabase();
-                        MixService.SetConfig("InitStatus", 4);
-                        MixService.SetConfig(MixAppSettingKeywords.IsInit, true);
-                        MixService.SaveSettings();
+                        MixAppSettingService.LoadFromDatabase();
+                        MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 4);
+                        MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, true);
+                        MixAppSettingService.SaveSettings();
                         _ = Services.MixCacheService.RemoveCacheAsync();
-                        MixService.Reload();
+                        MixAppSettingService.Reload();
                     }
                 }
                 return result;
@@ -189,12 +190,12 @@ namespace Mix.Theme.Controllers.v2
             if (result.IsSucceed)
             {
                 // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
-                MixService.LoadFromDatabase();
-                MixService.SetConfig("InitStatus", 3);
-                MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
-                MixService.SaveSettings();
+                MixAppSettingService.LoadFromDatabase();
+                MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 3);
+                MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
+                MixAppSettingService.SaveSettings();
                 _ = MixCacheService.RemoveCacheAsync();
-                MixService.Reload();
+                MixAppSettingService.Reload();
             }
             return Ok(result);
         }
@@ -204,25 +205,25 @@ namespace Mix.Theme.Controllers.v2
 
         private async Task<RepositoryResponse<bool>> InitStep1Async(InitCmsDto model)
         {
-            MixService.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
-            MixService.SetConnectionString(MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
-            MixService.SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
-            MixService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider.ToString());
-            MixService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
-            MixService.SetMixConfig<string>(WebConfiguration.MixCacheConnectionString, model.ConnectionString);
-            MixService.SetMixConfig<string>(WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
-            MixService.SaveSettings();
-            MixService.Reload();
+            MixAppSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
+            MixAppSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
+            MixAppSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, MixConstants.CONST_ACCOUNT_CONNECTION, model.ConnectionString);
+            MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER, model.DatabaseProvider.ToString());
+            MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_LANGUAGE, model.Culture.Specificulture);
+            MixAppSettingService.SetConfig(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
+            MixAppSettingService.SetConfig(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
+            MixAppSettingService.SaveSettings();
+            MixAppSettingService.Reload();
             var result = await InitCmsService.InitCms(model.SiteName, model.Culture);
 
             if (result.IsSucceed)
             {
                 await InitRolesAsync();
                 result.IsSucceed = true;
-                MixService.LoadFromDatabase();
-                MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
-                MixService.SetConfig("InitStatus", 1);
-                MixService.SaveSettings();
+                MixAppSettingService.LoadFromDatabase();
+                MixAppSettingService.SetConfig<string>(MixAppSettingsSection.GlobalSettings, "DefaultCulture", model.Culture.Specificulture);
+                MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 1);
+                MixAppSettingService.SaveSettings();
                 //MixService.Reload();
             }
             else
@@ -230,8 +231,8 @@ namespace Mix.Theme.Controllers.v2
                 // if cannot init cms
                 //  => reload from default settings
                 //  => save to appSettings
-                MixService.Reload();
-                MixService.SaveSettings();
+                MixAppSettingService.Reload();
+                MixAppSettingService.SaveSettings();
             }
             return result;
         }

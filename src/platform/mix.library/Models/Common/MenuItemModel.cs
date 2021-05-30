@@ -22,7 +22,7 @@ namespace Mix.Lib.Models.Common
         {
             get
             {
-                var domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                var domain = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain);
                 return Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
             }
         }
