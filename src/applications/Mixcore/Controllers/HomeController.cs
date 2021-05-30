@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Mix.Lib.Services;
 using Mixcore.Models;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,13 @@ namespace Mixcore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly TranslatorService _translator;
+        public HomeController(ILogger<HomeController> logger, 
+            TranslatorService translator)
         {
             _logger = logger;
+            _translator = translator;
+            _translator.Translate<string>("Ok", "en-us");
         }
 
         public IActionResult Index()

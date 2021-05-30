@@ -94,9 +94,9 @@ namespace Mix.Lib.ViewModels.Cms
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed && _context == null)
             {
-                MixService.SetConfig("LastUpdateConfiguration", DateTime.UtcNow);
-                MixService.LoadFromDatabase();
-                MixService.SaveSettings();
+                MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "LastUpdateConfiguration", DateTime.UtcNow);
+                MixAppSettingService.LoadFromDatabase();
+                MixAppSettingService.SaveSettings();
             }
             return result;
         }

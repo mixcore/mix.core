@@ -23,7 +23,7 @@ namespace Mix.Lib.Models.Common
         
         public SearchQueryModel(HttpRequest request, string culture = null)
         {
-            Specificulture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            Specificulture = culture ?? MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate: null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)
@@ -37,7 +37,7 @@ namespace Mix.Lib.Models.Common
         
         public SearchQueryModel(SearchRequestDto request, string culture = null)
         {
-            Specificulture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            Specificulture = culture ?? MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             FromDate = request.FromDate;
             ToDate = request.ToDate;
             Status = request.Status;

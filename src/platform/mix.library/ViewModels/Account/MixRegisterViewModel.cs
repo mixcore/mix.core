@@ -83,7 +83,7 @@ namespace Mix.Lib.ViewModels.Account
         public List<NavUserRoleViewModel> UserRoles { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public string Domain => MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl {

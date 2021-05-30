@@ -37,7 +37,7 @@ namespace Mix.Theme.Domain.Helpers
             var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
-                string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                string domain = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain);
                 string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
@@ -124,19 +124,19 @@ namespace Mix.Theme.Domain.Helpers
                     }
                 }
 
-                data.Title = MixService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
+                data.Title = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
                 data.Name = SeoHelper.GetSEOString(data.Title);
                 data.Specificulture = culture;
                 var result = await data.SaveModelAsync(true);
                 if (result.IsSucceed)
                 {
                     // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
-                    MixService.LoadFromDatabase();
-                    MixService.SetConfig("InitStatus", 3);
-                    MixService.SetConfig(MixAppSettingKeywords.IsInit, false);
-                    MixService.SaveSettings();
+                    MixAppSettingService.LoadFromDatabase();
+                    MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 3);
+                    MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
+                    MixAppSettingService.SaveSettings();
                     _ = Mix.Services.MixCacheService.RemoveCacheAsync();
-                    MixService.Reload();
+                    MixAppSettingService.Reload();
                 }
                 return result;
             }

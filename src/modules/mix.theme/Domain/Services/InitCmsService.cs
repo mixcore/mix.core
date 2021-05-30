@@ -47,8 +47,8 @@ namespace Mix.Lib.Services
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    context = MixService.GetDbContext();
-                    accountContext = MixService.GetAccountDbContext();
+                    context = MixAppSettingService.GetDbContext();
+                    accountContext = MixAppSettingService.GetAccountDbContext();
                     cacheContext = MixCacheService.GetCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
@@ -85,7 +85,7 @@ namespace Mix.Lib.Services
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    context = MixService.GetDbContext();
+                    context = MixAppSettingService.GetDbContext();
                     transaction = context.Database.BeginTransaction();
 
                     var countCulture = context.MixCulture.Count();

@@ -23,8 +23,8 @@ namespace Mix.Lib.Extensions
         public static IServiceCollection AddMixServices(this IServiceCollection services)
         {
             services.AddDbContext<MixDbContext>();
-            services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
-
+            services.AddMixAuthorize<MixDbContext>(MixAppSettingService.Instance.MixAuthentications);
+            services.AddScoped<TranslatorService>();
             var assemblies = GetMixAssemblies();
 
             foreach (var assembly in assemblies)

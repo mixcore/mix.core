@@ -37,7 +37,7 @@ namespace Mix.Theme.Domain.Helpers
                         var isCreateNew = string.IsNullOrEmpty(item.Id);
                         item.Columns = fields;
                         item.MixDatabaseName = mixDatabase.Name;
-                        item.Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus);
+                        item.Status = MixAppSettingService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus);
                         var saveResult = await item.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }

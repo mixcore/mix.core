@@ -9,7 +9,7 @@
         public const string CONST_SETTING_DATABASE_PROVIDER = "DatabaseProvider";
         public const string CONST_SETTING_LANGUAGE = "Language";
         public const string CONST_FILE_APPSETTING = "appsettings.json";
-        public const string CONST_DEFAULT_FILE_APPSETTING = "default.appsettings.json";
+        public const string CONST_DEFAULT_FILE_APPSETTING = "../../shared/default.appsettings.json";
         public const string CONST_FILE_CONFIGURATIONS = "configurations.json";
         public const string CONST_FILE_ATTRIBUTE_SETS = "attribute_sets.json";
         public const string CONST_FILE_POSITIONS = "menu-positions.json";

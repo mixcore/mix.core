@@ -52,7 +52,7 @@ namespace Mix.Lib.Entities.Account
             string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
                 switch (provider)
                 {
                     case MixDatabaseProvider.MSSQL:
@@ -80,7 +80,7 @@ namespace Mix.Lib.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = MixService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:

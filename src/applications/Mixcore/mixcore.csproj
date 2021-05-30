@@ -13,6 +13,7 @@
   <ItemGroup>
     <Content Include="..\..\shared\default.appsettings.json" Link="default.appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>
     <Content Include="..\..\shared\MixContent\data\enums.json" Link="MixContent\data\enums.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

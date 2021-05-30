@@ -39,7 +39,7 @@ namespace Mix.Lib.Models.Common
             }
 
             PageSize = request.Query.TryGetValue(MixRequestQueryKeywords.PageSize, out var pageSize)
-                ? int.Parse(pageSize) : MixService.GetConfig<int>(MixAppSettingKeywords.MaxPageSize);
+                ? int.Parse(pageSize) : MixAppSettingService.GetConfig<int>(MixAppSettingKeywords.MaxPageSize);
         }
     }
 }
