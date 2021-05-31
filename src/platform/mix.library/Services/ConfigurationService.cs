@@ -9,19 +9,10 @@ using System.Linq;
 
 namespace Mix.Lib.Services
 {
-    public class TranslatorService : JsonConfigurationServiceBase
+    public class ConfigurationService : JsonConfigurationServiceBase
     {
-        public TranslatorService() : base(MixAppConfigFilePath.Translator)
+        public ConfigurationService() : base(MixAppConfigFilePath.Configration)
         {
-        }
-        public static T Translate<T>(string name, string culture, T defaultVaule = default)
-        {
-            return GetConfig(culture, name, defaultVaule);
-        }
-
-        public static string TranslateString(string culture, string name, string defaultValue = null)
-        {
-            return GetConfig(culture, name) ?? defaultValue;
         }
 
         public static void Reload(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -31,14 +22,14 @@ namespace Mix.Lib.Services
             try
             {
                 var translator = new JObject();
-                var ListLanguage = context.MixLanguage.ToList();
+                var lstConfig = context.MixConfiguration.ToList();
                 var cultures = context.MixCulture.ToList();
                 foreach (var culture in cultures)
                 {
                     JObject arr = new();
-                    foreach (var lang in ListLanguage.Where(l => l.Specificulture == culture.Specificulture).ToList())
+                    foreach (var conf in lstConfig.Where(l => l.Specificulture == culture.Specificulture).ToList())
                     {
-                        JProperty l = new(lang.Keyword, lang.Value ?? lang.DefaultValue);
+                        JProperty l = new(conf.Keyword, conf.Value);
                         arr.Add(l);
                     }
                     translator.Add(new JProperty(culture.Specificulture, arr));

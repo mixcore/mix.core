@@ -3,6 +3,7 @@ using Mix.Lib.Constants;
 using Mix.Lib.Enums;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
@@ -30,7 +31,7 @@ namespace Mix.Lib.Services
 
         public static void SendMail(string subject, string message, string to, string from = null)
         {
-            MailMessage mailMessage = new MailMessage
+            MailMessage mailMessage = new()
             {
                 IsBodyHtml = true,
                 From = new MailAddress(from)
@@ -45,7 +46,7 @@ namespace Mix.Lib.Services
                 string pwd = MixAppSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Password");
                 int port = MixAppSettingService.GetConfig<int>(MixAppSettingsSection.Smtp, "Port");
                 bool ssl = MixAppSettingService.GetConfig<bool>(MixAppSettingsSection.Smtp, "SSL");
-                SmtpClient client = new SmtpClient(server)
+                SmtpClient client = new(server)
                 {
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(user, pwd),
@@ -59,7 +60,7 @@ namespace Mix.Lib.Services
             {
                 try
                 {
-                    SmtpClient smtpClient = new SmtpClient
+                    SmtpClient smtpClient = new()
                     {
                         UseDefaultCredentials = true
                     };
@@ -75,7 +76,7 @@ namespace Mix.Lib.Services
 
         public static void LogException(Exception ex)
         {
-            string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now.ToString("dd-MM-yyyy")}";
+            string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
             {
                 Directory.CreateDirectory(fullPath);
@@ -84,7 +85,7 @@ namespace Mix.Lib.Services
 
             try
             {
-                FileInfo file = new FileInfo(filePath);
+                FileInfo file = new(filePath);
                 string content = "[]";
                 if (file.Exists)
                 {
@@ -96,7 +97,7 @@ namespace Mix.Lib.Services
                 }
 
                 JArray arrExceptions = JArray.Parse(content);
-                JObject jex = new JObject
+                JObject jex = new()
                 {
                     new JProperty("CreatedDateTime", DateTime.UtcNow),
                     new JProperty("Details", JObject.FromObject(ex))
@@ -104,10 +105,8 @@ namespace Mix.Lib.Services
                 arrExceptions.Add(jex);
                 content = arrExceptions.ToString();
 
-                using (var writer = File.CreateText(filePath))
-                {
-                    writer.WriteLine(content);
-                }
+                using var writer = File.CreateText(filePath);
+                writer.WriteLine(content);
             }
             catch
             {

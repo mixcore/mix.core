@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Constants;
+﻿using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Common.Helper;
 using Mix.Heart.Enums;
@@ -8,11 +7,12 @@ using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using Mix.Identity.Models;
 using Mix.Lib.Entities.Account;
 using Mix.Lib.Enums;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mix.Lib.Services
 {
@@ -21,7 +21,7 @@ namespace Mix.Lib.Services
         /// <summary>
         /// The synchronize root
         /// </summary>
-        private static readonly object syncRoot = new Object();
+        private static readonly object syncRoot = new();
 
         /// <summary>
         /// The instance
@@ -30,9 +30,10 @@ namespace Mix.Lib.Services
 
         private static volatile MixAppSettingService defaultInstance;
 
+        private List<string> Cultures { get; set; }
         private JObject AppSettings { get; set; }
-        private readonly FileSystemWatcher watcher = new FileSystemWatcher();
-        public MixAuthenticationConfigurations MixAuthentications { get => instance.AppSettings[MixAppSettingsSection.Authentication.ToString()].ToObject<MixAuthenticationConfigurations>(); }
+        private readonly FileSystemWatcher watcher = new();
+        public static MixAuthenticationConfigurations MixAuthentications { get => instance.AppSettings[MixAppSettingsSection.Authentication.ToString()].ToObject<MixAuthenticationConfigurations>(); }
 
         public MixAppSettingService()
         {
@@ -53,7 +54,7 @@ namespace Mix.Lib.Services
                         if (instance == null)
                         {
                             instance = new MixAppSettingService();
-                            instance.LoadAppSettings();
+                            LoadAppSettings();
                         }
                     }
                 }
@@ -73,7 +74,7 @@ namespace Mix.Lib.Services
                         if (defaultInstance == null)
                         {
                             defaultInstance = new MixAppSettingService();
-                            defaultInstance.LoadDefaultAppSettings();
+                            LoadDefaultAppSettings();
                         }
                     }
                 }
@@ -82,10 +83,19 @@ namespace Mix.Lib.Services
             }
         }
 
-        private void LoadAppSettings()
+        public bool CheckValidCulture(string specificulture)
+        {
+            if (Cultures == null)
+            {
+                using MixCmsContext _context = new();
+                Instance.Cultures = _context.MixCulture.Select(c => c.Specificulture).ToList() ?? new List<string>();
+            }
+            return Instance.Cultures.Any(c => c == specificulture);
+        }
+
+        private static void LoadAppSettings()
         {
             // Load configurations from appSettings.json
-            JObject jsonSettings = new JObject();
             var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_APPSETTING, string.Empty, true);
 
             if (string.IsNullOrEmpty(settings.Content))
@@ -94,27 +104,26 @@ namespace Mix.Lib.Services
             }
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
-            jsonSettings = JObject.Parse(content);
+            JObject jsonSettings = JObject.Parse(content);
 
             instance.AppSettings = jsonSettings;
             MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
-        private void LoadDefaultAppSettings()
+        private static void LoadDefaultAppSettings()
         {
             // Load configurations from appSettings.json
-            JObject jsonSettings = new JObject();
             var settings = MixFileRepository.Instance.GetFile(MixConstants.CONST_DEFAULT_FILE_APPSETTING, string.Empty, true);
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
-            jsonSettings = JObject.Parse(content);
+            JObject jsonSettings = JObject.Parse(content);
             DefaultInstance.AppSettings = jsonSettings;
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(500);
-            Instance.LoadAppSettings();
+            LoadAppSettings();
         }
 
         public static T GetConfig<T>(MixAppSettingsSection section, string name, T defaultValue = default)
@@ -173,17 +182,6 @@ namespace Mix.Lib.Services
             Instance.AppSettings[section.ToString()][culture][name] = value.ToString();
         }
 
-       
-        public static JObject GetTranslator(string culture)
-        {
-            return JObject.FromObject(Instance.AppSettings[MixAppSettingsSection.Translator.ToString()][culture] ?? new JObject());
-        }
-
-        public static JObject GetLocalizeSettings(string culture)
-        {
-            return JObject.FromObject(Instance.AppSettings[MixAppSettingsSection.LocalSettings.ToString()][culture] ?? new JObject());
-        }
-
         public static JObject GetGlobalSetting()
         {
             return JObject.FromObject(Instance.AppSettings[MixAppSettingsSection.GlobalSettings.ToString()]);
@@ -212,8 +210,6 @@ namespace Mix.Lib.Services
                     jsonSettings["ConnectionStrings"] = instance.AppSettings[MixAppSettingsSection.ConnectionStrings.ToString()];
                     jsonSettings["GlobalSettings"] = instance.AppSettings[MixAppSettingsSection.GlobalSettings.ToString()];
                     jsonSettings["GlobalSettings"]["LastUpdateConfiguration"] = DateTime.UtcNow;
-                    jsonSettings["Translator"] = instance.AppSettings[MixAppSettingsSection.Translator.ToString()];
-                    jsonSettings["LocalSettings"] = instance.AppSettings[MixAppSettingsSection.LocalSettings.ToString()];
                     jsonSettings["Authentication"] = instance.AppSettings[MixAppSettingsSection.Authentication.ToString()];
                     jsonSettings["IpSecuritySettings"] = instance.AppSettings[MixAppSettingsSection.IpSecuritySettings.ToString()];
                     jsonSettings["Smtp"] = instance.AppSettings[MixAppSettingsSection.Smtp.ToString()];
@@ -238,114 +234,31 @@ namespace Mix.Lib.Services
 
         public static void Reload()
         {
-            Instance.LoadAppSettings();
+            LoadAppSettings();
             MixCommonHelper.ReloadWebConfig();
-        }
-
-        public static void LoadFromDatabase(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction
-                , out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
-            try
-            {
-                var translator = new JObject();
-                var ListLanguage = context.MixLanguage.ToList();
-                var cultures = context.MixCulture.ToList();
-                foreach (var culture in cultures)
-                {
-                    JObject arr = new JObject();
-                    foreach (var lang in ListLanguage.Where(l => l.Specificulture == culture.Specificulture).ToList())
-                    {
-                        JProperty l = new JProperty(lang.Keyword, lang.Value ?? lang.DefaultValue);
-                        arr.Add(l);
-                    }
-                    translator.Add(new JProperty(culture.Specificulture, arr));
-                }
-                Instance.AppSettings[MixAppSettingsSection.Translator] = translator;
-
-                var localConfigurations = new JObject();
-                var listLocalSettings = context.MixConfiguration.ToList();
-                foreach (var culture in cultures)
-                {
-                    JObject arr = new JObject();
-                    foreach (var cnf in listLocalSettings.Where(l => l.Specificulture == culture.Specificulture).ToList())
-                    {
-                        JProperty l = new JProperty(cnf.Keyword, cnf.Value);
-                        arr.Add(l);
-                    }
-                    localConfigurations.Add(new JProperty(culture.Specificulture, arr));
-                }
-                Instance.AppSettings[MixAppSettingsSection.LocalSettings] = localConfigurations;
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(true, isRoot, transaction);
-            }
-            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
-            {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixLanguage>(ex, isRoot, transaction);
-            }
-            finally
-            {
-                //if current Context is Root
-                if (isRoot)
-                {
-                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
-                }
-            }
-        }
-
-
-
-
-
-        public static string GetTemplateFolder(string culture)
-        {
-            return $"{MixFolders.SiteContentAssetsFolder}/{Instance.AppSettings[MixAppSettingsSection.LocalSettings][culture][MixAppSettingKeywords.ThemeFolder]}";
-        }
-
-        public static string GetTemplateUploadFolder(string culture)
-        {
-            return $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{Instance.AppSettings[MixAppSettingsSection.LocalSettings][culture][MixAppSettingKeywords.ThemeFolder]}/" +
-                $"uploads/" +
-                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 
         public static MixCmsContext GetDbContext()
         {
             var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            switch (provider)
+            return provider switch
             {
-                case MixDatabaseProvider.MSSQL:
-                    return new MsSqlMixCmsContext();
-
-                case MixDatabaseProvider.MySQL:
-                    return new MySqlMixCmsContext();
-
-                case MixDatabaseProvider.SQLITE:
-                    return new SqliteMixCmsContext();
-
-                case MixDatabaseProvider.PostgreSQL:
-                    return new PostgresqlMixCmsContext();
-
-                default:
-                    return null;
-            }
+                MixDatabaseProvider.MSSQL => new MsSqlMixCmsContext(),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(),
+                _ => null,
+            };
         }
         public static MixCmsAccountContext GetAccountDbContext()
         {
             var provider = GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            switch (provider)
+            return provider switch
             {
-                case MixDatabaseProvider.MSSQL:
-                case MixDatabaseProvider.MySQL:
-                case MixDatabaseProvider.SQLITE:
-                    return new SQLAccountContext();
-
-                case MixDatabaseProvider.PostgreSQL:
-                    return new PostgresSQLAccountContext();
-
-                default:
-                    return null;
-            }
+                MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
+                _ => null,
+            };
         }
     }
 }

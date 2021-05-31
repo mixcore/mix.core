@@ -90,7 +90,7 @@ namespace Mix.Lib.ViewModels.Account.MixUsers
         [JsonProperty("avatarUrl")]
         public string AvatarUrl {
             get {
-                if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
+                if (Avatar != null && (!Avatar.Contains("http", StringComparison.CurrentCulture) && Avatar[0] != '/'))
                 {
                     return $"{Domain}/{Avatar}";
                 }

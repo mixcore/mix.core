@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
+using Mix.Lib.Services;
 using System;
 
 namespace Mix.Lib.ViewModels.Cms
@@ -49,6 +52,54 @@ namespace Mix.Lib.ViewModels.Cms
         #endregion Overrides
 
         #region Expand
+        /// <summary>
+        /// Gets the template by path.
+        /// </summary>
+        /// <param name="path">The path.</param> Ex: "Pages/_Home"
+        /// <returns></returns>
+        public static RepositoryResponse<MixTemplateViewModel> GetTemplateByPath(string path, string culture
+            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            RepositoryResponse<MixTemplateViewModel> result = new();
+            string[] temp = path.Split('/');
+            if (temp.Length < 2)
+            {
+                result.IsSucceed = false;
+                result.Errors.Add("Template Not Found");
+            }
+            else
+            {
+                int activeThemeId = MixAppSettingService.GetConfig<int>(
+                    MixAppSettingKeywords.ThemeId, culture);
+                string name = temp[1].Split('.')[0];
+                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
+                    , _context, _transaction);
+            }
+            return result;
+        }
+
+        public static MixTemplateViewModel GetTemplateByPath(int themeId, string path, string type, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            string templateName = path?.Split('/')[1];
+            var getView = MixTemplateViewModel.Repository.GetSingleModel(t =>
+                    t.ThemeId == themeId && t.FolderType == type
+                    && !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"), _context, _transaction);
+            return getView.Data;
+        }
+
+        public static MixTemplateViewModel GetDefault(string activedTemplate, string folderType, string folder, string specificulture)
+        {
+            return new MixTemplateViewModel(new MixTemplate()
+            {
+                Extension = MixAppSettingService.GetConfig<string>("TemplateExtension"),
+                ThemeId = MixAppSettingService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
+                ThemeName = activedTemplate,
+                FolderType = folderType,
+                FileFolder = folder,
+                FileName = MixAppSettingService.GetConfig<string>("DefaultTemplate"),
+                Content = "<div></div>"
+            });
+        }
 
         #endregion Expand
     }

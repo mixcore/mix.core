@@ -38,10 +38,9 @@ namespace Mix.Lib.Services
         /// <returns></returns>
         public static async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCultureModel culture)
         {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>();
+            RepositoryResponse<bool> result = new();
             MixCmsContext context = null;
             MixCmsAccountContext accountContext = null;
-            MixCacheDbContext cacheContext = null;
             try
             {
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
@@ -49,7 +48,7 @@ namespace Mix.Lib.Services
                 {
                     context = MixAppSettingService.GetDbContext();
                     accountContext = MixAppSettingService.GetAccountDbContext();
-                    cacheContext = MixCacheService.GetCacheDbContext();
+                    MixCacheDbContext cacheContext = MixCacheService.GetCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     await cacheContext.Database.MigrateAsync();
@@ -77,10 +76,9 @@ namespace Mix.Lib.Services
 
         public static async Task<RepositoryResponse<bool>> InitSiteData(string siteName, InitCultureModel culture)
         {
-            RepositoryResponse<bool> result = new RepositoryResponse<bool>();
+            RepositoryResponse<bool> result = new();
             MixCmsContext context = null;
             IDbContextTransaction transaction = null;
-            bool isSucceed = true;
             try
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -91,14 +89,14 @@ namespace Mix.Lib.Services
                     var countCulture = context.MixCulture.Count();
 
                     /**
-                     * Init Selected Language as default
-                     */
-                    isSucceed = InitCultures(culture, context, transaction);
+         * Init Selected Language as default
+         */
+                    bool isSucceed = InitCultures(culture, context);
 
                     /**
                      * Init System Configurations
                      */
-                    if (isSucceed && context.MixConfiguration.Count() == 0)
+                    if (isSucceed && !context.MixConfiguration.Any())
                     {
                         var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
                         result.IsSucceed = saveResult.IsSucceed;
@@ -256,12 +254,12 @@ namespace Mix.Lib.Services
             return new RepositoryResponse<bool>() { IsSucceed = result.IsSucceed };
         }
 
-        protected static bool InitCultures(InitCultureModel culture, MixCmsContext context, IDbContextTransaction transaction)
+        protected static bool InitCultures(InitCultureModel culture, MixCmsContext context)
         {
             bool isSucceed = true;
             try
             {
-                if (context.MixCulture.Count() == 0)
+                if (!context.MixCulture.Any())
                 {
                     // EN-US
 
@@ -288,7 +286,7 @@ namespace Mix.Lib.Services
             return isSucceed;
         }
 
-        protected static void InitPages(string culture, MixCmsContext context, IDbContextTransaction transaction)
+        protected static void InitPages(string culture, MixCmsContext context)
         {
             /* Init Pages */
             var pages = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");

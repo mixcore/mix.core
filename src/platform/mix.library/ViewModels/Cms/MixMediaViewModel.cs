@@ -7,6 +7,7 @@ using Mix.Infrastructure.Repositories;
 using Mix.Lib.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
+using Mix.Lib.Helpers;
 using Mix.Lib.Services;
 using System;
 using System.Threading.Tasks;
@@ -102,7 +103,7 @@ namespace Mix.Lib.ViewModels.Cms
             }
             if (string.IsNullOrEmpty(TargetUrl))
             {
-                if (FileFolder[0] == '/') { FileFolder = FileFolder.Substring(1); }
+                if (FileFolder[0] == '/') { FileFolder = FileFolder[1..]; }
             }
             return base.ParseModel(_context, _transaction);
         }
@@ -115,7 +116,7 @@ namespace Mix.Lib.ViewModels.Cms
             }
             if (MediaFile?.FileStream != null)
             {
-                FileFolder = $"{MixAppSettingService.GetTemplateUploadFolder(Specificulture)}";
+                FileFolder = $"{MixCmsHelper.GetUploadFolder(Specificulture)}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
@@ -155,7 +156,7 @@ namespace Mix.Lib.ViewModels.Cms
                     }
                 }
             }
-            FileType = FileType ?? "image";
+            FileType ??= "image";
             base.Validate(_context, _transaction);
         }
 

@@ -77,7 +77,7 @@ namespace Mix.Lib.ViewModels.Cms
             }
             Value = Property.Value;
             DataType = Property.DataType;
-            if (CreatedDateTime == default(DateTime))
+            if (CreatedDateTime == default)
             {
                 CreatedDateTime = DateTime.UtcNow;
             }
@@ -95,7 +95,6 @@ namespace Mix.Lib.ViewModels.Cms
             if (result.IsSucceed && _context == null)
             {
                 MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "LastUpdateConfiguration", DateTime.UtcNow);
-                MixAppSettingService.LoadFromDatabase();
                 MixAppSettingService.SaveSettings();
             }
             return result;
@@ -114,9 +113,11 @@ namespace Mix.Lib.ViewModels.Cms
             {
                 foreach (var item in arrConfiguration)
                 {
-                    var conf = new MixConfigurationViewModel(item, context, transaction);
-                    conf.CreatedDateTime = DateTime.UtcNow;
-                    conf.Specificulture = destCulture;
+                    var conf = new MixConfigurationViewModel(item, context, transaction)
+                    {
+                        CreatedDateTime = DateTime.UtcNow,
+                        Specificulture = destCulture
+                    };
                     var saveResult = await conf.SaveModelAsync(false, context, transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!result.IsSucceed)

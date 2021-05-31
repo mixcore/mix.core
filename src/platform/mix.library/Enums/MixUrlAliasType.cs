@@ -4,7 +4,6 @@
     {
         Page,
         Post,
-        Product,
         Module,
         ModuleData
     }

@@ -74,8 +74,8 @@ namespace Mix.Theme.Controllers.v2
         [Route("init-cms/step-2")]
         public async Task<RepositoryResponse<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
         {
-            RepositoryResponse<AccessTokenViewModel> result = new RepositoryResponse<AccessTokenViewModel>();
-            if (_userManager.Users.Count() == 0)
+            RepositoryResponse<AccessTokenViewModel> result = new();
+            if (!_userManager.Users.Any())
             {
                 var user = new ApplicationUser
                 {
@@ -99,7 +99,6 @@ namespace Mix.Theme.Controllers.v2
                     if (token != null)
                     {
                         result.IsSucceed = true;
-                        MixAppSettingService.LoadFromDatabase();
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 2);
                         MixAppSettingService.SaveSettings();
@@ -157,11 +156,10 @@ namespace Mix.Theme.Controllers.v2
                 if (MixAppSettingService.GetConfig<int>("InitStatus") == 3)
                 {
                     string culture = MixAppSettingService.GetConfig<string>("DefaultCulture");
-                    InitCmsService sv = new InitCmsService();
+                    InitCmsService sv = new();
                     result = await sv.InitLanguagesAsync(culture, model);
                     if (result.IsSucceed)
                     {
-                        MixAppSettingService.LoadFromDatabase();
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 4);
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, true);
                         MixAppSettingService.SaveSettings();
@@ -190,7 +188,6 @@ namespace Mix.Theme.Controllers.v2
             if (result.IsSucceed)
             {
                 // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
-                MixAppSettingService.LoadFromDatabase();
                 MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 3);
                 MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
                 MixAppSettingService.SaveSettings();
@@ -220,7 +217,6 @@ namespace Mix.Theme.Controllers.v2
             {
                 await InitRolesAsync();
                 result.IsSucceed = true;
-                MixAppSettingService.LoadFromDatabase();
                 MixAppSettingService.SetConfig<string>(MixAppSettingsSection.GlobalSettings, "DefaultCulture", model.Culture.Specificulture);
                 MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 1);
                 MixAppSettingService.SaveSettings();

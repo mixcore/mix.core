@@ -6,25 +6,31 @@ using System;
 
 namespace Mix.Lib.Abstracts.ViewModels
 {
-    public class MixModuleViewModelBase<T> : ViewModelBase<MixCmsContext, MixModule, T>
-        where T: ViewModelBase<MixCmsContext, MixModule, T>
+    public class MixPostViewModelBase<T> : ViewModelBase<MixCmsContext, MixPost, T>
+        where T: ViewModelBase<MixCmsContext, MixPost, T>
     {
         #region Properties
 
         public int Id { get; set; }
         public string Specificulture { get; set; }
-        public string Description { get; set; }
-        public string Fields { get; set; }
-        public string Thumbnail { get; set; }
+        public string Content { get; set; }
+        public DateTime? PublishedDateTime { get; set; }
+        public string Excerpt { get; set; }
+        public string ExtraProperties { get; set; }
+        public string Icon { get; set; }
         public string Image { get; set; }
-        public string Name { get; set; }
+        public string SeoDescription { get; set; }
+        public string SeoKeywords { get; set; }
+        public string SeoName { get; set; }
+        public string SeoTitle { get; set; }
+        public string Source { get; set; }
+        public string Tags { get; set; }
         public string Template { get; set; }
-        public string FormTemplate { get; set; }
-        public string EdmTemplate { get; set; }
+        public string Thumbnail { get; set; }
         public string Title { get; set; }
-        public MixModuleType Type { get; set; }
-        public string PostType { get; set; }
-        public int? PageSize { get; set; }
+        public string Type { get; set; }
+        public int? Views { get; set; }
+        public string ExtraFields { get; set; }
         public string CreatedBy { get; set; }
         public string ModifiedBy { get; set; }
         public int Priority { get; set; }
@@ -37,11 +43,11 @@ namespace Mix.Lib.Abstracts.ViewModels
 
         #region Contructors
 
-        public MixModuleViewModelBase() : base()
+        public MixPostViewModelBase() : base()
         {
         }
 
-        public MixModuleViewModelBase(MixModule model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public MixPostViewModelBase(MixPost model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }

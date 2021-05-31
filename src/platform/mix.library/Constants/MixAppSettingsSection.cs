@@ -6,9 +6,7 @@
         MixConfigurations,
         Authentication,
         IpSecuritySettings,
-        Translator,
         GlobalSettings,
-        LocalSettings,
         Smtp
     }
 }

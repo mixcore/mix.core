@@ -6,7 +6,7 @@ using System;
 
 namespace Mix.Lib.ViewModels.Cms
 {
-    public class UrlAliasViewModel : ViewModelBase<MixCmsContext, MixUrlAlias, UrlAliasViewModel>
+    public class MixUrlAliasViewModel : ViewModelBase<MixCmsContext, MixUrlAlias, MixUrlAliasViewModel>
     {
         #region Properties
 
@@ -41,11 +41,11 @@ namespace Mix.Lib.ViewModels.Cms
 
         #region Contructors
 
-        public UrlAliasViewModel() : base()
+        public MixUrlAliasViewModel() : base()
         {
         }
 
-        public UrlAliasViewModel(MixUrlAlias model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public MixUrlAliasViewModel(MixUrlAlias model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
