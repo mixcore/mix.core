@@ -88,7 +88,7 @@ namespace Mix.Lib.ViewModels.Account
         [JsonProperty("avatarUrl")]
         public string AvatarUrl {
             get {
-                if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
+                if (Avatar != null && (!Avatar.Contains("http", StringComparison.CurrentCulture) && Avatar[0] != '/'))
                 {
                     return $"{Domain}/{Avatar}";
                 }
@@ -151,21 +151,19 @@ namespace Mix.Lib.ViewModels.Account
 
         public List<NavUserRoleViewModel> GetRoleNavs()
         {
-            using (MixCmsAccountContext context = new MixCmsAccountContext())
-            {
-                var query = context.AspNetRoles
-                  .Include(cp => cp.AspNetUserRoles)
-                  .ToList()
-                  .Select(p => new NavUserRoleViewModel()
-                  {
-                      UserId = Id,
-                      RoleId = p.Id,
-                      Description = p.Name,
-                      IsActived = context.AspNetUserRoles.Any(m => m.UserId == Id && m.RoleId == p.Id)
-                  });
+            using MixCmsAccountContext context = new();
+            var query = context.AspNetRoles
+              .Include(cp => cp.AspNetUserRoles)
+              .ToList()
+              .Select(p => new NavUserRoleViewModel()
+              {
+                  UserId = Id,
+                  RoleId = p.Id,
+                  Description = p.Name,
+                  IsActived = context.AspNetUserRoles.Any(m => m.UserId == Id && m.RoleId == p.Id)
+              });
 
-                return query.OrderBy(m => m.Priority).ToList();
-            }
+            return query.OrderBy(m => m.Priority).ToList();
         }
 
         #endregion Expands

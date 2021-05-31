@@ -28,8 +28,6 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         public ImportMixDataAssociationViewModel RelatedData { get; set; }
 
-        public DateTime CreatedDateTime { get; set; }
-        public DateTime? LastModified { get; set; }
         #endregion
 
         #region Overrides

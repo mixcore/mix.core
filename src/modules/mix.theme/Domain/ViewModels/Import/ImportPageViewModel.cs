@@ -10,7 +10,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
     public class ImportPageViewModel: MixPageViewModelBase<ImportPageViewModel>
     {
         #region Properties
-        public List<UrlAliasViewModel> UrlAliases { get; set; }
+        public List<MixUrlAliasViewModel> UrlAliases { get; set; }
 
         public bool IsExportData { get; set; }
 
@@ -28,9 +28,9 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Expands
 
-        public List<UrlAliasViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
+        public List<MixUrlAliasViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
         {
-            var result = UrlAliasViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
+            var result = MixUrlAliasViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
                         && p.SourceId == Id.ToString() && p.Type == (int)MixUrlAliasType.Page, context, transaction);
             if (result.IsSucceed)
             {
@@ -38,7 +38,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             }
             else
             {
-                return new List<UrlAliasViewModel>();
+                return new List<MixUrlAliasViewModel>();
             }
         }
 

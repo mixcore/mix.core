@@ -2,11 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mixcore.Models;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mixcore.Controllers
 {
@@ -19,7 +15,7 @@ namespace Mixcore.Controllers
         {
             _logger = logger;
             _translator = translator;
-            _translator.Translate<string>("Ok", "en-us");
+            TranslatorService.Translate<string>("Ok", "en-us");
         }
 
         public IActionResult Index()

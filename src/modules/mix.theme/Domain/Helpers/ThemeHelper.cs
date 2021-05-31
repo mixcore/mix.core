@@ -96,7 +96,7 @@ namespace Mix.Theme.Domain.Helpers
                 data.CreatedBy = userName;
                 data.Status = MixContentStatus.Published;
                 string importFolder = $"{MixFolders.ImportFolder}/" +
-                    $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
+                    $"{DateTime.UtcNow:dd-MM-yyyy}";
                 if (request.Theme != null)
                 {
                     MixFileRepository.Instance.SaveWebFile(request.Theme, $"{importFolder}");
@@ -131,7 +131,6 @@ namespace Mix.Theme.Domain.Helpers
                 if (result.IsSucceed)
                 {
                     // MixService.SetConfig<string>(MixAppSettingKeywords.SiteName, _lang, data.Title);
-                    MixAppSettingService.LoadFromDatabase();
                     MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 3);
                     MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
                     MixAppSettingService.SaveSettings();
@@ -220,9 +219,11 @@ namespace Mix.Theme.Domain.Helpers
             {
                 foreach (var item in arrLanguage)
                 {
-                    var lang = new MixLanguageViewModel(item, context, transaction);
-                    lang.Specificulture = destCulture;
-                    lang.CreatedDateTime = DateTime.UtcNow;
+                    var lang = new MixLanguageViewModel(item, context, transaction)
+                    {
+                        Specificulture = destCulture,
+                        CreatedDateTime = DateTime.UtcNow
+                    };
                     var saveResult = await lang.SaveModelAsync(false, context, transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!result.IsSucceed)
@@ -260,9 +261,11 @@ namespace Mix.Theme.Domain.Helpers
             {
                 foreach (var item in arrConfiguration)
                 {
-                    var conf = new MixConfigurationViewModel(item, context, transaction);
-                    conf.CreatedDateTime = DateTime.UtcNow;
-                    conf.Specificulture = destCulture;
+                    var conf = new MixConfigurationViewModel(item, context, transaction)
+                    {
+                        CreatedDateTime = DateTime.UtcNow,
+                        Specificulture = destCulture
+                    };
                     var saveResult = await conf.SaveModelAsync(false, context, transaction);
                     result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
                     if (!result.IsSucceed)

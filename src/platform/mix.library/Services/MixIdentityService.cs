@@ -38,7 +38,7 @@ namespace Mix.Lib.Services
 
         public async Task<RepositoryResponse<JObject>> Login(LoginViewModel model)
         {
-            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+            RepositoryResponse<JObject> loginResult = new();
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await _signInManager.PasswordSignInAsync(
@@ -99,7 +99,7 @@ namespace Mix.Lib.Services
             if (isRemember)
             {
                 refreshToken = Guid.NewGuid().ToString();
-                RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(
+                RefreshTokenViewModel vmRefreshToken = new(
                             new RefreshTokens()
                             {
                                 Id = refreshToken,
@@ -115,9 +115,9 @@ namespace Mix.Lib.Services
                 refreshTokenId = saveRefreshTokenResult.Data?.Id;
             }
 
-            AccessTokenViewModel token = new AccessTokenViewModel()
+            AccessTokenViewModel token = new()
             {
-                Access_token = await _helper.GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey, MixAppSettingService.Instance.MixAuthentications),
+                Access_token = await _helper.GenerateTokenAsync(user, dtExpired, refreshToken, aesKey, rsaPublicKey, MixAppSettingService.MixAuthentications),
                 Refresh_token = refreshTokenId,
                 Token_type = MixAppSettingService.GetConfig<string>(MixAppSettingsSection.Authentication, MixAuthConfigurations.TokenType),
                 Expires_in = MixAppSettingService.GetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.AccessTokenExpiration, 20),
@@ -130,8 +130,8 @@ namespace Mix.Lib.Services
 
         public async Task<RepositoryResponse<JObject>> ExternalLogin(RegisterExternalBindingModel model)
         {
-            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
-            var verifiedAccessToken = await _helper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, MixAppSettingService.Instance.MixAuthentications);
+            RepositoryResponse<JObject> loginResult = new();
+            var verifiedAccessToken = await _helper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, MixAppSettingService.MixAuthentications);
             if (verifiedAccessToken != null)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -163,7 +163,7 @@ namespace Mix.Lib.Services
 
         public async Task<RepositoryResponse<JObject>> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
-            RepositoryResponse<JObject> result = new RepositoryResponse<JObject>();
+            RepositoryResponse<JObject> result = new();
             var getRefreshToken = await RefreshTokenViewModel.Repository.GetSingleModelAsync(t => t.Id == refreshTokenDto.RefreshToken);
             if (getRefreshToken.IsSucceed)
             {
@@ -171,7 +171,7 @@ namespace Mix.Lib.Services
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
-                    var principle = _helper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, MixAppSettingService.Instance.MixAuthentications);
+                    var principle = _helper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, MixAppSettingService.MixAuthentications);
                     if (principle != null && oldToken.Username == _helper.GetClaim(principle, MixClaims.Username))
                     {
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);

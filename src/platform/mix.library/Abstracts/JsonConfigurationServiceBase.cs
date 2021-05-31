@@ -8,24 +8,26 @@ namespace Mix.Lib.Abstracts
 {
     public abstract class JsonConfigurationServiceBase
     {
-        protected static string _filePath;
+        private static string filePath;
         protected static JObject AppSettings { get; set; }
-        protected readonly FileSystemWatcher watcher = new FileSystemWatcher();
+        protected static string FilePath { get => filePath; set => filePath = value; }
+
+        protected readonly FileSystemWatcher watcher = new();
 
         public JsonConfigurationServiceBase(string filePath)
         {
-            _filePath = filePath;
+            FilePath = filePath;
             LoadAppSettings();
             WatchFile();
         }
 
-        public T GetConfig<T>(string name, T defaultValue = default)
+        public static T GetConfig<T>(string name, T defaultValue = default)
         {
             var result = AppSettings[name];
             return result != null ? result.Value<T>() : defaultValue;
         }
 
-        public T GetConfig<T>(string culture, string name, T defaultValue = default)
+        public static T GetConfig<T>(string culture, string name, T defaultValue = default)
         {
             JToken result = null;
             if (!string.IsNullOrEmpty(culture) && AppSettings[culture] != null)
@@ -35,25 +37,25 @@ namespace Mix.Lib.Abstracts
             return result != null ? result.Value<T>() : defaultValue;
         }
 
-        public T GetEnumConfig<T>(string name)
+        public static T GetEnumConfig<T>(string name)
         {
             Enum.TryParse(typeof(T), AppSettings[name]?.Value<string>(), true, out object result);
             return result != null ? (T)result : default;
         }
 
-        public void SetConfig<T>(string name, T value)
+        public static void SetConfig<T>(string name, T value)
         {
             AppSettings[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public void SetConfig<T>(string culture, string name, T value)
+        public static void SetConfig<T>(string culture, string name, T value)
         {
             AppSettings[culture][name] = value.ToString();
         }
 
-        public bool SaveSettings()
+        public static bool SaveSettings()
         {
-            var settings = MixFileRepository.Instance.GetFile(_filePath, string.Empty, true, "{}");
+            var settings = MixFileRepository.Instance.GetFile(FilePath, string.Empty, true, "{}");
             if (settings != null)
             {
                 settings.Content = AppSettings.ToString();
@@ -82,12 +84,10 @@ namespace Mix.Lib.Abstracts
         protected virtual void LoadAppSettings()
         {
             // Load configurations from appSettings.json
-            JObject jsonSettings = new JObject();
-            var settings = MixFileRepository.Instance.GetFile(_filePath, string.Empty, true);
+            var settings = MixFileRepository.Instance.GetFile(FilePath, string.Empty, true);
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
-            jsonSettings = JObject.Parse(content);
-
+            JObject jsonSettings = JObject.Parse(content);
             AppSettings = jsonSettings;
         }
     }

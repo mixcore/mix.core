@@ -2,13 +2,22 @@
 using Mix.Common.Helper;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Extensions;
+using Mix.Lib.ViewModels.Cms;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
 namespace Mix.Lib.Helpers
 {
-    public static class MixDataHelper
+    public class MixDataHelper
     {
+
+        public static MixDatabaseDataViewModel LoadAdditionalData(string parentId, string culture, string databaseName, MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            return _context.MixDatabaseDataAssociation.Where(
+                a => a.ParentId == parentId && a.Specificulture == culture && a.MixDatabaseName == databaseName)
+                .Join(_context.MixDatabaseData, a => a.DataId, d => d.Id, (a, d) => new { a, d })
+                .Select(ad => new MixDatabaseDataViewModel(ad.d, _context, _transaction)).First();
+        }
 
         public static JObject ParseData(
             string dataId,

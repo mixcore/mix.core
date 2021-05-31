@@ -116,7 +116,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         public List<ImportMixDataAssociationViewModel> SysTags { get; set; }
 
-        public List<UrlAliasViewModel> UrlAliases { get; set; }
+        public List<MixUrlAliasViewModel> UrlAliases { get; set; }
 
         public ImportMixDataAssociationViewModel RelatedData { get; set; }
 

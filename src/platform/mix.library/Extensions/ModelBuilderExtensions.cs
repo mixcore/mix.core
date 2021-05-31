@@ -14,7 +14,7 @@ namespace Mix.Lib.Extensions
             var applyGenericMethod = typeof(ModelBuilder)
             .GetMethods(BindingFlags.Instance | BindingFlags.Public)
             .Single(m => m.Name == nameof(ModelBuilder.ApplyConfiguration)
-            && m.GetParameters().Count() == 1
+            && m.GetParameters().Length == 1
             && m.GetParameters().Single().ParameterType.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>));
             foreach (var type in assembly.GetTypes()
                 .Where(c => c.IsClass && !c.IsAbstract && !c.ContainsGenericParameters
