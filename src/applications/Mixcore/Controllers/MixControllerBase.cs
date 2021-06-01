@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 
 namespace Mixcore.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MixControllerBase : Controller
     {
         protected string domain;

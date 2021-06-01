@@ -11,6 +11,7 @@ using Mix.Heart.Enums;
 using Mix.Identity.Entities;
 using Mix.Identity.Models;
 using MySqlConnector;
+using Mix.Lib.Constants;
 
 namespace Mix.Lib.Entities.Account
 {

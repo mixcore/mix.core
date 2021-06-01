@@ -14,14 +14,27 @@ using Mix.Heart.Extensions;
 using Mix.Cms.Web;
 using Mix.Lib.Entities.Account;
 using Mix.Lib.Services;
+using Microsoft.AspNetCore.StaticFiles;
+using Mix.Lib.Constants;
+using Mix.Infrastructure.Repositories;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using Mix.Lib.ViewModels.Cms;
+using Mix.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mix.Lib.Extensions
 {
     public static class ServiceCollectionExtensions
     {
+        static string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
 
         public static IServiceCollection AddMixServices(this IServiceCollection services)
         {
+            VerifyInitData();
+            services.AddResponseCompression();
             services.AddDbContext<MixDbContext>();
             services.AddMixAuthorize<MixDbContext>(MixAppSettingService.MixAuthentications);
             services.AddScoped<MixService>();
@@ -43,12 +56,38 @@ namespace Mix.Lib.Extensions
                 services.AddGeneratedRestApi(assembly);
                 services.AddRepositories(assembly);
             }
-
+            // Mix: Check if require ssl
+            if (MixAppSettingService.GetConfig<bool>("IsHttps"))
+            {
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
             return services;
         }
 
         public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, bool isDevelop)
         {
+            app.UseResponseCompression();
+            app.UseCors(MixcoreAllowSpecificOrigins);
+            var provider = new FileExtensionContentTypeProvider();
+            // Add new mappings
+            app.UseDefaultFiles();
+            provider.Mappings[".vue"] = "application/text";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            if (MixAppSettingService.GetConfig<bool>("IsHttps"))
+            {
+                app.UseHttpsRedirection();
+            }
+
             var assemblies = GetMixAssemblies();
             foreach (var assembly in assemblies)
             {
@@ -100,6 +139,35 @@ namespace Mix.Lib.Extensions
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void VerifyInitData()
+        {
+            MixService.InitAppSettings();
+
+            if (!MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            {
+                using (var ctx = MixAppSettingService.GetDbContext())
+                {
+                    ctx.Database.Migrate();
+                    var transaction = ctx.Database.BeginTransaction();
+                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
+                    foreach (var db in sysDatabases)
+                    {
+                        if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
+                        {
+                            db.SaveModel(true, ctx, transaction);
+                        }
+                    }
+                    transaction.Commit();
+                    transaction.Dispose();
+                }
+                using (var cacheCtx = MixCacheService.GetCacheDbContext())
+                {
+                    cacheCtx.Database.Migrate();
+                }
+            }
         }
 
         private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Assembly assembly, Type baseType = null)

@@ -4,8 +4,7 @@ using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Mix.Heart.Enums;
 using MySqlConnector;
-using Mix.Lib;
-using Mix.Lib.Enums;
+using Mix.Lib.Constants;
 
 namespace Mix.Lib.Entities.Cms
 {
