@@ -10,6 +10,7 @@ using Mix.Identity.Data;
 using MySqlConnector;
 using Mix.Lib.Extensions;
 using Mix.Lib.Enums;
+using Mix.Lib.Constants;
 
 namespace Mix.Lib.Entities.Account
 {

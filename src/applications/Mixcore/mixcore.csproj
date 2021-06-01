@@ -6,12 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="..\..\shared\default.appsettings.json" Link="default.appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>true</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\shared\MixContent\data\cultures.json" Link="MixContent\data\cultures.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>
@@ -28,5 +32,9 @@
       <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
   </ItemGroup>
 </Project>

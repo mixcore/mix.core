@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mix.library.iddentiy
+namespace Mix.library.iddentiy
 {
     public class Class1
     {

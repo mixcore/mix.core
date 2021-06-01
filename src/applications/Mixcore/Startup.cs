@@ -13,7 +13,6 @@ namespace Mixcore
     {
         public Startup(IConfiguration configuration)
         {
-            MixService.InitAppSettings();
             Configuration = configuration;
         }
 
@@ -24,7 +23,7 @@ namespace Mixcore
         {
             services.AddMixServices();
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -33,7 +33,7 @@ namespace Mix.Lib.Services
         private List<string> Cultures { get; set; }
         private JObject AppSettings { get; set; }
         private readonly FileSystemWatcher watcher = new();
-        public static MixAuthenticationConfigurations MixAuthentications { get => instance.AppSettings[MixAppSettingsSection.Authentication.ToString()].ToObject<MixAuthenticationConfigurations>(); }
+        public static MixAuthenticationConfigurations MixAuthentications { get => Instance.AppSettings[MixAppSettingsSection.Authentication.ToString()].ToObject<MixAuthenticationConfigurations>(); }
 
         public MixAppSettingService()
         {
