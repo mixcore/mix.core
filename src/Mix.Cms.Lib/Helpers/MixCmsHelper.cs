@@ -574,5 +574,12 @@ namespace Mix.Cms.Lib.Helpers
                     context.Request, culture, mixDatabaseName);
             return result;
         }
+
+        public static string TranslateUrl(string url, string srcCulture, string destCulture)
+        {
+            return url.Contains($"/{srcCulture}")
+                ? url.Replace(srcCulture, destCulture)
+                : $"/{destCulture}{url}";
+        }
     }
 }
