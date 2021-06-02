@@ -146,6 +146,7 @@ namespace Mix.Cms.Web.Controllers
                         culture = seoName;
                         seoName = keyword;
                         keyword = string.Empty;
+                        ViewBag.culture = culture;
                     }
                 }
             }
