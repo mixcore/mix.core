@@ -42,10 +42,7 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
-            {
-                LoadCulture();
-            }
+            
         }
 
         private void LoadCulture()
@@ -110,6 +107,11 @@ namespace Mix.Cms.Web.Controllers
 
         protected virtual void ValidateRequest()
         {
+            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            {
+                LoadCulture();
+            }
+
             // If IP retricted in appsettings
             if (forbidden)
             {
