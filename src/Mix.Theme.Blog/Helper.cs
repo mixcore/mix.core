@@ -54,8 +54,8 @@ namespace Mix.Theme.Blog
                         .ToListAsync();
                     var prevId = postIdsByMeta.OrderBy(p => p).Where(p => p < currentPost.Id).FirstOrDefault();
                     var nextId = postIdsByMeta.OrderBy(p => p).Where(p => p > currentPost.Id).FirstOrDefault();
-                    result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId)) : null;
-                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId)) : null;                     
+                    result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId && m.Specificulture == culture)) : null;
+                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId && m.Specificulture == culture)) : null;                     
                 }
                 else
                 {
