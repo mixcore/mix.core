@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Heart.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,15 +17,16 @@ namespace Mix.Theme.Blog
     {
         public static async Task<dynamic> GetPosts(string culture = null, int? pageSize = 15, int? pageIndex = 0)
         {
+            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
-                m => m.Status == MixContentStatus.Published,
+                m => m.Specificulture == culture && m.Status == MixContentStatus.Published,
                 "CreatedDateTime",
                 DisplayDirection.Desc, pageSize, pageIndex);
         }
         public static async Task<dynamic> GetPostsByAuthor(string username, string culture, int? pageSize = 15, int? pageIndex = 0)
         {
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
-                m => m.Status == MixContentStatus.Published
+                m => m.Specificulture == culture && m.Status == MixContentStatus.Published
                 && m.CreatedBy == username,
                 "CreatedDateTime",
                 DisplayDirection.Desc, pageSize, pageIndex);
