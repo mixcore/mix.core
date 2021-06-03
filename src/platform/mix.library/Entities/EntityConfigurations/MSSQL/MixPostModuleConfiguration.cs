@@ -62,12 +62,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.MSSQL
                 .WithMany(p => p.MixPostModule)
                 .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                 .HasConstraintName("FK_Mix_Post_Module_Mix_Module1");
-
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixPostModule)
-                .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Post_Module_Mix_Post");
         }
     }
 }

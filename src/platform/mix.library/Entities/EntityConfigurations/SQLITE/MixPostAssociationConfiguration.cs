@@ -58,17 +58,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                 .HasCharSet("utf8")
                 .UseCollation("NOCASE");
 
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixRelatedPostMixPost)
-                .HasForeignKey(d => new { d.DestinationId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_post_association_mix_post1");
-
-            entity.HasOne(d => d.S)
-                .WithMany(p => p.MixRelatedPostS)
-                .HasForeignKey(d => new { d.SourceId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_post_association_mix_post");
         }
     }
 }

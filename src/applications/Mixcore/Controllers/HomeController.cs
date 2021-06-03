@@ -2,14 +2,21 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
+using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
 using Mix.Lib.Constants;
+using Mix.Lib.Controllers;
 using Mix.Lib.Entities.Cms;
+using Mix.Lib.Enums;
+using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using Mix.Lib.ViewModels.Cms;
 using Mixcore.Domain.ViewModels.Mvc;
 using Mixcore.Models;
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -108,6 +115,212 @@ namespace Mixcore.Controllers
         public async Task<IActionResult> Search([FromBody] string keyword)
         {
             return await Page("search", keyword);
+        }
+
+        #region Views
+        protected async Task<IActionResult> Page(string seoName, string keyword = null)
+        {
+            // Home Page
+            int maxPageSize = MixAppSettingService.GetConfig<int>("MaxPageSize");
+            var searchRequest = new SearchQueryModel(Request);
+            ViewData["keyword"] = keyword;
+            RepositoryResponse<MvcPageViewModel> getPage = null;
+            Expression<Func<MixPage, bool>> predicate;
+
+            if (string.IsNullOrEmpty(seoName))
+            {
+                predicate = p =>
+                p.Type == MixPageType.Home
+                && p.Status == MixContentStatus.Published && p.Specificulture == Culture;
+            }
+            else
+            {
+                predicate = p =>
+                p.SeoName == seoName
+                && p.Status == MixContentStatus.Published && p.Specificulture == Culture;
+            }
+
+            getPage = await MvcPageViewModel.Repository.GetFirstModelAsync(predicate);
+
+            if (getPage.IsSucceed)
+            {
+                if (getPage.Data != null)
+                {
+                    maxPageSize = getPage.Data.PageSize ?? maxPageSize;
+                    await getPage.Data.LoadData(searchRequest.PagingData);
+                }
+            }
+
+            if (getPage.IsSucceed)
+            {
+                ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Name"] = getPage.Data.SeoName;
+                ViewData["Description"] = getPage.Data.SeoDescription;
+                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Image"] = getPage.Data.ImageUrl;
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                ViewData["Keyword"] = keyword;
+                getPage.LastUpdateConfiguration = MixAppSettingService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPage.Data);
+            }
+            else
+            {
+                if (seoName != "404")
+                {
+                    return Redirect($"/{Culture}/404");
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+        }
+
+        protected async Task<IActionResult> Page(int pageId, string keyword = null)
+        {
+            // Home Page
+            var searchRequest = new SearchQueryModel(Request);
+            RepositoryResponse<MvcPageViewModel> getPage = null;
+
+            Expression<Func<MixPage, bool>> predicate;
+
+            predicate = p =>
+            p.Id == pageId
+            && p.Status == MixContentStatus.Published && p.Specificulture == Culture;
+
+            getPage = await MvcPageViewModel.Repository.GetFirstModelAsync(predicate);
+            if (getPage.IsSucceed)
+            {
+                await getPage.Data.LoadData(searchRequest.PagingData);
+            }
+
+            if (getPage.IsSucceed)
+            {
+                ViewData["Title"] = getPage.Data.SeoTitle;
+                ViewData["Description"] = getPage.Data.SeoDescription;
+                ViewData["Keywords"] = getPage.Data.SeoKeywords;
+                ViewData["Image"] = getPage.Data.ImageUrl;
+                ViewData["Layout"] = getPage.Data.Layout ?? "Masters/_Layout";
+                ViewData["BodyClass"] = getPage.Data.CssClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                ViewData["Keyword"] = keyword;
+
+                ViewBag.viewMode = MixMvcViewMode.Page;
+                getPage.LastUpdateConfiguration = MixAppSettingService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPage.Data);
+            }
+            else
+            {
+                return Redirect($"/{Culture}/404");
+            }
+        }
+
+        protected async Task<IActionResult> Post(int id)
+        {
+            Expression<Func<MixPost, bool>> predicate;
+            predicate = p =>
+            p.Id == id
+            && p.Status == MixContentStatus.Published
+            && p.Specificulture == Culture;
+
+            RepositoryResponse<MvcPostViewModel> getPost =
+                await MvcPostViewModel.Repository.GetFirstModelAsync(predicate);
+
+            if (getPost.IsSucceed)
+            {
+                ViewData["Title"] = getPost.Data.SeoTitle;
+                ViewData["Description"] = getPost.Data.SeoDescription;
+                ViewData["Keywords"] = getPost.Data.SeoKeywords;
+                ViewData["Image"] = getPost.Data.ImageUrl;
+                ViewData["BodyClass"] = getPost.Data.BodyClass;
+                ViewData["ViewMode"] = MixMvcViewMode.Post;
+
+                ViewBag.viewMode = MixMvcViewMode.Post;
+                getPost.LastUpdateConfiguration = MixAppSettingService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getPost.Data);
+            }
+            else
+            {
+                return Redirect($"/{Culture}/404");
+            }
+        }
+
+        protected async Task<IActionResult> Module(int id)
+        {
+            // Home Page
+            var searchRequest = new SearchQueryModel(Request);
+            RepositoryResponse<MvcModuleViewModel> getData = null;
+
+            Expression<Func<MixModule, bool>> predicate;
+
+            predicate = p =>
+            p.Id == id
+            && p.Status == MixContentStatus.Published && p.Specificulture == Culture;
+
+            getData = await MvcModuleViewModel.Repository.GetFirstModelAsync(predicate);
+            if (getData.IsSucceed)
+            {
+                await getData.Data.LoadData(searchRequest.PagingData);
+            }
+
+            if (getData.IsSucceed)
+            {
+                ViewData["Title"] = getData.Data.Title;
+                ViewData["Description"] = getData.Data.Description;
+                ViewData["Keywords"] = getData.Data.Title;
+                ViewData["Image"] = getData.Data.ImageUrl;
+                getData.LastUpdateConfiguration = MixAppSettingService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                return View(getData.Data);
+            }
+            else
+            {
+                return Redirect($"/{Culture}/404");
+            }
+        }
+
+        protected async Task<IActionResult> AliasAsync(string seoName, string keyword = null)
+        {
+            // Home Page
+
+            // If page name is null => return home page
+            if (string.IsNullOrEmpty(seoName))
+            {
+                return await Page(seoName);
+            }
+            else
+            {
+                RepositoryResponse<MixUrlAliasViewModel> getAlias = null;
+
+                Expression<Func<MixUrlAlias, bool>> predicate;
+
+                predicate = p =>
+                p.Alias == seoName
+                && p.Status == MixContentStatus.Published && p.Specificulture == Culture;
+
+                getAlias = await MixUrlAliasViewModel.Repository.GetFirstModelAsync(predicate);
+                if (getAlias.IsSucceed)// && getPage.Data.View != null
+                {
+                    return getAlias.Data.Type switch
+                    {
+                        MixUrlAliasType.Page => await Page(int.Parse(getAlias.Data.SourceId), keyword),
+                        MixUrlAliasType.Post => await Post(int.Parse(getAlias.Data.SourceId)),
+                        // TODO: Create view for module
+                        _ => await Page(0),
+                    };
+                }
+                else
+                {
+                    return await Page(seoName, keyword);
+                }
+            }
+        }
+
+        #endregion
+       
+        public async System.Threading.Tasks.Task<IActionResult> Error(string page = "404")
+        {
+            return await Page(page);
         }
 
         private void HandleSeoName(ref string seoName, ref string keyword)

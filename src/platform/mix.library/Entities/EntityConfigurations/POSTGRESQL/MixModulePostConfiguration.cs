@@ -60,12 +60,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.POSTGRESQL
                 .HasForeignKey(d => new { d.ModuleId, d.Specificulture })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mix_Module_Post_Mix_Module");
-
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixModulePost)
-                .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Module_Post_Mix_Post");
         }
     }
 }

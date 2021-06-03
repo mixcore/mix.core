@@ -47,18 +47,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.POSTGRESQL
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .UseCollation("und-x-icu");
-
-            entity.HasOne(d => d.Page)
-                .WithMany(p => p.MixPortalPageNavigationPage)
-                .HasForeignKey(d => d.PageId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page");
-
-            entity.HasOne(d => d.Parent)
-                .WithMany(p => p.MixPortalPageNavigationParent)
-                .HasForeignKey(d => d.ParentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_mix_portal_page_navigation_mix_portal_page1");
         }
     }
 }

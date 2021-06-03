@@ -63,7 +63,7 @@ namespace Mixcore.Domain.ViewModels.Mvc
         {
             get
             {
-                return $"/{ MixFolders.TemplatesFolder}/{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/{Template}";
+                return $"/{ MixFolders.TemplatesFolder}/{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/{Template}";
             }
         }
 

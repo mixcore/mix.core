@@ -30,7 +30,7 @@ namespace Mix.Lib.Services
 
         private static volatile MixAppSettingService defaultInstance;
 
-        private List<string> Cultures { get; set; }
+        public List<string> Cultures { get; set; }
         private JObject AppSettings { get; set; }
         private readonly FileSystemWatcher watcher = new();
         public static MixAuthenticationConfigurations MixAuthentications { get => Instance.AppSettings[MixAppSettingsSection.Authentication.ToString()].ToObject<MixAuthenticationConfigurations>(); }
@@ -136,16 +136,6 @@ namespace Mix.Lib.Services
             return result != null ? result.Value<T>() : defaultValue;
         }
 
-        public static T GetConfig<T>(MixAppSettingsSection section, string culture, string name)
-        {
-            JToken result = null;
-            if (!string.IsNullOrEmpty(culture) && Instance.AppSettings[section.ToString()][culture] != null)
-            {
-                result = Instance.AppSettings[section.ToString()][culture][name];
-            }
-            return result != null ? result.Value<T>() : default;
-        }
-
         public static T GetEnumConfig<T>(MixAppSettingsSection section, string name)
         {
             Enum.TryParse(typeof(T), Instance.AppSettings[section.ToString()][name]?.Value<string>(), true, out object result);
@@ -159,11 +149,6 @@ namespace Mix.Lib.Services
             return GetConfig<T>(MixAppSettingsSection.GlobalSettings, name);
         }
         
-        public static T GetConfig<T>(string culture, string name)
-        {
-            return GetConfig<T>(MixAppSettingsSection.GlobalSettings, culture, name);
-        }
-
         public static T GetEnumConfig<T>(string name)
         {
             return GetEnumConfig<T>(MixAppSettingsSection.GlobalSettings, name);
@@ -174,12 +159,6 @@ namespace Mix.Lib.Services
         public static void SetConfig<T>(MixAppSettingsSection section, string name, T value)
         {
             Instance.AppSettings[section.ToString()][name] = value != null ? JToken.FromObject(value) : null;
-        }
-
-
-        public static void SetConfig<T>(MixAppSettingsSection section, string culture, string name, T value)
-        {
-            Instance.AppSettings[section.ToString()][culture][name] = value.ToString();
         }
 
         public static JObject GetGlobalSetting()

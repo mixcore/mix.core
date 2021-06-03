@@ -18,20 +18,20 @@ namespace Mix.Lib.Helpers
             culture ??= MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             return $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
+                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public static string GetUploadFolder(string culture = null)
         {
             culture ??= MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             return $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
+                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 
         public static string GetTemplateFolder(string culture)
         {
-            return $"/{MixFolders.TemplatesFolder}/{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
+            return $"/{MixFolders.TemplatesFolder}/{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
         }
 
         public static T Property<T>(JObject obj, string fieldName)

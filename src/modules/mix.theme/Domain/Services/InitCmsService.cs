@@ -9,6 +9,7 @@ using Mix.Lib.Constants;
 using Mix.Lib.Entities.Account;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
+using Mix.Lib.Helpers;
 using Mix.Services;
 using Mix.Theme.Domain.Helpers;
 using Mix.Theme.Domain.Models;
@@ -63,8 +64,7 @@ namespace Mix.Lib.Services
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                result.IsSucceed = false;
-                result.Exception = ex;
+                MixHelper.HandleException(result, ex);
                 return result;
             }
             finally

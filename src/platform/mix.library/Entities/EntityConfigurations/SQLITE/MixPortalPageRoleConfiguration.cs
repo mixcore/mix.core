@@ -34,11 +34,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasMaxLength(50)
                 .IsUnicode(false);
-
-            entity.HasOne(d => d.Page)
-                .WithMany(p => p.MixPortalPageRole)
-                .HasForeignKey(d => d.PageId)
-                .HasConstraintName("FK_mix_portal_page_role_mix_portal_page");
         }
     }
 }

@@ -124,13 +124,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.POSTGRESQL
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .UseCollation("und-x-icu");
-
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixPost)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Post_Mix_Culture");
         }
     }
 }

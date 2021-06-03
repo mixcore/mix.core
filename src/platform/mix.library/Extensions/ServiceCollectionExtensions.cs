@@ -23,7 +23,6 @@ using Mix.Lib.ViewModels.Cms;
 using Mix.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Mix.Lib.Extensions
 {
@@ -119,14 +118,17 @@ namespace Mix.Lib.Extensions
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            string routePrefix = $"{swaggerBasePath}/swagger";
+            string routeTemplate = swaggerBasePath + "/swagger/{documentName}/swagger.json";
+            string endPoint = $"/{swaggerBasePath}/swagger/{version}/swagger.json";
             if (isDevelop)
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger(opt => opt.RouteTemplate = swaggerBasePath + "/swagger/{documentName}/swagger.json");
+                app.UseSwagger(opt => opt.RouteTemplate = routeTemplate);
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"/{swaggerBasePath}/swagger/{version}/swagger.json", $"{title} {version}");
-                    c.RoutePrefix = $"{swaggerBasePath}/swagger";
+                    c.SwaggerEndpoint(endPoint, $"{title} {version}");
+                    c.RoutePrefix = routePrefix;
                 });
             }
             app.UseHttpsRedirection();

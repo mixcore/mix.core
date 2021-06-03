@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Mix.Heart.Constants;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Models;
-using Mix.Lib;
 using Mix.Lib.Constants;
+using Mix.Lib.Controllers;
 using Mix.Lib.Entities.Cms;
 using Mix.Lib.Enums;
 using Mix.Lib.Services;
@@ -24,19 +24,17 @@ using System.Threading.Tasks;
 namespace Mix.Theme.Controllers.v2
 {
     [Route("api/v2/mix-theme/init")]
-    [ApiController]
-    public class InitController: Controller
+    public class InitController : MixApiControllerBase
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MixIdentityService _idService;
 
-        public InitController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, MixIdentityService idService)
+        public InitController(ILogger<MixApiControllerBase> logger, MixService mixService, TranslatorService translator) : base(logger, mixService, translator)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
-            _idService = idService;
         }
+
+
         #region Post
 
         /// <summary>
@@ -50,18 +48,13 @@ namespace Mix.Theme.Controllers.v2
         /// <returns></returns>
         [HttpPost]
         [Route("init-cms/step-1")]
-        public async Task<RepositoryResponse<bool>> Step1([FromBody] InitCmsDto model)
+        public async Task<ActionResult<bool>> Step1([FromBody] InitCmsDto model)
         {
-            if (model != null)
+            if (model != null || MixAppSettingService.GetConfig<int>("InitStatus") == 0)
             {
-                var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                if (MixAppSettingService.GetConfig<int>("InitStatus") == 0)
-                {
-                    result = await InitStep1Async(model).ConfigureAwait(false);
-                }
-                return result;
+                return await InitStep1Async(model);
             }
-            return new RepositoryResponse<bool>();
+            return BadRequest();
         }
 
         /// <summary>
@@ -72,7 +65,7 @@ namespace Mix.Theme.Controllers.v2
         /// <returns></returns>
         [HttpPost]
         [Route("init-cms/step-2")]
-        public async Task<RepositoryResponse<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
+        public async Task<ActionResult<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
         {
             RepositoryResponse<AccessTokenViewModel> result = new();
             if (!_userManager.Users.Any())
@@ -104,11 +97,6 @@ namespace Mix.Theme.Controllers.v2
                         MixAppSettingService.SaveSettings();
                         MixAppSettingService.Reload();
                         result.Data = token;
-                        return result;
-                    }
-                    else
-                    {
-                        return result;
                     }
                 }
                 else
@@ -117,12 +105,11 @@ namespace Mix.Theme.Controllers.v2
                     {
                         result.Errors.Add(error.Description);
                     }
-                    return result;
                 }
             }
-            return result;
+            return GetResponse(result);
         }
-        
+
         /// <summary>
         /// Step 3 when status = 3 (Finished)
         ///     - Init default theme
@@ -132,23 +119,24 @@ namespace Mix.Theme.Controllers.v2
         [HttpPost]
         [Route("init-cms/step-3")]
         [DisableRequestSizeLimit]
-        public async Task<RepositoryResponse<InitThemeViewModel>> Save(InitThemePackageDto request)
+        public async Task<ActionResult<InitThemeViewModel>> Save(InitThemePackageDto request)
         {
             string _lang = MixAppSettingService.GetConfig<string>("Language");
             string user = _idService._helper.GetClaim(User, MixClaims.Username);
-            return await ThemeHelper.InitTheme(request, user, _lang);
+            var result = await ThemeHelper.InitTheme(request, user, _lang);
+            return GetResponse(result);
         }
 
-        
+
         /// <summary>
         /// Step 4 when status = 3
         ///     - Init Languages for translate from languages.json
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-4")]
-        public async Task<RepositoryResponse<bool>> InitLanguages([FromBody] List<MixLanguage> model)
+        public async Task<ActionResult<bool>> InitLanguages([FromBody] List<MixLanguage> model)
         {
             if (model != null)
             {
@@ -163,13 +151,15 @@ namespace Mix.Theme.Controllers.v2
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, "InitStatus", 4);
                         MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, true);
                         MixAppSettingService.SaveSettings();
-                        _ = Services.MixCacheService.RemoveCacheAsync();
+                        await MixCacheService.RemoveCacheAsync();
                         MixAppSettingService.Reload();
+                        return Ok(result.Data);
                     }
+                    return BadRequest(result.Errors);
                 }
-                return result;
+                return GetResponse(result);
             }
-            return new RepositoryResponse<bool>();
+            return BadRequest();
         }
 
         /// <summary>
@@ -178,7 +168,7 @@ namespace Mix.Theme.Controllers.v2
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-3/active")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult<bool>> Active([FromBody] InitThemeViewModel model)
@@ -200,7 +190,7 @@ namespace Mix.Theme.Controllers.v2
 
         #region Helpers
 
-        private async Task<RepositoryResponse<bool>> InitStep1Async(InitCmsDto model)
+        private async Task<ActionResult<bool>> InitStep1Async(InitCmsDto model)
         {
             MixAppSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, MixConstants.CONST_CMS_CONNECTION, model.ConnectionString);
             MixAppSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, MixConstants.CONST_MESSENGER_CONNECTION, model.ConnectionString);
@@ -230,7 +220,7 @@ namespace Mix.Theme.Controllers.v2
                 MixAppSettingService.Reload();
                 MixAppSettingService.SaveSettings();
             }
-            return result;
+            return GetResponse(result);
         }
 
         private async Task<bool> InitRolesAsync()

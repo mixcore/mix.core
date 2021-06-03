@@ -79,7 +79,7 @@ namespace Mixcore.Domain.ViewModels.Mvc
             get
             {
                 return $"/{MixFolders.TemplatesFolder}/" +
-                    $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                    $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                     $"{Template}";
             }
         }
@@ -89,7 +89,7 @@ namespace Mixcore.Domain.ViewModels.Mvc
             get
             {
                 return $"/{MixFolders.TemplatesFolder}/" +
-                   $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                   $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{FormTemplate}";
             }
         }
@@ -99,7 +99,7 @@ namespace Mixcore.Domain.ViewModels.Mvc
             get
             {
                 return $"/{MixFolders.TemplatesFolder}/" +
-                   $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
+                   $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, Specificulture) ?? "Default"}/" +
                    $"{EdmTemplate}";
             }
         }

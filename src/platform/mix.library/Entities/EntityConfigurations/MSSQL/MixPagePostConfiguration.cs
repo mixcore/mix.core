@@ -64,11 +64,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.MSSQL
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mix_Page_Post_Mix_Page");
 
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixPagePost)
-                .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Page_Post_Mix_Post");
         }
     }
 }
