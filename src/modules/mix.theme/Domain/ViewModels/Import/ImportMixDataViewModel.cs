@@ -2,8 +2,7 @@
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,10 +11,11 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Mix.Lib.Extensions;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Theme.Domain.ViewModels.Import
 {
-    public class ImportMixDataViewModel: ViewModelBase<MixCmsContext, MixDatabaseData, ImportMixDataViewModel>
+    public class ImportMixDataViewModel: ViewModelBase<MixCmsContextV2, MixDatabaseData, ImportMixDataViewModel>
     {
         #region Properties
 
@@ -72,7 +72,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
         {
         }
 
-        public ImportMixDataViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ImportMixDataViewModel(MixDatabaseData model, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
 
@@ -80,7 +80,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Overrides
 
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override void ExpandView(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             if (Obj == null)
             {
@@ -88,7 +88,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             }
         }
 
-        public override MixDatabaseData ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseData ParseModel(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
             {
@@ -191,9 +191,9 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Async
 
-        public override async Task<RepositoryResponse<ImportMixDataViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<ImportMixDataViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(_context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
@@ -224,7 +224,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
                     }
                 }
 
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 if (result.IsSucceed)
                 {
                     Obj = MixDataHelper.ParseData(Id, Specificulture, context, transaction);
@@ -233,7 +233,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<ImportMixDataViewModel>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContextV2>.HandleException<ImportMixDataViewModel>(ex, isRoot, transaction);
             }
             finally
             {
@@ -245,7 +245,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             }
         }
 
-        public override RepositoryResponse<ImportMixDataViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<ImportMixDataViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.SaveModel(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
@@ -255,7 +255,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             return result;
         }
 
-        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixDatabaseData parent, MixCmsContext _context, IDbContextTransaction _transaction)
+        public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixDatabaseData parent, MixCmsContextV2 _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
 
@@ -281,7 +281,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContextV2 context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in Values)
@@ -311,7 +311,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixDatabaseData parent, MixCmsContextV2 context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             foreach (var item in RefData)

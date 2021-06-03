@@ -2,9 +2,9 @@
 using Mix.Common.Helper;
 using Mix.Heart.Models;
 using Mix.Lib.Abstracts.ViewModels;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Helpers;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mix.Shared.Services;
 
 namespace Mixcore.Domain.ViewModels.Mvc
 {

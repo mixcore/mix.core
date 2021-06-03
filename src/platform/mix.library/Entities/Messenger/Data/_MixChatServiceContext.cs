@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Services;
 using Mix.Heart.Enums;
 using MySqlConnector;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 
 namespace Mix.Cms.Messenger.Models.Data
 {

@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Enums;
+﻿using Mix.Database.Entities.Cms.v2;
+using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Lib.Entities.Cms;
@@ -9,7 +10,7 @@ namespace Mix.Lib.Helpers
 {
     public class MixAssociationHelper
     {
-        public static IQueryable<MixDatabaseData> GetAssociationDatas(string parentId, string culture, string databaseName, MixCmsContext context)
+        public static IQueryable<MixDatabaseData> GetAssociationDatas(string parentId, string culture, string databaseName, MixCmsContextV2 context)
         {
             return context.MixDatabaseDataAssociation.Where(
                         a => a.ParentId == parentId && a.Specificulture == culture && a.MixDatabaseName == databaseName)
@@ -17,7 +18,7 @@ namespace Mix.Lib.Helpers
                         .Select(ad => ad.d);
         }
 
-        public static IQueryable<MixModule> GetAssociationModules(int pageId, string culture, MixCmsContext context)
+        public static IQueryable<MixModule> GetAssociationModules(int pageId, string culture, MixCmsContextV2 context)
         {
             return context.MixPageModule.Where(
                         a => a.PageId == pageId && a.Specificulture == culture)
@@ -28,7 +29,7 @@ namespace Mix.Lib.Helpers
                         .Select(association => association.d);
         }
 
-        public static IQueryable<MixPost> GetAssociationModulePosts(int parentId, string culture, MixCmsContext context)
+        public static IQueryable<MixPost> GetAssociationModulePosts(int parentId, string culture, MixCmsContextV2 context)
         {
             return context.MixModulePost.Where(
                         a => a.ModuleId == parentId && a.Specificulture == culture)
@@ -39,7 +40,7 @@ namespace Mix.Lib.Helpers
                         .Select(association => association.post);
         }
 
-        public static IQueryable<MixPost> GetAssociationPagePosts(int parentId, string culture, MixCmsContext context)
+        public static IQueryable<MixPost> GetAssociationPagePosts(int parentId, string culture, MixCmsContextV2 context)
         {
             return context.MixPagePost.Where(
                         a => a.PageId == parentId && a.Specificulture == culture)

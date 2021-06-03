@@ -6,8 +6,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
-using Mix.Lib.Constants;
+using Mix.Shared.Enums;
+using Mix.Shared.Constants;
 using Mix.Lib.Repositories;
 using Mix.Lib.Models.Common;
 

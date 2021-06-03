@@ -5,21 +5,20 @@ using Mix.Heart.Infrastructure;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Lib.Constants;
-using Mix.Lib.Entities.Account;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Lib.Helpers;
 using Mix.Services;
-using Mix.Theme.Domain.Helpers;
 using Mix.Theme.Domain.Models;
-using Mix.Theme.Domain.ViewModels.Import;
-using Mix.Theme.Domain.ViewModels.Init;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Shared.Services;
+using Mix.Database.Services;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Account;
 
 namespace Mix.Lib.Services
 {
@@ -40,20 +39,20 @@ namespace Mix.Lib.Services
         public static async Task<RepositoryResponse<bool>> InitCms(string siteName, InitCultureModel culture)
         {
             RepositoryResponse<bool> result = new();
-            MixCmsContext context = null;
+            MixCmsContextV2 context = null;
             MixCmsAccountContext accountContext = null;
             try
             {
                 string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 if (!string.IsNullOrEmpty(cnn))
                 {
-                    context = MixAppSettingService.GetDbContext();
-                    accountContext = MixAppSettingService.GetAccountDbContext();
+                    context = MixDatabaseService.GetDbContext();
+                    accountContext = MixDatabaseService.GetAccountDbContext();
                     MixCacheDbContext cacheContext = MixCacheService.GetCacheDbContext();
                     await context.Database.MigrateAsync();
                     await accountContext.Database.MigrateAsync();
                     await cacheContext.Database.MigrateAsync();
-                    var countCulture = context.MixCulture.Count();
+                    var countCulture = context.MixCultures.Count();
                     var pendingMigration = context.Database.GetPendingMigrations().Count();
                     if (pendingMigration == 0)
                     {
@@ -77,16 +76,16 @@ namespace Mix.Lib.Services
         public static async Task<RepositoryResponse<bool>> InitSiteData(string siteName, InitCultureModel culture)
         {
             RepositoryResponse<bool> result = new();
-            MixCmsContext context = null;
+            MixCmsContextV2 context = null;
             IDbContextTransaction transaction = null;
             try
             {
                 if (!string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    context = MixAppSettingService.GetDbContext();
+                    context = MixDatabaseService.GetDbContext();
                     transaction = context.Database.BeginTransaction();
 
-                    var countCulture = context.MixCulture.Count();
+                    var countCulture = context.MixCultures.Count();
 
                     /**
          * Init Selected Language as default
@@ -96,7 +95,7 @@ namespace Mix.Lib.Services
                     /**
                      * Init System Configurations
                      */
-                    if (isSucceed && !context.MixConfiguration.Any())
+                    if (isSucceed && !context.MixConfigurations.Any())
                     {
                         var saveResult = await InitConfigurationsAsync(siteName, culture.Specificulture, context, transaction);
                         result.IsSucceed = saveResult.IsSucceed;
@@ -142,25 +141,28 @@ namespace Mix.Lib.Services
         /// <param name="_context"></param>
         /// <param name="_transaction"></param>
         /// <returns></returns>
-        public static async Task<RepositoryResponse<bool>> InitConfigurationsAsync(string siteName, string specifiCulture, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> InitConfigurationsAsync(string siteName, string specifiCulture, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
 
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(
+                _context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             var getConfigs = MixFileRepository.Instance.GetFile(
                 MixConstants.CONST_FILE_CONFIGURATIONS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getConfigs.Content);
-            var configurations = obj["data"].ToObject<List<MixConfiguration>>();
-            var cnfSiteName = configurations.Find(c => c.Keyword == MixAppSettingKeywords.SiteName);
-            cnfSiteName.Value = siteName;
-            if (!string.IsNullOrEmpty(cnfSiteName.Value))
+            var configurations = obj["data"].ToObject<List<MixConfigurationContent>>();
+            var cnfSiteName = configurations.Find(c => c.SystemName == MixAppSettingKeywords.SiteName);
+            cnfSiteName.Content = siteName;
+            if (!string.IsNullOrEmpty(cnfSiteName.Content))
             {
-                configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeName).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
-                configurations.Find(c => c.Keyword == MixAppSettingKeywords.ThemeFolder).Value = Common.Helper.SeoHelper.GetSEOString(cnfSiteName.Value);
+                configurations.Find(c => c.SystemName == MixAppSettingKeywords.ThemeName).Content = 
+                    SeoHelper.GetSEOString(cnfSiteName.Content);
+                configurations.Find(c => c.SystemName == MixAppSettingKeywords.ThemeFolder).Content = 
+                    SeoHelper.GetSEOString(cnfSiteName.Content);
             }
             var result = await ThemeHelper.ImportConfigurations(configurations, specifiCulture, context, transaction);
 
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
             return result;
         }
@@ -174,13 +176,15 @@ namespace Mix.Lib.Services
         /// <param name="_context"></param>
         /// <param name="_transaction"></param>
         /// <returns></returns>
-        public static async Task<RepositoryResponse<bool>> InitMixDatabasesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> InitMixDatabasesAsync(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Configs */
 
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(
+                _context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getData = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
+            var getData = MixFileRepository.Instance.GetFile(
+                MixConstants.CONST_FILE_ATTRIBUTE_SETS, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(getData.Content);
             var data = obj["data"].ToObject<List<ImportMixDatabaseViewModel>>();
             foreach (var item in data)
@@ -197,7 +201,7 @@ namespace Mix.Lib.Services
                 }
             }
 
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
 
             return result;
         }
@@ -211,14 +215,14 @@ namespace Mix.Lib.Services
         /// <param name="_transaction"></param>
         /// <returns></returns>
         public async Task<RepositoryResponse<bool>> InitLanguagesAsync(string specificulture, List<MixLanguage> languages
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            , MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             /* Init Languages */
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(_context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
 
             var result = await ThemeHelper.ImportLanguages(languages, specificulture, context, transaction);
 
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return result;
         }
 
@@ -231,9 +235,9 @@ namespace Mix.Lib.Services
         /// <param name="_transaction"></param>
         /// <returns></returns>
         public async Task<RepositoryResponse<bool>> InitThemesAsync(string siteName
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            , MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(_context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (!context.MixTheme.Any())
             {
@@ -250,16 +254,16 @@ namespace Mix.Lib.Services
                 var saveResult = await theme.SaveModelAsync(true, context, transaction);
                 ViewModelHelper.HandleResult(saveResult, ref result);
             }
-            UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             return new RepositoryResponse<bool>() { IsSucceed = result.IsSucceed };
         }
 
-        protected static bool InitCultures(InitCultureModel culture, MixCmsContext context)
+        protected static bool InitCultures(InitCultureModel culture, MixCmsContextV2 context)
         {
             bool isSucceed = true;
             try
             {
-                if (!context.MixCulture.Any())
+                if (!context.MixCultures.Any())
                 {
                     // EN-US
 
@@ -286,12 +290,12 @@ namespace Mix.Lib.Services
             return isSucceed;
         }
 
-        protected static void InitPages(string culture, MixCmsContext context)
+        protected static void InitPages(string culture, MixCmsContextV2 context)
         {
             /* Init Pages */
             var pages = MixFileRepository.Instance.GetFile(MixConstants.CONST_FILE_PAGES, MixFolders.JsonDataFolder, true, "{}");
             var obj = JObject.Parse(pages.Content);
-            var arrPage = obj["data"].ToObject<List<MixPage>>();
+            var arrPage = obj["data"].ToObject<List<MixPageContent>>();
             foreach (var page in arrPage)
             {
                 page.Specificulture = culture;
@@ -300,7 +304,6 @@ namespace Mix.Lib.Services
                 page.SeoDescription = page.Title.ToLower();
                 page.SeoKeywords = page.Title.ToLower();
                 page.CreatedDateTime = DateTime.UtcNow;
-                page.CreatedBy = MixRoles.SuperAdmin;
                 context.Entry(page).State = EntityState.Added;
                 var alias = new MixUrlAlias()
                 {

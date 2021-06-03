@@ -1,5 +1,5 @@
 ﻿using Mix.Heart.Infrastructure.Entities;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 
 namespace Mix.Lib.Entities.Cms
 {

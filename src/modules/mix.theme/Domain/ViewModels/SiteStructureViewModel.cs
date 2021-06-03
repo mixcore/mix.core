@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;

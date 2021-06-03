@@ -1,0 +1,8 @@
+﻿using Mix.Database.Entities.Base;
+
+namespace Mix.Database.Entities.Cms.v2
+{
+    public class MixUrlAlias : EntityBase<int>
+    {
+    }
+}

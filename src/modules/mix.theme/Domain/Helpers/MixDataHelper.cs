@@ -3,32 +3,35 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
-using Mix.Lib.Constants;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
-using Mix.Lib.Services;
-using Mix.Lib.ViewModels.Cms;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Theme.Domain.ViewModels.Import;
 using Newtonsoft.Json.Linq;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Shared.Services;
+using Mix.Heart.Infrastructure.Repositories;
 
 namespace Mix.Theme.Domain.Helpers
 {
     public class MixDataHelper
     {
         public static async Task<RepositoryResponse<bool>> ImportData(
-            string culture, MixDatabaseViewModel mixDatabase, IFormFile file)
+            string culture, MixDatabase mixDatabase, IFormFile file,
+            DefaultModelRepository<MixCmsContextV2, MixDatabase> mixDatabaseRepo,
+            DefaultRepository<MixCmsContextV2, MixDatabaseColumn, ImportaMixDatabaseColumnViewModel> mixDatabaseColumnRepo)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(null, null, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(
+                null, null, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 List<ImportMixDataViewModel> data = LoadFileData(culture, mixDatabase, file);
 
-                var fields = ImportaMixDatabaseColumnViewModel.Repository.GetModelListBy(
+                var fields = mixDatabaseColumnRepo.GetModelListBy(
                     f => f.MixDatabaseId == mixDatabase.Id, context, transaction).Data;
                 foreach (var item in data)
                 {
@@ -36,31 +39,31 @@ namespace Mix.Theme.Domain.Helpers
                     {
                         var isCreateNew = string.IsNullOrEmpty(item.Id);
                         item.Columns = fields;
-                        item.MixDatabaseName = mixDatabase.Name;
+                        item.MixDatabaseName = mixDatabase.SystemName;
                         item.Status = MixAppSettingService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus);
                         var saveResult = await item.SaveModelAsync(true, context, transaction);
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 return result;
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContextV2>.HandleException<bool>(ex, isRoot, transaction);
             }
             finally
             {
                 if (isRoot)
                 {
                     //if current Context is Root
-                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                    UnitOfWorkHelper<MixCmsContextV2>.CloseDbContext(ref context, ref transaction);
                 }
             }
         }
 
         private static List<ImportMixDataViewModel> LoadFileData(
-           string culture, MixDatabaseViewModel mixDatabase, IFormFile file)
+           string culture, MixDatabase mixDatabase, IFormFile file)
         {
             //create a list to hold all the values
             List<ImportMixDataViewModel> excelData = new List<ImportMixDataViewModel>();
@@ -87,7 +90,7 @@ namespace Mix.Theme.Domain.Helpers
                         {
                             Id = obj["id"]?.ToString(),
                             MixDatabaseId = mixDatabase.Id,
-                            MixDatabaseName = mixDatabase.Name,
+                            MixDatabaseName = mixDatabase.SystemName,
                             Specificulture = culture,
                             Obj = obj
                         };

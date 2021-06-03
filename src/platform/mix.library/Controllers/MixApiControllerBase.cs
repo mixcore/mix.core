@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Mix.Heart.Models;
 using Mix.Lib.Services;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Controllers
 {
