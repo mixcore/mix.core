@@ -127,13 +127,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
                 .UseCollation("NOCASE");
-
-            entity.HasOne(d => d.SpecificultureNavigation)
-                .WithMany(p => p.MixPost)
-                .HasPrincipalKey(p => p.Specificulture)
-                .HasForeignKey(d => d.Specificulture)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Post_Mix_Culture");
         }
     }
 }

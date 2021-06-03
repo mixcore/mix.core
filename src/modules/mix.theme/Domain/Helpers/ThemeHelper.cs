@@ -124,7 +124,7 @@ namespace Mix.Theme.Domain.Helpers
                     }
                 }
 
-                data.Title = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
+                data.Title = ConfigurationService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
                 data.Name = SeoHelper.GetSEOString(data.Title);
                 data.Specificulture = culture;
                 var result = await data.SaveModelAsync(true);

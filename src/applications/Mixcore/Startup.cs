@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Lib.Extensions;
-using Mix.Lib.Services;
 using System.Reflection;
 
 namespace Mixcore

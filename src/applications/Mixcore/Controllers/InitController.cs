@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Constants;
+using Mix.Lib.Controllers;
 using Mix.Lib.Services;
 
 namespace Mixcore.Controllers

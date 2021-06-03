@@ -1,0 +1,16 @@
+﻿using Mix.Lib.Enums;
+using System;
+
+namespace Mix.Lib.Entities.Base
+{
+    public abstract class EntityBase<TPrimaryKey>
+    {
+        public TPrimaryKey Id { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime? LastModified { get; set; }
+        public Guid CreatedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public int Priority { get; set; }
+        public MixContentStatus Status { get; set; }
+    }
+}

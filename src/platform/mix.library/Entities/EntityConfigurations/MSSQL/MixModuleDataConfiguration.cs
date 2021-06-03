@@ -75,11 +75,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.MSSQL
                 .WithMany(p => p.MixModuleData)
                 .HasForeignKey(d => new { d.PageId, d.Specificulture })
                 .HasConstraintName("FK_mix_module_data_mix_page");
-
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixModuleData)
-                .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                .HasConstraintName("FK_mix_module_data_mix_post");
         }
     }
 }

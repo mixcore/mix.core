@@ -63,12 +63,6 @@ namespace Mix.Lib.Entities.EntityConfigurations.SQLITE
                 .HasForeignKey(d => new { d.PageId, d.Specificulture })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mix_Page_Post_Mix_Page");
-
-            entity.HasOne(d => d.MixPost)
-                .WithMany(p => p.MixPagePost)
-                .HasForeignKey(d => new { d.PostId, d.Specificulture })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Mix_Page_Post_Mix_Post");
         }
     }
 }

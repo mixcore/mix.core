@@ -20,7 +20,7 @@ using Mix.Lib.Models.Common;
 
 namespace Mix.Lib.Controllers
 {
-    public class BaseRestApiController<TDbContext, TModel, TView> : Controller
+    public class MixRestApiControllerBase<TDbContext, TModel, TView> : Controller
         where TDbContext : DbContext
         where TModel : class
         where TView : ViewModelBase<TDbContext, TModel, TView>

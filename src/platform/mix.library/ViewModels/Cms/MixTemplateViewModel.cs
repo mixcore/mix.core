@@ -69,7 +69,7 @@ namespace Mix.Lib.ViewModels.Cms
             }
             else
             {
-                int activeThemeId = MixAppSettingService.GetConfig<int>(
+                int activeThemeId = ConfigurationService.GetConfig<int>(
                     MixAppSettingKeywords.ThemeId, culture);
                 string name = temp[1].Split('.')[0];
                 result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
@@ -92,7 +92,7 @@ namespace Mix.Lib.ViewModels.Cms
             return new MixTemplateViewModel(new MixTemplate()
             {
                 Extension = MixAppSettingService.GetConfig<string>("TemplateExtension"),
-                ThemeId = MixAppSettingService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
+                ThemeId = ConfigurationService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
                 ThemeName = activedTemplate,
                 FolderType = folderType,
                 FileFolder = folder,
