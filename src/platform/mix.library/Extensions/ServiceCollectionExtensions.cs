@@ -12,17 +12,18 @@ using System.Linq;
 using System.Reflection;
 using Mix.Heart.Extensions;
 using Mix.Cms.Web;
-using Mix.Lib.Entities.Account;
 using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using Mix.Lib.ViewModels.Cms;
 using Mix.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Mix.Shared.Services;
+using Mix.Database.Entities.Account;
+using Mix.Database.Services;
 
 namespace Mix.Lib.Extensions
 {
@@ -149,26 +150,8 @@ namespace Mix.Lib.Extensions
 
             if (!MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
-                using (var ctx = MixAppSettingService.GetDbContext())
-                {
-                    ctx.Database.Migrate();
-                    var transaction = ctx.Database.BeginTransaction();
-                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-                    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
-                    foreach (var db in sysDatabases)
-                    {
-                        if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
-                        {
-                            db.SaveModel(true, ctx, transaction);
-                        }
-                    }
-                    transaction.Commit();
-                    transaction.Dispose();
-                }
-                using (var cacheCtx = MixCacheService.GetCacheDbContext())
-                {
-                    cacheCtx.Database.Migrate();
-                }
+                MixDatabaseService.InitMixCmsContext();
+                MixCacheService.InitMixCacheContext();
             }
         }
 

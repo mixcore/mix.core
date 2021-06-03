@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
@@ -11,9 +11,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 using Mix.Lib.ViewModels.Account;
-using Mix.Lib.Entities.Account;
 using Mix.Lib.Dtos;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Services
 {

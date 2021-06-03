@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using System;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.ViewModels.Cms
 {

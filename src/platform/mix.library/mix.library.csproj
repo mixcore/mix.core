@@ -6,7 +6,40 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ViewModels\Cms\DefaultViewModel.cs" />
+    <Compile Remove="Abstracts\ViewModels\**" />
+    <Compile Remove="Constants\**" />
+    <Compile Remove="Entities\Cms\**" />
+    <Compile Remove="Entities\EntityConfigurations\**" />
+    <Compile Remove="Entities\Messenger\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="ViewModels\Account\**" />
+    <Compile Remove="ViewModels\Cms\**" />
+    <EmbeddedResource Remove="Abstracts\ViewModels\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <EmbeddedResource Remove="Entities\Cms\**" />
+    <EmbeddedResource Remove="Entities\EntityConfigurations\**" />
+    <EmbeddedResource Remove="Entities\Messenger\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="ViewModels\Account\**" />
+    <EmbeddedResource Remove="ViewModels\Cms\**" />
+    <None Remove="Abstracts\ViewModels\**" />
+    <None Remove="Constants\**" />
+    <None Remove="Entities\Cms\**" />
+    <None Remove="Entities\EntityConfigurations\**" />
+    <None Remove="Entities\Messenger\**" />
+    <None Remove="Enums\**" />
+    <None Remove="ViewModels\Account\**" />
+    <None Remove="ViewModels\Cms\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\MixAttributeValueModelExtensions.cs" />
+    <Compile Remove="Extensions\ModelBuilderExtensions.cs" />
+    <Compile Remove="Helpers\MixAssociationHelper.cs" />
+    <Compile Remove="Services\HttpService.cs" />
+    <Compile Remove="Services\MixAppSettingService.cs" />
+    <Compile Remove="Services\MixIdentityService.cs" />
+    <Compile Remove="Services\MixService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,8 +50,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\mix.heart.csproj" />
-    <ProjectReference Include="..\mix.library.identity\mix.identity.csproj" />
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>

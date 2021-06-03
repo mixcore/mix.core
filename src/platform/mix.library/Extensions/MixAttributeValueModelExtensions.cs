@@ -1,17 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
-using Mix.Lib.Services;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Abstracts.ViewModels;
 using Mix.Heart.Infrastructure.ViewModels;
 using Newtonsoft.Json;
 using Mix.Heart.Models;
-using Mix.Lib.ViewModels.Cms;
 using Mix.Heart.Extensions;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Extensions
 {

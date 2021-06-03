@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Enums;
+﻿using Mix.Shared.Enums;
 
 namespace Mix.Lib.Models.Common
 {

@@ -5,6 +5,7 @@ namespace Mix.Theme.Domain.Models
 {
     public class ColumnConfigurations
     {
+        public string Options { get; set; }
         public int? MaxLength { get; set; }
         public string BelongTo { get; set; }
         public string OptionsConfigurationName { get; set; }

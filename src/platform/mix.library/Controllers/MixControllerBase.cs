@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Lib.Helpers;
 using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Linq;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -51,10 +52,10 @@ namespace Mix.Lib.Controllers
             {
                 Culture = RouteData?.Values["culture"]?.ToString().ToLower();
             }
-            if (!MixAppSettingService.Instance.CheckValidCulture(Culture))
-            {
-                Culture = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            }
+            //if (!MixAppSettingService.Instance.CheckValidCulture(Culture))
+            //{
+            //    Culture = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            //}
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);

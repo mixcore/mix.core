@@ -1,27 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Enums;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Mix.Lib.Entities.Cms;
 using Mix.Theme.Domain.Models;
-using Mix.Lib.ViewModels.Cms;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Shared.Enums;
 
 namespace Mix.Theme.Domain.ViewModels.Import
 {
     public class ImportaMixDatabaseColumnViewModel
-      : MixDatabaseColumnViewModelBase<ImportaMixDatabaseColumnViewModel>
+      : ViewModelBase<MixCmsContextV2, MixDatabaseColumn, ImportaMixDatabaseColumnViewModel>
     {
         #region Properties
+        public int Id { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime? LastModified { get; set; }
+        public Guid CreatedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public int Priority { get; set; }
+        public MixContentStatus Status { get; set; }
 
-        #region Models
-        public string Specificulture { get; set; }
-        public JArray JOptions { get; set; }
-        public bool IsRegex { get { return !string.IsNullOrEmpty(Regex); } }
-        #endregion Models
+        public string SystemName { get; set; }
+        public string DisplayName { get; set; }
+        public int MixDatabaseId { get; set; }
+        public string MixDatabaseName { get; set; }
+        public MixDataType DataType { get; set; }
+        public string Configurations { get; set; }
+        public int? ReferenceId { get; set; }
 
         #region Views
 
@@ -37,7 +46,9 @@ namespace Mix.Theme.Domain.ViewModels.Import
         {
         }
 
-        public ImportaMixDatabaseColumnViewModel(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
+        public ImportaMixDatabaseColumnViewModel(
+            MixDatabaseColumn model, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null) 
+            : base(model, _context, _transaction)
         {
         }
 
@@ -45,7 +56,7 @@ namespace Mix.Theme.Domain.ViewModels.Import
 
         #region Overrides
 
-        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        public override void Validate(MixCmsContextV2 _context, IDbContextTransaction _transaction)
         {
             base.Validate(_context, _transaction);
             if (IsValid)
@@ -53,44 +64,38 @@ namespace Mix.Theme.Domain.ViewModels.Import
                 if (MixDatabaseName != "sys_additional_field")
                 {
                     // Check if there is field name in the same attribute set
-                    IsValid = !_context.MixDatabaseColumn.Any(
-                        f => f.Id != Id && f.Name == Name && f.MixDatabaseId == MixDatabaseId);
+                    IsValid = !_context.MixDatabaseColumns.Any(
+                        f => f.Id != Id && f.SystemName == SystemName && f.MixDatabaseId == MixDatabaseId);
                     if (!IsValid)
                     {
-                        Errors.Add($"Field {Name} Existed");
+                        Errors.Add($"Field {SystemName} Existed");
                     }
                 }
             }
         }
 
-        public override MixDatabaseColumn ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixDatabaseColumn ParseModel(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            Options = JOptions?.ToString();
             Configurations = JObject.FromObject(ColumnConfigurations).ToString(Formatting.None);
             return base.ParseModel(_context, _transaction);
         }
 
-        public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override void ExpandView(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
-            if (!string.IsNullOrEmpty(Options))
-            {
-                JOptions = JArray.Parse(Options);
-            }
-
             ColumnConfigurations = string.IsNullOrEmpty(Configurations) ? new ColumnConfigurations()
                     : JObject.Parse(Configurations).ToObject<ColumnConfigurations>();
         }
 
-        public override Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task RemoveCache(MixDatabaseColumn model, MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
-            using (_context ??= new MixCmsContext())
+            using (_context ??= new MixCmsContextV2())
             {
-                var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
+                var relatedDatabaseId = _context.MixDatabases.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
                 MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
                 return base.RemoveCache(model, _context, _transaction);
             }

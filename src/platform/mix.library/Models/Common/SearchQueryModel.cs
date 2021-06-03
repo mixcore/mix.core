@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Dtos;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using System;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Models.Common
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Lib.Abstracts.ViewModels;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using System;
 
 namespace Mix.Lib.ViewModels.Cms

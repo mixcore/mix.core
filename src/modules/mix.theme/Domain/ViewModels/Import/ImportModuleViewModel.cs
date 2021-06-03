@@ -3,7 +3,7 @@ using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Lib.Abstracts.ViewModels;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.ViewModels.Cms;
 using System;
 using System.Collections.Generic;

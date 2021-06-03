@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
-using Mix.Lib.Services;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
@@ -10,12 +9,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Entities.Account;
+using Mix.Shared.Services;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.ViewModels.Account
 {
-    public class MixRegisterViewModel : ViewModelBase<MixCmsContext, MixCmsUser, MixRegisterViewModel>
+    public class MixRegisterViewModel : ViewModelBase<MixCmsContextV2, MixCmsUser, MixRegisterViewModel>
     {
         #region Properties
 
@@ -121,7 +120,7 @@ namespace Mix.Lib.ViewModels.Account
 
         #region Overrides
 
-        public override MixCmsUser ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixCmsUser ParseModel(MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             if (MediaFile.FileStream != null)
             {

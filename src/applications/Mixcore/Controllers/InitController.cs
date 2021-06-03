@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Controllers;
 using Mix.Lib.Services;
+using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {

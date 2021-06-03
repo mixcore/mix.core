@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Constants;
+﻿using Mix.Shared.Constants;
 using Mix.Lib.Entities.Cms;
 using Mix.Common.Helper;
 using Mix.Heart.Enums;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Threading;
 using Mix.Identity.Models;
 using Mix.Lib.Entities.Account;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using System.Collections.Generic;
 using System.Linq;
 

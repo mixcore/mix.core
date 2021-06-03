@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Entities.Cms;
 using System;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
@@ -10,6 +10,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using Mix.Lib.Entities.Cms;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.ViewModels.Account.MixUsers
 {

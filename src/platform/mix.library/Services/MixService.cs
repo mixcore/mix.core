@@ -1,6 +1,6 @@
 ﻿using Mix.Heart.Helpers;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

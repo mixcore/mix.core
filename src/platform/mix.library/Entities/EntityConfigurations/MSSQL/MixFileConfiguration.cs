@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Entities.Cms;
 
 namespace Mix.Lib.Entities.EntityConfigurations.MSSQL

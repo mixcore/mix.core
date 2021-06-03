@@ -1,7 +1,6 @@
 ﻿using Mix.Common.Helper;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Models.Common;
-using Mix.Lib.ViewModels.Cms;
 using System;
 using System.Collections.Generic;
 using System.IO;

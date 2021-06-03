@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -6,7 +6,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Domain\ViewModels\Import\Default.cs" />
+    <Compile Remove="Domain\Dtos\**" />
+    <Compile Remove="Domain\Helpers\**" />
+    <Compile Remove="Domain\Services\**" />
+    <Compile Remove="Domain\ViewModels\**" />
+    <Content Remove="Domain\Dtos\**" />
+    <Content Remove="Domain\Helpers\**" />
+    <Content Remove="Domain\Services\**" />
+    <Content Remove="Domain\ViewModels\**" />
+    <EmbeddedResource Remove="Domain\Dtos\**" />
+    <EmbeddedResource Remove="Domain\Helpers\**" />
+    <EmbeddedResource Remove="Domain\Services\**" />
+    <EmbeddedResource Remove="Domain\ViewModels\**" />
+    <None Remove="Domain\Dtos\**" />
+    <None Remove="Domain\Helpers\**" />
+    <None Remove="Domain\Services\**" />
+    <None Remove="Domain\ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\v2\InitController.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\platform\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
@@ -34,6 +54,10 @@
       <CopyToPublishDirectory>true</CopyToPublishDirectory>
     </Content>
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\v2\" />
   </ItemGroup>
 
 </Project>

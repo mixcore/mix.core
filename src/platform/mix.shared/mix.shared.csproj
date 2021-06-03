@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Mix.Shared</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\mix.heart.csproj" />
+    <ProjectReference Include="..\mix.library.identity\mix.identity.csproj" />
+  </ItemGroup>
+
+</Project>

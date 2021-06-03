@@ -6,10 +6,10 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Models;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Controllers;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels.Account;
 using Mix.Services;
@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Shared.Services;
 
 namespace Mix.Theme.Controllers.v2
 {

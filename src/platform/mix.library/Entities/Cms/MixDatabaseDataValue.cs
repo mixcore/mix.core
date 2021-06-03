@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Enums;
+﻿using Mix.Shared.Enums;
 using Mix.Heart.Infrastructure.Entities;
 using System;
 

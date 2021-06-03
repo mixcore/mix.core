@@ -2,7 +2,7 @@
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

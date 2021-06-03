@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Constants;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Mix.Common.Helper;
 using System;

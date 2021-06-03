@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Enums;
+﻿using Mix.Shared.Enums;
 using System;
 
 namespace Mix.Cms.Messenger.Models.Data

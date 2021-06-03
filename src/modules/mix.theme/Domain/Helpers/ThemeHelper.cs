@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Lib.Constants;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels.Cms;
 using Mix.Theme.Domain.Dtos;
@@ -17,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mix.Shared.Services;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Theme.Domain.Helpers
 {
@@ -174,9 +174,9 @@ namespace Mix.Theme.Domain.Helpers
             int themeId,
             string themeName,
             string culture,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+            MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(_context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -193,12 +193,12 @@ namespace Mix.Theme.Domain.Helpers
                     saveResult = await SaveNewConfigAsync(MixAppSettingKeywords.ThemeId, themeId.ToString(), culture, context, transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
                 }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
                 return result;
             }
             catch (Exception ex)
             {
-                return UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+                return UnitOfWorkHelper<MixCmsContextV2>.HandleException<bool>(ex, isRoot, transaction);
             }
             finally
             {
@@ -209,35 +209,42 @@ namespace Mix.Theme.Domain.Helpers
             }
         }
 
-        public static async Task<RepositoryResponse<bool>> ImportLanguages(List<MixLanguage> arrLanguage, string destCulture
-           , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> ImportLanguages(
+            List<MixLanguageContent> arrLanguage, string destCulture
+           , MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(
+                _context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
 
             try
             {
                 foreach (var item in arrLanguage)
                 {
-                    var lang = new MixLanguageViewModel(item, context, transaction)
+                    item.Specificulture = destCulture;
+                    var lang = new MixLanguage()
                     {
-                        Specificulture = destCulture,
+                        SystemName = item.SystemName,
+                        
+                        MixLanguageContents = new List<MixLanguageContent>() { 
+                            item 
+                        },
                         CreatedDateTime = DateTime.UtcNow
                     };
-                    var saveResult = await lang.SaveModelAsync(false, context, transaction);
-                    result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                    if (!result.IsSucceed)
-                    {
-                        result.Exception = saveResult.Exception;
-                        result.Errors = saveResult.Errors;
-                        break;
-                    }
+                    context.Add(lang);
                 }
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                await context.SaveChangesAsync();
+                if (!result.IsSucceed)
+                {
+                    result.Exception = saveResult.Exception;
+                    result.Errors = saveResult.Errors;
+                    break;
+                }
+                UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContextV2>.HandleException<bool>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -252,11 +259,12 @@ namespace Mix.Theme.Domain.Helpers
             return result;
         }
 
-        public static async Task<RepositoryResponse<bool>> ImportConfigurations(List<MixConfiguration> arrConfiguration, string destCulture,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static async Task<RepositoryResponse<bool>> ImportConfigurations(
+            List<MixConfigurationContent> arrConfiguration, string destCulture,
+            MixCmsContextV2 _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            UnitOfWorkHelper<MixCmsContextV2>.InitTransaction(_context, _transaction, out MixCmsContextV2 context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
                 foreach (var item in arrConfiguration)
@@ -276,11 +284,11 @@ namespace Mix.Theme.Domain.Helpers
                     }
                 }
                 result.Data = true;
-                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                UnitOfWorkHelper<MixCmsContextV2>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
-                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<bool>(ex, isRoot, transaction);
+                var error = UnitOfWorkHelper<MixCmsContextV2>.HandleException<bool>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
@@ -298,7 +306,7 @@ namespace Mix.Theme.Domain.Helpers
 
 
         private static async Task<RepositoryResponse<MixConfigurationViewModel>> SaveNewConfigAsync(
-            string keyword, string value, string culture, MixCmsContext context, IDbContextTransaction transaction)
+            string keyword, string value, string culture, MixCmsContextV2 context, IDbContextTransaction transaction)
         {
             MixConfigurationViewModel config = (await MixConfigurationViewModel.Repository.GetSingleModelAsync(
                            c => c.Keyword == keyword && c.Specificulture == culture

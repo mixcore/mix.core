@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Lib.Constants;
+using Mix.Shared.Constants;
 using Mix.Lib.Controllers;
-using Mix.Lib.Entities.Cms;
-using Mix.Lib.Enums;
+using Mix.Shared.Enums;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using Mix.Lib.ViewModels.Cms;
 using Mixcore.Domain.ViewModels.Mvc;
 using Mixcore.Models;
 using System;
@@ -19,6 +17,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Mix.Shared.Services;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mixcore.Controllers
 {
