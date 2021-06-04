@@ -2,8 +2,9 @@
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixConfigurationContent : MultilanguageContentaBase<int, MixConfiguration>
+    public class MixConfigurationContent : MultilanguageContentaBase<int>
     {
-
+        public int MixConfigurationId { get; set; }
+        public virtual MixConfiguration MixConfiguration { get; set; }
     }
 }

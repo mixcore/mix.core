@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixLanguage : EntityBase<int>
+    public class MixLanguage : SiteEntityBase<int>
     {
-        public string SystemName { get; set; }
-        public ICollection<MixLanguageContent> MixLanguageContents { get; set; }
+        public virtual ICollection<MixLanguageContent> MixLanguageContents { get; set; }
     }
 }

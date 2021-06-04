@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixPostContent: MultilanguageSEOContentBase<int, MixPost>
+    public class MixPostContent: MultilanguageSEOContentBase<int>
     {
         public string CssClass { get; set; }
         public string Icon { get; set; }
@@ -12,6 +12,9 @@ namespace Mix.Database.Entities.Cms.v2
         public string Template { get; set; }
         public int? PageSize { get; set; }
         public MixPageType Type { get; set; }
-        public ICollection<MixPage> MixPages { get; set; }
+
+        public int MixPostId { get; set; }
+        public virtual MixPost MixPost { get; set; }
+        public virtual ICollection<MixPage> MixPages { get; set; }
     }
 }

@@ -7,7 +7,6 @@ namespace Mix.Database.Entities.Cms.v2
 {
     public class MixDataContentValue : EntityBase<int>
     {
-        public int MixDatabaseColumnId { get; set; }
         public string MixDatabaseColumnName { get; set; }
         public string MixDatabaseName { get; set; }
         public string Regex { get; set; }
@@ -22,6 +21,10 @@ namespace Mix.Database.Entities.Cms.v2
         public string EncryptKey { get; set; }
         public int EncryptType { get; set; }
 
+        public Guid MixDataContentId { get; set; }
+        public int MixDatabaseColumnId { get; set; }
+
         public virtual MixDataContent MixDataContent { get; set; }
+        public virtual MixDatabaseColumn MixDatabaseColumn { get; set; }
     }
 }

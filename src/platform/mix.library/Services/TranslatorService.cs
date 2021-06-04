@@ -31,8 +31,8 @@ namespace Mix.Lib.Services
             try
             {
                 var translator = new JObject();
-                var ListLanguage = context.MixLanguageContents.ToList();
-                var cultures = context.MixCultures.ToList();
+                var ListLanguage = context.MixLanguageContent.ToList();
+                var cultures = context.MixCulture.ToList();
                 foreach (var culture in cultures)
                 {
                     JObject arr = new();

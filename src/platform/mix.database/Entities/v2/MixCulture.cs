@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixCulture : EntityBase<int>
+    public class MixCulture : SiteEntityBase<int>
     {
         public string Alias { get; set; }
         public string Description { get; set; }

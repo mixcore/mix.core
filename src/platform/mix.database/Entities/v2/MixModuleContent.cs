@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixPageContent: MultilanguageSEOContentBase<int>
+    public class MixModuleContent : MultilanguageSEOContentBase<int>
     {
         public string Title { get; set; }
         public string CssClass { get; set; }
         public string Icon { get; set; }
         public string Layout { get; set; }
         public string Template { get; set; }
-        public int? PageSize { get; set; }
-        public MixPageType Type { get; set; }
+        public int? ModuleSize { get; set; }
+        public MixModuleType Type { get; set; }
 
-        public int MixPageId { get; set; }
-        public virtual MixPage MixPage { get; set; }
+        public int MixModuleId { get; set; }
+        public virtual MixModule MixModule { get; set; }
         public virtual ICollection<MixPostContent> MixPostContents { get; set; }
     }
 }
