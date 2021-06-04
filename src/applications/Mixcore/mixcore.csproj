@@ -13,11 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\HomeController.cs" />
-    <Compile Remove="Controllers\InitController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>
@@ -59,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Domain\ViewModels\" />
   </ItemGroup>
 </Project>

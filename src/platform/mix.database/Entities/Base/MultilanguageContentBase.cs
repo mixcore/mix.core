@@ -3,13 +3,15 @@ using System;
 
 namespace Mix.Database.Entities.Base
 {
-    public abstract class MultilanguageContentaBase<TPrimaryKey>: EntityBase<TPrimaryKey>
+    public abstract class MultilanguageContentBase<TPrimaryKey>: EntityBase<TPrimaryKey>
     {
         public string Specificulture { get; set; }
+        public string DisplayName { get; set; }
         public string SystemName { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }
 
+        public int MixCultureId { get; set; }
         public virtual MixCulture MixCulture { get; set; }
     }
 }

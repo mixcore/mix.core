@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Database.Migrations
 {
     [DbContext(typeof(MixCmsContextV2))]
-    partial class MixCmsContextV2ModelSnapshot : ModelSnapshot
+    [Migration("20210604055254_AddTheme")]
+    partial class AddTheme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1049,9 +1051,6 @@ namespace Mix.Database.Migrations
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MixPostContentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MixPostId")
                         .HasColumnType("int");
 
@@ -1107,8 +1106,6 @@ namespace Mix.Database.Migrations
 
                     b.HasIndex("MixPageContentId");
 
-                    b.HasIndex("MixPostContentId");
-
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
@@ -1151,64 +1148,6 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MixSite");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MixSiteId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PreviewUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SystemName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MixDataContentId");
-
-                    b.HasIndex("MixSiteId");
-
-                    b.ToTable("MixTheme");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAlias", b =>
@@ -1317,71 +1256,6 @@ namespace Mix.Database.Migrations
                     b.HasIndex("MixUrlAliasId");
 
                     b.ToTable("MixUrlAliasContent");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixViewTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileFolder")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FolderType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MixThemeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MixThemeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MobileContent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Scripts")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SpaContent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Styles")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MixThemeId");
-
-                    b.ToTable("MixViewTemplate");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
@@ -1650,10 +1524,6 @@ namespace Mix.Database.Migrations
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPageContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPostContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixPostContentId");
-
                     b.HasOne("Mix.Database.Entities.Cms.v2.MixPost", "MixPost")
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPostId")
@@ -1665,25 +1535,6 @@ namespace Mix.Database.Migrations
                     b.Navigation("MixDataContent");
 
                     b.Navigation("MixPost");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
-                        .WithMany()
-                        .HasForeignKey("MixDataContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
-                        .WithMany()
-                        .HasForeignKey("MixSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixDataContent");
-
-                    b.Navigation("MixSite");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAlias", b =>
@@ -1712,17 +1563,6 @@ namespace Mix.Database.Migrations
                     b.Navigation("MixCulture");
 
                     b.Navigation("MixUrlAlias");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixViewTemplate", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixTheme", "MixTheme")
-                        .WithMany("MixViewTemplates")
-                        .HasForeignKey("MixThemeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTheme");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
@@ -1778,8 +1618,6 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPostContent", b =>
                 {
                     b.Navigation("MixPages");
-
-                    b.Navigation("MixPostContents");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixSite", b =>
@@ -1791,11 +1629,6 @@ namespace Mix.Database.Migrations
                     b.Navigation("MixPages");
 
                     b.Navigation("MixPosts");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
-                {
-                    b.Navigation("MixViewTemplates");
                 });
 #pragma warning restore 612, 618
         }
