@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Extensions;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
 using Mix.Shared.Services;
@@ -39,6 +40,14 @@ namespace Mix.Database.Entities.Cms.v2
                         break;
                 }
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyAllConfigurationsFromNamespace(
+                this.GetType().Assembly,
+                "Mix.Database.EntityConfigurations.v2.SQLSERVER");
         }
 
         public virtual DbSet<MixSite> MixSite { get; set; }
