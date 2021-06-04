@@ -13,8 +13,8 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.ClassName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.String}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.String}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
         }
     }
 }

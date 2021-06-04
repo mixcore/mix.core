@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.PreviewUrl)
                .IsRequired()
-               .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-               .HasCharSet(DatabaseConfiguration.CharSet)
-               .UseCollation(DatabaseConfiguration.DatabaseCollation);
+               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+               .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
     }
 }

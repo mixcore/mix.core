@@ -12,27 +12,27 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
             base.Configure(builder);
 
             builder.Property(e => e.Image)
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Description)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MaxLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
         }
 

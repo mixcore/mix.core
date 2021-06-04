@@ -15,44 +15,44 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseColumnName)
-              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-               .HasCharSet(DatabaseConfiguration.CharSet);
+               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
 
             builder.Property(e => e.DateTimeValue)
-              .HasColumnType(DataTypes.DateTime);
+              .HasColumnType(SqlServerDatabaseConstants.DataTypes.DateTime);
 
             builder.Property(e => e.StringValue)
-              .HasColumnType(DataTypes.Text)
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.EncryptValue)
-              .HasColumnType(DataTypes.Text)
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.EncryptKey)
-              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MaxLength}")
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.EncryptType)
               .HasConversion(new EnumToStringConverter<MixEncryptType>())
-              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
     }
 }

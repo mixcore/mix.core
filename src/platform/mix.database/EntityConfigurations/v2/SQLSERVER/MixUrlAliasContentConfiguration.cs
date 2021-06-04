@@ -14,21 +14,21 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             base.Configure(builder);
 
             builder.Property(e => e.SourceId)
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Alias)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Type)
                 .HasConversion(new EnumToStringConverter<MixUrlAliasType>())
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
     }
 }
