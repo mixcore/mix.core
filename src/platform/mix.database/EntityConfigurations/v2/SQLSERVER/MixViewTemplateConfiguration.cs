@@ -14,63 +14,63 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             base.Configure(builder);
 
             builder.Property(e => e.Content)
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Extension)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
              builder.Property(e => e.FileFolder)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
              builder.Property(e => e.FileName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.FolderType)
               .HasConversion(new EnumToStringConverter<MixTemplateFolderType>())
-              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-              .HasCharSet(DatabaseConfiguration.CharSet)
-              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Scripts)
                 .IsRequired()
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Styles)
                 .IsRequired()
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.SpaContent)
                 .IsRequired()
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.MobileContent)
                 .IsRequired()
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
              builder.Property(e => e.MixThemeName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
     }
 }

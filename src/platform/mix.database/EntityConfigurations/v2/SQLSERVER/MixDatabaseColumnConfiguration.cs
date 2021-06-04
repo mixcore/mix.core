@@ -15,33 +15,33 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
                 .IsRequired()
-                .HasColumnType(DataTypes.Text)
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-               .HasCharSet(DatabaseConfiguration.CharSet);
+               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
         }
     }
 }

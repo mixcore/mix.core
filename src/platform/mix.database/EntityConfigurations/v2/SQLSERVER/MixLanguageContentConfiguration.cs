@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MaxLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
     }
 }

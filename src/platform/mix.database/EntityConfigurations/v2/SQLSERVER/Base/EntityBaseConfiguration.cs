@@ -16,28 +16,28 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
                    .HasName(key);
 
             builder.Property(e => e.CreatedDateTime)
-                .HasColumnType(DataTypes.DateTime);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.DateTime);
 
             builder.Property(e => e.LastModified)
-                .HasColumnType(DataTypes.DateTime);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.DateTime);
 
             builder.Property(e => e.CreatedBy)
-                .HasColumnType(DataTypes.Guid);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Guid);
 
             builder.Property(e => e.ModifiedBy)
-                .HasColumnType(DataTypes.Guid);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Guid);
 
             builder.Property(e => e.Priority)
-                .HasColumnType(DataTypes.Integer);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Integer);
 
             builder.Property(e => e.Priority)
-                .HasColumnType(DataTypes.Integer);
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Integer);
 
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
-                .HasColumnType($"{DataTypes.String}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet);
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.String}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
         }
     }
 }

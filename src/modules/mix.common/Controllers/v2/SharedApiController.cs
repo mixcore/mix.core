@@ -102,7 +102,7 @@ namespace Mix.Common.Controllers.v2
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
-                    new JProperty("Facebook", ""),
+                    new JProperty("Facebook", MixAppSettingService.MixAuthentications.Facebook?.AppId),
                     new JProperty("Google", MixAppSettingService.MixAuthentications.Google?.AppId),
                     new JProperty("Twitter", MixAppSettingService.MixAuthentications.Twitter?.AppId),
                     new JProperty("Microsoft", MixAppSettingService.MixAuthentications.Microsoft?.AppId),
@@ -111,28 +111,9 @@ namespace Mix.Common.Controllers.v2
 
             };
 
-            // Get translator
-            var translator = new JObject()
-            {
-                new JProperty("lang",lang),
-                //new JProperty("data", MixAppSettingService.GetTranslator(lang))
-            };
-
-            // Get Configurations
-            var localizeSettings = new JObject()
-            {
-                new JProperty("lang",lang),
-                new JProperty("langIcon",configurations.LangIcon),
-
-                //new JProperty("data", MixAppSettingService.GetLocalizeSettings(lang))
-            };
-
-
             JObject result = new JObject()
             {
                 new JProperty("globalSettings", JObject.FromObject(configurations)),
-                new JProperty("translator", translator),
-                new JProperty("localizeSettings", JObject.FromObject(localizeSettings))
             };
 
 
