@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Base;
 using Mix.Shared.Enums;
 
-namespace Mix.Database.EntityConfigurations.SQLSERVER.Base
+namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
 {
     public abstract class EntityBaseConfiguration<T, TPrimaryKey> : IEntityTypeConfiguration<T>
         where T : EntityBase<TPrimaryKey>
@@ -16,28 +16,28 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER.Base
                    .HasName(key);
 
             builder.Property(e => e.CreatedDateTime)
-                .HasColumnType("datetime");
-            
+                .HasColumnType(DataTypes.DateTime);
+
             builder.Property(e => e.LastModified)
-                .HasColumnType("datetime");
+                .HasColumnType(DataTypes.DateTime);
 
             builder.Property(e => e.CreatedBy)
-                .HasColumnType("uniqueidentifier");
-            
+                .HasColumnType(DataTypes.Guid);
+
             builder.Property(e => e.ModifiedBy)
-                .HasColumnType("uniqueidentifier");
-            
+                .HasColumnType(DataTypes.Guid);
+
             builder.Property(e => e.Priority)
-                .HasColumnType("int");
-            
+                .HasColumnType(DataTypes.Integer);
+
             builder.Property(e => e.Priority)
-                .HasColumnType("int");
+                .HasColumnType(DataTypes.Integer);
 
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
-                .HasColumnType("varchar(50)")
-                .HasCharSet("utf8");
+                .HasColumnType($"{DataTypes.String}{DatabaseConfiguration.SmallLength}")
+                .HasCharSet(DatabaseConfiguration.CharSet);
         }
     }
 }

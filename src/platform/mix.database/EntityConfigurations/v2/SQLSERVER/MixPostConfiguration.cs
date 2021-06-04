@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Cms.v2;
-using Mix.Database.EntityConfigurations.SQLSERVER.Base;
+using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
@@ -8,6 +8,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
     {
         public override void Configure(EntityTypeBuilder<MixPost> builder)
         {
+            base.Configure(builder);
         }
     }
 }
