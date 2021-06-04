@@ -1,21 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Base;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
+using Mix.Shared.Enums;
 
-namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
+namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public abstract class MultilanguageContentBaseConfiguration<T, TPrimaryKey> : EntityBaseConfiguration<T, TPrimaryKey>
-        where T : MultilanguageContentBase<TPrimaryKey>
+    public class MixDatabaseColumnConfiguration : EntityBaseConfiguration<MixDatabaseColumn, int>
     {
-        public override void Configure(EntityTypeBuilder<T> builder)
+        public override void Configure(EntityTypeBuilder<MixDatabaseColumn> builder)
         {
             base.Configure(builder);
-
-            builder.Property(e => e.Specificulture)
-                .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
@@ -29,18 +25,23 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
                 .HasCharSet(DatabaseConfiguration.CharSet)
                 .UseCollation(DatabaseConfiguration.DatabaseCollation);
 
-            builder.Property(e => e.Description)
+            builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
+                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
+                .HasCharSet(DatabaseConfiguration.CharSet)
+                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+            
+            builder.Property(e => e.Configurations)
+                .IsRequired()
+                .HasColumnType(DataTypes.Text)
                 .HasCharSet(DatabaseConfiguration.CharSet)
                 .UseCollation(DatabaseConfiguration.DatabaseCollation);
 
-            builder.Property(e => e.Content)
-                .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
+            builder.Property(e => e.DataType)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixDataType>())
+               .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
+               .HasCharSet(DatabaseConfiguration.CharSet);
         }
-
     }
 }

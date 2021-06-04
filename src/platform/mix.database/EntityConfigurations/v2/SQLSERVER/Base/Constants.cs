@@ -4,9 +4,9 @@
     {
         public const string DatabaseCollation = "Vietnamese_CI_AS";
         public const string CharSet = "utf8";
-        public const string SmallLength = "50";
-        public const string MediumLength = "250";
-        public const string MaxLength = "4000";
+        public const string SmallLength = "(50)";
+        public const string MediumLength = "(250)";
+        public const string MaxLength = "(4000)";
     }
 
     public class DataTypes

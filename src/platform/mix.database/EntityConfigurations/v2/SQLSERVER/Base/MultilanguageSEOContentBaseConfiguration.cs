@@ -11,6 +11,16 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
         {
             base.Configure(builder);
 
+            builder.Property(e => e.Layout)
+              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
+              .HasCharSet(DatabaseConfiguration.CharSet)
+              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+
+            builder.Property(e => e.Template)
+              .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
+              .HasCharSet(DatabaseConfiguration.CharSet)
+              .UseCollation(DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.MixDatabaseName)
                 .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MediumLength}")
                 .HasCharSet(DatabaseConfiguration.CharSet)
