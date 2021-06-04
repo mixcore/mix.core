@@ -6,8 +6,7 @@ namespace Mix.Database.Entities.Cms.v2
 {
     public class MixPostContent: MultilanguageSEOContentBase<int>
     {
-        public string CssClass { get; set; }
-        public string Icon { get; set; }
+        public string ClassName { get; set; }
         public string Layout { get; set; }
         public string Template { get; set; }
         public int? PageSize { get; set; }
@@ -16,5 +15,6 @@ namespace Mix.Database.Entities.Cms.v2
         public int MixPostId { get; set; }
         public virtual MixPost MixPost { get; set; }
         public virtual ICollection<MixPage> MixPages { get; set; }
+        public virtual ICollection<MixPostContent> MixPostContents { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Shared.Constants;
 using Mix.Lib.Controllers;
-using Mix.Lib.Services;
 using Mix.Shared.Services;
+using Mixcore.Domain.Constants;
 
 namespace Mixcore.Controllers
 {
@@ -24,41 +24,27 @@ namespace Mixcore.Controllers
             else
             {
                 page = page ?? "";
-                var initStatus = MixAppSettingService.GetConfig<int>("InitStatus");
+                var initStatus = MixAppSettingService.GetConfig<int>(MixAppSettingKeywords.InitStatus);
                 switch (initStatus)
                 {
                     case 0:
                         if (page.ToLower() != "")
                         {
-                            return Redirect($"/init");
+                            return Redirect(InitRoutePath.Default);
                         }
                         break;
 
                     case 1:
                         if (page.ToLower() != "step2")
                         {
-                            return Redirect($"/init/step2");
+                            return Redirect(InitRoutePath.Step2);
                         }
                         break;
 
                     case 2:
                         if (page.ToLower() != "step3")
                         {
-                            return Redirect($"/init/step3");
-                        }
-                        break;
-
-                    case 3:
-                        if (page.ToLower() != "step4")
-                        {
-                            return Redirect($"/init/step4");
-                        }
-                        break;
-
-                    case 4:
-                        if (page.ToLower() != "step5")
-                        {
-                            return Redirect($"/init/step5");
+                            return Redirect(InitRoutePath.Step3);
                         }
                         break;
                 }

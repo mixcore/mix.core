@@ -42,18 +42,21 @@ namespace Mix.Database.Entities.Cms.v2
         }
 
         public virtual DbSet<MixSite> MixSite { get; set; }
+        public virtual DbSet<MixDomain> MixDomain { get; set; }
         public virtual DbSet<MixCulture> MixCulture { get; set; }
         public virtual DbSet<MixPage> MixPage { get; set; }
-        public virtual DbSet<MixPageContent> MixPageContent { get; set; }
         public virtual DbSet<MixPost> MixPost { get; set; }
-        public virtual DbSet<MixPostContent> MixPostContent { get; set; }
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
-        public virtual DbSet<MixUrlAliasContent> MixUrlAliasContent { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
-        public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
-        public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabase> MixDatabase { get; set; }
+        public virtual DbSet<MixTheme> MixTheme { get; set; }
+        public virtual DbSet<MixViewTemplate> MixViewTemplate { get; set; }
+        public virtual DbSet<MixPageContent> MixPageContent { get; set; }
+        public virtual DbSet<MixPostContent> MixPostContent { get; set; }
+        public virtual DbSet<MixUrlAliasContent> MixUrlAliasContent { get; set; }
+        public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }
+        public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixData> MixData { get; set; }
         public virtual DbSet<MixDataContent> MixDataContent { get; set; }

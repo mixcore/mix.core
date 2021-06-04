@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Database.Migrations
 {
     [DbContext(typeof(MixCmsContextV2))]
-    partial class MixCmsContextV2ModelSnapshot : ModelSnapshot
+    [Migration("20210604055509_AddTheme1")]
+    partial class AddTheme1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1049,9 +1051,6 @@ namespace Mix.Database.Migrations
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MixPostContentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MixPostId")
                         .HasColumnType("int");
 
@@ -1106,8 +1105,6 @@ namespace Mix.Database.Migrations
                     b.HasIndex("MixModuleContentId");
 
                     b.HasIndex("MixPageContentId");
-
-                    b.HasIndex("MixPostContentId");
 
                     b.HasIndex("MixPostId");
 
@@ -1650,10 +1647,6 @@ namespace Mix.Database.Migrations
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPageContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPostContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixPostContentId");
-
                     b.HasOne("Mix.Database.Entities.Cms.v2.MixPost", "MixPost")
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPostId")
@@ -1778,8 +1771,6 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPostContent", b =>
                 {
                     b.Navigation("MixPages");
-
-                    b.Navigation("MixPostContents");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixSite", b =>
