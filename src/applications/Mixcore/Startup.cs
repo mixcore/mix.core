@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Database.Entities.Cms.v2;
 using Mix.Lib.Extensions;
+using System.Linq;
 using System.Reflection;
 
 namespace Mixcore
@@ -20,6 +23,10 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            using (var ctx = new MixCmsContextV2())
+            {
+                var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
+            }
             services.AddMixServices();
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews().AddNewtonsoftJson();

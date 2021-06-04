@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixPost: EntityBase<int>
+    public class MixPost: SiteEntityBase<int>
     {
-        public ICollection<MixPostContent> MixPostContents { get; set; }
+        public virtual ICollection<MixPostContent> MixPostContents { get; set; }
     }
 }

@@ -1,11 +1,15 @@
-﻿using Mix.Database.Entities.Account;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
+using Mix.Infrastructure.Repositories;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Services;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 
 namespace Mix.Database.Services
 {
@@ -36,23 +40,24 @@ namespace Mix.Database.Services
 
         public static void InitMixCmsContext()
         {
-            throw new NotImplementedException();
-            //using (var ctx = MixDatabaseService.GetDbContext())
-            //{
-            //    ctx.Database.Migrate();
-            //    var transaction = ctx.Database.BeginTransaction();
-            //    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-            //    var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
-            //    foreach (var db in sysDatabases)
-            //    {
-            //        if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
-            //        {
-            //            db.SaveModel(true, ctx, transaction);
-            //        }
-            //    }
-            //    transaction.Commit();
-            //    transaction.Dispose();
-            //}
+            using (var ctx = MixDatabaseService.GetDbContext())
+            {
+                ctx.Database.Migrate();
+                var transaction = ctx.Database.BeginTransaction();
+                var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
+                //foreach (var db in sysDatabases)
+                //{
+                //    if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
+                //    {
+                //        db.SaveModel(true, ctx, transaction);
+                //    }
+                //}
+                //transaction.Commit();
+                //transaction.Dispose();
+                var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
+                Console.WriteLine(query);
+            }
         }
     }
 }
