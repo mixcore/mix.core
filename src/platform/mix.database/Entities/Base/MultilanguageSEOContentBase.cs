@@ -5,6 +5,8 @@ namespace Mix.Database.Entities.Base
 {
     public abstract class MultilanguageSEOContentBase<TPrimaryKey>: MultilanguageContentBase<TPrimaryKey>
     {
+        public string Layout { get; set; }
+        public string Template { get; set; }
         public string Image { get; set; }
         public string Source { get; set; }
         public string SeoDescription { get; set; }

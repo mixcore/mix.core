@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Entities.Base;
+using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Cms.v2
 {
@@ -8,7 +9,7 @@ namespace Mix.Database.Entities.Cms.v2
         public string Extension { get; set; }
         public string FileFolder { get; set; }
         public string FileName { get; set; }
-        public string FolderType { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
         public string Scripts { get; set; }
         public string SpaContent { get; set; }
         public string MobileContent { get; set; }

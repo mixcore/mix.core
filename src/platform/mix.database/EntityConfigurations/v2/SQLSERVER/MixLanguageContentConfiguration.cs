@@ -5,9 +5,9 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixConfigurationContentConfiguration : MultilanguageContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixLanguageContentConfiguration : MultilanguageContentBaseConfiguration<MixLanguageContent, int>
     {
-        public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
+        public override void Configure(EntityTypeBuilder<MixLanguageContent> builder)
         {
             base.Configure(builder);
 

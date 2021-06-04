@@ -1,21 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Base;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
-namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
+namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public abstract class MultilanguageContentBaseConfiguration<T, TPrimaryKey> : EntityBaseConfiguration<T, TPrimaryKey>
-        where T : MultilanguageContentBase<TPrimaryKey>
+    public class MixSiteConfiguration : EntityBaseConfiguration<MixSite, int>
     {
-        public override void Configure(EntityTypeBuilder<T> builder)
+        public override void Configure(EntityTypeBuilder<MixSite> builder)
         {
             base.Configure(builder);
-
-            builder.Property(e => e.Specificulture)
-                .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.SmallLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
@@ -34,13 +28,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
                 .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
                 .HasCharSet(DatabaseConfiguration.CharSet)
                 .UseCollation(DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.Content)
-                .IsRequired()
-                .HasColumnType($"{DataTypes.NString}{DatabaseConfiguration.MaxLength}")
-                .HasCharSet(DatabaseConfiguration.CharSet)
-                .UseCollation(DatabaseConfiguration.DatabaseCollation);
         }
-
     }
 }

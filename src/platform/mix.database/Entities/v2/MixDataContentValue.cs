@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixDataContentValue : EntityBase<int>
+    public class MixDataContentValue : EntityBase<Guid>
     {
         public string MixDatabaseColumnName { get; set; }
         public string MixDatabaseName { get; set; }
-        public string Regex { get; set; }
         public MixDataType DataType { get; set; }
         public bool? BooleanValue { get; set; }
         public string DataId { get; set; }
@@ -19,7 +18,7 @@ namespace Mix.Database.Entities.Cms.v2
         public string StringValue { get; set; }
         public string EncryptValue { get; set; }
         public string EncryptKey { get; set; }
-        public int EncryptType { get; set; }
+        public MixEncryptType EncryptType { get; set; }
 
         public Guid MixDataContentId { get; set; }
         public int MixDatabaseColumnId { get; set; }
