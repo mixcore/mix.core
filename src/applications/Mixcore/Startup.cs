@@ -27,7 +27,7 @@ namespace Mixcore
             {
                 var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
             }
-            services.AddMixServices();
+            services.AddMixServices(Configuration);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews().AddNewtonsoftJson();
         }

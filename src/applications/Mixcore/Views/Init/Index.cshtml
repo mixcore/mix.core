@@ -5,7 +5,8 @@
     <base href="/portal">
     <meta charset="utf-8" />
     <link rel="apple-touch-icon" sizes="76x76" href="~/lib/now-ui-kit-pro-v1.2.2/mix-app/assets/img/apple-icon.png">
-    <link rel="icon" href="@(MixAppSettingService.GetConfig<string>("Favicon") ?? "/mix-app/css/portal/img/mixcore-logo-green-16x16.png")">
+    <link rel="icon" href="@(MixAppSettingService.Instance.GetConfig<string>(Mix.Shared.Enums.MixAppSettingsSection.GlobalSettings, "Favicon") 
+        ?? "/mix-app/css/portal/img/mixcore-logo-green-16x16.png")">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Init Cms - Mixcore</title>
     <meta content='width=device-width, initial-sca

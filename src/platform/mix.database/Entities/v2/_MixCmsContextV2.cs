@@ -3,8 +3,10 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES;
 using Mix.Database.EntityConfigurations.v2.SQLITE;
 using Mix.Database.EntityConfigurations.v2.SQLSERVER;
 using Mix.Database.Extensions;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Shared.Services;
 using System;
 
@@ -18,10 +20,11 @@ namespace Mix.Database.Entities.Cms.v2
             //optionsBuilder.UseSqlServer(cnn1);
             //return;
 
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                    MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
                 switch (provider)
                 {
                     case MixDatabaseProvider.MSSQL:
@@ -48,7 +51,8 @@ namespace Mix.Database.Entities.Cms.v2
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             Type configType = provider switch
             {
                 MixDatabaseProvider.SQLITE => typeof(SqliteDatabaseConstants),

@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
-using Mix.Lib.Helpers;
-using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Linq;
 using Mix.Shared.Services;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -20,12 +19,13 @@ namespace Mix.Lib.Controllers
         protected bool forbidden = false;
         protected bool isValid = true;
         protected string _redirectUrl;
+        protected readonly MixAppSettingService _appSettingService;
         protected readonly MixService _mixService;
         protected bool ForbiddenPortal
         {
             get
             {
-                var allowedIps = MixAppSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "AllowedPortalIps") ?? new JArray();
+                var allowedIps = _appSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "AllowedPortalIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
                         // add in allowedIps "::1" to allow localhost
@@ -37,13 +37,16 @@ namespace Mix.Lib.Controllers
 
         protected IConfiguration _configuration;
 
-        public MixControllerBase(MixService mixService)
+        public MixControllerBase([FromServices] MixAppSettingService appSettingService, [FromServices] MixService mixService)
         {
-            if (!MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            _appSettingService = appSettingService;
+            _mixService = mixService;
+
+            if (!_appSettingService.GetConfig<bool>(
+                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
                 LoadCulture();
             }
-            _mixService = mixService;
         }
 
         private void LoadCulture()
@@ -52,9 +55,9 @@ namespace Mix.Lib.Controllers
             {
                 Culture = RouteData?.Values["culture"]?.ToString().ToLower();
             }
-            //if (!MixAppSettingService.Instance.CheckValidCulture(Culture))
+            //if (!_appSettingService.Instance.CheckValidCulture(Culture))
             //{
-            //    Culture = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            //    Culture = _appSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             //}
 
             // Set CultureInfo
@@ -82,13 +85,13 @@ namespace Mix.Lib.Controllers
             ViewBag.culture = Culture;
             if (!string.IsNullOrEmpty(Culture))
             {
-                ViewBag.assetFolder = MixCmsHelper.GetAssetFolder(Culture);
+                ViewBag.assetFolder = _mixService.GetAssetFolder(Culture);
             }
             domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
-            if (MixAppSettingService.GetConfig<bool>(MixAppSettingsSection.IpSecuritySettings, "IsRetrictIp"))
+            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.IpSecuritySettings, "IsRetrictIp"))
             {
-                var allowedIps = MixAppSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "AllowedIps") ?? new JArray();
-                var exceptIps = MixAppSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "ExceptIps") ?? new JArray();
+                var allowedIps = _appSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "AllowedIps") ?? new JArray();
+                var exceptIps = _appSettingService.GetConfig<JArray>(MixAppSettingsSection.IpSecuritySettings, "ExceptIps") ?? new JArray();
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 if (
                         // To allow localhost remove below comment
@@ -116,13 +119,14 @@ namespace Mix.Lib.Controllers
             }
 
             // If mode Maintenance enabled in appsettings
-            if (MixAppSettingService.GetConfig<bool>("IsMaintenance") && Request.RouteValues["seoName"].ToString() != "maintenance")
+            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsMaintenance")
+                    && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;
                 _redirectUrl = $"/maintenance";
             }
         }
 
-       
+
     }
 }

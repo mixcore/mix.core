@@ -11,19 +11,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mix.Heart.Extensions;
-using Mix.Cms.Web;
 using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Mix.Shared.Constants;
-using Mix.Infrastructure.Repositories;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using Mix.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Mix.Shared.Services;
-using Mix.Database.Entities.Account;
 using Mix.Database.Services;
+using Mix.Shared.Enums;
+using Microsoft.Extensions.Configuration;
+using Mix.Identity.Models;
 
 namespace Mix.Lib.Extensions
 {
@@ -31,16 +29,21 @@ namespace Mix.Lib.Extensions
     {
         static string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
 
-        public static IServiceCollection AddMixServices(this IServiceCollection services)
+        public static IServiceCollection AddMixServices(this IServiceCollection services, IConfiguration Configuration)
         {
-            VerifyInitData();
-            services.AddResponseCompression();
-            services.AddDbContext<MixDbContext>();
-            services.AddMixAuthorize<MixDbContext>(MixAppSettingService.MixAuthentications);
+            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString()) as MixAuthenticationConfigurations;
+            services.AddSingleton<MixFileService>();
+            services.AddSingleton<MixAppSettingService>();
+            services.AddSingleton<MixDatabaseService>();
             services.AddScoped<MixService>();
+            services.AddResponseCompression();
+            //services.AddDbContext<MixDbContext>();
+            //services.AddMixAuthorize<MixDbContext>(mixAuthentications);
             services.AddScoped<TranslatorService>();
             services.AddScoped<ConfigurationService>();
-
+            var serviceProvider = services.BuildServiceProvider();
+            var appSettingService = serviceProvider.GetService<MixAppSettingService>();
+            VerifyInitData(appSettingService);
             var assemblies = GetMixAssemblies();
 
             foreach (var assembly in assemblies)
@@ -57,7 +60,7 @@ namespace Mix.Lib.Extensions
                 services.AddRepositories(assembly);
             }
             // Mix: Check if require ssl
-            if (MixAppSettingService.GetConfig<bool>("IsHttps"))
+            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
             {
                 services.AddHttpsRedirection(options =>
                 {
@@ -83,7 +86,7 @@ namespace Mix.Lib.Extensions
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            if (MixAppSettingService.GetConfig<bool>("IsHttps"))
+            if (MixAppSettingService.Instance.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
@@ -144,13 +147,15 @@ namespace Mix.Lib.Extensions
             });
         }
 
-        private static void VerifyInitData()
+        private static void VerifyInitData(MixAppSettingService appSettingService)
         {
-            MixService.InitAppSettings();
+            var mixService = new MixService(appSettingService);
+            var mixDatabaseService = new MixDatabaseService(appSettingService);
+            mixService.InitAppSettings();
 
-            if (!MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
-                MixDatabaseService.InitMixCmsContext();
+                mixDatabaseService.InitMixCmsContext();
                 MixCacheService.InitMixCacheContext();
             }
         }
