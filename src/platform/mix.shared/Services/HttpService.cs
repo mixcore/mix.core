@@ -1,5 +1,4 @@
-﻿using Mix.Infrastructure.Repositories;
-using Mix.Shared.Constants;
+﻿using Mix.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,10 +16,12 @@ namespace Mix.Shared.Services
     public class HttpService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly MixFileService _fileService;
         private readonly JsonSerializerOptions _sharedJsonSerializerOptions;
-        public HttpService(IHttpClientFactory httpClientFactory)
+        public HttpService(IHttpClientFactory httpClientFactory, MixFileService fileService)
         {
             _httpClientFactory = httpClientFactory;
+            _fileService = fileService;
             _sharedJsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -39,7 +40,7 @@ namespace Mix.Shared.Services
                 response.EnsureSuccessStatusCode();
                 string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
-                MixFileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                _fileService.CreateDirectoryIfNotExist(folder);
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {

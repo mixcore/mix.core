@@ -1,9 +1,9 @@
 ﻿using Mix.Heart.Helpers;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
+using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
@@ -12,24 +12,42 @@ namespace Mix.Lib.Services
 {
     public class MixService
     {
-        public static void InitAppSettings()
+        public readonly MixAppSettingService _appSettingService;
+
+        public MixService(MixAppSettingService appSettingService)
         {
-            if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}"))
+            _appSettingService = appSettingService;
+        }
+        public void InitAppSettings()
+        {
+            if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}"))
             {
-                File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}", $"{MixConstants.CONST_FILE_APPSETTING}");
+                File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}{MixFileExtensions.Json}", $"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}");
                 var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-                MixAppSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                MixAppSettingService.SetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
-                MixAppSettingService.SaveSettings();
+                _appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
+                _appSettingService.SetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+                _appSettingService.SaveSettings();
             }
         }
 
-        public static string GetConnectionString(string connectionName)
+        public string GetAssetFolder(string culture = null)
         {
-            return MixAppSettingService.GetConfig<string>(MixAppSettingsSection.ConnectionStrings, connectionName);
+            culture ??= _appSettingService.GetConfig<string>(
+                MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+            return $"{_appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain)}/" +
+                $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
-        public static void SendMail(string subject, string message, string to, string from = null)
+        public string GetUploadFolder(string culture = null)
+        {
+            culture ??= _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+            return $"{MixFolders.SiteContentAssetsFolder}/" +
+                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
+                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
+        }
+
+        public void SendMail(string subject, string message, string to, string from = null)
         {
             MailMessage mailMessage = new()
             {
@@ -41,11 +59,11 @@ namespace Mix.Lib.Services
             mailMessage.Subject = subject;
             try
             {
-                string server = MixAppSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Server");
-                string user = MixAppSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "User");
-                string pwd = MixAppSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Password");
-                int port = MixAppSettingService.GetConfig<int>(MixAppSettingsSection.Smtp, "Port");
-                bool ssl = MixAppSettingService.GetConfig<bool>(MixAppSettingsSection.Smtp, "SSL");
+                string server = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Server");
+                string user = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "User");
+                string pwd = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Password");
+                int port = _appSettingService.GetConfig<int>(MixAppSettingsSection.Smtp, "Port");
+                bool ssl = _appSettingService.GetConfig<bool>(MixAppSettingsSection.Smtp, "SSL");
                 SmtpClient client = new(server)
                 {
                     UseDefaultCredentials = false,

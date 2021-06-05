@@ -5,6 +5,8 @@ using Mix.Lib.Controllers;
 using Mix.Lib.Services;
 using System.Threading.Tasks;
 using Mix.Shared.Services;
+using Mix.Shared.Enums;
+using Mix.Database.Services;
 
 namespace Mixcore.Controllers
 {
@@ -14,8 +16,9 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         public HomeController(
             ILogger<HomeController> logger,
+            MixAppSettingService appSettingService,
             MixService mixService,
-            TranslatorService translator) : base(mixService)
+            TranslatorService translator) : base(appSettingService, mixService)
         {
             _logger = logger;
             _translator = translator;
@@ -25,16 +28,18 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (_appSettingService.GetConfig<bool>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
-                if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                if (string.IsNullOrEmpty(MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     _redirectUrl = "Init";
                 }
                 else
                 {
-                    var status = MixAppSettingService.GetConfig<string>("InitStatus");
+                    var status = _appSettingService.GetConfig<string>(
+                        MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus);
                     _redirectUrl = $"/init/step{status}";
                 }
             }

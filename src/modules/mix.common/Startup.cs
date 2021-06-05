@@ -21,7 +21,7 @@ namespace Mix.Common
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddMixServices();
+            services.AddMixServices(Configuration);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
         }
 

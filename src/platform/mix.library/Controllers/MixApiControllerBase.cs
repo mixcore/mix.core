@@ -11,13 +11,18 @@ namespace Mix.Lib.Controllers
     public class MixApiControllerBase: ControllerBase
     {
         protected readonly ILogger<MixApiControllerBase> _logger;
-        private readonly TranslatorService _translator;
+        protected readonly MixAppSettingService _appSettingService;
+        protected readonly MixService _mixService;
+        protected readonly TranslatorService _translator;
         public MixApiControllerBase(
             ILogger<MixApiControllerBase> logger,
+            MixAppSettingService appSettingService,
             MixService mixService,
             TranslatorService translator) : base()
         {
             _logger = logger;
+            _appSettingService = appSettingService;
+            _mixService = mixService;
             _translator = translator;
         }
 

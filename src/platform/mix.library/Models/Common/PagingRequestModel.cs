@@ -5,6 +5,7 @@ using System;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
+using Mix.Shared.Enums;
 
 namespace Mix.Lib.Models.Common
 {
@@ -40,7 +41,7 @@ namespace Mix.Lib.Models.Common
             }
 
             PageSize = request.Query.TryGetValue(MixRequestQueryKeywords.PageSize, out var pageSize)
-                ? int.Parse(pageSize) : MixAppSettingService.GetConfig<int>(MixAppSettingKeywords.MaxPageSize);
+                ? int.Parse(pageSize) : MixAppSettingService.Instance.GetConfig<int>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize);
         }
     }
 }

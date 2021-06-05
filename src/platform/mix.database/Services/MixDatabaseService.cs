@@ -1,23 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
-using Mix.Infrastructure.Repositories;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Services;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService
+    public class MixDatabaseService : SingletonService<MixDatabaseService>
     {
-        public static MixCmsContextV2 GetDbContext()
+        public MixAppSettingService _appSettingService;
+        public MixDatabaseService()
         {
-            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            _appSettingService = MixAppSettingService.Instance;
+        }
+        public MixDatabaseService(MixAppSettingService appSettingService)
+        {
+            _appSettingService = appSettingService;
+        }
+
+        public string GetConnectionString(string connectionName)
+        {
+            return _appSettingService.GetConfig<string>(MixAppSettingsSection.ConnectionStrings, connectionName);
+        }
+
+        public MixCmsContextV2 GetDbContext()
+        {
+            var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             return provider switch
             {
                 MixDatabaseProvider.MSSQL => new MsSqlMixCmsContext(),
@@ -27,24 +39,24 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        public static MixCmsAccountContext GetAccountDbContext()
-        {
-            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            return provider switch
-            {
-                MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
-                _ => null,
-            };
-        }
+        //public MixCmsAccountContext GetAccountDbContext()
+        //{
+        //    var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+        //    return provider switch
+        //    {
+        //        MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
+        //        MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
+        //        _ => null,
+        //    };
+        //}
 
-        public static void InitMixCmsContext()
+        public void InitMixCmsContext()
         {
-            using (var ctx = MixDatabaseService.GetDbContext())
+            using (var ctx = GetDbContext())
             {
                 ctx.Database.Migrate();
                 var transaction = ctx.Database.BeginTransaction();
-                var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
                 //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
                 //foreach (var db in sysDatabases)
                 //{
@@ -59,5 +71,6 @@ namespace Mix.Database.Services
                 Console.WriteLine(query);
             }
         }
+
     }
 }

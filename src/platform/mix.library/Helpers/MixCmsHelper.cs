@@ -1,30 +1,12 @@
 ﻿using Mix.Shared.Constants;
 using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Text.RegularExpressions;
-using Mix.Shared.Services;
 
 namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
-        public static string GetAssetFolder(string culture = null)
-        {
-            culture ??= MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            return $"{MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
-                $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
-        }
-
-        public static string GetUploadFolder(string culture = null)
-        {
-            culture ??= MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            return $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
-                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
-        }
-
         public static string GetTemplateFolder(string culture)
         {
             return $"/{MixFolders.TemplatesFolder}/{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";

@@ -39,7 +39,6 @@
     <Compile Remove="Services\HttpService.cs" />
     <Compile Remove="Services\MixAppSettingService.cs" />
     <Compile Remove="Services\MixIdentityService.cs" />
-    <Compile Remove="Services\MixService.cs" />
   </ItemGroup>
 
   <ItemGroup>

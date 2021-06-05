@@ -1,6 +1,5 @@
 ﻿using Mix.Shared.Constants;
 using Mix.Shared.Enums;
-using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Mix.Shared.Services;
@@ -9,6 +8,12 @@ namespace Mix.Lib.Models.Common
 {
     public class MenuItemModel
     {
+        public MenuItemModel(MixAppSettingService appSettingService)
+        {
+            var domain = appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain);
+            Href = Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
+        }
+
         public JObject Obj { get; set; }
 
         public string Id { get; set; }
@@ -19,14 +24,7 @@ namespace Mix.Lib.Models.Common
 
         public string Uri { get; set; }
 
-        public string Href
-        {
-            get
-            {
-                var domain = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain);
-                return Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
-            }
-        }
+        public string Href { get; private set; }
 
         public string Icon { get; set; }
 

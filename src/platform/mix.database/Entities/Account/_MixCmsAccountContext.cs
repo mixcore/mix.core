@@ -10,6 +10,8 @@ using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using MySqlConnector;
 using Mix.Database.Extensions;
+using Mix.Shared.Enums;
+using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
 {
@@ -40,10 +42,11 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+                var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                    MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
                 switch (provider)
                 {
                     case MixDatabaseProvider.MSSQL:
@@ -71,7 +74,8 @@ namespace Mix.Database.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                            MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.MSSQL:
@@ -87,7 +91,8 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var provider = MixAppSettingService.GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                            MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             switch (provider)
             {
                 case MixDatabaseProvider.PostgreSQL:

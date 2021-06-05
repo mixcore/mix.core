@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Mix.Common.Helper;
-using Mix.Heart.Helpers;
-using Mix.Heart.Models;
-using Mix.Infrastructure.Repositories;
 using Mix.Shared.Constants;
 using Mix.Lib.Controllers;
 using Mix.Shared.Enums;
@@ -14,14 +10,23 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using Mix.Shared.Services;
+using Mix.Lib.Helpers;
+using Mix.Heart.Helpers;
 
 namespace Mix.Common.Controllers.v2
 {
     [Route("api/v2/shared")]
     public class SharedApiController : MixApiControllerBase
     {
-        public SharedApiController(ILogger<MixApiControllerBase> logger, MixService mixService, TranslatorService translator) : base(logger, mixService, translator)
+        private readonly MixFileService _fileService;
+
+        public SharedApiController(ILogger<MixApiControllerBase> logger,
+            MixFileService fileService, 
+            MixAppSettingService appSettingService, 
+            MixService mixService, 
+            TranslatorService translator) : base(logger, appSettingService, mixService, translator)
         {
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -35,93 +40,90 @@ namespace Mix.Common.Controllers.v2
         [Route("get-shared-settings")]
         public ActionResult<JObject> GetSharedSettingsAsync()
         {
-            return Ok(GetAllSettings().Data);
+            return Ok(GetAllSettings());
         }
         
         [HttpGet]
         [Route("{culture}/get-shared-settings")]
         public ActionResult<JObject> GetSharedSettingsAsync(string culture)
         {
-            return Ok(GetAllSettings(culture).Data);
+            return Ok(GetAllSettings(culture));
         }
 
         // GET api/v1/portal/check-config
         [HttpGet]
         [Route("check-config/{lastSync}")]
-        public ActionResult<RepositoryResponse<JObject>> checkConfig(DateTime lastSync)
+        public ActionResult<JObject> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = MixAppSettingService.GetConfig<DateTime>("LastUpdateConfiguration");
+            var lastUpdate = _appSettingService.GetConfig<DateTime>(
+                                MixAppSettingsSection.GlobalSettings, "LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettings());
             }
             else
             {
-                return new RepositoryResponse<JObject>()
-                {
-                    IsSucceed = true,
-                };
+                return BadRequest();
             }
         }
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("jarray-data/{name}")]
-        public ActionResult<JArray> LoadData(string name)
+        [Route("json-data/{name}")]
+        public ActionResult<JObject> LoadData(string name)
         {
             try
             {
-                var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
-                var obj = JObject.Parse(cultures.Content);
-                return Ok(obj["data"] as JArray);
+                var data = _fileService.GetFile(
+                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder,  false, "[]");
+                var obj = JObject.Parse(data.Content);
+                return Ok(obj);
             }
             catch
             {
                 return NotFound();
             }
         }
-        private RepositoryResponse<JObject> GetAllSettings(string lang = null)
+        private JObject GetAllSettings(string lang = null)
         {
-            lang ??= MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            var cultures = MixAppSettingService.Instance.Cultures;
+            lang ??= _appSettingService.GetConfig<string>(
+                        MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+            var cultures = _appSettingService.Cultures;
             var culture = cultures?.FirstOrDefault(c => c == lang);
             // Get Settings
             GlobalSettingModel configurations = new()
             {
-                Domain = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.Domain),
+                Domain = _appSettingService.GetConfig<string>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain),
                 Lang = lang,
-                PortalThemeSettings = MixAppSettingService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
-                ApiEncryptKey = MixAppSettingService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                IsEncryptApi = MixAppSettingService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
+                PortalThemeSettings = _appSettingService.GetConfig<JObject>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.PortalThemeSettings),
+                ApiEncryptKey = _appSettingService.GetConfig<string>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey),
+                IsEncryptApi = _appSettingService.GetConfig<bool>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = MixCommonHelper.ParseEnumToObject(typeof(MixPageType)),
-                ModuleTypes = MixCommonHelper.ParseEnumToObject(typeof(MixModuleType)),
-                MixDatabaseTypes = MixCommonHelper.ParseEnumToObject(typeof(MixDatabaseType)),
-                DataTypes = MixCommonHelper.ParseEnumToObject(typeof(MixDataType)),
-                Statuses = MixCommonHelper.ParseEnumToObject(typeof(MixContentStatus)),
+                PageTypes = MixHelper.ParseEnumToObject(typeof(MixPageType)),
+                ModuleTypes = MixHelper.ParseEnumToObject(typeof(MixModuleType)),
+                MixDatabaseTypes = MixHelper.ParseEnumToObject(typeof(MixDatabaseType)),
+                DataTypes = MixHelper.ParseEnumToObject(typeof(MixDataType)),
+                Statuses = MixHelper.ParseEnumToObject(typeof(MixContentStatus)),
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
-                    new JProperty("Facebook", MixAppSettingService.MixAuthentications.Facebook?.AppId),
-                    new JProperty("Google", MixAppSettingService.MixAuthentications.Google?.AppId),
-                    new JProperty("Twitter", MixAppSettingService.MixAuthentications.Twitter?.AppId),
-                    new JProperty("Microsoft", MixAppSettingService.MixAuthentications.Microsoft?.AppId),
+                    new JProperty("Facebook", _appSettingService.MixAuthentications.Facebook?.AppId),
+                    new JProperty("Google", _appSettingService.MixAuthentications.Google?.AppId),
+                    new JProperty("Twitter", _appSettingService.MixAuthentications.Twitter?.AppId),
+                    new JProperty("Microsoft", _appSettingService.MixAuthentications.Microsoft?.AppId),
                 },
-                LastUpdateConfiguration = MixAppSettingService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
+                LastUpdateConfiguration = _appSettingService.GetConfig<DateTime?>(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.LastUpdateConfiguration)
 
             };
 
-            JObject result = new JObject()
+            return new JObject()
             {
                 new JProperty("globalSettings", JObject.FromObject(configurations)),
-            };
-
-
-
-            return new RepositoryResponse<JObject>()
-            {
-                IsSucceed = true,
-                Data = result
             };
         }
 
