@@ -5,16 +5,16 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Mix.Lib.Entities.Cms;
 using Mix.Shared.Enums;
 using Mix.Shared.Constants;
 using Mix.Lib.Repositories;
 using Mix.Lib.Models.Common;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
     public class InitTemplateViewModel
-       : ViewModelBase<MixCmsContext, MixTemplate, InitTemplateViewModel>
+       : ViewModelBase<MixCmsContext, MixViewTemplate, InitTemplateViewModel>
     {
         #region Properties
 
@@ -95,7 +95,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
         {
         }
 
-        public InitTemplateViewModel(MixTemplate model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public InitTemplateViewModel(MixViewTemplate model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             : base(model, _context, _transaction)
         {
         }
@@ -106,7 +106,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         #region Common
 
-        public override MixTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override MixViewTemplate ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (Id == 0)
             {
@@ -123,7 +123,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         #region Async
 
-        public override RepositoryResponse<MixTemplate> RemoveModel(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<MixViewTemplate> RemoveModel(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = base.RemoveModel(isRemoveRelatedModels, _context, _transaction);
             if (result.IsSucceed)
@@ -133,7 +133,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             return result;
         }
 
-        public override RepositoryResponse<bool> SaveSubModels(MixTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override RepositoryResponse<bool> SaveSubModels(MixViewTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             TemplateRepository.Instance.SaveTemplate(new TemplateModel()
             {
@@ -149,7 +149,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         #region Async
 
-        public override async Task<RepositoryResponse<MixTemplate>> RemoveModelAsync(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<MixViewTemplate>> RemoveModelAsync(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = await base.RemoveModelAsync(isRemoveRelatedModels, _context, _transaction);
             if (result.IsSucceed)
@@ -159,7 +159,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             return result;
         }
 
-        public override Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixViewTemplate parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             TemplateRepository.Instance.SaveTemplate(new TemplateModel()
             {

@@ -12,7 +12,7 @@ using System;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixCmsContextV2 : DbContext
+    public class MixCmsContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

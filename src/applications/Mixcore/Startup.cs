@@ -23,7 +23,7 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            using (var ctx = new MixCmsContextV2())
+            using (var ctx = new MixCmsContext())
             {
                 var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
             }

@@ -7,7 +7,7 @@ using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Migrations
 {
-    [DbContext(typeof(MixCmsContextV2))]
+    [DbContext(typeof(MixCmsContext))]
     [Migration("20210603055531_Init")]
     partial class Init
     {

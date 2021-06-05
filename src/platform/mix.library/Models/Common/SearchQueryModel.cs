@@ -5,6 +5,7 @@ using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using System;
 using Mix.Shared.Services;
+using Mix.Heart.Enums;
 
 namespace Mix.Lib.Models.Common
 {

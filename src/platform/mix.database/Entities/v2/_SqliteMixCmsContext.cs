@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.v2
 {
-    public class SqliteMixCmsContext : MixCmsContextV2
+    public class SqliteMixCmsContext : MixCmsContext
     {
     }
 }

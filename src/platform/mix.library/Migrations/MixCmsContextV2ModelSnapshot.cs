@@ -6,7 +6,7 @@ using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Migrations
 {
-    [DbContext(typeof(MixCmsContextV2))]
+    [DbContext(typeof(MixCmsContext))]
     partial class MixCmsContextV2ModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using System;
+using Mix.Heart.Entity;
 
 namespace Mix.Database.Entities.Base
 {

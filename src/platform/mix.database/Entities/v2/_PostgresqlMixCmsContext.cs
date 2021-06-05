@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.v2
 {
-    public class PostgresqlMixCmsContext : MixCmsContextV2
+    public class PostgresqlMixCmsContext : MixCmsContext
     {
     }
 }

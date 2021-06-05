@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Lib.Conventions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Providers;
@@ -10,11 +8,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Mix.Shared.Constants;
-using Mix.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Mix.Shared.Services;
@@ -22,6 +18,10 @@ using Mix.Database.Services;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Models;
+using Mix.Heart.Extensions;
+using Mix.Heart.Entity;
+using Mix.Heart.Repository;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Extensions
 {
@@ -37,6 +37,7 @@ namespace Mix.Lib.Extensions
             services.AddSingleton<MixDatabaseService>();
             services.AddScoped<MixService>();
             services.AddResponseCompression();
+            services.AddDbContext<MixCmsContext>();
             //services.AddDbContext<MixDbContext>();
             //services.AddMixAuthorize<MixDbContext>(mixAuthentications);
             services.AddScoped<TranslatorService>();
@@ -156,7 +157,9 @@ namespace Mix.Lib.Extensions
             if (!appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
                 mixDatabaseService.InitMixCmsContext();
-                MixCacheService.InitMixCacheContext();
+
+                // TODO: Update cache service
+                //MixCacheService.InitMixCacheContext();
             }
         }
 
@@ -174,16 +177,21 @@ namespace Mix.Lib.Extensions
 
         private static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
+            IEntity<int> t = new MixDatabase();
             var candidates = assembly
                 .GetExportedTypes()
-                .Where(m => m.BaseType?.Name == typeof(ViewModelBase<,,>).Name);
-            var repositoryType = typeof(DefaultRepository<,,>);
+                .Where(
+                myType => myType.IsClass && !myType.IsAbstract
+                && (
+                    myType.IsSubclassOf(typeof(EntityBase<int>))
+                    || myType.IsSubclassOf(typeof(EntityBase<Guid>)
+                )));
+            var repositoryType = typeof(ViewRepository<,>);
             foreach (var candidate in candidates)
             {
-                if (candidate.BaseType.IsGenericType
-                    && candidate.BaseType.GenericTypeArguments.Length == repositoryType.GetGenericArguments().Length)
+                if (candidate.BaseType.IsGenericType)
                 {
-                    Type[] types = candidate.BaseType.GenericTypeArguments;
+                    Type[] types = new[] { typeof(MixCmsContext), candidate.BaseType };
                     services.AddScoped(
                         repositoryType.MakeGenericType(types)
                     );
