@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.Entities.Base;
-using Mix.Shared.Enums;
+using Mix.Heart.Entity;
+using Mix.Heart.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
 {

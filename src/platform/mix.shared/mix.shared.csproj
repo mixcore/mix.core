@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\mix.heart.csproj" />
+    <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
     <ProjectReference Include="..\mix.library.identity\mix.identity.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
-﻿using Mix.Shared.Enums;
+﻿using Mix.Heart.Enums;
+using Mix.Shared.Enums;
 using System;
 
 namespace Mix.Lib.Entities.Base

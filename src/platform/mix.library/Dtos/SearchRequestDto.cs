@@ -12,7 +12,7 @@ namespace Mix.Lib.Dtos
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public string OrderBy { get; set; }
-        public DisplayDirection Direction { get; set; }
+        public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
     }
 }

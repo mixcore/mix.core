@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Shared.Constants;
-using Mix.Heart.Enums;
 using System;
 using Mix.Heart.Extensions;
-using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mix.Shared.Enums;
+using Mix.Heart.Enums;
 
 namespace Mix.Lib.Models.Common
 {
     public class PagingRequestModel
     {
         public string OrderBy { get; set; }
-        public DisplayDirection Direction { get; set; }
+        public SortDirection Direction { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public int Page { get; set; }
@@ -26,7 +25,7 @@ namespace Mix.Lib.Models.Common
             OrderBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
                 ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";
             Direction = request.Query.TryGetValue(MixRequestQueryKeywords.Direction, out var direction)
-                ? Enum.Parse<DisplayDirection>(direction) : DisplayDirection.Desc;
+                ? Enum.Parse<SortDirection>(direction) : SortDirection.Desc;
             Page = request.Query.TryGetValue(MixRequestQueryKeywords.Page, out var page)
                 ? int.Parse(page) : 0;
             if (Page > 0)

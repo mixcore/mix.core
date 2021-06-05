@@ -1,4 +1,5 @@
-﻿using Mix.Infrastructure.Repositories;
+﻿using Mix.Shared.Constants;
+using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -55,11 +56,11 @@ namespace Mix.Lib.Abstracts
 
         public static bool SaveSettings()
         {
-            var settings = MixFileRepository.Instance.GetFile(FilePath, string.Empty, true, "{}");
+            var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
             if (settings != null)
             {
                 settings.Content = AppSettings.ToString();
-                return MixFileRepository.Instance.SaveFile(settings);
+                return MixFileService.Instance.SaveFile(settings);
             }
             else
             {
@@ -84,7 +85,7 @@ namespace Mix.Lib.Abstracts
         protected virtual void LoadAppSettings()
         {
             // Load configurations from appSettings.json
-            var settings = MixFileRepository.Instance.GetFile(FilePath, string.Empty, true);
+            var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true);
 
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             JObject jsonSettings = JObject.Parse(content);

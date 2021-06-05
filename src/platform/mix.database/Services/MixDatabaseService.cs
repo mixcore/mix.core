@@ -27,7 +27,7 @@ namespace Mix.Database.Services
             return _appSettingService.GetConfig<string>(MixAppSettingsSection.ConnectionStrings, connectionName);
         }
 
-        public MixCmsContextV2 GetDbContext()
+        public MixCmsContext GetDbContext()
         {
             var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
             return provider switch

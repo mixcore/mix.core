@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Mix.Shared.Services
 {
-    public class MixFileService
+    public class MixFileService: SingletonService<MixFileService>
     {
         public string CurrentDirectory { get; set; }
 

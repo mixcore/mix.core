@@ -1,5 +1,4 @@
-﻿using Mix.Heart.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Mix.Lib.Helpers
@@ -17,14 +16,9 @@ namespace Mix.Lib.Helpers
             return result;
         }
 
-        public static void HandleException<TResult>(RepositoryResponse<TResult> result, Exception ex)
-
+        public static void HandleException<TResult>(TResult result, Exception ex)
         {
-            result.IsSucceed = false;
-            result.Exception = ex;
-            result.Errors.Add(ex.Message);
             LogException(ex);
-            result.Errors.Add(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
         }
 
         private static void LogException(Exception ex)

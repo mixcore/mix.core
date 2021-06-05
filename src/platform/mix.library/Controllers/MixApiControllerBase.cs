@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Mix.Heart.Models;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 
@@ -24,18 +23,6 @@ namespace Mix.Lib.Controllers
             _appSettingService = appSettingService;
             _mixService = mixService;
             _translator = translator;
-        }
-
-        protected virtual ActionResult<T> GetResponse<T>(RepositoryResponse<T> result)
-        {
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
         }
     }
 }
