@@ -49,21 +49,6 @@ namespace Mix.Database.Entities.Cms.v2
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
-                MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            Type configType = provider switch
-            {
-                MixDatabaseProvider.SQLITE => typeof(SqliteDatabaseConstants),
-                MixDatabaseProvider.MSSQL => typeof(SqlServerDatabaseConstants),
-                MixDatabaseProvider.MySQL => typeof(SqlServerDatabaseConstants),
-                MixDatabaseProvider.PostgreSQL => typeof(PostgresSqlDatabaseConstants),
-                _ => throw new NotImplementedException()
-            };
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyAllConfigurationsFromNamespace(this.GetType().Assembly, configType.Namespace);
-        }
 
         public virtual DbSet<MixSite> MixSite { get; set; }
         public virtual DbSet<MixDomain> MixDomain { get; set; }

@@ -25,6 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Domain\Services\InitCmsService.cs" />
+    <Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />
+    <Compile Include="Domain\ViewModels\Init\InitSiteViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 

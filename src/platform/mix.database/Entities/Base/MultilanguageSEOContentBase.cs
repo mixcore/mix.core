@@ -4,6 +4,7 @@ using System;
 namespace Mix.Database.Entities.Base
 {
     public abstract class MultilanguageSEOContentBase<TPrimaryKey>: MultilanguageContentBase<TPrimaryKey>
+        where TPrimaryKey : IComparable
     {
         public string Layout { get; set; }
         public string Template { get; set; }

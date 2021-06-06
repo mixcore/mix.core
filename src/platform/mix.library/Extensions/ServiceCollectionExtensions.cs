@@ -183,17 +183,23 @@ namespace Mix.Lib.Extensions
                 .Where(
                 myType => myType.IsClass && !myType.IsAbstract
                 && (
-                    myType.IsSubclassOf(typeof(EntityBase<int>))
+                    myType.IsAssignableTo(typeof(EntityBase<int>))
                     || myType.IsSubclassOf(typeof(EntityBase<Guid>)
                 )));
-            var repositoryType = typeof(ViewRepository<,>);
+            var queryRepo = typeof(QueryRepository<,,>);
+            var commandRepo = typeof(CommandRepository<,,>);
             foreach (var candidate in candidates)
             {
                 if (candidate.BaseType.IsGenericType)
                 {
-                    Type[] types = new[] { typeof(MixCmsContext), candidate.BaseType };
+                    Type keyType = candidate.IsAssignableTo(typeof(EntityBase<int>)) ? typeof(int) : typeof(Guid);
+                    Type[] types = new[] { typeof(MixCmsContext), candidate.UnderlyingSystemType, keyType };
                     services.AddScoped(
-                        repositoryType.MakeGenericType(types)
+                        queryRepo.MakeGenericType(types)
+                    );
+                    
+                    services.AddScoped(
+                        commandRepo.MakeGenericType(types)
                     );
                 }
             }
