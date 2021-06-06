@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Base;
+using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
 {
     public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
+        where TPrimaryKey : IComparable
         where T : MultilanguageSEOContentBase<TPrimaryKey>
     {
         public override void Configure(EntityTypeBuilder<T> builder)

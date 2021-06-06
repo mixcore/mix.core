@@ -26,6 +26,11 @@ namespace Mix.Database.Services
         {
             return _appSettingService.GetConfig<string>(MixAppSettingsSection.ConnectionStrings, connectionName);
         }
+        
+        public void SetConnectionString(string connectionName, string connection)
+        {
+            _appSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, connectionName, connection);
+        }
 
         public MixCmsContext GetDbContext()
         {
@@ -49,6 +54,20 @@ namespace Mix.Database.Services
         //        _ => null,
         //    };
         //}
+
+        public void InitMixCmsContext(string connectionString,
+            MixDatabaseProvider databaseProvider,
+            string defaultCulture)
+        {
+            Instance.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
+            MixAppSettingService.Instance.SetConfig(
+                MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER, databaseProvider.ToString());
+            MixAppSettingService.Instance.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
+            //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
+            //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
+            MixAppSettingService.Instance.SaveSettings();
+            MixAppSettingService.Instance.Reload();
+        }
 
         public void InitMixCmsContext()
         {

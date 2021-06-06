@@ -12,7 +12,7 @@ using System.Linq;
 using Mix.Shared.Services;
 using Mix.Lib.Helpers;
 using Mix.Heart.Enums;
-using Mix.Cms.Lib.Helpers;
+using Mix.Heart.Helpers;
 
 namespace Mix.Common.Controllers.v2
 {

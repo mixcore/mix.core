@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Heart.Entity;
 using Mix.Heart.Enums;
+using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
 {
     public abstract class EntityBaseConfiguration<T, TPrimaryKey> : IEntityTypeConfiguration<T>
+        where TPrimaryKey : IComparable
         where T : EntityBase<TPrimaryKey>
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)

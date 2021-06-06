@@ -6,14 +6,16 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Repository;
 using Mix.Heart.Helpers;
+using Mix.Heart.Entity;
 
 namespace Mix.Lib.Controllers
 {
-    public class MixRestApiControllerBase<TDbContext, TModel> : Controller
+    public class MixRestApiControllerBase<TDbContext, TEntity, TPrimaryKey> : Controller
+        where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TModel : class
+        where TEntity : class, IEntity<TPrimaryKey>
     {
-        protected readonly ViewRepository<TDbContext, TModel> _repository;
+        protected readonly QueryRepository<TDbContext, TEntity, TPrimaryKey> _repository;
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
         protected string _lang;
@@ -24,37 +26,37 @@ namespace Mix.Lib.Controllers
         /// </summary>
         protected string _domain;
 
-        public MixRestApiControllerBase(ViewRepository<TDbContext, TModel> repository)
+        public MixRestApiControllerBase(QueryRepository<TDbContext, TEntity, TPrimaryKey> repository)
         {
             _repository = repository;
         }
 
         #region Helpers
 
-        protected async Task<TModel> GetSingleAsync(string id)
+        protected async Task<TEntity> GetSingleAsync(string id)
         {
-            Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>("Id", id, Heart.Enums.ExpressionMethod.Eq);
-            TModel data = null;
+            Expression<Func<TEntity, bool>> predicate = ReflectionHelper.GetExpression<TEntity>("Id", id, Heart.Enums.ExpressionMethod.Eq);
+            TEntity data = null;
             if (predicate != null)
             {
-                data = await _repository.GetSingleModelAsync(predicate);
+                data = await _repository.GetSingleAsync(predicate);
             }
             return data;
         }
 
-        protected async Task<TModel> GetSingleAsync(Expression<Func<TModel, bool>> predicate = null)
+        protected async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate = null)
         {
-            TModel  data = null;
+            TEntity  data = null;
             if (predicate != null)
             {
-                data = await _repository.GetSingleModelAsync(predicate);
+                data = await _repository.GetSingleAsync(predicate);
             }
             return data;
         }
 
-        protected async Task<TModel> DeleteAsync(Expression<Func<TModel, bool>> predicate, bool isDeleteRelated = false)
+        protected async Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool isDeleteRelated = false)
         {
-            return await _repository.GetSingleModelAsync(predicate);
+            return await _repository.GetSingleAsync(predicate);
         }
 
         //protected async Task<TModel> DeleteAsync(TModel data, bool isDeleteRelated = false)

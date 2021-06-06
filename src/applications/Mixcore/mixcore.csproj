@@ -6,13 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Domain\ViewModels\Mvc\**" />
-    <Content Remove="Domain\ViewModels\Mvc\**" />
-    <EmbeddedResource Remove="Domain\ViewModels\Mvc\**" />
-    <None Remove="Domain\ViewModels\Mvc\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>

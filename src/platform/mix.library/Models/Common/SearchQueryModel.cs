@@ -49,8 +49,8 @@ namespace Mix.Lib.Models.Common
             PagingData = new PagingRequestModel() {
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
-                Direction = request.Direction,
-                OrderBy = request.OrderBy
+                SortDirection = request.Direction,
+                SortBy = request.OrderBy
             };
         }
     }
