@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/{MixController.Post}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }

@@ -3,7 +3,7 @@
 
 # ref https://aloneonahill.com/blog/url-rewriting-for-beginners
 #RewriteRule ^(init|security|portal|api|page|post|module|error|swagger|graphql)(.*){0,}$ [NC,L]
-#RewriteRule \.(xml|json|html|css|js|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$ [NC,L]
+#RewriteRule \.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$ [NC,L]
 RewriteRule ^admin(.*)$ backend/$1
 #RewriteRule ^(.*)$ /?alias=$1
 RewriteRule ^(.*)\.((vue)$) /vue$1

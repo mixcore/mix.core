@@ -39,6 +39,10 @@ namespace Mix.Cms.Web.Controllers
         [Route("post/{id}/{seoName}")]
         [Route("{culture}/post/{id}")]
         [Route("{culture}/post/{id}/{seoName}")]
+        [Route("blog/{id}")]
+        [Route("blog/{id}/{seoName}")]
+        [Route("{culture}/blog/{id}")]
+        [Route("{culture}/blog/{id}/{seoName}")]
         public async Task<IActionResult> Index(int id, string culture, string seoName)
         {
             if (isValid)

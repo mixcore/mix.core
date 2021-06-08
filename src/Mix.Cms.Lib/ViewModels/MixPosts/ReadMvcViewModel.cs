@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/{MixController.Post}/{Id}/{SeoName}" : null; }
 
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }

@@ -17,7 +17,7 @@
     </rule>
 
     <rule name="Not rewrite Static Files" stopProcessing="true">
-      <match url="^(.*)\.(xml|json|html|css|js|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$" />
+      <match url="^(.*)\.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$" />
       <action type="None" appendQueryString="false"/>
     </rule>
 
