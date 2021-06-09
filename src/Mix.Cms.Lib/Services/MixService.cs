@@ -36,6 +36,7 @@ namespace Mix.Cms.Lib.Services
         private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
+        public List<ViewModels.MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
@@ -161,6 +162,15 @@ namespace Mix.Cms.Lib.Services
             }
             return Instance.Cultures.Any(c => c == specificulture);
         }
+        
+        public bool CheckValidAlias(string culture, string path)
+        {
+            if (Instance.Aliases == null)
+            {
+                Instance.Aliases = ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetModelList().Data;
+            }
+            return Instance.Aliases.Any(c => c.Specificulture == culture && c.Alias == path);
+        }
 
         public static T GetAuthConfig<T>(string name, T defaultValue = default)
         {
@@ -236,6 +246,16 @@ namespace Mix.Cms.Lib.Services
                 result = Instance.LocalSettings[culture][name];
             }
             return result != null ? result.Value<T>() : default;
+        }
+        
+        public static T GetConfig<T>(string name, string culture, T defaultValue)
+        {
+            JToken result = null;
+            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
+            {
+                result = Instance.LocalSettings[culture][name];
+            }
+            return result != null ? result.Value<T>() : defaultValue;
         }
 
         public static void SetConfig<T>(string name, string culture, T value)

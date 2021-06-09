@@ -63,6 +63,7 @@ namespace Mix.Cms.Web
                 });
 
             #region Additionals Config for Mixcore Cms
+            services.AddSingleton<TranslationTransformer>();
             services.AddHttpClient();
             services.Configure<FormOptions>(x =>
             {
@@ -139,6 +140,8 @@ namespace Mix.Cms.Web
 
             //app.UseStaticFiles();
             //app.UseGraphiQl("/api/graphql");
+
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseAuthentication();
