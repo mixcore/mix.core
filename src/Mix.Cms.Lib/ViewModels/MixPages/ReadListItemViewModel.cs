@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
@@ -179,6 +180,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 TotalPost = countPost.Data;
             }
+
+            DetailsUrl = Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PageController", Specificulture, "page")}/{Id}/{SeoName}")
+                   : null;
         }
 
         #endregion Overrides

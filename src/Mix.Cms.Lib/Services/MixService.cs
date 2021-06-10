@@ -36,6 +36,7 @@ namespace Mix.Cms.Lib.Services
         private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
+        public string DefaultCulture { get; set; }
         public List<ViewModels.MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
@@ -113,6 +114,7 @@ namespace Mix.Cms.Lib.Services
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
             instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
+            instance.DefaultCulture = instance.GlobalSettings[MixAppSettingKeywords.DefaultCulture].Value<string>();
             MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 

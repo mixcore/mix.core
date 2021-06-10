@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
@@ -116,7 +117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Specificulture}/{MixController.Post}/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
@@ -159,6 +160,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("author")]
         public JObject Author { get; set; }
 
+        [JsonProperty("aliases")]
         public List<MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         #endregion Views
 
@@ -187,6 +189,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAuthor(_context, _transaction);
             LoadAliased(_context, _transaction);
 
+            DetailsUrl = Aliases.Count > 0
+                ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{Aliases[0].Alias}")
+
+                : Id > 0
+                    ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                    : null;
         }
 
         private void LoadAliased(MixCmsContext context, IDbContextTransaction transaction)

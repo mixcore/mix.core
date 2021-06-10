@@ -49,7 +49,7 @@ namespace Mix.Cms.Lib.Services
             }
 
             var currentController = GetRouteValue(values, keys, ref keyIndex);
-            var controller = MixService.GetConfig<string>(currentController, language, currentController);
+            var controller = MixService.Translate(currentController, language, currentController);
             if (!IsValidController(controller))
             {
                 controller = "home";

@@ -164,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = MixRoles.SuperAdmin)]
+        Roles = "SuperAdmin,Admin")]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
@@ -310,7 +310,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/account/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin,Admin")]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
@@ -414,7 +414,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin,Admin")]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {
