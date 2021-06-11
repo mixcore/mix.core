@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
-     <PackageReference Include="Mix.Heart" Version="1.0.3.5" /> 
+     <PackageReference Include="Mix.Heart" Version="1.0.3.6" />
+    <!--<ProjectReference Include="..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />-->
   </ItemGroup>
+
 </Project>

@@ -11,6 +11,7 @@ namespace Mix.Cms.Lib.SignalR.Hubs
         public async Task JoinRoom(string room)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, room);
+            await SendMessageToGroups($"New member {Context.ConnectionId}", room);
         }
 
         public async Task SendMessage(string message)
@@ -23,10 +24,9 @@ namespace Mix.Cms.Lib.SignalR.Hubs
             return Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
-        public Task SendMessageToGroups(string message)
+        public Task SendMessageToGroups(string message, string groupName)
         {
-            List<string> groups = new List<string>() { "SignalR Users" };
-            return Clients.Groups(groups).SendAsync(Constants.HubMethods.ReceiveMethod, message);
+            return Clients.Group(groupName).SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
         public override async Task OnConnectedAsync()
