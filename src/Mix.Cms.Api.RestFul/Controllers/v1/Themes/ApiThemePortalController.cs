@@ -151,8 +151,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
 
+        [AllowAnonymous]
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [Route("install")]
         public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> InstallTheme([FromBody] JObject theme)
         {

@@ -41,10 +41,6 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [HttpGet]
-        [Route("")]
-        [Route("{seoName}")]
-        [Route("{seoName}/{keyword}")]
-        [Route("{culture}/{seoName}/{keyword}")]
         public async Task<IActionResult> Index(string seoName, string keyword)
         {
             if (isValid)

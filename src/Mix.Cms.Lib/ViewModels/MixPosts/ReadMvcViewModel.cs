@@ -109,7 +109,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("view")]
         public MixTemplates.ReadListItemViewModel View { get; set; }
@@ -200,6 +200,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("bodyClass")]
         public string BodyClass => Property<string>("body_class");
 
+        [JsonProperty("aliases")]
+        public List<MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -252,7 +254,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 // Related Posts
                 PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             }
+
+            LoadAliased(_context, _transaction);
+            DetailsUrl = Aliases.Count > 0
+               ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{Aliases[0].Alias}")
+
+               : Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                   : null;
         }
+
+        private void LoadAliased(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            Aliases = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(
+                m => m.Type == (int)MixUrlAliasType.Post && m.SourceId == Id.ToString(),
+                context, transaction).Data;
+        }
+
 
         private void LoadAuthor(MixCmsContext context, IDbContextTransaction transaction)
         {

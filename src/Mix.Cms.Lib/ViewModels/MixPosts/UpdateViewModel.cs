@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
@@ -277,6 +277,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             // Related Posts
             LoadRelatedPost(_context, _transaction);
+
+            DetailsUrl = Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                   : null;
         }
 
         public override MixPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

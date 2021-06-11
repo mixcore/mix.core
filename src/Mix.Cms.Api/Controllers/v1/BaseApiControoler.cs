@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Infrastructure.ViewModels;
@@ -120,7 +121,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("status", status),
                     new JProperty("message", message)
                 };
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+            _hubContext.Clients.All.SendAsync(HubMethods.ReceiveMethod, logMsg);
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)

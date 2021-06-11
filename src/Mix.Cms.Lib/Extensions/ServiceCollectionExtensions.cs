@@ -38,7 +38,7 @@ namespace Mix.Cms.Lib.Extensions
             {
                 endpoints.MapHub<PortalHub>("/portalHub");
                 //endpoints.MapHub<ServiceHub>("/serviceHub");
-                endpoints.MapHub<VideoChatHub>("/videoChatHub");
+                endpoints.MapHub<EditFileHub>("/editFileHub");
             });
             return app;
         }

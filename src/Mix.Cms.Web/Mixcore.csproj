@@ -67,14 +67,6 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-    <ItemGroup>
-        <None Update="ApacheModRewrite.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="IISUrlRewrite.xml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
     <ProjectExtensions>
         <VisualStudio>
             <UserProperties />

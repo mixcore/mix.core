@@ -36,6 +36,8 @@ namespace Mix.Cms.Lib.Services
         private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
+        public string DefaultCulture { get; set; }
+        public List<ViewModels.MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
@@ -112,6 +114,7 @@ namespace Mix.Cms.Lib.Services
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
             instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
+            instance.DefaultCulture = instance.GlobalSettings[MixAppSettingKeywords.DefaultCulture].Value<string>();
             MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -160,6 +163,15 @@ namespace Mix.Cms.Lib.Services
                 Instance.Cultures = cultures?.Select(c => c.Specificulture).ToList() ?? new List<string>();
             }
             return Instance.Cultures.Any(c => c == specificulture);
+        }
+        
+        public bool CheckValidAlias(string culture, string path)
+        {
+            if (Instance.Aliases == null)
+            {
+                Instance.Aliases = ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetModelList().Data;
+            }
+            return Instance.Aliases.Any(c => c.Specificulture == culture && c.Alias == path);
         }
 
         public static T GetAuthConfig<T>(string name, T defaultValue = default)
@@ -236,6 +248,16 @@ namespace Mix.Cms.Lib.Services
                 result = Instance.LocalSettings[culture][name];
             }
             return result != null ? result.Value<T>() : default;
+        }
+        
+        public static T GetConfig<T>(string name, string culture, T defaultValue)
+        {
+            JToken result = null;
+            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
+            {
+                result = Instance.LocalSettings[culture][name];
+            }
+            return result != null ? result.Value<T>() : defaultValue;
         }
 
         public static void SetConfig<T>(string name, string culture, T value)

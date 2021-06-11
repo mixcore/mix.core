@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
+using Mix.Heart.NetCore.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,6 +15,7 @@ using System.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
+    [GeneratedController("api/v1/rest/{culture}/mix-post/list-item")]
     public class ReadListItemViewModel
         : ViewModelBase<MixCmsContext, MixPost, ReadListItemViewModel>
     {
@@ -114,7 +117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<string> ListCategory { get => SysCategories.Select(t => t.AttributeData?.Property<string>("title")).Distinct().ToList(); }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
@@ -156,6 +159,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         [JsonProperty("author")]
         public JObject Author { get; set; }
+
+        [JsonProperty("aliases")]
+        public List<MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -181,6 +187,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
             LoadAuthor(_context, _transaction);
+            LoadAliased(_context, _transaction);
+
+            DetailsUrl = Aliases.Count > 0
+                ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{Aliases[0].Alias}")
+
+                : Id > 0
+                    ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                    : null;
+        }
+
+        private void LoadAliased(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            Aliases = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(
+                m => m.Type == (int)MixUrlAliasType.Post && m.SourceId == Id.ToString(),
+                context, transaction).Data;
         }
 
         private void LoadPages(MixCmsContext context, IDbContextTransaction transaction)

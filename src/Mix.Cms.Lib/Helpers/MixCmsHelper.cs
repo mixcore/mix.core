@@ -189,6 +189,13 @@ namespace Mix.Cms.Lib.Helpers
             return Task.FromResult(module.Data);
         }
 
+        internal static string GetDetailsUrl(string specificulture, string path)
+        {
+            return MixService.GetConfig<string>(MixAppSettingKeywords.Domain).TrimEnd('/')
+                    + (specificulture != MixService.Instance.DefaultCulture ? $"/{specificulture}" : string.Empty)
+                    + path;
+        }
+
         public static async System.Threading.Tasks.Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
         {
             RepositoryResponse<ViewModels.MixPages.ReadMvcViewModel> getPage = null;

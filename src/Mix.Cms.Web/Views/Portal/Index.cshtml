@@ -2,12 +2,12 @@
     ViewData["Title"] = "Dashboard";
     ViewData["Description"] = "Your powerful dashboard is here";
     Layout = "~/Views/Shared/_LayoutPortal_Angular.cshtml";
-
+    
     var menus = MixCmsHelper.LoadDataFile(MixFolders.JsonDataFolder, "portal-menus.json");
 }
 
 <div class="">
-
+    
     <mix-loader ng-show="isBusy"></mix-loader>
     <header-nav ng-if="isInit" settings="localizeSettings" bread-crumbs="breadCrumbs"></header-nav>
     <login-popup></login-popup>
