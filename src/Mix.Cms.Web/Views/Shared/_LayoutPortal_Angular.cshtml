@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="~/mix-app/css/app-vendor-scss.min.css" />
     <link rel="stylesheet" href="~/mix-app/css/shared.min.css" />    <
     @*script async src="https://pay.google.com/gp/p/js/pay.js"></script>*@
-    
+
 </head>
 
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="w-100 overflow-auto">
@@ -62,8 +62,14 @@
     <script src="~/mix-app/js/app-portal-required.min.js"></script>
     <script src="~/mix-app/js/app-portal.min.js?v="></script>
     <script src="~/mix-app/js/app-shared.min.js?v="></script>
-
-    <script>var require = { paths: { 'vs': '/mix-app/js/monaco-editor/min/vs' } };</script>
+    <script src="/mix-app/js/monaco-editor/min/vs/loader.js"></script>
+    <script>
+        require.config({
+            paths: {
+                vs: '/mix-app/js/monaco-editor/min/vs'
+            }
+        });
+    </script>
     <script src="/mix-app/js/monaco-editor/min/vs/loader.js"></script>
     <script src="/mix-app/js/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
     <script src="/mix-app/js/monaco-editor/min/vs/editor/editor.main.js"></script>
