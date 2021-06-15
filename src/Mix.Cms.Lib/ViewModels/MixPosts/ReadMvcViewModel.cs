@@ -258,7 +258,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadAliased(_context, _transaction);
             DetailsUrl = Aliases.Count > 0
                ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{Aliases[0].Alias}")
-
                : Id > 0
                    ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
                    : null;
