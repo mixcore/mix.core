@@ -28,6 +28,7 @@ using Mix.Identity.Helpers;
 using Mix.Cms.Lib.Dtos;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
+using Mix.Cms.Lib.Attributes;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -163,8 +164,8 @@ namespace Mix.Cms.Api.Controllers.v1
             return BadRequest(result);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = "SuperAdmin,Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
@@ -311,6 +312,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/account/list
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin,Admin")]
+        [MixAuthorize]
         [HttpPost, HttpOptions]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)

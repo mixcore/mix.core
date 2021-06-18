@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Heart.Models;
 using Mix.Heart.Infrastructure.Repositories;
+using Mix.Cms.Lib.Attributes;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -69,6 +70,7 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Routes
 
+        [MixAuthorize]
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TRead>>> Get()
         {
@@ -99,6 +101,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<TUpdate>> Get(string id)
         {
@@ -113,6 +116,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpGet("duplicate/{id}")]
         public virtual async Task<ActionResult<TUpdate>> Duplicate(string id)
         {
@@ -181,6 +185,7 @@ namespace Mix.Cms.Lib.Controllers
             return NoContent();
         }
 
+        [MixAuthorize]
         [HttpPost]
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TUpdate data)
         {
@@ -199,6 +204,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Update(string id, [FromBody] TUpdate data)
         {
@@ -235,6 +241,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpPatch("{id}")]
         public virtual async Task<IActionResult> Patch(string id, [FromBody] JObject fields)
         {
@@ -260,6 +267,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult<TModel>> Delete(string id)
         {
@@ -274,7 +282,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {

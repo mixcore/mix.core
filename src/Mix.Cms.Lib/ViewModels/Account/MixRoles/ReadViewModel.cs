@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Heart.Infrastructure.ViewModels;
@@ -35,6 +36,8 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         [JsonProperty("permissions")]
         public List<MixPortalPages.ReadRolePermissionViewModel> Permissions { get; set; }
 
+        [JsonProperty("mixPermissions")]
+        public List<MixDatabaseDatas.ReadMvcViewModel> MixPermissions { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -78,6 +81,11 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
+            var getPermissions = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListBy(
+                    m => m.ParentType == MixDatabaseParentType.Role && m.ParentId == Id);
+            MixPermissions = getPermissions.IsSucceed
+                    ? getPermissions.Data.Select(n => n.Data).ToList()
+                    : new List<MixDatabaseDatas.ReadMvcViewModel>();
             //Permissions = MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
             //&& (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == MixRoles.SuperAdmin)
             //).Data;

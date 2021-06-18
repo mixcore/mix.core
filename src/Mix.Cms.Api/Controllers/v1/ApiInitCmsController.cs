@@ -109,7 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (createResult.Succeeded)
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                        await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                        await _userManager.AddToRoleAsync(user, MixDefaultRoles.SuperAdmin);
                         await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                         var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
@@ -297,7 +297,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 var saveResult = await _roleManager.CreateAsync(new IdentityRole()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Name = MixRoles.SuperAdmin
+                    Name = MixDefaultRoles.SuperAdmin
                 });
                 isSucceed = saveResult.Succeeded;
             }

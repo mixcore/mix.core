@@ -1,6 +1,6 @@
 ﻿namespace Mix.Cms.Lib.Constants
 {
-    public class MixRoles
+    public class MixDefaultRoles
     {
         public const string SuperAdmin = "SuperAdmin";
     }

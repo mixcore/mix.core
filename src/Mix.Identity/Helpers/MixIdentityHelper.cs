@@ -91,11 +91,11 @@ namespace Mix.Identity.Helpers
         }
 
         public async Task<string> GenerateTokenAsync(
-            ApplicationUser user, 
-            DateTime expires, 
-            string refreshToken, 
-            string aesKey, 
-            string rsaPublicKey, 
+            ApplicationUser user,
+            DateTime expires,
+            string refreshToken,
+            string aesKey,
+            string rsaPublicKey,
             MixAuthenticationConfigurations appConfigs)
         {
             List<Claim> claims = await GetClaimsAsync(user, appConfigs);
@@ -141,7 +141,7 @@ namespace Mix.Identity.Helpers
             }
             return claims;
         }
-        
+
         public Claim CreateClaim(string type, string value)
         {
             return new Claim(type, value, ClaimValueTypes.String);
@@ -150,6 +150,11 @@ namespace Mix.Identity.Helpers
         public string GetClaim(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
+        }
+
+        public IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
+        {
+            return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)

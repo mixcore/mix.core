@@ -10,5 +10,6 @@
         public const string SYSTEM_CATEGORY = "sys_category";
         public const string SYSTEM_TAG = "sys_tag";
         public const string SYSTEM_USER_DATA = "sys_user_data";
+        public const string SYSTEM_PERMISSION = "sys_permission";
     }
 }
