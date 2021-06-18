@@ -106,9 +106,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var temp = await ReadViewModel.Repository.GetSingleModelAsync(r => r.Id == role.Id);
                     if (temp.IsSucceed)
                     {
-                        temp.Data.Permissions = Lib.ViewModels.MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
-                        && (p.MixPortalPageRole.Any(r => r.RoleId == temp.Data.Id))
-                        ).Data;
+                        await temp.Data.LoadPermissions();
                         permissions.Data.Add(temp.Data);
                     }
                 }

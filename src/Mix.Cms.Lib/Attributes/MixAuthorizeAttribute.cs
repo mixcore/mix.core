@@ -51,6 +51,7 @@ namespace Mix.Cms.Lib.Attributes
                 return true;
             }
             var getPermissions = ViewModels.Account.MixRoles.ReadViewModel.Repository.GetSingleModel(r => r.Name == roles.First());
+            getPermissions.Data.LoadMixPermissions().GetAwaiter().GetResult();
             return getPermissions.IsSucceed
                 ? getPermissions.Data.MixPermissions.Any(
                     p => p.Property<JArray>("endpoints")

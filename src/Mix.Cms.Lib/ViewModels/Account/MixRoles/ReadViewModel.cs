@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
@@ -34,7 +35,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
         #region Views
 
         [JsonProperty("permissions")]
-        public List<MixPortalPages.ReadRolePermissionViewModel> Permissions { get; set; }
+        public List<MixPortalPages.UpdateRolePermissionViewModel> Permissions { get; set; }
 
         [JsonProperty("mixPermissions")]
         public List<MixDatabaseDatas.ReadMvcViewModel> MixPermissions { get; set; }
@@ -81,54 +82,69 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var getPermissions = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListBy(
-                    m => m.ParentType == MixDatabaseParentType.Role && m.ParentId == Id);
-            MixPermissions = getPermissions.IsSucceed
-                    ? getPermissions.Data.Select(n => n.Data).ToList()
-                    : new List<MixDatabaseDatas.ReadMvcViewModel>();
-            //Permissions = MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
-            //&& (p.MixPortalPageRole.Any(r => r.RoleId == Id) || Name == MixRoles.SuperAdmin)
-            //).Data;
-            //foreach (var item in Permissions)
-            //{
-            //    item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == item.Id && n.RoleId == Id).Data;
-
-            //    //foreach (var child in item.ChildPages)
-            //    //{
-            //    //    child.Page.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(n => n.PageId == child.Page.Id && n.RoleId == Id).Data;
-            //    //}
-            //}
+           
         }
 
         #endregion Overrides
 
         #region Expands
 
-        private List<MixPortalPageRoles.ReadViewModel> GetPermission()
+        public async Task LoadPermissions(MixCmsContext _context = null
+            , IDbContextTransaction _transaction = null)
         {
-            using (MixCmsContext context = new MixCmsContext())
+            var getPermissions = await MixPortalPages.UpdateRolePermissionViewModel.Repository.GetModelListByAsync(
+                p => p.Level == 0
+                && p.MixPortalPageRole.Any(r => r.RoleId == Id)
+                , _context, _transaction);
+            if (getPermissions.IsSucceed)
             {
-                var transaction = context.Database.BeginTransaction();
-                var query = context.MixPortalPage
-                .Include(cp => cp.MixPortalPageRole)
-                .Select(Category =>
-                new MixPortalPageRoles.ReadViewModel(
-                      new MixPortalPageRole()
-                      {
-                          RoleId = Id,
-                          PageId = Category.Id,
-                      }, context, transaction));
-
-                var result = query.ToList();
-
-                result.ForEach(nav =>
+                Permissions = getPermissions.Data;
+                try
                 {
-                    nav.IsActived = context.MixPortalPageRole.Any(
-                            m => m.PageId == nav.PageId && m.RoleId == Id);
-                });
-                transaction.Commit();
-                return result.OrderBy(m => m.Priority).ToList();
+                    foreach (var item in getPermissions.Data)
+                    {
+                        item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(
+                            n => n.PageId == item.Id && n.RoleId == Id, _context, _transaction)
+                            .Data;
+                       
+                        foreach (var child in item.ChildPages)
+                        {
+                            child.PortalPage.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(
+                                n => n.PageId == child.PortalPage.Id && n.RoleId == Id, _context, _transaction)
+                                .Data;
+                            if (child.PortalPage.NavPermission == null)
+                            {
+                                var nav = new MixPortalPageRole()
+                                {
+                                    PageId = child.PortalPage.Id,
+                                    RoleId = Id,
+                                    Status = MixContentStatus.Published
+                                };
+                                child.PortalPage.NavPermission = new MixPortalPageRoles.ReadViewModel(nav) { IsActived = false };
+                            }
+                            else
+                            {
+                                child.PortalPage.NavPermission.IsActived = true;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
+
+            await LoadMixPermissions(_context, _transaction);
+        }
+
+        public async Task LoadMixPermissions(MixCmsContext context = null, IDbContextTransaction transaction = null)
+        {
+            var getPermissions = await MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetModelListByAsync(
+                   m => m.ParentType == MixDatabaseParentType.Role && m.ParentId == Id, context, transaction);
+            MixPermissions = getPermissions.IsSucceed
+                    ? getPermissions.Data.Select(n => n.Data).ToList()
+                    : new List<MixDatabaseDatas.ReadMvcViewModel>();
         }
 
         #endregion Expands

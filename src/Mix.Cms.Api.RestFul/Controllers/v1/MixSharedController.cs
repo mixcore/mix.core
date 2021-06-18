@@ -9,6 +9,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Heart.Models;
+using Mix.Identity.Constants;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -90,7 +91,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 IsSucceed = true,
                 Data = new List<MixRoles.ReadViewModel>()
             };
-            var roles = User.Claims.Where(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").ToList();
+            var roles = User.Claims.Where(c => c.Type == MixClaims.Role).ToList();
             if (!roles.Any(role => role.Value.ToUpper() == MixDefaultRoles.SuperAdmin))
             {
                 foreach (var item in roles)
@@ -99,9 +100,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     var temp = await MixRoles.ReadViewModel.Repository.GetSingleModelAsync(r => r.Id == role.Id);
                     if (temp.IsSucceed)
                     {
-                        temp.Data.Permissions = Lib.ViewModels.MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
-                        && (p.MixPortalPageRole.Any(r => r.RoleId == temp.Data.Id))
-                        ).Data;
+                        await temp.Data.LoadPermissions();
                         permissions.Data.Add(temp.Data);
                     }
                 }

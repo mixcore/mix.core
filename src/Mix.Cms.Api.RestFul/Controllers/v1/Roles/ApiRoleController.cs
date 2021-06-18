@@ -79,7 +79,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         protected override async Task<RepositoryResponse<UpdateViewModel>> GetSingleAsync(string id)
         {
             var result = await base.GetSingleAsync(id);
-            result.Data?.LoadPermissions();
+            await result.Data?.LoadPermissions();
+            return result;
+        }
+
+        public override async Task<IActionResult> Update(string id, [FromBody] UpdateViewModel data)
+        {
+            var result = await base.Update(id, data);
+            await data.SavePermissionsAsync(data.Model);
             return result;
         }
     }

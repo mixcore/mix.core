@@ -70,9 +70,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-            MixPermissions = MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListBy(
-                                m => m.ParentType == MixDatabaseParentType.Role
-                                    && m.ParentId == Id).Data;
+           
         }
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
@@ -137,6 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                             }
                         }
                     }
+                    await LoadMixPermission(_context, _transaction);
                 }
                 catch(Exception ex)
                 {
@@ -179,31 +178,13 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         #region Expands
 
-        private List<MixPortalPageRoles.ReadViewModel> GetPermission()
+        private async Task LoadMixPermission(MixCmsContext context, IDbContextTransaction transaction)
         {
-            using (MixCmsContext context = new MixCmsContext())
-            {
-                var transaction = context.Database.BeginTransaction();
-                var query = context.MixPortalPage
-                .Include(cp => cp.MixPortalPageRole)
-                .Select(Category =>
-                new MixPortalPageRoles.ReadViewModel(
-                      new MixPortalPageRole()
-                      {
-                          RoleId = Id,
-                          PageId = Category.Id,
-                      }, context, transaction));
-
-                var result = query.ToList();
-                result.ForEach(nav =>
-                {
-                    nav.IsActived = context.MixPortalPageRole.Any(
-                            m => m.PageId == nav.PageId && m.RoleId == Id);
-                });
-                transaction.Commit();
-                return result.OrderBy(m => m.Priority).ToList();
-            }
+            MixPermissions = (await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
+                               m => m.ParentType == MixDatabaseParentType.Role
+                                   && m.ParentId == Id, context, transaction)).Data;
         }
+
 
         private async Task<RepositoryResponse<bool>> HandlePermission(MixPortalPages.UpdateRolePermissionViewModel item, MixCmsContext context, IDbContextTransaction transaction)
         {
