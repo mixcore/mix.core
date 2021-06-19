@@ -1,14 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Cms.Lib.Constants;
-using Mix.Identity.Constants;
-using Mix.Identity.Helpers;
-using Mix.Identity.Models;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Security.Claims;
+using Mix.Cms.Lib.Services;
 
 namespace Mix.Cms.Lib.Attributes
 {
@@ -23,42 +15,20 @@ namespace Mix.Cms.Lib.Attributes
 
     public class AuthorizeActionFilter : IAuthorizationFilter
     {
-        protected readonly RoleManager<IdentityRole> _roleManager;
-        protected readonly UserManager<ApplicationUser> _userManager;
-        protected readonly MixIdentityHelper _idHelper;
-        public AuthorizeActionFilter(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, MixIdentityHelper idHelper)
+        protected readonly MixIdentityService _idService;
+        public AuthorizeActionFilter(MixIdentityService idService)
         {
-            _roleManager = roleManager;
-            _userManager = userManager;
-            _idHelper = idHelper;
+            _idService = idService;
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            bool isAuthorized = VerifyUserAsync(context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
+            bool isAuthorized = _idService.CheckEndpointPermission(
+                context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
 
             if (!isAuthorized)
             {
-                context.Result = new ForbidResult();
+                context.Result = new UnauthorizedResult();
             }
-        }
-
-
-        private bool VerifyUserAsync(ClaimsPrincipal user, PathString path, string method)
-        {
-            var roles = _idHelper.GetClaims(user, MixClaims.Role);
-            if (roles.Any(r => r == MixDefaultRoles.SuperAdmin))
-            {
-                return true;
-            }
-            var getPermissions = ViewModels.Account.MixRoles.ReadViewModel.Repository.GetSingleModel(r => r.Name == roles.First());
-            getPermissions.Data.LoadMixPermissions().GetAwaiter().GetResult();
-            return getPermissions.IsSucceed
-                ? getPermissions.Data.MixPermissions.Any(
-                    p => p.Property<JArray>("endpoints")
-                            .Any(e=> e["endpoint"].Value<string>() == path
-                                    && e["method"].Value<string>() == method.ToUpper())
-                    )
-                : false;
         }
     }
 }

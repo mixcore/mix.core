@@ -107,6 +107,7 @@ namespace Mix.Identity.Helpers
                     new Claim(MixClaims.AESKey, aesKey),
                     new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
                 });
+
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
                 issuer: appConfigs.Issuer,
                 audience: appConfigs.Audience,

@@ -23,8 +23,8 @@ namespace Mix.Cms.Lib.Services
             {
                 return ValueTask.FromResult(values);
             }
-            reg = new Regex(@"^\/(init|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI)(.*)");
-            if (reg.IsMatch(httpContext.Request.Path.Value))
+            reg = new Regex(@"^\/(init|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI)(\/.+)?");
+            if (reg.IsMatch(httpContext.Request.Path.Value.ToLower()))
             {
                 return ValueTask.FromResult(values);
             }

@@ -8,5 +8,6 @@
         public const string RefreshToken = "RefreshToken";
         public const string AESKey = "AESKey";
         public const string RSAPublicKey = "RSAPublicKey";
+        public const string Endpoint = "Endpoint";
     }
 }

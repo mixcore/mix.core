@@ -220,7 +220,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
+            string user = _idHelper._idHelper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
         
