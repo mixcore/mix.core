@@ -93,6 +93,29 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 
         #region overrides
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = ParentId != default;
+                if (!IsValid)
+                {
+                    Errors.Add("Ivalid Parent");
+                }
+                IsValid = IsValid && !_context.MixDatabaseDataAssociation.Any(m =>
+                            m.Id != Id
+                            && m.Specificulture == Specificulture
+                            && m.DataId == DataId
+                            && m.ParentType == ParentType
+                            && m.ParentId == ParentId);
+                if (!IsValid)
+                {
+                    Errors.Add("This Association Existed");
+                }
+            }
+        }
+
         public override MixDatabaseDataAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
