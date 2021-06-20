@@ -15,17 +15,18 @@ namespace Mix.Cms.Web
     {
         public static IApplicationBuilder UseMixRoutes(this IApplicationBuilder app)
         {
+            string notStartWithPattern = "regex(^(?!(init|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
             app.UseEndpoints(routes =>
             {
                 routes.MapDefaultControllerRoute();
                 routes.MapDynamicControllerRoute<TranslationTransformer>(
-                    pattern: "{seoName}");
+                    pattern: "{seoName:" + notStartWithPattern + "}");
                 routes.MapDynamicControllerRoute<TranslationTransformer>(
-                    pattern: "{culture}/{seoName}");
+                    pattern: "{culture:" + notStartWithPattern + "}/{seoName}");
                 routes.MapDynamicControllerRoute<TranslationTransformer>(
-                    pattern: "{controller}/{id}/{seoName}");
+                    pattern: "{controller:" + notStartWithPattern + "}/{id}/{seoName}");
                 routes.MapDynamicControllerRoute<TranslationTransformer>(
-                    pattern: "{culture}/{controller}/{id}/{seoName}");
+                    pattern: "{culture:" + notStartWithPattern + "}/{controller}/{id}/{seoName}");
             });
             app.MapWhen(
                context =>

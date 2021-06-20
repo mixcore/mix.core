@@ -33,7 +33,8 @@ namespace Mix.Theme.Blog
         }
         public static async Task<dynamic> GetTagInfo(string keyword, string culture)
         {
-            return (await MixDatas.Helper.GetSingleDataAsync<MixDatas.ReadMvcViewModel>(keyword, "slug", "sys_tag", culture)).Data.Obj as dynamic;
+            var result = (await MixDatas.Helper.GetSingleDataAsync<MixDatas.ReadMvcViewModel>(keyword, "slug", "sys_tag", culture))?.Data?.Obj;
+            return  result as dynamic;
         }
 
         public static async Task<dynamic> GetAuthorInfo(string keyword, string culture)
