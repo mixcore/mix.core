@@ -17,20 +17,12 @@
         <Compile Remove="MixContent\cache\**" />
         <Compile Remove="Views\Shared\Templates\**" />
         <Compile Remove="wwwroot\mix-content\assets\**" />
-        <Content Remove="logs\**" />
-        <Content Remove="MixContent\cache\**" />
         <Content Remove="Views\Shared\Templates\**" />
-        <Content Remove="wwwroot\mix-content\assets\**" />
-        <EmbeddedResource Remove="logs\**" />
-        <EmbeddedResource Remove="MixContent\cache\**" />
         <EmbeddedResource Remove="Views\Shared\Templates\**" />
-        <EmbeddedResource Remove="wwwroot\mix-content\assets\**" />
-        <None Remove="logs\**" />
-        <None Remove="MixContent\cache\**" />
         <None Remove="Views\Shared\Templates\**" />
-        <None Remove="wwwroot\mix-content\assets\**" />
     </ItemGroup>
     <ItemGroup>
+        <Content Remove="appsettings.emfit.json" />
         <Content Remove="appsettings.json" />
     </ItemGroup>
     <ItemGroup>
