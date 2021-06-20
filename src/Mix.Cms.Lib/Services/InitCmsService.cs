@@ -299,7 +299,7 @@ namespace Mix.Cms.Lib.Services
                 page.SeoDescription = page.Title.ToLower();
                 page.SeoKeywords = page.Title.ToLower();
                 page.CreatedDateTime = DateTime.UtcNow;
-                page.CreatedBy = MixRoles.SuperAdmin;
+                page.CreatedBy = MixDefaultRoles.SuperAdmin;
                 context.Entry(page).State = EntityState.Added;
                 var alias = new MixUrlAlias()
                 {

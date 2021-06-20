@@ -716,8 +716,7 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Columns = item.Columns ?? MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
-                            m => m.MixDatabaseId == item.MixDatabaseId, context, transaction).Data;
+                        item.Columns = item.Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Fields;
                         foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;

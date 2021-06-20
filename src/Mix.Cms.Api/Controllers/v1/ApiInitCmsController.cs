@@ -109,7 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     if (createResult.Succeeded)
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                        await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                        await _userManager.AddToRoleAsync(user, MixDefaultRoles.SuperAdmin);
                         await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                         var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
@@ -220,7 +220,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
+            string user = _idHelper._idHelper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
         
@@ -297,7 +297,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 var saveResult = await _roleManager.CreateAsync(new IdentityRole()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Name = MixRoles.SuperAdmin
+                    Name = MixDefaultRoles.SuperAdmin
                 });
                 isSucceed = saveResult.Succeeded;
             }

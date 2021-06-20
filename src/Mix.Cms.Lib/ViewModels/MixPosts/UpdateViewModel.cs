@@ -833,7 +833,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
+                        MixModules.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Module.Model, _context, _transaction);
                     }
                 }
                 else
@@ -847,7 +847,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
+                        MixModules.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Module.Model, _context, _transaction);
                     }
                 }
             }
@@ -874,7 +874,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
+                        MixPages.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Page.Model, _context, _transaction);
                     }
                 }
                 else
@@ -888,7 +888,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
+                        MixPages.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Page.Model, _context, _transaction);
                     }
                 }
             }
@@ -914,7 +914,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
+                        MixPosts.ReadViewModel.Repository.RemoveCacheAsync(navPost.RelatedPost.Model);
                     }
                 }
                 else
@@ -928,7 +928,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
+                        MixPosts.ReadViewModel.Repository.RemoveCacheAsync(navPost.RelatedPost.Model);
                     }
                 }
             }

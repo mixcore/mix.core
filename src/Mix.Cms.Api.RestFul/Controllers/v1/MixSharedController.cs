@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
@@ -7,9 +9,14 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Heart.Models;
+using Mix.Identity.Constants;
+using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MixRoles = Mix.Cms.Lib.ViewModels.Account.MixRoles;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -17,10 +24,34 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [ApiController]
     public class MixSharedController : ControllerBase
     {
+        private readonly IApplicationLifetime applicationLifetime;
+        protected readonly RoleManager<IdentityRole> _roleManager;
+        public MixSharedController(IApplicationLifetime applicationLifetime, RoleManager<IdentityRole> roleManager)
+        {
+            this.applicationLifetime = applicationLifetime;
+            _roleManager = roleManager;
+        }
+
         [HttpGet]
         [Route("ping")]
         public ActionResult Ping()
         {
+            return Ok(DateTime.UtcNow);
+        }
+
+        [HttpGet]
+        [Route("stop-application")]
+        public ActionResult StopApplication()
+        {
+            applicationLifetime.StopApplication();
+            return Ok(DateTime.UtcNow);
+        }
+        
+        [HttpGet]
+        [Route("clear-cache")]
+        public async Task<ActionResult> ClearCacheAsync()
+        {
+            await MixCacheService.RemoveCacheAsync();
             return Ok(DateTime.UtcNow);
         }
 
@@ -49,6 +80,32 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     IsSucceed = true,
                 };
             }
+        }
+
+        [HttpGet]
+        [Route("permissions")]
+        public async Task<JObject> GetPermissions()
+        {
+            RepositoryResponse<List<MixRoles.ReadViewModel>> permissions = new RepositoryResponse<List<MixRoles.ReadViewModel>>()
+            {
+                IsSucceed = true,
+                Data = new List<MixRoles.ReadViewModel>()
+            };
+            var roles = User.Claims.Where(c => c.Type == MixClaims.Role).ToList();
+            if (!roles.Any(role => role.Value.ToUpper() == MixDefaultRoles.SuperAdmin))
+            {
+                foreach (var item in roles)
+                {
+                    var role = await _roleManager.FindByNameAsync(item.Value);
+                    var temp = await MixRoles.ReadViewModel.Repository.GetSingleModelAsync(r => r.Id == role.Id);
+                    if (temp.IsSucceed)
+                    {
+                        await temp.Data.LoadPermissions();
+                        permissions.Data.Add(temp.Data);
+                    }
+                }
+            }
+            return JObject.FromObject(permissions);
         }
 
         private RepositoryResponse<JObject> GetAllSettings(string lang = null)

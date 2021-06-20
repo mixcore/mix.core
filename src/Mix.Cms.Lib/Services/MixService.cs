@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -8,7 +7,6 @@ using Mix.Heart.Enums;
 using Mix.Heart.Models;
 using Mix.Identity.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +24,7 @@ namespace Mix.Cms.Lib.Services
         /// <summary>
         /// The synchronize root
         /// </summary>
-        private static readonly object syncRoot = new Object();
+        private static readonly object syncRoot = new();
 
         /// <summary>
         /// The instance

@@ -95,6 +95,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Alias = Alias.TrimStart('/');
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)

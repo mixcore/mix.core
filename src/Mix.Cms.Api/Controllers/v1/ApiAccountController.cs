@@ -28,6 +28,7 @@ using Mix.Identity.Helpers;
 using Mix.Cms.Lib.Dtos;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
+using Mix.Cms.Lib.Attributes;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -163,15 +164,15 @@ namespace Mix.Cms.Api.Controllers.v1
             return BadRequest(result);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = "SuperAdmin,Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [Route("user-in-role")]
         [HttpPost, HttpOptions]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             var result = new RepositoryResponse<bool>();
-
+            
             List<string> errors = new List<string>();
 
             if (role == null)
@@ -218,7 +219,8 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
+        [MixAuthorize]
         [Route("details/{viewType}/{id}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult> Details(string viewType, string id = null)
@@ -242,7 +244,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("my-profile")]
         public async Task<ActionResult<MixUserViewModel>> MyProfile()
         {
@@ -264,7 +266,8 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/template
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost, HttpOptions]
+        [MixAuthorize]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<MixUserViewModel>> Save(
             [FromBody] MixUserViewModel model)
@@ -310,8 +313,9 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/account/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin,Admin")]
-        [HttpPost, HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
+        [HttpPost]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
@@ -414,13 +418,14 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin,Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
+            if (user == null || _userManager.IsInRoleAsync(user, MixDefaultRoles.SuperAdmin).GetAwaiter().GetResult())
             {
                 result.IsSucceed = false;
                 result.Data = "Invalid User";

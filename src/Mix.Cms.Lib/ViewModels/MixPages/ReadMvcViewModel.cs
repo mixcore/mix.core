@@ -118,7 +118,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("details")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/page/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
@@ -178,6 +178,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("bodyClass")]
         public string BodyClass => CssClass;
 
+        [JsonProperty("urlAliases")]
+        public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
+
         #endregion Views
 
         #endregion Properties
@@ -204,11 +207,31 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 GetSubModules(_context, _transaction);
             }
             LoadAttributes(_context, _transaction);
+            UrlAliases = GetAliases(_context, _transaction);
+            DetailsUrl = UrlAliases.Count > 0
+              ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{UrlAliases[0].Alias}")
+              : Id > 0
+                  ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{SeoName}")
+                  : null;
         }
 
         #endregion Overrides
 
         #region Expands
+        
+        public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
+                        && p.SourceId == Id.ToString() && p.Type == (int)MixUrlAliasType.Page, context, transaction);
+            if (result.IsSucceed && result.Data != null)
+            {
+                return result.Data;
+            }
+            else
+            {
+                return new List<MixUrlAliases.UpdateViewModel>();
+            }
+        }
 
         #region Sync
 

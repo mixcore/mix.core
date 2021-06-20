@@ -81,7 +81,7 @@ a,
         }
 
 .main-sidebar {
-    width: 15%;
+    width: 20%;
     background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
     -webkit-box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
     box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
