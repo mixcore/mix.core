@@ -3,6 +3,7 @@
     {
       "path": "/portal",
       "icon": "mi mi-Tiles",
+      "svg": "tabler-icon-smart-home.svg",
       "title": "Dashboard",
       "subMenus": []
     },
@@ -10,6 +11,7 @@
       "title": "Navigations",
       "path": "#",
       "icon": "mi mi-Relationship",
+      "svg": "tabler-icon-directions.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -28,6 +30,7 @@
       "title": "Posts",
       "path": "#",
       "icon": "mi mi-ReadingList",
+      "svg": "tabler-icon-notebook.svg",
       "subMenus": [
         {
           "title": "Create Post",
@@ -45,6 +48,7 @@
       "title": "Pages",
       "path": "#",
       "icon": "mi mi-Page",
+      "svg": "tabler-icon-file-horizontal.svg",
       "subMenus": [
         {
           "title": "Create",
@@ -62,6 +66,7 @@
       "title": "Modules",
       "path": "#",
       "icon": "mi mi-Puzzle",
+      "svg": "tabler-icon-layout-grid-add.svg",
       "subMenus": [
         {
           "title": "Create new",
@@ -97,6 +102,7 @@
       "title": "Databases",
       "path": "#",
       "icon": "mi mi-ResolutionLegacy",
+      "svg": "tabler-icon-table.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -114,6 +120,7 @@
       "title": "Categories",
       "path": "#",
       "icon": "mi mi-Label",
+      "svg": "tabler-icon-inbox.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -131,6 +138,7 @@
       "title": "Tags",
       "path": "#",
       "icon": "mi mi-Tag",
+      "svg": "tabler-icon-tag.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -148,6 +156,7 @@
       "title": "Media",
       "path": "#",
       "icon": "mi mi-Media",
+      "svg": "tabler-icon-photo.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -165,6 +174,7 @@
       "title": "Files",
       "path": "#",
       "icon": "mi mi-FileExplorer",
+      "svg": "tabler-icon-file.svg",
       "isHiden": false,
       "subMenus": [
         {
@@ -183,6 +193,7 @@
       "title": "Users",
       "path": "#",
       "icon": "mi mi-Emoji",
+      "svg": "tabler-icon-users.svg",
       "subMenus": [
         {
           "title": "Create",
@@ -246,6 +257,7 @@
       "title": "Themes",
       "path": "#",
       "icon": "mi mi-Layout",
+      "svg": "tabler-icon-template.svg",
       "subMenus": [
         {
           "title": "Create New",
@@ -263,6 +275,7 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
+      "svg": "tabler-icon-building-store.svg",
       "isHiden": false,
       "subMenus": [
         {
@@ -276,6 +289,7 @@
       "title": "Settings",
       "path": "#",
       "icon": "mi mi-Settings  mi-spin",
+      "svg": "tabler-icon-settings.svg",
       "subMenus": [
         {
           "title": "Global Settings",
