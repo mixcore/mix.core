@@ -1,131 +1,187 @@
 ﻿@{
-    ViewData["Title"] = "Dashboard";
-    ViewData["Description"] = "Your powerful dashboard is here";
-    Layout = "~/Views/Shared/_LayoutPortal_Angular.cshtml";
-    
+    Layout = null;
     var menus = MixCmsHelper.LoadDataFile(MixFolders.JsonDataFolder, "portal-menus.json");
 }
+<!doctype html>
+<html lang="en">
 
-<div class="">
-    
-    <mix-loader ng-show="isBusy"></mix-loader>
-    <header-nav ng-if="isInit" settings="localizeSettings" bread-crumbs="breadCrumbs"></header-nav>
-    <login-popup></login-popup>
+<head>
+    <base href="/portal">
+    <title>Portal - Angular mixcore</title>
 
-<div class="wrapper" ng-if="isInit">
-    
-      <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <h1 class="navbar-brand navbar-brand-autodark">
-            <a href=".">
-              <img src="/mix-app/css/portal/img/mixcore-logo-red-2.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
-            </a>
-          </h1>
-          <div class="navbar-nav flex-row d-lg-none">
-            <div class="nav-item d-none d-md-flex me-3">
-              <div class="btn-list">
-                <a href="https://github.com/tabler/tabler" class="btn btn-outline-white" target="_blank" rel="noreferrer">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon text-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" /></svg>
-                  Source code
-                </a>
-                <a href="https://github.com/sponsors/codecalm" class="btn btn-outline-white" target="_blank" rel="noreferrer">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                  Sponsor
-                </a>
-              </div>
-            </div>
-            <div class="nav-item dropdown d-none d-md-flex me-3">
-              <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
-                <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
-                <span class="badge bg-red"></span>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
-                <div class="card">
-                  <div class="card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
-                <div class="d-none d-xl-block ps-2">
-                  <div>Paweł Kuna</div>
-                  <div class="mt-1 small text-muted">UI Designer</div>
-                </div>
-              </a>
-              <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="#" class="dropdown-item">Set status</a>
-                <a href="#" class="dropdown-item">Profile & account</a>
-                <a href="#" class="dropdown-item">Feedback</a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">Settings</a>
-                <a href="#" class="dropdown-item">Logout</a>
-              </div>
-            </div>
-          </div>
-        <main-side-bar ng-if="isInRole('SuperAdmin')" class=""></main-side-bar>
-        <main-side-bar-dynamic ng-if="!isInRole('SuperAdmin')" roles="roles" actived-role="roles[0]" class=""></main-side-bar-dynamic>
-        </div>
-      </aside>
-      <div class="page-wrapper">
-          
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" sizes="16x16"
+          href="@(MixService.GetConfig<string>("Favicon", ViewBag.culture) ?? "/mix-app/css/portal/img/mixcore-logo-green.svg")">
+    <link rel="stylesheet" href="https://unpkg.com/@@tabler/core@@latest/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="~/mix-app/css/app-vendor.min.css" />
+</head>
+
+<body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="antialiased">
+    @* <style>
+            :root
+            {
+                --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
+                --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
+                --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
+                --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
+                --text-color: {{globalSettings.portalThemeSettings.textColor}};
+                --bs-table-bg: transparent;
+                --bs-table-striped-color: #212529;
+                --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
+                --bs-table-active-color: #212529;
+                --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+                --bs-table-hover-color: #212529;
+                --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+            }
+        </style> *@
+    <div class="">
+
         <mix-loader ng-show="isBusy"></mix-loader>
         <header-nav ng-if="isInit" settings="localizeSettings" bread-crumbs="breadCrumbs"></header-nav>
         <login-popup></login-popup>
-        
-        <!-- Page Content  -->
-        <form id="form-portal" class="{{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()">
-        </form>
-        <portal-theme-settings></portal-theme-settings>
-        <medias></medias>
-        <hub-messages></hub-messages>
-        <message message="message"></message>
-        <confirm message="confirmMessage"></confirm>
-        <modal-permission></modal-permission>
-        <modal-bookmark></modal-bookmark>
-        <preview-popup preview-object="previewObject"></preview-popup>
-        <modal-helper></modal-helper>
-        <input type="hidden" id="portal-menus" value="@menus.Content" />
-    
-        <footer class="footer footer-transparent d-print-none">
-          <div class="container">
-            <div class="row text-center align-items-center flex-row-reverse">
-              <div class="col-lg-auto ms-lg-auto">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item"><a href="./docs/index.html" class="link-secondary">Documentation</a></li>
-                  <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
-                  <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
-                  <li class="list-inline-item">
-                    <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
-                      <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                      <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                      Sponsor
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                <ul class="list-inline list-inline-dots mb-0">
-                  <li class="list-inline-item">
-                    Copyright &copy; 2021
-                    <a href="." class="link-secondary">Tabler</a>.
-                    All rights reserved.
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="./changelog.html" class="link-secondary" rel="noopener">v1.0.0-beta3</a>
-                  </li>
-                </ul>
-              </div>
+
+        <div class="wrapper" ng-if="isInit">
+
+            <aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <h1 class="navbar-brand navbar-brand-autodark">
+                        <a href=".">
+                            <img src="/mix-app/css/portal/img/mixcore-logo-red-2.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                        </a>
+                    </h1>
+                    <div class="navbar-nav flex-row d-lg-none">
+                        <div class="nav-item d-none d-md-flex me-3">
+                            <div class="btn-list">
+                                <a href="https://github.com/tabler/tabler" class="btn btn-outline-white" target="_blank" rel="noreferrer">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" /></svg>
+                                    Source code
+                                </a>
+                                <a href="https://github.com/sponsors/codecalm" class="btn btn-outline-white" target="_blank" rel="noreferrer">
+                                    <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                    Sponsor
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown d-none d-md-flex me-3">
+                            <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/bell -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /></svg>
+                                <span class="badge bg-red"></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-card">
+                                <div class="card">
+                                    <div class="card-body">
+                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad amet consectetur exercitationem fugiat in ipsa ipsum, natus odio quidem quod repudiandae sapiente. Amet debitis et magni maxime necessitatibus ullam.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
+                                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
+                                <div class="d-none d-xl-block ps-2">
+                                    <div>Paweł Kuna</div>
+                                    <div class="mt-1 small text-muted">UI Designer</div>
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <a href="#" class="dropdown-item">Set status</a>
+                                <a href="#" class="dropdown-item">Profile & account</a>
+                                <a href="#" class="dropdown-item">Feedback</a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item">Settings</a>
+                                <a href="#" class="dropdown-item">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <main-side-bar ng-if="isInRole('SuperAdmin')" class=""></main-side-bar>
+                    <main-side-bar-dynamic ng-if="!isInRole('SuperAdmin')" roles="roles" actived-role="roles[0]" class=""></main-side-bar-dynamic>
+                </div>
+            </aside>
+            <div class="page-wrapper">
+                <!-- Page Content  -->
+                <form id="form-portal" class="{{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()">
+                </form>
+                <portal-theme-settings></portal-theme-settings>
+                <medias></medias>
+                <hub-messages></hub-messages>
+                <message message="message"></message>
+                <confirm message="confirmMessage"></confirm>
+                <modal-permission></modal-permission>
+                <modal-bookmark></modal-bookmark>
+                <preview-popup preview-object="previewObject"></preview-popup>
+                <modal-helper></modal-helper>
+                <input type="hidden" id="portal-menus" value="@menus.Content" />
+
+                <footer class="footer footer-transparent d-print-none">
+                    <div class="container">
+                        <div class="row text-center align-items-center flex-row-reverse">
+                            <div class="col-lg-auto ms-lg-auto">
+                                <ul class="list-inline list-inline-dots mb-0">
+                                    <li class="list-inline-item"><a href="./docs/index.html" class="link-secondary">Documentation</a></li>
+                                    <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a></li>
+                                    <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
+                                    <li class="list-inline-item">
+                                        <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                            Sponsor
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                                <ul class="list-inline list-inline-dots mb-0">
+                                    <li class="list-inline-item">
+                                        Copyright &copy; 2021
+                                        <a href="." class="link-secondary">Tabler</a>.
+                                        All rights reserved.
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="./changelog.html" class="link-secondary" rel="noopener">v1.0.0-beta3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+        </div>
+
+
+        <script src="https://unpkg.com/@@tabler/core@@latest/dist/js/tabler.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+                integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="~/mix-app/js/framework.min.js"></script>
+        <script src="~/mix-app/js/shared.min.js"></script>
+
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-drag-and-drop-lists/2.1.0/angular-drag-and-drop-lists.min.js"></script>
+        <script src="~/mix-app/js/app-portal-required.min.js"></script>
+        <script src="~/mix-app/js/app-portal.min.js?v="></script>
+        <script src="~/mix-app/js/app-shared.min.js?v="></script>
+        <script src="/mix-app/js/monaco-editor/min/vs/loader.js"></script>
+        <script>
+            require.config({
+                paths: {
+                    vs: '/mix-app/js/monaco-editor/min/vs'
+                }
+            });
+        </script>
+        <script src="/mix-app/js/monaco-editor/min/vs/loader.js"></script>
+        <script src="/mix-app/js/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+        <script src="/mix-app/js/monaco-editor/min/vs/editor/editor.main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+
+</body>
+
+</html>
