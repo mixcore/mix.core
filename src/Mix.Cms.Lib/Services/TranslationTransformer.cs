@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.Services
                 controller = "home";
                 keyIndex -= 1;
                 result["keyword"] = keyIndex < keys.Count ? string.Join('/', values.Values.Skip(keyIndex + 1)) : string.Empty;
-                result["seoName"] = (string)values[keys[keyIndex]];
+                result["seoName"] = keys.Count > keyIndex ? (string)values[keys[keyIndex]] : string.Empty;
                 result["culture"] = language;
                 result["action"] = "Index";
                 result["controller"] = controller;
