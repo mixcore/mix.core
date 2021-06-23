@@ -17,13 +17,7 @@ namespace Mix.Cms.Lib.Services
 
         public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
         {
-            string notTransformPattern = @"^(.*)\.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$";
-            Regex reg = new Regex(notTransformPattern);
             RouteValueDictionary result = values;
-            if (reg.IsMatch(httpContext.Request.Path.Value))
-            {
-                return ValueTask.FromResult(values);
-            }
 
             var keys = values.Keys.ToList();
 
@@ -42,6 +36,15 @@ namespace Mix.Cms.Lib.Services
                 result["action"] = "Index";
                 result["seoName"] = path;
                 return ValueTask.FromResult(result);
+            }
+
+            
+            string notTransformPattern = @"^(.*)\.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$";
+            Regex reg = new Regex(notTransformPattern);
+
+            if (reg.IsMatch(httpContext.Request.Path.Value))
+            {
+                return ValueTask.FromResult(values);
             }
 
             var currentController = GetRouteValue(values, keys, ref keyIndex);
