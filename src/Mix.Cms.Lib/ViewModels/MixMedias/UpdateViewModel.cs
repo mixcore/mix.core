@@ -157,13 +157,9 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (!FileFolder.StartsWith(MixFolders.UploadsFolder))
-            {
-                FileFolder = $"{MixFolders.UploadsFolder}/{FileFolder}";
-            }
+            FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
             if (MediaFile?.FileStream != null)
             {
-                FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);

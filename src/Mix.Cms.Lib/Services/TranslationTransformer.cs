@@ -17,13 +17,7 @@ namespace Mix.Cms.Lib.Services
 
         public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
         {
-            string notTransformPattern = @"^(.*)\.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$";
-            Regex reg = new Regex(notTransformPattern);
             RouteValueDictionary result = values;
-            if (reg.IsMatch(httpContext.Request.Path.Value))
-            {
-                return ValueTask.FromResult(values);
-            }
 
             var keys = values.Keys.ToList();
 
@@ -44,6 +38,15 @@ namespace Mix.Cms.Lib.Services
                 return ValueTask.FromResult(result);
             }
 
+            
+            string notTransformPattern = @"^(.*)\.(xml|json|html|css|js|map|jpg|png|gif|jpeg|svg|map|ico|webmanifest|woff|woff2|ttf|eot)$";
+            Regex reg = new Regex(notTransformPattern);
+
+            if (reg.IsMatch(httpContext.Request.Path.Value))
+            {
+                return ValueTask.FromResult(values);
+            }
+
             var currentController = GetRouteValue(values, keys, ref keyIndex);
             var controller = MixService.Translate(currentController, language, currentController);
             if (!IsValidController(controller))
@@ -51,7 +54,7 @@ namespace Mix.Cms.Lib.Services
                 controller = "home";
                 keyIndex -= 1;
                 result["keyword"] = keyIndex < keys.Count ? string.Join('/', values.Values.Skip(keyIndex + 1)) : string.Empty;
-                result["seoName"] = (string)values[keys[keyIndex]];
+                result["seoName"] = keys.Count > keyIndex ? (string)values[keys[keyIndex]] : string.Empty;
                 result["culture"] = language;
                 result["action"] = "Index";
                 result["controller"] = controller;

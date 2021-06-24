@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.Extensions
                     string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
                     string url = !string.IsNullOrEmpty(item.StringValue)
                    ? !item.StringValue.Contains(domain)
-                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
+                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{item.StringValue.TrimStart('/')}"
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));

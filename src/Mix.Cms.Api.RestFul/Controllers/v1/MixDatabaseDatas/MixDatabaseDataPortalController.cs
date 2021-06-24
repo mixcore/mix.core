@@ -145,7 +145,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public async Task<ActionResult> Export()
         {
             string mixDatabaseName = Request.Query["mixDatabaseName"].ToString();
-            string exportPath = $"content/exports/module/{mixDatabaseName}";
+            string exportPath = $"mix-content/exports/module/{mixDatabaseName}";
             var getData = await Helper.FilterByKeywordAsync<FormViewModel>(Request, _lang);
 
             var jData = new List<JObject>();
