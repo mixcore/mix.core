@@ -132,11 +132,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
-                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
+        public string ImageUrl
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1))
                 {
-                    return $"{Domain}/{Image}";
+                    return $"{Domain.TrimEnd('/')}/{Image.TrimStart('/')}";
                 }
                 else
                 {
@@ -146,11 +148,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
-                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1)
                 {
-                    return $"{Domain}/{Thumbnail}";
+                    return $"{Domain.TrimEnd('/')}/{Thumbnail.TrimStart('/')}";
                 }
                 else
                 {

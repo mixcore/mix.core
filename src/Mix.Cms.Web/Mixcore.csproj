@@ -14,9 +14,7 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="logs\**" />
-        <Compile Remove="MixContent\cache\**" />
         <Compile Remove="Views\Shared\Templates\**" />
-        <Compile Remove="wwwroot\mix-content\assets\**" />
         <Content Remove="Views\Shared\Templates\**" />
         <EmbeddedResource Remove="Views\Shared\Templates\**" />
         <None Remove="Views\Shared\Templates\**" />

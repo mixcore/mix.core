@@ -122,7 +122,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1))
                 {
-                    return $"{Domain}/{Image}";
+                    return $"{Domain.TrimEnd('/')}/{Image.TrimStart('/')}";
                 }
                 else
                 {
@@ -136,9 +136,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             get
             {
-                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1)
                 {
-                    return $"{Domain}/{Thumbnail}";
+                    return $"{Domain.TrimEnd('/')}/{Thumbnail.TrimStart('/')}";
                 }
                 else
                 {
