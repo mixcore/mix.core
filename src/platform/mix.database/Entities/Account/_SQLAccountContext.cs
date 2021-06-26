@@ -4,7 +4,6 @@
 
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Extensions;
-using Mix.Identity.Data;
 
 namespace Mix.Database.Entities.Account
 {

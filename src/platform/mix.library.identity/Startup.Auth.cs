@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Mix.Identity.Models;
 using System;
 using System.Text;
 using Mix.Identity.Extensions;
 using Mix.Identity.Helpers;
+using Mix.Shared.Models;
+using Mix.Database.Entities.Account;
 
 namespace Mix.Cms.Web
 {
@@ -34,14 +35,14 @@ namespace Mix.Cms.Web
 
             const string accessDeniedPath = "/security/login";
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<MixUser, IdentityRole>(options =>
             {
                 options.Password = pOpt;
                 options.User = new UserOptions() { RequireUniqueEmail = true };
             })
             .AddEntityFrameworkStores<TDbContext>()
             .AddDefaultTokenProviders()
-            .AddUserManager<UserManager<ApplicationUser>>();
+            .AddUserManager<UserManager<MixUser>>();
 
             services.AddAuthorization();
 

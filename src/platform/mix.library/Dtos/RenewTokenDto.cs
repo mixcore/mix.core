@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Mix.Lib.Dtos
 {
     public class RenewTokenDto
     {
-        public string RefreshToken { get; set; }
+        public Guid RefreshToken { get; set; }
         public string AccessToken { get; set; }
     }
 }

@@ -17,11 +17,11 @@ using Mix.Shared.Services;
 using Mix.Database.Services;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
-using Mix.Identity.Models;
 using Mix.Heart.Extensions;
 using Mix.Heart.Entity;
 using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms.v2;
+using Mix.Shared.Models;
 
 namespace Mix.Lib.Extensions
 {
@@ -31,7 +31,8 @@ namespace Mix.Lib.Extensions
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, IConfiguration Configuration)
         {
-            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString()) as MixAuthenticationConfigurations;
+            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString()) 
+                    as MixAuthenticationConfigurations;
             services.AddSingleton<MixFileService>();
             services.AddSingleton<MixAppSettingService>();
             services.AddSingleton<MixDatabaseService>();

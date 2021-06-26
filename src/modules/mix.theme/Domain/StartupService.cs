@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
-using Mix.Lib.Services;
+using Mix.Theme.Domain.Services;
 
 namespace Mix.Theme.Domain
 {

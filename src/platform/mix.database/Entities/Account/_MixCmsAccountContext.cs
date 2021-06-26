@@ -5,13 +5,13 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Enums;
-using Mix.Identity.Data;
 using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using MySqlConnector;
 using Mix.Database.Extensions;
 using Mix.Shared.Enums;
 using Mix.Database.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Mix.Database.Entities.Account
 {
