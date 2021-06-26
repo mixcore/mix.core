@@ -13,6 +13,7 @@ using Mix.Shared.Services;
 using Mix.Lib.Helpers;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
+using Mix.Shared.Models;
 
 namespace Mix.Common.Controllers.v2
 {
@@ -20,6 +21,7 @@ namespace Mix.Common.Controllers.v2
     public class SharedApiController : MixApiControllerBase
     {
         private readonly MixFileService _fileService;
+        private readonly MixAuthenticationConfigurations _authConfigurations;
 
         public SharedApiController(ILogger<MixApiControllerBase> logger,
             MixFileService fileService, 
@@ -28,6 +30,7 @@ namespace Mix.Common.Controllers.v2
             TranslatorService translator) : base(logger, appSettingService, mixService, translator)
         {
             _fileService = fileService;
+            _authConfigurations = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
         }
 
         [HttpGet]
@@ -112,10 +115,10 @@ namespace Mix.Common.Controllers.v2
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
-                    new JProperty("Facebook", _appSettingService.MixAuthentications.Facebook?.AppId),
-                    new JProperty("Google", _appSettingService.MixAuthentications.Google?.AppId),
-                    new JProperty("Twitter", _appSettingService.MixAuthentications.Twitter?.AppId),
-                    new JProperty("Microsoft", _appSettingService.MixAuthentications.Microsoft?.AppId),
+                    new JProperty("Facebook", _authConfigurations.Facebook?.AppId),
+                    new JProperty("Google", _authConfigurations.Google?.AppId),
+                    new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
+                    new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
                 },
                 LastUpdateConfiguration = _appSettingService.GetConfig<DateTime?>(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.LastUpdateConfiguration)

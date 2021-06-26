@@ -5,7 +5,7 @@ using Mix.Theme.Domain.Dtos;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
-    public class InitCultureViewModel : CommandViewModelBase<MixCmsContext, MixCulture, int>
+    public class InitCultureViewModel : ViewModelBase<MixCmsContext, MixCulture, int>
     {
         public string Alias { get; set; }
         public string Icon { get; set; }
@@ -17,14 +17,9 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public virtual string Description { get; set; }
 
         public int MixSiteId { get; set; }
-        public InitCultureViewModel(
-            MixCmsContext dbContext,
-            CommandRepository<MixCmsContext, MixCulture, int> repo
-            ) : base(dbContext, repo)
+
+        public InitCultureViewModel(CommandRepository<MixCmsContext, MixCulture, int> repository) : base(repository)
         {
         }
-
-
-       
     }
 }

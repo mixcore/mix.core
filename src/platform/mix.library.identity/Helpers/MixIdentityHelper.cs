@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Database.Entities.Account;
 using Mix.Identity.Constants;
-using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,19 @@ namespace Mix.Identity.Helpers
 {
     public class MixIdentityHelper
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<MixUser> _userManager;
+        private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public MixIdentityHelper(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager = null, RoleManager<IdentityRole> roleManager = null)
+        public MixIdentityHelper(UserManager<MixUser> userManager, SignInManager<MixUser> signInManager = null, RoleManager<IdentityRole> roleManager = null)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
 
-        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs)
+        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
+            MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs)
         {
             ParsedExternalAccessToken parsedToken = null;
 
@@ -91,7 +93,7 @@ namespace Mix.Identity.Helpers
         }
 
         public async Task<string> GenerateTokenAsync(
-            ApplicationUser user, 
+            MixUser user, 
             DateTime expires, 
             string refreshToken, 
             string aesKey, 
@@ -117,7 +119,7 @@ namespace Mix.Identity.Helpers
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        public async Task<List<Claim>> GetClaimsAsync(ApplicationUser user, MixAuthenticationConfigurations appConfigs)
+        public async Task<List<Claim>> GetClaimsAsync(MixUser user, MixAuthenticationConfigurations appConfigs)
         {
             List<Claim> claims = new List<Claim>();
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -185,5 +187,11 @@ namespace Mix.Identity.Helpers
                 return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
             }
         }
+
+        public IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
+        {
+            return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
+        }
+
     }
 }

@@ -2,50 +2,32 @@
 using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
 using Mix.Theme.Domain.Dtos;
-using System;
 using System.Threading.Tasks;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
-    public class InitSiteViewModel: CommandViewModelBase<MixCmsContext, MixSite, int>
+    public class InitSiteViewModel: ViewModelBase<MixCmsContext, MixSite, int>
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
 
         public InitCultureViewModel Culture { get; set; }
-        public InitSiteViewModel(
-            MixCmsContext dbContext,
-            CommandRepository<MixCmsContext, MixSite, int> repo, 
-            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo, 
-            InitCmsDto model) : base(dbContext, repo)
+        public InitSiteViewModel(InitCmsDto model, CommandRepository<MixCmsContext, MixSite, int> repository) : base(repository)
         {
-            
-            Culture = new InitCultureViewModel(dbContext, cultureRepo)
-            {
-                Id = 1,
-                Specificulture = model.Culture.Specificulture,
-                Alias = model.Culture.Alias,
-                Icon = model.Culture.Icon,
-                DisplayName = model.Culture.FullName,
-                SystemName = model.Culture.Specificulture,
-                Description = model.SiteName,
-                CreatedDateTime = DateTime.UtcNow
-            };
         }
 
-        public override async Task<MixSite> SaveEntityAsync()
+        protected override async Task<MixSite> SaveHandlerAsync()
         {
-            var entity  = await base.SaveEntityAsync();
-            SaveEntityRelationship(entity);
+            var entity  = await base.SaveHandlerAsync();
+            await SaveEntityRelationshipAsync(entity);
             return entity;
         }
 
-        protected override void SaveEntityRelationship(MixSite parentEntity)
+        protected async Task SaveEntityRelationshipAsync(MixSite parent)
         {
-            Culture.SetUowInfo(_unitOfWorkInfo);
-            Culture.MixSiteId = parentEntity.Id;
-            Culture.SaveAsync().GetAwaiter().GetResult();
+            Culture.MixSiteId = parent.Id;
+            await Culture.SaveAsync(_unitOfWorkInfo);
         }
 
     }

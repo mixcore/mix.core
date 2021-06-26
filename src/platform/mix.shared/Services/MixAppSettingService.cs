@@ -6,7 +6,6 @@ using System.Threading;
 using Mix.Shared.Enums;
 using System.Collections.Generic;
 using Mix.Shared.Models;
-using Mix.Identity.Models;
 
 namespace Mix.Shared.Services
 {
@@ -17,10 +16,7 @@ namespace Mix.Shared.Services
         private static JObject DefaultAppSettings { get; set; }
         private static readonly FileSystemWatcher watcher = new();
         private static MixFileService _fileService;
-        public MixAuthenticationConfigurations MixAuthentications 
-        { 
-            get => Instance.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication); 
-        }
+        
         public MixAppSettingService()
         {
             _fileService = new MixFileService();
@@ -30,7 +26,7 @@ namespace Mix.Shared.Services
         public MixAppSettingService(MixFileService fileService)
         {
             _fileService = fileService;
-            watcher.Path = System.IO.Directory.GetCurrentDirectory();
+            watcher.Path = Directory.GetCurrentDirectory();
             watcher.Filter = "";
             watcher.Changed += new FileSystemEventHandler(OnChanged);
             watcher.EnableRaisingEvents = true;
@@ -54,9 +50,6 @@ namespace Mix.Shared.Services
             JObject jsonSettings = JObject.Parse(content);
 
             AppSettings = jsonSettings;
-
-            // TODO: Init Mix.Heart Config
-            //MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
         private static void LoadDefaultAppSettings()
@@ -97,9 +90,14 @@ namespace Mix.Shared.Services
             return result != null ? (T)result : default;
         }
 
-        public void SetConfig<T>(MixAppSettingsSection section, string name, T value)
+        public void SetConfig<T>(MixAppSettingsSection section, string name, T value, bool isReload = false)
         {
             AppSettings[section.ToString()][name] = value != null ? JToken.FromObject(value) : null;
+            if (isReload)
+            {
+                Instance.SaveSettings();
+                Instance.Reload();
+            }
         }
 
         public JObject GetGlobalSetting()

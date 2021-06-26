@@ -25,6 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Domain\Services\InitCmsService.Account.cs" />
+    <Compile Include="Domain\Services\InitCmsService.Site.cs" />
     <Compile Include="Domain\Services\InitCmsService.cs" />
     <Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />
     <Compile Include="Domain\ViewModels\Init\InitSiteViewModel.cs" />
@@ -36,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.database\mix.database.csproj" />
+    <ProjectReference Include="..\..\platform\mix.library.identity\mix.identity.csproj" />
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 

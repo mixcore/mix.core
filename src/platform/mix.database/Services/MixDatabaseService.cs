@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
@@ -44,16 +45,16 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        //public MixCmsAccountContext GetAccountDbContext()
-        //{
-        //    var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-        //    return provider switch
-        //    {
-        //        MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
-        //        MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
-        //        _ => null,
-        //    };
-        //}
+        public MixCmsAccountContext GetAccountDbContext()
+        {
+            var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+            return provider switch
+            {
+                MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
+                _ => null,
+            };
+        }
 
         public void InitMixCmsContext(string connectionString,
             MixDatabaseProvider databaseProvider,

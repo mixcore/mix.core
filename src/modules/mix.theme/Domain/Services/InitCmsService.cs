@@ -1,47 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
-using Mix.Database.Services;
-using Mix.Database.Entities.Cms.v2;
-using Mix.Theme.Domain.Dtos;
-using Mix.Theme.Domain.ViewModels.Init;
+﻿using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Repository;
-using Mix.Heart.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Mix.Identity.Services;
+using Mix.Database.Entities.Account;
 
-namespace Mix.Lib.Services
+namespace Mix.Theme.Domain.Services
 {
-    public class InitCmsService
+    public partial class InitCmsService
     {
+        private readonly MixIdentityService _idHelper;
+        private readonly UserManager<MixUser> _userManager;
         private readonly CommandRepository<MixCmsContext, MixSite, int> siteRepo;
         private readonly CommandRepository<MixCmsContext, MixCulture, int> _cultureRepo;
 
         public InitCmsService(
             CommandRepository<MixCmsContext, MixSite, int> siteRepo,
-            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo)
+            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo, 
+            UserManager<MixUser> userManager)
         {
             this.siteRepo = siteRepo;
             this._cultureRepo = cultureRepo;
+            _userManager = userManager;
         }
-
-        public async Task InitSiteAsync(InitCmsDto model)
-        {
-            MixDatabaseService.Instance.InitMixCmsContext(
-                model.ConnectionString,
-                model.DatabaseProvider,
-                model.Culture.Specificulture);
-
-            var dbContext = MixDatabaseService.Instance.GetDbContext();
-            dbContext.Database.Migrate();
-
-            InitSiteViewModel vm = new(dbContext, siteRepo, _cultureRepo, model)
-            {
-                Id = 1,
-                DisplayName = model.SiteName,
-                SystemName = model.SiteName.ToSEOString('_'),
-                Description = model.SiteName,
-                CreatedDateTime = DateTime.UtcNow
-            };
-            await vm.SaveAsync();
-        }
+        
     }
 }
