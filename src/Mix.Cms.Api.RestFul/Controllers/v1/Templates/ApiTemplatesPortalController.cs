@@ -9,6 +9,7 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixTemplates;
+using Mix.Heart.Extensions;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
 using Mix.Identity.Helpers;
@@ -24,8 +25,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixTemplate, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         public ApiTemplateController(
-            DefaultRepository<MixCmsContext, MixTemplate, ReadViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixTemplate, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixTemplate, ReadViewModel> repo,
+            DefaultRepository<MixCmsContext, MixTemplate, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixTemplate, DeleteViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
         {
@@ -40,16 +41,16 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             bool isTheme = int.TryParse(Request.Query["themeId"], out int themeId);
             string folderType = Request.Query["folderType"];
-            Expression<Func<MixTemplate, bool>> predicate = model =>
-                (!isStatus || model.Status == status)
-                && (!isTheme || model.ThemeId == themeId)
-                && (!isFromDate || model.CreatedDateTime >= fromDate)
-                && (!isToDate || model.CreatedDateTime <= toDate)
-                && (string.IsNullOrEmpty(folderType) || model.FolderType == folderType)
-                && (string.IsNullOrEmpty(keyword)
-                 || EF.Functions.Like(model.FileName, $"%{keyword}%")
-                 || EF.Functions.Like(model.Content, $"%{keyword}%")
-                 );
+            
+            Expression<Func<MixTemplate, bool>> predicate = model => true;
+            predicate = predicate.AndAlsoIf(isStatus, model => model.Status == status);
+            predicate = predicate.AndAlsoIf(isTheme, model => model.ThemeId == themeId);
+            predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
+            predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime <= toDate);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(folderType),model => model.FolderType == folderType);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword),model => EF.Functions.Like(model.FileName, $"%{keyword}%")
+             || EF.Functions.Like(model.Content, $"%{keyword}%"));
+
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)
             {
@@ -61,7 +62,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
-        
+
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<UpdateViewModel>> Copy(string id)
         {

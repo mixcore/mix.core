@@ -17,6 +17,11 @@ namespace Mix.Cms.Lib.Services
 
         public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
         {
+            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            {
+                return ValueTask.FromResult(values);
+            }
+
             RouteValueDictionary result = values;
 
             var keys = values.Keys.ToList();

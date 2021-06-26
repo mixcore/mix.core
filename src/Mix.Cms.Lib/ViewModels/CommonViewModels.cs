@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixDatabaseColumns;
 using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -180,6 +181,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("width")]
         public int Width { get; set; }
+
+        [JsonProperty("columnConfigurations")]
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new ColumnConfigurations();
     }
 
     public class ApiModuleDataValueViewModel
@@ -213,6 +217,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("options")]
         public JArray Options { get; set; } = new JArray();
+
+        [JsonProperty("columnConfigurations")]
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new ColumnConfigurations();
 
         public RepositoryResponse<bool> Validate<T>(IConvertible id, string specificulture, JObject jItem, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where T : class

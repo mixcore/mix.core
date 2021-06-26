@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixDatabaseColumns;
 using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
@@ -305,21 +306,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             JArray arrField = !string.IsNullOrEmpty(Fields) ? JArray.Parse(Fields) : new JArray();
             foreach (var field in arrField)
             {
-                ModuleFieldViewModel thisField = new ModuleFieldViewModel()
-                {
-                    Name = MixCommonHelper.ParseJsonPropertyName(field["name"].ToString()),
-                    Title = field["title"]?.ToString(),
-                    Options = field["options"] != null ? field["options"].Value<JArray>() : new JArray(),
-                    Priority = field["priority"] != null ? field["priority"].Value<int>() : 0,
-                    DataType = (MixDataType)(int)field["dataType"],
-                    Width = field["width"] != null ? field["width"].Value<int>() : 3,
-                    IsUnique = field["isUnique"] != null ? field["isUnique"].Value<bool>() : true,
-                    IsRequired = field["isRequired"] != null ? field["isRequired"].Value<bool>() : true,
-                    IsDisplay = field["isDisplay"] != null ? field["isDisplay"].Value<bool>() : true,
-                    IsSelect = field["isSelect"] != null ? field["isSelect"].Value<bool>() : false,
-                    IsGroupBy = field["isGroupBy"] != null ? field["isGroupBy"].Value<bool>() : false,
-                };
-                Columns.Add(thisField);
+                var col = field.ToObject<ModuleFieldViewModel>();
+                Columns.Add(col);
             }
 
             this.Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
