@@ -14,14 +14,17 @@ namespace Mixcore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
+        private readonly MixDatabaseService _databaseService;
         public HomeController(
             ILogger<HomeController> logger,
             MixAppSettingService appSettingService,
             MixService mixService,
-            TranslatorService translator) : base(appSettingService, mixService)
+            TranslatorService translator, 
+            MixDatabaseService databaseService) : base(appSettingService, mixService)
         {
             _logger = logger;
             _translator = translator;
+            _databaseService = databaseService;
         }
         protected override void ValidateRequest()
         {
@@ -32,7 +35,7 @@ namespace Mixcore.Controllers
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
-                if (string.IsNullOrEmpty(MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     _redirectUrl = "Init";
                 }

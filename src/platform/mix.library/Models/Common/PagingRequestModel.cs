@@ -20,7 +20,7 @@ namespace Mix.Lib.Models.Common
         {
 
         }
-        public PagingRequestModel(HttpRequest request)
+        public PagingRequestModel(HttpRequest request, MixAppSettingService appSettingService)
         {
             SortBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
                 ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";
@@ -40,7 +40,7 @@ namespace Mix.Lib.Models.Common
             }
 
             PageSize = request.Query.TryGetValue(MixRequestQueryKeywords.PageSize, out var pageSize)
-                ? int.Parse(pageSize) : MixAppSettingService.Instance.GetConfig<int>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize);
+                ? int.Parse(pageSize) : appSettingService.GetConfig<int>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize);
         }
     }
 }

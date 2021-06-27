@@ -12,15 +12,15 @@ namespace Mix.Theme.Domain.Services
     {
         public async Task InitSiteAsync(InitCmsDto model)
         {
-            MixDatabaseService.Instance.InitMixCmsContext(
+            _databaseService.InitMixCmsContext(
                 model.ConnectionString,
                 model.DatabaseProvider,
                 model.Culture.Specificulture);
 
-            var dbContext = MixDatabaseService.Instance.GetDbContext();
+            var dbContext = _databaseService.GetDbContext();
             dbContext.Database.Migrate();
 
-            InitSiteViewModel vm = new(model, siteRepo)
+            InitSiteViewModel vm = new(model, _siteRepo)
             {
                 Id = 1,
                 DisplayName = model.SiteName,

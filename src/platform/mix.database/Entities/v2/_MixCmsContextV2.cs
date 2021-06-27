@@ -14,16 +14,18 @@ namespace Mix.Database.Entities.Cms.v2
 {
     public class MixCmsContext : DbContext
     {
+        public MixCmsContext(MixDatabaseService databaseService,
+            MixAppSettingService appSettingService)
+        {
+            _databaseService = databaseService;
+            _appSettingService = appSettingService;
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //string cnn1 = "Server=localhost;Database=mixcore_structure;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;";
-            //optionsBuilder.UseSqlServer(cnn1);
-            //return;
-
-            string cnn = MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
+                var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(
                     MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
                 switch (provider)
                 {
@@ -69,5 +71,8 @@ namespace Mix.Database.Entities.Cms.v2
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixData> MixData { get; set; }
         public virtual DbSet<MixDataContent> MixDataContent { get; set; }
+
+        private static MixDatabaseService _databaseService;
+        private static MixAppSettingService _appSettingService;
     }
 }

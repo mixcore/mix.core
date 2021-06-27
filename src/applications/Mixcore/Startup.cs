@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Account;
+using Mix.Identity;
+using Mix.Identity.Services;
 using Mix.Lib.Extensions;
-using System.Linq;
+using Mix.Shared.Enums;
+using Mix.Shared.Models;
+using Mix.Shared.Services;
 using System.Reflection;
 
 namespace Mixcore
@@ -23,17 +26,18 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            using (var ctx = new MixCmsContext())
-            {
-                var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
-            }
+            MixAppSettingService appSettingService = new();
+            var auth = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddMixAuthorize<ApplicationDbContext>(auth);
+            services.AddScoped<MixIdentityService>();
             services.AddMixServices(Configuration);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MixAppSettingService appSettingService)
         {
             if (env.IsDevelopment())
             {
@@ -45,7 +49,7 @@ namespace Mixcore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseMixApps(env.IsDevelopment());
+            app.UseMixApps(env.IsDevelopment(), appSettingService);
             app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
 
             app.UseHttpsRedirection();

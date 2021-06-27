@@ -4,15 +4,13 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace Mix.Database.Entities.Account
 {
     public class ApplicationDbContext : IdentityDbContext<MixUser>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
+        /// Initializes a new instance of the <see cref="MixDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -21,7 +19,7 @@ namespace Mix.Database.Entities.Account
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
+        /// Initializes a new instance of the <see cref="MixDbContext" /> class.
         /// </summary>
         public ApplicationDbContext()
         {

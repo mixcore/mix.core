@@ -50,7 +50,7 @@ namespace Mix.Theme.Controllers.v2
                 && _appSettingService.GetConfig<int>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus) == 0)
             {
                 await _initCmsService.InitSiteAsync(model);
-                MixAppSettingService.Instance.SetConfig(
+                _appSettingService.SetConfig(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, InitStep.InitSite, true);
                 return NoContent();
             }
@@ -73,7 +73,7 @@ namespace Mix.Theme.Controllers.v2
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus) == InitStep.InitSite)
             {
                 await _initCmsService.InitAccountAsync(model);
-                MixAppSettingService.Instance.SetConfig(
+                _appSettingService.SetConfig(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, InitStep.InitAccount, true);
                 return NoContent();
             }

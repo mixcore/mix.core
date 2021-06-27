@@ -6,17 +6,22 @@ using System.Threading;
 using Mix.Shared.Enums;
 using System.Collections.Generic;
 using Mix.Shared.Models;
+using Mix.Heart.Enums;
 
 namespace Mix.Shared.Services
 {
-    public class MixAppSettingService: SingletonService<MixAppSettingService>
+    public class MixAppSettingService
     {
         public List<string> Cultures { get; set; }
         private static JObject AppSettings { get; set; }
         private static JObject DefaultAppSettings { get; set; }
         private static readonly FileSystemWatcher watcher = new();
         private static MixFileService _fileService;
-        
+        public MixDatabaseProvider DatabaseProvider
+        {
+            get => GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
+        }
+
         public MixAppSettingService()
         {
             _fileService = new MixFileService();
@@ -95,8 +100,8 @@ namespace Mix.Shared.Services
             AppSettings[section.ToString()][name] = value != null ? JToken.FromObject(value) : null;
             if (isReload)
             {
-                Instance.SaveSettings();
-                Instance.Reload();
+                SaveSettings();
+                Reload();
             }
         }
 
@@ -160,6 +165,6 @@ namespace Mix.Shared.Services
             //MixCommonHelper.ReloadWebConfig();
         }
 
-        
+
     }
 }

@@ -23,24 +23,23 @@ namespace Mix.Lib.Models.Common
 
         }
         
-        public SearchQueryModel(HttpRequest request, string culture = null)
+        public SearchQueryModel(HttpRequest request, MixAppSettingService appSettingService)
         {
-            Specificulture = culture ?? MixAppSettingService.Instance.GetConfig<string>(
+            string culture = appSettingService.GetConfig<string>(
                 MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
-            FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
-                ? fromDate: null;
-            ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)
-                ? toDate: null;
-            Status = Enum.TryParse(request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status)
-                ? status : null;
-            Keyword = request.Query.TryGetValue(MixRequestQueryKeywords.Keyword, out var orderBy)
-                ? orderBy : string.Empty;
-            PagingData = new PagingRequestModel(request);
+            Init(request, culture, appSettingService);
         }
         
-        public SearchQueryModel(SearchRequestDto request, string culture = null)
+        public SearchQueryModel(HttpRequest request, string culture, MixAppSettingService appSettingService)
         {
-            Specificulture = culture ?? MixAppSettingService.Instance.GetConfig<string>(
+            Init(request, culture, appSettingService);
+        }
+
+        
+
+        public SearchQueryModel(SearchRequestDto request, string culture, MixAppSettingService appSettingService)
+        {
+            Specificulture = culture ?? appSettingService.GetConfig<string>(
                 MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
             FromDate = request.FromDate;
             ToDate = request.ToDate;
@@ -52,6 +51,20 @@ namespace Mix.Lib.Models.Common
                 SortDirection = request.Direction,
                 SortBy = request.OrderBy
             };
+        }
+
+        private void Init(HttpRequest request, string culture, MixAppSettingService appSettingService)
+        {
+            Specificulture = culture;
+            FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
+                ? fromDate : null;
+            ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)
+                ? toDate : null;
+            Status = Enum.TryParse(request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status)
+                ? status : null;
+            Keyword = request.Query.TryGetValue(MixRequestQueryKeywords.Keyword, out var orderBy)
+                ? orderBy : string.Empty;
+            PagingData = new PagingRequestModel(request, appSettingService);
         }
     }
 }

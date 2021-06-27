@@ -15,7 +15,7 @@ using Mix.Identity.Helpers;
 using Mix.Shared.Models;
 using Mix.Database.Entities.Account;
 
-namespace Mix.Cms.Web
+namespace Mix.Identity
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public static class AuthServiceCollectionExtensions
