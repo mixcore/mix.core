@@ -33,6 +33,8 @@ namespace Mixcore
             var auth = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
             services.AddMixAuthorize<ApplicationDbContext>(auth);
             services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<SQLAccountContext>();
+            services.AddDbContext<PostgresSQLAccountContext>();
             services.AddScoped<MixIdentityService>();
             services.AddMixServices(Configuration);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());

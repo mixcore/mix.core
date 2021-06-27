@@ -8,6 +8,8 @@ using Mix.Heart.Helpers;
 using Mix.Shared.Enums;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models;
+using Microsoft.AspNetCore.Identity;
+using Mix.Identity.Constants;
 
 namespace Mix.Theme.Domain.Services
 {
@@ -17,7 +19,16 @@ namespace Mix.Theme.Domain.Services
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();
-            
+
+            if (!_roleManager.Roles.Any())
+            {
+                await _roleManager.CreateAsync(new IdentityRole()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = MixDefaultRoles.SuperAdmin
+                });
+            }
+
             if (_userManager.Users.Count() == 0)
             {
                 var user = new MixUser
