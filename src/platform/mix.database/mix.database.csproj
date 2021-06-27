@@ -18,9 +18,4 @@
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\Account\PostgresSQLAccount\" />
-    <Folder Include="Migrations\Account\SQLAccount\" />
-  </ItemGroup>
-
 </Project>

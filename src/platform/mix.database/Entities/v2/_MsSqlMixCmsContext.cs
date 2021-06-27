@@ -6,9 +6,9 @@ using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.v2
 {
-    public class MsSqlMixCmsContext : MixCmsContext
+    public class SqlServerMixCmsContext : MixCmsContext
     {
-        public MsSqlMixCmsContext(MixDatabaseService databaseService, MixAppSettingService appSettingService) 
+        public SqlServerMixCmsContext(MixDatabaseService databaseService, MixAppSettingService appSettingService) 
             : base(databaseService, appSettingService)
         {
         }

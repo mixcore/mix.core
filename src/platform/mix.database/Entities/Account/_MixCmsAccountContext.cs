@@ -9,7 +9,6 @@ using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using MySqlConnector;
 using Mix.Database.Extensions;
-using Mix.Shared.Enums;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
