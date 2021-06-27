@@ -12,22 +12,24 @@ namespace Mix.Theme.Domain.Services
     {
         private readonly MixIdentityService _idHelper;
         private readonly UserManager<MixUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly CommandRepository<MixCmsContext, MixCulture, int> _cultureRepo;
         private readonly MixAppSettingService _appSettingService;
         private readonly MixDatabaseService _databaseService;
         public InitCmsService(
-            CommandRepository<MixCmsContext, MixSite, int> siteRepo,
             CommandRepository<MixCmsContext, MixCulture, int> cultureRepo,
             UserManager<MixUser> userManager,
             MixAppSettingService appSettingService,
-            MixIdentityService idHelper, 
-            MixDatabaseService databaseService)
+            MixIdentityService idHelper,
+            MixDatabaseService databaseService, 
+            RoleManager<IdentityRole> roleManager)
         {
             _cultureRepo = cultureRepo;
             _userManager = userManager;
             _appSettingService = appSettingService;
             _idHelper = idHelper;
             _databaseService = databaseService;
+            _roleManager = roleManager;
         }
 
     }
