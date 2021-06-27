@@ -44,7 +44,7 @@ namespace Mix.Shared.Models
         public FileViewModel(IFormFile file, string folder)
         {
             Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.'));
-            Extension = file.FileName.Substring(file.FileName.LastIndexOf('.'));
+            Extension = file.FileName[file.FileName.LastIndexOf('.')..];
             FileFolder = folder;
         }
     }

@@ -8,7 +8,6 @@ using Mix.Heart.Helpers;
 using Mix.Shared.Enums;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models;
-using Mix.Identity.Services;
 
 namespace Mix.Theme.Domain.Services
 {

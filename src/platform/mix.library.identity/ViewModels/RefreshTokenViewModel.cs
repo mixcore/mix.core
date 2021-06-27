@@ -8,7 +8,7 @@ namespace Mix.Identity.ViewModels
     public class RefreshTokenViewModel
         : ViewModelBase<MixCmsAccountContext, RefreshTokens, Guid>
     {
-        public RefreshTokenViewModel(CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> repository) : base(repository)
+        public RefreshTokenViewModel() : base()
         {
         }
 

@@ -63,11 +63,16 @@ namespace Mix.Identity.Services
 
         public async Task<JObject> Login(LoginViewModel model)
         {
-            JObject loginResult = new JObject();
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             var result = await _signInManager.PasswordSignInAsync(
                 model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                var token = await GetAuthData(user, model.RememberMe);
+            }
 
             if (result.IsLockedOut)
             {
@@ -77,14 +82,6 @@ namespace Mix.Identity.Services
             {
                 throw new Exception("Logi failed");
             }
-
-            if (result.Succeeded)
-            {
-                var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                var token = await GetAuthData(user, model.RememberMe);
-            }
-
-            return loginResult;
         }
 
         public async Task<JObject> GetAuthData(MixUser user, bool rememberMe)
@@ -124,7 +121,7 @@ namespace Mix.Identity.Services
                 if (isRemember)
                 {
                     refreshTokenId = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(_refreshTokenRepo)
+                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel()
                     {
                         Id = refreshTokenId,
                         Email = user.Email,
@@ -229,7 +226,7 @@ namespace Mix.Identity.Services
                 _roleRepo
                     .GetAllQuery()
                     .ToList()
-                    .ForEach(r=> Roles.Add(new RoleViewModel(_roleRepo, r)));
+                    .ForEach(r=> Roles.Add(new RoleViewModel(r)));
             }
         }
     }

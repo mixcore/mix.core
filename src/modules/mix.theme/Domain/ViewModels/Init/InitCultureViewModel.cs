@@ -18,7 +18,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public int MixSiteId { get; set; }
 
-        public InitCultureViewModel(CommandRepository<MixCmsContext, MixCulture, int> repository) : base(repository)
+        public InitCultureViewModel() : base()
         {
         }
     }

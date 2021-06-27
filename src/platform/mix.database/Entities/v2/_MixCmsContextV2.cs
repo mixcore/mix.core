@@ -14,20 +14,23 @@ namespace Mix.Database.Entities.Cms.v2
 {
     public class MixCmsContext : DbContext
     {
+        public MixCmsContext()
+        {
+        }
+
         public MixCmsContext(MixDatabaseService databaseService,
             MixAppSettingService appSettingService)
         {
             _databaseService = databaseService;
             _appSettingService = appSettingService;
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(
-                    MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-                switch (provider)
+                switch (_appSettingService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);

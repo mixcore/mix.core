@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
 using Mix.Theme.Domain.Dtos;
 using Mix.Theme.Domain.ViewModels.Init;
 using System;
@@ -20,7 +19,7 @@ namespace Mix.Theme.Domain.Services
             var dbContext = _databaseService.GetDbContext();
             dbContext.Database.Migrate();
 
-            InitSiteViewModel vm = new(model, _siteRepo)
+            InitSiteViewModel vm = new()
             {
                 Id = 1,
                 DisplayName = model.SiteName,
@@ -28,7 +27,7 @@ namespace Mix.Theme.Domain.Services
                 Description = model.SiteName,
                 CreatedDateTime = DateTime.UtcNow,
 
-                Culture = new InitCultureViewModel(_cultureRepo)
+                Culture = new InitCultureViewModel()
                 {
                     Id = 1,
                     Specificulture = model.Culture.Specificulture,

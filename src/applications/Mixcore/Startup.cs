@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services;
 using Mix.Identity;
 using Mix.Identity.Services;
 using Mix.Lib.Extensions;
@@ -26,10 +27,12 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<MixAppSettingService>();
+            services.AddSingleton<MixDatabaseService>();
             MixAppSettingService appSettingService = new();
             var auth = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
-            services.AddDbContext<ApplicationDbContext>();
             services.AddMixAuthorize<ApplicationDbContext>(auth);
+            services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<MixIdentityService>();
             services.AddMixServices(Configuration);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());

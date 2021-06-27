@@ -48,7 +48,7 @@ namespace Mix.Shared.Services
                     var totalReads = 0L;
                     var buffer = new byte[8192];
                     var isMoreToRead = true;
-                    var total = response.Content.Headers.ContentLength.HasValue ? response.Content.Headers.ContentLength.Value : -1L;
+                    var total = response.Content.Headers.ContentLength ?? -1L;
                     var canReportProgress = total != -1 && progress != null;
                     do
                     {

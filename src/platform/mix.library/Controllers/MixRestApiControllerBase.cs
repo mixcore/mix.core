@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Repository;
 using Mix.Heart.Helpers;
-using Mix.Heart.Entity;
+using Mix.Heart.Entities;
 
 namespace Mix.Lib.Controllers
 {

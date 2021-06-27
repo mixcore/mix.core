@@ -47,8 +47,8 @@ namespace Mix.Database.Services
         {
             return _appSettingService.DatabaseProvider switch
             {
-                MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
+                MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(this, _appSettingService),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this, _appSettingService),
                 _ => null,
             };
         }

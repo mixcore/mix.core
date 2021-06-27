@@ -1,4 +1,4 @@
-﻿using Mix.Heart.Entity;
+﻿using Mix.Heart.Entities;
 using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Cms.v2

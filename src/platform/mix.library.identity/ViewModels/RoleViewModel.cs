@@ -9,7 +9,7 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
     {
-        public RoleViewModel(CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> repository) : base(repository)
+        public RoleViewModel() : base()
         {
         }
 
@@ -17,7 +17,7 @@ namespace Mix.Identity.ViewModels
         {
         }
 
-        public RoleViewModel(CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> repository, AspNetRoles entity) : base(repository, entity)
+        public RoleViewModel(AspNetRoles entity) : base(entity)
         {
         }
         #region Properties

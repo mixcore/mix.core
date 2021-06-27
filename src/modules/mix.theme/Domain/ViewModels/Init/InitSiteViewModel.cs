@@ -1,7 +1,6 @@
 ﻿using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
-using Mix.Theme.Domain.Dtos;
 using System.Threading.Tasks;
 
 namespace Mix.Theme.Domain.ViewModels.Init
@@ -13,10 +12,10 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public string Description { get; set; }
 
         public InitCultureViewModel Culture { get; set; }
-        public InitSiteViewModel(InitCmsDto model, CommandRepository<MixCmsContext, MixSite, int> repository) : base(repository)
+        public InitSiteViewModel()
         {
         }
-
+        
         protected override async Task<MixSite> SaveHandlerAsync()
         {
             var entity  = await base.SaveHandlerAsync();
@@ -24,7 +23,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             return entity;
         }
 
-        protected async Task SaveEntityRelationshipAsync(MixSite parent)
+        protected override async Task SaveEntityRelationshipAsync(MixSite parent)
         {
             Culture.MixSiteId = parent.Id;
             await Culture.SaveAsync(_unitOfWorkInfo);
