@@ -11,7 +11,6 @@ using MySqlConnector;
 using Mix.Database.Extensions;
 using Mix.Shared.Enums;
 using Mix.Database.Services;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Mix.Database.Entities.Account
 {
@@ -27,6 +26,8 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
+        private static MixDatabaseService _databaseService;
+        private static MixAppSettingService _appSettingService;
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
@@ -38,16 +39,24 @@ namespace Mix.Database.Entities.Account
 
         public MixCmsAccountContext()
         {
+
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public MixCmsAccountContext(
+            MixDatabaseService databaseService,
+            MixAppSettingService appSettingService)
         {
-            string cnn = MixDatabaseService.Instance.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseService = databaseService;
+            _appSettingService = appSettingService;
+        }
+
+        protected override void OnConfiguring(
+            DbContextOptionsBuilder optionsBuilder)
+        {
+            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
-                    MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-                switch (provider)
+                switch (_appSettingService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.MSSQL:
                         optionsBuilder.UseSqlServer(cnn);
@@ -74,9 +83,7 @@ namespace Mix.Database.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
-                            MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            switch (provider)
+            switch (_appSettingService.DatabaseProvider)
             {
                 case MixDatabaseProvider.MSSQL:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
@@ -91,9 +98,7 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var provider = MixAppSettingService.Instance.GetEnumConfig<MixDatabaseProvider>(
-                            MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            switch (provider)
+            switch (_appSettingService.DatabaseProvider)
             {
                 case MixDatabaseProvider.PostgreSQL:
                     modelBuilder.ApplyPostgresIddentityConfigurations();

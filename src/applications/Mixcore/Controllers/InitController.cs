@@ -20,7 +20,7 @@ namespace Mixcore.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!MixAppSettingService.Instance.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (!_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
                 return Redirect("/");
             }

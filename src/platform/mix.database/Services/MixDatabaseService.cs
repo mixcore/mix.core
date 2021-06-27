@@ -11,12 +11,11 @@ using System.Linq;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService : SingletonService<MixDatabaseService>
+    public class MixDatabaseService
     {
         public MixAppSettingService _appSettingService;
         public MixDatabaseService()
         {
-            _appSettingService = MixAppSettingService.Instance;
         }
         public MixDatabaseService(MixAppSettingService appSettingService)
         {
@@ -35,20 +34,18 @@ namespace Mix.Database.Services
 
         public MixCmsContext GetDbContext()
         {
-            var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            return provider switch
+            return _appSettingService.DatabaseProvider switch
             {
-                MixDatabaseProvider.MSSQL => new MsSqlMixCmsContext(),
-                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(),
-                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(),
-                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(),
+                MixDatabaseProvider.MSSQL => new MsSqlMixCmsContext(this, _appSettingService),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this, _appSettingService),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this, _appSettingService),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this, _appSettingService),
                 _ => null,
             };
         }
         public MixCmsAccountContext GetAccountDbContext()
         {
-            var provider = _appSettingService.GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-            return provider switch
+            return _appSettingService.DatabaseProvider switch
             {
                 MixDatabaseProvider.MSSQL or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(),
                 MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(),
@@ -60,14 +57,14 @@ namespace Mix.Database.Services
             MixDatabaseProvider databaseProvider,
             string defaultCulture)
         {
-            Instance.SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
-            MixAppSettingService.Instance.SetConfig(
+            SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
+            _appSettingService.SetConfig(
                 MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER, databaseProvider.ToString());
-            MixAppSettingService.Instance.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
+            _appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
-            MixAppSettingService.Instance.SaveSettings();
-            MixAppSettingService.Instance.Reload();
+            _appSettingService.SaveSettings();
+            _appSettingService.Reload();
         }
 
         public void InitMixCmsContext()

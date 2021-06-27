@@ -4,6 +4,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Extensions;
+using Mix.Database.Services;
+using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.Account
 {
@@ -19,6 +21,11 @@ namespace Mix.Database.Entities.Account
         }
 
         public SQLAccountContext()
+        {
+        }
+
+        public SQLAccountContext(MixDatabaseService databaseService, MixAppSettingService appSettingService) 
+            : base(databaseService, appSettingService)
         {
         }
 

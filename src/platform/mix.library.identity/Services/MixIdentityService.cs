@@ -36,6 +36,11 @@ namespace Mix.Identity.Services
         protected CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         protected CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
         public List<RoleViewModel> Roles { get; set; }
+
+        public MixIdentityService()
+        {
+
+        }
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,

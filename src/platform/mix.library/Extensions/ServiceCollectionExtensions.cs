@@ -50,6 +50,7 @@ namespace Mix.Lib.Extensions
 
             foreach (var assembly in assemblies)
             {
+                services.AddRepositories(assembly);
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
@@ -59,7 +60,7 @@ namespace Mix.Lib.Extensions
 
                 }
                 services.AddGeneratedRestApi(assembly);
-                services.AddRepositories(assembly);
+                
             }
             // Mix: Check if require ssl
             if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
@@ -73,7 +74,7 @@ namespace Mix.Lib.Extensions
             return services;
         }
 
-        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, bool isDevelop)
+        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, bool isDevelop, MixAppSettingService appSettingService)
         {
             app.UseResponseCompression();
             app.UseCors(MixcoreAllowSpecificOrigins);
@@ -88,7 +89,7 @@ namespace Mix.Lib.Extensions
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            if (MixAppSettingService.Instance.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
+            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
             {
                 app.UseHttpsRedirection();
             }

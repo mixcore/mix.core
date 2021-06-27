@@ -3,6 +3,8 @@ using Mix.Heart.Repository;
 using Microsoft.AspNetCore.Identity;
 using Mix.Identity.Services;
 using Mix.Database.Entities.Account;
+using Mix.Shared.Services;
+using Mix.Database.Services;
 
 namespace Mix.Theme.Domain.Services
 {
@@ -10,18 +12,25 @@ namespace Mix.Theme.Domain.Services
     {
         private readonly MixIdentityService _idHelper;
         private readonly UserManager<MixUser> _userManager;
-        private readonly CommandRepository<MixCmsContext, MixSite, int> siteRepo;
+        private readonly CommandRepository<MixCmsContext, MixSite, int> _siteRepo;
         private readonly CommandRepository<MixCmsContext, MixCulture, int> _cultureRepo;
-
+        private readonly MixAppSettingService _appSettingService;
+        private readonly MixDatabaseService _databaseService;
         public InitCmsService(
             CommandRepository<MixCmsContext, MixSite, int> siteRepo,
-            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo, 
-            UserManager<MixUser> userManager)
+            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo,
+            UserManager<MixUser> userManager,
+            MixAppSettingService appSettingService,
+            MixIdentityService idHelper, 
+            MixDatabaseService databaseService)
         {
-            this.siteRepo = siteRepo;
-            this._cultureRepo = cultureRepo;
+            _siteRepo = siteRepo;
+            _cultureRepo = cultureRepo;
             _userManager = userManager;
+            _appSettingService = appSettingService;
+            _idHelper = idHelper;
+            _databaseService = databaseService;
         }
-        
+
     }
 }
