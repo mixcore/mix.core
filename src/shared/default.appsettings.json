@@ -1,8 +1,7 @@
 {
   "ConnectionStrings": {
     "MixAccountConnection": null,
-    "MixCmsConnection": null,
-    "MixMessengerConnection": null
+    "MixCmsConnection": null
   },
   "MixConfigurations": {
     "IsCache": true,

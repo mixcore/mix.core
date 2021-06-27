@@ -36,7 +36,7 @@ namespace Mix.Database.Services
         {
             return _appSettingService.DatabaseProvider switch
             {
-                MixDatabaseProvider.MSSQL => new MsSqlMixCmsContext(this, _appSettingService),
+                MixDatabaseProvider.MSSQL => new SqlServerMixCmsContext(this, _appSettingService),
                 MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this, _appSettingService),
                 MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this, _appSettingService),
                 MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this, _appSettingService),
