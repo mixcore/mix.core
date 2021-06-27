@@ -7,8 +7,6 @@ using Mix.Lib.Services;
 using System.Threading.Tasks;
 using Mix.Shared.Services;
 using Mix.Theme.Domain.Dtos;
-using Mix.Heart.Repository;
-using Mix.Database.Entities.Cms.v2;
 using Mix.Theme.Domain.Enums;
 using Mix.Theme.Domain.Services;
 using Mix.Identity.Models.AccountViewModels;
@@ -18,7 +16,6 @@ namespace Mix.Theme.Controllers.v2
     [Route("api/v2/mix-theme/setup")]
     public class InitController : MixApiControllerBase
     {
-        private readonly CommandRepository<MixCmsContext, MixSite, int> _repo;
         private readonly InitCmsService _initCmsService;
 
         public InitController(ILogger<MixApiControllerBase> logger,

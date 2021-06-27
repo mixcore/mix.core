@@ -18,8 +18,6 @@ using Mix.Database.Services;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
-using Mix.Heart.Entity;
-using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Shared.Models;
 
@@ -34,8 +32,6 @@ namespace Mix.Lib.Extensions
             var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString()) 
                     as MixAuthenticationConfigurations;
             services.AddSingleton<MixFileService>();
-            services.AddSingleton<MixAppSettingService>();
-            services.AddSingleton<MixDatabaseService>();
             services.AddScoped<MixService>();
             services.AddResponseCompression();
             services.AddDbContext<MixCmsContext>();
@@ -50,7 +46,7 @@ namespace Mix.Lib.Extensions
 
             foreach (var assembly in assemblies)
             {
-                services.AddRepositories(assembly);
+                services.AddRepositories(assembly, typeof(MixCmsContext));
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {
@@ -174,37 +170,6 @@ namespace Mix.Lib.Extensions
                 ConfigureApplicationPartManager(m =>
                     m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider(assembly, baseType)
                 ));
-            return services;
-        }
-
-        private static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
-        {
-            IEntity<int> t = new MixDatabase();
-            var candidates = assembly
-                .GetExportedTypes()
-                .Where(
-                myType => myType.IsClass && !myType.IsAbstract
-                && (
-                    myType.IsAssignableTo(typeof(EntityBase<int>))
-                    || myType.IsSubclassOf(typeof(EntityBase<Guid>)
-                )));
-            var queryRepo = typeof(QueryRepository<,,>);
-            var commandRepo = typeof(CommandRepository<,,>);
-            foreach (var candidate in candidates)
-            {
-                if (candidate.BaseType.IsGenericType)
-                {
-                    Type keyType = candidate.IsAssignableTo(typeof(EntityBase<int>)) ? typeof(int) : typeof(Guid);
-                    Type[] types = new[] { typeof(MixCmsContext), candidate.UnderlyingSystemType, keyType };
-                    services.AddScoped(
-                        queryRepo.MakeGenericType(types)
-                    );
-                    
-                    services.AddScoped(
-                        commandRepo.MakeGenericType(types)
-                    );
-                }
-            }
             return services;
         }
 

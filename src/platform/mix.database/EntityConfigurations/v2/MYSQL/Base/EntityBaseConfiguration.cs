@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Heart.Entity;
+using Mix.Heart.Entities;
 using Mix.Heart.Enums;
 using System;
 

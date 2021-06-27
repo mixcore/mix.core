@@ -52,7 +52,7 @@ namespace Mixcore.Controllers
         [Route("{seoName}")]
         [Route("{seoName}/{keyword}")]
         [Route("{culture}/{seoName}/{keyword}")]
-        public async Task<IActionResult> Index(string seoName, string keyword)
+        public IActionResult Index(string seoName, string keyword)
         {
             if (!isValid)
             {

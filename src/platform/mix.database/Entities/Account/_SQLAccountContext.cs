@@ -20,10 +20,6 @@ namespace Mix.Database.Entities.Account
         {
         }
 
-        public SQLAccountContext()
-        {
-        }
-
         public SQLAccountContext(MixDatabaseService databaseService, MixAppSettingService appSettingService) 
             : base(databaseService, appSettingService)
         {

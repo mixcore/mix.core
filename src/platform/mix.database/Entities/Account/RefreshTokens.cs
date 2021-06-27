@@ -1,4 +1,4 @@
-﻿using Mix.Heart.Entity;
+﻿using Mix.Heart.Entities;
 using System;
 
 namespace Mix.Database.Entities.Account

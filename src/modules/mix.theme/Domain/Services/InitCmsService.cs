@@ -12,7 +12,6 @@ namespace Mix.Theme.Domain.Services
     {
         private readonly MixIdentityService _idHelper;
         private readonly UserManager<MixUser> _userManager;
-        private readonly CommandRepository<MixCmsContext, MixSite, int> _siteRepo;
         private readonly CommandRepository<MixCmsContext, MixCulture, int> _cultureRepo;
         private readonly MixAppSettingService _appSettingService;
         private readonly MixDatabaseService _databaseService;
@@ -24,7 +23,6 @@ namespace Mix.Theme.Domain.Services
             MixIdentityService idHelper, 
             MixDatabaseService databaseService)
         {
-            _siteRepo = siteRepo;
             _cultureRepo = cultureRepo;
             _userManager = userManager;
             _appSettingService = appSettingService;

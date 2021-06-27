@@ -37,11 +37,6 @@ namespace Mix.Database.Entities.Account
         {
         }
 
-        public MixCmsAccountContext()
-        {
-
-        }
-
         public MixCmsAccountContext(
             MixDatabaseService databaseService,
             MixAppSettingService appSettingService)
