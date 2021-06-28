@@ -21,6 +21,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/rest/mix-database/portal")]
+    [Route("api/v1/rest/{culture}/mix-database/portal")]
     public class ApiMixDatabasePortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabase, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
@@ -74,7 +75,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost("migrate/{id}")]
         public async Task<ActionResult> Migrate([FromBody] UpdateViewModel database)
         {
-            var result = await Helper.MigrateDatabase(database);
+            var result = await Helper.MigrateDatabase(database, _lang);
             return result ? Ok() : BadRequest();
         }
 
