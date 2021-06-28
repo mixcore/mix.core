@@ -200,7 +200,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("migrate-data/{databaseId}")]
         public async Task<ActionResult> MigrateData(int databaseId)
         {
-            var result = await Helper.MigrateData(databaseId);
+            var result = await Helper.MigrateData(databaseId, _lang);
             return result ? Ok() : BadRequest();
         }
     }

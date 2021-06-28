@@ -975,28 +975,28 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             Task.WhenAll(tasks);
         }
 
-        public static async Task<bool> MigrateData(int databaseId)
+        public static async Task<bool> MigrateData(int databaseId, string culture)
         {
             using (var ctx = new MixCmsContext())
             {
                 var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId, ctx, null);
                 if (getDatabase.IsSucceed)
                 {
-                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
+                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}_{culture.Replace("-", "_")}";
 
 
                     int page = 0;
                     int pageSize = 10;
                     string truncateSql = $"DELETE FROM {databaseName};";
                     await ctx.Database.ExecuteSqlRawAsync(truncateSql);
-                    while (true)
-                    {
-                        List<string> datas = new List<string>();
-                        var getData = await FormViewModel.Repository.GetModelListByAsync(
-                        m => m.MixDatabaseName == getDatabase.Data.Name
+                    var getData = await FormViewModel.Repository.GetModelListByAsync(
+                        m => m.MixDatabaseName == getDatabase.Data.Name && m.Specificulture == culture
                         , "Id", Heart.Enums.DisplayDirection.Asc
                         , pageSize, page, null, null
                         , ctx, null);
+                    while (page < getData.Data.TotalPage)
+                    {
+                        List<string> datas = new List<string>();
                         page++;
                         foreach (var item in getData.Data.Items)
                         {
@@ -1013,10 +1013,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             await ctx.Database.ExecuteSqlRawAsync(commandText);
 
                             await ctx.SaveChangesAsync();
-                        }
-                        if (getData.Data.Page == getData.Data.TotalPage)
-                        {
-                            break;
                         }
                     }
                     return true;

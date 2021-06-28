@@ -10,7 +10,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 {
     public class Helper
     {
-        public static async Task<bool> MigrateDatabase(UpdateViewModel database)
+        public static async Task<bool> MigrateDatabase(UpdateViewModel database, string culture)
         {
             if (database.Columns.Count > 0)
             {
@@ -20,8 +20,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 {
                     colSqls.Add(GenerateColumnSql(col));
                 }
-                string commandText = $"DROP TABLE IF EXISTS {MixConstants.CONST_MIXDB_PREFIX}{database.Name}; " +
-                    $"CREATE TABLE {MixConstants.CONST_MIXDB_PREFIX}{database.Name} " +
+                string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.Name}_{culture.Replace("-", "_")}";
+                string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
+                    $"CREATE TABLE {tableName} " +
                     $"(id varchar(50) NOT NULL Unique, specificulture varchar(50), mix_status varchar(50), createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
                     $" {string.Join(",", colSqls.ToArray())})";
                 if (!string.IsNullOrEmpty(commandText))
