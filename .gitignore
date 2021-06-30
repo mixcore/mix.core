@@ -278,3 +278,5 @@ src/Mix.Cms.Web/MixContent/mix-cms.db-shm
 src/Mix.Cms.Web/MixContent/mix_cache.db
 
 *.db
+
+src/applications/Mixcore/mix.settings.json

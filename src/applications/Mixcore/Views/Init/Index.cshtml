@@ -5,22 +5,15 @@
 <head>
     <base href="/portal">
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="~/lib/now-ui-kit-pro-v1.2.2/mix-app/assets/img/apple-icon.png">
-    <link rel="icon" href="@(appSettingService.GetConfig<string>(Mix.Shared.Enums.MixAppSettingsSection.GlobalSettings, "Favicon") 
-        ?? "/mix-app/css/portal/img/mixcore-logo-green-16x16.png")">
+    <link rel="icon" href="/mix-app/css/portal/img/mixcore-logo-green-16x16.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Init Cms - Mixcore</title>
+    <title>@ViewData["Title"] - Mixcore</title>
     <meta content='width=device-width, initial-sca
           le=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <link href="~/mix-app/css/app-vendor.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/@@tabler/core@latest/dist/css/tabler.min.css">
     <link href="~/mix-app/css/shared.min.css" rel="stylesheet" />
-    <link href="~/mix-app/css/app-init.min.css" rel="stylesheet" />
-    <script src="~/mix-app/js/particles/particles.min.js"></script>
-    <script async src="https://pay.google.com/gp/p/js/pay.js"></script>
 </head>
-<body class="d-flex" ng-app="MixInit">
+<body class="antialiased border-top-wide border-primary d-flex flex-column" ng-app="MixInit">
     <style>
         :root
         {
@@ -31,22 +24,17 @@
             --text-color: {{globalSettings.portalThemeSettings.textColor}};
         }
     </style>
-    <div id="particles-js" class="position-fixed w-100 h-100"></div>
     <mix-loader ng-show="isBusy"></mix-loader>
-    <div class="container" style="margin: auto;">
-        <div class="card form-init">
-            <div class="p-5">
-                <img src="/mix-app/css/portal/img/mixcore-logo-green.svg" alt="Mixcore CMS" height="35">
-                <div class="{{pageClass}}" ng-view>
-                </div>
-            </div>
+    <div class="page page-center">
+        <div class="{{pageClass}}" ng-view>
         </div>
     </div>
 
     <environment names="Development">
     </environment>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@@tabler/core@latest/dist/js/tabler.min.js"></script>
+
     <script src="~/mix-app/js/framework.min.js"></script>
     <script src="~/mix-app/js/app-portal-required.min.js"></script>
     <script src="~/mix-app/js/portal.min.js"></script>
@@ -73,7 +61,5 @@
             </div>
         </div>
     </div>
-
-    <script>particlesJS('particles-js', { "particles": { "number": { "value": 50, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 }, "image": { "src": "img/background.jpg", "width": 100, "height": 100 } }, "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.2, "width": 1 }, "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } } }, "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.2 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } }, "retina_detect": true });</script>
 </body>
 </html>
