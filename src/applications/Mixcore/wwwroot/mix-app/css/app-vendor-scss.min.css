@@ -1,5 +1,14 @@
-/* Tue Jun 01 2021 13:11:46 GMT+0700 (Indochina Time) */fb-login {
+/* Wed Jun 30 2021 23:46:50 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
+
+medias .modal {
+  z-index: 1049; }
+
+medias #modal-files .modal-body .table img {
+  height: 30px; }
+
+medias #modal-files .modal-body .table img.preview {
+  height: auto; }
 
 mix-column-preview .row {
   max-height: 120px;

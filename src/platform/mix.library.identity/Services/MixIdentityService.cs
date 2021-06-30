@@ -32,23 +32,21 @@ namespace Mix.Identity.Services
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly MixAppSettingService _appSettingService;
+        private readonly MixCmsAccountContext _context;
         public readonly MixIdentityHelper _idHelper;
         protected CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         protected CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
         public List<RoleViewModel> Roles { get; set; }
 
-        public MixIdentityService()
-        {
-
-        }
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             MixIdentityHelper helper,
             MixAppSettingService appSettingService,
-            CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
-            CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo)
+            CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+            CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo, 
+            MixCmsAccountContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -59,6 +57,7 @@ namespace Mix.Identity.Services
             LoadRoles();
             _refreshTokenRepo = refreshTokenRepo;
             _roleRepo = roleRepo;
+            _context = context;
         }
 
         public async Task<JObject> Login(LoginViewModel model)
@@ -121,7 +120,7 @@ namespace Mix.Identity.Services
                 if (isRemember)
                 {
                     refreshTokenId = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel()
+                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(_context)
                     {
                         Id = refreshTokenId,
                         Email = user.Email,

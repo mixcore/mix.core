@@ -14,6 +14,7 @@ using Mix.Identity.Extensions;
 using Mix.Identity.Helpers;
 using Mix.Shared.Models;
 using Mix.Database.Entities.Account;
+using Mix.Identity.Services;
 
 namespace Mix.Identity
 {
@@ -102,6 +103,7 @@ namespace Mix.Identity
                 options.SlidingExpiration = true;
             });
             services.AddScoped<MixIdentityHelper>();
+            services.AddScoped<MixIdentityService>();
             return services;
         }
 

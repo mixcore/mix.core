@@ -9,7 +9,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixSite",
@@ -35,7 +35,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     table.PrimaryKey("PK_MixSite", x => x.Id);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixConfiguration",
@@ -70,7 +70,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixCulture",
@@ -113,7 +113,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixDatabase",
@@ -150,7 +150,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixDomain",
@@ -185,7 +185,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixLanguage",
@@ -220,7 +220,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixModule",
@@ -255,7 +255,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixPost",
@@ -271,13 +271,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
                     Image = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     DisplayName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     SystemName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     MixSiteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -290,7 +290,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixUrlAlias",
@@ -325,7 +325,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixConfigurationContent",
@@ -371,7 +371,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixData",
@@ -400,7 +400,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixDatabaseColumn",
@@ -438,7 +438,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixLanguageContent",
@@ -484,7 +484,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixUrlAliasContent",
@@ -507,15 +507,15 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
                     Specificulture = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     DisplayName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     SystemName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     Content = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     MixCultureId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -534,7 +534,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixDataContent",
@@ -576,7 +576,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     SeoName = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     SeoTitle = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -605,7 +605,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixDataContentValue",
@@ -620,7 +620,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8"),
                     BooleanValue = table.Column<bool>(type: "tinyint(1)", nullable: true),
                     DataId = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
                     DoubleValue = table.Column<double>(type: "double", nullable: true),
                     IntegerValue = table.Column<int>(type: "int", nullable: true),
@@ -658,7 +658,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixModuleContent",
@@ -705,7 +705,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     SeoName = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     SeoTitle = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -733,7 +733,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixTheme",
@@ -744,7 +744,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     PreviewUrl = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     MixDataContentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -779,7 +779,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixViewTemplate",
@@ -826,7 +826,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixPageContent",
@@ -873,7 +873,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     SeoName = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     SeoTitle = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -895,7 +895,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixPostContent",
@@ -942,7 +942,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     SeoName = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     SeoTitle = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                        .Annotation("MySql:CharSet", "utf8"),
                     PublishedDateTime = table.Column<DateTime>(type: "datetime", nullable: true),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -988,7 +988,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateTable(
                 name: "MixPage",
@@ -1030,7 +1030,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixConfiguration_MixSiteId",

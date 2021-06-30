@@ -1,7 +1,7 @@
 {
   "ConnectionStrings": {
     "MixAccountConnection": null,
-    "MixCmsConnection": null
+    "MixCmsConnection": "Data Source=MixContent\\mix-cms2.db"
   },
   "MixConfigurations": {
     "IsCache": true,
@@ -41,7 +41,7 @@
     "ValidateIssuerSigningKey": true,
     "TokenType": "Bearer",
     "Audience": "mix-core",
-    "SecretKey": "mixcore-secret-key",
+    "SecretKey": "91860222738b474db140c4ebf85a91e1",
     "Issuer": "mix-core",
     "Issuers": "mix-core",
     "Audiences": "mix-core",
@@ -77,7 +77,7 @@
   },
   "GlobalSettings": {
     "IsInit": true,
-    "InitStatus": 0,
+    "InitStatus": 2,
     "IsMaintenance": false,
     "IsRewrite": true,
     "IsHttps": false,
@@ -106,9 +106,9 @@
     "TagPageSize": "20",
     "SearchPageSize": "20",
     "IsEncryptApi": true,
-    "ApiEncryptKey": "RHZhMEFvckY0VUF3Ynd2YUZZTnRIdz09LGx3dk82QlR0WHlPUG5FWC8rUFV2bU1pdUpIMnVQTEF5TW9kMFpPdU5aMlU9",
-    "LastUpdateConfiguration": null,
-    "DatabaseProvider": "MSSQL",
+    "ApiEncryptKey": "WHRDZjJBMEFuUUh5MDBkRlFNTVJZdz09LE8yTmYzNU1PNFZFNm50cDNaQnExTmcwNHRiMmRuNmJiWVpDamVWdmF4L1U9",
+    "LastUpdateConfiguration": "2021-06-30T16:38:00.745544Z",
+    "DatabaseProvider": "SQLITE",
     "AllowedHosts": [],
     "Smtp": {
       "Server": "",
@@ -153,10 +153,11 @@
   "Language": "en-us",
   "EPPlus": {
     "ExcelPackage": {
-      "LicenseContext": "NonCommercial" //The license context used
+      "LicenseContext": "NonCommercial"
     }
   },
   "Quartz": {
     "quartz.scheduler.instanceName": "Mixcore Cms Scheduler"
-  }
+  },
+  "Smtp": null
 }

@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Shared.Models;
+using Mix.Database.Extenstions;
 
 namespace Mix.Lib.Extensions
 {
@@ -42,11 +43,11 @@ namespace Mix.Lib.Extensions
             var serviceProvider = services.BuildServiceProvider();
             var appSettingService = serviceProvider.GetService<MixAppSettingService>();
             VerifyInitData(appSettingService);
-            var assemblies = GetMixAssemblies();
 
+            services.AddRepositories();
+            var assemblies = GetMixAssemblies();
             foreach (var assembly in assemblies)
             {
-                services.AddRepositories(assembly, typeof(MixCmsContext));
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
                 foreach (var startup in startupServices)
                 {

@@ -27,16 +27,14 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MixAppSettingService>();
-            services.AddSingleton<MixDatabaseService>();
+            services.AddScoped<MixAppSettingService>();
+            services.AddScoped<MixDatabaseService>();
             MixAppSettingService appSettingService = new();
             var auth = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
-            services.AddMixAuthorize<ApplicationDbContext>(auth);
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<SQLAccountContext>();
-            services.AddDbContext<PostgresSQLAccountContext>();
-            services.AddScoped<MixIdentityService>();
+            services.AddDbContext<MixCmsAccountContext>();
             services.AddMixServices(Configuration);
+            services.AddMixAuthorize<ApplicationDbContext>(auth);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
             services.AddControllersWithViews().AddNewtonsoftJson();
         }

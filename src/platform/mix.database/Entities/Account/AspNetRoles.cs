@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class AspNetRoles: IEntity<Guid>
+    public partial class AspNetRoles: Entity
     {
         public AspNetRoles()
         {
@@ -12,7 +12,6 @@ namespace Mix.Database.Entities.Account
             AspNetUserRoles = new HashSet<AspNetUserRoles>();
         }
 
-        public Guid Id { get; set; }
         public string ConcurrencyStamp { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
