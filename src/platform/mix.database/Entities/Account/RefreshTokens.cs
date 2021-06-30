@@ -3,9 +3,8 @@ using System;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class RefreshTokens: IEntity<Guid>
+    public partial class RefreshTokens: Entity
     {
-        public Guid Id { get; set; }
         public Guid ClientId { get; set; }
         public string Email { get; set; }
         public string Username { get; set; }

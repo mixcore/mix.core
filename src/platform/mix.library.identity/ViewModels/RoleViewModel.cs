@@ -9,15 +9,11 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
     {
-        public RoleViewModel() : base()
-        {
-        }
-
-        public RoleViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
-        {
-        }
-
         public RoleViewModel(AspNetRoles entity) : base(entity)
+        {
+        }
+
+        public RoleViewModel(MixCmsAccountContext context) : base(context)
         {
         }
         #region Properties

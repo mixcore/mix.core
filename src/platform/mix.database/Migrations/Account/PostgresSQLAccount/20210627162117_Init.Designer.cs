@@ -84,7 +84,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.Property<int>("Id")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("MixUserId")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -103,7 +103,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("MixUserId");
 
                     b.HasIndex("UserId");
 
@@ -120,7 +120,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("MixUserId")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -136,7 +136,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("MixUserId");
 
                     b.HasIndex("UserId");
 
@@ -153,13 +153,13 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("ApplicationUserId")
+                    b.Property<string>("MixUserId")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("MixUserId");
 
                     b.HasIndex("RoleId");
 
@@ -384,9 +384,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "ApplicationUser")
-                        .WithMany("AspNetUserClaimsApplicationUser")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
+                        .WithMany("AspNetUserClaimsMixUser")
+                        .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserClaimsUser")
@@ -394,16 +394,16 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("MixUser");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "ApplicationUser")
-                        .WithMany("AspNetUserLoginsApplicationUser")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
+                        .WithMany("AspNetUserLoginsMixUser")
+                        .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
                         .WithMany("AspNetUserLoginsUser")
@@ -411,16 +411,16 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("MixUser");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "ApplicationUser")
-                        .WithMany("AspNetUserRolesApplicationUser")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
+                        .WithMany("AspNetUserRolesMixUser")
+                        .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetRoles", "Role")
                         .WithMany("AspNetUserRoles")
@@ -434,7 +434,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
+                    b.Navigation("MixUser");
 
                     b.Navigation("Role");
 
@@ -461,15 +461,15 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
                 {
-                    b.Navigation("AspNetUserClaimsApplicationUser");
+                    b.Navigation("AspNetUserClaimsMixUser");
 
                     b.Navigation("AspNetUserClaimsUser");
 
-                    b.Navigation("AspNetUserLoginsApplicationUser");
+                    b.Navigation("AspNetUserLoginsMixUser");
 
                     b.Navigation("AspNetUserLoginsUser");
 
-                    b.Navigation("AspNetUserRolesApplicationUser");
+                    b.Navigation("AspNetUserRolesMixUser");
 
                     b.Navigation("AspNetUserRolesUser");
 

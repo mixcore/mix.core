@@ -49,7 +49,7 @@ namespace Mix.Theme.Domain.Services
                     var aesKey = _appSettingService.GetConfig<string>(
                             MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey);
 
-                    var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+                    var token = await _identityService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
 

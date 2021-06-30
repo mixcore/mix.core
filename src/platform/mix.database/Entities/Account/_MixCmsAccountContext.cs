@@ -10,6 +10,8 @@ using Mix.Shared.Services;
 using MySqlConnector;
 using Mix.Database.Extensions;
 using Mix.Database.Services;
+using System;
+using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Account
 {
@@ -27,6 +29,11 @@ namespace Mix.Database.Entities.Account
 
         private static MixDatabaseService _databaseService;
         private static MixAppSettingService _appSettingService;
+
+        public MixCmsAccountContext()
+        {
+
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
@@ -73,15 +80,18 @@ namespace Mix.Database.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            switch (_appSettingService.DatabaseProvider)
+            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ClearDbPool))
             {
-                case MixDatabaseProvider.MSSQL:
-                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-                    break;
+                switch (_appSettingService.DatabaseProvider)
+                {
+                    case MixDatabaseProvider.MSSQL:
+                        SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                        break;
 
-                case MixDatabaseProvider.MySQL:
-                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-                    break;
+                    case MixDatabaseProvider.MySQL:
+                        MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                        break;
+                }
             }
             base.Dispose();
         }

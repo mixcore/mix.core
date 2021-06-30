@@ -29,5 +29,7 @@
         public const string MaxPageSize = "MaxPageSize";
         public const string ImageSizes = "ImageSizes";
         public const string LastUpdateConfiguration = "LastUpdateConfiguration";
+
+        public const string ClearDbPool = "ClearDbPool";
     }
 }

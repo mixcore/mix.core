@@ -54,13 +54,13 @@ namespace Mix.Database.Extensions
 
             modelBuilder.Entity<AspNetUserClaims>(entity =>
             {
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.UserId);
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
                 entity.Property(e => e.ClaimType).HasMaxLength(400);
 
@@ -70,9 +70,9 @@ namespace Mix.Database.Extensions
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserClaimsApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaimsUser)
@@ -84,7 +84,7 @@ namespace Mix.Database.Extensions
                 entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
                     .HasName("PK_AspNetUserLogins_1");
 
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.UserId);
 
@@ -92,7 +92,7 @@ namespace Mix.Database.Extensions
 
                 entity.Property(e => e.ProviderKey).HasMaxLength(50);
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
                 entity.Property(e => e.ProviderDisplayName).HasMaxLength(400);
 
@@ -100,9 +100,9 @@ namespace Mix.Database.Extensions
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserLoginsApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserLoginsUser)
@@ -113,7 +113,7 @@ namespace Mix.Database.Extensions
             {
                 entity.HasKey(e => new { e.UserId, e.RoleId });
 
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.RoleId);
 
@@ -121,11 +121,11 @@ namespace Mix.Database.Extensions
 
                 entity.Property(e => e.RoleId).HasMaxLength(50);
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserRolesApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUserRoles)
@@ -281,13 +281,13 @@ namespace Mix.Database.Extensions
 
             modelBuilder.Entity<AspNetUserClaims>(entity =>
             {
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.UserId);
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
                 entity.Property(e => e.ClaimType).HasMaxLength(400);
 
@@ -297,9 +297,9 @@ namespace Mix.Database.Extensions
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserClaimsApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaimsUser)
@@ -311,7 +311,7 @@ namespace Mix.Database.Extensions
                 entity.HasKey(e => new { e.LoginProvider, e.ProviderKey })
                     .HasName("PK_AspNetUserLogins_1");
 
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.UserId);
 
@@ -319,7 +319,7 @@ namespace Mix.Database.Extensions
 
                 entity.Property(e => e.ProviderKey).HasMaxLength(50);
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
                 entity.Property(e => e.ProviderDisplayName).HasMaxLength(400);
 
@@ -327,9 +327,9 @@ namespace Mix.Database.Extensions
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserLoginsApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserLoginsUser)
@@ -340,7 +340,7 @@ namespace Mix.Database.Extensions
             {
                 entity.HasKey(e => new { e.UserId, e.RoleId });
 
-                entity.HasIndex(e => e.ApplicationUserId);
+                entity.HasIndex(e => e.MixUserId);
 
                 entity.HasIndex(e => e.RoleId);
 
@@ -348,11 +348,11 @@ namespace Mix.Database.Extensions
 
                 entity.Property(e => e.RoleId).HasMaxLength(50);
 
-                entity.Property(e => e.ApplicationUserId).HasMaxLength(50);
+                entity.Property(e => e.MixUserId).HasMaxLength(50);
 
-                entity.HasOne(d => d.ApplicationUser)
+                entity.HasOne(d => d.MixUser)
                     .WithMany(p => p.AspNetUserRolesApplicationUser)
-                    .HasForeignKey(d => d.ApplicationUserId);
+                    .HasForeignKey(d => d.MixUserId);
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUserRoles)

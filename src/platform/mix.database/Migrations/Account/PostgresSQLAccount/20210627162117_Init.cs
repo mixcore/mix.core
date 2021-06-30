@@ -117,7 +117,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     ClaimType = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
                     ClaimValue = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
                     UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
@@ -126,8 +126,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_AspNetUserClaims_AspNetUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -145,7 +145,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     LoginProvider = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ProviderKey = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     ProviderDisplayName = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
                     UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
                 },
@@ -153,8 +153,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     table.PrimaryKey("PK_AspNetUserLogins_1", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_AspNetUserLogins_AspNetUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -172,7 +172,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     RoleId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,8 +184,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_AspNetUserRoles_AspNetUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -230,9 +230,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 filter: "([NormalizedName] IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_ApplicationUserId",
+                name: "IX_AspNetUserClaims_MixUserId",
                 table: "AspNetUserClaims",
-                column: "ApplicationUserId");
+                column: "MixUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -240,9 +240,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_ApplicationUserId",
+                name: "IX_AspNetUserLogins_MixUserId",
                 table: "AspNetUserLogins",
-                column: "ApplicationUserId");
+                column: "MixUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
@@ -250,9 +250,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_ApplicationUserId",
+                name: "IX_AspNetUserRoles_MixUserId",
                 table: "AspNetUserRoles",
-                column: "ApplicationUserId");
+                column: "MixUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",

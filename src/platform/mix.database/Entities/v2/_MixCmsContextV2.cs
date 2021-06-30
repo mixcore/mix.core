@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.EntityConfigurations.v2.POSTGRES;
 using Mix.Database.EntityConfigurations.v2.SQLITE;
 using Mix.Database.EntityConfigurations.v2.SQLSERVER;
@@ -8,6 +9,7 @@ using Mix.Heart.Enums;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Services;
+using MySqlConnector;
 using System;
 
 namespace Mix.Database.Entities.Cms.v2
@@ -52,6 +54,24 @@ namespace Mix.Database.Entities.Cms.v2
                         break;
                 }
             }
+        }
+
+        public override void Dispose()
+        {
+            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ClearDbPool))
+            {
+                switch (_appSettingService.DatabaseProvider)
+                {
+                    case MixDatabaseProvider.MSSQL:
+                        SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                        break;
+
+                    case MixDatabaseProvider.MySQL:
+                        MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                        break;
+                }
+            }
+            base.Dispose();
         }
 
 
