@@ -493,12 +493,10 @@ namespace Mix.Cms.Lib.ViewModels
                         if (result.IsSucceed)
                         {
                             field.CreatedBy = CreatedBy;
-                            var setId = dicMixDatabaseIds.FirstOrDefault(m => m.Key == field.MixDatabaseId);
-                            field.MixDatabaseId = setId.Value;
-                            if (field.ReferenceId != null)
+                            field.MixDatabaseId = dicMixDatabaseIds[field.MixDatabaseId];
+                            if (field.ReferenceId.HasValue)
                             {
-                                var refId = dicMixDatabaseIds.FirstOrDefault(m => m.Key == field.ReferenceId);
-                                field.ReferenceId = refId.Value;
+                                field.ReferenceId = dicMixDatabaseIds[field.ReferenceId.Value];
                             }
                             if (dicFieldIds.ContainsKey(field.Id))
                             {
@@ -712,7 +710,7 @@ namespace Mix.Cms.Lib.ViewModels
                         item.Specificulture = destCulture;
                         item.CreatedDateTime = DateTime.UtcNow;
                         // update new Id if not system attribute
-                        if (item.MixDatabaseName.IndexOf("sys_") != 0 && dicMixDatabaseIds.ContainsKey(item.MixDatabaseId))
+                        if (dicMixDatabaseIds.ContainsKey(item.MixDatabaseId))
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
@@ -720,7 +718,7 @@ namespace Mix.Cms.Lib.ViewModels
                         foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;
-                            var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
+                            var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);                            
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {

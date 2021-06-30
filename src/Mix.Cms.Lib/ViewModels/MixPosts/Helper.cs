@@ -685,7 +685,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     post.Status = MixContentStatus.Published;
                 }
                 _ = await context.SaveChangesAsync();
-                Console.WriteLine($"PublishScheduledPosts at {now.ToLongTimeString()}");
             }
         }
     }
