@@ -12,7 +12,7 @@ namespace Mix.Lib.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Exception is HttpResponseException exception)
+            if (context.Exception is MixHttpResponseException exception)
             {
                 switch (exception.Status)
                 {
