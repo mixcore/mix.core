@@ -36,7 +36,9 @@ namespace Mixcore
             services.AddMixServices(Configuration);
             services.AddMixAuthorize<ApplicationDbContext>(auth);
             services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
-            services.AddControllersWithViews().AddNewtonsoftJson();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation()
+                .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
