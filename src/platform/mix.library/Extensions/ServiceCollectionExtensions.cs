@@ -21,6 +21,7 @@ using Mix.Heart.Extensions;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Shared.Models;
 using Mix.Database.Extenstions;
+using Mix.Lib.Filters;
 
 namespace Mix.Lib.Extensions
 {
@@ -30,7 +31,7 @@ namespace Mix.Lib.Extensions
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, IConfiguration Configuration)
         {
-            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString()) 
+            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString())
                     as MixAuthenticationConfigurations;
             services.AddSingleton<MixFileService>();
             services.AddScoped<MixService>();
@@ -57,7 +58,7 @@ namespace Mix.Lib.Extensions
 
                 }
                 services.AddGeneratedRestApi(assembly);
-                
+
             }
             // Mix: Check if require ssl
             if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
@@ -110,7 +111,8 @@ namespace Mix.Lib.Extensions
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
-            services.AddControllers();
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
