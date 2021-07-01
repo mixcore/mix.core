@@ -14,6 +14,7 @@ using Mix.Lib.Helpers;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Shared.Models;
+using Mix.Heart.Exceptions;
 
 namespace Mix.Common.Controllers.v2
 {
