@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Mix.Theme</RootNamespace>
+    <UserSecretsId>ce99c40c-2b2e-4835-bb26-5d431ba630f8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

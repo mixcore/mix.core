@@ -1,6 +1,6 @@
 using System;
 
-namespace Mix.Portal
+namespace WebApplication1
 {
     public class WeatherForecast
     {

@@ -5,6 +5,10 @@ namespace Mix.Lib.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class GeneratedControllerAttribute: Attribute
     {
+        public GeneratedControllerAttribute()
+        {
+
+        }
         public GeneratedControllerAttribute(string route, string name)
         {
             Route = route;
