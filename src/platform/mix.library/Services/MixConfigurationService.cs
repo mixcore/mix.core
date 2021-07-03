@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Shared.Constants;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
 using Mix.Lib.Abstracts;
 using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Services
 {
-    public class ConfigurationService : JsonConfigurationServiceBase
+    public class MixConfigurationService : JsonConfigurationServiceBase
     {
-        public ConfigurationService() : base(MixAppConfigFilePath.Configration)
+        public MixConfigurationService() : base(MixAppConfigFilePath.Configration)
         {
         }
 

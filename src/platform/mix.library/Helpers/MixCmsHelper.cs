@@ -1,17 +1,10 @@
-﻿using Mix.Shared.Constants;
-using Mix.Lib.Services;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
-        public static string GetTemplateFolder(string culture)
-        {
-            return $"/{MixFolders.TemplatesFolder}/{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}";
-        }
-
         public static T Property<T>(JObject obj, string fieldName)
         {
             if (obj != null && obj.ContainsKey(fieldName) && obj[fieldName] != null)

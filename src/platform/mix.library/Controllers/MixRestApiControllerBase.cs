@@ -10,7 +10,7 @@ using Mix.Heart.Entities;
 
 namespace Mix.Lib.Controllers
 {
-    public class MixRestApiControllerBase<TDbContext, TEntity, TPrimaryKey> : Controller
+    public class MixRestApiControllerBase<TDbContext, TEntity, TPrimaryKey> : ControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : class, IEntity<TPrimaryKey>

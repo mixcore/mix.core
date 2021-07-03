@@ -19,107 +19,75 @@ using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
 using Mix.Database.Entities.Cms.v2;
-using Mix.Shared.Models;
 using Mix.Database.Extenstions;
 using Mix.Lib.Filters;
+using Mix.Lib.Attributes;
+using System.Collections.Generic;
+using Mix.Heart.Helpers;
+using Mix.Database.Entities.Account;
 
 namespace Mix.Lib.Extensions
 {
     public static class ServiceCollectionExtensions
     {
         static string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
+        static List<Assembly> MixAssemblies { get => GetMixAssemblies(); }
 
-        public static IServiceCollection AddMixServices(this IServiceCollection services, IConfiguration Configuration)
+        #region Services
+
+        public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration Configuration)
         {
-            var mixAuthentications = Configuration.GetSection(MixAppSettingsSection.Authentication.ToString())
-                    as MixAuthenticationConfigurations;
-            services.AddSingleton<MixFileService>();
-            services.AddScoped<MixService>();
-            services.AddResponseCompression();
+            services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
-            //services.AddDbContext<MixDbContext>();
-            //services.AddMixAuthorize<MixDbContext>(mixAuthentications);
-            services.AddScoped<TranslatorService>();
-            services.AddScoped<ConfigurationService>();
-            var serviceProvider = services.BuildServiceProvider();
-            var appSettingService = serviceProvider.GetService<MixAppSettingService>();
-            VerifyInitData(appSettingService);
+            services.AddDbContext<MixCmsAccountContext>();
 
+            
+            services.AddSingleton<MixFileService>();
+            services.InitMixContext();
             services.AddRepositories();
-            var assemblies = GetMixAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
-                foreach (var startup in startupServices)
-                {
-                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                    var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
+            services.AddScoped<MixService>();
+            services.AddScoped<TranslatorService>();
+            services.AddScoped<MixConfigurationService>();
+            services.AddMixModuleServices();
+            services.AddGeneratedRestApi();
+            services.AddMixSwaggerServices(executingAssembly);
+            services.AddSSL();
 
-                }
-                services.AddGeneratedRestApi(assembly);
-
-            }
-            // Mix: Check if require ssl
-            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
-            {
-                services.AddHttpsRedirection(options =>
-                {
-                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-                    options.HttpsPort = 443;
-                });
-            }
+            services.AddResponseCompression();
             return services;
         }
 
-        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, bool isDevelop, MixAppSettingService appSettingService)
+        #endregion
+
+        #region Apps
+
+        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, Assembly executingAssembly, bool isDevelop, MixAppSettingService appSettingService)
         {
             app.UseResponseCompression();
             app.UseCors(MixcoreAllowSpecificOrigins);
-            var provider = new FileExtensionContentTypeProvider();
-            // Add new mappings
-            app.UseDefaultFiles();
-            provider.Mappings[".vue"] = "application/text";
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                ContentTypeProvider = provider
-            });
+            app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, "IsHttps"))
+
+            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsHttps))
             {
                 app.UseHttpsRedirection();
             }
 
-            var assemblies = GetMixAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
-                foreach (var startup in startupServices)
-                {
-                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
-                    var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
-                }
-            }
+            app.UseMixModuleApps(isDevelop);
+            app.UseMixSwaggerApps(isDevelop, executingAssembly);
+            app.UseResponseCompression();
             return app;
         }
 
-        public static void AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
-        {
-            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
-            string version = "v2";
-            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
-            services.AddControllers(options =>
-                options.Filters.Add(new HttpResponseExceptionFilter()));
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
-            });
-        }
+        #endregion
 
-        public static void UseMixSwaggerApps(this IApplicationBuilder app, bool isDevelop, Assembly assembly)
+        #region Private
+
+        #region App
+
+        private static IApplicationBuilder UseMixSwaggerApps(this IApplicationBuilder app, bool isDevelop, Assembly assembly)
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty);
             string version = "v2";
@@ -147,13 +115,67 @@ namespace Mix.Lib.Extensions
             {
                 endpoints.MapControllers();
             });
+
+            return app;
         }
 
-        private static void VerifyInitData(MixAppSettingService appSettingService)
+        private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app)
         {
-            var mixService = new MixService(appSettingService);
+            var provider = new FileExtensionContentTypeProvider();
+            app.UseDefaultFiles();
+            provider.Mappings[".vue"] = "application/text";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+
+            return app;
+        }
+
+        private static IApplicationBuilder UseMixModuleApps(this IApplicationBuilder app, bool isDevelop)
+        {
+            foreach (var assembly in MixAssemblies)
+            {
+                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
+                foreach (var startup in startupServices)
+                {
+                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                    var instance = classConstructor.Invoke(Array.Empty<Type>());
+                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
+                }
+            }
+
+            return app;
+        }
+        #endregion
+
+        #region Services
+
+        private static IServiceCollection InitMixContext(this IServiceCollection services)
+        {
+            InitAppSettings();
+            services.AddScoped<MixAppSettingService>();
+            services.AddScoped<MixDatabaseService>();
+            
+            return services;
+        }
+
+        private static void InitAppSettings()
+        {
+            MixFileService _fileService = new();
+            _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
+
+            if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}"))
+            {
+                File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}{MixFileExtensions.Json}", $"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}");
+            }
+
+            MixAppSettingService appSettingService = new();
             var mixDatabaseService = new MixDatabaseService(appSettingService);
-            mixService.InitAppSettings();
+            var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+            appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
+            appSettingService.SetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+            appSettingService.SaveSettings();
 
             if (!appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
             {
@@ -164,19 +186,68 @@ namespace Mix.Lib.Extensions
             }
         }
 
-        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Assembly assembly, Type baseType = null)
+        private static IServiceCollection AddSSL(this IServiceCollection services)
         {
+            var serviceProvider = services.BuildServiceProvider();
+            var appSettingService = serviceProvider.GetService<MixAppSettingService>();
+            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsHttps))
+            {
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
+            return services;
+        }
+
+        private static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
+        {
+            string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
+            string version = "v2";
+            string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            services.AddControllers(options =>
+                options.Filters.Add(new HttpResponseExceptionFilter()));
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+            });
+            return services;
+        }
+
+        private static IServiceCollection AddMixModuleServices(this IServiceCollection services)
+        {
+            foreach (var assembly in MixAssemblies)
+            {
+                var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
+                foreach (var startup in startupServices)
+                {
+                    ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
+                    var instance = classConstructor.Invoke(Array.Empty<Type>());
+                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
+
+                }
+            }
+            return services;
+        }
+
+        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Type baseType = null)
+        {
+            List<Type> candidates = GetGenereatedApiCandidates(MixAssemblies);
             services.
                 AddMvc(o => o.Conventions.Add(
                     new GenericControllerRouteConvention()
                 )).
                 ConfigureApplicationPartManager(m =>
-                    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider(assembly, baseType)
+                    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider(candidates, baseType)
                 ));
             return services;
         }
 
-        internal static bool IsStartupService(Type type)
+        #endregion
+
+
+        private static bool IsStartupService(Type type)
         {
             var typeInfo = type.GetTypeInfo();
             return
@@ -186,13 +257,27 @@ namespace Mix.Lib.Extensions
                 typeof(IStartupService).IsAssignableFrom(type);
         }
 
+        private static List<Type> GetGenereatedApiCandidates(List<Assembly> assemblies)
+        {
+            List<Type> types = new();
+            assemblies.ForEach(
+                a => types.AddRange(a.GetExportedTypes()
+                        .Where(
+                            x => x.GetCustomAttributes<GeneratedControllerAttribute>().Any()
+                            )
+                        ));
+            return types;
+        }
 
-        private static Assembly[] GetMixAssemblies()
+        private static List<Assembly> GetMixAssemblies()
         {
             var assemblies = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
                                 .Where(x => AssemblyName.GetAssemblyName(x).FullName.StartsWith("mix."))
                                 .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)));
-            return assemblies.ToArray();
+            return assemblies.ToList();
         }
+
+        #endregion
+
     }
 }

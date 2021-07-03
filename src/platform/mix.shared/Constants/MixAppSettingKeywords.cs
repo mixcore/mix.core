@@ -19,6 +19,7 @@
         public const string ThemeFolder = "ThemeFolder";
         public const string ApiEncryptKey = "ApiEncryptKey";
         public const string IsEncryptApi = "IsEncryptApi";
+        public const string IsHttps = "IsHttps";
         public const string TemplateExtension = "TemplateExtension";
         public const string DefaultTheme = "DefaultTheme";
         public const string DefaultTemplate = "DefaultTemplate";
@@ -26,6 +27,7 @@
         public const string DefaultContentStatus = "DefaultContentStatus";
         public const string NextSyncContent = "NextSyncContent";
         public const string AllowedHosts = "AllowedHosts";
+        public const string AllowedPortalIps = "AllowedPortalIps";
         public const string MaxPageSize = "MaxPageSize";
         public const string ImageSizes = "ImageSizes";
         public const string LastUpdateConfiguration = "LastUpdateConfiguration";

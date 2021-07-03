@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Lib.Abstracts;
 using Mix.Shared.Constants;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
 using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Services
@@ -13,12 +10,12 @@ namespace Mix.Lib.Services
         public TranslatorService() : base(MixAppConfigFilePath.Translator)
         {
         }
-        public static T Translate<T>(string name, string culture, T defaultVaule = default)
+        public T Translate<T>(string name, string culture, T defaultVaule = default)
         {
             return GetConfig(culture, name, defaultVaule);
         }
 
-        public static string TranslateString(string culture, string name, string defaultValue = null)
+        public string TranslateString(string culture, string name, string defaultValue = null)
         {
             return GetConfig(culture, name) ?? defaultValue;
         }

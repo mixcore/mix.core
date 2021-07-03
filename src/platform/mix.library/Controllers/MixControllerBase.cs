@@ -59,6 +59,7 @@ namespace Mix.Lib.Controllers
             //{
             //    Culture = _appSettingService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             //}
+            Culture = _appSettingService.GetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture, string.Empty);
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);

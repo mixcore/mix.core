@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Identity;
-using Mix.Identity.Services;
 using Mix.Lib.Extensions;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
@@ -27,15 +26,11 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<MixAppSettingService>();
-            services.AddScoped<MixDatabaseService>();
-            MixAppSettingService appSettingService = new();
-            var auth = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
-            services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<MixCmsAccountContext>();
-            services.AddMixServices(Configuration);
-            services.AddMixAuthorize<ApplicationDbContext>(auth);
-            services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
+            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            
+            // Must app Auth config after Add mixservice to init App config 
+            services.AddMixAuthorize<ApplicationDbContext>();
+            
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson();
@@ -54,8 +49,8 @@ namespace Mixcore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseMixApps(env.IsDevelopment(), appSettingService);
-            app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
+
+            app.UseMixApps(Assembly.GetExecutingAssembly(), env.IsDevelopment(), appSettingService);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

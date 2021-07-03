@@ -44,23 +44,4 @@
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="..\..\shared\default.appsettings.json" Link="default.appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\enums.json" Link="MixContent\data\enums.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\sys_databases.json" Link="MixContent\data\sys_databases.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\portal-menus.json" Link="MixContent\data\portal-menus.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-
-  </ItemGroup>
-
 </Project>

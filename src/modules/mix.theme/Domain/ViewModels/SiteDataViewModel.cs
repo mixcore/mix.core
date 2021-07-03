@@ -1,7 +1,5 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using Mix.Heart.UnitOfWork;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mix.Theme.Domain.ViewModels
 {

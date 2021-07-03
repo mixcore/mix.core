@@ -81,6 +81,28 @@ namespace Mix.Shared.Services
                 Directory.CreateDirectory(fullPath);
             }
         }
+
+        public bool CopyDirectory(string srcPath, string desPath)
+        {
+            if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
+            {
+                //Now Create all of the directories
+                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, desPath));
+                }
+
+                //Copy all the files & Replaces any files with the same name
+                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, desPath), true);
+                }
+
+                return true;
+            }
+            return true;
+        }
+
         public bool SaveFile(FileViewModel file)
         {
             try
