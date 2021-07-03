@@ -1,10 +1,11 @@
-﻿using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Enums;
 using Mix.Heart.ViewModel;
 using Mix.Theme.Domain.Dtos;
 using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
+using System.Linq;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -56,6 +57,16 @@ namespace Mix.Theme.Domain.ViewModels.Init
             // Or can use this instead of _consumer to listen result in this viewmodel 
             // Then override ConsumeAsync to handle result
             await Culture.SaveAsync(_unitOfWorkInfo, _consumer);
+        }
+
+        protected override void InitEntityValues()
+        {
+            if (Id == default)
+            {
+                Id = _repository.MaxAsync(m => m.Id);
+                CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
+            }
         }
     }
 }
