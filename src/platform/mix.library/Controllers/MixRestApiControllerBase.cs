@@ -7,35 +7,75 @@ using System.Threading.Tasks;
 using Mix.Heart.Repository;
 using Mix.Heart.Helpers;
 using Mix.Heart.Entities;
+using Mix.Lib.Dtos;
+using Mix.Lib.Models.Common;
+using Mix.Heart.ViewModel;
+using Mix.Shared.Services;
+using Mix.Heart.Extensions;
+using System.Reflection;
+using Mix.Heart.Exceptions;
+using Mix.Heart.Enums;
+using Mix.Heart.Model;
 
 namespace Mix.Lib.Controllers
 {
-    public class MixRestApiControllerBase<TDbContext, TEntity, TPrimaryKey> : ControllerBase
+    public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : ControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
-        where TEntity : class, IEntity<TPrimaryKey>
+        where TEntity : EntityBase<TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
-        protected readonly QueryRepository<TDbContext, TEntity, TPrimaryKey> _repository;
+        protected readonly CommandRepository<TDbContext, TEntity, TPrimaryKey> _repository;
+        protected readonly MixAppSettingService _appSettingService;
         protected static TDbContext _context;
         protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
-
+        protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
         /// <summary>
         /// The domain
         /// </summary>
         protected string _domain;
 
-        public MixRestApiControllerBase(QueryRepository<TDbContext, TEntity, TPrimaryKey> repository)
+        public MixRestApiControllerBase(
+            CommandRepository<TDbContext, TEntity, TPrimaryKey> repository,
+            MixAppSettingService appSettingService)
         {
             _repository = repository;
+            _appSettingService = appSettingService;
         }
 
         #region Helpers
 
-        protected async Task<TEntity> GetSingleAsync(string id)
+        protected async Task<PagingResponseModel<TView>> GetListAsync(SearchRequestDto req)
+        {
+            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req);
+            var query = _repository.GetPagingQuery(searchRequest.Predicate, searchRequest.PagingData);
+
+            if (query != null)
+            {
+                var result = await query.ToPagingViewModelAsync<TDbContext, TView, TEntity, TPrimaryKey>(
+                    _repository, searchRequest.PagingData, false);
+                return result;
+            }
+            throw new MixHttpResponseException(MixErrorStatus.Badrequest, "Invalid Request");
+        }
+
+        protected async Task<TView> GetSingleAsync(string id)
         {
             Expression<Func<TEntity, bool>> predicate = ReflectionHelper.GetExpression<TEntity>("Id", id, Heart.Enums.ExpressionMethod.Eq);
+            TEntity data = null;
+            if (predicate != null)
+            {
+                data = await _repository.GetSingleAsync(predicate);
+            }
+            return data == null
+                    ? throw new MixHttpResponseException(MixErrorStatus.NotFound, $"{id} not found")
+                    : (TView)classConstructor.Invoke(new object[] { data });
+        }
+
+        protected async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate = null)
+        {
             TEntity data = null;
             if (predicate != null)
             {
@@ -44,100 +84,37 @@ namespace Mix.Lib.Controllers
             return data;
         }
 
-        protected async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate = null)
+        protected async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            TEntity  data = null;
-            if (predicate != null)
+            await _repository.DeleteAsync(predicate);
+        }
+
+        protected async Task DeleteAsync(TEntity data)
+        {
+            await _repository.DeleteAsync(data);
+        }
+
+        protected async Task DeleteListAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            await _repository.DeleteManyAsync(predicate);
+        }
+
+        protected async Task<TPrimaryKey> SaveAsync(TView vm)
+        {
+            if (vm != null)
             {
-                data = await _repository.GetSingleAsync(predicate);
+                var id = await vm.SaveAsync().ConfigureAwait(false);
+                return id;
             }
-            return data;
+            throw new MixHttpResponseException(MixErrorStatus.Badrequest, "Invalid Object");
         }
 
-        protected async Task<TEntity> DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool isDeleteRelated = false)
-        {
-            return await _repository.GetSingleAsync(predicate);
-        }
-
-        //protected async Task<TModel> DeleteAsync(TModel data, bool isDeleteRelated = false)
-        //{
-        //    return new RepositoryResponse<TModel>() { IsSucceed = false };
-        //}
-
-        //protected async Task<RepositoryResponse<List<TModel>>> DeleteListAsync(Expression<Func<TModel, bool>> predicate, bool isRemoveRelatedModel = false)
-        //{
-        //    var data = await _repository.RemoveListModelAsync(isRemoveRelatedModel, predicate);
-        //    return data;
-        //}
-
-        //protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TModel, bool>> predicate, string type)
-        //{
-        //    var getData = await DefaultModelRepository<TDbContext, TModel>.Instance.GetModelListByAsync(predicate, _context);
-        //    FileViewModel file = null;
-        //    if (getData.IsSucceed)
-        //    {
-        //        string exportPath = $"Export/Structures/{typeof(TModel).Name}";
-        //        string filename = $"{type}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
-        //        var objContent = new JObject(
-        //            new JProperty("type", type.ToString()),
-        //            new JProperty("data", JArray.FromObject(getData.Data))
-        //            );
-        //        file = new FileViewModel()
-        //        {
-        //            Filename = filename,
-        //            Extension = ".json",
-        //            FileFolder = exportPath,
-        //            Content = objContent.ToString()
-        //        };
-        //        // Copy current templates file
-        //        MixFileRepository.Instance.SaveWebFile(file);
-        //    }
-        //    UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
-        //    return new RepositoryResponse<FileViewModel>()
-        //    {
-        //        IsSucceed = true,
-        //        Data = file,
-        //    };
-        //}
-
-        //protected async Task<RepositoryResponse<PaginationModel<TView>>> GetListAsync(Expression<Func<TModel, bool>> predicate = null)
-        //{
-        //    var query = new SearchQueryModel(Request);
-        //    RepositoryResponse<PaginationModel<TView>> data = null;
-
-        //    if (data == null)
-        //    {
-        //        if (predicate != null)
-        //        {
-        //            data = await _repository.GetModelListByAsync(
-        //                predicate, query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null);
-        //        }
-        //        else
-        //        {
-        //            data = await _repository.GetModelListAsync(
-        //                query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null).ConfigureAwait(false);
-        //        }
-        //    }
-        //    return data;
-        //}
-
-        //protected async Task<RepositoryResponse<TView>> SaveAsync(TView vm, bool isSaveSubModel)
-        //{
-        //    if (vm != null)
-        //    {
-        //        var result = await vm.SaveModelAsync(isSaveSubModel).ConfigureAwait(false);
-
-        //        return result;
-        //    }
-        //    return new RepositoryResponse<TView>();
-        //}
-
-        //protected async Task<RepositoryResponse<TModel>> SaveAsync(JObject obj, Expression<Func<TModel, bool>> predicate)
+        //protected async Task<RepositoryResponse<TEntity>> SaveAsync(JObject obj, Expression<Func<TEntity, bool>> predicate)
         //{
         //    if (obj != null)
         //    {
         //        List<EntityField> fields = new List<EntityField>();
-        //        Type type = typeof(TModel);
+        //        Type type = typeof(TEntity);
         //        foreach (var item in obj.Properties())
         //        {
         //            var propName = System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(item.Name);
@@ -158,12 +135,12 @@ namespace Mix.Lib.Controllers
 
         //        return result;
         //    }
-        //    return new RepositoryResponse<TModel>();
+        //    return new RepositoryResponse<TEntity>();
         //}
 
         //protected async Task<RepositoryResponse<List<TView>>> SaveListAsync(List<TView> lstVm, bool isSaveSubModel)
         //{
-        //    var result = await _repository.SaveListModelAsync(lstVm, isSaveSubModel);
+        //    var result = await _repository.SaveLisTEntityAsync(lstVm, isSaveSubModel);
 
         //    return result;
         //}
@@ -190,89 +167,106 @@ namespace Mix.Lib.Controllers
         //    return result;
         //}
 
+        //protected async Task<RepositoryResponse<FileViewModel>> ExportListAsync(Expression<Func<TEntity, bool>> predicate, string type)
+        //{
+        //    var getData = await DefaulTEntityRepository<TDbContext, TEntity>.Instance.GeTEntityListByAsync(predicate, _context);
+        //    FileViewModel file = null;
+        //    if (getData.IsSucceed)
+        //    {
+        //        string exportPath = $"Export/Structures/{typeof(TEntity).Name}";
+        //        string filename = $"{type}_{DateTime.UtcNow.ToString("ddMMyyyy")}";
+        //        var objContent = new JObject(
+        //            new JProperty("type", type.ToString()),
+        //            new JProperty("data", JArray.FromObject(getData.Data))
+        //            );
+        //        file = new FileViewModel()
+        //        {
+        //            Filename = filename,
+        //            Extension = ".json",
+        //            FileFolder = exportPath,
+        //            Content = objContent.ToString()
+        //        };
+        //        // Copy current templates file
+        //        MixFileRepository.Instance.SaveWebFile(file);
+        //    }
+        //    UnitOfWorkHelper<TDbContext>.HandleTransaction(getData.IsSucceed, true, _transaction);
+        //    return new RepositoryResponse<FileViewModel>()
+        //    {
+        //        IsSucceed = true,
+        //        Data = file,
+        //    };
+        //}
+
         #endregion Helpers
 
-        //#region Routes
+        #region Routes
 
-        //[HttpGet]
-        //public virtual async Task<ActionResult<PaginationModel<TView>>> Get([FromQuery] SearchRequestDto req)
-        //{
-        //    var query = new SearchQueryModel(req, _lang);
+        [HttpGet]
+        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
+        {
+            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req);
 
-        //    RepositoryResponse<PaginationModel<TView>> getData = await _repository.GetModelListAsync(
-        //        query.PagingData.OrderBy, query.PagingData.Direction, query.PagingData.PageSize, query.PagingData.PageIndex, null, null).ConfigureAwait(false);
+            var query = _repository.GetPagingQuery(searchRequest.Predicate, searchRequest.PagingData);
 
-        //    if (getData.IsSucceed)
-        //    {
-        //        return Ok(getData.Data);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(getData.Errors);
-        //    }
-        //}
+            if (query != null)
+            {
+                var result = await query.ToPagingViewModelAsync<TDbContext, TView, TEntity, TPrimaryKey>(
+                    _repository, searchRequest.PagingData, false);
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
 
-        //// GET: api/v1/rest/{culture}/attribute-set-data/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<TView>> Get(string id)
-        //{
-        //    var getData = await GetSingleAsync(id);
-        //    if (getData.IsSucceed)
-        //    {
-        //        return getData.Data;
-        //    }
-        //    else
-        //    {
-        //        return NotFound();
-        //    }
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TView>> Get(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData != null)
+            {
+                return Ok(getData);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
 
-        //// POST: api/s
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        //// more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPost]
-        //public async Task<ActionResult<TModel>> Create([FromBody] TView data)
-        //{
-        //    var result = await SaveAsync(data, true);
-        //    if (result.IsSucceed)
-        //    {
-        //        return Ok(result.Data);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
-        //}
+        // POST: api/s
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost]
+        public async Task<ActionResult<TEntity>> Create([FromBody] TView data)
+        {
+            var id = await SaveAsync(data);
+            return Ok(id);
+        }
 
-        //// PUT: api/s/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        //// more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> Update(string id, [FromBody] TView data)
-        //{
-        //    var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
-        //    if (id != currentId)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var result = await SaveAsync(data, true);
-        //    if (result.IsSucceed)
-        //    {
-        //        return NoContent();
-        //    }
-        //    else
-        //    {
-        //        var current = await GetSingleAsync(currentId);
-        //        if (!current.IsSucceed)
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            return BadRequest(result.Errors);
-        //        }
-        //    }
-        //}
+        // PUT: api/s/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(string id, [FromBody] TView data)
+        {
+            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
+            if (id != currentId)
+            {
+                return BadRequest();
+            }
+            var result = await SaveAsync(data);
+            return Ok(result);
+        }
+
+        // DELETE: api/v1/rest/en-us/attribute-set/portal/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var predicate = ReflectionHelper.GetExpression<TEntity>("id", id, ExpressionMethod.Eq);
+            await DeleteAsync(predicate);
+            return Ok();
+        }
 
         //// PATCH: api/v1/rest/en-us/attribute-set/portal/5
         //[HttpPatch("{id}")]
@@ -297,21 +291,7 @@ namespace Mix.Lib.Controllers
         //    }
         //}
 
-        //// DELETE: api/v1/rest/en-us/attribute-set/portal/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<TModel>> Delete(string id)
-        //{
-        //    var predicate = ReflectionHelper.GetExpression<TModel>("id", id, ExpressionMethod.Eq);
-        //    var result = await DeleteAsync(predicate, false);
-        //    if (result.IsSucceed)
-        //    {
-        //        return Ok(result.Data);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(result.Errors);
-        //    }
-        //}
+
 
         //[HttpGet("clear-cache")]
         //protected async Task ClearCacheAsync(Type type)
@@ -319,6 +299,6 @@ namespace Mix.Lib.Controllers
         //    await MixCacheService.RemoveCacheAsync(type: type);
         //}
 
-        //#endregion Routes
+        #endregion Routes
     }
 }

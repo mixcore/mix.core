@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GeneratedController("api/v2/portal/rest/mix-configuration", "Mix Configurations Autogen")]
+    [GeneratedController("api/v2/portal/rest/mix-configuration", "Mix Configurations")]
     public class MixConfigurationViewModel : ViewModelBase<MixCmsContext, MixConfiguration, int>
     {
         public virtual string Image { get; set; }

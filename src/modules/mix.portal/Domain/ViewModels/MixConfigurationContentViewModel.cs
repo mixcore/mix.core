@@ -1,10 +1,10 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using Mix.Heart.Enums;
 using Mix.Heart.ViewModel;
-using System;
+using Mix.Lib.Attributes;
 
 namespace Mix.Portal.Domain.ViewModels
 {
+    [GeneratedController]
     public class MixConfigurationContentViewModel : ViewModelBase<MixCmsContext, MixConfigurationContent, int>
     {
         public string Specificulture { get; set; }
