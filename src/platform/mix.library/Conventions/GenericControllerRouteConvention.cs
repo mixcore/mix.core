@@ -19,8 +19,9 @@ namespace Mix.Lib.Conventions
 
                 if (customNameAttribute != null)
                 {
+                    string moduleName = genericType.Assembly.GetName().Name.Replace(".", "-");
                     string modelName = genericType.Name.Replace("ViewModel", string.Empty);
-                    string route = customNameAttribute.Route ?? $"api/v2/{modelName.ToHypenCase()[1..]}";
+                    string route = customNameAttribute.Route ?? $"api/v2/rest/{moduleName}/{modelName.ToHypenCase()[1..]}";
                     string name = customNameAttribute.Name ?? modelName.ToHypenCase(' ', false);
                     if (!controller.Selectors.Any(s => s.AttributeRouteModel?.Template == route))
                     {
