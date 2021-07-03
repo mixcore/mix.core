@@ -71,7 +71,7 @@ namespace Mix.Lib.Controllers
             }
             return data == null
                     ? throw new MixHttpResponseException(MixErrorStatus.NotFound, $"{id} not found")
-                    : (TView)classConstructor.Invoke(new object[] { data });
+                    : BuildViewModel(data);
         }
 
         protected async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate = null)
@@ -107,6 +107,11 @@ namespace Mix.Lib.Controllers
                 return id;
             }
             throw new MixHttpResponseException(MixErrorStatus.Badrequest, "Invalid Object");
+        }
+
+        private TView BuildViewModel(TEntity data)
+        {
+            return (TView)classConstructor.Invoke(new object[] { data });
         }
 
         //protected async Task<RepositoryResponse<TEntity>> SaveAsync(JObject obj, Expression<Func<TEntity, bool>> predicate)

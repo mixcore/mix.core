@@ -1,4 +1,5 @@
-﻿using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Account;
+using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
@@ -40,6 +41,16 @@ namespace Mix.Identity.ViewModels
                 view.Id = Guid.NewGuid();
             }
             return base.ParseEntity(view);
+        }
+
+        protected override void InitEntityValues()
+        {
+            if (Id == default)
+            {
+                Id = Guid.NewGuid();
+                CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
+            }
         }
 
         #endregion Overrides

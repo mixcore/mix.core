@@ -1,5 +1,8 @@
-﻿using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Heart.Enums;
 using Mix.Heart.ViewModel;
+using System;
+using System.Linq;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -18,6 +21,16 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public InitCultureViewModel() : base()
         {
+        }
+
+        protected override void InitEntityValues()
+        {
+            if (Id == default)
+            {
+                 Id = _repository.MaxAsync(m => m.Id);
+                CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
+            }
         }
     }
 }
