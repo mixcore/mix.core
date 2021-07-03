@@ -25,6 +25,7 @@ namespace Mixcore.Controllers
             _translator = translator;
             _databaseService = databaseService;
         }
+        
         protected override void ValidateRequest()
         {
             base.ValidateRequest();

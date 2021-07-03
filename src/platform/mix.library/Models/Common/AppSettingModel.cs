@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Lib.Models.Common
 {
-    public class GlobalSettingModel
+    public class AppSettingModel
 
     {
         public string Domain { get; set; }
@@ -23,18 +23,20 @@ namespace Mix.Lib.Models.Common
 
         public List<string> Cultures { get; set; }
 
-        public List<object> PageTypes { get; set; }
+        public string[] PageTypes { get; set; }
 
-        public List<object> ModuleTypes { get; set; }
+        public string[] ModuleTypes { get; set; }
 
-        public List<object> MixDatabaseTypes { get; set; }
+        public string[] MixDatabaseTypes { get; set; }
 
-        public List<object> DataTypes { get; set; }
+        public string[] DataTypes { get; set; }
 
-        public List<object> Statuses { get; set; }
+        public string[] Statuses { get; set; }
 
         public JObject ExternalLoginProviders { get; set; }
 
         public DateTime? LastUpdateConfiguration { get; set; }
+
+        public DateTime? ExpiredAt { get; set; } = DateTime.UtcNow.AddMinutes(20);
     }
 }

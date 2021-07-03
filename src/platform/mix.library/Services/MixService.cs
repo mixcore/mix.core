@@ -13,21 +13,17 @@ namespace Mix.Lib.Services
     public class MixService
     {
         public readonly MixAppSettingService _appSettingService;
+        public readonly MixConfigurationService _configService;
+        public readonly MixFileService _fileService;
 
-        public MixService(MixAppSettingService appSettingService)
+        public MixService(
+            MixAppSettingService appSettingService,
+            MixConfigurationService configService, 
+            MixFileService fileService)
         {
             _appSettingService = appSettingService;
-        }
-        public void InitAppSettings()
-        {
-            if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}"))
-            {
-                File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}{MixFileExtensions.Json}", $"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}");
-                var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-                _appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                _appSettingService.SetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
-                _appSettingService.SaveSettings();
-            }
+            _configService = configService;
+            _fileService = fileService;
         }
 
         public string GetAssetFolder(string culture = null)
@@ -36,14 +32,14 @@ namespace Mix.Lib.Services
                 MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
             return $"{_appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain)}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
+                $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public string GetUploadFolder(string culture = null)
         {
             culture ??= _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
             return $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{ConfigurationService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
+                $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 

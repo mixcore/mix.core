@@ -12,26 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\shared\default.appsettings.json" Link="default.appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\cultures.json" Link="MixContent\data\cultures.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\sys_databases.json" Link="MixContent\data\sys_databases.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-    <Content Include="..\..\shared\MixContent\data\portal-menus.json" Link="MixContent\data\portal-menus.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>true</CopyToPublishDirectory>
-    </Content>
-
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.6">

@@ -51,15 +51,11 @@ namespace Mix.Theme.Domain.ViewModels.Init
         protected override async Task SaveEntityRelationshipAsync(MixSite parent)
         {
             Culture.MixSiteId = parent.Id;
-            await Culture.SaveAsync(_unitOfWorkInfo, this);
-        }
 
-        public override Task ConsumeAsync(object sender, MixViewModelAction action, bool isSucceed, Exception ex = null)
-        {
-            Console.WriteLine(sender);
-            Console.WriteLine(action);
-            Console.WriteLine(ex);
-            return base.ConsumeAsync(sender, action, isSucceed, ex);
+            // Save and subscribe result for current consumer
+            // Or can use this instead of _consumer to listen result in this viewmodel 
+            // Then override ConsumeAsync to handle result
+            await Culture.SaveAsync(_unitOfWorkInfo, _consumer);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Theme.Domain.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -46,10 +47,34 @@ namespace Mix.Theme.Domain.Services
         private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
-        public async Task<bool> ImportAsync(SiteDataViewModel data, string destCulture)
+        public async Task ImportAsync(SiteDataViewModel data, string destCulture)
         {
-            var result = true;
-            return result;
+            if (data.Configurations != null && data.Configurations.Count > 0)
+            {
+                await ImportConfigurationsAsync(data.Configurations, destCulture);
+            }
+            
+            if (data.Languages != null && data.Languages.Count > 0)
+            {
+                await ImportLanguagesAsync(data.Languages, destCulture);
+            }
+
+        }
+
+        private async Task ImportLanguagesAsync(List<MixLanguage> languages, string destCulture)
+        {
+            foreach (var item in languages)
+            {
+                await _languageRepo.SaveAsync(item);
+            }
+        }
+
+        private async Task ImportConfigurationsAsync(List<MixConfiguration> configurations, string destCulture)
+        {
+            foreach (var item in configurations)
+            {
+                await _configRepo.SaveAsync(item);
+            }
         }
 
         #endregion Import

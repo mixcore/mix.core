@@ -10,6 +10,7 @@ namespace Mix.Theme.Domain
         public void AddServices(IServiceCollection services)
         {
             services.AddScoped<InitCmsService>();
+            services.AddScoped<ImportSiteService>();
         }
 
         public void UseApps(IApplicationBuilder app, bool isDevelop)

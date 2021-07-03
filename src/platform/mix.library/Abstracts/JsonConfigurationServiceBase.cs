@@ -22,13 +22,13 @@ namespace Mix.Lib.Abstracts
             WatchFile();
         }
 
-        public static T GetConfig<T>(string name, T defaultValue = default)
+        public T GetConfig<T>(string name, T defaultValue = default)
         {
             var result = AppSettings[name];
             return result != null ? result.Value<T>() : defaultValue;
         }
 
-        public static T GetConfig<T>(string culture, string name, T defaultValue = default)
+        public T GetConfig<T>(string culture, string name, T defaultValue = default)
         {
             JToken result = null;
             if (!string.IsNullOrEmpty(culture) && AppSettings[culture] != null)
@@ -38,23 +38,23 @@ namespace Mix.Lib.Abstracts
             return result != null ? result.Value<T>() : defaultValue;
         }
 
-        public static T GetEnumConfig<T>(string name)
+        public T GetEnumConfig<T>(string name)
         {
             Enum.TryParse(typeof(T), AppSettings[name]?.Value<string>(), true, out object result);
             return result != null ? (T)result : default;
         }
 
-        public static void SetConfig<T>(string name, T value)
+        public void SetConfig<T>(string name, T value)
         {
             AppSettings[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public static void SetConfig<T>(string culture, string name, T value)
+        public void SetConfig<T>(string culture, string name, T value)
         {
             AppSettings[culture][name] = value.ToString();
         }
 
-        public static bool SaveSettings()
+        public bool SaveSettings()
         {
             var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
             if (settings != null)

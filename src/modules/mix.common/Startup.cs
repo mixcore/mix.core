@@ -21,16 +21,13 @@ namespace Mix.Common
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddMixServices(Configuration);
-            services.AddMixSwaggerServices(Assembly.GetExecutingAssembly());
+            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MixAppSettingService appSettingService)
         {
-            app.UseMixApps(env.IsDevelopment(), appSettingService);
-            app.UseMixSwaggerApps(env.IsDevelopment(), Assembly.GetExecutingAssembly());
+            app.UseMixApps(Assembly.GetExecutingAssembly(), env.IsDevelopment(), appSettingService);
         }
     }
 }

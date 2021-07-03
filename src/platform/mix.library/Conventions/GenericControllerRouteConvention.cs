@@ -14,7 +14,7 @@ namespace Mix.Lib.Conventions
         {
             if (controller.ControllerType.IsGenericType)
             {
-                var genericType = controller.ControllerType.GenericTypeArguments[2];
+                var genericType = controller.ControllerType.GenericTypeArguments[0];
                 var customNameAttribute = genericType.GetCustomAttribute<GeneratedControllerAttribute>();
 
                 if (customNameAttribute?.Route != null)
@@ -25,7 +25,7 @@ namespace Mix.Lib.Conventions
                         {
                             AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(customNameAttribute.Route)),
                         });
-                        controller.ControllerName = customNameAttribute.Name;
+                        controller.ControllerName = customNameAttribute.Name.ToHypenCase('_');
                     }
                 }
                 else

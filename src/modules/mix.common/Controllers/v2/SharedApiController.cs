@@ -25,9 +25,9 @@ namespace Mix.Common.Controllers.v2
         private readonly MixAuthenticationConfigurations _authConfigurations;
 
         public SharedApiController(ILogger<MixApiControllerBase> logger,
-            MixFileService fileService, 
-            MixAppSettingService appSettingService, 
-            MixService mixService, 
+            MixFileService fileService,
+            MixAppSettingService appSettingService,
+            MixService mixService,
             TranslatorService translator) : base(logger, appSettingService, mixService, translator)
         {
             _fileService = fileService;
@@ -47,7 +47,7 @@ namespace Mix.Common.Controllers.v2
         {
             return Ok(GetAllSettings());
         }
-        
+
         [HttpGet]
         [Route("{culture}/get-shared-settings")]
         public ActionResult<JObject> GetSharedSettingsAsync(string culture)
@@ -80,7 +80,7 @@ namespace Mix.Common.Controllers.v2
             try
             {
                 var data = _fileService.GetFile(
-                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder,  false, "[]");
+                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder, false, "[]");
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);
             }
@@ -89,14 +89,14 @@ namespace Mix.Common.Controllers.v2
                 return NotFound();
             }
         }
-        private JObject GetAllSettings(string lang = null)
+        private AllSettingModel GetAllSettings(string lang = null)
         {
             lang ??= _appSettingService.GetConfig<string>(
                         MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
             var cultures = _appSettingService.Cultures;
             var culture = cultures?.FirstOrDefault(c => c == lang);
             // Get Settings
-            GlobalSettingModel configurations = new()
+            AppSettingModel globalSettings = new()
             {
                 Domain = _appSettingService.GetConfig<string>(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain),
@@ -108,11 +108,11 @@ namespace Mix.Common.Controllers.v2
                 IsEncryptApi = _appSettingService.GetConfig<bool>(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
-                PageTypes = MixHelper.ParseEnumToObject(typeof(MixPageType)),
-                ModuleTypes = MixHelper.ParseEnumToObject(typeof(MixModuleType)),
-                MixDatabaseTypes = MixHelper.ParseEnumToObject(typeof(MixDatabaseType)),
-                DataTypes = MixHelper.ParseEnumToObject(typeof(MixDataType)),
-                Statuses = MixHelper.ParseEnumToObject(typeof(MixContentStatus)),
+                PageTypes = Enum.GetNames(typeof(MixPageType)),
+                ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
+                MixDatabaseTypes = Enum.GetNames(typeof(MixDatabaseType)),
+                DataTypes = Enum.GetNames(typeof(MixDataType)),
+                Statuses = Enum.GetNames(typeof(MixContentStatus)),
                 RSAKeys = RSAEncryptionHelper.GenerateKeys(),
                 ExternalLoginProviders = new JObject()
                 {
@@ -126,12 +126,12 @@ namespace Mix.Common.Controllers.v2
 
             };
 
-            return new JObject()
+            return new AllSettingModel()
             {
-                new JProperty("globalSettings", JObject.FromObject(configurations)),
+                AppSettings = globalSettings
             };
         }
 
-        
+
     }
 }
