@@ -35,7 +35,7 @@ namespace Mix.Lib.Extensions
 
         #region Services
 
-        public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration Configuration)
+        public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
@@ -49,7 +49,7 @@ namespace Mix.Lib.Extensions
             services.AddScoped<MixService>();
             services.AddScoped<TranslatorService>();
             services.AddScoped<MixConfigurationService>();
-            services.AddMixModuleServices();
+            services.AddMixModuleServices(configuration);
             services.AddGeneratedRestApi();
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
@@ -62,7 +62,7 @@ namespace Mix.Lib.Extensions
 
         #region Apps
 
-        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, Assembly executingAssembly, bool isDevelop, MixAppSettingService appSettingService)
+        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, Assembly executingAssembly, IConfiguration configuration, bool isDevelop, MixAppSettingService appSettingService)
         {
             app.UseResponseCompression();
             app.UseCors(MixcoreAllowSpecificOrigins);
@@ -76,7 +76,7 @@ namespace Mix.Lib.Extensions
                 app.UseHttpsRedirection();
             }
 
-            app.UseMixModuleApps(isDevelop);
+            app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.UseResponseCompression();
             return app;
@@ -133,7 +133,7 @@ namespace Mix.Lib.Extensions
             return app;
         }
 
-        private static IApplicationBuilder UseMixModuleApps(this IApplicationBuilder app, bool isDevelop)
+        private static IApplicationBuilder UseMixModuleApps(this IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
             foreach (var assembly in MixAssemblies)
             {
@@ -142,7 +142,7 @@ namespace Mix.Lib.Extensions
                 {
                     ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                     var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, isDevelop });
+                    startup.GetMethod("UseApps").Invoke(instance, new object[] { app, configuration, isDevelop });
                 }
             }
 
@@ -216,7 +216,7 @@ namespace Mix.Lib.Extensions
             return services;
         }
 
-        private static IServiceCollection AddMixModuleServices(this IServiceCollection services)
+        private static IServiceCollection AddMixModuleServices(this IServiceCollection services, IConfiguration configuration)
         {
             foreach (var assembly in MixAssemblies)
             {
@@ -225,7 +225,7 @@ namespace Mix.Lib.Extensions
                 {
                     ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                     var instance = classConstructor.Invoke(Array.Empty<Type>());
-                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services });
+                    startup.GetMethod("AddServices").Invoke(instance, new object[] { services, configuration });
 
                 }
             }

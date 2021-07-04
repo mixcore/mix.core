@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
 using Mix.SignalR.Constants;
@@ -8,7 +9,7 @@ namespace Mix.Messenger.Domain
 {
     public class StartupService : IStartupService
     {
-        public void AddServices(IServiceCollection services)
+        public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSignalR()
                   .AddJsonProtocol(options =>
@@ -17,7 +18,7 @@ namespace Mix.Messenger.Domain
                   });
         }
 
-        public void UseApps(IApplicationBuilder app, bool isDevelop)
+        public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
             app.UseEndpoints(endpoints =>
             {
