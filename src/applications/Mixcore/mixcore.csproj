@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
+    <ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
     <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>
