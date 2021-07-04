@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.library.identity\mix.identity.csproj" />
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
   
