@@ -37,6 +37,7 @@ namespace Mix.Lib.Extensions
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration Configuration)
         {
+            services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();

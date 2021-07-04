@@ -54,6 +54,8 @@ namespace Mix.Theme.Domain.Services
                     {
 
                         _appSettingService.SetConfig(
+                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
+                        _appSettingService.SetConfig(
                             MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
                         _appSettingService.SetConfig(
                             MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, 2, true);

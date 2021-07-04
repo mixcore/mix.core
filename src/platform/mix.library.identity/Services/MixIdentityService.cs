@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
 using Mix.Identity.Constants;
+using Mix.Identity.Domain.Models;
 using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Dtos;
-using Mix.Lib.Services;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
@@ -21,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Mix.Identity.Services
@@ -36,7 +34,7 @@ namespace Mix.Identity.Services
         public readonly MixIdentityHelper _idHelper;
         protected CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         protected CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
-        public List<RoleViewModel> Roles { get; set; }
+        public List<RoleViewModel> Roles { get; set; } = new List<RoleViewModel>();
 
         public MixIdentityService(
             UserManager<MixUser> userManager,
@@ -54,13 +52,13 @@ namespace Mix.Identity.Services
             _idHelper = helper;
             _appSettingService = appSettingService;
 
+            _roleRepo = roleRepo;
             LoadRoles();
             _refreshTokenRepo = refreshTokenRepo;
-            _roleRepo = roleRepo;
             _context = context;
         }
 
-        public async Task<JObject> Login(LoginViewModel model)
+        public async Task<LoginSuccessModel> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -70,7 +68,7 @@ namespace Mix.Identity.Services
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                var token = await GetAuthData(user, model.RememberMe);
+                return await GetAuthData(user, model.RememberMe);
             }
 
             if (result.IsLockedOut)
@@ -79,11 +77,11 @@ namespace Mix.Identity.Services
             }
             else
             {
-                throw new Exception("Logi failed");
+                throw new Exception("Login failed");
             }
         }
 
-        public async Task<JObject> GetAuthData(MixUser user, bool rememberMe)
+        public async Task<LoginSuccessModel> GetAuthData(MixUser user, bool rememberMe)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
@@ -95,13 +93,11 @@ namespace Mix.Identity.Services
                 var plainText = JObject.FromObject(token).ToString(Formatting.None).Replace("\r\n", string.Empty);
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
 
-                var resp = new JObject()
-                        {
-                            new JProperty("k", aesKey),
-                            new JProperty("rpk", rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
-                            new JProperty("data", encryptedInfo)
-                        };
-                return resp;
+                return new LoginSuccessModel() { 
+                    AESKey = aesKey,
+                    RSAKey = rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY],
+                    Message = encryptedInfo
+                };
             }
             return default;
         }
@@ -159,9 +155,9 @@ namespace Mix.Identity.Services
             }
         }
 
-        public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto)
+        public async Task<LoginSuccessModel> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
-            JObject result = new JObject();
+            LoginSuccessModel result = null;
             var oldToken = await _refreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken);
             if (oldToken != null)
             {
