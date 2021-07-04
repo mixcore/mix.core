@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Database.Entities.Account;
+using Mix.Identity;
 using Mix.Lib.Extensions;
 using Mix.Shared.Services;
 using System.Reflection;
@@ -22,6 +24,9 @@ namespace Mix.Account
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+
+            // Must app Auth config after Add mixservice to init App config 
+            services.AddMixAuthorize<ApplicationDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
