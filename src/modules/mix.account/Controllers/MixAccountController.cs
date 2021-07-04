@@ -47,7 +47,7 @@ namespace Mix.Account.Controllers
 
 
         [Route("Logout")]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync().ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace Mix.Account.Controllers
         }
 
         [Route("login")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDto requestDto)
         {

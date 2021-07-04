@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
+using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 
 namespace Mix.Messenger.Domain
@@ -13,16 +14,15 @@ namespace Mix.Messenger.Domain
                   .AddJsonProtocol(options =>
                   {
                       options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                  })
-                  .AddMessagePackProtocol();
+                  });
         }
 
         public void UseApps(IApplicationBuilder app, bool isDevelop)
         {
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<PortalHub>("/portalHub");
-                endpoints.MapHub<EditFileHub>("/editFileHub");
+                endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
+                endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
             });
         }
     }
