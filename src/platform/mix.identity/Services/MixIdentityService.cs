@@ -28,9 +28,7 @@ namespace Mix.Identity.Services
     {
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly MixAppSettingService _appSettingService;
-        private readonly MixCmsAccountContext _context;
         public readonly MixIdentityHelper _idHelper;
         protected Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         protected Repository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
@@ -39,23 +37,20 @@ namespace Mix.Identity.Services
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
             MixIdentityHelper helper,
             MixAppSettingService appSettingService,
             Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo, 
-            MixCmsAccountContext context)
+            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _idHelper = helper;
             _appSettingService = appSettingService;
 
             _roleRepo = roleRepo;
             LoadRoles();
             _refreshTokenRepo = refreshTokenRepo;
-            _context = context;
         }
 
         public async Task<LoginSuccessModel> Login(LoginViewModel model)
@@ -116,7 +111,7 @@ namespace Mix.Identity.Services
                 if (isRemember)
                 {
                     refreshTokenId = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(_refreshTokenRepo)
+                    RefreshTokenViewModel vmRefreshToken = new(_refreshTokenRepo)
                     {
                         Id = refreshTokenId,
                         Email = user.Email,
@@ -132,7 +127,7 @@ namespace Mix.Identity.Services
                     refreshToken = saveRefreshTokenResult.ToString();
                 }
                 var authSettings = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
-                AccessTokenViewModel token = new AccessTokenViewModel()
+                AccessTokenViewModel token = new()
                 {
                     AccessToken = await _idHelper.GenerateTokenAsync(
                         user, dtExpired, refreshToken, aesKey, rsaPublicKey, authSettings),
@@ -221,7 +216,7 @@ namespace Mix.Identity.Services
                 _roleRepo
                     .GetAllQuery()
                     .ToList()
-                    .ForEach(r=> Roles.Add(new RoleViewModel(r, _roleRepo)));
+                    .ForEach(r=> Roles.Add(new RoleViewModel(r)));
             }
         }
     }

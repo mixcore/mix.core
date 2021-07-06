@@ -15,7 +15,16 @@ namespace Mix.Theme.Domain.Services
         private readonly Repository<MixCmsContext, MixPost, int> _postRepo;
         private readonly Repository<MixCmsContext, MixPage, int> _pageRepo;
         private readonly Repository<MixCmsContext, MixModule, int> _moduleRepo;
-        private UnitOfWorkInfo _uowInfo;
+        private readonly UnitOfWorkInfo _uowInfo;
+
+        private readonly Dictionary<int, int> dicConfigurationIds = new();
+        private readonly Dictionary<int, int> dicLanguageIds = new();
+        private readonly Dictionary<int, int> dicModuleIds = new();
+        private readonly Dictionary<int, int> dicPostIds = new();
+        private readonly Dictionary<int, int> dicPageIds = new();
+        private readonly Dictionary<int, int> dicFieldIds = new();
+        private readonly Dictionary<int, int> dicMixDatabaseIds = new();
+
         public ImportSiteService(
             MixCmsContext dbContext,
             Repository<MixCmsContext, MixConfiguration, int> configRepo,
@@ -39,14 +48,6 @@ namespace Mix.Theme.Domain.Services
         }
         #region Import
 
-        private Dictionary<int, int> dicConfigurationIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicLanguageIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicFieldIds = new Dictionary<int, int>();
-        private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
-
         public async Task ImportAsync(SiteDataViewModel data, string destCulture)
         {
             if (data.Configurations != null && data.Configurations.Count > 0)
@@ -58,7 +59,6 @@ namespace Mix.Theme.Domain.Services
             {
                 await ImportLanguagesAsync(data.Languages, destCulture);
             }
-
         }
 
         private async Task ImportLanguagesAsync(List<MixLanguage> languages, string destCulture)
