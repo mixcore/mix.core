@@ -11,7 +11,7 @@ namespace Mix.Database.Extenstions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddRepositories(this IServiceCollection services)
+        public static IServiceCollection AddEntityRepositories(this IServiceCollection services)
         {
             var assembly = Assembly.GetAssembly(typeof(MixCmsContext));
             var cmsEntities = assembly

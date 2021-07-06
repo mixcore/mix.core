@@ -32,8 +32,8 @@ namespace Mix.Identity.Services
         private readonly MixAppSettingService _appSettingService;
         private readonly MixCmsAccountContext _context;
         public readonly MixIdentityHelper _idHelper;
-        protected CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
-        protected CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
+        protected Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
+        protected Repository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
         public List<RoleViewModel> Roles { get; set; } = new List<RoleViewModel>();
 
         public MixIdentityService(
@@ -42,8 +42,8 @@ namespace Mix.Identity.Services
             RoleManager<IdentityRole> roleManager,
             MixIdentityHelper helper,
             MixAppSettingService appSettingService,
-            CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            CommandRepository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo, 
+            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo, 
             MixCmsAccountContext context)
         {
             _userManager = userManager;
@@ -116,7 +116,7 @@ namespace Mix.Identity.Services
                 if (isRemember)
                 {
                     refreshTokenId = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(_context)
+                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(_refreshTokenRepo)
                     {
                         Id = refreshTokenId,
                         Email = user.Email,
@@ -221,7 +221,7 @@ namespace Mix.Identity.Services
                 _roleRepo
                     .GetAllQuery()
                     .ToList()
-                    .ForEach(r=> Roles.Add(new RoleViewModel(r)));
+                    .ForEach(r=> Roles.Add(new RoleViewModel(r, _roleRepo)));
             }
         }
     }

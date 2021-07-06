@@ -17,6 +17,10 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
             builder.HasKey(e => new { e.Id })
                    .HasName(key);
 
+            builder.Property(e => e.Id)
+               .HasDefaultValueSql("NEWID()")
+               .ValueGeneratedOnAdd();
+
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(SqliteDatabaseConstants.DataTypes.DateTime);
 

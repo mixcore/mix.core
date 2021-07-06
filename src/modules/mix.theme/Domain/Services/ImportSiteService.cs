@@ -10,19 +10,19 @@ namespace Mix.Theme.Domain.Services
 {
     public class ImportSiteService
     {
-        private readonly CommandRepository<MixCmsContext, MixConfiguration, int> _configRepo;
-        private readonly CommandRepository<MixCmsContext, MixLanguage, int> _languageRepo;
-        private readonly CommandRepository<MixCmsContext, MixPost, int> _postRepo;
-        private readonly CommandRepository<MixCmsContext, MixPage, int> _pageRepo;
-        private readonly CommandRepository<MixCmsContext, MixModule, int> _moduleRepo;
+        private readonly Repository<MixCmsContext, MixConfiguration, int> _configRepo;
+        private readonly Repository<MixCmsContext, MixLanguage, int> _languageRepo;
+        private readonly Repository<MixCmsContext, MixPost, int> _postRepo;
+        private readonly Repository<MixCmsContext, MixPage, int> _pageRepo;
+        private readonly Repository<MixCmsContext, MixModule, int> _moduleRepo;
         private UnitOfWorkInfo _uowInfo;
         public ImportSiteService(
             MixCmsContext dbContext,
-            CommandRepository<MixCmsContext, MixConfiguration, int> configRepo,
-            CommandRepository<MixCmsContext, MixLanguage, int> languageRepo,
-            CommandRepository<MixCmsContext, MixPost, int> postRepo,
-            CommandRepository<MixCmsContext, MixPage, int> pageRepo,
-            CommandRepository<MixCmsContext, MixModule, int> moduleRepo)
+            Repository<MixCmsContext, MixConfiguration, int> configRepo,
+            Repository<MixCmsContext, MixLanguage, int> languageRepo,
+            Repository<MixCmsContext, MixPost, int> postRepo,
+            Repository<MixCmsContext, MixPage, int> pageRepo,
+            Repository<MixCmsContext, MixModule, int> moduleRepo)
         {
             _configRepo = configRepo;
             _languageRepo = languageRepo;

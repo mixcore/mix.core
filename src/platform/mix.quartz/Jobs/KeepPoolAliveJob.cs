@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Services;
+﻿using Mix.Shared.Constants;
+using Mix.Shared.Services;
 using Quartz;
 using System;
 using System.Threading.Tasks;
@@ -9,14 +8,16 @@ namespace Mix.MixQuartz.Jobs
 {
     public class KeepPoolAliveJob : BaseJob
     {
-        HttpService _httpService;
-        public KeepPoolAliveJob([FromServices] HttpService httpService)
+        private readonly HttpService _httpService;
+        private readonly MixAppSettingService _appSettingService;
+        public KeepPoolAliveJob(HttpService httpService, MixAppSettingService appSettingService)
         {
             _httpService = httpService;
+            _appSettingService = appSettingService;
         }
         public override async Task Execute(IJobExecutionContext context)
         {
-            var domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+            var domain = _appSettingService.GetConfig<string>(Shared.Enums.MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain);
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;

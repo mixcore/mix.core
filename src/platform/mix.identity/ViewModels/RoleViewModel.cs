@@ -10,13 +10,13 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
     {
-        public RoleViewModel(AspNetRoles entity) : base(entity)
+        public RoleViewModel(
+            AspNetRoles entity, 
+            Repository<MixCmsAccountContext, AspNetRoles, Guid> repository) : base(repository)
         {
+            ExtendView();
         }
 
-        public RoleViewModel(MixCmsAccountContext context) : base(context)
-        {
-        }
         #region Properties
 
         public string ConcurrencyStamp { get; set; }

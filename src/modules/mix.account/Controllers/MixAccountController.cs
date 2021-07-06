@@ -27,13 +27,13 @@ namespace Mix.Account.Controllers
         private readonly ILogger<MixAccountController> _logger;
         private readonly MixIdentityService _idService;
         private readonly MixAppSettingService _appSettingService;
-        private readonly CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
+        private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixAccountController(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<MixAccountController> logger,
-            MixIdentityService idService, CommandRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
+            MixIdentityService idService, Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
             MixAppSettingService appSettingService)
         {
             _userManager = userManager;
