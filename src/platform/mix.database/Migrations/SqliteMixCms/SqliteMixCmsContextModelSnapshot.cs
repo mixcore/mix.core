@@ -14,13 +14,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.7");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -80,7 +81,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -158,7 +160,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Alias")
                         .HasColumnType("nvarchar(250)")
@@ -237,7 +240,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -279,7 +283,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -408,7 +413,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("INTEGER");
@@ -501,7 +507,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -566,7 +573,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Configurations")
                         .IsRequired()
@@ -635,7 +643,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -695,7 +704,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -755,7 +765,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -833,7 +844,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -893,7 +905,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("ClassName")
                         .IsRequired()
@@ -1029,7 +1042,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1094,7 +1108,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("ClassName")
                         .IsRequired()
@@ -1230,7 +1245,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1279,7 +1295,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("ClassName")
                         .IsRequired()
@@ -1422,7 +1439,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1472,7 +1490,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1546,7 +1565,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -1606,7 +1626,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Alias")
                         .IsRequired()
@@ -1680,7 +1701,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValueSql("NEWID()");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")

@@ -12,7 +12,7 @@ namespace Mix.Lib.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Exception is MixHttpResponseException exception)
+            if (context.Exception is MixException exception)
             {
                 switch (exception.Status)
                 {
@@ -39,7 +39,17 @@ namespace Mix.Lib.Filters
                             StatusCode = (int)exception.Status,
                         };
                         break;
+                    case Heart.Enums.MixErrorStatus.NotFound:
+                        context.Result = new NotFoundObjectResult(exception.Value)
+                        {
+                            StatusCode = (int)exception.Status,
+                        };
+                        break;
                     default:
+                        context.Result = new ObjectResult(exception.Value)
+                        {
+                            StatusCode = (int)exception.Status,
+                        };
                         break;
                 }                
                 context.ExceptionHandled = true;

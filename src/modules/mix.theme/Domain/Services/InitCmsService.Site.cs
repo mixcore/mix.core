@@ -20,7 +20,7 @@ namespace Mix.Theme.Domain.Services
             var dbContext = _databaseService.GetDbContext();
             dbContext.Database.Migrate();
 
-            InitSiteViewModel vm = new(model);
+            InitSiteViewModel vm = new InitSiteViewModel(_siteRepo, _cultureRepo);
             await vm.SaveAsync();
         }
     }

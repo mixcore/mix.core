@@ -11,7 +11,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixSite",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
@@ -32,7 +32,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixConfiguration",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -61,7 +61,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixCulture",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     Alias = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     Icon = table.Column<string>(type: "nvarchar(4000)", nullable: true),
@@ -94,7 +94,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDatabase",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     Type = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -124,7 +124,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDomain",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -153,7 +153,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixLanguage",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -182,7 +182,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixModule",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -211,7 +211,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixPost",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -240,7 +240,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixUrlAlias",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -269,7 +269,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixConfigurationContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     DefaultContent = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
                     MixConfigurationId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -307,7 +307,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
@@ -333,7 +333,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDatabaseColumn",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
@@ -364,7 +364,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixLanguageContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     DefaultContent = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
                     MixLanguageId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -402,7 +402,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixUrlAliasContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     SourceId = table.Column<string>(type: "nvarchar(50)", nullable: true, collation: "NOCASE"),
                     Type = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
@@ -442,7 +442,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDataContent",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
                     MixDataId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixDataId1 = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -497,7 +497,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDataContentValue",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
                     MixDatabaseColumnName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DataType = table.Column<string>(type: "nvarchar(50)", nullable: false),
@@ -540,7 +540,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixModuleContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
                     PageSize = table.Column<int>(type: "INTEGER", nullable: true),
@@ -597,7 +597,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixTheme",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     PreviewUrl = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     MixDatabaseName = table.Column<string>(type: "TEXT", nullable: true),
@@ -635,7 +635,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixViewTemplate",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     Content = table.Column<string>(type: "ntext", nullable: true, collation: "NOCASE"),
                     Extension = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
@@ -670,7 +670,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixPageContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
                     PageSize = table.Column<int>(type: "INTEGER", nullable: true),
@@ -721,7 +721,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixPostContent",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
                     MixPostId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -797,7 +797,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixPage",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     MixPostContentId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),

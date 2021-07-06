@@ -25,6 +25,7 @@ using Mix.Lib.Attributes;
 using System.Collections.Generic;
 using Mix.Heart.Helpers;
 using Mix.Database.Entities.Account;
+using Mix.Heart.ViewModel;
 
 namespace Mix.Lib.Extensions
 {
@@ -45,7 +46,7 @@ namespace Mix.Lib.Extensions
             
             services.AddSingleton<MixFileService>();
             services.InitMixContext();
-            services.AddRepositories();
+            services.AddEntityRepositories();
             services.AddScoped<MixService>();
             services.AddScoped<TranslatorService>();
             services.AddScoped<MixConfigurationService>();
@@ -244,7 +245,7 @@ namespace Mix.Lib.Extensions
                 ));
             return services;
         }
-
+        
         #endregion
 
 
@@ -265,6 +266,18 @@ namespace Mix.Lib.Extensions
                 a => types.AddRange(a.GetExportedTypes()
                         .Where(
                             x => x.GetCustomAttributes<GeneratedControllerAttribute>().Any()
+                            )
+                        ));
+            return types;
+        }
+        
+        private static List<Type> GetViewModelCandidates(List<Assembly> assemblies)
+        {
+            List<Type> types = new();
+            assemblies.ForEach(
+                a => types.AddRange(a.GetExportedTypes()
+                        .Where(
+                            x => x.BaseType?.Name == typeof(ViewModelBase<,,>).Name
                             )
                         ));
             return types;

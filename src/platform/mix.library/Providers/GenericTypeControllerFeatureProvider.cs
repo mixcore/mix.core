@@ -16,7 +16,7 @@ namespace Mix.Lib.Providers
         public GenericTypeControllerFeatureProvider(List<Type> candidates, Type baseType = null)
         {
             Candidates = candidates;
-            BaseType = baseType != null ? baseType : typeof(MixRestAutoGenerateApiController<,,,>);
+            BaseType = baseType != null ? baseType : typeof(MixAutoGenerateRestApiController<,,,>);
         }
 
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)

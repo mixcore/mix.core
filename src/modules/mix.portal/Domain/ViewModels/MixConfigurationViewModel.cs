@@ -1,11 +1,12 @@
 ﻿using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Enums;
+using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
 
 namespace Mix.Portal.Domain.ViewModels
 {
@@ -18,12 +19,13 @@ namespace Mix.Portal.Domain.ViewModels
         public virtual string Description { get; set; }
         public int MixSiteId { get; set; }
 
-        public MixConfigurationViewModel() : base()
-        {
-
-        }
+        private QueryRepository<MixCmsContext, MixConfigurationContent, int> _contentQueryRepository;
 
         public MixConfigurationViewModel(MixConfiguration entity) : base(entity)
+        {   
+        }
+
+        public MixConfigurationViewModel(Repository<MixCmsContext, MixConfiguration, int> repository) : base(repository)
         {
         }
 
@@ -35,19 +37,29 @@ namespace Mix.Portal.Domain.ViewModels
         {
             if (Id == default)
             {
-                Id = _repository.MaxAsync(m => m.Id);
                 MixSiteId = 1;
                 CreatedDateTime = DateTime.UtcNow;
                 Status = MixContentStatus.Published;
             }
         }
 
+        public override async Task ExtendView()
+        {
+            _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(_unitOfWorkInfo);
+
+            Content = await _contentQueryRepository.GetListViewAsync<MixConfigurationContentViewModel>(
+                        m => m.MixConfigurationId == Id, _unitOfWorkInfo);
+        }
+
         protected override async Task SaveEntityRelationshipAsync(MixConfiguration parentEntity)
         {
-            foreach (var item in Content)
+            if (Content!=null)
             {
-                item.MixConfigurationId = parentEntity.Id;
-                await item.SaveAsync(_unitOfWorkInfo);
+                foreach (var item in Content)
+                {
+                    item.MixConfigurationId = parentEntity.Id;
+                    await item.SaveAsync(_unitOfWorkInfo);
+                }
             }
         }
 

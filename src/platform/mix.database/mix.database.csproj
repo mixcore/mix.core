@@ -17,4 +17,8 @@
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\Cms\SqliteMixCms\" />
+  </ItemGroup>
+
 </Project>

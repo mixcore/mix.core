@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Heart.Entities;
 using Mix.Heart.Enums;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
 {
@@ -16,6 +17,10 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
             string key = $"PK_{typeof(T).Name}";
             builder.HasKey(e => new { e.Id })
                    .HasName(key);
+
+            builder.Property(e => e.Id)
+                .HasDefaultValueSql("NEWID()")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(SqlServerDatabaseConstants.DataTypes.DateTime);

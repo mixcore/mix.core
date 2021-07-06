@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using System.Linq;
+using Mix.Heart.Repository;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -16,11 +17,16 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public string Description { get; set; }
 
         public InitCultureViewModel Culture { get; set; }
-        public InitSiteViewModel() : base()
+
+        private readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
+        public InitSiteViewModel(
+            Repository<MixCmsContext, MixSite, int> repository,
+            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(repository)
         {
+            _cultureRepository = cultureRepository;
         }
 
-        public InitSiteViewModel(InitCmsDto model) : base()
+        public void InitSiteData(InitCmsDto model)
         {
             Id = 1;
             DisplayName = model.SiteName;
@@ -29,7 +35,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             Status = MixContentStatus.Published;
             CreatedDateTime = DateTime.UtcNow;
 
-            Culture = new InitCultureViewModel()
+            Culture = new InitCultureViewModel(_cultureRepository)
             {
                 Id = 1,
                 Specificulture = model.Culture.Specificulture,
@@ -42,7 +48,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
                 CreatedDateTime = DateTime.UtcNow,
             };
         }
-
+       
         protected override async Task<MixSite> SaveHandlerAsync()
         {
             var entity = await base.SaveHandlerAsync();
@@ -63,7 +69,6 @@ namespace Mix.Theme.Domain.ViewModels.Init
         {
             if (Id == default)
             {
-                Id = _repository.MaxAsync(m => m.Id);
                 CreatedDateTime = DateTime.UtcNow;
                 Status = MixContentStatus.Published;
             }

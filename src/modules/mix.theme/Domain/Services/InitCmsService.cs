@@ -13,16 +13,18 @@ namespace Mix.Theme.Domain.Services
         private readonly MixIdentityService _identityService;
         private readonly UserManager<MixUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly CommandRepository<MixCmsContext, MixCulture, int> _cultureRepo;
+        private readonly Repository<MixCmsContext, MixCulture, int> _cultureRepo;
+        private readonly Repository<MixCmsContext, MixSite, int> _siteRepo;
         private readonly MixAppSettingService _appSettingService;
         private readonly MixDatabaseService _databaseService;
         public InitCmsService(
-            CommandRepository<MixCmsContext, MixCulture, int> cultureRepo,
+            Repository<MixCmsContext, MixCulture, int> cultureRepo,
             UserManager<MixUser> userManager,
             MixAppSettingService appSettingService,
             MixIdentityService identityService,
-            MixDatabaseService databaseService, 
-            RoleManager<IdentityRole> roleManager)
+            MixDatabaseService databaseService,
+            RoleManager<IdentityRole> roleManager, 
+            Repository<MixCmsContext, MixSite, int> siteRepo)
         {
             _cultureRepo = cultureRepo;
             _userManager = userManager;
@@ -30,6 +32,7 @@ namespace Mix.Theme.Domain.Services
             _identityService = identityService;
             _databaseService = databaseService;
             _roleManager = roleManager;
+            _siteRepo = siteRepo;
         }
 
     }
