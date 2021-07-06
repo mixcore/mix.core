@@ -27,8 +27,6 @@ namespace Mix.Lib.Controllers
     {
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
         protected readonly MixAppSettingService _appSettingService;
-        protected static TDbContext _context;
-        protected static IDbContextTransaction _transaction;
         protected string _lang;
         protected bool _forbidden;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });

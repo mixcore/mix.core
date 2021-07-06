@@ -1,7 +1,5 @@
 using Mix.Database.Entities.Account;
 using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
 using System.Threading.Tasks;
@@ -10,11 +8,8 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
     {
-        public RoleViewModel(
-            AspNetRoles entity, 
-            Repository<MixCmsAccountContext, AspNetRoles, Guid> repository) : base(repository)
+        public RoleViewModel(AspNetRoles entity) : base(entity)
         {
-            ExtendView();
         }
 
         #region Properties
@@ -31,7 +26,6 @@ namespace Mix.Identity.ViewModels
         #endregion Views
 
         #endregion Properties
-
 
         #region Overrides
         public override Task<AspNetRoles> ParseEntity<T>(T view)

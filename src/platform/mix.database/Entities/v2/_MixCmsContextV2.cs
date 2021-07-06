@@ -72,6 +72,7 @@ namespace Mix.Database.Entities.Cms.v2
                 }
             }
             base.Dispose();
+            GC.SuppressFinalize(this);
         }
 
 

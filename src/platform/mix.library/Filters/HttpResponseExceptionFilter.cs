@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 
 namespace Mix.Lib.Filters
@@ -14,44 +15,32 @@ namespace Mix.Lib.Filters
         {
             if (context.Exception is MixException exception)
             {
-                switch (exception.Status)
+                context.Result = exception.Status switch
                 {
-                    case Heart.Enums.MixErrorStatus.UnAuthorized:
-                        context.Result = new UnauthorizedObjectResult(exception.Value)
-                        {
-                            StatusCode = (int)exception.Status,
-                        };
-                        break;
-                    case Heart.Enums.MixErrorStatus.Forbidden:
-                        context.Result = new ForbidResult()
-                        {
-                        };
-                        break;
-                    case Heart.Enums.MixErrorStatus.Badrequest:
-                        context.Result = new BadRequestObjectResult(exception.Value)
-                        {
-                            StatusCode = (int)exception.Status,
-                        };
-                        break;
-                    case Heart.Enums.MixErrorStatus.ServerError:
-                        context.Result = new ObjectResult(exception.Value)
-                        {
-                            StatusCode = (int)exception.Status,
-                        };
-                        break;
-                    case Heart.Enums.MixErrorStatus.NotFound:
-                        context.Result = new NotFoundObjectResult(exception.Value)
-                        {
-                            StatusCode = (int)exception.Status,
-                        };
-                        break;
-                    default:
-                        context.Result = new ObjectResult(exception.Value)
-                        {
-                            StatusCode = (int)exception.Status,
-                        };
-                        break;
-                }                
+                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Value)
+                    {
+                        StatusCode = (int)exception.Status,
+                    },
+                    MixErrorStatus.Forbidden => new ForbidResult()
+                    {
+                    },
+                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Value)
+                    {
+                        StatusCode = (int)exception.Status,
+                    },
+                    MixErrorStatus.ServerError => new ObjectResult(exception.Value)
+                    {
+                        StatusCode = (int)exception.Status,
+                    },
+                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Value)
+                    {
+                        StatusCode = (int)exception.Status,
+                    },
+                    _ => new ObjectResult(exception.Value)
+                    {
+                        StatusCode = (int)exception.Status,
+                    },
+                };
                 context.ExceptionHandled = true;
             }
         }

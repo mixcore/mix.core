@@ -31,7 +31,7 @@ namespace Mix.Lib.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        static string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
+        static readonly string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
         static List<Assembly> MixAssemblies { get => GetMixAssemblies(); }
 
         #region Services
