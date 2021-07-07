@@ -1,0 +1,91 @@
+﻿@inject MixConfigurationService configService
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/portal">
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="~/lib/now-ui-kit-pro-v1.2.2/mix-app/assets/img/apple-icon.png">
+    <link rel="icon"
+          href="@(configService.GetConfig<string>( "Favicon", ViewBag.culture, "/mix-app/css/portal/img/mixcore-logo-green.svg"))" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>@ViewData["Title"] - mixcore</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport' />
+    <!--     Fonts and icons     -->
+    @* <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" /> *@
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <environment names="Development,Staging,Production">
+
+    </environment>
+    <link href="~/mix-app/css/app-vendor.min.css" rel="stylesheet" />
+    <link href="~/mix-app/css/app-vendor-scss.min.css" rel="stylesheet" />
+    <link href="~/mix-app/css/shared.min.css" rel="stylesheet" />
+
+    <script src="~/mix-app/js/particles/particles.min.js"></script>
+</head>
+
+<body class="" ng-app="MixSecurity"
+      ng-controller="AppSecurityController"
+      ng-init="init()">
+    <div id="particles-js" class="position-absolute w-100 h-100"></div>
+    <mix-loader ng-show="isBusy"></mix-loader>
+
+    <div class="container" ng-if="isInit">
+        <div class="card form-signin">
+
+            <section class="content">
+                <div class="{{pageClass}}" ng-view>
+                </div>
+                <message message="message"></message>
+                <confirm message="confirmMessage"></confirm>
+            </section>
+        </div>
+    </div>
+
+    <environment names="Development">
+    </environment>
+    <script src="~/mix-app/js/framework.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js"></script>
+
+    <script src="~/mix-app/js/app-security.min.js"></script>
+    <script src="~/mix-app/js/app-shared.min.js"></script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="termAndCondition" tabindex="-1" role="dialog" aria-labelledby="termAndConditionTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termAndConditionTitle">Terms and Conditions.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur
+                    et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">I have read and understand!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
