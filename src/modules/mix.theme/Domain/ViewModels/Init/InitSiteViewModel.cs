@@ -62,7 +62,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             // Save and subscribe result for current consumer
             // Or can use this instead of _consumer to listen result in this viewmodel 
             // Then override ConsumeAsync to handle result
-            await Culture.SaveAsync(_unitOfWorkInfo, _consumer);
+            await Culture.SaveAsync(UowInfo, _consumer);
         }
 
         protected override void InitEntityValues()

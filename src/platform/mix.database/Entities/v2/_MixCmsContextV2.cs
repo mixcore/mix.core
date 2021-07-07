@@ -1,9 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.EntityConfigurations.v2.POSTGRES;
-using Mix.Database.EntityConfigurations.v2.SQLITE;
-using Mix.Database.EntityConfigurations.v2.SQLSERVER;
-using Mix.Database.Extensions;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;

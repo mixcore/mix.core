@@ -45,10 +45,10 @@ namespace Mix.Portal.Domain.ViewModels
 
         public override async Task ExtendView()
         {
-            _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(_unitOfWorkInfo);
+            _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(UowInfo);
 
             Content = await _contentQueryRepository.GetListViewAsync<MixConfigurationContentViewModel>(
-                        m => m.MixConfigurationId == Id, _unitOfWorkInfo);
+                        m => m.MixConfigurationId == Id, UowInfo);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixConfiguration parentEntity)
@@ -58,7 +58,7 @@ namespace Mix.Portal.Domain.ViewModels
                 foreach (var item in Content)
                 {
                     item.MixConfigurationId = parentEntity.Id;
-                    await item.SaveAsync(_unitOfWorkInfo);
+                    await item.SaveAsync(UowInfo);
                 }
             }
         }
