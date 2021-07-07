@@ -15,7 +15,7 @@ namespace Mix.Lib.Conventions
             if (controller.ControllerType.IsGenericType)
             {
                 var genericType = controller.ControllerType.GenericTypeArguments[0];
-                var customNameAttribute = genericType.GetCustomAttribute<GeneratedControllerAttribute>();
+                var customNameAttribute = genericType.GetCustomAttribute<GenerateRestApiControllerAttribute>();
 
                 if (customNameAttribute != null)
                 {
@@ -29,7 +29,7 @@ namespace Mix.Lib.Conventions
                         {
                             AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)),
                         });
-                        controller.ControllerName = $"Auto Generate {name}";
+                        controller.ControllerName = $"{moduleName.ToTitleCase()} - {name} (Auto Generate)";
                     }
                 }
                 else

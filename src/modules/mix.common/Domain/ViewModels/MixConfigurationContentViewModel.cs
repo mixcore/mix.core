@@ -1,14 +1,11 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
-using System;
-using System.Linq;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Common.Domain.ViewModels
 {
-    [GenerateRestApiController]
+    [GenerateRestApiController(false)]
     public class MixConfigurationContentViewModel : ViewModelBase<MixCmsContext, MixConfigurationContent, int>
     {
         public string Specificulture { get; set; }
@@ -25,19 +22,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixConfigurationContentViewModel(Repository  <MixCmsContext, MixConfigurationContent, int> repository) : base(repository)
+        public MixConfigurationContentViewModel(Repository<MixCmsContext, MixConfigurationContent, int> repository) : base(repository)
         {
-        }
-
-        protected override void InitEntityValues()
-        {
-            if (Id == default)
-            {
-                MixSiteId = 1;
-                MixCultureId = 1;
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
         }
     }
 }
