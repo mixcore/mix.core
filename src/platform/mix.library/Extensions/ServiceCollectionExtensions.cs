@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using Mix.Heart.Helpers;
 using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
+using Mix.Lib.Controllers;
 
 namespace Mix.Lib.Extensions
 {
@@ -43,7 +44,7 @@ namespace Mix.Lib.Extensions
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
 
-            
+
             services.AddSingleton<MixFileService>();
             services.InitMixContext();
             services.AddEntityRepositories();
@@ -158,7 +159,7 @@ namespace Mix.Lib.Extensions
             InitAppSettings();
             services.AddScoped<MixAppSettingService>();
             services.AddScoped<MixDatabaseService>();
-            
+
             return services;
         }
 
@@ -213,6 +214,7 @@ namespace Mix.Lib.Extensions
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+                c.CustomSchemaIds(x => x.FullName);
             });
             return services;
         }
@@ -233,19 +235,22 @@ namespace Mix.Lib.Extensions
             return services;
         }
 
-        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services, Type baseType = null)
+        private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services)
         {
-            List<Type> candidates = GetGenereatedApiCandidates(MixAssemblies);
+            List<Type> restCandidates = GetCandidatesByAttributeType(MixAssemblies, typeof(GenerateRestApiControllerAttribute));
             services.
                 AddMvc(o => o.Conventions.Add(
                     new GenericControllerRouteConvention()
                 )).
                 ConfigureApplicationPartManager(m =>
-                    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider(candidates, baseType)
-                ));
+                    {
+                        m.FeatureProviders.Add(
+                            new GenericTypeControllerFeatureProvider(restCandidates)); 
+                    }
+                    );
             return services;
         }
-        
+
         #endregion
 
 
@@ -259,18 +264,18 @@ namespace Mix.Lib.Extensions
                 typeof(IStartupService).IsAssignableFrom(type);
         }
 
-        private static List<Type> GetGenereatedApiCandidates(List<Assembly> assemblies)
+        private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
         {
             List<Type> types = new();
             assemblies.ForEach(
                 a => types.AddRange(a.GetExportedTypes()
                         .Where(
-                            x => x.GetCustomAttributes<GeneratedControllerAttribute>().Any()
+                            x => x.GetCustomAttributes(attributeType).Any()
                             )
                         ));
             return types;
         }
-        
+
         private static List<Type> GetViewModelCandidates(List<Assembly> assemblies)
         {
             List<Type> types = new();

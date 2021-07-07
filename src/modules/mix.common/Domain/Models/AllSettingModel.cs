@@ -1,4 +1,4 @@
-﻿namespace Mix.Lib.Models.Common
+﻿namespace Mix.Common.Models
 {
     public class AllSettingModel
     {

@@ -7,14 +7,14 @@ using Mix.Shared.Services;
 
 namespace Mix.Lib.Controllers
 {
-    public class MixAutoGenerateQueryApiController<TView, TDbContext, TEntity, TPrimaryKey>
-        : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
+    public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
+        : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
         where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
-        public MixAutoGenerateQueryApiController(
+        public MixAutoGenerateRestApiController(
             Repository<TDbContext, TEntity, TPrimaryKey> repository, 
             MixAppSettingService appSettingService) 
             : base(appSettingService, repository)

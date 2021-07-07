@@ -10,7 +10,7 @@ using Mix.Heart.Extensions;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GeneratedController("api/v2/portal/rest/mix-configuration", "Mix Configurations")]
+    [GenerateRestApiController("api/v2/rest/portal/mix-configuration", "Mix Configuration")]
     public class MixConfigurationViewModel : ViewModelBase<MixCmsContext, MixConfiguration, int>
     {
         public virtual string Image { get; set; }

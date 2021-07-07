@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Mix.Lib.Attributes;
 using Mix.Lib.Controllers;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,11 @@ namespace Mix.Lib.Providers
     public class GenericTypeControllerFeatureProvider : IApplicationFeatureProvider<ControllerFeature>
     {
         public List<Type> Candidates { get; set; }
-        public Type BaseType { get; set; }
 
-        public GenericTypeControllerFeatureProvider(List<Type> candidates, Type baseType = null)
+        public GenericTypeControllerFeatureProvider(List<Type> candidates)
         {
             Candidates = candidates;
-            BaseType = baseType != null ? baseType : typeof(MixAutoGenerateRestApiController<,,,>);
+            
         }
 
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
@@ -25,9 +25,13 @@ namespace Mix.Lib.Providers
             {
                 if (candidate.BaseType.IsGenericType)
                 {
+                    var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
+                    var baseType = attr.IsRestful
+                            ? typeof(MixAutoGenerateRestApiController<,,,>)
+                            : typeof(MixAutoGenerateQueryApiController<,,,>);
                     Type[] types = candidate.BaseType.GenericTypeArguments.Prepend(candidate).ToArray();
                     feature.Controllers.Add(
-                        BaseType.MakeGenericType(types)
+                        baseType.MakeGenericType(types)
                             .GetTypeInfo()
                     );
                 }

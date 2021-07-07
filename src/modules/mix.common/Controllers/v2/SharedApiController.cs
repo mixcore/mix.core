@@ -10,17 +10,20 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using Mix.Shared.Services;
-using Mix.Lib.Helpers;
 using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Shared.Models;
-using Mix.Heart.Exceptions;
+using Mix.Heart.Repository;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Common.Models;
 
 namespace Mix.Common.Controllers.v2
 {
     [Route("api/v2/shared")]
     public class SharedApiController : MixApiControllerBase
     {
+        private readonly QueryRepository<MixCmsContext, MixConfigurationContent, int> _configRepo;
+        private readonly QueryRepository<MixCmsContext, MixLanguageContent, int> _langRepo;
         private readonly MixFileService _fileService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
 
@@ -28,10 +31,29 @@ namespace Mix.Common.Controllers.v2
             MixFileService fileService,
             MixAppSettingService appSettingService,
             MixService mixService,
-            TranslatorService translator) : base(logger, appSettingService, mixService, translator)
+            TranslatorService translator,
+            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo, QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo) : base(logger, appSettingService, mixService, translator)
         {
             _fileService = fileService;
             _authConfigurations = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
+            _configRepo = configRepo;
+            _langRepo = langRepo;
+        }
+
+        #region Routes
+
+        [HttpGet]
+        [Route("mix-configuration/{lang}")]
+        public ActionResult GetMixConfigurations(string lang)
+        {
+            return Ok(_configRepo.GetListQuery(c => c.Specificulture == lang).ToList());
+        }
+        
+        [HttpGet]
+        [Route("mix-translation/{lang}")]
+        public ActionResult GetMixTranslation(string lang)
+        {
+            return Ok(_langRepo.GetListQuery(c => c.Specificulture == lang).ToList());
         }
 
         [HttpGet]
@@ -89,6 +111,9 @@ namespace Mix.Common.Controllers.v2
                 return NotFound();
             }
         }
+
+        #endregion
+
         private AllSettingModel GetAllSettings(string lang = null)
         {
             lang ??= _appSettingService.GetConfig<string>(
