@@ -27,8 +27,7 @@ namespace Mix.Cms.Lib.Extensions
                    .AddJsonProtocol(options =>
                    {
                        options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                   })
-                   .AddMessagePackProtocol();
+                   });
             return services;
         }
 
