@@ -6,7 +6,6 @@ using Mix.Lib.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
 
 namespace Mix.Portal.Domain.ViewModels
 {

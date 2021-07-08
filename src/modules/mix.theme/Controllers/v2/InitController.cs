@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Mix.Shared.Constants;
-using Mix.Lib.Controllers;
 using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using System.Threading.Tasks;
@@ -10,6 +9,7 @@ using Mix.Theme.Domain.Dtos;
 using Mix.Theme.Domain.Enums;
 using Mix.Theme.Domain.Services;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Abstracts;
 
 namespace Mix.Theme.Controllers.v2
 {

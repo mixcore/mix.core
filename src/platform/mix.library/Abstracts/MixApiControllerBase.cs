@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 
-namespace Mix.Lib.Controllers
+namespace Mix.Lib.Abstracts
 {
     [Produces("application/json")]
     [ApiController]
-    public class MixApiControllerBase: ControllerBase
+    public abstract class MixApiControllerBase: ControllerBase
     {
         protected readonly ILogger<MixApiControllerBase> _logger;
         protected readonly MixAppSettingService _appSettingService;

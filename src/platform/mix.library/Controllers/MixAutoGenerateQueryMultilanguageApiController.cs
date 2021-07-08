@@ -8,14 +8,14 @@ using Mix.Lib.Abstracts;
 
 namespace Mix.Lib.Controllers
 {
-    public class MixAutoGenerateQueryApiController<TView, TDbContext, TEntity, TPrimaryKey>
-        : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
+    public class MixAutoGenerateQueryMultilanguageApiController<TView, TDbContext, TEntity, TPrimaryKey>
+        : MixQueryMultiLanguageApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
         where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
-        public MixAutoGenerateQueryApiController(
+        public MixAutoGenerateQueryMultilanguageApiController(
             Repository<TDbContext, TEntity, TPrimaryKey> repository, 
             MixAppSettingService appSettingService) 
             : base(appSettingService, repository)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Shared.Constants;
-using Mix.Lib.Controllers;
+using Mix.Lib.Abstracts;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
 using Mix.Shared.Enums;

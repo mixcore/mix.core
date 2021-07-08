@@ -16,6 +16,9 @@ using Mix.Shared.Models;
 using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Common.Models;
+using Mix.Common.Domain.ViewModels;
+using System.Threading.Tasks;
+using Mix.Lib.Abstracts;
 
 namespace Mix.Common.Controllers.v2
 {
@@ -65,16 +68,18 @@ namespace Mix.Common.Controllers.v2
 
         [HttpGet]
         [Route("get-shared-settings")]
-        public ActionResult<JObject> GetSharedSettingsAsync()
+        public async Task<ActionResult<AllSettingModel>> GetSharedSettingsAsync()
         {
-            return Ok(GetAllSettings());
+            var settings = await GetAllSettingsAsync();
+            return Ok(settings);
         }
 
         [HttpGet]
-        [Route("{culture}/get-shared-settings")]
-        public ActionResult<JObject> GetSharedSettingsAsync(string culture)
+        [Route("get-shared-settings/{culture}")]
+        public async Task<ActionResult<AllSettingModel>> GetSharedSettingsAsync(string culture)
         {
-            return Ok(GetAllSettings(culture));
+            var settings = await GetAllSettingsAsync(culture);
+            return Ok(settings);
         }
 
         // GET api/v1/portal/check-config
@@ -86,7 +91,7 @@ namespace Mix.Common.Controllers.v2
                                 MixAppSettingsSection.GlobalSettings, "LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
-                return Ok(GetAllSettings());
+                return Ok(GetAllSettingsAsync());
             }
             else
             {
@@ -114,7 +119,7 @@ namespace Mix.Common.Controllers.v2
 
         #endregion
 
-        private AllSettingModel GetAllSettings(string lang = null)
+        private async Task<AllSettingModel> GetAllSettingsAsync(string lang = null)
         {
             lang ??= _appSettingService.GetConfig<string>(
                         MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
@@ -153,7 +158,9 @@ namespace Mix.Common.Controllers.v2
 
             return new AllSettingModel()
             {
-                AppSettings = globalSettings
+                AppSettings = globalSettings,
+                MixConfigurations = await _configRepo.GetListViewAsync<MixConfigurationContentViewModel>(m => m.Specificulture == lang),
+                Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };
         }
 
