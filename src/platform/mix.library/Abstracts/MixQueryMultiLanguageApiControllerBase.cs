@@ -10,10 +10,13 @@ using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
 using System.Reflection;
 using Mix.Heart.Model;
+using Mix.Heart.Helpers;
+using Mix.Shared.Constants;
 
-namespace Mix.Lib.Controllers
+namespace Mix.Lib.Abstracts
 {
-    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : ControllerBase
+    public abstract class MixQueryMultiLanguageApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
+        : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
@@ -29,31 +32,22 @@ namespace Mix.Lib.Controllers
         /// </summary>
         protected string _domain;
 
-        public MixQueryApiControllerBase(
+        public MixQueryMultiLanguageApiControllerBase(
             MixAppSettingService appSettingService,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository)
+            Repository<TDbContext, TEntity, TPrimaryKey> repository): base(appSettingService, repository)
         {
-            _repository = repository;
-            _appSettingService = appSettingService;
         }
 
         #region Routes
 
-        [HttpGet]
-        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
+        [HttpGet("by-culture/{culture}")]
+        public virtual async Task<ActionResult<PagingResponseModel<TView>>> GetByCulture(string culture, [FromQuery] SearchRequestDto req)
         {
-            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req);
+            var predicate = ReflectionHelper.GetExpression<TEntity>(MixRequestQueryKeywords.Specificulture, culture, Heart.Enums.ExpressionMethod.Eq);
+            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req, predicate);
 
             return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
         }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TView>> Get(TPrimaryKey id)
-        {
-            var getData = await _repository.GetSingleViewAsync<TView>(id);
-            return Ok(getData);
-        }
-
 
         #endregion Routes
     }

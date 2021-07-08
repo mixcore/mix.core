@@ -16,7 +16,7 @@ namespace Mix.Lib.Providers
         public GenericTypeControllerFeatureProvider(List<Type> candidates)
         {
             Candidates = candidates;
-            
+
         }
 
         public void PopulateFeature(IEnumerable<ApplicationPart> parts, ControllerFeature feature)
@@ -28,7 +28,9 @@ namespace Mix.Lib.Providers
                     var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
                     var baseType = attr.IsRestful
                             ? typeof(MixAutoGenerateRestApiController<,,,>)
-                            : typeof(MixAutoGenerateQueryApiController<,,,>);
+                            : attr.IsMultiLanguage
+                                ? typeof(MixAutoGenerateQueryMultilanguageApiController<,,,>)
+                                : typeof(MixAutoGenerateQueryApiController<,,,>);
                     Type[] types = candidate.BaseType.GenericTypeArguments.Prepend(candidate).ToArray();
                     feature.Controllers.Add(
                         baseType.MakeGenericType(types)

@@ -10,10 +10,10 @@ using Mix.Shared.Services;
 using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
 
-namespace Mix.Lib.Controllers
+namespace Mix.Lib.Abstracts
 {
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class MixControllerBase : Controller
+    public abstract class MixControllerBase : Controller
     {
         protected string domain;
         protected bool forbidden = false;

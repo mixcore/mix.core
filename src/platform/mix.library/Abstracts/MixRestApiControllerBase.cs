@@ -11,7 +11,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Model;
 using System.Collections.Generic;
 
-namespace Mix.Lib.Controllers
+namespace Mix.Lib.Abstracts
 {
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
