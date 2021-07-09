@@ -26,11 +26,13 @@ namespace Mix.Lib.Providers
                 if (candidate.BaseType.IsGenericType)
                 {
                     var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
-                    var baseType = attr.IsRestful
-                            ? typeof(MixAutoGenerateRestApiController<,,,>)
-                            : attr.IsMultiLanguage
+                    
+                    var baseType = attr.QueryOnly
+                            ? attr.IsMultiLanguage
                                 ? typeof(MixAutoGenerateQueryMultilanguageApiController<,,,>)
-                                : typeof(MixAutoGenerateQueryApiController<,,,>);
+                                : typeof(MixAutoGenerateQueryApiController<,,,>)
+                            : typeof(MixAutoGenerateRestApiController<,,,>);
+
                     Type[] types = candidate.BaseType.GenericTypeArguments.Prepend(candidate).ToArray();
                     feature.Controllers.Add(
                         baseType.MakeGenericType(types)

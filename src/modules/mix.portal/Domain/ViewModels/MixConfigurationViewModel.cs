@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GenerateRestApiController("api/v2/rest/portal/mix-configuration", "Mix Configuration")]
+    [GenerateRestApiController(Route = "api/v2/rest/portal/mix-configuration", Name = "Mix Configuration")]
     public class MixConfigurationViewModel : ViewModelBase<MixCmsContext, MixConfiguration, int>
     {
         public virtual string Image { get; set; }

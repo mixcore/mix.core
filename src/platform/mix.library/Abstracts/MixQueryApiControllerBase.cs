@@ -10,6 +10,8 @@ using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
 using System.Reflection;
 using Mix.Heart.Model;
+using Mix.Shared.Enums;
+using Mix.Shared.Constants;
 
 namespace Mix.Lib.Abstracts
 {
@@ -21,13 +23,11 @@ namespace Mix.Lib.Abstracts
     {
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
         protected readonly MixAppSettingService _appSettingService;
+        protected const int _defaultPageSize = 1000;
         protected string _lang;
         protected bool _forbidden;
-        protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
-        /// <summary>
-        /// The domain
-        /// </summary>
         protected string _domain;
+        protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
             MixAppSettingService appSettingService,
@@ -42,6 +42,10 @@ namespace Mix.Lib.Abstracts
         [HttpGet]
         public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
+            if (!req.PageSize.HasValue)
+            {
+                req.PageSize = _appSettingService.GetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
+            }
             var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req);
 
             return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);

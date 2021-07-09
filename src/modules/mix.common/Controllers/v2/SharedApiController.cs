@@ -19,6 +19,9 @@ using Mix.Common.Models;
 using Mix.Common.Domain.ViewModels;
 using System.Threading.Tasks;
 using Mix.Lib.Abstracts;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Mix.Common.Domain.Models;
 
 namespace Mix.Common.Controllers.v2
 {
@@ -29,21 +32,43 @@ namespace Mix.Common.Controllers.v2
         private readonly QueryRepository<MixCmsContext, MixLanguageContent, int> _langRepo;
         private readonly MixFileService _fileService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
+        private readonly IActionDescriptorCollectionProvider _routeProvider;
 
         public SharedApiController(ILogger<MixApiControllerBase> logger,
             MixFileService fileService,
             MixAppSettingService appSettingService,
             MixService mixService,
             TranslatorService translator,
-            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo, QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo) : base(logger, appSettingService, mixService, translator)
+            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo, QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo, IActionDescriptorCollectionProvider routeProvider) : base(logger, appSettingService, mixService, translator)
         {
             _fileService = fileService;
             _authConfigurations = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
             _configRepo = configRepo;
             _langRepo = langRepo;
+            _routeProvider = routeProvider;
         }
 
         #region Routes
+
+        [HttpGet]
+        [Route("routes")]
+        public ActionResult GetRoutes()
+        {
+            var routes = _routeProvider.ActionDescriptors.Items.Where(
+            ad => ad.AttributeRouteInfo != null).Select(ad => new RouteModel
+            {
+                Name = ad.AttributeRouteInfo.Name,
+                Template = ad.AttributeRouteInfo.Template,
+                Method = ad.ActionConstraints?.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods.First(),
+            }).ToList();
+
+            var res = new RootResultModel
+            {
+                Routes = routes
+            };
+
+            return Ok(routes);
+        }
 
         [HttpGet]
         [Route("mix-configuration/{lang}")]
@@ -51,7 +76,7 @@ namespace Mix.Common.Controllers.v2
         {
             return Ok(_configRepo.GetListQuery(c => c.Specificulture == lang).ToList());
         }
-        
+
         [HttpGet]
         [Route("mix-translation/{lang}")]
         public ActionResult GetMixTranslation(string lang)
