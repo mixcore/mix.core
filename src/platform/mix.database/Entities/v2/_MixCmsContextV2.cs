@@ -16,34 +16,39 @@ namespace Mix.Database.Entities.Cms.v2
         {
         }
 
+        public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider)
+        {
+            _connectionString = connectionString;
+            _databaseProvider = databaseProvider;
+        }
+
         public MixCmsContext(MixDatabaseService databaseService,
             MixAppSettingService appSettingService)
         {
-            _databaseService = databaseService;
-            _appSettingService = appSettingService;
+            _connectionString = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseProvider = appSettingService.DatabaseProvider;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
+            if (!string.IsNullOrEmpty(_connectionString))
             {
-                switch (_appSettingService.DatabaseProvider)
+                switch (_databaseProvider)
                 {
                     case MixDatabaseProvider.MSSQL:
-                        optionsBuilder.UseSqlServer(cnn);
+                        optionsBuilder.UseSqlServer(_connectionString);
                         break;
 
                     case MixDatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
+                        optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
                         break;
 
                     case MixDatabaseProvider.SQLITE:
-                        optionsBuilder.UseSqlite(cnn);
+                        optionsBuilder.UseSqlite(_connectionString);
                         break;
 
                     case MixDatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
+                        optionsBuilder.UseNpgsql(_connectionString);
                         break;
 
                     default:
@@ -54,18 +59,15 @@ namespace Mix.Database.Entities.Cms.v2
 
         public override void Dispose()
         {
-            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ClearDbPool))
+            switch (_databaseProvider)
             {
-                switch (_appSettingService.DatabaseProvider)
-                {
-                    case MixDatabaseProvider.MSSQL:
-                        SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
-                        break;
+                case MixDatabaseProvider.MSSQL:
+                    SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
+                    break;
 
-                    case MixDatabaseProvider.MySQL:
-                        MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
-                        break;
-                }
+                case MixDatabaseProvider.MySQL:
+                    MySqlConnection.ClearPool((MySqlConnection)Database.GetDbConnection());
+                    break;
             }
             base.Dispose();
             GC.SuppressFinalize(this);
@@ -92,7 +94,7 @@ namespace Mix.Database.Entities.Cms.v2
         public virtual DbSet<MixData> MixData { get; set; }
         public virtual DbSet<MixDataContent> MixDataContent { get; set; }
 
-        private static MixDatabaseService _databaseService;
-        private static MixAppSettingService _appSettingService;
+        private static string _connectionString;
+        private static MixDatabaseProvider _databaseProvider;
     }
 }

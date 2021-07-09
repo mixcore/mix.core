@@ -19,9 +19,9 @@ namespace Mix.Lib.Conventions
 
                 if (customNameAttribute != null)
                 {
-                    string moduleName = genericType.Assembly.GetName().Name.Replace(".", "-");
+                    string moduleName = genericType.Assembly.GetName().Name;
                     string modelName = genericType.Name.Replace("ViewModel", string.Empty);
-                    string route = customNameAttribute.Route ?? $"api/v2/rest/{moduleName}/{modelName.ToHypenCase()[1..]}";
+                    string route = customNameAttribute.Route ?? $"api/v2/rest/{moduleName.Replace(".", "-")}/{modelName.ToHypenCase()[1..]}";
                     string name = customNameAttribute.Name ?? modelName.ToHypenCase(' ', false);
                     if (!controller.Selectors.Any(s => s.AttributeRouteModel?.Template == route))
                     {
@@ -29,7 +29,7 @@ namespace Mix.Lib.Conventions
                         {
                             AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)),
                         });
-                        controller.ControllerName = $"{moduleName.ToTitleCase()} - {name} (Auto Generate)";
+                        controller.ControllerName = $"{moduleName} - {name} (Auto Generate)";
                     }
                 }
                 else
