@@ -1,15 +1,12 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
-using System;
-using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GenerateRestApiController(Route = "api/v2/rest/portal/mix-Post", Name = "Mix Post")]
+    [GenerateRestApiController]
     public class MixPostViewModel : SiteDataViewModelBase<MixCmsContext, MixPost, int, MixPostContent, MixPostContentViewModel>
     {
 
