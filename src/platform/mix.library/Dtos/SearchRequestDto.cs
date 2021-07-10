@@ -7,6 +7,7 @@ namespace Mix.Lib.Dtos
     public class SearchRequestDto
     {
         public string Keyword { get; set; }
+        public string Culture { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int PageIndex { get; set; }

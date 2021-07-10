@@ -5,7 +5,7 @@ using Mix.Lib.Attributes;
 
 namespace Mix.Common.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true, IsMultiLanguage = true)]
+    [GenerateRestApiController(QueryOnly = true)]
     public class MixConfigurationContentViewModel : ViewModelBase<MixCmsContext, MixConfigurationContent, int>
     {
         public string Specificulture { get; set; }
