@@ -32,24 +32,22 @@ namespace Mix.Lib.Models.Common
         public SearchQueryModel(
             HttpRequest request, 
             Expression<Func<TEntity, bool>> andPredicate = null, 
-            Expression<Func<TEntity, bool>> orPredicate = null, 
-            string culture = null)
+            Expression<Func<TEntity, bool>> orPredicate = null)
         {
             AndPredicate = andPredicate;
             OrPredicate = orPredicate;
-            Init(request, culture, default);
+            Init(request, default);
         }
 
         public SearchQueryModel(
             SearchRequestDto request,
             Expression<Func<TEntity, bool>> andPredicate = null,
-            Expression<Func<TEntity, bool>> orPredicate = null,
-            string culture = null)
+            Expression<Func<TEntity, bool>> orPredicate = null)
         {
             AndPredicate = andPredicate;
             OrPredicate = orPredicate;
 
-            Specificulture = culture;
+            Specificulture = request.Culture;
             FromDate = request.FromDate;
             ToDate = request.ToDate;
             Status = request.Status;
@@ -65,9 +63,9 @@ namespace Mix.Lib.Models.Common
             BuildPredicate();
         }
 
-        private void Init(HttpRequest request, string culture = null, int defaultPageSize = 1000)
+        private void Init(HttpRequest request, int defaultPageSize = 1000)
         {
-            Specificulture = culture;
+            Specificulture = request.Query[MixRequestQueryKeywords.Specificulture];
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate : null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)

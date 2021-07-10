@@ -13,6 +13,8 @@ using Mix.Heart.Model;
 using Mix.Shared.Enums;
 using Mix.Shared.Constants;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.Heart.Helpers;
+using System.Linq.Expressions;
 
 namespace Mix.Lib.Abstracts
 {
@@ -42,11 +44,20 @@ namespace Mix.Lib.Abstracts
         [HttpGet]
         public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
+            Expression<Func<TEntity, bool>> andPredicate = null;
+
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = _appSettingService.GetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
+                req.PageSize = _appSettingService.GetConfig(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
             }
-            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req);
+            
+            if (req.Culture != null)
+            {
+                andPredicate = ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq);
+            }
+            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
 
             return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
         }
@@ -59,7 +70,7 @@ namespace Mix.Lib.Abstracts
         }
 
         [HttpGet("default")]
-        [HttpGet("default/{culture}")]
+        [HttpGet("{culture}/default")]
         public ActionResult<TView> GetDefault(string culture = null)
         {
             var result = (TView)Activator.CreateInstance(typeof(TView));
