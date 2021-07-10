@@ -1,3 +1,7 @@
+body {
+  background-color: var(--bg-color, hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1));
+}
+
 a,
 .btn-link {
   text-decoration: none !important;
@@ -86,6 +90,7 @@ a,
 }
 .main-sidebar .btn {
   font-weight: 550;
+  font-size: inherit;
 }
 .main-sidebar .sidebar-menu-item-main {
   border-radius: 0;
