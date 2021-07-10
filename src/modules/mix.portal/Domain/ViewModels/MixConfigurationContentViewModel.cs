@@ -24,15 +24,5 @@ namespace Mix.Portal.Domain.ViewModels
         public MixConfigurationContentViewModel(Repository<MixCmsContext, MixConfigurationContent, int> repository) : base(repository)
         {
         }
-
-        protected override void InitEntityValues()
-        {
-            if (Id == default)
-            {
-                MixCultureId = 1;
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
-        }
     }
 }

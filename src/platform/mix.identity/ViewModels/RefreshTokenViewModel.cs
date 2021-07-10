@@ -9,7 +9,7 @@ namespace Mix.Identity.ViewModels
     public class RefreshTokenViewModel
         : ViewModelBase<MixCmsAccountContext, RefreshTokens, Guid>
     {
-        public RefreshTokenViewModel(Repository<MixCmsAccountContext, RefreshTokens, Guid> commandRepository) 
+        public RefreshTokenViewModel(Repository<MixCmsAccountContext, RefreshTokens, Guid> commandRepository)
             : base(commandRepository)
         {
         }
@@ -34,14 +34,11 @@ namespace Mix.Identity.ViewModels
 
         #region Overrides
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (Id == default)
-            {
-                Id = Guid.NewGuid();
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
+            Id = Guid.NewGuid();
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
         }
 
         #endregion

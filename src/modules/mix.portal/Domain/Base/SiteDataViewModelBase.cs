@@ -16,7 +16,7 @@ namespace Mix.Portal.Domain.Base
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
         where TContentEntity : MultilanguageContentBase<TPrimaryKey>
-        where TContent: SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
+        where TContent : SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
     {
         #region Contructors
         protected SiteDataViewModelBase()
@@ -45,7 +45,7 @@ namespace Mix.Portal.Domain.Base
         public virtual string Description { get; set; }
         public int MixSiteId { get; set; }
 
-        public IEnumerable<TContent> Contents { get; set; }
+        public List<TContent> Contents { get; set; }
 
         #endregion
 
@@ -59,13 +59,18 @@ namespace Mix.Portal.Domain.Base
                         m => m.ParentId.Equals(Id), UowInfo);
         }
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (IsDefaultId())
+            MixSiteId = 1;
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
+
+            if (Contents == null)
             {
-                MixSiteId = 1;
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
+                Contents = new();
+                var content = (TContent)Activator.CreateInstance(typeof(TContent));
+                content.InitDefaultValues(language, cultureId);
+                Contents.Add(content);
             }
         }
 
@@ -81,6 +86,8 @@ namespace Mix.Portal.Domain.Base
             }
         }
         #endregion
+
+
 
     }
 }

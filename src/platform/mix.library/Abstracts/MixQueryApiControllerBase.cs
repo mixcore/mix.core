@@ -12,29 +12,29 @@ using System.Reflection;
 using Mix.Heart.Model;
 using Mix.Shared.Enums;
 using Mix.Shared.Constants;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mix.Lib.Abstracts
 {
-    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : ControllerBase
+    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : Controller
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
-        protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
         protected readonly MixAppSettingService _appSettingService;
+        protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
         protected const int _defaultPageSize = 1000;
-        protected string _lang;
         protected bool _forbidden;
-        protected string _domain;
+        protected string _lang;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
-            MixAppSettingService appSettingService,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository)
+            MixAppSettingService appSettingService, 
+            Repository<TDbContext, TEntity, TPrimaryKey> repository) : base()
         {
-            _repository = repository;
             _appSettingService = appSettingService;
+            _repository = repository;
         }
 
         #region Routes
@@ -58,6 +58,23 @@ namespace Mix.Lib.Abstracts
             return Ok(getData);
         }
 
+        [HttpGet("default")]
+        [HttpGet("default/{culture}")]
+        public ActionResult<TView> GetDefault(string culture = null)
+        {
+            var result = (TView)Activator.CreateInstance(typeof(TView));
+            result.InitDefaultValues(_lang);
+            return Ok(result);
+        }
+
         #endregion Routes
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            base.OnActionExecuting(context);
+            _lang = RouteData?.Values["culture"] != null
+                ? RouteData.Values["culture"].ToString()
+                : _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+        }
     }
 }

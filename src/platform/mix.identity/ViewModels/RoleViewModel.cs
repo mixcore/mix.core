@@ -37,14 +37,11 @@ namespace Mix.Identity.ViewModels
             return base.ParseEntity(view);
         }
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (Id == default)
-            {
-                Id = Guid.NewGuid();
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
+            Id = Guid.NewGuid();
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
         }
 
         #endregion Overrides
