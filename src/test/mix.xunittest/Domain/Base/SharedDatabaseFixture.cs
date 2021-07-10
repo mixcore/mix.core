@@ -3,7 +3,7 @@ using Mix.Heart.Enums;
 using System;
 using System.Reflection;
 
-namespace Mix.XUnit.Domain.Base
+namespace Mix.Xunittest.Domain.Base
 {
     // Ref: https://docs.microsoft.com/en-us/ef/core/testing/sharing-databases
     public abstract class SharedDatabaseFixture<TDbContext> 
