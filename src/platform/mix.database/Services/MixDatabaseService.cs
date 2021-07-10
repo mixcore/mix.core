@@ -72,7 +72,7 @@ namespace Mix.Database.Services
             using (var ctx = GetDbContext())
             {
                 ctx.Database.Migrate();
-                var transaction = ctx.Database.BeginTransaction();
+                //var transaction = ctx.Database.BeginTransaction();
                 //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
                 //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
                 //foreach (var db in sysDatabases)
@@ -84,10 +84,11 @@ namespace Mix.Database.Services
                 //}
                 //transaction.Commit();
                 //transaction.Dispose();
-                var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
-                Console.WriteLine(query);
+                //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
+                //Console.WriteLine(query);
             }
         }
 
     }
 }
+ 

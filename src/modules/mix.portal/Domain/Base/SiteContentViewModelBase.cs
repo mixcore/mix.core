@@ -49,14 +49,12 @@ namespace Mix.Portal.Domain.Base
 
         #region Overrides
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (IsDefaultId())
-            {
-                MixCultureId = 1;
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
+            Specificulture = language;
+            MixCultureId = cultureId ?? 1;
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
         }
 
         #endregion

@@ -14,6 +14,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public MixPostViewModel()
         {
+            
         }
 
         public MixPostViewModel(MixPost entity) : base(entity)
@@ -32,7 +33,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-       
+
         #endregion
     }
 }

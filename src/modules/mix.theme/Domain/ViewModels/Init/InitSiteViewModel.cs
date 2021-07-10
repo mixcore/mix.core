@@ -48,7 +48,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
                 CreatedDateTime = DateTime.UtcNow,
             };
         }
-       
+
         protected override async Task<MixSite> SaveHandlerAsync()
         {
             var entity = await base.SaveHandlerAsync();
@@ -65,13 +65,10 @@ namespace Mix.Theme.Domain.ViewModels.Init
             await Culture.SaveAsync(UowInfo, _consumer);
         }
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (Id == default)
-            {
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
         }
     }
 }

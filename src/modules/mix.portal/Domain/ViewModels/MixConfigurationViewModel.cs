@@ -34,16 +34,6 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        protected override void InitEntityValues()
-        {
-            if (Id == default)
-            {
-                MixSiteId = 1;
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
-        }
-
         public override async Task ExtendView()
         {
             _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(UowInfo);

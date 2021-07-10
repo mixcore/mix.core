@@ -212,6 +212,11 @@ namespace Mix.Lib.Extensions
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
             services.AddControllers(options =>
                 options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddJsonOptions(opts =>
+                {
+                    var enumConverter = new JsonStringEnumConverter();
+                    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+                })
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             services.AddSwaggerGen(c =>
@@ -248,9 +253,14 @@ namespace Mix.Lib.Extensions
                 ConfigureApplicationPartManager(m =>
                     {
                         m.FeatureProviders.Add(
-                            new GenericTypeControllerFeatureProvider(restCandidates)); 
+                            new GenericTypeControllerFeatureProvider(restCandidates));
                     }
                     )
+                .AddJsonOptions(opts =>
+                {
+                    var enumConverter = new JsonStringEnumConverter();
+                    opts.JsonSerializerOptions.Converters.Add(enumConverter);
+                })
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             return services;

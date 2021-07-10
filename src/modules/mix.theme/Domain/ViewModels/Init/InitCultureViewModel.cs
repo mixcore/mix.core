@@ -24,13 +24,10 @@ namespace Mix.Theme.Domain.ViewModels.Init
         {
         }
 
-        protected override void InitEntityValues()
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            if (Id == default)
-            {
-                CreatedDateTime = DateTime.UtcNow;
-                Status = MixContentStatus.Published;
-            }
+            CreatedDateTime = DateTime.UtcNow;
+            Status = MixContentStatus.Published;
         }
     }
 }
