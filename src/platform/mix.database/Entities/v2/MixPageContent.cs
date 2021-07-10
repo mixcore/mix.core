@@ -10,7 +10,6 @@ namespace Mix.Database.Entities.Cms.v2
         public int? PageSize { get; set; }
         public MixPageType Type { get; set; }
 
-        public int MixPageId { get; set; }
         public virtual MixPage MixPage { get; set; }
         public virtual ICollection<MixPostContent> MixPostContents { get; set; }
     }

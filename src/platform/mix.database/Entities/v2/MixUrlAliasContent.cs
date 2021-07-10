@@ -9,7 +9,6 @@ namespace Mix.Database.Entities.Cms.v2
         public MixUrlAliasType Type { get; set; }
         public string Alias { get; set; }
 
-        public int MixUrlAliasId { get; set; }
         public virtual MixUrlAlias MixUrlAlias { get; set; }
     }
 }

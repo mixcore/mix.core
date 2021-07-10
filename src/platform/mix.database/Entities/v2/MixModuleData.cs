@@ -7,7 +7,6 @@ namespace Mix.Database.Entities.Cms.v2
         public string Fields { get; set; }
         public string Value { get; set; }
 
-        public int MixModuleId { get; set; }
         public virtual MixModule MixModule { get; set; }
     }
 }

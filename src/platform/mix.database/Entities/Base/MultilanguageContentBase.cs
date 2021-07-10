@@ -13,6 +13,7 @@ namespace Mix.Database.Entities.Base
         public string Description { get; set; }
         public string Content { get; set; }
 
+        public TPrimaryKey ParentId { get; set; }
         public int MixCultureId { get; set; }
         public virtual MixCulture MixCulture { get; set; }
     }

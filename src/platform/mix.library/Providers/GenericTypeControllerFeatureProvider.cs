@@ -33,7 +33,7 @@ namespace Mix.Lib.Providers
                                 : typeof(MixAutoGenerateQueryApiController<,,,>)
                             : typeof(MixAutoGenerateRestApiController<,,,>);
 
-                    Type[] types = candidate.BaseType.GenericTypeArguments.Prepend(candidate).ToArray();
+                    Type[] types = candidate.BaseType.GenericTypeArguments.Take(3).Prepend(candidate).ToArray();
                     feature.Controllers.Add(
                         baseType.MakeGenericType(types)
                             .GetTypeInfo()
