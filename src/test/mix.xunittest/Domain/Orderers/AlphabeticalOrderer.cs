@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace Mix.XUnit.Domain.Orderers
+namespace Mix.Xunittest.Domain.Orderers
 {
     public class AlphabeticalOrderer : ITestCaseOrderer
     {

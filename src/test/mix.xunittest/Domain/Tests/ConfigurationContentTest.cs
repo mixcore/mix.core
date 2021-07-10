@@ -1,12 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Portal.Domain.ViewModels;
-using Mix.XUnit.Domain.Base;
-using System;
+using Mix.Xunittest.Domain.Base;
 using Xunit;
 
-namespace Mix.XUnit.Domain.Tests
+namespace Mix.Xunittest.Domain.Tests
 {
+    [Collection("Step 2 - Configuration Content")]
     public class ConfigurationContentTest
         : ViewModelTestBase<SharedMixCmsDbFixture, MixConfigurationContentViewModel, MixCmsContext, MixConfigurationContent, int>
         , IClassFixture<SharedMixCmsDbFixture>

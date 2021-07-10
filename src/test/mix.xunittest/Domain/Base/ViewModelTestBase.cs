@@ -9,14 +9,20 @@ using Mix.Heart.ViewModel;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using XUnit.Project.Attributes;
 
-namespace Mix.XUnit.Domain.Base
+// Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
+// Need to turn off test parallelization so we can validate the run order
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+[assembly: TestCollectionOrderer("Mix.XUnittest.Domain.Orderers.DisplayNameOrderer", "mix.xunittest")]
+
+namespace Mix.Xunittest.Domain.Base
 {
-    // Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
-    [TestCaseOrderer("Mix.XUnit.Domain.Orderers.AlphabeticalOrderer", "mix.xunittest")]
+    [TestCaseOrderer("Mix.XUnit.Domain.Orderers.PriorityOrderer", "mix.xunittest")]
     public abstract class ViewModelTestBase<TFixture, TView, TDbContext, TEntity, TPrimaryKey>
          : IClassFixture<TFixture>
-        where TFixture: SharedDatabaseFixture<TDbContext>
+        where TFixture : SharedDatabaseFixture<TDbContext>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
@@ -38,7 +44,7 @@ namespace Mix.XUnit.Domain.Base
 
         #endregion
 
-        [Fact]
+        [Fact, TestPriority(1)]
         public async Task Step_1_Save()
         {
             TView valueToAdd = CreateSampleValue();
@@ -46,7 +52,7 @@ namespace Mix.XUnit.Domain.Base
             Assert.True(key != null, key.ToString());
         }
 
-        [Fact]
+        [Fact, TestPriority(2)]
         public async Task Step_2_GetList()
         {
             using (var dbContext = Fixture.CreateContext())
@@ -57,7 +63,7 @@ namespace Mix.XUnit.Domain.Base
             }
         }
 
-        [Fact]
+        [Fact, TestPriority(3)]
         public async Task Step_3_Delete()
         {
             using (var dbContext = Fixture.CreateContext())
