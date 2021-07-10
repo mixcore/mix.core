@@ -27,6 +27,7 @@ using Mix.Heart.Helpers;
 using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Controllers;
+using System.Text.Json.Serialization;
 
 namespace Mix.Lib.Extensions
 {
@@ -210,7 +211,9 @@ namespace Mix.Lib.Extensions
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
             services.AddControllers(options =>
-                options.Filters.Add(new HttpResponseExceptionFilter()));
+                options.Filters.Add(new HttpResponseExceptionFilter()))
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
@@ -239,7 +242,7 @@ namespace Mix.Lib.Extensions
         {
             List<Type> restCandidates = GetCandidatesByAttributeType(MixAssemblies, typeof(GenerateRestApiControllerAttribute));
             services.
-                AddMvc(o => o.Conventions.Add(
+                AddControllers(o => o.Conventions.Add(
                     new GenericControllerRouteConvention()
                 )).
                 ConfigureApplicationPartManager(m =>
@@ -247,7 +250,9 @@ namespace Mix.Lib.Extensions
                         m.FeatureProviders.Add(
                             new GenericTypeControllerFeatureProvider(restCandidates)); 
                     }
-                    );
+                    )
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             return services;
         }
 
