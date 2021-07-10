@@ -8,7 +8,7 @@
 
 <head>
     <base href="/portal">
-    <title>@ViewData["Title"] - Angular mixcore</title>
+    <title>@ViewData["Title"] - Angular mixcore tet</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,42 +17,38 @@
     <link rel="icon" type="image/png" sizes="16x16"
           href="@(configService.GetConfig<string>("Favicon", ViewBag.culture, "/mix-app/css/portal/img/mixcore-logo-green.svg"))">
 
-    <!-- <link rel="stylesheet" href="~/mix-app/css/portal.min.css" /> -->
     <link rel="stylesheet" href="~/mix-app/css/portal-extend.css" />
     <link rel="stylesheet" href="~/mix-app/css/app-vendor.min.css" />
     <link rel="stylesheet" href="~/mix-app/css/app-vendor-scss.min.css" />
     <link rel="stylesheet" href="~/mix-app/css/shared.min.css" />
-    @*script async src="https://pay.google.com/gp/p/js/pay.js"></script>*@
 
 </head>
 
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="w-100 overflow-auto">
-    <style>
+    <div class="w-100" ng-if="isInit">
+        <style>
         :root
         {
-            --primary-color-hue : {{globalSettings.portalThemeSettings.primaryColorHue}};
-            --primary-color-saturation : {{globalSettings.portalThemeSettings.primaryColorSaturation}}%;
-            --primary-color-brightness : {{globalSettings.portalThemeSettings.primaryColorBrightness}}%;
-            --bg-color: {{globalSettings.portalThemeSettings.bgColor}};
-            --text-color: {{globalSettings.portalThemeSettings.textColor}};
-            --bs-table-bg: transparent;
-            --bs-table-striped-color: #212529;
-            --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
-            --bs-table-active-color: #212529;
-            --bs-table-active-bg: rgba(0, 0, 0, 0.1);
-            --bs-table-hover-color: #212529;
-            --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
+            --primary-color-hue : {{portalThemeSettings.primaryColorHue}};
+        --primary-color-saturation : {{portalThemeSettings.primaryColorSaturation}}%;
+        --primary-color-brightness : {{portalThemeSettings.primaryColorBrightness}}%;
+        --bg-color: {{portalThemeSettings.bgColor}};
+        --text-color: {{portalThemeSettings.textColor}};
+        --bs-table-bg: transparent;
+        --bs-table-striped-color: #212529;
+        --bs-table-striped-bg: rgba(0, 0, 0, 0.02);
+        --bs-table-active-color: #212529;
+        --bs-table-active-bg: rgba(0, 0, 0, 0.1);
+        --bs-table-hover-color: #212529;
+        --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
         }
-    </style>
-    <div class="">
-
+        </style>
         <mix-loader ng-show="isBusy"></mix-loader>
         <header-nav ng-if="isInit" settings="localizeSettings" bread-crumbs="breadCrumbs"></header-nav>
         <login-popup></login-popup>
 
         <div class="wrapper d-flex" ng-if="isInit">
-            <main-side-bar ng-if="isInRole('SuperAdmin')" class="bd-sidebar main-sidebar"></main-side-bar>
-            <main-side-bar-dynamic ng-if="!isInRole('SuperAdmin')" roles="roles" actived-role="roles[0]" class="bd-sidebar main-sidebar"></main-side-bar-dynamic>
+            <main-side-bar class="bd-sidebar main-sidebar"></main-side-bar>
             <!-- Page Content  -->
             <form id="form-portal" class="container d-flex flex-row-reverse {{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()" style="background-color: var(--bg-color,hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1));">
             </form>

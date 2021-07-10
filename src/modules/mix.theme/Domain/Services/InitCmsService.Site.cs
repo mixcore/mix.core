@@ -21,6 +21,7 @@ namespace Mix.Theme.Domain.Services
             dbContext.Database.Migrate();
 
             InitSiteViewModel vm = new(_siteRepo, _cultureRepo);
+            vm.InitSiteData(model);
             await vm.SaveAsync();
         }
     }
