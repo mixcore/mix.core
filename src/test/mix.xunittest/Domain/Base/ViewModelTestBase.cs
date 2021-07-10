@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
 using Mix.Heart.Entities;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
@@ -7,35 +6,30 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Shared.Services;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Mix.XUnittest.Domain.Base
+namespace Mix.XUnit.Domain.Base
 {
-    public abstract class ViewModelTestBase<TView, TDbContext, TEntity, TPrimaryKey>
+    // Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
+    [TestCaseOrderer("Mix.XUnit.Domain.Orderers.AlphabeticalOrderer", "mix.xunittest")]
+    public abstract class ViewModelTestBase<TFixture, TView, TDbContext, TEntity, TPrimaryKey>
+         : IClassFixture<TFixture>
+        where TFixture: SharedDatabaseFixture<TDbContext>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
     {
+        public TFixture Fixture { get; set; }
+
         protected Repository<TDbContext, TEntity, TPrimaryKey> _repository { get; set; }
         protected UnitOfWorkInfo _uowInfo { get; set; }
 
-        protected const string _connectionString = "Data Source=mix-test.db";
-        protected const MixDatabaseProvider _dbProvider = MixDatabaseProvider.SQLITE;
-        protected static TDbContext _dbContext;
-        protected static ConstructorInfo ctor;
-        protected static bool _databaseInitialized;
-        public ViewModelTestBase()
+        public ViewModelTestBase(TFixture fixture)
         {
-            ctor = typeof(TDbContext).GetConstructor(new Type[] { typeof(string), typeof(MixDatabaseProvider) });
-            if (!_databaseInitialized)
-            {
-                Seed();
-            }
+            Fixture = fixture;
         }
 
         #region Abstracts
@@ -44,36 +38,20 @@ namespace Mix.XUnittest.Domain.Base
 
         #endregion
 
-        #region Methods
-
-        protected virtual void Seed()
-        {
-            using (_dbContext = (TDbContext)ctor.Invoke(new object[] { _connectionString, _dbProvider }))
-            {
-                _dbContext.Database.EnsureDeleted();
-                _dbContext.Database.EnsureCreated();
-                _dbContext.Database.Migrate();
-                _databaseInitialized = true;
-            }
-            
-        }
-
-        #endregion
-
         [Fact]
         public async Task Step_1_Save()
         {
             TView valueToAdd = CreateSampleValue();
             var key = await valueToAdd.SaveAsync();
-            Assert.True(key != null);
+            Assert.True(key != null, key.ToString());
         }
 
         [Fact]
         public async Task Step_2_GetList()
         {
-            using (_dbContext = (TDbContext)ctor.Invoke(new object[] { _connectionString, _dbProvider }))
+            using (var dbContext = Fixture.CreateContext())
             {
-                _repository = new(_dbContext);
+                _repository = new(dbContext);
                 var data = await _repository.GetListViewAsync<TView>(m => true);
                 Assert.True(data.Count > 0);
             }
@@ -82,22 +60,22 @@ namespace Mix.XUnittest.Domain.Base
         [Fact]
         public async Task Step_3_Delete()
         {
-            using (_dbContext = (TDbContext)ctor.Invoke(new object[] { _connectionString, _dbProvider }))
+            using (var dbContext = Fixture.CreateContext())
             {
                 try
                 {
-                    _repository = new(_dbContext);
+                    _repository = new(dbContext);
                     var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
                     await _repository.DeleteAsync(predicate);
                     Assert.True(true);
                 }
                 catch (MixException mex)
                 {
-                    Assert.True(false);
+                    Assert.True(false, mex.Message);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Assert.True(false);
+                    Assert.True(false, ex.Message);
                 }
             }
         }
