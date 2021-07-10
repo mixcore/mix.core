@@ -18,7 +18,7 @@ namespace Mix.Xunittest.Domain.Tests
         {
             var data = new MixConfigurationContent()
             {
-                MixConfigurationId = 1,
+                ParentId = 1,
                 Specificulture = "en-us",
                 MixCultureId = 1,
                 DisplayName = "unit test",

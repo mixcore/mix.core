@@ -33,6 +33,10 @@ namespace Mix.Lib.Abstracts
         [HttpPost]
         public async Task<ActionResult<TPrimaryKey>> Create([FromBody] TView data)
         {
+            if (data == null)
+            {
+                return BadRequest("Null Object");
+            }
             var id = await data.SaveAsync();
             return Ok(id);
         }

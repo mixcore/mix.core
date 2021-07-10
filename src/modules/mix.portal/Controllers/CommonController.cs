@@ -19,7 +19,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator) : base(logger, appSettingService, mixService, translator)
         { }
 
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("{culture}/dashboard")]
         public ActionResult<DashboardModel> Dashboard(string culture)
         {

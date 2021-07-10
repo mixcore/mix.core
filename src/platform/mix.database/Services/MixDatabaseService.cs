@@ -84,7 +84,7 @@ namespace Mix.Database.Services
                 //}
                 //transaction.Commit();
                 //transaction.Dispose();
-                var query = ctx.MixConfigurationContent.Where(c => c.MixConfigurationId == 1).ToQueryString();
+                var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
                 Console.WriteLine(query);
             }
         }

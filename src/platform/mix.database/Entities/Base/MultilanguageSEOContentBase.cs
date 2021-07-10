@@ -17,7 +17,6 @@ namespace Mix.Database.Entities.Base
         public DateTime? PublishedDateTime { get; set; }
         public string MixDatabaseName { get; set; }
 
-        public TPrimaryKey ParentId { get; set; }
         public Guid MixDataContentId { get; set; }
         public MixDataContent MixDataContent { get; set; }
     }

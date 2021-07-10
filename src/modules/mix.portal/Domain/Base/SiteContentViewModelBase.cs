@@ -1,4 +1,4 @@
-﻿using Mix.Database.Entities.Cms.v2;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
@@ -7,13 +7,19 @@ using System;
 
 namespace Mix.Portal.Domain.Base
 {
-    public abstract class SiteContentViewModelBase<TEntity, TPrimaryKey> : ViewModelBase<MixCmsContext, TEntity, TPrimaryKey>
+    public abstract class SiteContentViewModelBase<TDbContext, TEntity, TPrimaryKey> : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+         where TDbContext : DbContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
     {
         #region Contructors
 
-        protected SiteContentViewModelBase(Repository<MixCmsContext, TEntity, TPrimaryKey> repository) : base(repository)
+        public SiteContentViewModelBase()
+        {
+
+        }
+
+        protected SiteContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -29,19 +35,14 @@ namespace Mix.Portal.Domain.Base
 
         #region Properties
 
-        public string Layout { get; set; }
-        public string Template { get; set; }
-        public string Image { get; set; }
-        public string Source { get; set; }
-        public string SeoDescription { get; set; }
-        public string SeoKeywords { get; set; }
-        public string SeoName { get; set; }
-        public string SeoTitle { get; set; }
-        public DateTime? PublishedDateTime { get; set; }
-        public string MixDatabaseName { get; set; }
+        public string Specificulture { get; set; }
+        public string DisplayName { get; set; }
+        public string SystemName { get; set; }
+        public string Description { get; set; }
+        public string Content { get; set; }
 
         public TPrimaryKey ParentId { get; set; }
-        public Guid MixDataContentId { get; set; }
+        public int MixCultureId { get; set; }
 
         #endregion
 
