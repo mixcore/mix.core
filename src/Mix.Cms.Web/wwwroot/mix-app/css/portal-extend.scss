@@ -151,6 +151,10 @@ a,
     {
       border-radius: 0;
       padding-left: 30px;
+      ul{
+        
+        padding-left: 60px;
+      }
       &:hover{
         // background-color: hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),var(--primary-color-brightness,50%),1)!important;
         // span{
@@ -204,15 +208,15 @@ a,
   min-height: 4rem;
   max-height: 4rem;
   // background-color: hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1);
-  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+  // -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+  // box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
   z-index: 1020;
   border-bottom: 1px solid #fff;
 
   // box-shadow: inset 0 0 2px #fefefed1;
   -webkit-backdrop-filter: saturate(200%) blur(30px);
   backdrop-filter: saturate(200%) blur(30px);
-  background-color: hsla(0,0%,100%,.8)!important;
+  // background-color: hsla(0,0%,100%,.8)!important;
 }
 
 .bd-navbar {
