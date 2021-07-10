@@ -2,6 +2,27 @@ body {
   background-color: var(--bg-color, hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1));
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 0.8);
+  cursor: move;
+}
+
 a,
 .btn-link {
   text-decoration: none !important;
@@ -58,12 +79,22 @@ a,
 }
 
 .card {
-  -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 20px 27px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  border-color: #fff;
 }
 .card .card-header {
+  padding: 1.25rem 1rem;
   border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
-  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+  background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 0.8);
+  border-radius: 1rem 1rem 0 0;
+  border-bottom-color: #fff;
+  backdrop-filter: saturate(200%) blur(30px);
+}
+.card .card-footer {
+  padding: 1rem 1rem;
+  border-radius: 0 0 1rem 1rem;
+  border-top-color: #fff;
 }
 
 .nav-tabs {
@@ -82,33 +113,28 @@ a,
 .main-sidebar {
   width: 15%;
   max-width: 250px;
-  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
-  -webkit-box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
-  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.075);
-  border-right: 1px solid rgba(0, 0, 0, 0.125);
   z-index: 1;
+}
+.main-sidebar hr {
+  background-color: #fff;
 }
 .main-sidebar .btn {
   font-weight: 550;
   font-size: inherit;
 }
 .main-sidebar .sidebar-menu-item-main {
+  padding-top: 0;
+  padding-bottom: 9px;
   border-radius: 0;
+  padding-left: 30px;
 }
-.main-sidebar .sidebar-menu-item-main:hover {
-  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
-}
-.main-sidebar .sidebar-menu-item-main:hover span {
-  color: #fff !important;
+.main-sidebar .sidebar-menu-item-main:hover .menu-item-title {
+  color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
 }
 .main-sidebar .sidebar-menu-item-main:hover .btn-group .btn {
   background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
   border-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
   color: #fff !important;
-}
-.main-sidebar .sidebar-menu-item-main .btn-group .btn:last-child {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
 }
 .main-sidebar .sidebar-menu-item-main .btn-group:hover .btn {
   background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
@@ -132,11 +158,13 @@ a,
   padding: 0.75rem 0;
   min-height: 4rem;
   max-height: 4rem;
-  background-color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), 100%, 1);
   -webkit-box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   z-index: 1020;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-bottom: 1px solid #fff;
+  -webkit-backdrop-filter: saturate(200%) blur(30px);
+  backdrop-filter: saturate(200%) blur(30px);
+  background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
 .bd-navbar .navbar-toggler {
@@ -150,6 +178,9 @@ a,
 .bd-navbar .navbar-nav .nav-link {
   padding-right: 0.25rem;
   padding-left: 0.25rem;
+}
+.bd-navbar .navbar-brand {
+  padding-left: 20px;
 }
 
 .bd-navbar .navbar-nav .nav-link.active {
@@ -186,8 +217,13 @@ a,
 }
 
 .table .thead-light th {
+  font-size: 14px;
   font-weight: 500;
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+  border-bottom-color: #e9ecef !important;
+}
+.table tr:last-child td {
+  border-bottom: 0;
 }
 
 .accordion {
