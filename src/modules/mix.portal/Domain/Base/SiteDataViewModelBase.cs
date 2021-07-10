@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Mix.Heart.Entities;
+using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
@@ -60,14 +61,13 @@ namespace Mix.Portal.Domain.Base
 
         protected override void InitEntityValues()
         {
-            if (Id == default)
+            if (IsDefaultId())
             {
                 MixSiteId = 1;
                 CreatedDateTime = DateTime.UtcNow;
                 Status = MixContentStatus.Published;
             }
         }
-
 
         protected override async Task SaveEntityRelationshipAsync(TEntity parentEntity)
         {

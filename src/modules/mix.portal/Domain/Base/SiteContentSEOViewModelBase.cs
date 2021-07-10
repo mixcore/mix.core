@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
+using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using System;
@@ -49,5 +50,18 @@ namespace Mix.Portal.Domain.Base
 
         #endregion
 
+        #region Overrides
+
+        protected override void InitEntityValues()
+        {
+            if (IsDefaultId())
+            {
+                MixCultureId = 1;
+                CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
+            }
+        }
+
+        #endregion
     }
 }
