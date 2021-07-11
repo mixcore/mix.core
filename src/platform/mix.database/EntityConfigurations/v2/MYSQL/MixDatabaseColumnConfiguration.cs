@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 using Mix.Shared.Enums;
+using Mix.Shared.Models;
+using Mix.Database.Extenstions;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
@@ -32,7 +34,6 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .IsRequired()
                 .HasColumnType(MySqlDatabaseConstants.DataTypes.Text)
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);

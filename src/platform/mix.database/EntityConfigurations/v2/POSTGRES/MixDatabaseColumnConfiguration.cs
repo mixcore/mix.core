@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
+using Mix.Database.Extenstions;
 using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
@@ -32,7 +33,6 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
                 .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .IsRequired()
                 .HasColumnType(PostgresSqlDatabaseConstants.DataTypes.Text)
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
