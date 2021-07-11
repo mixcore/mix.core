@@ -17,22 +17,22 @@ namespace Mix.Lib.Filters
             {
                 context.Result = exception.Status switch
                 {
-                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Value)
+                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Message)
                     {
                         StatusCode = (int)exception.Status,
                     },
                     MixErrorStatus.Forbidden => new ForbidResult()
                     {
                     },
-                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Value)
+                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Message)
                     {
                         StatusCode = (int)exception.Status,
                     },
-                    MixErrorStatus.ServerError => new ObjectResult(exception.Value)
+                    MixErrorStatus.ServerError => new ObjectResult(exception.Message)
                     {
                         StatusCode = (int)exception.Status,
                     },
-                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Value)
+                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Message)
                     {
                         StatusCode = (int)exception.Status,
                     },

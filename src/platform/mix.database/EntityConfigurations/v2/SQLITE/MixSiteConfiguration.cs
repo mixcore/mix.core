@@ -24,7 +24,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
                 .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .IsRequired()
                 .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MaxLength}")
                 .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);

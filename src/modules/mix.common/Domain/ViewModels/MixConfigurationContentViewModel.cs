@@ -25,5 +25,9 @@ namespace Mix.Common.Domain.ViewModels
         public MixConfigurationContentViewModel(Repository<MixCmsContext, MixConfigurationContent, int> repository) : base(repository)
         {
         }
+
+        public MixConfigurationContentViewModel()
+        {
+        }
     }
 }

@@ -10,6 +10,7 @@ using Mix.Shared.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Model;
 using System.Collections.Generic;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Abstracts
 {
@@ -22,7 +23,8 @@ namespace Mix.Lib.Abstracts
     {
         public MixRestApiControllerBase(
             MixAppSettingService appSettingService,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(appSettingService, repository)
+            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+             Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(appSettingService, repository, cultureRepository)
         {
         }
 
