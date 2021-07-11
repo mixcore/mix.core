@@ -15,7 +15,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .Annotation("Sqlite:Autoincrement", true),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -43,7 +43,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -76,7 +76,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -106,7 +106,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -135,7 +135,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -164,7 +164,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -193,7 +193,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -251,7 +251,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -272,7 +272,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     DefaultContent = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    MixConfigurationId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixConfigurationId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -282,8 +282,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -294,7 +295,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         column: x => x.MixConfigurationId,
                         principalTable: "MixConfiguration",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MixConfigurationContent_MixCulture_MixCultureId",
                         column: x => x.MixCultureId,
@@ -339,7 +340,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     MixDatabaseName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     DataType = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Configurations = table.Column<string>(type: "ntext", nullable: false, collation: "NOCASE"),
+                    Configurations = table.Column<string>(type: "ntext", nullable: true, collation: "NOCASE"),
                     ReferenceId = table.Column<int>(type: "INTEGER", nullable: true),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -367,7 +368,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     DefaultContent = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    MixLanguageId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixLanguageId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -377,8 +378,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -395,7 +397,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         column: x => x.MixLanguageId,
                         principalTable: "MixLanguage",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -407,7 +409,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     SourceId = table.Column<string>(type: "nvarchar(50)", nullable: true, collation: "NOCASE"),
                     Type = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     Alias = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    MixUrlAliasId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixUrlAliasId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -419,6 +421,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     SystemName = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -435,7 +438,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         column: x => x.MixUrlAliasId,
                         principalTable: "MixUrlAlias",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -443,8 +446,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "NEWID()"),
-                    MixDataId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    MixDataId1 = table.Column<int>(type: "INTEGER", nullable: true),
+                    MixDataId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -454,8 +456,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
                     Layout = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
@@ -480,8 +483,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MixDataContent_MixData_MixDataId1",
-                        column: x => x.MixDataId1,
+                        name: "FK_MixDataContent_MixData_MixDataId",
+                        column: x => x.MixDataId,
                         principalTable: "MixData",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -545,7 +548,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
                     PageSize = table.Column<int>(type: "INTEGER", nullable: true),
                     Type = table.Column<string>(type: "varchar(50)", nullable: false),
-                    MixModuleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixModuleId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -555,8 +558,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
                     Layout = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
@@ -590,7 +594,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         column: x => x.MixModuleId,
                         principalTable: "MixModule",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -611,7 +615,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -675,7 +679,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
                     PageSize = table.Column<int>(type: "INTEGER", nullable: true),
                     Type = table.Column<string>(type: "varchar(50)", nullable: false),
-                    MixPageId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixPageId = table.Column<int>(type: "INTEGER", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -685,8 +689,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
                     Layout = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
@@ -724,7 +729,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Id = table.Column<int>(type: "INTEGER", nullable: false, defaultValueSql: "NEWID()")
                         .Annotation("Sqlite:Autoincrement", true),
                     ClassName = table.Column<string>(type: "varchar(50)", nullable: false),
-                    MixPostId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MixPostId = table.Column<int>(type: "INTEGER", nullable: true),
                     MixModuleContentId = table.Column<int>(type: "INTEGER", nullable: true),
                     MixPageContentId = table.Column<int>(type: "INTEGER", nullable: true),
                     MixPostContentId = table.Column<int>(type: "INTEGER", nullable: true),
@@ -737,8 +742,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Specificulture = table.Column<string>(type: "nvarchar(50)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
-                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    Content = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
+                    ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
                     Layout = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     Template = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
@@ -784,7 +790,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         column: x => x.MixPostId,
                         principalTable: "MixPost",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MixPostContent_MixPostContent_MixPostContentId",
                         column: x => x.MixPostContentId,
@@ -809,7 +815,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Image = table.Column<string>(type: "nvarchar(250)", nullable: true, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "nvarchar(250)", nullable: false, collation: "NOCASE"),
-                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: false, collation: "NOCASE"),
+                    Description = table.Column<string>(type: "nvarchar(4000)", nullable: true, collation: "NOCASE"),
                     MixSiteId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -875,9 +881,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 column: "MixDataContentId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MixDataContent_MixDataId1",
+                name: "IX_MixDataContent_MixDataId",
                 table: "MixDataContent",
-                column: "MixDataId1");
+                column: "MixDataId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixDataContentValue_MixDatabaseColumnId",
@@ -1025,7 +1031,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 column: "MixPageId",
                 principalTable: "MixPage",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -1071,7 +1077,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 table: "MixData");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_MixDataContent_MixData_MixDataId1",
+                name: "FK_MixDataContent_MixData_MixDataId",
                 table: "MixDataContent");
 
             migrationBuilder.DropForeignKey(

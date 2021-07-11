@@ -32,7 +32,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
                 .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .IsRequired()
                 .HasColumnType(SqliteDatabaseConstants.DataTypes.Text)
                 .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
