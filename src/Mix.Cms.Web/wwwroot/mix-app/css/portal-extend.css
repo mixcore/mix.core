@@ -4,7 +4,7 @@ body {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 /* Track */
@@ -73,6 +73,11 @@ a,
   background-color: #e7f1ff;
 }
 
+.form-control:focus, .form-select:focus {
+  border-color: hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  box-shadow: 0 0 0 0.25rem hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+}
+
 .form-check-input:checked,
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link,
 .page-item.active .page-link {
@@ -103,7 +108,6 @@ a,
   border-color: hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
 }
 .nav-tabs .nav-link {
-  padding: 0.5rem 2.5rem;
   border-top: 3px solid;
   border-color: transparent;
 }
