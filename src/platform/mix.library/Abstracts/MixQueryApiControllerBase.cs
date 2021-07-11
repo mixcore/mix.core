@@ -15,6 +15,7 @@ using Mix.Shared.Constants;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Heart.Helpers;
 using System.Linq.Expressions;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Abstracts
 {
@@ -26,17 +27,21 @@ namespace Mix.Lib.Abstracts
     {
         protected readonly MixAppSettingService _appSettingService;
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
+        protected readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
         protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
         protected string _lang;
+        protected MixCulture _culture;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
-            MixAppSettingService appSettingService, 
-            Repository<TDbContext, TEntity, TPrimaryKey> repository) : base()
+            MixAppSettingService appSettingService,
+            Repository<TDbContext, TEntity, TPrimaryKey> repository, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base()
         {
             _appSettingService = appSettingService;
             _repository = repository;
+            _cultureRepository = cultureRepository;
         }
 
         #region Routes
@@ -74,7 +79,7 @@ namespace Mix.Lib.Abstracts
         public ActionResult<TView> GetDefault(string culture = null)
         {
             var result = (TView)Activator.CreateInstance(typeof(TView));
-            result.InitDefaultValues(_lang);
+            result.InitDefaultValues(_lang, _culture.Id);
             return Ok(result);
         }
 
@@ -86,6 +91,7 @@ namespace Mix.Lib.Abstracts
             _lang = RouteData?.Values["culture"] != null
                 ? RouteData.Values["culture"].ToString()
                 : _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+            _culture = _cultureRepository.GetSingleAsync(c => c.Specificulture == _lang).GetAwaiter().GetResult();
         }
     }
 }

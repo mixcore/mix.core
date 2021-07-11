@@ -12,7 +12,7 @@
         public const string Status = "status";
         public const string DatabaseId = "databaseId";
         public const string DatabaseName = "databaseName";
-        public const string Specificulture = "culture";
+        public const string Specificulture = "Specificulture";
         public const string Keyword = "keyword";
         public const string ParentType = "parentType";
         public const string ParentId = "parentId";

@@ -51,10 +51,9 @@ namespace Mix.Portal.Domain.Base
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
+            base.InitDefaultValues(language, cultureId);
             Specificulture = language;
             MixCultureId = cultureId ?? 1;
-            CreatedDateTime = DateTime.UtcNow;
-            Status = MixContentStatus.Published;
         }
 
         #endregion

@@ -31,7 +31,6 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
                 .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .IsRequired()
                 .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);

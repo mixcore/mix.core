@@ -11,7 +11,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController(Route = "api/v2/rest/portal/mix-configuration", Name = "Mix Configuration")]
     public class MixConfigurationViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixConfiguration, int, MixConfigurationContent, MixConfigurationContentViewModel>
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixConfiguration, int, MixConfigurationContent, MixConfigurationContentViewModel>
     {
         private QueryRepository<MixCmsContext, MixConfigurationContent, int> _contentQueryRepository;
 

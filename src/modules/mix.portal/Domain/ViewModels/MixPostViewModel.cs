@@ -7,7 +7,7 @@ using Mix.Portal.Domain.Base;
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPostViewModel : SiteDataViewModelBase<MixCmsContext, MixPost, int, MixPostContent, MixPostContentViewModel>
+    public class MixPostViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixPost, int, MixPostContent, MixPostContentViewModel>
     {
 
         #region Contructors

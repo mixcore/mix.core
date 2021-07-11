@@ -5,6 +5,7 @@ using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
 using Mix.Lib.Abstracts;
+using Mix.Database.Entities.Cms.v2;
 
 namespace Mix.Lib.Controllers
 {
@@ -17,8 +18,8 @@ namespace Mix.Lib.Controllers
     {
         public MixAutoGenerateQueryApiController(
             Repository<TDbContext, TEntity, TPrimaryKey> repository, 
-            MixAppSettingService appSettingService) 
-            : base(appSettingService, repository)
+            MixAppSettingService appSettingService,
+            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(appSettingService, repository, cultureRepository)
         {
         }
     }

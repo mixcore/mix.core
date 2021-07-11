@@ -7,15 +7,17 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Base
 {
-    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey> : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent> 
+        : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TContentEntity : MultilanguageContentBase<TPrimaryKey>
+        where TContent : SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
     {
         #region Contructors
         protected SiteDataWithContentViewModelBase()
@@ -39,23 +41,49 @@ namespace Mix.Portal.Domain.Base
         #region Properties
 
         public virtual string Image { get; set; }
-        [Required]
         public virtual string DisplayName { get; set; }
-        [Required]
         public virtual string SystemName { get; set; }
         public virtual string Description { get; set; }
         public int MixSiteId { get; set; }
+
+        public List<TContent> Contents { get; set; }
 
         #endregion
 
         #region Overrides
 
+        public override async Task ExtendView()
+        {
+            var _contentQueryRepository = new QueryRepository<TDbContext, TContentEntity, TPrimaryKey>(UowInfo);
+
+            Contents = await _contentQueryRepository.GetListViewAsync<TContent>(
+                        m => m.ParentId.Equals(Id), UowInfo);
+        }
+
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
             MixSiteId = 1;
+            if (Contents == null)
+            {
+                Contents = new();
+                var content = (TContent)Activator.CreateInstance(typeof(TContent));
+                content.InitDefaultValues(language, cultureId);
+                Contents.Add(content);
+            }
         }
 
+        protected override async Task SaveEntityRelationshipAsync(TEntity parentEntity)
+        {
+            if (Contents != null)
+            {
+                foreach (var item in Contents)
+                {
+                    item.ParentId = parentEntity.Id;
+                    await item.SaveAsync(UowInfo);
+                }
+            }
+        }
         #endregion
 
 

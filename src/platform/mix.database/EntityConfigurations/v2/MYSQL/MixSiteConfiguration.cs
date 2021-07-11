@@ -24,7 +24,6 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .IsRequired()
                 .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
