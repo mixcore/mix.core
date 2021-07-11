@@ -23,10 +23,13 @@ body {
   cursor: move;
 }
 
+.shadow {
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.09), 0 2px 3px -1px rgba(0, 0, 0, 0.07) !important;
+}
+
 a,
 .btn-link {
   text-decoration: none !important;
-  color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
 }
 
 .btn-check:active + .btn-outline-primary, .btn-check:checked + .btn-outline-primary, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show, .btn-outline-primary:active {
@@ -84,7 +87,7 @@ a,
   border-color: #fff;
 }
 .card .card-header {
-  padding: 1.25rem 1rem;
+  padding: 1rem 1rem;
   border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 0.8);
   border-radius: 1rem 1rem 0 0;
@@ -92,7 +95,6 @@ a,
   backdrop-filter: saturate(200%) blur(30px);
 }
 .card .card-footer {
-  padding: 1rem 1rem;
   border-radius: 0 0 1rem 1rem;
   border-top-color: #fff;
 }
@@ -219,6 +221,12 @@ a,
   font-weight: 500;
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
   border-bottom-color: #e9ecef !important;
+}
+.table .thead-light th:first-child {
+  border-radius: 1rem 0 0 0;
+}
+.table .thead-light th:last-child {
+  border-radius: 0 1rem 0 0;
 }
 .table tr:last-child td {
   border-bottom: 0;
