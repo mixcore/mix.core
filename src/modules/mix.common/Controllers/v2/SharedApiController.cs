@@ -64,10 +64,11 @@ namespace Mix.Common.Controllers.v2
 
             var res = new RootResultModel
             {
-                Routes = routes
+                Routes = routes,
+                Total = routes.Count
             };
 
-            return Ok(routes);
+            return Ok(res);
         }
 
         [HttpGet]

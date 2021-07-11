@@ -12,5 +12,6 @@ namespace Mix.Common.Domain.Models
     internal class RootResultModel
     {
         public List<RouteModel> Routes { get; set; }
+        public int Total { get; set; }
     }
 }

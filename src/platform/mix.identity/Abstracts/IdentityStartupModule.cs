@@ -12,17 +12,19 @@ namespace Mix.Identity.Abstracts
 {
     public abstract class IdentityStartupModule
     {
-        public IdentityStartupModule(IConfiguration configuration)
+        public IdentityStartupModule(IConfiguration configuration, Assembly assembly)
         {
             Configuration = configuration;
+            Assembly = assembly;
         }
 
         public IConfiguration Configuration { get; }
+        public Assembly Assembly { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixServices(Assembly, Configuration);
 
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<ApplicationDbContext>();
