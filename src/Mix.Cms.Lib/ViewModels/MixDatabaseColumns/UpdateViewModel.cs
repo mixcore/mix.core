@@ -161,12 +161,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 
         public override Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            using (_context ??= new MixCmsContext())
-            {
-                var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
-                MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
-                return base.RemoveCache(model, _context, _transaction);
-            }
+            _context ??= new MixCmsContext();
+            var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
+            MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
+            return base.RemoveCache(model, _context, _transaction);
         }
         #endregion Overrides
     }
