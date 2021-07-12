@@ -22,6 +22,16 @@
     <ItemGroup>
         <Content Remove="appsettings.emfit.json" />
         <Content Remove="appsettings.json" />
+        <Content Remove="Views\_ViewImports.cshtml" />
+        <Content Remove="Views\_ViewStart.cshtml" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Views\_ViewImports.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Views\_ViewStart.cshtml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.1" />
@@ -49,12 +59,6 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-        </Content>
-        <Content Update="Views\_ViewImports.cshtml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Update="Views\_ViewStart.cshtml">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
     <ProjectExtensions>
