@@ -11,6 +11,7 @@ namespace Mix.Shared.Models
         {
         }
 
+        public bool IsEncrypt { get; set; }
         public int? MaxLength { get; set; }
         public string BelongTo { get; set; }
         public string OptionsConfigurationName { get; set; }

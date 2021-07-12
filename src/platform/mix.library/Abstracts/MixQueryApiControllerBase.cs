@@ -75,7 +75,7 @@ namespace Mix.Lib.Abstracts
         }
 
         [HttpGet("default")]
-        [HttpGet("{culture}/default")]
+        [HttpGet("{lang}/default")]
         public ActionResult<TView> GetDefault(string culture = null)
         {
             var result = (TView)Activator.CreateInstance(typeof(TView));
@@ -88,8 +88,8 @@ namespace Mix.Lib.Abstracts
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            _lang = RouteData?.Values["culture"] != null
-                ? RouteData.Values["culture"].ToString()
+            _lang = RouteData?.Values["lang"] != null
+                ? RouteData.Values["lang"].ToString()
                 : _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
             _culture = _cultureRepository.GetSingleAsync(c => c.Specificulture == _lang).GetAwaiter().GetResult();
         }

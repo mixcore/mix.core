@@ -93,6 +93,8 @@ namespace Mix.Database.Entities.Cms.v2
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
         public virtual DbSet<MixData> MixData { get; set; }
         public virtual DbSet<MixDataContent> MixDataContent { get; set; }
+        public virtual DbSet<MixDataContentValue> MixDataContentValue { get; set; }
+        public virtual DbSet<MixDataContentAssociation> MixDataContentAssociation { get; set; }
 
         private static string _connectionString;
         private static MixDatabaseProvider _databaseProvider;

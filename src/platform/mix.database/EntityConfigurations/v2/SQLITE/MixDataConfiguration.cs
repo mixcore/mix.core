@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.EntityConfigurations.v2.SQLITE.Base;
+using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixDataConfiguration : EntityBaseConfiguration<MixData, int>
+    public class MixDataConfiguration : EntityBaseConfiguration<MixData, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixData> builder)
         {
