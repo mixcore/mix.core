@@ -16,7 +16,7 @@ namespace Mix.Xunittest.Domain.Tests
 
         protected override MixConfigurationContentViewModel CreateSampleValue()
         {
-            var data = new MixConfigurationContent()
+            var data = new MixConfigurationContentViewModel()
             {
                 ParentId = 1,
                 Specificulture = "en-us",
@@ -24,7 +24,8 @@ namespace Mix.Xunittest.Domain.Tests
                 DisplayName = "unit test",
                 Content = "test case 1"
             };
-            return new MixConfigurationContentViewModel(data);
+            data.InitDefaultValues();
+            return data;
         }
     }
 }

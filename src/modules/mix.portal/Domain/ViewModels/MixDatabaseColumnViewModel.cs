@@ -21,6 +21,7 @@ namespace Mix.Portal.Domain.ViewModels
         public MixDataType DataType { get; set; } = MixDataType.Text;
         public int? ReferenceId { get; set; }
 
+        public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
         [JsonIgnore]
         public string Configurations { get; set; }

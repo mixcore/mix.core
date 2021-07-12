@@ -52,12 +52,12 @@ namespace Mix.Portal.Domain.Base
 
         #region Overrides
 
-        public override async Task ExtendView()
+        public override async Task ExpandView()
         {
-            var _contentQueryRepository = new QueryRepository<TDbContext, TContentEntity, TPrimaryKey>(UowInfo);
+            using var _contentQueryRepository = new QueryRepository<TDbContext, TContentEntity, TPrimaryKey>(UowInfo);
 
             Contents = await _contentQueryRepository.GetListViewAsync<TContent>(
-                        m => m.ParentId.Equals(Id), UowInfo);
+                        m => m.ParentId.Equals(Id));
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

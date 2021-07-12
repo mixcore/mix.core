@@ -34,12 +34,12 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExtendView()
+        public override async Task ExpandView()
         {
             _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(UowInfo);
 
             Contents = await _contentQueryRepository.GetListViewAsync<MixConfigurationContentViewModel>(
-                        m => m.ParentId == Id, UowInfo);
+                        m => m.ParentId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixConfiguration parentEntity)

@@ -16,13 +16,14 @@ namespace Mix.Xunittest.Domain.Tests
 
         protected override MixConfigurationViewModel CreateSampleValue()
         {
-            var data = new MixConfiguration()
+
+            var data = new MixConfigurationViewModel()
             {
-                MixSiteId = 1,
                 DisplayName = "unit test",
                 SystemName = "unit_test"
             };
-            return new MixConfigurationViewModel(data);
+            data.InitDefaultValues();
+            return data;
         }
     }
 }

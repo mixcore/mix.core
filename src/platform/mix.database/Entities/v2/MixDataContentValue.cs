@@ -10,7 +10,6 @@ namespace Mix.Database.Entities.Cms.v2
         public string MixDatabaseName { get; set; }
         public MixDataType DataType { get; set; }
         public bool? BooleanValue { get; set; }
-        public string DataId { get; set; }
         public DateTime? DateTimeValue { get; set; }
         public double? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }

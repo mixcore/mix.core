@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Mixcore</RootNamespace>
+    <UserSecretsId>18e7166c-3aa3-4569-98f0-d319f894743d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

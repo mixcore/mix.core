@@ -12,6 +12,8 @@ namespace Mix.Database.Entities.Cms.v2
         public string Configurations { get; set; }
         public int? ReferenceId { get; set; }
 
+        public string DefaultValue { get; set; }
+
         public int MixDatabaseId { get; set; }
         public virtual MixDatabase MixDatabase { get; set; }
     }
