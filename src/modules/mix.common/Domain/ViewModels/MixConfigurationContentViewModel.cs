@@ -1,13 +1,17 @@
 ﻿using Mix.Database.Entities.Cms.v2;
 using Mix.Heart.Repository;
+using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
 
 namespace Mix.Common.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
-    public class MixConfigurationContentViewModel : ViewModelBase<MixCmsContext, MixConfigurationContent, int>
+    public class MixConfigurationContentViewModel
+        : ViewModelBase<MixCmsContext, MixConfigurationContent, int>
     {
+        #region Properties
+
         public string Specificulture { get; set; }
         public string DisplayName { get; set; }
         public string SystemName { get; set; }
@@ -18,7 +22,10 @@ namespace Mix.Common.Domain.ViewModels
         public int MixConfigurationId { get; set; }
         public int MixSiteId { get; set; }
 
-        public MixConfigurationContentViewModel(MixConfigurationContent entity) : base(entity)
+        #endregion
+
+        #region Contructors
+        public MixConfigurationContentViewModel()
         {
         }
 
@@ -26,8 +33,13 @@ namespace Mix.Common.Domain.ViewModels
         {
         }
 
-        public MixConfigurationContentViewModel()
+        public MixConfigurationContentViewModel(MixConfigurationContent entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
+
+        public MixConfigurationContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        {
+        }
+        #endregion
     }
 }

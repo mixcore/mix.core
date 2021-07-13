@@ -29,7 +29,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDataContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDataContentViewModel(UnitOfWorkInfo unitOfWorkInfo = null) : base(unitOfWorkInfo)
         {
         }
 

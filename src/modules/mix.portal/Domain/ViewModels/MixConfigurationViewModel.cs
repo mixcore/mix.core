@@ -28,7 +28,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixConfigurationViewModel(MixConfiguration entity) : base(entity)
+        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo unitOfWorkInfo = null) 
+            : base(entity, unitOfWorkInfo)
         {
         }
 

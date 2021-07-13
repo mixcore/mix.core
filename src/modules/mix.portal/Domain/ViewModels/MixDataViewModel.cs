@@ -15,6 +15,7 @@ namespace Mix.Portal.Domain.ViewModels
     {
         private string databaseName;
         private JObject data;
+
         #region Properties
 
         public int MixDatabaseId { get; set; }
@@ -30,10 +31,6 @@ namespace Mix.Portal.Domain.ViewModels
 
         }
 
-        public MixDataViewModel(MixData entity) : base(entity)
-        {
-        }
-
         public MixDataViewModel(Repository<MixCmsContext, MixData, Guid> repository) : base(repository)
         {
         }
@@ -47,6 +44,10 @@ namespace Mix.Portal.Domain.ViewModels
             MixDatabaseName = databaseName;
             this.data = data;
             SaveDataContent = new(lang, cultureId, databaseName, data);
+        }
+
+        public MixDataViewModel(MixData entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        {
         }
 
         #endregion

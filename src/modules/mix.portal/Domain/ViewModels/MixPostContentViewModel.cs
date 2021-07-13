@@ -7,7 +7,8 @@ using Mix.Portal.Domain.Base;
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPostContentViewModel : SiteContentSEOViewModelBase<MixCmsContext, MixPostContent, int>
+    public class MixPostContentViewModel 
+        : SiteContentSEOViewModelBase<MixCmsContext, MixPostContent, int>
     {
         #region Contructors
 
@@ -19,7 +20,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixPostContentViewModel(MixPostContent entity) : base(entity)
+        public MixPostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

@@ -24,11 +24,11 @@ namespace Mix.Portal.Domain.Base
         {
         }
 
-        protected SiteContentViewModelBase(TEntity entity) : base(entity)
+        protected SiteContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected SiteContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

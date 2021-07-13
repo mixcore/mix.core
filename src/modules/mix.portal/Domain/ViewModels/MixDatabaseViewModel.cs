@@ -37,12 +37,12 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity) : base(entity)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
         #endregion
-        
+
         #region Overrides
 
         public override async Task ExpandView()

@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataContentAssociationViewModel : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+    public class MixDataContentAssociationViewModel 
+        : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
     {
         #region Contructors
 
@@ -20,11 +21,11 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDataContentAssociationViewModel(MixDataContentAssociation entity) : base(entity)
+        public MixDataContentAssociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDataContentAssociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDataContentAssociationViewModel(MixDataContentAssociation entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion

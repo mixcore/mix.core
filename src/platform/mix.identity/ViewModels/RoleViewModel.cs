@@ -1,5 +1,7 @@
 using Mix.Database.Entities.Account;
 using Mix.Heart.Enums;
+using Mix.Heart.Repository;
+using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
 using System.Threading.Tasks;
@@ -8,9 +10,24 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
     {
-        public RoleViewModel(AspNetRoles entity) : base(entity)
+        #region Contructors
+        public RoleViewModel()
         {
         }
+
+        public RoleViewModel(Repository<MixCmsAccountContext, AspNetRoles, Guid> repository) : base(repository)
+        {
+        }
+
+        public RoleViewModel(AspNetRoles entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        {
+        }
+
+        public RoleViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        {
+        }
+
+        #endregion
 
         #region Properties
 

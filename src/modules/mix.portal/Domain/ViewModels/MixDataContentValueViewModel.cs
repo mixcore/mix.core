@@ -47,7 +47,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDataContentValueViewModel(MixDataContentValue entity) : base(entity)
+        public MixDataContentValueViewModel(MixDataContentValue entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.ViewModels
             
         }
 
-        public MixPostViewModel(MixPost entity) : base(entity)
+        public MixPostViewModel(MixPost entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

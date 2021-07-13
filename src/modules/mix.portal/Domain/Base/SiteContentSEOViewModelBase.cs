@@ -7,7 +7,8 @@ using System;
 
 namespace Mix.Portal.Domain.Base
 {
-    public abstract class SiteContentSEOViewModelBase<TDbContext, TEntity, TPrimaryKey> : SiteContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
+    public abstract class SiteContentSEOViewModelBase<TDbContext, TEntity, TPrimaryKey> 
+        : SiteContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
@@ -23,11 +24,11 @@ namespace Mix.Portal.Domain.Base
         {
         }
 
-        protected SiteContentSEOViewModelBase(TEntity entity) : base(entity)
+        protected SiteContentSEOViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteContentSEOViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected SiteContentSEOViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
