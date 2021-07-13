@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Base
 {
-    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent> 
+    public abstract class SiteDataWithContentViewModelBase
+        <TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent> 
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
          where TPrimaryKey : IComparable
@@ -28,11 +29,11 @@ namespace Mix.Portal.Domain.Base
         {
         }
 
-        protected SiteDataWithContentViewModelBase(TEntity entity) : base(entity)
+        protected SiteDataWithContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteDataWithContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected SiteDataWithContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

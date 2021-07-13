@@ -38,11 +38,11 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(MixDatabaseColumn entity) : base(entity)
+        public MixDatabaseColumnViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixDatabaseColumnViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
