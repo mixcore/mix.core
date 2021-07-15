@@ -13,6 +13,17 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
         {
             base.Configure(builder);
 
+            builder.Property(e => e.Title)
+               .IsRequired()
+               .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
+               .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
+               .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
+            builder.Property(e => e.Content)
+                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.Text}")
+                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.Layout)
               .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
               .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)

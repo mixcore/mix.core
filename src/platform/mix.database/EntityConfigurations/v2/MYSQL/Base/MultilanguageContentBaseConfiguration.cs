@@ -18,28 +18,6 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL.Base
                 .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.DisplayName)
-                .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.SystemName)
-                .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.Description)
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.Content)
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
 
     }

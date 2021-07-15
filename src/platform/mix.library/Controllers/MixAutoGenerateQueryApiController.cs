@@ -6,6 +6,8 @@ using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
 using Mix.Lib.Abstracts;
 using Mix.Database.Entities.Cms.v2;
+using Microsoft.Extensions.Logging;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -17,9 +19,13 @@ namespace Mix.Lib.Controllers
         where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
         public MixAutoGenerateQueryApiController(
-            Repository<TDbContext, TEntity, TPrimaryKey> repository, 
-            MixAppSettingService appSettingService,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(appSettingService, repository, cultureRepository)
+            ILogger<MixApiControllerBase> logger, 
+            MixAppSettingService appSettingService, 
+            MixService mixService, 
+            TranslatorService translator, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
+            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository, repository)
         {
         }
     }

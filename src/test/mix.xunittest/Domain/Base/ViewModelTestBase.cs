@@ -19,7 +19,7 @@ using XUnit.Project.Attributes;
 
 namespace Mix.Xunittest.Domain.Base
 {
-    [TestCaseOrderer("Mix.XUnit.Domain.Orderers.PriorityOrderer", "mix.xunittest")]
+    [TestCaseOrderer("Mix.XUnittest.Domain.Orderers.PriorityOrderer", "mix.xunittest")]
     public abstract class ViewModelTestBase<TFixture, TView, TDbContext, TEntity, TPrimaryKey>
          : IClassFixture<TFixture>
         where TFixture : SharedDatabaseFixture<TDbContext>
@@ -55,34 +55,28 @@ namespace Mix.Xunittest.Domain.Base
         [Fact, TestPriority(2)]
         public async Task Step_2_GetList()
         {
-            using (var dbContext = Fixture.CreateContext())
-            {
-                _repository = new(dbContext);
-                var data = await _repository.GetListViewAsync<TView>(m => true);
-                Assert.True(data.Count > 0);
-            }
+            _repository = new(Fixture.CreateContext());
+            var data = await _repository.GetListViewAsync<TView>(m => true);
+            Assert.True(data.Count > 0);
         }
 
         [Fact, TestPriority(3)]
         public async Task Step_3_Delete()
         {
-            using (var dbContext = Fixture.CreateContext())
+            try
             {
-                try
-                {
-                    _repository = new(dbContext);
-                    var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
-                    await _repository.DeleteAsync(predicate);
-                    Assert.True(true);
-                }
-                catch (MixException mex)
-                {
-                    Assert.True(false, mex.Message);
-                }
-                catch (Exception ex)
-                {
-                    Assert.True(false, ex.Message);
-                }
+                _repository = new(Fixture.CreateContext());
+                var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
+                await _repository.DeleteAsync(predicate);
+                Assert.True(true);
+            }
+            catch (MixException mex)
+            {
+                Assert.True(false, mex.Message);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, ex.Message);
             }
         }
     }

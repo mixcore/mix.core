@@ -5,13 +5,24 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
 {
-    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
+     public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : MultilanguageSEOContentBase<TPrimaryKey>
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {
             base.Configure(builder);
+
+            builder.Property(e => e.Title)
+               .IsRequired()
+               .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
+               .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
+               .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
+            builder.Property(e => e.Content)
+                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.Text}")
+                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Layout)
               .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")

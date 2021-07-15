@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Theme.Domain.Dtos;
 using Mix.Theme.Domain.ViewModels.Init;
-using System;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
-using Mix.Heart.Enums;
 
 namespace Mix.Theme.Domain.Services
 {

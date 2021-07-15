@@ -11,6 +11,8 @@ using Mix.Heart.Enums;
 using Mix.Heart.Model;
 using System.Collections.Generic;
 using Mix.Database.Entities.Cms.v2;
+using Microsoft.Extensions.Logging;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Abstracts
 {
@@ -22,9 +24,13 @@ namespace Mix.Lib.Abstracts
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
         public MixRestApiControllerBase(
-            MixAppSettingService appSettingService,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository,
-             Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(appSettingService, repository, cultureRepository)
+            ILogger<MixApiControllerBase> logger, 
+            MixAppSettingService appSettingService, 
+            MixService mixService, 
+            TranslatorService translator, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
+            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository, repository)
         {
         }
 

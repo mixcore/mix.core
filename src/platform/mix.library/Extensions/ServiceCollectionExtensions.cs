@@ -160,6 +160,7 @@ namespace Mix.Lib.Extensions
             InitAppSettings();
             services.AddScoped<MixAppSettingService>();
             services.AddScoped<MixDatabaseService>();
+            services.AddScoped<MixDataService>();
 
             return services;
         }

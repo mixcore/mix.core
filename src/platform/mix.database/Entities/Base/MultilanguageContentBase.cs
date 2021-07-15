@@ -8,10 +8,6 @@ namespace Mix.Database.Entities.Base
         where TPrimaryKey : IComparable
     {
         public string Specificulture { get; set; }
-        public string DisplayName { get; set; }
-        public string SystemName { get; set; }
-        public string Description { get; set; }
-        public string Content { get; set; }
 
         public TPrimaryKey ParentId { get; set; }
         public int MixCultureId { get; set; }

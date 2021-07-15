@@ -3,7 +3,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixUrlAliasContent : MultilanguageContentBase<int>
+    public class MixUrlAliasContent : MultilanguageUniqueNameContentBase<int>
     {
         public string SourceId { get; set; }
         public MixUrlAliasType Type { get; set; }

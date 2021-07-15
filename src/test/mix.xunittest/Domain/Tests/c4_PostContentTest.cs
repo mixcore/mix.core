@@ -5,18 +5,18 @@ using Xunit;
 
 namespace Mix.Xunittest.Domain.Tests
 {
-    [Collection("Step 2 - Configuration Content")]
-    public class ConfigurationContentTest
-        : ViewModelTestBase<SharedMixCmsDbFixture, MixConfigurationContentViewModel, MixCmsContext, MixConfigurationContent, int>
+    [Collection("Step 4 - Post Content")]
+    public class c4_PostContentTest
+        : ViewModelTestBase<SharedMixCmsDbFixture, MixPostContentViewModel, MixCmsContext, MixPostContent, int>
         , IClassFixture<SharedMixCmsDbFixture>
     {
-        public ConfigurationContentTest(SharedMixCmsDbFixture fixture) : base(fixture)
+        public c4_PostContentTest(SharedMixCmsDbFixture fixture) : base(fixture)
         {
         }
 
-        protected override MixConfigurationContentViewModel CreateSampleValue()
+        protected override MixPostContentViewModel CreateSampleValue()
         {
-            var data = new MixConfigurationContentViewModel()
+            var data = new MixPostContentViewModel()
             {
                 ParentId = 1,
                 Specificulture = "en-us",

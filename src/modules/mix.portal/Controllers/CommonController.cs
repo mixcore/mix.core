@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Mix.Database.Entities.Cms.v2;
+using Mix.Heart.Repository;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Services;
 using Mix.Portal.Domain.Models;
@@ -16,8 +18,11 @@ namespace Mix.Portal.Controllers
             ILogger<MixApiControllerBase> logger, 
             MixAppSettingService appSettingService, 
             MixService mixService, 
-            TranslatorService translator) : base(logger, appSettingService, mixService, translator)
-        { }
+            TranslatorService translator, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository)
+        {
+        }
 
         [HttpGet]
         [Route("{culture}/dashboard")]
