@@ -37,6 +37,11 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
+            builder.Property(e => e.DefaultValue)
+                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())

@@ -38,6 +38,11 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
+            builder.Property(e => e.DefaultValue)
+                .HasColumnType(MySqlDatabaseConstants.DataTypes.Text)
+                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())

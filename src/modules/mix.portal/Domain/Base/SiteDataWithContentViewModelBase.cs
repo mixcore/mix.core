@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Mix.Heart.Entities;
-using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
@@ -17,7 +16,7 @@ namespace Mix.Portal.Domain.Base
         where TDbContext : DbContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
-        where TContentEntity : MultilanguageSEOContentBase<TPrimaryKey>
+        where TContentEntity : MultilanguageContentBase<TPrimaryKey>
         where TContent : SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
     {
         #region Contructors
