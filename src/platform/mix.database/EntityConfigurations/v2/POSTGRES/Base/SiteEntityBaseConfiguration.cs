@@ -13,7 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Title)
+            builder.Property(e => e.DisplayName)
                 .IsRequired()
                 .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)

@@ -13,7 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Title)
+            builder.Property(e => e.DisplayName)
                 .IsRequired()
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)

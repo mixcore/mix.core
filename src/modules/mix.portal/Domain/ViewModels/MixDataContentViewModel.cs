@@ -181,7 +181,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixDataViewModel parent = new MixDataViewModel(UowInfo)
             {
-                Title = Title,
+                DisplayName = DisplayName,
                 Description = Description
             };
             return await parent.SaveAsync();

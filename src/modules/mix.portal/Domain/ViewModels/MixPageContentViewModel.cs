@@ -40,7 +40,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixPageViewModel parent = new(UowInfo)
             {
-                Title = Title,
+                DisplayName = DisplayName,
                 Description = Description
             };
             return await parent.SaveAsync();

@@ -38,7 +38,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixPostViewModel parent = new(UowInfo)
             {
-                Title = Title,
+                DisplayName = DisplayName,
                 Description = Description
             };
             return await parent.SaveAsync();

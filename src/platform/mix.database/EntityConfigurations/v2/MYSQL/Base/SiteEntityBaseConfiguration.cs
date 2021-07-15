@@ -13,7 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Title)
+            builder.Property(e => e.DisplayName)
                 .IsRequired()
                 .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
