@@ -19,21 +19,16 @@ namespace Mix.Xunittest.Domain
             {
                 Specificulture = "en-us",
                 MixSiteId = 1,
-                DisplayName = "English"
             });
             dbContext.MixConfiguration.Add(new MixConfiguration()
             {
                 MixSiteId = 1,
                 Id = 1,
-                DisplayName = "Config 1",
-                SystemName = "config_1"
             });
             dbContext.MixPost.Add(new MixPost()
             {
                 MixSiteId = 1,
                 Id = 1,
-                DisplayName = "Config 1",
-                SystemName = "config_1"
             });
             dbContext.SaveChanges();
         }

@@ -40,10 +40,12 @@ namespace Mix.Portal.Domain.Base
 
         #region Properties
 
+        public virtual string Title { get; set; }
+        public virtual string Description { get; set; }
+
         public virtual string Image { get; set; }
         public virtual string DisplayName { get; set; }
         public virtual string SystemName { get; set; }
-        public virtual string Description { get; set; }
         public int MixSiteId { get; set; }
 
         public List<TContent> Contents { get; set; }

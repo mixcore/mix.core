@@ -13,18 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Image)
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.DisplayName)
-                .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.SystemName)
+            builder.Property(e => e.Title)
                 .IsRequired()
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)

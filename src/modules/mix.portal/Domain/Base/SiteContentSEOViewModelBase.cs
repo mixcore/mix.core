@@ -4,6 +4,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using System;
+using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Base
 {
@@ -56,10 +57,21 @@ namespace Mix.Portal.Domain.Base
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             Status = MixContentStatus.Published;
-            Specificulture = language;
-            MixCultureId = cultureId ?? 1;
+            Specificulture = language ?? Specificulture;
+            MixCultureId = cultureId ?? MixCultureId;
+        }
+
+        protected override async Task<TEntity> SaveHandlerAsync()
+        {
+            if (IsDefaultId(ParentId))
+            {
+                ParentId = await CreateParentAsync();
+            }
+            return await base.SaveHandlerAsync();
         }
 
         #endregion
+
+        public abstract Task<TPrimaryKey> CreateParentAsync();
     }
 }

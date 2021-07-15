@@ -15,7 +15,6 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .IsRequired()
                 .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
             

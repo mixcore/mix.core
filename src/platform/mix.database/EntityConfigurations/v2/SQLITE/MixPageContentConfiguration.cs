@@ -15,7 +15,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .IsRequired()
                 .HasColumnType($"{SqliteDatabaseConstants.DataTypes.String}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet);
             
