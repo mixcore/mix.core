@@ -37,6 +37,11 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
+            builder.Property(e => e.DefaultValue)
+                .HasColumnType(PostgresSqlDatabaseConstants.DataTypes.Text)
+                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())

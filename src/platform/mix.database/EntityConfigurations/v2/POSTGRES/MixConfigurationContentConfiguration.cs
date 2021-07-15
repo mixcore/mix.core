@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixConfigurationContentConfiguration : MultilanguageContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixConfigurationContentConfiguration : MultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
         {
