@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Base;
-using Mix.Heart.Entities;
 using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base

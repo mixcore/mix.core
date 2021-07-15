@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
 using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 using Mix.Shared.Enums;
-using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
@@ -17,7 +16,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             builder.Property(e => e.SystemName)
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.String}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
-            
+
             builder.Property(e => e.ClassName)
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.String}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);

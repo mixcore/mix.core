@@ -5,7 +5,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
 {
-     public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
+    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : MultilanguageSEOContentBase<TPrimaryKey>
     {

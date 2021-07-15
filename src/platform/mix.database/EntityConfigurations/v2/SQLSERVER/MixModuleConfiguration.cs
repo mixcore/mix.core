@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
-using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
+using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
@@ -15,7 +15,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.Type)
                .IsRequired()
-               .HasConversion(new EnumToStringConverter<MixDatabaseType>())
+               .HasConversion(new EnumToStringConverter<MixModuleType>())
                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
         }

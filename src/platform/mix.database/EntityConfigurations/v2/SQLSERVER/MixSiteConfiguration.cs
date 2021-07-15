@@ -24,7 +24,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
                 .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .IsRequired()
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MaxLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
