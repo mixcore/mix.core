@@ -6,8 +6,8 @@ using System;
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
 {
     public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
-       where TPrimaryKey : IComparable
-       where T : MultilanguageSEOContentBase<TPrimaryKey>
+        where TPrimaryKey : IComparable
+        where T : MultilanguageSEOContentBase<TPrimaryKey>
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms.v2;
-using Mix.Database.EntityConfigurations.v2.SQLITE.Base;
+using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 using Mix.Shared.Enums;
 using System;
 
