@@ -9,12 +9,10 @@ namespace Mix.Portal.Domain.ViewModels
     [GenerateRestApiController]
     public class MixPostViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixPost, int, MixPostContent, MixPostContentViewModel>
     {
-
         #region Contructors
 
         public MixPostViewModel()
         {
-            
         }
 
         public MixPostViewModel(MixPost entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)

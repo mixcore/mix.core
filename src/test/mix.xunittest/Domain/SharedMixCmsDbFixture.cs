@@ -28,6 +28,13 @@ namespace Mix.Xunittest.Domain
                 DisplayName = "Config 1",
                 SystemName = "config_1"
             });
+            dbContext.MixPost.Add(new MixPost()
+            {
+                MixSiteId = 1,
+                Id = 1,
+                DisplayName = "Config 1",
+                SystemName = "config_1"
+            });
             dbContext.SaveChanges();
         }
     }

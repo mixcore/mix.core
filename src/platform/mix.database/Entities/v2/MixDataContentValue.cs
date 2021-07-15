@@ -1,10 +1,10 @@
-﻿using Mix.Heart.Entities;
+﻿using Mix.Database.Entities.Base;
 using Mix.Shared.Enums;
 using System;
 
 namespace Mix.Database.Entities.Cms.v2
 {
-    public class MixDataContentValue : EntityBase<Guid>
+    public class MixDataContentValue : MultilanguageContentBase<Guid>
     {
         public string MixDatabaseColumnName { get; set; }
         public string MixDatabaseName { get; set; }

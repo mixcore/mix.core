@@ -12,36 +12,36 @@ using System.Reflection;
 using Mix.Heart.Model;
 using Mix.Shared.Enums;
 using Mix.Shared.Constants;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Heart.Helpers;
 using System.Linq.Expressions;
 using Mix.Database.Entities.Cms.v2;
+using Microsoft.Extensions.Logging;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Abstracts
 {
-    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : Controller
+    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : MixApiControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
-        protected readonly MixAppSettingService _appSettingService;
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
-        protected readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
+        
         protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
-        protected string _lang;
-        protected MixCulture _culture;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
-            MixAppSettingService appSettingService,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base()
+            ILogger<MixApiControllerBase> logger, 
+            MixAppSettingService appSettingService, 
+            MixService mixService, 
+            TranslatorService translator, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository)
         {
-            _appSettingService = appSettingService;
             _repository = repository;
-            _cultureRepository = cultureRepository;
         }
 
         #region Routes
@@ -84,14 +84,5 @@ namespace Mix.Lib.Abstracts
         }
 
         #endregion Routes
-
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            base.OnActionExecuting(context);
-            _lang = RouteData?.Values["lang"] != null
-                ? RouteData.Values["lang"].ToString()
-                : _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
-            _culture = _cultureRepository.GetSingleAsync(c => c.Specificulture == _lang).GetAwaiter().GetResult();
-        }
     }
 }

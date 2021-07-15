@@ -34,12 +34,17 @@ namespace Mix.Common.Controllers.v2
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
 
-        public SharedApiController(ILogger<MixApiControllerBase> logger,
+        public SharedApiController(
+            ILogger<MixApiControllerBase> logger, 
+            MixAppSettingService appSettingService, 
+            MixService mixService, 
+            TranslatorService translator, 
+            Repository<MixCmsContext, MixCulture, int> cultureRepository,
             MixFileService fileService,
-            MixAppSettingService appSettingService,
-            MixService mixService,
-            TranslatorService translator,
-            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo, QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo, IActionDescriptorCollectionProvider routeProvider) : base(logger, appSettingService, mixService, translator)
+            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo,
+            QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo,
+            IActionDescriptorCollectionProvider routeProvider) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository)
         {
             _fileService = fileService;
             _authConfigurations = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);

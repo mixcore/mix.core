@@ -18,28 +18,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
                 .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
                 .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.DisplayName)
-                .IsRequired()
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.SystemName)
-                .IsRequired()
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.Description)
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.Content)
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
         }
 
     }

@@ -5,14 +5,24 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
 {
-    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> 
-        : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
-        where TPrimaryKey : IComparable
-        where T : MultilanguageSEOContentBase<TPrimaryKey>
+    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
+       where TPrimaryKey : IComparable
+       where T : MultilanguageSEOContentBase<TPrimaryKey>
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {
             base.Configure(builder);
+
+            builder.Property(e => e.Title)
+               .IsRequired()
+               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+               .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
+            builder.Property(e => e.Content)
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.Text}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Layout)
               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")

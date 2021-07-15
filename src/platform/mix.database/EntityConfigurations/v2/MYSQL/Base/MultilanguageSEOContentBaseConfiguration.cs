@@ -5,14 +5,24 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL.Base
 {
-    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> 
-        : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
-        where TPrimaryKey : IComparable
-        where T : MultilanguageSEOContentBase<TPrimaryKey>
+    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey> : MultilanguageContentBaseConfiguration<T, TPrimaryKey>
+       where TPrimaryKey : IComparable
+       where T : MultilanguageSEOContentBase<TPrimaryKey>
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {
             base.Configure(builder);
+
+            builder.Property(e => e.Title)
+               .IsRequired()
+               .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
+               .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
+               .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
+            builder.Property(e => e.Content)
+                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.Text}")
+                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Layout)
               .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")

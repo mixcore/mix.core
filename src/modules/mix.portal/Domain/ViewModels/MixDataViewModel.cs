@@ -2,12 +2,8 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Portal.Domain.Base;
-using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {

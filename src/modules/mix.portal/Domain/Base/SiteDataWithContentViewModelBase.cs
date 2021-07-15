@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.Base
         where TDbContext : DbContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
-        where TContentEntity : MultilanguageContentBase<TPrimaryKey>
+        where TContentEntity : MultilanguageSEOContentBase<TPrimaryKey>
         where TContent : SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
     {
         #region Contructors
@@ -65,13 +65,6 @@ namespace Mix.Portal.Domain.Base
         {
             base.InitDefaultValues(language, cultureId);
             MixSiteId = 1;
-            if (Contents == null)
-            {
-                Contents = new();
-                var content = (TContent)Activator.CreateInstance(typeof(TContent));
-                content.InitDefaultValues(language, cultureId);
-                Contents.Add(content);
-            }
         }
 
         protected override async Task SaveEntityRelationshipAsync(TEntity parentEntity)
