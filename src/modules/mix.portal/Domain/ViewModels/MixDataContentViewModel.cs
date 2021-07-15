@@ -177,5 +177,14 @@ namespace Mix.Portal.Domain.ViewModels
             return MixCmsHelper.Property<T>(Obj, fieldName);
         }
 
+        public override async Task<Guid> CreateParentAsync()
+        {
+            MixDataViewModel parent = new MixDataViewModel(UowInfo)
+            {
+                Title = Title,
+                Description = Description
+            };
+            return await parent.SaveAsync();
+        }
     }
 }

@@ -13,6 +13,12 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
         {
             base.Configure(builder);
 
+            builder.Property(e => e.SystemName)
+                .IsRequired()
+                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())

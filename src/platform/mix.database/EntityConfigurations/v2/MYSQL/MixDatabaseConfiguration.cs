@@ -13,6 +13,12 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
         {
             base.Configure(builder);
 
+            builder.Property(e => e.SystemName)
+                .IsRequired()
+                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())

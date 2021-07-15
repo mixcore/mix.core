@@ -1,14 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Base;
 using Mix.Heart.Entities;
-using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Base
 {
@@ -39,12 +35,14 @@ namespace Mix.Portal.Domain.Base
 
         #region Properties
 
+        public string Title { get; set; }
+        public string Description { get; set; }
+
         public virtual string Image { get; set; }
         [Required]
         public virtual string DisplayName { get; set; }
         [Required]
         public virtual string SystemName { get; set; }
-        public virtual string Description { get; set; }
         public int MixSiteId { get; set; }
 
         #endregion

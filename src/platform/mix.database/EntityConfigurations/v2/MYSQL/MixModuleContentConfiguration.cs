@@ -15,7 +15,6 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .IsRequired()
                 .HasColumnType($"{MySqlDatabaseConstants.DataTypes.String}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
             

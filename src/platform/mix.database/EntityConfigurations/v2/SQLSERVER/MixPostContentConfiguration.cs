@@ -12,7 +12,6 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .IsRequired()
                 .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.String}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
         }

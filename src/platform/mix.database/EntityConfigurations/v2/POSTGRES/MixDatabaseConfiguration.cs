@@ -13,6 +13,12 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
         {
             base.Configure(builder);
 
+            builder.Property(e => e.SystemName)
+                .IsRequired()
+                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())

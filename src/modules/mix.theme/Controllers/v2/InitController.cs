@@ -52,6 +52,8 @@ namespace Mix.Theme.Controllers.v2
             {
                 await _initCmsService.InitSiteAsync(model);
                 _appSettingService.SetConfig(
+                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture, model.Culture.Specificulture, false);
+                _appSettingService.SetConfig(
                     MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, InitStep.InitSite, true);
                 return NoContent();
             }

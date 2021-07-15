@@ -13,18 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Image)
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.DisplayName)
-                .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
-
-            builder.Property(e => e.SystemName)
+            builder.Property(e => e.Title)
                 .IsRequired()
                 .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)

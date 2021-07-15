@@ -3,29 +3,30 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
+using Mix.Shared.Enums;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPageContentViewModel 
-        : SiteContentSEOViewModelBase<MixCmsContext, MixPageContent, int>
+    public class MixModuleContentViewModel 
+        : SiteContentSEOViewModelBase<MixCmsContext, MixModuleContent, int>
     {
         #region Contructors
 
-        public MixPageContentViewModel()
+        public MixModuleContentViewModel()
         {
         }
 
-        public MixPageContentViewModel(Repository<MixCmsContext, MixPageContent, int> repository) : base(repository)
+        public MixModuleContentViewModel(Repository<MixCmsContext, MixModuleContent, int> repository) : base(repository)
         {
         }
 
-        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixModuleContentViewModel(MixModuleContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
-        public MixPageContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixModuleContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
         #endregion
@@ -33,17 +34,20 @@ namespace Mix.Portal.Domain.ViewModels
         #region Properties
 
         public string ClassName { get; set; }
+        public int? PageSize { get; set; }
+        public MixModuleType Type { get; set; }
 
         #endregion
 
         public override async Task<int> CreateParentAsync()
         {
-            MixPageViewModel parent = new(UowInfo)
+            MixModuleViewModel parent = new(UowInfo)
             {
                 Title = Title,
                 Description = Description
             };
             return await parent.SaveAsync();
         }
+
     }
 }

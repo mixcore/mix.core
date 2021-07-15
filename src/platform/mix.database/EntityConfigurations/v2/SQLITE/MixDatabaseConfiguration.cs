@@ -13,6 +13,12 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
         {
             base.Configure(builder);
 
+            builder.Property(e => e.SystemName)
+                .IsRequired()
+                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
+                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())

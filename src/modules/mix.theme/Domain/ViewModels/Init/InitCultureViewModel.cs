@@ -9,6 +9,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 {
     public class InitCultureViewModel : ViewModelBase<MixCmsContext, MixCulture, int>
     {
+        public string Title { get; set; }
         public string Alias { get; set; }
         public string Icon { get; set; }
         public string Lcid { get; set; }

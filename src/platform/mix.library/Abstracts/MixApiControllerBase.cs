@@ -41,7 +41,7 @@ namespace Mix.Lib.Abstracts
                 _lang = RouteData?.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()
                     : _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
-                _culture = _cultureRepository.GetSingleAsync(c => c.Specificulture == _lang).GetAwaiter().GetResult();
+                _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
             }
         }
     }

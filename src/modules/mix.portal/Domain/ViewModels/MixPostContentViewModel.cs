@@ -3,6 +3,7 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
+using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
@@ -32,6 +33,16 @@ namespace Mix.Portal.Domain.ViewModels
         #region Properties
 
         public string ClassName { get; set; }
+
+        public override async Task<int> CreateParentAsync()
+        {
+            MixPostViewModel parent = new(UowInfo)
+            {
+                Title = Title,
+                Description = Description
+            };
+            return await parent.SaveAsync();
+        }
 
         #endregion
 

@@ -38,6 +38,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             Culture = new InitCultureViewModel(_cultureRepository)
             {
                 Id = 1,
+                Title = model.Culture.FullName,
                 Specificulture = model.Culture.Specificulture,
                 Alias = model.Culture.Alias,
                 Icon = model.Culture.Icon,
