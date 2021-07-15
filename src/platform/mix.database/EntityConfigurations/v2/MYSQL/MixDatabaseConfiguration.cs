@@ -7,17 +7,11 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixDatabaseConfiguration : SiteEntityBaseConfiguration<MixDatabase, int>
+    public class MixDatabaseConfiguration : SiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabase> builder)
         {
             base.Configure(builder);
-
-            builder.Property(e => e.SystemName)
-                .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
 
             builder.Property(e => e.Type)
                .IsRequired()

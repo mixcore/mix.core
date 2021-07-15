@@ -9,7 +9,7 @@ using Mix.Database.Entities.v2;
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
-    [Migration("20210715084359_Init")]
+    [Migration("20210715140513_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -53,7 +59,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .UseCollation("NOCASE")
@@ -170,6 +176,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(4000)")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -199,12 +211,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -562,6 +568,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -580,12 +592,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .UseCollation("NOCASE")
@@ -696,6 +702,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -711,12 +723,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -745,6 +751,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -762,7 +774,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("SystemName")
                         .IsRequired()
                         .HasColumnType("nvarchar(250)")
                         .UseCollation("NOCASE")
@@ -860,8 +872,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -870,8 +881,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("utf8_unicode_ci")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("LastModified")
@@ -891,10 +908,15 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1003,6 +1025,10 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("SystemName")
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Template")
                         .HasColumnType("nvarchar(250)")
                         .UseCollation("NOCASE")
@@ -1049,6 +1075,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -1067,12 +1099,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1227,6 +1253,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -1243,9 +1272,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id")
                         .HasName("PK_MixPost");
@@ -1456,6 +1482,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -1483,12 +1515,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1519,6 +1545,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -1534,12 +1566,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")

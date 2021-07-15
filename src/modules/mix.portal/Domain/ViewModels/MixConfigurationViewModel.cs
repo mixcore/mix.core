@@ -15,6 +15,8 @@ namespace Mix.Portal.Domain.ViewModels
     {
         private QueryRepository<MixCmsContext, MixConfigurationContent, int> _contentQueryRepository;
 
+        #region Contructores
+
         public MixConfigurationViewModel()
         {
 
@@ -28,10 +30,18 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo unitOfWorkInfo = null) 
+        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo unitOfWorkInfo = null)
             : base(entity, unitOfWorkInfo)
         {
         }
+
+        #endregion
+
+        #region Properties
+
+        public string SystemName { get; set; }
+
+        #endregion
 
         #region Overrides
 

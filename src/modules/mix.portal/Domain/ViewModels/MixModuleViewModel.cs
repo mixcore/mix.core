@@ -3,6 +3,7 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Portal.Domain.ViewModels
 {
@@ -26,6 +27,13 @@ namespace Mix.Portal.Domain.ViewModels
         public MixModuleViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
+
+        #endregion
+
+        #region Properties
+
+        [Required]
+        public string SystemName { get; set; }
 
         #endregion
 

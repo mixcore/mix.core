@@ -1,12 +1,11 @@
 ﻿using Mix.Database.Entities.Cms.v2;
-using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
 using Mix.Shared.Enums;
-using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
@@ -16,6 +15,8 @@ namespace Mix.Portal.Domain.ViewModels
         : SiteDataWithContentViewModelBase<MixCmsContext, MixDatabase, int>
     {
         #region Properties
+        [Required]
+        public virtual string SystemName { get; set; }
 
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
 

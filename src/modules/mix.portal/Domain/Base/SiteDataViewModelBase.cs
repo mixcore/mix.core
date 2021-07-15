@@ -35,14 +35,11 @@ namespace Mix.Portal.Domain.Base
 
         #region Properties
 
-        public string Title { get; set; }
         public string Description { get; set; }
 
         public virtual string Image { get; set; }
         [Required]
         public virtual string DisplayName { get; set; }
-        [Required]
-        public virtual string SystemName { get; set; }
         public int MixSiteId { get; set; }
 
         #endregion

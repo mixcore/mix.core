@@ -13,7 +13,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE.Base
         {
             base.Configure(builder);
 
-            builder.Property(e => e.Title)
+            builder.Property(e => e.DisplayName)
                 .IsRequired()
                 .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
                 .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)

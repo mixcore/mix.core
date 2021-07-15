@@ -14,6 +14,10 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
         {
             base.Configure(builder);
 
+            builder.Property(e => e.SystemName)
+                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
+                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+            
             builder.Property(e => e.ClassName)
                 .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
                 .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);

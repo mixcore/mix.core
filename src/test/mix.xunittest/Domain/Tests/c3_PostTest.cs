@@ -19,8 +19,7 @@ namespace Mix.Xunittest.Domain.Tests
 
             var data = new MixPostViewModel()
             {
-                DisplayName = "unit test",
-                SystemName = "unit_test"
+                DisplayName = "unit test"
             };
             return data;
         }
