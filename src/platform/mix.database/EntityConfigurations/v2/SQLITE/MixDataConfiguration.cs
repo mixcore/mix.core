@@ -6,16 +6,16 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixDataConfiguration : EntityBaseConfiguration<MixData, Guid>
+    public class MixDataConfiguration : SqliteEntityBaseConfiguration<MixData, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixData> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
-              .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-              .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{_config.NString}{_config.MediumLength}")
+              .HasCharSet(_config.CharSet)
+              .UseCollation(_config.DatabaseCollation);
         }
     }
 }

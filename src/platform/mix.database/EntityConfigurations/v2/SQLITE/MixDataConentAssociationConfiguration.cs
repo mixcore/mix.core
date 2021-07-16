@@ -8,7 +8,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixDataConentAssociationConfiguration : EntityBaseConfiguration<MixDataContentAssociation, Guid>
+    public class MixDataConentAssociationConfiguration : SqliteEntityBaseConfiguration<MixDataContentAssociation, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContentAssociation> builder)
         {
@@ -17,8 +17,8 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
             builder.Property(e => e.ParentType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
-               .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

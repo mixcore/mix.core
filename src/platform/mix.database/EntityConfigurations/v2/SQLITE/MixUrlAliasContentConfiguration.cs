@@ -7,28 +7,28 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixUrlAliasContentConfiguration : EntityBaseConfiguration<MixUrlAliasContent, int>
+    public class MixUrlAliasContentConfiguration : SqliteEntityBaseConfiguration<MixUrlAliasContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAliasContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.SourceId)
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Alias)
                 .IsRequired()
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Type)
                 .HasConversion(new EnumToStringConverter<MixUrlAliasType>())
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

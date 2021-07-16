@@ -8,21 +8,21 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixPageContentConfiguration : MultilanguageSEOContentBaseConfiguration<MixPageContent, int>
+    public class MixPageContentConfiguration : SqliteMultilanguageSEOContentBaseConfiguration<MixPageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPageContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.String}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
             
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixPageType>())
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.String}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
         }
     }
 }

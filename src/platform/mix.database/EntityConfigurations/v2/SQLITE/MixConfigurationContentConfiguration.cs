@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixConfigurationContentConfiguration : MultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixConfigurationContentConfiguration : SqliteMultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqliteDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }
