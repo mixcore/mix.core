@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixUrlAliasConfiguration : SiteEntityBaseConfiguration<MixUrlAlias, int>
+    public class MixUrlAliasConfiguration : PostgresSiteEntityBaseConfiguration<MixUrlAlias, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAlias> builder)
         {

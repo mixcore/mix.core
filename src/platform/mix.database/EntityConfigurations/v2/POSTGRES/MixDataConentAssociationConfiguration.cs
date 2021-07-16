@@ -8,7 +8,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixDataConentAssociationConfiguration : EntityBaseConfiguration<MixDataContentAssociation, Guid>
+    public class MixDataConentAssociationConfiguration : PostgresEntityBaseConfiguration<MixDataContentAssociation, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContentAssociation> builder)
         {
@@ -17,8 +17,8 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
             builder.Property(e => e.ParentType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
-               .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

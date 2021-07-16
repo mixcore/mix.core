@@ -6,16 +6,16 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixDataConfiguration : EntityBaseConfiguration<MixData, Guid>
+    public class MixDataConfiguration : PostgresEntityBaseConfiguration<MixData, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixData> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-              .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-              .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{_config.NString}{_config.MediumLength}")
+              .HasCharSet(_config.CharSet)
+              .UseCollation(_config.DatabaseCollation);
         }
     }
 }

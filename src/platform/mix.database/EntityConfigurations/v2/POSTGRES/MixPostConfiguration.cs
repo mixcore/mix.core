@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixPostConfiguration : EntityBaseConfiguration<MixPost, int>
+    public class MixPostConfiguration : PostgresEntityBaseConfiguration<MixPost, int>
     {
         public override void Configure(EntityTypeBuilder<MixPost> builder)
         {

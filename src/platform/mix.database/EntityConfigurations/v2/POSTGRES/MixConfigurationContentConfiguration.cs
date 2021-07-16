@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixConfigurationContentConfiguration : MultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixConfigurationContentConfiguration : PostgresMultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

@@ -7,25 +7,25 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixModuleContentConfiguration : MultilanguageSEOContentBaseConfiguration<MixModuleContent, int>
+    public class MixModuleContentConfiguration : PostgresMultilanguageSEOContentBaseConfiguration<MixModuleContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixModuleContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.SystemName)
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet);
 
             builder.Property(e => e.ClassName)
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
             
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixModuleType>())
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.String}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
         }
     }
 }

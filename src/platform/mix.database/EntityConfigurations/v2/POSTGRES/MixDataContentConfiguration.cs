@@ -5,7 +5,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixDataContentConfiguration : MultilanguageSEOContentBaseConfiguration<MixDataContent, Guid>
+    public class MixDataContentConfiguration : PostgresMultilanguageSEOContentBaseConfiguration<MixDataContent, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContent> builder)
         {
