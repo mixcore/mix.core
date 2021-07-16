@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Shared.Services;
 using MySqlConnector;
 using System;
@@ -16,6 +15,7 @@ namespace Mix.Database.Entities.Cms.v2
         {
         }
 
+        // For Unit Test
         public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider)
         {
             _connectionString = connectionString;
@@ -35,7 +35,7 @@ namespace Mix.Database.Entities.Cms.v2
             {
                 switch (_databaseProvider)
                 {
-                    case MixDatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(_connectionString);
                         break;
 
@@ -61,7 +61,7 @@ namespace Mix.Database.Entities.Cms.v2
         {
             switch (_databaseProvider)
             {
-                case MixDatabaseProvider.MSSQL:
+                case MixDatabaseProvider.SQLSERVER:
                     SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                     break;
 

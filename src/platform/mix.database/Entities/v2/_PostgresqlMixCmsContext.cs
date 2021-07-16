@@ -15,6 +15,7 @@ namespace Mix.Database.Entities.v2
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
                 m => m.Namespace == typeof(PostgresSqlDatabaseConstants).Namespace);

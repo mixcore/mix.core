@@ -18,7 +18,7 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER.Base
                    .HasName(key);
 
             builder.Property(e => e.Id)
-               .HasDefaultValueSql("NEWID()")
+               .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), "NEWID()")
                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)
