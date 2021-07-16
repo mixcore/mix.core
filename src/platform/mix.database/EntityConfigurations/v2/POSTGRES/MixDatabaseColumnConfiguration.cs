@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixDatabaseColumnConfiguration : EntityBaseConfiguration<MixDatabaseColumn, int>
+    public class MixDatabaseColumnConfiguration : PostgresEntityBaseConfiguration<MixDatabaseColumn, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabaseColumn> builder)
         {
@@ -15,37 +15,37 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .HasColumnType(PostgresSqlDatabaseConstants.DataTypes.Text)
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
             
             builder.Property(e => e.DefaultValue)
-                .HasColumnType(PostgresSqlDatabaseConstants.DataTypes.Text)
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

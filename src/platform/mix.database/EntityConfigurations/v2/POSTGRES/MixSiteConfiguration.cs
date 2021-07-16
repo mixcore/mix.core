@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixSiteConfiguration : EntityBaseConfiguration<MixSite, int>
+    public class MixSiteConfiguration : PostgresEntityBaseConfiguration<MixSite, int>
     {
         public override void Configure(EntityTypeBuilder<MixSite> builder)
         {
@@ -13,20 +13,20 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(PostgresSqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixConfigurationConfiguration : SiteEntityUniqueNameBaseConfiguration<MixConfiguration, int>
+    public class MixConfigurationConfiguration : PostgresSiteEntityUniqueNameBaseConfiguration<MixConfiguration, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfiguration> builder)
         {

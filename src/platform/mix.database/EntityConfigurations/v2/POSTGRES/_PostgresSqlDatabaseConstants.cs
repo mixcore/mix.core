@@ -1,24 +1,29 @@
 ﻿namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class PostgresSqlDatabaseConstants
+    public class PostgresDatabaseConstants: IDatabaseConstants
     {
-        public class DatabaseConfiguration
-        {
-            public const string DatabaseCollation = "und-x-icu";
-            public const string CharSet = "utf8";
-            public const string SmallLength = "(50)";
-            public const string MediumLength = "(250)";
-            public const string MaxLength = "(4000)";
-        }
+        string IDatabaseConstants.DatabaseCollation => "und-x-icu";
 
-        public class DataTypes
-        {
-            public const string DateTime = "timestamp without time zone";
-            public const string Guid = "uuid";
-            public const string Integer = "int";
-            public const string String = "varchar";
-            public const string NString = "varchar";
-            public const string Text = "text";
-        }
+        string IDatabaseConstants.CharSet => "utf8";
+
+        string IDatabaseConstants.SmallLength => "(50)";
+
+        string IDatabaseConstants.MediumLength => "(250)";
+
+        string IDatabaseConstants.MaxLength => "(4000)";
+
+        string IDatabaseConstants.DateTime => "timestamp without time zone";
+
+        string IDatabaseConstants.Guid => "uuid";
+
+        string IDatabaseConstants.Integer => "int";
+
+        string IDatabaseConstants.String => "varchar";
+
+        string IDatabaseConstants.NString => "varchar";
+
+        string IDatabaseConstants.Text => "text";
+
+        string IDatabaseConstants.GenerateUUID => "uuid_generate_v4()";
     }
 }

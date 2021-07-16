@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public class MixDatabaseConfiguration : SiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
+    public class MixDatabaseConfiguration : PostgresSiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabase> builder)
         {
@@ -16,8 +16,8 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())
-               .HasColumnType($"{PostgresSqlDatabaseConstants.DataTypes.NString}{PostgresSqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(PostgresSqlDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }
