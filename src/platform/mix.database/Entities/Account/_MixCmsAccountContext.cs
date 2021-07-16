@@ -55,7 +55,7 @@ namespace Mix.Database.Entities.Account
             {
                 switch (_appSettingService.DatabaseProvider)
                 {
-                    case MixDatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
 
@@ -84,7 +84,7 @@ namespace Mix.Database.Entities.Account
             {
                 switch (_appSettingService.DatabaseProvider)
                 {
-                    case MixDatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.SQLSERVER:
                         SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
                         break;
 
@@ -104,7 +104,7 @@ namespace Mix.Database.Entities.Account
                     modelBuilder.ApplyPostgresIddentityConfigurations();
                     break;
 
-                case MixDatabaseProvider.MSSQL:
+                case MixDatabaseProvider.SQLSERVER:
                 case MixDatabaseProvider.MySQL:
                 case MixDatabaseProvider.SQLITE:
                 default:

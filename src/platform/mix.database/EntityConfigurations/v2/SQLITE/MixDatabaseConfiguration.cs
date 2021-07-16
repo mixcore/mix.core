@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixDatabaseConfiguration : SiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
+    public class MixDatabaseConfiguration : SqliteSiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabase> builder)
         {
@@ -16,8 +16,8 @@ namespace Mix.Database.EntityConfigurations.v2.SQLITE
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseType>())
-               .HasColumnType($"{SqliteDatabaseConstants.DataTypes.NString}{SqliteDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(SqliteDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

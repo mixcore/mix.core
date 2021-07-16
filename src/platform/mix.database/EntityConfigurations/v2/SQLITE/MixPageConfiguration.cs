@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixPageConfiguration : SiteEntityBaseConfiguration<MixPage, int>
+    public class MixPageConfiguration : SqliteSiteEntityBaseConfiguration<MixPage, int>
     {
         public override void Configure(EntityTypeBuilder<MixPage> builder)
         {

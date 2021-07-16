@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public class MixPostConfiguration : EntityBaseConfiguration<MixPost, int>
+    public class MixPostConfiguration : SqliteEntityBaseConfiguration<MixPost, int>
     {
         public override void Configure(EntityTypeBuilder<MixPost> builder)
         {

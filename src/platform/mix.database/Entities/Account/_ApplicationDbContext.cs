@@ -52,7 +52,7 @@ namespace Mix.Database.Entities.Account
             {
                 switch (_appSettingService.DatabaseProvider)
                 {
-                    case MixDatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
                         break;
 

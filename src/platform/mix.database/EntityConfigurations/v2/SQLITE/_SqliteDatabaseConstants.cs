@@ -1,24 +1,27 @@
 ﻿namespace Mix.Database.EntityConfigurations.v2.SQLITE
 {
-    public static class SqliteDatabaseConstants
+    public class SqliteDatabaseConstants: IDatabaseConstants
     {
-        public class DatabaseConfiguration
-        {
-            public const string DatabaseCollation = "NOCASE";
-            public const string CharSet = "utf8";
-            public const string SmallLength = "(50)";
-            public const string MediumLength = "(250)";
-            public const string MaxLength = "(4000)";
-        }
+        string IDatabaseConstants.DatabaseCollation => "NOCASE";
 
-        public class DataTypes
-        {
-            public const string DateTime = "datetime";
-            public const string Guid = "uniqueidentifier";
-            public const string Integer = "int";
-            public const string String = "varchar";
-            public const string NString = "nvarchar";
-            public const string Text = "ntext";
-        }
+        string IDatabaseConstants.CharSet => "utf8";
+
+        string IDatabaseConstants.SmallLength => "(50)";
+
+        string IDatabaseConstants.MediumLength => "(250)";
+
+        string IDatabaseConstants.MaxLength => "(4000)";
+
+        string IDatabaseConstants.DateTime => "datetime";
+
+        string IDatabaseConstants.Guid => "uniqueidentifier";
+
+        string IDatabaseConstants.Integer => "int";
+
+        string IDatabaseConstants.String => "varchar";
+
+        string IDatabaseConstants.NString => "varchar";
+
+        string IDatabaseConstants.Text => "ntext";
     }
 }
