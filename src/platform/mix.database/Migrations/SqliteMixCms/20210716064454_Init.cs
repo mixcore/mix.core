@@ -297,7 +297,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDataContentAssociation",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "uuid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "TEXT", nullable: true),
                     ParentType = table.Column<string>(type: "varchar(50)", nullable: false),
@@ -329,7 +329,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixData",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "uuid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -466,7 +466,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDataContent",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "uuid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDataId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -520,7 +520,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "MixDataContentValue",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "uuid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
                     MixDatabaseColumnName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     DataType = table.Column<string>(type: "varchar(50)", nullable: false),

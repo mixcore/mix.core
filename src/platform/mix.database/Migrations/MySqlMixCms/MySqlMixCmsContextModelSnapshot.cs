@@ -24,7 +24,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -47,7 +47,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -83,7 +83,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -115,7 +115,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -162,7 +162,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -194,7 +194,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -221,10 +221,11 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("uuid()");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -241,7 +242,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -263,7 +264,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("uuid()");
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
@@ -271,7 +273,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -310,7 +312,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("char(36)");
@@ -383,10 +385,10 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasDefaultValueSql("uuid()");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -413,7 +415,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("longtext");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("char(36)");
@@ -446,13 +448,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(36)")
+                        .HasDefaultValueSql("uuid()");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -510,7 +513,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("char(36)");
@@ -550,7 +553,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -573,7 +576,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -614,7 +617,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -648,7 +651,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -682,7 +685,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -705,7 +708,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -730,7 +733,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -753,7 +756,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -789,7 +792,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -821,7 +824,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -863,7 +866,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -886,7 +889,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -931,7 +934,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -964,7 +967,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
@@ -1051,7 +1054,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1077,7 +1080,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1113,7 +1116,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1146,7 +1149,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("int");
@@ -1229,7 +1232,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1247,7 +1250,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1281,7 +1284,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1323,7 +1326,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -1404,7 +1407,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1424,7 +1427,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1453,7 +1456,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1482,7 +1485,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<string>("PreviewUrl")
                         .IsRequired()
@@ -1515,7 +1518,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1538,7 +1541,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1572,7 +1575,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("longtext");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1593,7 +1596,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
@@ -1645,7 +1648,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
@@ -1693,7 +1696,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasCharSet("utf8");
 
                     b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier(36)");
+                        .HasColumnType("uuid(36)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");

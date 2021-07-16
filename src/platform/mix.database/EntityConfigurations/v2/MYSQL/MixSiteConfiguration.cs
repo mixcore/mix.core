@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixSiteConfiguration : EntityBaseConfiguration<MixSite, int>
+    public class MixSiteConfiguration : MySqlEntityBaseConfiguration<MixSite, int>
     {
         public override void Configure(EntityTypeBuilder<MixSite> builder)
         {
@@ -13,20 +13,20 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

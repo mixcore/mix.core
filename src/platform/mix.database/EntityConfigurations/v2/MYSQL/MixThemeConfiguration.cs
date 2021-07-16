@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixThemeConfiguration : SiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : MySqlSiteEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
 
             builder.Property(e => e.PreviewUrl)
                .IsRequired()
-               .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-               .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-               .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+               .HasColumnType($"{_config.NString}{_config.MediumLength}")
+               .HasCharSet(_config.CharSet)
+               .UseCollation(_config.DatabaseCollation);
         }
     }
 }

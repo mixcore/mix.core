@@ -221,7 +221,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -264,7 +264,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
@@ -384,7 +384,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -448,7 +448,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("INTEGER");

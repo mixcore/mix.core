@@ -22,7 +22,7 @@ namespace Mix.Database.EntityConfigurations.v2.Base
                    .HasName(key);
 
             builder.Property(e => e.Id)
-                .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), "uuid()")
+                .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), _config.GenerateUUID)
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)

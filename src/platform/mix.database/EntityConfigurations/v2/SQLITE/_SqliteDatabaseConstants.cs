@@ -23,5 +23,7 @@
         string IDatabaseConstants.NString => "varchar";
 
         string IDatabaseConstants.Text => "ntext";
+
+        string IDatabaseConstants.GenerateUUID => "newid()";
     }
 }

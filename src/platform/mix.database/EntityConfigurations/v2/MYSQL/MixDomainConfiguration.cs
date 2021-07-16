@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixDomainConfiguration : SiteEntityBaseConfiguration<MixDomain, int>
+    public class MixDomainConfiguration : MySqlSiteEntityBaseConfiguration<MixDomain, int>
     {
         public override void Configure(EntityTypeBuilder<MixDomain> builder)
         {

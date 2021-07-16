@@ -1,24 +1,29 @@
 ﻿namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public static class MySqlDatabaseConstants
+    public class MySqlDatabaseConstants: IDatabaseConstants
     {
-        public class DatabaseConfiguration
-        {
-            public const string DatabaseCollation = "utf8_unicode_ci";
-            public const string CharSet = "utf8";
-            public const string SmallLength = "(50)";
-            public const string MediumLength = "(250)";
-            public const string MaxLength = "(4000)";
-        }
+        string IDatabaseConstants.DatabaseCollation => "utf8_unicode_ci";
 
-        public class DataTypes
-        {
-            public const string DateTime = "datetime";
-            public const string Guid = "uniqueidentifier";
-            public const string Integer = "int";
-            public const string String = "varchar";
-            public const string NString = "varchar";
-            public const string Text = "text";
-        }
+        string IDatabaseConstants.CharSet => "utf8";
+
+        string IDatabaseConstants.SmallLength => "(50)";
+
+        string IDatabaseConstants.MediumLength => "(250)";
+
+        string IDatabaseConstants.MaxLength => "(4000)";
+
+        string IDatabaseConstants.DateTime => "datetime";
+
+        string IDatabaseConstants.Guid => "uuid";
+
+        string IDatabaseConstants.Integer => "int";
+
+        string IDatabaseConstants.String => "varchar";
+
+        string IDatabaseConstants.NString => "varchar";
+
+        string IDatabaseConstants.Text => "text";
+
+        string IDatabaseConstants.GenerateUUID => "uuid()";
     }
 }
