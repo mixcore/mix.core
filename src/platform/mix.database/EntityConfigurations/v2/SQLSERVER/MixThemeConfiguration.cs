@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixThemeConfiguration : SiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : SqlServerSiteEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.PreviewUrl)
                .IsRequired()
-               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-               .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+               .HasColumnType($"{_config.NString}{_config.MediumLength}")
+               .HasCharSet(_config.CharSet)
+               .UseCollation(_config.DatabaseCollation);
         }
     }
 }

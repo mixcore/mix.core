@@ -8,7 +8,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixDataConentAssociationConfiguration : EntityBaseConfiguration<MixDataContentAssociation, Guid>
+    public class MixDataConentAssociationConfiguration : SqlServerEntityBaseConfiguration<MixDataContentAssociation, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContentAssociation> builder)
         {
@@ -17,8 +17,8 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
             builder.Property(e => e.ParentType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
-               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

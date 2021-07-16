@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixDatabaseColumnConfiguration : EntityBaseConfiguration<MixDatabaseColumn, int>
+    public class MixDatabaseColumnConfiguration : SqlServerEntityBaseConfiguration<MixDatabaseColumn, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabaseColumn> builder)
         {
@@ -15,37 +15,37 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
             
             builder.Property(e => e.DefaultValue)
-                .HasColumnType(SqlServerDatabaseConstants.DataTypes.Text)
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

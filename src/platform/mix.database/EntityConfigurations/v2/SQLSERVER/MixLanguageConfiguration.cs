@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixLanguageConfiguration : SiteEntityUniqueNameBaseConfiguration<MixLanguage, int>
+    public class MixLanguageConfiguration : SqlServerSiteEntityUniqueNameBaseConfiguration<MixLanguage, int>
     {
         public override void Configure(EntityTypeBuilder<MixLanguage> builder)
         {
