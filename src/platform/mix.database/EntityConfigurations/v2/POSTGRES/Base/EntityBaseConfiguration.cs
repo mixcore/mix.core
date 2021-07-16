@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Heart.Entities;
 using Mix.Heart.Enums;
 using System;
+using Mix.Database.EntityConfigurations.v2;
 
 namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
 {
@@ -18,8 +19,8 @@ namespace Mix.Database.EntityConfigurations.v2.POSTGRES.Base
                    .HasName(key);
 
             builder.Property(e => e.Id)
-               .HasDefaultValueSql("NEWID()")
-               .ValueGeneratedOnAdd();
+                .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), "uuid_generate_v4()")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(PostgresSqlDatabaseConstants.DataTypes.DateTime);

@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.EntityConfigurations.v2.POSTGRES
 {
-    public static class PostgresSqlDatabaseConstants
+    public class PostgresSqlDatabaseConstants
     {
         public class DatabaseConfiguration
         {
@@ -14,7 +14,7 @@
         public class DataTypes
         {
             public const string DateTime = "timestamp without time zone";
-            public const string Guid = "uniqueidentifier";
+            public const string Guid = "uuid";
             public const string Integer = "int";
             public const string String = "varchar";
             public const string NString = "varchar";

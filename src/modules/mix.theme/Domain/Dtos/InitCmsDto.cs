@@ -13,7 +13,7 @@ namespace Mix.Theme.Domain.Dtos
             {
                 switch (DatabaseProvider)
                 {
-                    case MixDatabaseProvider.MSSQL:
+                    case MixDatabaseProvider.SQLSERVER:
                         {
                             string dbServer = !string.IsNullOrEmpty(DatabasePort) ? $"{DatabaseServer},{DatabasePort}" : DatabaseServer;
                             return $"Server={dbServer};Database={DatabaseName}" +
