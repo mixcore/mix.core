@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixUrlAliasConfiguration : SiteEntityBaseConfiguration<MixUrlAlias, int>
+    public class MixUrlAliasConfiguration : SqlServerSiteEntityBaseConfiguration<MixUrlAlias, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAlias> builder)
         {

@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixLanguageContentConfiguration : MultilanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
+    public class MixLanguageContentConfiguration : SqlServerMultilanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixLanguageContent> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

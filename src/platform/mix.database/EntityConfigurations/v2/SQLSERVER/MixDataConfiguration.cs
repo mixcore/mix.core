@@ -6,16 +6,16 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixDataConfiguration : EntityBaseConfiguration<MixData, Guid>
+    public class MixDataConfiguration : SqlServerEntityBaseConfiguration<MixData, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixData> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-              .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-              .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+              .HasColumnType($"{_config.NString}{_config.MediumLength}")
+              .HasCharSet(_config.CharSet)
+              .UseCollation(_config.DatabaseCollation);
         }
     }
 }

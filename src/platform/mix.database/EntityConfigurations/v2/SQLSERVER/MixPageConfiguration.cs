@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixPageConfiguration : SiteEntityBaseConfiguration<MixPage, int>
+    public class MixPageConfiguration : SqlServerSiteEntityBaseConfiguration<MixPage, int>
     {
         public override void Configure(EntityTypeBuilder<MixPage> builder)
         {

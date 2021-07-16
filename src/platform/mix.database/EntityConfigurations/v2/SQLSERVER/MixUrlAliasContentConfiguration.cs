@@ -7,28 +7,28 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.SQLSERVER
 {
-    public class MixUrlAliasContentConfiguration : EntityBaseConfiguration<MixUrlAliasContent, int>
+    public class MixUrlAliasContentConfiguration : SqlServerEntityBaseConfiguration<MixUrlAliasContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAliasContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.SourceId)
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Alias)
                 .IsRequired()
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.Type)
                 .HasConversion(new EnumToStringConverter<MixUrlAliasType>())
-                .HasColumnType($"{SqlServerDatabaseConstants.DataTypes.NString}{SqlServerDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(SqlServerDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(SqlServerDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }
