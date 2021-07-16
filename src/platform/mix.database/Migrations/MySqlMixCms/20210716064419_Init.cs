@@ -25,8 +25,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -45,8 +45,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -86,8 +86,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -119,8 +119,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -152,8 +152,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -183,8 +183,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -218,8 +218,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -251,8 +251,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -282,8 +282,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -316,8 +316,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixConfigurationId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -356,7 +356,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContentAssociation",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "NEWID()", collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -367,8 +367,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     IntParentId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -393,14 +393,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixData",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -439,8 +439,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -468,8 +468,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixLanguageId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -519,8 +519,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixUrlAliasId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -559,13 +559,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContent",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDataId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -627,7 +627,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContentValue",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
                     MixDatabaseColumnName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
@@ -650,8 +650,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixDatabaseColumnId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -700,8 +700,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixModuleId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -771,8 +771,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixDataContentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -829,8 +829,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixThemeId = table.Column<int>(type: "int", nullable: false),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8")
@@ -861,8 +861,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixPageId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -927,8 +927,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixPostContentId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
@@ -1012,8 +1012,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     MixPostContentId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: false, collation: "ascii_general_ci"),
-                    ModifiedBy = table.Column<Guid>(type: "uniqueidentifier(36)", nullable: true, collation: "ascii_general_ci"),
+                    CreatedBy = table.Column<Guid>(type: "uuid(36)", nullable: false, collation: "ascii_general_ci"),
+                    ModifiedBy = table.Column<Guid>(type: "uuid(36)", nullable: true, collation: "ascii_general_ci"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),

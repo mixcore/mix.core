@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixUrlAliasConfiguration : SiteEntityBaseConfiguration<MixUrlAlias, int>
+    public class MixUrlAliasConfiguration : MySqlSiteEntityBaseConfiguration<MixUrlAlias, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAlias> builder)
         {

@@ -5,15 +5,15 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixPostContentConfiguration : MultilanguageSEOContentBaseConfiguration<MixPostContent, int>
+    public class MixPostContentConfiguration : MySqlMultilanguageSEOContentBaseConfiguration<MixPostContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPostContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.String}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
         }
     }
 }

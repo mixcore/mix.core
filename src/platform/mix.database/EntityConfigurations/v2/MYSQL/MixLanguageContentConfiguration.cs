@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixLanguageContentConfiguration : MultilanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
+    public class MixLanguageContentConfiguration : MySqlMultilanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixLanguageContent> builder)
         {
@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MaxLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
         }
     }
 }

@@ -9,7 +9,7 @@ using Mix.Database.Entities.v2;
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
-    [Migration("20210716062958_Init")]
+    [Migration("20210716064454_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,7 +223,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -266,7 +266,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
@@ -386,7 +386,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
@@ -450,7 +450,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("INTEGER");

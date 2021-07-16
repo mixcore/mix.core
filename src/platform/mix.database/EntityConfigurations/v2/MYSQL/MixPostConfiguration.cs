@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.v2.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixPostConfiguration : EntityBaseConfiguration<MixPost, int>
+    public class MixPostConfiguration : MySqlEntityBaseConfiguration<MixPost, int>
     {
         public override void Configure(EntityTypeBuilder<MixPost> builder)
         {

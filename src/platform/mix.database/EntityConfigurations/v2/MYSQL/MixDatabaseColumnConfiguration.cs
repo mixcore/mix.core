@@ -9,7 +9,7 @@ using Mix.Database.Extenstions;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixDatabaseColumnConfiguration : EntityBaseConfiguration<MixDatabaseColumn, int>
+    public class MixDatabaseColumnConfiguration : MySqlEntityBaseConfiguration<MixDatabaseColumn, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabaseColumn> builder)
         {
@@ -17,37 +17,37 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.MediumLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType($"{_config.NString}{_config.MediumLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .HasColumnType(MySqlDatabaseConstants.DataTypes.Text)
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.DefaultValue)
-                .HasColumnType(MySqlDatabaseConstants.DataTypes.Text)
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet)
-                .UseCollation(MySqlDatabaseConstants.DatabaseConfiguration.DatabaseCollation);
+                .HasColumnType(_config.Text)
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

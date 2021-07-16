@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixModuleConfiguration : SiteEntityUniqueNameBaseConfiguration<MixModule, int>
+    public class MixModuleConfiguration : MySqlSiteEntityUniqueNameBaseConfiguration<MixModule, int>
     {
         public override void Configure(EntityTypeBuilder<MixModule> builder)
         {
@@ -16,8 +16,8 @@ namespace Mix.Database.EntityConfigurations.v2.MYSQL
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixModuleType>())
-               .HasColumnType($"{MySqlDatabaseConstants.DataTypes.NString}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-               .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
+               .HasColumnType($"{_config.NString}{_config.SmallLength}")
+               .HasCharSet(_config.CharSet);
         }
     }
 }

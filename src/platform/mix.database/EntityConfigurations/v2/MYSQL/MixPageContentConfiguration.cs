@@ -8,21 +8,21 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.v2.MYSQL
 {
-    public class MixPageContentConfiguration : MultilanguageSEOContentBaseConfiguration<MixPageContent, int>
+    public class MixPageContentConfiguration : MySqlMultilanguageSEOContentBaseConfiguration<MixPageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPageContent> builder)
         {
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.String}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
             
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixPageType>())
-                .HasColumnType($"{MySqlDatabaseConstants.DataTypes.String}{MySqlDatabaseConstants.DatabaseConfiguration.SmallLength}")
-                .HasCharSet(MySqlDatabaseConstants.DatabaseConfiguration.CharSet);
+                .HasColumnType($"{_config.String}{_config.SmallLength}")
+                .HasCharSet(_config.CharSet);
         }
     }
 }
