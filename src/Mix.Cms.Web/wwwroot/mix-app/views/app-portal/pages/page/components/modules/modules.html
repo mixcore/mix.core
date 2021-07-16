@@ -1,1 +1,18 @@
-<div class="card"><div class="card-body"><div class="tab-pane" ng-if="$ctrl.page.moduleNavs.length>0"><navs data="$ctrl.page.moduleNavs" prefix="'module-nav'" key="'moduleId'" details-url="'/portal/module/details/'" model="'nav-page-module'">No module created yet...</navs></div></div></div>
+<style>.hd-screen .wrap-a {
+        margin-left: -0;
+        margin-top: -0;
+    }
+
+    .hd-screen .wrap-b {
+        max-width: 513px;
+        height: 292px;
+        padding: 0;
+    }
+
+    .hd-screen .wrap-c {
+        width: 1920px;
+        height: 1080px;
+        /* margin-left: 2px; */
+        -webkit-transform: scale(0.27);
+        -webkit-transform-origin: 0 0;
+    }</style><div class="card"><div class="card-body d-flex"><div class="col-5 me-3" ng-if="$ctrl.page.moduleNavs.length>0"><navs data="$ctrl.page.moduleNavs" prefix="'module-nav'" key="'moduleId'" details-url="'/portal/module/details/'" model="'nav-page-module'">No module created yet...</navs></div><div class="col hd-screen"><div class="wrap-a border radius" id="pills-tabContent"><div class="wrap-b overflow-hidden" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"><iframe id="preview-iframe" class="wrap-c transitions-Mixcore Studio" src="{{$ctrl.page.detailsUrl}}" style="opacity: 1;"></iframe></div></div></div></div></div>
