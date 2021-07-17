@@ -41,6 +41,31 @@ body {
   cursor: move;
 }
 
+.avatar {
+  --tblr-avatar-size: 2.5rem;
+  position: relative;
+  width: var(--tblr-avatar-size);
+  height: var(--tblr-avatar-size);
+  font-size: calc(var(--tblr-avatar-size)/ 2.8571429);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #656d77;
+  text-align: center;
+  text-transform: uppercase;
+  vertical-align: bottom;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: #f0f2f6 no-repeat center/cover;
+  border-radius: 4px;
+}
+.avatar-sm {
+  --tblr-avatar-size: 2rem;
+}
+
 .shadow {
   box-shadow: 0 3px 5px -1px rgb(0 0 0 / 9%), 0 2px 3px -1px rgb(0 0 0 / 7%) !important;
 }
