@@ -1,4 +1,4 @@
-/* Sat Jul 17 2021 00:42:33 GMT+0700 (Indochina Time) */fb-login {
+/* Sat Jul 17 2021 17:26:41 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -45,6 +45,12 @@ main-side-bar-dynamic .sw-sidebar ul {
 
 main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
   padding: 2px 0; }
+
+.custom-image {
+  max-width: 30vw; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
 
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
