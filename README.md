@@ -109,11 +109,14 @@ gulp build
 
 ### Admin Portal
 
-> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 4. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
+> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 5. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
 
 (New Portal in Angular / Svelte will be coming soon)
 
-![Mixcore Admin Portal Bootstrap 5.x](https://docs.mixcore.org/img/screencapture-stag-mixcore-org-portal-2019-08-04-16_04_15.jpg "Mixcore CMS Admin Portal Bootstrap 5")
+![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/125382627-322d7d00-e3c0-11eb-8ff7-f02316770876.png "Mixcore CMS Admin Portal Bootstrap 5")
+
+
+![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/126033976-28302532-1284-4be8-b8dd-74258a227873.png "Mixcore CMS Admin Portal Bootstrap 5")
 
 ## Thanks to
 
