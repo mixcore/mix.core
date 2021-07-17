@@ -46,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
         public string Title { get; set; }
 
         [JsonProperty("dataType")]
-        public MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; } = MixDataType.Text;
 
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
