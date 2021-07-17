@@ -94,6 +94,19 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
                 .HasPrincipalKey(p => p.Specificulture)
                 .HasForeignKey(d => d.Specificulture)
                 .HasConstraintName("FK_Mix_Module_Mix_Culture");
+
+            entity.Property(e => e.EditorValue)
+                .HasColumnType("text")
+                .HasCharSet("utf8")
+                .HasCollation("und-x-icu");
+
+            entity.Property(e => e.EditorType)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixEditorType>())
+               .HasDefaultValue(MixEditorType.Html)
+               .HasColumnType("varchar(50)")
+               .HasCharSet("utf8")
+               .HasCollation("und-x-icu");
         }
     }
 }

@@ -131,6 +131,19 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                 .HasForeignKey(d => d.Specificulture)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mix_Post_Mix_Culture");
+
+            entity.Property(e => e.EditorValue)
+                .HasColumnType("text")
+                .HasCharSet("utf8")
+                .HasCollation("utf8_unicode_ci");
+
+            entity.Property(e => e.EditorType)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixEditorType>())
+               .HasDefaultValue(MixEditorType.Html)
+               .HasColumnType("varchar(50)")
+               .HasCharSet("utf8")
+               .HasCollation("utf8_unicode_ci");
         }
     }
 }

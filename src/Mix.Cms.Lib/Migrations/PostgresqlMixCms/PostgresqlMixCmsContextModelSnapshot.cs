@@ -590,6 +590,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<double?>("DoubleValue")
                         .HasColumnType("double precision");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EncryptKey")
                         .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
@@ -929,6 +942,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EdmTemplate")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
@@ -1161,6 +1187,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<string>("CssClass")
                         .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1589,6 +1628,19 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("text")

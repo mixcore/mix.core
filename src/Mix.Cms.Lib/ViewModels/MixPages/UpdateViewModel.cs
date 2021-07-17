@@ -61,6 +61,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("content")]
         public string Content { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -232,7 +238,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO(_context, _transaction);
-
+            EditorValue ??= Content;
+            EditorType ??= MixEditorType.Html;
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
             Layout = Master != null ? $"{Master.FolderType}/{Master.FileName}{Master.Extension}" : null;
             if (Id == 0)

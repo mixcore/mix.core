@@ -16,6 +16,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Id { get; set; }
         public string Specificulture { get; set; }
         public string Content { get; set; }
+        public string EditorValue { get; set; }
+        public MixEditorType? EditorType { get; set; }
         public string CssClass { get; set; }
         public string Excerpt { get; set; }
         public string Icon { get; set; }

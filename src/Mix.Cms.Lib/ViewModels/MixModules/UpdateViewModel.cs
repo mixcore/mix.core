@@ -56,6 +56,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("description")]
         public string Description { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("fields")]
         public string Fields { get; set; }
 
@@ -300,6 +306,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            EditorValue ??= Description;
+            EditorType ??= MixEditorType.Html;
             Cultures = MixModules.Helper.LoadCultures(Id, Specificulture, _context, _transaction);
             Cultures.ForEach(c => c.IsSupported = _context.MixModule.Any(m => m.Id == Id && m.Specificulture == c.Specificulture));
             Columns = new List<ModuleFieldViewModel>();
