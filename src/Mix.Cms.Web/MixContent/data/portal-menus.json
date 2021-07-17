@@ -8,25 +8,6 @@
       "subMenus": []
     },
     {
-      "title": "Navigations",
-      "path": "#",
-      "icon": "mi mi-Relationship",
-      "svg": "tabler-icon-directions.svg",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
-        },
-        {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
-
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
       "title": "Posts",
       "path": "#",
       "icon": "mi mi-ReadingList",
@@ -58,6 +39,60 @@
         {
           "path": "/portal/page/list",
           "title": "List Page",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
+      "title": "Categories",
+      "path": "#",
+      "icon": "mi mi-Label",
+      "svg": "tabler-icon-inbox.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
+          "title": "List",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
+      "title": "Tags",
+      "path": "#",
+      "icon": "mi mi-Tag",
+      "svg": "tabler-icon-tag.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "title": "List",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
+      "title": "Media",
+      "path": "#",
+      "icon": "mi mi-Media",
+      "svg": "tabler-icon-photo.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/media/create"
+        },
+        {
+          "path": "/portal/media/list",
+          "title": "List",
           "icon": "mi mi-List"
         }
       ]
@@ -117,54 +152,19 @@
       ]
     },
     {
-      "title": "Categories",
+      "title": "Navigations",
       "path": "#",
-      "icon": "mi mi-Label",
-      "svg": "tabler-icon-inbox.svg",
+      "icon": "mi mi-Relationship",
+      "svg": "tabler-icon-directions.svg",
       "subMenus": [
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
-      "title": "Tags",
-      "path": "#",
-      "icon": "mi mi-Tag",
-      "svg": "tabler-icon-tag.svg",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
-        },
-        {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
-      "title": "Media",
-      "path": "#",
-      "icon": "mi mi-Media",
-      "svg": "tabler-icon-photo.svg",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/media/create"
-        },
-        {
-          "path": "/portal/media/list",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+
           "title": "List",
           "icon": "mi mi-List"
         }
