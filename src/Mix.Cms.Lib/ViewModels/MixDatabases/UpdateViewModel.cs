@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         public int? ReferenceId { get; set; }
 
         [JsonProperty("type")]
-        public MixDatabaseType Type { get; set; }
+        public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
 
         [JsonProperty("title")]
         public string Title { get; set; }
