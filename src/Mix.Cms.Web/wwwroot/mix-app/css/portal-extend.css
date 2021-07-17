@@ -76,6 +76,7 @@ a,
 }
 
 .btn-link,
+.nav-link,
 .text-primary {
   color: hsla(var(--primary-color-hue, 211), var(--primary-color-saturation, 100%), var(--primary-color-brightness, 50%), 1) !important;
 }
@@ -126,7 +127,7 @@ a,
 }
 .card .card-header {
   padding: 1rem 1rem;
-  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 70%, 1);
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 0.8);
   border-radius: 1rem 1rem 0 0;
   border-bottom-color: #fff;
@@ -138,15 +139,20 @@ a,
 }
 
 .nav-tabs {
-  border-color: hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  border-color: hsla(var(--primary-color-hue, 211), 100%, 70%, 1);
 }
 .nav-tabs .nav-link {
   border-top: 3px solid;
   border-color: transparent;
 }
+.nav-tabs .nav-link:hover {
+  border-color: #e9ecef #e9ecef hsla(var(--primary-color-hue, 211), 100%, 70%, 1);
+}
 .nav-tabs .nav-link.active {
-  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 90%, 1);
+  color: var(--bs-gray-dark) !important;
+  border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 70%, 1);
   background-color: hsla(var(--primary-color-hue, 211), 100%, 98%, 1);
+  border-color: hsla(var(--primary-color-hue, 211), 100%, 70%, 1) hsla(var(--primary-color-hue, 211), 100%, 70%, 1) transparent;
 }
 
 .main-sidebar {
