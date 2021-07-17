@@ -21,6 +21,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Id { get; set; }
         public string Specificulture { get; set; }
         public string Content { get; set; }
+        public string EditorValue { get; set; }
+        public MixEditorType? EditorType { get; set; }
         public DateTime? PublishedDateTime { get; set; }
         public string Excerpt { get; set; }
         public string ExtraProperties { get; set; }

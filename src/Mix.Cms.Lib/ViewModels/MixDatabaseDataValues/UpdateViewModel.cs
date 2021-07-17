@@ -58,6 +58,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
         [JsonProperty("stringValue")]
         public string StringValue { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("encryptValue")]
         public string EncryptValue { get; set; }
 
@@ -164,6 +170,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (DataType == MixDataType.Html)
+            {
+                EditorValue ??= StringValue;
+                EditorType ??= MixEditorType.Html;
+            }
+            
             if (string.IsNullOrEmpty(Id))
             {
                 Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>

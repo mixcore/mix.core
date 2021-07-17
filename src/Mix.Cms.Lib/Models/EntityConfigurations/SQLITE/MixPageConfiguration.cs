@@ -133,6 +133,19 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .HasForeignKey(d => d.Specificulture)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Mix_Page_Mix_Culture");
+
+            entity.Property(e => e.EditorValue)
+                .HasColumnType("text")
+                .HasCharSet("utf8")
+                .HasCollation("NOCASE");
+
+            entity.Property(e => e.EditorType)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixEditorType>())
+               .HasDefaultValue(MixEditorType.Html)
+               .HasColumnType("varchar(50)")
+               .HasCharSet("utf8")
+               .HasCollation("NOCASE");
         }
     }
 }

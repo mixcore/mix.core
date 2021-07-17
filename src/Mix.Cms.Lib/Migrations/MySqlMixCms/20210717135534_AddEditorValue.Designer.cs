@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
 
 namespace Mix.Cms.Lib.Migrations.MySqlMixCms
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    partial class MySqlMixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20210717135534_AddEditorValue")]
+    partial class AddEditorValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

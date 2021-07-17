@@ -65,6 +65,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("content")]
         public string Content { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -253,7 +259,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST : Type;
-
+            EditorValue ??= Content;
+            EditorType ??= MixEditorType.Html;
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
             if (!string.IsNullOrEmpty(this.Tags))

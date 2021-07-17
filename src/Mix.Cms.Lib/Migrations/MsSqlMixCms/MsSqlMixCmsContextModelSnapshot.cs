@@ -571,6 +571,19 @@ namespace Mix.Cms.Lib.Migrations
                     b.Property<double?>("DoubleValue")
                         .HasColumnType("float");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EncryptKey")
                         .HasColumnType("varchar(50)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -908,6 +921,19 @@ namespace Mix.Cms.Lib.Migrations
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EdmTemplate")
                         .HasColumnType("nvarchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -1140,6 +1166,19 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<string>("CssClass")
                         .HasColumnType("nvarchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1564,6 +1603,19 @@ namespace Mix.Cms.Lib.Migrations
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("ntext")

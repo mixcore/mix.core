@@ -1,4 +1,4 @@
-/* Sat Jul 17 2021 17:26:41 GMT+0700 (Indochina Time) */fb-login {
+/* Sat Jul 17 2021 23:15:31 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -30,6 +30,10 @@ mix-module-data-table .preview-container {
 /* PROPORTIONALLY resize the canvas to the intended viewing size */
 /* canvas{width:300px; height:380px;} */
 upload-croppie .cr-boundary {
+  overflow: hidden; }
+
+.table-data td.preview {
+  max-width: 120px;
   overflow: hidden; }
 
 main-side-bar-dynamic .sw-sidebar .sw-toc-item {

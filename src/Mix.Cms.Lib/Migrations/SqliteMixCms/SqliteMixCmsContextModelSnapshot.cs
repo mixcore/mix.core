@@ -570,6 +570,19 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
                     b.Property<double?>("DoubleValue")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EncryptKey")
                         .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
@@ -907,6 +920,19 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("EdmTemplate")
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
@@ -1139,6 +1165,19 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
 
                     b.Property<string>("CssClass")
                         .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1562,6 +1601,19 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("EditorType")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("Html")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("EditorValue")
+                        .HasColumnType("text")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("text")
