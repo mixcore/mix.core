@@ -125,6 +125,10 @@ a,
   border-radius: 1rem;
   border-color: #fff;
 }
+.card .card-img, .card .card-img-top {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
 .card .card-header {
   padding: 1rem 1rem;
   border-top: 3px solid hsla(var(--primary-color-hue, 211), 100%, 70%, 1);
