@@ -331,7 +331,7 @@
           "icon": "mi mi-World"
         },
         {
-          "path": "/portal/language/list",
+          "path": "/portal/localize/list",
           "title": "Localization",
           "icon": "mi mi-TimeLanguage"
         },
