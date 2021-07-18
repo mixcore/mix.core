@@ -4,7 +4,7 @@
     {
         public const string WebRootPath = "wwwroot";
         public const string TemplatesFolder = "Views/Shared/Templates";
-        public const string JsonDataFolder = "MixContent/data";
+        public const string DataFolder = "MixContent/data";
         public const string MixCacheFolder = "MixContent/cache";
         public const string MixLogsFolder = "MixContent/logs";
         public const string ExportFolder = "mix-content/exports";

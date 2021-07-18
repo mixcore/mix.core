@@ -175,7 +175,7 @@ namespace Mix.Cms.Web
                 {
                     ctx.Database.Migrate();
                     var transaction = ctx.Database.BeginTransaction();
-                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.DataFolder}");
                     var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixDatabases.ImportViewModel>>();
                     foreach (var db in sysDatabases)
                     {

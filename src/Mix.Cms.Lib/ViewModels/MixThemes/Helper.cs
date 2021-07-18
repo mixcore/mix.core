@@ -91,11 +91,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 data.CreatedBy = userName;
                 data.Status = MixContentStatus.Published;
-                string importFolder = $"{MixFolders.ThemePackage}/" +
-                    $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
+                string importFolder = MixFolders.ThemePackage;
                 if (theme != null)
                 {
-                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}");
+                    MixFileRepository.Instance.SaveFile(theme, $"{importFolder}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else
@@ -104,7 +103,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     {
                         Filename = "_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ThemePackage
+                        FileFolder = MixFolders.DataFolder
                     };
                 }
 
@@ -140,7 +139,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     Filename = name,
                     Extension = MixFileExtensions.Zip,
-                    FileFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{name}"
+                    FileFolder = MixFolders.ThemePackage
                 }
             };
 

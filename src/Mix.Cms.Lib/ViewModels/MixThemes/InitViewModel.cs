@@ -147,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { FileFolder = MixFolders.ThemePackage };
             Asset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{AssetFolder}" };
         }
 
@@ -192,6 +192,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
+                MixFileRepository.Instance.DeleteFolder(MixFolders.ThemePackage);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);

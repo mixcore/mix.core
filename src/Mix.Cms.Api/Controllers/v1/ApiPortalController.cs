@@ -64,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             try
             {
-                var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "[]");
+                var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.DataFolder, true, "[]");
                 var obj = JObject.Parse(cultures.Content);
                 return new RepositoryResponse<JArray>()
                 {
@@ -87,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Route("json-data/{name}")]
         public RepositoryResponse<JObject> loadJsonData(string name)
         {
-            var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.JsonDataFolder, true, "{}");
+            var cultures = MixFileRepository.Instance.GetFile(name, MixFolders.DataFolder, true, "{}");
             var obj = JObject.Parse(cultures.Content);
             return new RepositoryResponse<JObject>()
             {

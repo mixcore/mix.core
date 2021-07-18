@@ -123,9 +123,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     data.TemplateAsset = new FileViewModel()
                     {
-                        Filename = "default_blank",
+                        Filename = "_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ThemePackage
+                        FileFolder = MixFolders.DataFolder
                     };
                 }
             }
