@@ -38,9 +38,8 @@ namespace Mix.Cms.Lib.Services
             using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).Result)
             {
                 response.EnsureSuccessStatusCode();
-                string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
-                string fullPath = $"{folder}/{fileName}{extension}";
-                MixFileRepository.Instance.CreateDirectoryIfNotExist(folder);
+                string fullPath = $"{downloadPath}/{fileName}{extension}";
+                MixFileRepository.Instance.CreateDirectoryIfNotExist(downloadPath);
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {
