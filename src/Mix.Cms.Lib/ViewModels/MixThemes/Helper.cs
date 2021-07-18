@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             {
                 data.CreatedBy = userName;
                 data.Status = MixContentStatus.Published;
-                string importFolder = $"{MixFolders.ImportFolder}/" +
+                string importFolder = $"{MixFolders.ThemePackage}/" +
                     $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
                 if (theme != null)
                 {
@@ -100,24 +100,12 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 }
                 else
                 {
-                    if (data.IsCreateDefault)
+                    data.TemplateAsset = new FileViewModel()
                     {
-                        data.TemplateAsset = new FileViewModel()
-                        {
-                            Filename = "default",
-                            Extension = MixFileExtensions.Zip,
-                            FileFolder = MixFolders.ImportFolder
-                        };
-                    }
-                    else
-                    {
-                        data.TemplateAsset = new FileViewModel()
-                        {
-                            Filename = "default_blank",
-                            Extension = MixFileExtensions.Zip,
-                            FileFolder = MixFolders.ImportFolder
-                        };
-                    }
+                        Filename = "_blank",
+                        Extension = MixFileExtensions.Zip,
+                        FileFolder = MixFolders.ThemePackage
+                    };
                 }
 
                 data.Title = MixService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
@@ -152,7 +140,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     Filename = name,
                     Extension = MixFileExtensions.Zip,
-                    FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{name}"
+                    FileFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{name}"
                 }
             };
 

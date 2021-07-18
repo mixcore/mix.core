@@ -142,7 +142,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.DeleteViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{MixFolders.ThemePackage}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
