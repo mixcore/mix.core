@@ -125,7 +125,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     {
                         Filename = "default_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ImportFolder
+                        FileFolder = MixFolders.ThemePackage
                     };
                 }
             }

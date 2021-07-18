@@ -147,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{AssetFolder}" };
         }
 
@@ -156,16 +156,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            if (string.IsNullOrEmpty(TemplateAsset.Filename))
-            {
-                TemplateAsset = new FileViewModel()
-                {
-                    Filename = "default_blank",
-                    Extension = MixFileExtensions.Zip,
-                    FileFolder = MixFolders.ImportFolder
-                };
-            }
 
             result = await ImportThemeAsync(parent, _context, _transaction);
 
@@ -181,10 +171,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
-                string outputFolder = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/Extract";
+                string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 MixFileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 MixFileRepository.Instance.UnZipFile(filePath, outputFolder);

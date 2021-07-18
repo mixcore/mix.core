@@ -167,7 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     {
                         Filename = "default_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ImportFolder
+                        FileFolder = MixFolders.ThemePackage
                     };
                 }
             }
@@ -179,7 +179,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
             TemplateAsset = new FileViewModel() { 
-                FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+                FileFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
@@ -238,6 +238,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 MixFileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 MixFileRepository.Instance.UnZipFile(filePath, outputFolder);
+                
                 //Move Unzip Asset folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
                 //Move Unzip Templates folder
@@ -252,6 +253,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
+                MixFileRepository.Instance.DeleteFolder($"{MixFolders.WebRootPath}/{MixFolders.ThemePackage}");
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
                 result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
