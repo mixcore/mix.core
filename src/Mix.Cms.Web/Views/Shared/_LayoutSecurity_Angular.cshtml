@@ -15,24 +15,38 @@
   @* <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" /> *@
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
   <environment names="Development,Staging,Production">
     <!-- CSS Files -->
     <style>
-      html,
       body {
-        height: 100%;
-      }
-      body {
-        display: flex;
-        align-items: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
+
+        min-height: 100%;
+            background-color: #f4f6fa;
+            
       }
 
-      body::before {
+      .page-center {
+    justify-content: center;
+}
+.page {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-height: 100vh;
+}
+
+.container-tight {
+    width: 100%;
+    padding-right: var(--tblr-gutter-x,1.5rem);
+    padding-left: var(--tblr-gutter-x,1.5rem);
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 30rem;
+}
+
+      @* body::before {
         content: "";
         background: black;
         opacity: 0.8;
@@ -67,12 +81,40 @@
         /* Add the blur effect */
         filter: blur(8px);
         -webkit-filter: blur(8px);
-      }
-
-      hr {
-        border: none !important;
-      }
-
+      } *@
+.card>.hr-text {
+    margin: 0;
+}
+.hr-text-spaceless {
+    margin: -.5rem 0;
+}
+.hr-text {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    font-size: .625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    line-height: 1.6;
+    color: #656d77;
+    height: 1px;
+}
+.hr-text:before {
+    content: "";
+    margin-right: .5rem;
+}
+.hr-text:after {
+    content: "";
+    margin-left: .5rem;
+}
+.hr-text:after, .hr-text:before {
+    flex: 1 1 auto;
+    height: 1px;
+    background-color: currentColor;
+    opacity: .16;
+}
+@* 
       .container {
         grid-template-columns: 40px 50px auto 50px 40px;
         grid-template-rows: 25% 100px auto;
@@ -83,14 +125,14 @@
         max-width: 430px;
         padding: 15px;
         margin: auto auto;
-      }
+      } *@
     </style>
   </environment>
   <link href="~/mix-app/css/app-vendor.min.css" rel="stylesheet" />
   <link href="~/mix-app/css/app-vendor-scss.min.css" rel="stylesheet" />
   <link href="~/mix-app/css/shared.min.css" rel="stylesheet" />
 
-  <script src="~/mix-app/js/particles/particles.min.js"></script>
+  @* <script src="~/mix-app/js/particles/particles.min.js"></script> *@
     <script>
 
         (function (d, s, id) {
@@ -139,23 +181,18 @@
         </div>
     </div> -->
 
-<body class="" ng-app="MixSecurity">
-    <div id="particles-js" class="position-absolute w-100 h-100"></div>
+<body class="antialiased border-top-wide border-primary" ng-app="MixSecurity">
+    @* <div id="particles-js" class="position-absolute w-100 h-100"></div> *@
     <mix-loader ng-show="isBusy"></mix-loader>
-
-    <div class="container">
-        <div class="card form-signin">
+    <div class="d-flex page page-center">
             @RenderBody()
-        </div>
     </div>
 
     <environment names="Development">
     </environment>
     <script src="~/mix-app/js/framework.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js" integrity="sha512-n/4gHW3atM3QqRcbCn6ewmpxcLAHGaDjpEBu4xZd47N0W2oQ+6q7oc3PXstrJYXcbNU1OHdQ1T7pAP+gi5Yu8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-notify/0.2.0/js/bootstrap-notify.min.js"></script>
     
@@ -186,7 +223,7 @@
         </div>
     </div>
 
-    <script>
+    @* <script>
     particlesJS('particles-js',
             {
                 "particles": {
@@ -297,7 +334,7 @@
                     }
                 },
                 "retina_detect": true
-            });</script>
+            });</script> *@
 </body>
 
 </html>
