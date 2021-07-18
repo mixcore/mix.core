@@ -102,6 +102,7 @@
       "path": "#",
       "icon": "mi mi-Puzzle",
       "svg": "tabler-icon-layout-grid-add.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create new",
@@ -138,6 +139,7 @@
       "path": "#",
       "icon": "mi mi-ResolutionLegacy",
       "svg": "tabler-icon-table.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create New",
@@ -156,6 +158,7 @@
       "path": "#",
       "icon": "mi mi-Relationship",
       "svg": "tabler-icon-directions.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create New",
@@ -175,7 +178,7 @@
       "path": "#",
       "icon": "mi mi-FileExplorer",
       "svg": "tabler-icon-file.svg",
-      "isHiden": false,
+      "isHiden": true,
       "subMenus": [
         {
           "path": "/portal/file/list",
@@ -260,14 +263,35 @@
       "svg": "tabler-icon-template.svg",
       "subMenus": [
         {
-          "title": "Create New",
+          "title": "Create Theme",
           "icon": "mi mi-Add",
           "path": "/portal/theme/create"
         },
         {
           "path": "/portal/theme/list",
-          "title": "List",
+          "title": "Theme List",
           "icon": "mi mi-List"
+        },
+        {
+          "title": "Store",
+          "icon": "mi mi-ShoppingCart",
+          "path": "/portal/store/list"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+
+          "title": "Navigations",
+          "icon": "mi mi-ButtonMenu"
+        },
+        {
+          "path": "/portal/module/list",
+          "title": "Modules",
+          "icon": "mi mi-Apps"
+        },
+        {
+          "path": "/portal/mix-database/list",
+          "title": "Databases",
+          "icon": "mi mi-Wheel"
         }
       ]
     },
@@ -276,7 +300,7 @@
       "path": "#",
       "icon": "mi mi-Shop",
       "svg": "tabler-icon-building-store.svg",
-      "isHiden": false,
+      "isHiden": true,
       "subMenus": [
         {
           "title": "List Online",
@@ -293,18 +317,33 @@
       "subMenus": [
         {
           "title": "Global Settings",
-          "icon": "mi mi-Apps",
+          "icon": "mi mi-Equalizer",
           "path": "/portal/app-settings/details"
-        },
-        {
-          "path": "/portal/configuration/create",
-          "title": "Create",
-          "icon": "mi mi-Add"
         },
         {
           "path": "/portal/configuration/list",
           "title": "Local settings",
-          "icon": "mi mi-List"
+          "icon": "mi mi-Repair"
+        },
+        {
+          "path": "/portal/language/list",
+          "title": "Languages",
+          "icon": "mi mi-World"
+        },
+        {
+          "path": "/portal/language/list",
+          "title": "Localization",
+          "icon": "mi mi-TimeLanguage"
+        },
+        {
+          "path": "/portal/file/list",
+          "title": "Files",
+          "icon": "mi mi-FileExplorer"
+        },
+        {
+          "path": "/portal/file/list?folder=MixContent/logs",
+          "title": "Logs",
+          "icon": "mi mi-Error"
         }
       ]
     }
