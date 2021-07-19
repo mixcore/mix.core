@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Lib.MixDatabase\Mix.Cms.Lib.MixDatabase.csproj" />
   </ItemGroup>
 

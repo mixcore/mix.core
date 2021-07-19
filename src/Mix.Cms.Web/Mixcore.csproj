@@ -45,9 +45,9 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.8" />
         <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.1">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -71,6 +71,11 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="MixContent\data\_blank.zip">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
     <ProjectExtensions>
         <VisualStudio>
