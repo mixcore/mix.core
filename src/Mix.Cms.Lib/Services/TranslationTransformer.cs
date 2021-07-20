@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.Services
 
         public override ValueTask<RouteValueDictionary> TransformAsync(HttpContext httpContext, RouteValueDictionary values)
         {
-            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 return ValueTask.FromResult(values);
             }
@@ -30,7 +30,7 @@ namespace Mix.Cms.Lib.Services
             var keyIndex = 1;
             if (!MixService.Instance.CheckValidCulture(language))
             {
-                language = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                language = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 keyIndex -= 1;
             }
 

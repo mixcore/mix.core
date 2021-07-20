@@ -48,7 +48,7 @@ namespace Mix.Cms.Schedule
                     tp.MaxConcurrency = 10;
                 });
 
-                if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+                if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
                 {
                     q.AddMixJobsAsync().GetAwaiter().GetResult();
                 }

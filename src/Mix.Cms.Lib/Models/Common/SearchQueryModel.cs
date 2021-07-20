@@ -21,7 +21,7 @@ namespace Mix.Cms.Lib.Models.Common
         }
         public SearchQueryModel(HttpRequest request, string culture = null)
         {
-            Specificulture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            Specificulture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate: null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)

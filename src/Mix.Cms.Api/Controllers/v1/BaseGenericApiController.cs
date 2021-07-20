@@ -130,7 +130,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     };
                 }
             }
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            data.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -154,7 +154,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
             }
             AlertAsync($"Get {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            data.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -237,7 +237,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     data = await DefaultRepository<TDbContext, TModel, TView>.Instance.GetModelListAsync(request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
                 }
             }
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            data.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
             AlertAsync($"Get List {typeof(TView).Name}", data?.Status ?? 400, data?.ResponseKey);
             return data;
         }
@@ -409,7 +409,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetAppSetting<string>("Language");
             ViewBag.culture = _lang;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }

@@ -68,7 +68,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [Route("check-config/{lastSync}")]
         public ActionResult<RepositoryResponse<JObject>> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = MixService.GetConfig<DateTime>("LastUpdateConfiguration");
+            var lastUpdate = MixService.GetAppSetting<DateTime>("LastUpdateConfiguration");
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettings());
@@ -110,19 +110,19 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         private RepositoryResponse<JObject> GetAllSettings(string lang = null)
         {
-            lang ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            lang ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             var cultures = CommonRepository.Instance.LoadCultures();
             var culture = cultures.FirstOrDefault(c => c.Specificulture == lang);
 
             // Get Settings
             GlobalSettingsViewModel configurations = new GlobalSettingsViewModel()
             {
-                Domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain),
+                Domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain),
                 Lang = lang,
-                PortalThemeSettings = MixService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
+                PortalThemeSettings = MixService.GetAppSetting<JObject>(MixAppSettingKeywords.PortalThemeSettings),
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, lang),
-                ApiEncryptKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                IsEncryptApi = MixService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
+                ApiEncryptKey = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey),
+                IsEncryptApi = MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
@@ -137,11 +137,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     new JProperty("Twitter", MixService.Instance.MixAuthentications.Twitter?.AppId),
                     new JProperty("Microsoft", MixService.Instance.MixAuthentications.Microsoft?.AppId),
                 },
-                LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
+                LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
 
             };
 
-            configurations.LangIcon = culture?.Icon ?? MixService.GetConfig<string>(MixAppSettingKeywords.Language);
+            configurations.LangIcon = culture?.Icon ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.Language);
 
             // Get translator
             var translator = new JObject()

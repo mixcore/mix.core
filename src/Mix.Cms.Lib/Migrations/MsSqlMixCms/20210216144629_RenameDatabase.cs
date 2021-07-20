@@ -9,7 +9,7 @@ namespace Mix.Cms.Lib.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            Version.TryParse(MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION), out Version dbVersion);
+            Version.TryParse(MixService.GetAppSetting<string>(MixConfigurations.CONST_MIXCORE_VERSION), out Version dbVersion);
             var prevVersion = new Version("1.0.0");
             if (dbVersion == null || dbVersion.CompareTo(prevVersion) <= 0)
             {
@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            var dbVersion = MixService.GetConfig<string>(MixConfigurations.CONST_MIXCORE_VERSION);
+            var dbVersion = MixService.GetAppSetting<string>(MixConfigurations.CONST_MIXCORE_VERSION);
             if (string.IsNullOrEmpty(dbVersion) || dbVersion == "1.0.0")
             {
                 string schema = null;

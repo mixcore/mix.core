@@ -163,7 +163,7 @@ namespace Mix.Cms.Lib.Controllers
                 var transaction = context.Database.BeginTransaction();
                 TUpdate data = ReflectionHelper.InitModel<TUpdate>();
                 ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }

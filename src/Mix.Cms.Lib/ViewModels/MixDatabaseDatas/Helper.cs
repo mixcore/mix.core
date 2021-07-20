@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             try
             {
                 // Additional Data is sub data of page / post / module only
-                culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var databaseName = request.Query["databaseName"].ToString();
 
                 var result = await LoadAdditionalDataAsync(parentType, parentId, databaseName, culture, context, transaction);
@@ -104,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -167,7 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -353,7 +353,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
                 var queryDictionary = request.Query.ToList();
                 mixDatabaseName = mixDatabaseName ?? request.Query["mixDatabaseName"].ToString().Trim();
                 var keyword = request.Query["keyword"].ToString();
@@ -525,7 +525,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 RepositoryResponse<TView> result = new RepositoryResponse<TView>()
@@ -578,7 +578,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var dataId = _context.MixDatabaseDataAssociation.FirstOrDefault(
                         m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
                 if (dataId is not null)
@@ -612,7 +612,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var dataId = context.MixDatabaseDataAssociation.FirstOrDefault(
                         m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
                 if (dataId is not null)
@@ -647,7 +647,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 RepositoryResponse<TView> result = new RepositoryResponse<TView>()

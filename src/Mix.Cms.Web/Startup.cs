@@ -40,7 +40,7 @@ namespace Mix.Cms.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string[] allowedHosts = MixService.GetConfig<JArray>(MixAppSettingKeywords.AllowedHosts)
+            string[] allowedHosts = MixService.GetAppSetting<JArray>(MixAppSettingKeywords.AllowedHosts)
                                         .Select(m => m.Value<string>("text")).ToArray();
             services.AddCors(options =>
             {
@@ -115,7 +115,7 @@ namespace Mix.Cms.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 var context = MixService.GetDbContext();
                 var pendingMigration = context.Database.GetPendingMigrations();
@@ -149,7 +149,7 @@ namespace Mix.Cms.Web
 
             #region Additionals Config for Mixcore Cms
 
-            if (MixService.GetConfig<bool>("IsHttps"))
+            if (MixService.GetAppSetting<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
@@ -169,7 +169,7 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 using (var ctx = MixService.GetDbContext())
                 {
@@ -194,7 +194,7 @@ namespace Mix.Cms.Web
             }
 
             // Mix: Check if require ssl
-            if (MixService.GetConfig<bool>("IsHttps"))
+            if (MixService.GetAppSetting<bool>("IsHttps"))
             {
                 services.AddHttpsRedirection(options =>
                 {

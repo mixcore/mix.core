@@ -207,7 +207,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             string data = model.GetValue("data").Value<string>();
             var encrypted = new JObject(new JProperty("encrypted", data));
-            var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            var key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             return new RepositoryResponse<string>()
             {
                 Data = AesEncryptionHelper.EncryptString(data, key)
@@ -220,7 +220,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<string> Decrypt([FromBody] JObject model)
         {
             string data = model.GetValue("data")?.Value<string>();
-            var key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            var key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             return new RepositoryResponse<string>()
             {
                 Data = AesEncryptionHelper.DecryptString(data, key)

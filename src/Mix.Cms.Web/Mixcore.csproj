@@ -71,6 +71,63 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
             <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\heart.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-building-store.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-database.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-directions.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-file-horizontal.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-file.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-inbox.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-layout-grid-add.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-layout.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-notebook.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-photo.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-settings.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-smart-home.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-table.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-tag.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-template.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-tools.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\assets\img\svg\tabler-icon-users.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\mix-app\css\portal-extend.scss">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     <ItemGroup>
       <None Update="MixContent\data\_blank.zip">

@@ -18,7 +18,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public static async Task<MixDatabaseDatas.AdditionalViewModel> LoadUserInfoAsync(string userName,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            var culture = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            var culture = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {

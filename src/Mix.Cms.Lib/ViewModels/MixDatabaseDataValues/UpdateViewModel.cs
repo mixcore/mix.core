@@ -178,7 +178,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
             
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>
                     (MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
 

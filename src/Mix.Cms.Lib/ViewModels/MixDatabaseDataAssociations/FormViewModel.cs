@@ -97,7 +97,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>(
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>(
                     MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
             return base.ParseModel(_context, _transaction);

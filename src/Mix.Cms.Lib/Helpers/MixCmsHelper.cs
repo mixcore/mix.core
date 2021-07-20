@@ -39,15 +39,15 @@ namespace Mix.Cms.Lib.Helpers
 
         public static string GetAssetFolder(string culture = null)
         {
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
+            return $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public static string GetUploadFolder(string culture = null)
         {
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
@@ -173,11 +173,11 @@ namespace Mix.Cms.Lib.Helpers
             }
         }
 
-        public static System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture, IUrlHelper url = null)
+        public static System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture = null, IUrlHelper url = null)
         {
             var cacheKey = $"vm_{culture}_module_{name}_mvc";
             var module = new RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
-
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             // If not cached yet => load from db
             if (module == null || !module.IsSucceed)
             {
@@ -191,7 +191,7 @@ namespace Mix.Cms.Lib.Helpers
 
         internal static string GetDetailsUrl(string specificulture, string path)
         {
-            return MixService.GetConfig<string>(MixAppSettingKeywords.Domain).TrimEnd('/')
+            return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain).TrimEnd('/')
                     + (specificulture != MixService.Instance.DefaultCulture ? $"/{specificulture}" : string.Empty)
                     + path;
         }
@@ -503,7 +503,7 @@ namespace Mix.Cms.Lib.Helpers
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
 
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
 
             PagingRequest pagingRequest = new PagingRequest(context.Request);
@@ -526,8 +526,8 @@ namespace Mix.Cms.Lib.Helpers
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
+            int maxPageSize = MixService.GetAppSetting<int>("MaxPageSize");
+            string orderBy = MixService.GetAppSetting<string>("OrderBy");
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             pageIndex = (pageIndex >= 0) ? pageIndex : 0;
 

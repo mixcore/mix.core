@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public string TemplatePath { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public string Domain => MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("categories")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }

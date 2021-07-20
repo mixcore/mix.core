@@ -58,7 +58,7 @@ namespace Mix.Cms.Api.MixDatabase.Controllers
         protected void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString()
-                    : MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                    : MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{RouteData.Values["tableName"]}";
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }

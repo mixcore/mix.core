@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
 
                         fullUrl = fullUrl.IndexOf("http") >= 0 
                             ? fullUrl 
-                            : $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{fullUrl.TrimStart('/')}";
+                            : $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{fullUrl.TrimStart('/')}";
                         val["value"] = fullUrl;
                         break;
 

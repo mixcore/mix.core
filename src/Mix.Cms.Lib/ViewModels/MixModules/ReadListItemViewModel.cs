@@ -87,7 +87,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             get {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
-                    return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Image}";
+                    return $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/{Image}";
                 }
                 else
                 {
@@ -101,7 +101,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             get {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
-                    return $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/{Thumbnail}";
+                    return $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/{Thumbnail}";
                 }
                 else
                 {

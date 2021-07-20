@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var getData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository
             .GetModelListBy(
                 m => m.ParentId == parentId && m.ParentType == parentType && m.Specificulture == specificulture
-                , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
+                , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
                 , pageSize, pageIndex
                 , _context: _context, _transaction: _transaction);
 
