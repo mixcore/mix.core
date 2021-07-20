@@ -12,7 +12,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
     {
         public static Expression<Func<MixDatabaseDataValue, bool>> GetMetaExpression(string databaseName, string slug, string culture = null)
         {
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             Expression<Func<MixDatabaseDataValue, bool>> valExp =
                 m => m.Specificulture == culture
                     && m.Status == MixContentStatus.Published

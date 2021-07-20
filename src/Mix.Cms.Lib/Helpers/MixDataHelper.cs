@@ -34,7 +34,7 @@ namespace Mix.Cms.Lib.Helpers
             IDbContextTransaction _transaction = null)
             where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
         {
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {

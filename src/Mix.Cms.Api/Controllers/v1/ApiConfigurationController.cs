@@ -68,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             Specificulture = _lang,
                             Category = "Site",
-                            Status = MixService.GetConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                            Status = MixService.GetAppSetting<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 

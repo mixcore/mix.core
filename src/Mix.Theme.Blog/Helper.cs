@@ -17,7 +17,7 @@ namespace Mix.Theme.Blog
     {
         public static async Task<dynamic> GetPosts(string culture = null, int? pageSize = 15, int? pageIndex = 0)
         {
-            culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
                 m => m.Specificulture == culture && m.Status == MixContentStatus.Published,
                 "CreatedDateTime",

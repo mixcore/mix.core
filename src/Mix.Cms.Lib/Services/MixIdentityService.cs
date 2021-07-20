@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.Services
                     Expires_in = MixService.GetAuthConfig(MixAuthConfigurations.AccessTokenExpiration, 20),
                     Issued = dtIssued,
                     Expires = dtExpired,
-                    LastUpdateConfiguration = MixService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
+                    LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
                 };
                 return token;
             }
@@ -240,7 +240,7 @@ namespace Mix.Cms.Lib.Services
 
         private void LoadRoles()
         {
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 var getRoles = ViewModels.Account.MixRoles.ReadViewModel.Repository
                                 .GetModelList();

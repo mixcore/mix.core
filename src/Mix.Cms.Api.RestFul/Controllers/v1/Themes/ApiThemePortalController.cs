@@ -169,7 +169,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             };
 
             string createdBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
-            _lang ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            _lang ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             var result = await Helper.InstallThemeAsync(theme, createdBy, _lang, progress, _httpService);
             if (result.IsSucceed)
             {

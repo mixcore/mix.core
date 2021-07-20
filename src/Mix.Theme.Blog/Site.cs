@@ -33,13 +33,13 @@ namespace Mix.Theme.Blog
 
         public Site(string culture, IUrlHelper urlHelper)
         {
-            Url = MixService.GetConfig<string>("Domain");
+            Url = MixService.GetAppSetting<string>("Domain");
             Title = MixService.GetConfig<string>("SiteTitle", culture);
             Title = MixService.GetConfig<string>("SiteTitle", culture);
             Logo = MixService.GetConfig<string>("SiteLogo", culture);
             Description = MixService.GetConfig<string>("SiteDescription", culture);
             CoverImage = MixService.GetConfig<string>("SiteCoverImage", culture);
-            IsAllowMembers = MixService.GetConfig<bool>("IsRegistration");
+            IsAllowMembers = MixService.GetAppSetting<bool>("IsRegistration");
 
             Navigation = MixCmsHelper.GetNavigation("navigation", culture, urlHelper);
             SecondaryNavigation = MixCmsHelper.GetNavigation("secondary_navigation", culture, urlHelper);

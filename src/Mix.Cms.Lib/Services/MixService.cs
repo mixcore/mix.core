@@ -217,7 +217,7 @@ namespace Mix.Cms.Lib.Services
             Instance.MixConfigurations[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public static T GetConfig<T>(string name)
+        public static T GetAppSetting<T>(string name)
         {
             var result = Instance.GlobalSettings[name];
             if (result == null)
@@ -238,26 +238,17 @@ namespace Mix.Cms.Lib.Services
             Instance.GlobalSettings[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public static T GetConfig<T>(string name, string culture)
+        public static T GetConfig<T>(string name, string culture = null, T defaultValue = default)
         {
             JToken result = null;
-            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
-            {
-                result = Instance.LocalSettings[culture][name];
-            }
-            return result != null ? result.Value<T>() : default;
-        }
-        
-        public static T GetConfig<T>(string name, string culture, T defaultValue)
-        {
-            JToken result = null;
-            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
+            culture ??= GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
+            if (Instance.LocalSettings[culture] != null)
             {
                 result = Instance.LocalSettings[culture][name];
             }
             return result != null ? result.Value<T>() : defaultValue;
         }
-
+        
         public static void SetConfig<T>(string name, string culture, T value)
         {
             Instance.LocalSettings[culture][name] = value.ToString();

@@ -12,14 +12,14 @@ namespace Mix.Cms.Web.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 return Redirect("/");
             }
             else
             {
                 page = page ?? "";
-                var initStatus = MixService.GetConfig<int>("InitStatus");
+                var initStatus = MixService.GetAppSetting<int>("InitStatus");
                 switch (initStatus)
                 {
                     case 0:

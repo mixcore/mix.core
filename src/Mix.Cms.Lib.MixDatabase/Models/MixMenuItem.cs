@@ -33,7 +33,7 @@ namespace Mix.Cms.Lib.MixDatabase.Models
         {
             get
             {
-                var domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                var domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
                 return Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
             }
         }

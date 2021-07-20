@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string culture = null,
             string postType = MixDatabaseNames.ADDITIONAL_FIELD_POST)
         {
-            culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
 
             var dataIds = context.MixDatabaseDataValue.Where(valExp).Select(m => m.DataId);
 

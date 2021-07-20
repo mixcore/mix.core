@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
-                string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
                 string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")

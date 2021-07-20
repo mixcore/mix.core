@@ -77,7 +77,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
@@ -95,7 +95,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> ExternalLogin([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
             RepositoryResponse<JObject> loginResult = await _idService.ExternalLogin(model);
@@ -127,7 +127,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
+                    Avatar = model.Avatar ?? MixService.GetAppSetting<string>("DefaultAvatar"),
                     JoinDate = DateTime.UtcNow
                 };
 

@@ -117,7 +117,7 @@ namespace Mix.Rest.Api.Client.ViewModels
         public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/page/{SeoName}" : null; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -232,7 +232,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                     var postIds = context.MixPagePost.Where(postExp).Select(m => m.PostId);
                     Posts = PostViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture && postIds.Any(n => n == m.Id),
-                        MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy),
+                        MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy),
                         0,
                         pageSize,
                         pageIndex

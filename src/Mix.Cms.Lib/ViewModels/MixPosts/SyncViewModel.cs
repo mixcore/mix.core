@@ -113,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public string Domain => MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("categories")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
@@ -234,7 +234,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             if (Id == 0)
             {
-                ExtraFields = MixService.GetConfig<string>("DefaultPostAttr");
+                ExtraFields = MixService.GetAppSetting<string>("DefaultPostAttr");
             }
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);

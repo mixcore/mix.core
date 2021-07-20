@@ -20,7 +20,7 @@ namespace Mix.Rest.Api.Client.Helpers
     {
         public static PaginationModel<JObject> GetListData<T>(HttpRequest request, string culture = null)
         {
-            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
             string mixDatabaseName = request.Query["mixDatabaseName"].ToString().Trim();
             var orderBy = "Id";
             Enum.TryParse(request.Query["direction"], out Heart.Enums.DisplayDirection direction);

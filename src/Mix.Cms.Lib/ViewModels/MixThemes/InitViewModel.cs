@@ -68,7 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public bool IsCreateDefault { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl {
@@ -297,7 +297,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string defaultFolder = $"{MixService.GetConfig<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
+            string defaultFolder = $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
 
             bool copyResult = MixFileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 

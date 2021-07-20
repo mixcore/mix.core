@@ -72,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                if (MixService.GetConfig<int>("InitStatus") == 0)
+                if (MixService.GetAppSetting<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
                 }
@@ -102,7 +102,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         Email = model.Email,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
+                        Avatar = model.Avatar ?? MixService.GetAppSetting<string>("DefaultAvatar"),
                         JoinDate = DateTime.UtcNow
                     };
                     var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
@@ -112,7 +112,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         await _userManager.AddToRoleAsync(user, MixDefaultRoles.SuperAdmin);
                         await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                        var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                        var aesKey = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
                         
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
@@ -189,9 +189,9 @@ namespace Mix.Cms.Api.Controllers.v1
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>();
-                if (MixService.GetConfig<int>("InitStatus") == 3)
+                if (MixService.GetAppSetting<int>("InitStatus") == 3)
                 {
-                    string culture = MixService.GetConfig<string>("DefaultCulture");
+                    string culture = MixService.GetAppSetting<string>("DefaultCulture");
                     InitCmsService sv = new InitCmsService();
                     result = await sv.InitLanguagesAsync(culture, model);
                     if (result.IsSucceed)

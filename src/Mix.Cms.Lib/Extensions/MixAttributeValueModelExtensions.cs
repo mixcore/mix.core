@@ -60,10 +60,10 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
-                    string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                    string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
                     string url = !string.IsNullOrEmpty(item.StringValue)
                    ? !item.StringValue.Contains(domain)
-                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
+                        ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));
@@ -130,10 +130,10 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
-                    string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                    string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
                     string url = !string.IsNullOrEmpty(item.StringValue)
                    ? !item.StringValue.Contains(domain)
-                        ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{item.StringValue.TrimStart('/')}"
+                        ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{item.StringValue.TrimStart('/')}"
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));

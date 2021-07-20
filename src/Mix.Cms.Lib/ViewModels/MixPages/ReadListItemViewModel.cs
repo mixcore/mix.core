@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl

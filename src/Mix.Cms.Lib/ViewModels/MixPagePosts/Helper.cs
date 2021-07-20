@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
         {
             if (postId.HasValue || pageId.HasValue)
             {
-                specificulture = specificulture ?? MixService.GetConfig<string>("DefaultCulture");
+                specificulture = specificulture ?? MixService.GetAppSetting<string>("DefaultCulture");
                 var result = DefaultRepository<MixCmsContext, MixPagePost, TView>.Instance.GetModelListBy(
                     m => (!postId.HasValue || m.PostId == postId.Value)
                         && (!pageId.HasValue || m.PageId == pageId.Value)

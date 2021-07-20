@@ -131,7 +131,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public FileStreamViewModel ImageFileStream { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl {

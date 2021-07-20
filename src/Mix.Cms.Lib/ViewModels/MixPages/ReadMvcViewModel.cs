@@ -121,7 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public string DetailsUrl { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl
@@ -265,7 +265,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPagePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
+                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -308,7 +308,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPosts.ReadListItemViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(orderBy), 0
+                    , MixService.GetAppSetting<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -362,7 +362,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPosts.ReadListItemViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(orderBy), 0
+                    , MixService.GetAppSetting<string>(orderBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -424,7 +424,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
                 n => n.PageId == Id && n.Specificulture == Specificulture,
-                MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
+                MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
                 , 4, 0
                , _context: _context, _transaction: _transaction
                );

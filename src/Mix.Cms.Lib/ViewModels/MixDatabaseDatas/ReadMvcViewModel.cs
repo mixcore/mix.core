@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public string PreviewUrl
         {
             get => !string.IsNullOrEmpty(Id) && HasValue("seo_url")
-                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{MixDatabaseName}/{Property<string>("seo_url")}"
+                    ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/data/{Specificulture}/{MixDatabaseName}/{Property<string>("seo_url")}"
                     : null;
         }
 
@@ -77,7 +77,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public string DetailApiUrl
         {
             get => !string.IsNullOrEmpty(Id)
-                    ? $"{MixService.GetConfig<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}"
+                    ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/api/v1/rest/{Specificulture}/attribute-set-data/mvc/{Id}"
                     : null;
         }
 
