@@ -137,6 +137,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
+                Status = MixContentStatus.Published;
                 Priority = Repository.Count(m => m.MixDatabaseName == MixDatabaseName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
             }
 
@@ -209,7 +210,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                                     {
                                         Specificulture = Specificulture,
                                         MixDatabaseId = field.ReferenceId.Value,
-                                        Obj = objData["obj"].Value<JObject>()
+                                        Status = MixContentStatus.Published,
+                                        Obj = objData
                                     });
                                 }
                             }

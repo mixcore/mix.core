@@ -120,6 +120,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
+            var formData = await getFormDataAsync(mixDatabase);
+            return formData != null
+                ? Ok(formData)
+                : BadRequest(mixDatabase);
+        }
+
+        private async Task<FormViewModel> getFormDataAsync(string mixDatabase)
+        {
             _ = int.TryParse(mixDatabase, out int mixDatabaseId);
             var getAttrSet = await Lib.ViewModels.MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == mixDatabase || m.Id == mixDatabaseId);
             if (getAttrSet.IsSucceed)
@@ -133,12 +141,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Columns = getAttrSet.Data.Columns
                 };
                 result.ExpandView();
-                return Ok(result);
+                return result;
             }
-            else
+            return null;
+        }
+
+        [HttpPost("save-data/{mixDatabase}")]
+        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute]string mixDatabase, [FromBody] JObject data)
+        {
+            var formData = await getFormDataAsync(mixDatabase);
+            if (formData!=null)
             {
-                return BadRequest(getAttrSet.Errors);
+                formData.Obj = data;
+                var result = await SaveAsync(formData, true);
+                return GetResponse(result);
             }
+            return BadRequest(mixDatabase);
         }
 
         [HttpGet("export")]

@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
@@ -43,9 +42,31 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         // GET: api/v1/rest/{culture}/mix-database-data
         [HttpGet("init/{mixDatabaseName}")]
-        public async Task<ActionResult<UpdateViewModel>> Init(string mixDatabaseName)
+        public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
-            var getAttrSet = await Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == mixDatabaseName);
+            var formData = await getFormDataAsync(mixDatabase);
+            return formData != null
+                ? Ok(formData)
+                : BadRequest(mixDatabase);
+        }
+
+        [HttpPost("save-data/{mixDatabase}")]
+        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, [FromBody] JObject data)
+        {
+            var formData = await getFormDataAsync(mixDatabase);
+            if (formData != null)
+            {
+                formData.Obj = data;
+                var result = await SaveAsync(formData, true);
+                return GetResponse(result);
+            }
+            return BadRequest(mixDatabase);
+        }
+
+        private async Task<FormViewModel> getFormDataAsync(string mixDatabase)
+        {
+            _ = int.TryParse(mixDatabase, out int mixDatabaseId);
+            var getAttrSet = await Lib.ViewModels.MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == mixDatabase || m.Id == mixDatabaseId);
             if (getAttrSet.IsSucceed)
             {
                 FormViewModel result = new FormViewModel()
@@ -53,15 +74,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     Specificulture = _lang,
                     MixDatabaseId = getAttrSet.Data.Id,
                     MixDatabaseName = getAttrSet.Data.Name,
-                    Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                    Status = MixContentStatus.Published,
+                    Columns = getAttrSet.Data.Columns
                 };
                 result.ExpandView();
-                return Ok(result);
+                return result;
             }
-            else
-            {
-                return BadRequest(getAttrSet.Errors);
-            }
+            return null;
         }
+
     }
 }
