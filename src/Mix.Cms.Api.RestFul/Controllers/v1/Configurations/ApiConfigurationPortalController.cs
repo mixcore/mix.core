@@ -30,6 +30,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             base(repo, updRepo, delRepo, mixIdentityHelper)
         {
         }
+        [HttpGet("by-keyword/{keyword}")]
+        public async Task<ActionResult<ReadMvcViewModel>> GetByKeyword(string keyword)
+        {
+            var config = await ReadMvcViewModel.Repository.GetSingleModelAsync(c => c.Keyword == keyword && c.Specificulture == _lang);
+            return GetResponse(config);
+        }
+
 
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
