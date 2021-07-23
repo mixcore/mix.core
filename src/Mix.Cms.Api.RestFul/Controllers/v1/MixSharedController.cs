@@ -10,6 +10,7 @@ using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
+using Mix.Infrastructure.Repositories;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -46,13 +47,24 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             applicationLifetime.StopApplication();
             return Ok(DateTime.UtcNow);
         }
-        
+
         [HttpGet]
         [Route("clear-cache")]
         public async Task<ActionResult> ClearCacheAsync()
         {
             await MixCacheService.RemoveCacheAsync();
             return Ok(DateTime.UtcNow);
+        }
+
+        [HttpGet]
+        [Route("json-data/{name}/{isArray}")]
+        public ActionResult loadJsonData(string name, bool isArray)
+        {
+            var data = MixFileRepository.Instance.GetFile(name, MixFolders.DataFolder, true, "{}");
+            var obj = JObject.Parse(data.Content);
+            return isArray
+                    ? Ok(obj["data"] as JArray)
+                    : Ok(obj);
         }
 
         [HttpGet]
