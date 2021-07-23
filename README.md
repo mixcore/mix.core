@@ -4,6 +4,41 @@
 
 ## Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
 
+
+## UI Screenshots 
+
+### Admin Portal
+
+> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 5. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
+
+(New Portal in Angular / Svelte will be coming soon)
+
+![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/125382627-322d7d00-e3c0-11eb-8ff7-f02316770876.png "Mixcore CMS Admin Portal Bootstrap 5")
+
+
+![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/126033976-28302532-1284-4be8-b8dd-74258a227873.png "Mixcore CMS Admin Portal Bootstrap 5")
+
+
+## Special features (Out of the box)
+
+- [x] **Reliability** - Member roles and permissions.
+- [x] **High Security** - Strong Data Encryption and Security compliance.
+- [x] **Multilingual** - Flexible multilingual content migration.
+- [x] **High Performance** - Millisecond response time.
+- [x] **Cross Platforms** - Powered by .NET Core and run everywhere.
+- [x] **Online Coding** - Visual Studio Code's heart inside.
+- [x] **Customizable Designs** - Build any kinds of website.
+- [x] **SEO Friendly** - No extra plugin required.
+- [x] **Media Management** - Multiple file formats for your website / application.
+- [x] **Manage On The Go** - Manage and Code everywhere you want.
+- [x] **Easy and Accessible** - Non deep tech knowledge required.
+- [x] **Analytics** - Inside Google Analytics dashboard & no extra plugin required.
+- [x] **Dynamic Modular Architecture** - Powerful module layers & Attribute sets feature.
+- [x] **Extensibility** - API-first architecture for Plug & Play.
+- [x] **Easy Backup** - Powerful 1 step export.
+- [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
+
+
 ### CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular / Bootstrap / React / Vue / Svelte.
  
 |Services  |Result  |Services  |Result  |
@@ -85,38 +120,6 @@ gulp build
 ````
 
 > Note: If you facing any System.Data.SqlClient.SqlException error, please replace all content inside "appsettings.json" file with "{}".
-
-## Special features (Out of the box)
-
-- [x] **Reliability** - Member roles and permissions.
-- [x] **High Security** - Strong Data Encryption and Security compliance.
-- [x] **Multilingual** - Flexible multilingual content migration.
-- [x] **High Performance** - Millisecond response time.
-- [x] **Cross Platforms** - Powered by .NET Core and run everywhere.
-- [x] **Online Coding** - Visual Studio Code's heart inside.
-- [x] **Customizable Designs** - Build any kinds of website.
-- [x] **SEO Friendly** - No extra plugin required.
-- [x] **Media Management** - Multiple file formats for your website / application.
-- [x] **Manage On The Go** - Manage and Code everywhere you want.
-- [x] **Easy and Accessible** - Non deep tech knowledge required.
-- [x] **Analytics** - Inside Google Analytics dashboard & no extra plugin required.
-- [x] **Dynamic Modular Architecture** - Powerful module layers & Attribute sets feature.
-- [x] **Extensibility** - API-first architecture for Plug & Play.
-- [x] **Easy Backup** - Powerful 1 step export.
-- [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
-
-## UI Screenshots 
-
-### Admin Portal
-
-> Mixcore CMS Back-office is built on top of the much awaited Bootstrap 5. This makes starting a new project very simple. It also provides benefits if you are already working on a Bootstrap 5 project.
-
-(New Portal in Angular / Svelte will be coming soon)
-
-![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/125382627-322d7d00-e3c0-11eb-8ff7-f02316770876.png "Mixcore CMS Admin Portal Bootstrap 5")
-
-
-![Mixcore Admin Portal Bootstrap 5.x](https://user-images.githubusercontent.com/3785721/126033976-28302532-1284-4be8-b8dd-74258a227873.png "Mixcore CMS Admin Portal Bootstrap 5")
 
 ## Thanks to
 
