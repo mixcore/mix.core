@@ -19,29 +19,29 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
             entity.Property(e => e.Alias)
                 .HasColumnType("varchar(150)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.FullName)
                 .HasColumnType("varchar(150)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.Icon)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
@@ -49,25 +49,25 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
                 .HasColumnName("LCID")
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.Specificulture)
                 .IsRequired()
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
         }
     }
 }

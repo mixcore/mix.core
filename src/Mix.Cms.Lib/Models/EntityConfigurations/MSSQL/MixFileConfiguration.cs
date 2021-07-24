@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -28,51 +28,51 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FileFolder)
                 .IsRequired()
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FileName)
                 .IsRequired()
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.FolderType)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.StringContent)
                 .IsRequired()
                 .HasColumnType("ntext")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.ThemeName)
                 .IsRequired()
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.HasOne(d => d.Theme)
                 .WithMany(p => p.MixFile)

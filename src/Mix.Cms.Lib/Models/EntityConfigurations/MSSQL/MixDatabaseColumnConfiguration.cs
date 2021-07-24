@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                .HasConversion(new EnumToStringConverter<MixDataType>())
                .HasColumnType("varchar(50)")
                .HasCharSet("utf8")
-               .HasCollation("Vietnamese_CI_AS");
+               .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.MixDatabaseName).HasMaxLength(250);
 
@@ -51,7 +51,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
                .HasConversion(new EnumToStringConverter<MixContentStatus>())
                .HasColumnType("varchar(50)")
                .HasCharSet("utf8")
-               .HasCollation("Vietnamese_CI_AS");
+               .UseCollation("Vietnamese_CI_AS");
         }
     }
 }

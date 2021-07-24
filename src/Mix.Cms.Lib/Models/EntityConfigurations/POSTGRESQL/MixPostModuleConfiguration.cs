@@ -22,38 +22,38 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.Image)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.LastModified).HasColumnType("timestamp without time zone");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("und-x-icu");
+                .UseCollation("und-x-icu");
 
             entity.HasOne(d => d.MixModule)
                 .WithMany(p => p.MixPostModule)
