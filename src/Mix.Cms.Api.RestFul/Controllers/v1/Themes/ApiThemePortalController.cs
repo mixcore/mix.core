@@ -104,9 +104,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
             if (theme != null)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                string importFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new FileViewModel(theme, importFolder);
-                MixFileRepository.Instance.SaveFile(theme, $"wwwroot/{importFolder}");
+                MixFileRepository.Instance.SaveFile(theme, importFolder);
             }
 
             // Load default blank if created new without upload theme

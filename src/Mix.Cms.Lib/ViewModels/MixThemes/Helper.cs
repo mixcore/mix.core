@@ -53,12 +53,18 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
                 // Delete Existing folder
                 MixFileRepository.Instance.DeleteWebFolder(outputPath);
+
                 // Copy current templates file
                 MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-                // Copy current assets files
-                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
-                // Copy current uploads files
-                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+
+                if (data.IsIncludeAssets)
+                {
+                    // Copy current assets files
+                    MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                    // Copy current uploads files
+                    MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                }
+
                 // Save Site Structures
                 MixFileRepository.Instance.SaveFile(file);
 
