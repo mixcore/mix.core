@@ -220,12 +220,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result = await ImportThemeAsync(parent, _context, _transaction);
             }
 
-            //// New themes without import existing theme => create from default folder
-            //if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
-            //{
-            //    result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
-            //}
-
             // Actived Theme
             if (IsActived)
             {

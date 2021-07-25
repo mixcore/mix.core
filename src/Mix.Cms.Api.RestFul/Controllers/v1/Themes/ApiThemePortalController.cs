@@ -28,6 +28,7 @@ using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Mix.Infrastructure.Repositories;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -45,7 +46,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixTheme, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixTheme, DeleteViewModel> delRepo,
              MixIdentityHelper idHelper,
-            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo, idHelper)
+             AuditLogRepository auditlogRepo,
+            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo, idHelper, auditlogRepo)
         {
             _httpService = httpService;
             _hubContext = hubContext;

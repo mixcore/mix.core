@@ -12,6 +12,7 @@ using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.MixDatabase.Extensions;
+using Mix.Cms.Lib.Models;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -78,6 +79,7 @@ namespace Mix.Cms.Web
 
             /* Mix: Add db contexts */
             services.AddDbContext<MixCmsContext>();
+            services.AddDbContext<AuditContext>();
             services.AddDbContext<MixDbContext>();
             services.AddDbContext<MixChatServiceContext>();
             /* Mix: End Add db contexts */

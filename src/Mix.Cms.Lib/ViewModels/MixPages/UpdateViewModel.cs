@@ -270,7 +270,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
-            this.View.SetMediator(this);
+            this.View?.SetMediator(this);
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
             // Load master views
