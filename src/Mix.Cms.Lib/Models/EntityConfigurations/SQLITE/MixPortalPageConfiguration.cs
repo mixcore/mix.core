@@ -18,48 +18,48 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(450)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Icon)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.TextDefault)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.TextKeyword)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Url)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
         }
     }
 }

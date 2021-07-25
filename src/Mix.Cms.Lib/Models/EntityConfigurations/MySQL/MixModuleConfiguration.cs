@@ -20,74 +20,74 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.EdmTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Fields)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.FormTemplate)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Image)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Name)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Template)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Thumbnail)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.Title)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.HasOne(d => d.SpecificultureNavigation)
                 .WithMany(p => p.MixModule)
@@ -98,7 +98,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
             entity.Property(e => e.EditorValue)
                 .HasColumnType("text")
                 .HasCharSet("utf8")
-                .HasCollation("utf8_unicode_ci");
+                .UseCollation("utf8_unicode_ci");
 
             entity.Property(e => e.EditorType)
                .IsRequired()
@@ -106,7 +106,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MySQL
                .HasDefaultValue(MixEditorType.Html)
                .HasColumnType("varchar(50)")
                .HasCharSet("utf8")
-               .HasCollation("utf8_unicode_ci");
+               .UseCollation("utf8_unicode_ci");
         }
     }
 }

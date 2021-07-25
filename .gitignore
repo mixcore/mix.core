@@ -281,3 +281,4 @@ src/Mix.Cms.Web/MixContent/mix_cache.db
 
 src/Mix.Cms.Web/Properties/PublishProfiles/
 /src/Mix.Cms.Web/wwwroot/mix-content/imports/themes/**/*
+/src/Mix.Cms.Web/wwwroot/Imports/Themes/24-07-2021/bs-5

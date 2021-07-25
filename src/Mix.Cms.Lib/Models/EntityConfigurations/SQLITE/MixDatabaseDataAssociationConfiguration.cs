@@ -19,22 +19,22 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .ValueGeneratedNever()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Specificulture)
                 .HasColumnType("varchar(10)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.MixDatabaseName)
                 .HasColumnType("varchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
@@ -42,39 +42,39 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Description)
                 .HasColumnType("varchar(450)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.ParentId)
                 .IsRequired()
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.ParentType)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("NOCASE");
+                .UseCollation("NOCASE");
         }
     }
 }

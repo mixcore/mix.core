@@ -43,6 +43,7 @@ namespace Mix.Cms.Web.Controllers
         #region Routes
 
         [HttpGet]
+        [Route("admin")]
         [Route("portal")]
         [Route("portal/page/{type}")]
         [Route("portal/post/{type}")]
@@ -65,52 +66,6 @@ namespace Mix.Cms.Web.Controllers
             }
         }
         
-        [HttpGet]
-        [Route("admin")]
-        [Route("admin/page/{type}")]
-        [Route("admin/post/{type}")]
-        [Route("admin/{pageName}")]
-        [Route("admin/{pageName}/{type}")]
-        [Route("admin/{pageName}/{type}/{param}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        public IActionResult Svelte(string page)
-        {
-            if (isValid)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect(_redirectUrl);
-            }
-        }
-        
-        [HttpGet]
-        [Route("portal-v2")]
-        [Route("portal-v2/page/{type}")]
-        [Route("portal-v2/post/{type}")]
-        [Route("portal-v2/{pageName}")]
-        [Route("portal-v2/{pageName}/{type}")]
-        [Route("portal-v2/{pageName}/{type}/{param}")]
-        [Route("portal-v2/{pageName}/{type}/{param}/{param1}")]
-        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}")]
-        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
-        [Route("portal-v2/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        public IActionResult PortalV2(string page)
-        {
-            if (isValid)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect(_redirectUrl);
-            }
-        }
-
         #endregion Routes
     }
 }

@@ -41,7 +41,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // GET: api/v1/rest/{culture}/mix-database-data
-        [HttpGet("init/{mixDatabaseName}")]
+        [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
             var formData = await getFormDataAsync(mixDatabase);

@@ -1074,38 +1074,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var getModulePost = MixModulePosts.ReadViewModel.GetModulePostNavAsync(Id, Specificulture, _context, _transaction);
             if (getModulePost.IsSucceed)
             {
-                foreach (var item in getModulePost.Data)
+                Modules = getModulePost.Data;
+                Modules.ForEach(c =>
                 {
-                    item.Description = item.Module?.Title ?? item.Description;
-                    item.Specificulture = Specificulture;
-                    item.Image = item.Module?.ImageUrl ?? item.Image;
-                }
-                this.Modules = getModulePost.Data;
-                this.Modules.ForEach(c =>
-                {
+                    c.Specificulture = Specificulture;
+                    c.Description = c.Module?.Title ?? c.Description;
                     c.IsActived = MixModulePosts.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.PostId == Id, _context, _transaction);
                 });
-            }
-            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixModuleType.Content || m.Type == (int)MixModuleType.ListPost)
-                && m.Specificulture == Specificulture
-                //&& !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", Heart.Enums.DisplayDirection.Desc, null, 0, _context, _transaction);
-            if (otherModules.Data != null)
-            {
-                foreach (var item in otherModules.Data.Items)
-                {
-                    if (!Modules.Any(m => m.ModuleId == Id && m.Specificulture == Specificulture))
-                    {
-                        Modules.Add(new MixModulePosts.ReadViewModel()
-                        {
-                            ModuleId = item.Id,
-                            Image = item.Image,
-                            PostId = Id,
-                            Description = item.Title
-                        });
-                    }
-                }
             }
         }
 

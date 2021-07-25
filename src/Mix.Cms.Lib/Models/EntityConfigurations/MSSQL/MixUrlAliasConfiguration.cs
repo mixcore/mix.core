@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.Specificulture)
             .HasColumnType("varchar(10)")
             .HasCharSet("utf8")
-            .HasCollation("Vietnamese_CI_AS");
+            .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Alias).HasMaxLength(250);
 

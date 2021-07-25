@@ -14,6 +14,9 @@ namespace Mix.Cms.Lib.ViewModels
 {
     public class SiteStructureViewModel
     {
+        [JsonProperty("isIncludeAssets")]
+        public bool IsIncludeAssets { get; set; } = true;
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
