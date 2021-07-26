@@ -120,9 +120,14 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                IsValid = MixDatabaseId > 0 && !string.IsNullOrEmpty(MixDatabaseName);
-                if (!IsValid)
+                if (string.IsNullOrEmpty(ParentId) || ParentId == "0")
                 {
+                    IsValid = false;
+                    Errors.Add("Invalid Parent Id");
+                }
+                if (MixDatabaseId <= 0 || string.IsNullOrEmpty(MixDatabaseName))
+                {
+                    IsValid = false;
                     Errors.Add("Invalid Mix Database");
                 }
             }
