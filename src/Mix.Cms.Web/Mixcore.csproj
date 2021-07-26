@@ -11,6 +11,8 @@
         <ApplicationIcon>favicon.ico</ApplicationIcon>
         <Version>1.0.1</Version>
         <AssemblyName>mixcore</AssemblyName>
+
+      <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="logs\**" />
