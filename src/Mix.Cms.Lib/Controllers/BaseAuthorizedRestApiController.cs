@@ -236,7 +236,7 @@ namespace Mix.Cms.Lib.Controllers
                 var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
 
                 idPre = idPre != null
-                    ? idPre.AndAlso(temp)
+                    ? idPre.Or(temp)
                     : temp;
             }
             if (idPre != null)
