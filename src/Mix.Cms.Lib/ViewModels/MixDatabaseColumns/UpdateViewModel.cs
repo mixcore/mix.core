@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                if (MixDatabaseName != "sys_additional_field")
+                if (MixDatabaseName != "sys_additional_column")
                 {
                     // Check if there is field name in the same attribute set
                     IsValid = !_context.MixDatabaseColumn.Any(

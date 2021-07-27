@@ -9,7 +9,14 @@ var app = angular.module("MixClient", [
   "ui.bootstrap",
   "cart",
   "ngSanitize",
-  'MixShared'
+  "MixShared",
+]);
+
+app.config([
+  "$locationProvider",
+  function ($locationProvider) {
+    $locationProvider.hashPrefix("");
+  },
 ]);
 
 var serviceBase = "";
