@@ -10,6 +10,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
 using Mix.Heart.Infrastructure.Repositories;
@@ -32,7 +33,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         public ApiRoleController(
             DefaultRepository<MixCmsAccountContext, AspNetRoles, ReadViewModel> repo,
             DefaultRepository<MixCmsAccountContext, AspNetRoles, UpdateViewModel> updRepo,
-            MixIdentityHelper mixIdentityHelper, RoleManager<IdentityRole> roleManager) : base(repo, updRepo, updRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper, RoleManager<IdentityRole> roleManager,
+            AuditLogRepository auditlogRepo) 
+            : base(repo, updRepo, updRepo, mixIdentityHelper, auditlogRepo)
         {
             _roleManager = roleManager;
         }
@@ -84,7 +87,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return result;
         }
 
-        public override async Task<IActionResult> Update(string id, [FromBody] UpdateViewModel data)
+        public override async Task<ActionResult<UpdateViewModel>> Update(string id, [FromBody] UpdateViewModel data)
         {
             var result = await base.Update(id, data);
             await data.SavePermissionsAsync(data.Model);

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixDatabases;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -29,8 +30,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, 
             DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : 
-            base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo) :
+            base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
 
