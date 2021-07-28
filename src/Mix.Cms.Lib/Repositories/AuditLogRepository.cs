@@ -24,29 +24,34 @@ namespace Mix.Cms.Lib.Repositories
         }
         internal void Log(string createdBy, HttpRequest request, bool isSucceed, Exception exception)
         {
-            string body = GetBody(request);
-            var msg = new AuditLog()
+            Guid.TryParse(request.Headers["RequestId"], out Guid id);
+            var msg = _dbContext.AuditLog.Find(id);
+            if (msg == null)
             {
-                Id = Guid.NewGuid(),
-                Exception = JsonSerializer.Serialize(exception),
-                Body = body,
-                CreatedDateTime = DateTime.UtcNow,
-                Endpoint = request.Path,
-                Method = request.Method,
-                Success = isSucceed,
-                CreatedBy = createdBy
-            };
-            _dbContext.AuditLog.Add(msg);
+                string body = GetBody(request);
+                msg = new AuditLog()
+                {
+                    Id = id,
+                    Body = body,
+                    CreatedDateTime = DateTime.UtcNow,
+                    Endpoint = request.Path,
+                    Method = request.Method,
+                    CreatedBy = createdBy
+                };
+                _dbContext.AuditLog.Add(msg);
+            }
+            msg.Exception = JsonSerializer.Serialize(exception);
+            msg.Success = isSucceed;
             _dbContext.SaveChanges();
         }
         private string GetBody(HttpRequest request)
         {
             var bodyStr = "";
-
+            string id = request.Headers["RequestId"];
             // Arguments: Stream, Encoding, detect encoding, buffer size 
             // AND, the most important: keep stream opened
             using (StreamReader reader
-                      = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true))
+                      = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
             {
                 bodyStr = reader.ReadToEndAsync().GetAwaiter().GetResult();
             }
