@@ -305,6 +305,7 @@ namespace Mix.Cms.Lib.Controllers
 
         protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result, MixErrorStatus status = MixErrorStatus.Badrequest)
         {
+            _auditlogRepo.Log(_mixIdentityHelper.GetClaim(User, MixClaims.Username), Request, result.IsSucceed, result.Exception);
             if (result.IsSucceed)
             {
                 return Ok(result.Data);
