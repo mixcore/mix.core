@@ -171,7 +171,6 @@ namespace Mix.Cms.Lib.Controllers
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
             ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
-            ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
             var result = await SaveAsync(data, true);
             return GetResponse(result);
         }

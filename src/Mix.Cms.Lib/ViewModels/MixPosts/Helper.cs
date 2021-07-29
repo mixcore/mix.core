@@ -674,8 +674,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             using (var context = new MixCmsContext())
             {
-                var now = DateTime.UtcNow;
-                now = now.AddSeconds(-now.Second);
+                var now =  DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm"));
                 var sheduledPosts = context.MixPost
                     .Where(m => m.Status == MixContentStatus.Schedule
                         && Equals(m.PublishedDateTime.Value, now));
