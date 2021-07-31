@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataContentViewModel : SiteContentSEOViewModelBase<MixCmsContext, MixDataContent, Guid>
+    public class MixDataContentViewModel : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid>
     {
         #region Contructors
 
@@ -181,8 +181,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixDataViewModel parent = new MixDataViewModel(UowInfo)
             {
-                DisplayName = DisplayName,
-                Description = Description
+                DisplayName = Title,
+                Description = Excerpt
             };
             return await parent.SaveAsync();
         }

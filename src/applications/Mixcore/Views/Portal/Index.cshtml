@@ -8,7 +8,7 @@
 
 <head>
     <base href="/portal">
-    <title>@ViewData["Title"] - Angular mixcore tet</title>
+    <title>@ViewData["Title"] - Angular mixcore</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -44,23 +44,13 @@
         }
         </style>
         <mix-loader ng-show="isBusy"></mix-loader>
-        <header-nav ng-if="isInit" settings="localizeSettings" bread-crumbs="breadCrumbs"></header-nav>
-        <login-popup></login-popup>
-
+        <layout-portal-header ng-if="isInit"></layout-portal-header>
         <div class="wrapper d-flex" ng-if="isInit">
-            <main-side-bar class="bd-sidebar main-sidebar"></main-side-bar>
+            <layout-portal-sidebar class="bd-sidebar main-sidebar"></layout-portal-sidebar>
             <!-- Page Content  -->
             <form id="form-portal" class="container d-flex flex-row-reverse {{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()" style="background-color: var(--bg-color,hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1));">
             </form>
-            <portal-theme-settings></portal-theme-settings>
-            <medias></medias>
-            <hub-messages></hub-messages>
-            <message message="message"></message>
-            <confirm message="confirmMessage"></confirm>
-            <modal-permission></modal-permission>
-            <modal-bookmark></modal-bookmark>
-            <preview-popup preview-object="previewObject"></preview-popup>
-            <modal-helper></modal-helper>
+            <layout-portal-modals></layout-portal-modals>
         </div>
 
         <input type="hidden" id="portal-menus" value="@menus.Content" />

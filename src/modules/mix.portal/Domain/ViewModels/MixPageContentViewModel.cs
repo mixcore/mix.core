@@ -9,7 +9,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixPageContentViewModel 
-        : SiteContentSEOViewModelBase<MixCmsContext, MixPageContent, int>
+        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixPageContent, int>
     {
         #region Contructors
 
@@ -40,8 +40,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixPageViewModel parent = new(UowInfo)
             {
-                DisplayName = DisplayName,
-                Description = Description
+                DisplayName = Title,
+                Description = Excerpt
             };
             return await parent.SaveAsync();
         }

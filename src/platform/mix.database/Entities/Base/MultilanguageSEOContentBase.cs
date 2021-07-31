@@ -7,6 +7,7 @@ namespace Mix.Database.Entities.Base
         where TPrimaryKey : IComparable
     {
         public string Title { get; set; }
+        public string Excerpt { get; set; }
         public string Content { get; set; }
         public string Layout { get; set; }
         public string Template { get; set; }

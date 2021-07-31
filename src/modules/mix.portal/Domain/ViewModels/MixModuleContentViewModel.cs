@@ -10,7 +10,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixModuleContentViewModel 
-        : SiteContentSEOViewModelBase<MixCmsContext, MixModuleContent, int>
+        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixModuleContent, int>
     {
         #region Contructors
 
@@ -33,6 +33,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Properties
 
+        public string SystemName { get; set; }
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
         public MixModuleType Type { get; set; }
@@ -43,9 +44,9 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixModuleViewModel parent = new(UowInfo)
             {
-                DisplayName = DisplayName,
+                DisplayName = Title,
                 SystemName = SystemName,
-                Description = Description
+                Description = Excerpt
             };
             return await parent.SaveAsync();
         }

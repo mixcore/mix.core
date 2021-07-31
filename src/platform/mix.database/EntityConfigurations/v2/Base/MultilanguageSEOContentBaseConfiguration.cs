@@ -20,6 +20,11 @@ namespace Mix.Database.EntityConfigurations.v2.Base
                .HasCharSet(_config.CharSet)
                .UseCollation(_config.DatabaseCollation);
 
+            builder.Property(e => e.Excerpt)
+                .HasColumnType($"{_config.NString}{_config.MaxLength}")
+                .HasCharSet(_config.CharSet)
+                .UseCollation(_config.DatabaseCollation);
+            
             builder.Property(e => e.Content)
                 .HasColumnType($"{_config.Text}")
                 .HasCharSet(_config.CharSet)
