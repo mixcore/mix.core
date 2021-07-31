@@ -1137,6 +1137,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_CATEGORY, _context, _transaction);
             if (getCategories.IsSucceed)
             {
+                getCategories.Data.ForEach(t => t.IsActived = true);
                 SysCategories = getCategories.Data;
             }
 
@@ -1145,6 +1146,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_TAG, _context, _transaction);
             if (getTags.IsSucceed)
             {
+                getTags.Data.ForEach(t => t.IsActived = true);
                 SysTags = getTags.Data;
             }
         }
