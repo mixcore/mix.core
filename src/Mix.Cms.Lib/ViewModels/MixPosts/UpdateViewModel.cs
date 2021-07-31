@@ -298,8 +298,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 CreatedDateTime = DateTime.UtcNow;
             }
             LastModified = DateTime.UtcNow;
-            PublishedDateTime = PublishedDateTime?.ToUniversalTime();
-
             //  Parsing Extra Fields to json string
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
