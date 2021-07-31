@@ -10,7 +10,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixConfigurationContentViewModel 
-        : SiteContentViewModelBase<MixCmsContext, MixConfigurationContent, int>
+        : MultilanguageUniqueNameContentViewModelBase<MixCmsContext, MixConfigurationContent, int>
     {
         public string DefaultContent { get; set; }
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentValueViewModel
-        : SiteContentViewModelBase<MixCmsContext, MixDataContentValue, Guid>
+        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid>
     {
         #region Properties
 

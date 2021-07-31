@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.Base
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
         where TContentEntity : MultilanguageContentBase<TPrimaryKey>
-        where TContent : SiteContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
+        where TContent : MultilanguageContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
     {
         #region Contructors
         protected SiteDataWithContentViewModelBase()

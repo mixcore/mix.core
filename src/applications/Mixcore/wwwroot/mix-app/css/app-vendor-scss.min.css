@@ -1,4 +1,4 @@
-/* Fri Jul 16 2021 16:37:38 GMT+0700 (Indochina Time) */fb-login {
+/* Sat Jul 31 2021 19:57:33 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -31,22 +31,3 @@ mix-module-data-table .preview-container {
 /* canvas{width:300px; height:380px;} */
 upload-croppie .cr-boundary {
   overflow: hidden; }
-
-main-side-bar-dynamic .sw-sidebar .sw-toc-item {
-  position: relative; }
-  main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
-    padding-left: 0; }
-  main-side-bar-dynamic .sw-sidebar .sw-toc-item .btn-group {
-    right: 20px;
-    opacity: 1; }
-
-main-side-bar-dynamic .sw-sidebar ul {
-  padding-left: 15px; }
-
-main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
-  padding: 2px 0; }
-
-@media (min-width: 992px) {
-  #modal-content-filter .modal-lg,
-  #modal-content-filter .modal-xl {
-    max-width: 80vw; } }

@@ -8,28 +8,28 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Base
 {
-    public abstract class SiteContentSEOViewModelBase<TDbContext, TEntity, TPrimaryKey> 
-        : SiteContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
+    public abstract class MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
+        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
     {
         #region Contructors
 
-        public SiteContentSEOViewModelBase()
+        public MultilanguageSEOContentViewModelBase()
         {
 
         }
 
-        protected SiteContentSEOViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
+        protected MultilanguageSEOContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
-        protected SiteContentSEOViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilanguageSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteContentSEOViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        protected MultilanguageSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -37,6 +37,9 @@ namespace Mix.Portal.Domain.Base
 
         #region Properties
 
+        public string Title { get; set; }
+        public string Excerpt { get; set; }
+        public string Content { get; set; }
         public string Layout { get; set; }
         public string Template { get; set; }
         public string Image { get; set; }
