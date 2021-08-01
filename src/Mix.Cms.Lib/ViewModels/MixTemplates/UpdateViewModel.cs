@@ -137,6 +137,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     Content = file.Content;
                 }
             }
+            Scripts ??= "<script>\r\n\r\n</script>";
+            Styles ??= "<style>\r\n\r\n</style>";
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
