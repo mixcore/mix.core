@@ -83,7 +83,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
         #endregion Model
 
         #region Views
-
+        [JsonProperty("isActived")]
+        public bool IsActived { get; set; }
         [JsonProperty("attributeData")]
         public MixDatabaseDatas.FormViewModel AttributeData { get; set; }
 
