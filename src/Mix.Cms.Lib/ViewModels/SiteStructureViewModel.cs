@@ -22,7 +22,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("posts")]
         public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
-        
+
         [JsonProperty("pages")]
         public List<MixPages.ImportViewModel> Pages { get; set; }
 
@@ -31,6 +31,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("mixDatabases")]
         public List<MixDatabases.ImportViewModel> MixDatabases { get; set; }
+
+        [JsonProperty("mixTemplates")]
+        public List<MixTemplates.ImportViewModel> Templates { get; set; }
 
         [JsonProperty("configurations")]
         public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
@@ -91,6 +94,7 @@ namespace Mix.Cms.Lib.ViewModels
                 ExportModules(context, transaction);
                 ExportMixDatabasesAsync(context, transaction);
                 ExportDatas(context, transaction);
+                ExportTemplates(context, transaction);
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
@@ -109,6 +113,11 @@ namespace Mix.Cms.Lib.ViewModels
                     UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
+        }
+
+        private void ExportTemplates(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            Templates = MixTemplates.ImportViewModel.Repository.GetModelList(context, transaction).Data;
         }
 
         private void ExportDatas(MixCmsContext context, IDbContextTransaction transaction)
@@ -318,6 +327,8 @@ namespace Mix.Cms.Lib.ViewModels
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
         public async Task<RepositoryResponse<bool>> ImportAsync(
+            int themeId,
+            string themeName,
             string destCulture,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -362,6 +373,10 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
+                if (result.IsSucceed && Templates.Count > 0)
+                {
+                    result = await ImportTemplates(themeId, themeName, context, transaction);
+                }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
@@ -378,6 +393,22 @@ namespace Mix.Cms.Lib.ViewModels
                 if (isRoot)
                 {
                     UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportTemplates(int themeId, string themeName, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in Templates)
+            {
+                if (result.IsSucceed)
+                {
+                    item.ThemeId = themeId;
+                    item.ThemeName = themeName;
+                    var saveResult = await item.SaveModelAsync(true, context, transaction);
+                    ViewModelHelper.HandleResult(saveResult, ref result);
                 }
             }
             return result;
@@ -466,7 +497,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
-                    {                        
+                    {
                         if (!context.MixDatabase.Any(m => m.Name == set.Name))
                         {
                             startId++;
@@ -481,7 +512,7 @@ namespace Mix.Cms.Lib.ViewModels
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
-                        }                        
+                        }
                     }
                     else
                     {
@@ -721,7 +752,7 @@ namespace Mix.Cms.Lib.ViewModels
                         foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;
-                            var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);                            
+                            var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
                             var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {
