@@ -34,6 +34,7 @@ namespace Mix.Cms.Lib.Repositories
                     Id = id,
                     Body = body,
                     CreatedDateTime = DateTime.UtcNow,
+                    RequestIp = request.HttpContext.Connection.Id.ToString(),
                     Endpoint = request.Path,
                     Method = request.Method,
                     CreatedBy = createdBy

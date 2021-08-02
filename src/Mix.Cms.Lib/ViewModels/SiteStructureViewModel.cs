@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels
@@ -297,20 +298,27 @@ namespace Mix.Cms.Lib.ViewModels
 
         private void ExportRelatedDatas(MixCmsContext context, IDbContextTransaction transaction)
         {
-            foreach (var item in MixDatabaseDatas)
-            {
-                var getDataResult = MixDatabaseDataAssociations.ImportViewModel.Repository
-                                   .GetModelListBy(m => m.ParentId == item.Id && m.Specificulture == item.Specificulture
-                                   , context, transaction);
+            var postIds = Posts.Select(p => p.Id.ToString()).ToList();
+            var pageIds = Pages.Select(p => p.Id.ToString()).ToList();
+            var moduleIds = Modules.Select(p => p.Id.ToString()).ToList();
+            var relatedIds = RelatedData.Select(p => p.Id).ToList();
+            var dataIds = MixDatabaseDatas.Select(p => p.Id).ToList();
+            Expression<Func<MixDatabaseDataAssociation, bool>> predicate = m =>
+                !relatedIds.Any(r => r == m.Id)
+                && m.Specificulture == Specificulture
+                && (
+                    dataIds.Any(d => d == m.ParentId)
+                    || (m.ParentType == MixDatabaseParentType.Page && pageIds.Any(p => p == m.ParentId))
+                    || (m.ParentType == MixDatabaseParentType.Post && postIds.Any(p => p == m.ParentId))
+                    || (m.ParentType == MixDatabaseParentType.Module && moduleIds.Any(p => p == m.ParentId))
+                    );
 
-                if (getDataResult.IsSucceed && getDataResult.Data.Count > 0)
-                {
-                    var data = getDataResult.Data.Where(m =>
-                        MixDatabaseDatas.Any(d => d.Id == m.DataId)
-                        && !RelatedData.Any(r => r.ParentId == item.Id && r.DataId == m.DataId))
-                        .ToList();
-                    RelatedData.AddRange(data);
-                }
+            var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository
+                               .GetModelListBy(predicate, context, transaction);
+
+            if (getRelatedData.IsSucceed && getRelatedData.Data.Count > 0)
+            {
+                RelatedData.AddRange(getRelatedData.Data);
             }
         }
 
@@ -498,13 +506,11 @@ namespace Mix.Cms.Lib.ViewModels
                     set.CreatedBy = CreatedBy;
                     if (result.IsSucceed)
                     {
+                        // Import database if not exist in current system (unique by name)
                         if (!context.MixDatabase.Any(m => m.Name == set.Name))
                         {
                             startId++;
-                            if (!dicMixDatabaseIds.Any(m => m.Key == set.Id))
-                            {
-                                dicMixDatabaseIds.Add(set.Id, startId);
-                            }
+                            dicMixDatabaseIds.Add(set.Id, startId);
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
                             mixDatabaseColumns.AddRange(set.Fields
@@ -512,6 +518,10 @@ namespace Mix.Cms.Lib.ViewModels
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
                             ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+                        else
+                        {
+                            dicMixDatabaseIds.Add(set.Id, set.Id);
                         }
                     }
                     else

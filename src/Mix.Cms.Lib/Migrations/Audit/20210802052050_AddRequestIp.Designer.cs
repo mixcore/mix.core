@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models;
 
 namespace Mix.Cms.Lib.Migrations.Audit
 {
     [DbContext(typeof(AuditContext))]
-    partial class AuditContextModelSnapshot : ModelSnapshot
+    [Migration("20210802052050_AddRequestIp")]
+    partial class AddRequestIp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
