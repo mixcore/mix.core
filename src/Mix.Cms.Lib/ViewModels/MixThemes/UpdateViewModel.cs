@@ -247,8 +247,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
                 //Move Unzip Asset folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
-                //Move Unzip Templates folder
-                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
@@ -260,14 +258,8 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 MixFileRepository.Instance.DeleteFolder(MixFolders.ThemePackage);
-                //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
-                result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
-                if (result.IsSucceed)
-                {
-                    RepositoryResponse<bool> saveTemplate = await SaveTemplatesAsync(parent, TemplateFolder, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveTemplate, ref result);
-                }
+                result = await siteStructures.ImportAsync(parent.Id, parent.Name, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -287,7 +279,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     {
                         FileFolder = file.FileFolder,
                         FileName = file.Filename,
-                        Content = file.Content,
+                        Content = content,
                         Extension = file.Extension,
                         CreatedDateTime = DateTime.UtcNow,
                         LastModified = DateTime.UtcNow,
@@ -304,51 +296,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     result.Exception = saveResult.Exception;
                     result.Errors.AddRange(saveResult.Errors);
                     break;
-                }
-            }
-            return result;
-        }
-
-
-        private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string defaultFolder = $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
-
-            //CommonHelper.GetFullPath(new string[] {
-            //    MixFolders.TemplatesFolder,
-            //    MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplateFolder) });
-            bool copyResult = MixFileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-
-            var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
-            var id = _context.MixTemplate.Count() + 1;
-            //TODO: Create default asset
-            foreach (var file in files)
-            {
-                MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
-                    new MixTemplate()
-                    {
-                        Id = id,
-                        FileFolder = file.FileFolder,
-                        FileName = file.Filename,
-                        Content = file.Content,
-                        Extension = file.Extension,
-                        CreatedDateTime = DateTime.UtcNow,
-                        LastModified = DateTime.UtcNow,
-                        ThemeId = Model.Id,
-                        ThemeName = Model.Name,
-                        FolderType = file.FolderName,
-                        ModifiedBy = CreatedBy
-                    }, _context, _transaction);
-                var saveResult = await template.SaveModelAsync(true, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
-                if (!result.IsSucceed)
-                {
-                    break;
-                }
-                else
-                {
-                    id += 1;
                 }
             }
             return result;

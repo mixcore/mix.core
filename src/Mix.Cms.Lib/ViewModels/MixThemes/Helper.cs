@@ -54,9 +54,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Delete Existing folder
                 MixFileRepository.Instance.DeleteWebFolder(outputPath);
 
-                // Copy current templates file
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-
                 if (data.IsIncludeAssets)
                 {
                     // Copy current assets files
@@ -74,7 +71,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Delete temp folder
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
 
                 return new RepositoryResponse<string>()

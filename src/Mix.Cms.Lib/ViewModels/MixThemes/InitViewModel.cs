@@ -180,8 +180,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 MixFileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
-                //Move Unzip Templates folder
-                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
@@ -195,40 +193,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 MixFileRepository.Instance.DeleteFolder(MixFolders.ThemePackage);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
-                result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
-                if (result.IsSucceed)
-                {
-                    // Save template files to db
-                    var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                    //TODO: Create default asset
-                    foreach (var file in files)
-                    {
-                        MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
-                            new MixTemplate()
-                            {
-                                CreatedBy = CreatedBy,
-                                FileFolder = file.FileFolder,
-                                FileName = file.Filename,
-                                Content = file.Content,
-                                Extension = file.Extension,
-                                CreatedDateTime = DateTime.UtcNow,
-                                LastModified = DateTime.UtcNow,
-                                ThemeId = parent.Id,
-                                ThemeName = parent.Name,
-                                FolderType = file.FolderName,
-                                ModifiedBy = CreatedBy
-                            }, _context, _transaction);
-                        var saveResult = await template.SaveModelAsync(true, _context, _transaction);
-                        result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.IsSucceed = false;
-                            result.Exception = saveResult.Exception;
-                            result.Errors.AddRange(saveResult.Errors);
-                            break;
-                        }
-                    }
-                }
+                result = await siteStructures.ImportAsync(parent.Id, parent.Name, Specificulture, _context, _transaction);
             }
             return result;
         }

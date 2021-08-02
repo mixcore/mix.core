@@ -23,6 +23,7 @@ namespace Mix.Cms.Lib.ViewModels
         }
 
         public Guid Id { get; set; }
+        public string RequestIp { get; set; }
         public string Endpoint { get; set; }
         public string Method { get; set; }
         public string Body { get; set; }

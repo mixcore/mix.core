@@ -2,21 +2,21 @@
   "data": [
     {
       "id": "001",
-      "name": "Quận Ba Đình",
+      "value": "Quận Ba Đình",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "002",
-      "name": "Quận Hoàn Kiếm",
+      "value": "Quận Hoàn Kiếm",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "003",
-      "name": "Quận Tây Hồ",
+      "value": "Quận Tây Hồ",
       "englishName": "Tay Ho Dist",
       "level": "Quận",
       "provinceId": "01",
@@ -24,448 +24,448 @@
     },
     {
       "id": "004",
-      "name": "Quận Long Biên",
+      "value": "Quận Long Biên",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "005",
-      "name": "Quận Cầu Giấy",
+      "value": "Quận Cầu Giấy",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "006",
-      "name": "Quận Đống Đa",
+      "value": "Quận Đống Đa",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "007",
-      "name": "Quận Hai Bà Trưng",
+      "value": "Quận Hai Bà Trưng",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "008",
-      "name": "Quận Hoàng Mai",
+      "value": "Quận Hoàng Mai",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "009",
-      "name": "Quận Thanh Xuân",
+      "value": "Quận Thanh Xuân",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "016",
-      "name": "Huyện Sóc Sơn",
+      "value": "Huyện Sóc Sơn",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "017",
-      "name": "Huyện Đông Anh",
+      "value": "Huyện Đông Anh",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "018",
-      "name": "Huyện Gia Lâm",
+      "value": "Huyện Gia Lâm",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "019",
-      "name": "Quận Nam Từ Liêm",
+      "value": "Quận Nam Từ Liêm",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "020",
-      "name": "Huyện Thanh Trì",
+      "value": "Huyện Thanh Trì",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "021",
-      "name": "Quận Bắc Từ Liêm",
+      "value": "Quận Bắc Từ Liêm",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "250",
-      "name": "Huyện Mê Linh",
+      "value": "Huyện Mê Linh",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "268",
-      "name": "Quận Hà Đông",
+      "value": "Quận Hà Đông",
       "level": "Quận",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "269",
-      "name": "Thị xã Sơn Tây",
+      "value": "Thị xã Sơn Tây",
       "level": "Thị xã",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "271",
-      "name": "Huyện Ba Vì",
+      "value": "Huyện Ba Vì",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "272",
-      "name": "Huyện Phúc Thọ",
+      "value": "Huyện Phúc Thọ",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "273",
-      "name": "Huyện Đan Phượng",
+      "value": "Huyện Đan Phượng",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "274",
-      "name": "Huyện Hoài Đức",
+      "value": "Huyện Hoài Đức",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "275",
-      "name": "Huyện Quốc Oai",
+      "value": "Huyện Quốc Oai",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "276",
-      "name": "Huyện Thạch Thất",
+      "value": "Huyện Thạch Thất",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "277",
-      "name": "Huyện Chương Mỹ",
+      "value": "Huyện Chương Mỹ",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "278",
-      "name": "Huyện Thanh Oai",
+      "value": "Huyện Thanh Oai",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "279",
-      "name": "Huyện Thường Tín",
+      "value": "Huyện Thường Tín",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "280",
-      "name": "Huyện Phú Xuyên",
+      "value": "Huyện Phú Xuyên",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "281",
-      "name": "Huyện Ứng Hòa",
+      "value": "Huyện Ứng Hòa",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "282",
-      "name": "Huyện Mỹ Đức",
+      "value": "Huyện Mỹ Đức",
       "level": "Huyện",
       "provinceId": "01",
       "province": "Thành phố Hà Nội"
     },
     {
       "id": "024",
-      "name": "Thành phố Hà Giang",
+      "value": "Thành phố Hà Giang",
       "level": "Thành phố",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "026",
-      "name": "Huyện Đồng Văn",
+      "value": "Huyện Đồng Văn",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "027",
-      "name": "Huyện Mèo Vạc",
+      "value": "Huyện Mèo Vạc",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "028",
-      "name": "Huyện Yên Minh",
+      "value": "Huyện Yên Minh",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "029",
-      "name": "Huyện Quản Bạ",
+      "value": "Huyện Quản Bạ",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "030",
-      "name": "Huyện Vị Xuyên",
+      "value": "Huyện Vị Xuyên",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "031",
-      "name": "Huyện Bắc Mê",
+      "value": "Huyện Bắc Mê",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "032",
-      "name": "Huyện Hoàng Su Phì",
+      "value": "Huyện Hoàng Su Phì",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "033",
-      "name": "Huyện Xín Mần",
+      "value": "Huyện Xín Mần",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "034",
-      "name": "Huyện Bắc Quang",
+      "value": "Huyện Bắc Quang",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "035",
-      "name": "Huyện Quang Bình",
+      "value": "Huyện Quang Bình",
       "level": "Huyện",
       "provinceId": "02",
       "province": "Tỉnh Hà Giang"
     },
     {
       "id": "040",
-      "name": "Thành phố Cao Bằng",
+      "value": "Thành phố Cao Bằng",
       "level": "Thành phố",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "042",
-      "name": "Huyện Bảo Lâm",
+      "value": "Huyện Bảo Lâm",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "043",
-      "name": "Huyện Bảo Lạc",
+      "value": "Huyện Bảo Lạc",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "045",
-      "name": "Huyện Hà Quảng",
+      "value": "Huyện Hà Quảng",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "047",
-      "name": "Huyện Trùng Khánh",
+      "value": "Huyện Trùng Khánh",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "048",
-      "name": "Huyện Hạ Lang",
+      "value": "Huyện Hạ Lang",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "049",
-      "name": "Huyện Quảng Hòa",
+      "value": "Huyện Quảng Hòa",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "051",
-      "name": "Huyện Hoà An",
+      "value": "Huyện Hoà An",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "052",
-      "name": "Huyện Nguyên Bình",
+      "value": "Huyện Nguyên Bình",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "053",
-      "name": "Huyện Thạch An",
+      "value": "Huyện Thạch An",
       "level": "Huyện",
       "provinceId": "04",
       "province": "Tỉnh Cao Bằng"
     },
     {
       "id": "058",
-      "name": "Thành Phố Bắc Kạn",
+      "value": "Thành Phố Bắc Kạn",
       "level": "Thành phố",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "060",
-      "name": "Huyện Pác Nặm",
+      "value": "Huyện Pác Nặm",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "061",
-      "name": "Huyện Ba Bể",
+      "value": "Huyện Ba Bể",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "062",
-      "name": "Huyện Ngân Sơn",
+      "value": "Huyện Ngân Sơn",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "063",
-      "name": "Huyện Bạch Thông",
+      "value": "Huyện Bạch Thông",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "064",
-      "name": "Huyện Chợ Đồn",
+      "value": "Huyện Chợ Đồn",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "065",
-      "name": "Huyện Chợ Mới",
+      "value": "Huyện Chợ Mới",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "066",
-      "name": "Huyện Na Rì",
+      "value": "Huyện Na Rì",
       "level": "Huyện",
       "provinceId": "06",
       "province": "Tỉnh Bắc Kạn"
     },
     {
       "id": "070",
-      "name": "Thành phố Tuyên Quang",
+      "value": "Thành phố Tuyên Quang",
       "level": "Thành phố",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "071",
-      "name": "Huyện Lâm Bình",
+      "value": "Huyện Lâm Bình",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "072",
-      "name": "Huyện Na Hang",
+      "value": "Huyện Na Hang",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "073",
-      "name": "Huyện Chiêm Hóa",
+      "value": "Huyện Chiêm Hóa",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "074",
-      "name": "Huyện Hàm Yên",
+      "value": "Huyện Hàm Yên",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "075",
-      "name": "Huyện Yên Sơn",
+      "value": "Huyện Yên Sơn",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "076",
-      "name": "Huyện Sơn Dương",
+      "value": "Huyện Sơn Dương",
       "level": "Huyện",
       "provinceId": "08",
       "province": "Tỉnh Tuyên Quang"
     },
     {
       "id": "080",
-      "name": "Thành phố Lào Cai",
+      "value": "Thành phố Lào Cai",
       "englishName": "Lao Cai City",
       "level": "Thành phố",
       "provinceId": "10",
@@ -473,336 +473,336 @@
     },
     {
       "id": "082",
-      "name": "Huyện Bát Xát",
+      "value": "Huyện Bát Xát",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "083",
-      "name": "Huyện Mường Khương",
+      "value": "Huyện Mường Khương",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "084",
-      "name": "Huyện Si Ma Cai",
+      "value": "Huyện Si Ma Cai",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "085",
-      "name": "Huyện Bắc Hà",
+      "value": "Huyện Bắc Hà",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "086",
-      "name": "Huyện Bảo Thắng",
+      "value": "Huyện Bảo Thắng",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "087",
-      "name": "Huyện Bảo Yên",
+      "value": "Huyện Bảo Yên",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "088",
-      "name": "Thị xã Sa Pa",
+      "value": "Thị xã Sa Pa",
       "level": "Thị xã",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "089",
-      "name": "Huyện Văn Bàn",
+      "value": "Huyện Văn Bàn",
       "level": "Huyện",
       "provinceId": "10",
       "province": "Tỉnh Lào Cai"
     },
     {
       "id": "094",
-      "name": "Thành phố Điện Biên Phủ",
+      "value": "Thành phố Điện Biên Phủ",
       "level": "Thành phố",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "095",
-      "name": "Thị Xã Mường Lay",
+      "value": "Thị Xã Mường Lay",
       "level": "Thị xã",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "096",
-      "name": "Huyện Mường Nhé",
+      "value": "Huyện Mường Nhé",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "097",
-      "name": "Huyện Mường Chà",
+      "value": "Huyện Mường Chà",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "098",
-      "name": "Huyện Tủa Chùa",
+      "value": "Huyện Tủa Chùa",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "099",
-      "name": "Huyện Tuần Giáo",
+      "value": "Huyện Tuần Giáo",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "100",
-      "name": "Huyện Điện Biên",
+      "value": "Huyện Điện Biên",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "101",
-      "name": "Huyện Điện Biên Đông",
+      "value": "Huyện Điện Biên Đông",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "102",
-      "name": "Huyện Mường Ảng",
+      "value": "Huyện Mường Ảng",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "103",
-      "name": "Huyện Nậm Pồ",
+      "value": "Huyện Nậm Pồ",
       "level": "Huyện",
       "provinceId": "11",
       "province": "Tỉnh Điện Biên"
     },
     {
       "id": "105",
-      "name": "Thành phố Lai Châu",
+      "value": "Thành phố Lai Châu",
       "level": "Thành phố",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "106",
-      "name": "Huyện Tam Đường",
+      "value": "Huyện Tam Đường",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "107",
-      "name": "Huyện Mường Tè",
+      "value": "Huyện Mường Tè",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "108",
-      "name": "Huyện Sìn Hồ",
+      "value": "Huyện Sìn Hồ",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "109",
-      "name": "Huyện Phong Thổ",
+      "value": "Huyện Phong Thổ",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "110",
-      "name": "Huyện Than Uyên",
+      "value": "Huyện Than Uyên",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "111",
-      "name": "Huyện Tân Uyên",
+      "value": "Huyện Tân Uyên",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "112",
-      "name": "Huyện Nậm Nhùn",
+      "value": "Huyện Nậm Nhùn",
       "level": "Huyện",
       "provinceId": "12",
       "province": "Tỉnh Lai Châu"
     },
     {
       "id": "116",
-      "name": "Thành phố Sơn La",
+      "value": "Thành phố Sơn La",
       "level": "Thành phố",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "118",
-      "name": "Huyện Quỳnh Nhai",
+      "value": "Huyện Quỳnh Nhai",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "119",
-      "name": "Huyện Thuận Châu",
+      "value": "Huyện Thuận Châu",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "120",
-      "name": "Huyện Mường La",
+      "value": "Huyện Mường La",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "121",
-      "name": "Huyện Bắc Yên",
+      "value": "Huyện Bắc Yên",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "122",
-      "name": "Huyện Phù Yên",
+      "value": "Huyện Phù Yên",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "123",
-      "name": "Huyện Mộc Châu",
+      "value": "Huyện Mộc Châu",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "124",
-      "name": "Huyện Yên Châu",
+      "value": "Huyện Yên Châu",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "125",
-      "name": "Huyện Mai Sơn",
+      "value": "Huyện Mai Sơn",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "126",
-      "name": "Huyện Sông id",
+      "value": "Huyện Sông id",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "127",
-      "name": "Huyện Sốp Cộp",
+      "value": "Huyện Sốp Cộp",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "128",
-      "name": "Huyện Vân Hồ",
+      "value": "Huyện Vân Hồ",
       "level": "Huyện",
       "provinceId": "14",
       "province": "Tỉnh Sơn La"
     },
     {
       "id": "132",
-      "name": "Thành phố Yên Bái",
+      "value": "Thành phố Yên Bái",
       "level": "Thành phố",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "133",
-      "name": "Thị xã Nghĩa Lộ",
+      "value": "Thị xã Nghĩa Lộ",
       "level": "Thị xã",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "135",
-      "name": "Huyện Lục Yên",
+      "value": "Huyện Lục Yên",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "136",
-      "name": "Huyện Văn Yên",
+      "value": "Huyện Văn Yên",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "137",
-      "name": "Huyện Mù Căng Chải",
+      "value": "Huyện Mù Căng Chải",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "138",
-      "name": "Huyện Trấn Yên",
+      "value": "Huyện Trấn Yên",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "139",
-      "name": "Huyện Trạm Tấu",
+      "value": "Huyện Trạm Tấu",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "140",
-      "name": "Huyện Văn Chấn",
+      "value": "Huyện Văn Chấn",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "141",
-      "name": "Huyện Yên Bình",
+      "value": "Huyện Yên Bình",
       "level": "Huyện",
       "provinceId": "15",
       "province": "Tỉnh Yên Bái"
     },
     {
       "id": "148",
-      "name": "Thành phố Hòa Bình",
+      "value": "Thành phố Hòa Bình",
       "englishName": "Hòa Bình City",
       "level": "Thành phố",
       "provinceId": "17",
@@ -810,301 +810,301 @@
     },
     {
       "id": "150",
-      "name": "Huyện Đà Bắc",
+      "value": "Huyện Đà Bắc",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "152",
-      "name": "Huyện Lương Sơn",
+      "value": "Huyện Lương Sơn",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "153",
-      "name": "Huyện Kim Bôi",
+      "value": "Huyện Kim Bôi",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "154",
-      "name": "Huyện Cao Phong",
+      "value": "Huyện Cao Phong",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "155",
-      "name": "Huyện Tân Lạc",
+      "value": "Huyện Tân Lạc",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "156",
-      "name": "Huyện Mai Châu",
+      "value": "Huyện Mai Châu",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "157",
-      "name": "Huyện Lạc Sơn",
+      "value": "Huyện Lạc Sơn",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "158",
-      "name": "Huyện Yên Thủy",
+      "value": "Huyện Yên Thủy",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "159",
-      "name": "Huyện Lạc Thủy",
+      "value": "Huyện Lạc Thủy",
       "level": "Huyện",
       "provinceId": "17",
       "province": "Tỉnh Hoà Bình"
     },
     {
       "id": "164",
-      "name": "Thành phố Thái Nguyên",
+      "value": "Thành phố Thái Nguyên",
       "level": "Thành phố",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "165",
-      "name": "Thành phố Sông Công",
+      "value": "Thành phố Sông Công",
       "level": "Thành phố",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "167",
-      "name": "Huyện Định Hóa",
+      "value": "Huyện Định Hóa",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "168",
-      "name": "Huyện Phú Lương",
+      "value": "Huyện Phú Lương",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "169",
-      "name": "Huyện Đồng Hỷ",
+      "value": "Huyện Đồng Hỷ",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "170",
-      "name": "Huyện Võ Nhai",
+      "value": "Huyện Võ Nhai",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "171",
-      "name": "Huyện Đại Từ",
+      "value": "Huyện Đại Từ",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "172",
-      "name": "Thị xã Phổ Yên",
+      "value": "Thị xã Phổ Yên",
       "level": "Thị xã",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "173",
-      "name": "Huyện Phú Bình",
+      "value": "Huyện Phú Bình",
       "level": "Huyện",
       "provinceId": "19",
       "province": "Tỉnh Thái Nguyên"
     },
     {
       "id": "178",
-      "name": "Thành phố Lạng Sơn",
+      "value": "Thành phố Lạng Sơn",
       "level": "Thành phố",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "180",
-      "name": "Huyện Tràng Định",
+      "value": "Huyện Tràng Định",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "181",
-      "name": "Huyện Bình Gia",
+      "value": "Huyện Bình Gia",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "182",
-      "name": "Huyện Văn Lãng",
+      "value": "Huyện Văn Lãng",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "183",
-      "name": "Huyện Cao Lộc",
+      "value": "Huyện Cao Lộc",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "184",
-      "name": "Huyện Văn Quan",
+      "value": "Huyện Văn Quan",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "185",
-      "name": "Huyện Bắc Sơn",
+      "value": "Huyện Bắc Sơn",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "186",
-      "name": "Huyện Hữu Lũng",
+      "value": "Huyện Hữu Lũng",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "187",
-      "name": "Huyện Chi Lăng",
+      "value": "Huyện Chi Lăng",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "188",
-      "name": "Huyện Lộc Bình",
+      "value": "Huyện Lộc Bình",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "189",
-      "name": "Huyện Đình Lập",
+      "value": "Huyện Đình Lập",
       "level": "Huyện",
       "provinceId": "20",
       "province": "Tỉnh Lạng Sơn"
     },
     {
       "id": "193",
-      "name": "Thành phố Hạ Long",
+      "value": "Thành phố Hạ Long",
       "level": "Thành phố",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "194",
-      "name": "Thành phố Móng Cái",
+      "value": "Thành phố Móng Cái",
       "level": "Thành phố",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "195",
-      "name": "Thành phố Cẩm Phả",
+      "value": "Thành phố Cẩm Phả",
       "level": "Thành phố",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "196",
-      "name": "Thành phố Uông Bí",
+      "value": "Thành phố Uông Bí",
       "level": "Thành phố",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "198",
-      "name": "Huyện Bình Liêu",
+      "value": "Huyện Bình Liêu",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "199",
-      "name": "Huyện Tiên Yên",
+      "value": "Huyện Tiên Yên",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "200",
-      "name": "Huyện Đầm Hà",
+      "value": "Huyện Đầm Hà",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "201",
-      "name": "Huyện Hải Hà",
+      "value": "Huyện Hải Hà",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "202",
-      "name": "Huyện Ba Chẽ",
+      "value": "Huyện Ba Chẽ",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "203",
-      "name": "Huyện Vân Đồn",
+      "value": "Huyện Vân Đồn",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "205",
-      "name": "Thị xã Đông Triều",
+      "value": "Thị xã Đông Triều",
       "level": "Thị xã",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "206",
-      "name": "Thị xã Quảng Yên",
+      "value": "Thị xã Quảng Yên",
       "level": "Thị xã",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "207",
-      "name": "Huyện Cô Tô",
+      "value": "Huyện Cô Tô",
       "level": "Huyện",
       "provinceId": "22",
       "province": "Tỉnh Quảng Ninh"
     },
     {
       "id": "213",
-      "name": "Thành phố Bắc Giang",
+      "value": "Thành phố Bắc Giang",
       "englishName": "Bac Giang city",
       "level": "Thành phố",
       "provinceId": "24",
@@ -1112,161 +1112,161 @@
     },
     {
       "id": "215",
-      "name": "Huyện Yên Thế",
+      "value": "Huyện Yên Thế",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "216",
-      "name": "Huyện Tân Yên",
+      "value": "Huyện Tân Yên",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "217",
-      "name": "Huyện Lạng Giang",
+      "value": "Huyện Lạng Giang",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "218",
-      "name": "Huyện Lục Nam",
+      "value": "Huyện Lục Nam",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "219",
-      "name": "Huyện Lục Ngạn",
+      "value": "Huyện Lục Ngạn",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "220",
-      "name": "Huyện Sơn Động",
+      "value": "Huyện Sơn Động",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "221",
-      "name": "Huyện Yên Dũng",
+      "value": "Huyện Yên Dũng",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "222",
-      "name": "Huyện Việt Yên",
+      "value": "Huyện Việt Yên",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "223",
-      "name": "Huyện Hiệp Hòa",
+      "value": "Huyện Hiệp Hòa",
       "level": "Huyện",
       "provinceId": "24",
       "province": "Tỉnh Bắc Giang"
     },
     {
       "id": "227",
-      "name": "Thành phố Việt Trì",
+      "value": "Thành phố Việt Trì",
       "level": "Thành phố",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "228",
-      "name": "Thị xã Phú Thọ",
+      "value": "Thị xã Phú Thọ",
       "level": "Thị xã",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "230",
-      "name": "Huyện Đoan Hùng",
+      "value": "Huyện Đoan Hùng",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "231",
-      "name": "Huyện Hạ Hoà",
+      "value": "Huyện Hạ Hoà",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "232",
-      "name": "Huyện Thanh Ba",
+      "value": "Huyện Thanh Ba",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "233",
-      "name": "Huyện Phù Ninh",
+      "value": "Huyện Phù Ninh",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "234",
-      "name": "Huyện Yên Lập",
+      "value": "Huyện Yên Lập",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "235",
-      "name": "Huyện Cẩm Khê",
+      "value": "Huyện Cẩm Khê",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "236",
-      "name": "Huyện Tam Nông",
+      "value": "Huyện Tam Nông",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "237",
-      "name": "Huyện Lâm Thao",
+      "value": "Huyện Lâm Thao",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "238",
-      "name": "Huyện Thanh Sơn",
+      "value": "Huyện Thanh Sơn",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "239",
-      "name": "Huyện Thanh Thuỷ",
+      "value": "Huyện Thanh Thuỷ",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "240",
-      "name": "Huyện Tân Sơn",
+      "value": "Huyện Tân Sơn",
       "level": "Huyện",
       "provinceId": "25",
       "province": "Tỉnh Phú Thọ"
     },
     {
       "id": "243",
-      "name": "Thành phố Vĩnh Yên",
+      "value": "Thành phố Vĩnh Yên",
       "englishName": "Vĩnh Yên City",
       "level": "Thành phố",
       "provinceId": "26",
@@ -1274,63 +1274,63 @@
     },
     {
       "id": "244",
-      "name": "Thành phố Phúc Yên",
+      "value": "Thành phố Phúc Yên",
       "level": "Thành phố",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "246",
-      "name": "Huyện Lập Thạch",
+      "value": "Huyện Lập Thạch",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "247",
-      "name": "Huyện Tam Dương",
+      "value": "Huyện Tam Dương",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "248",
-      "name": "Huyện Tam Đảo",
+      "value": "Huyện Tam Đảo",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "249",
-      "name": "Huyện Bình Xuyên",
+      "value": "Huyện Bình Xuyên",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "251",
-      "name": "Huyện Yên Lạc",
+      "value": "Huyện Yên Lạc",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "252",
-      "name": "Huyện Vĩnh Tường",
+      "value": "Huyện Vĩnh Tường",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "253",
-      "name": "Huyện Sông Lô",
+      "value": "Huyện Sông Lô",
       "level": "Huyện",
       "provinceId": "26",
       "province": "Tỉnh Vĩnh Phúc"
     },
     {
       "id": "256",
-      "name": "Thành phố Bắc Ninh",
+      "value": "Thành phố Bắc Ninh",
       "englishName": "Bac Ninh City",
       "level": "Thành phố",
       "provinceId": "27",
@@ -1338,966 +1338,966 @@
     },
     {
       "id": "258",
-      "name": "Huyện Yên Phong",
+      "value": "Huyện Yên Phong",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "259",
-      "name": "Huyện Quế Võ",
+      "value": "Huyện Quế Võ",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "260",
-      "name": "Huyện Tiên Du",
+      "value": "Huyện Tiên Du",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "261",
-      "name": "Thị xã Từ Sơn",
+      "value": "Thị xã Từ Sơn",
       "level": "Thị xã",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "262",
-      "name": "Huyện Thuận Thành",
+      "value": "Huyện Thuận Thành",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "263",
-      "name": "Huyện Gia Bình",
+      "value": "Huyện Gia Bình",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "264",
-      "name": "Huyện Lương Tài",
+      "value": "Huyện Lương Tài",
       "level": "Huyện",
       "provinceId": "27",
       "province": "Tỉnh Bắc Ninh"
     },
     {
       "id": "288",
-      "name": "Thành phố Hải Dương",
+      "value": "Thành phố Hải Dương",
       "level": "Thành phố",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "290",
-      "name": "Thành phố Chí Linh",
+      "value": "Thành phố Chí Linh",
       "level": "Thành phố",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "291",
-      "name": "Huyện Nam Sách",
+      "value": "Huyện Nam Sách",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "292",
-      "name": "Thị xã Kinh Môn",
+      "value": "Thị xã Kinh Môn",
       "level": "Thị xã",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "293",
-      "name": "Huyện Kim Thành",
+      "value": "Huyện Kim Thành",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "294",
-      "name": "Huyện Thanh Hà",
+      "value": "Huyện Thanh Hà",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "295",
-      "name": "Huyện Cẩm Giàng",
+      "value": "Huyện Cẩm Giàng",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "296",
-      "name": "Huyện Bình Giang",
+      "value": "Huyện Bình Giang",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "297",
-      "name": "Huyện Gia Lộc",
+      "value": "Huyện Gia Lộc",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "298",
-      "name": "Huyện Tứ Kỳ",
+      "value": "Huyện Tứ Kỳ",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "299",
-      "name": "Huyện Ninh Giang",
+      "value": "Huyện Ninh Giang",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "300",
-      "name": "Huyện Thanh Miện",
+      "value": "Huyện Thanh Miện",
       "level": "Huyện",
       "provinceId": "30",
       "province": "Tỉnh Hải Dương"
     },
     {
       "id": "303",
-      "name": "Quận Hồng Bàng",
+      "value": "Quận Hồng Bàng",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "304",
-      "name": "Quận Ngô Quyền",
+      "value": "Quận Ngô Quyền",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "305",
-      "name": "Quận Lê Chân",
+      "value": "Quận Lê Chân",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "306",
-      "name": "Quận Hải An",
+      "value": "Quận Hải An",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "307",
-      "name": "Quận Kiến An",
+      "value": "Quận Kiến An",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "308",
-      "name": "Quận Đồ Sơn",
+      "value": "Quận Đồ Sơn",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "309",
-      "name": "Quận Dương Kinh",
+      "value": "Quận Dương Kinh",
       "level": "Quận",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "311",
-      "name": "Huyện Thuỷ Nguyên",
+      "value": "Huyện Thuỷ Nguyên",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "312",
-      "name": "Huyện An Dương",
+      "value": "Huyện An Dương",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "313",
-      "name": "Huyện An Lão",
+      "value": "Huyện An Lão",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "314",
-      "name": "Huyện Kiến Thuỵ",
+      "value": "Huyện Kiến Thuỵ",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "315",
-      "name": "Huyện Tiên Lãng",
+      "value": "Huyện Tiên Lãng",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "316",
-      "name": "Huyện Vĩnh Bảo",
+      "value": "Huyện Vĩnh Bảo",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "317",
-      "name": "Huyện Cát Hải",
+      "value": "Huyện Cát Hải",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "318",
-      "name": "Huyện Bạch Long Vĩ",
+      "value": "Huyện Bạch Long Vĩ",
       "level": "Huyện",
       "provinceId": "31",
       "province": "Thành phố Hải Phòng"
     },
     {
       "id": "323",
-      "name": "Thành phố Hưng Yên",
+      "value": "Thành phố Hưng Yên",
       "level": "Thành phố",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "325",
-      "name": "Huyện Văn Lâm",
+      "value": "Huyện Văn Lâm",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "326",
-      "name": "Huyện Văn Giang",
+      "value": "Huyện Văn Giang",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "327",
-      "name": "Huyện Yên Mỹ",
+      "value": "Huyện Yên Mỹ",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "328",
-      "name": "Thị xã Mỹ Hào",
+      "value": "Thị xã Mỹ Hào",
       "level": "Thị xã",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "329",
-      "name": "Huyện Ân Thi",
+      "value": "Huyện Ân Thi",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "330",
-      "name": "Huyện Khoái Châu",
+      "value": "Huyện Khoái Châu",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "331",
-      "name": "Huyện Kim Động",
+      "value": "Huyện Kim Động",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "332",
-      "name": "Huyện Tiên Lữ",
+      "value": "Huyện Tiên Lữ",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "333",
-      "name": "Huyện Phù Cừ",
+      "value": "Huyện Phù Cừ",
       "level": "Huyện",
       "provinceId": "33",
       "province": "Tỉnh Hưng Yên"
     },
     {
       "id": "336",
-      "name": "Thành phố Thái Bình",
+      "value": "Thành phố Thái Bình",
       "level": "Thành phố",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "338",
-      "name": "Huyện Quỳnh Phụ",
+      "value": "Huyện Quỳnh Phụ",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "339",
-      "name": "Huyện Hưng Hà",
+      "value": "Huyện Hưng Hà",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "340",
-      "name": "Huyện Đông Hưng",
+      "value": "Huyện Đông Hưng",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "341",
-      "name": "Huyện Thái Thụy",
+      "value": "Huyện Thái Thụy",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "342",
-      "name": "Huyện Tiền Hải",
+      "value": "Huyện Tiền Hải",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "343",
-      "name": "Huyện Kiến Xương",
+      "value": "Huyện Kiến Xương",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "344",
-      "name": "Huyện Vũ Thư",
+      "value": "Huyện Vũ Thư",
       "level": "Huyện",
       "provinceId": "34",
       "province": "Tỉnh Thái Bình"
     },
     {
       "id": "347",
-      "name": "Thành phố Phủ Lý",
+      "value": "Thành phố Phủ Lý",
       "level": "Thành phố",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "349",
-      "name": "Thị xã Duy Tiên",
+      "value": "Thị xã Duy Tiên",
       "level": "Thị xã",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "350",
-      "name": "Huyện Kim Bảng",
+      "value": "Huyện Kim Bảng",
       "level": "Huyện",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "351",
-      "name": "Huyện Thanh Liêm",
+      "value": "Huyện Thanh Liêm",
       "level": "Huyện",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "352",
-      "name": "Huyện Bình Lục",
+      "value": "Huyện Bình Lục",
       "level": "Huyện",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "353",
-      "name": "Huyện Lý Nhân",
+      "value": "Huyện Lý Nhân",
       "level": "Huyện",
       "provinceId": "35",
       "province": "Tỉnh Hà Nam"
     },
     {
       "id": "356",
-      "name": "Thành phố Nam Định",
+      "value": "Thành phố Nam Định",
       "level": "Thành phố",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "358",
-      "name": "Huyện Mỹ Lộc",
+      "value": "Huyện Mỹ Lộc",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "359",
-      "name": "Huyện Vụ Bản",
+      "value": "Huyện Vụ Bản",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "360",
-      "name": "Huyện Ý Yên",
+      "value": "Huyện Ý Yên",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "361",
-      "name": "Huyện Nghĩa Hưng",
+      "value": "Huyện Nghĩa Hưng",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "362",
-      "name": "Huyện Nam Trực",
+      "value": "Huyện Nam Trực",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "363",
-      "name": "Huyện Trực Ninh",
+      "value": "Huyện Trực Ninh",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "364",
-      "name": "Huyện Xuân Trường",
+      "value": "Huyện Xuân Trường",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "365",
-      "name": "Huyện Giao Thủy",
+      "value": "Huyện Giao Thủy",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "366",
-      "name": "Huyện Hải Hậu",
+      "value": "Huyện Hải Hậu",
       "level": "Huyện",
       "provinceId": "36",
       "province": "Tỉnh Nam Định"
     },
     {
       "id": "369",
-      "name": "Thành phố Ninh Bình",
+      "value": "Thành phố Ninh Bình",
       "level": "Thành phố",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "370",
-      "name": "Thành phố Tam Điệp",
+      "value": "Thành phố Tam Điệp",
       "level": "Thành phố",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "372",
-      "name": "Huyện Nho Quan",
+      "value": "Huyện Nho Quan",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "373",
-      "name": "Huyện Gia Viễn",
+      "value": "Huyện Gia Viễn",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "374",
-      "name": "Huyện Hoa Lư",
+      "value": "Huyện Hoa Lư",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "375",
-      "name": "Huyện Yên Khánh",
+      "value": "Huyện Yên Khánh",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "376",
-      "name": "Huyện Kim Sơn",
+      "value": "Huyện Kim Sơn",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "377",
-      "name": "Huyện Yên Mô",
+      "value": "Huyện Yên Mô",
       "level": "Huyện",
       "provinceId": "37",
       "province": "Tỉnh Ninh Bình"
     },
     {
       "id": "380",
-      "name": "Thành phố Thanh Hóa",
+      "value": "Thành phố Thanh Hóa",
       "level": "Thành phố",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "381",
-      "name": "Thị xã Bỉm Sơn",
+      "value": "Thị xã Bỉm Sơn",
       "level": "Thị xã",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "382",
-      "name": "Thành phố Sầm Sơn",
+      "value": "Thành phố Sầm Sơn",
       "level": "Thành phố",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "384",
-      "name": "Huyện Mường Lát",
+      "value": "Huyện Mường Lát",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "385",
-      "name": "Huyện Quan Hóa",
+      "value": "Huyện Quan Hóa",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "386",
-      "name": "Huyện Bá Thước",
+      "value": "Huyện Bá Thước",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "387",
-      "name": "Huyện Quan Sơn",
+      "value": "Huyện Quan Sơn",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "388",
-      "name": "Huyện Lang Chánh",
+      "value": "Huyện Lang Chánh",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "389",
-      "name": "Huyện Ngọc Lặc",
+      "value": "Huyện Ngọc Lặc",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "390",
-      "name": "Huyện Cẩm Thủy",
+      "value": "Huyện Cẩm Thủy",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "391",
-      "name": "Huyện Thạch Thành",
+      "value": "Huyện Thạch Thành",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "392",
-      "name": "Huyện Hà Trung",
+      "value": "Huyện Hà Trung",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "393",
-      "name": "Huyện Vĩnh Lộc",
+      "value": "Huyện Vĩnh Lộc",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "394",
-      "name": "Huyện Yên Định",
+      "value": "Huyện Yên Định",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "395",
-      "name": "Huyện Thọ Xuân",
+      "value": "Huyện Thọ Xuân",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "396",
-      "name": "Huyện Thường Xuân",
+      "value": "Huyện Thường Xuân",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "397",
-      "name": "Huyện Triệu Sơn",
+      "value": "Huyện Triệu Sơn",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "398",
-      "name": "Huyện Thiệu Hóa",
+      "value": "Huyện Thiệu Hóa",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "399",
-      "name": "Huyện Hoằng Hóa",
+      "value": "Huyện Hoằng Hóa",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "400",
-      "name": "Huyện Hậu Lộc",
+      "value": "Huyện Hậu Lộc",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "401",
-      "name": "Huyện Nga Sơn",
+      "value": "Huyện Nga Sơn",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "402",
-      "name": "Huyện Như Xuân",
+      "value": "Huyện Như Xuân",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "403",
-      "name": "Huyện Như Thanh",
+      "value": "Huyện Như Thanh",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "404",
-      "name": "Huyện Nông Cống",
+      "value": "Huyện Nông Cống",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "405",
-      "name": "Huyện Đông Sơn",
+      "value": "Huyện Đông Sơn",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "406",
-      "name": "Huyện Quảng Xương",
+      "value": "Huyện Quảng Xương",
       "level": "Huyện",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "407",
-      "name": "Thị xã Nghi Sơn",
+      "value": "Thị xã Nghi Sơn",
       "level": "Thị xã",
       "provinceId": "38",
       "province": "Tỉnh Thanh Hóa"
     },
     {
       "id": "412",
-      "name": "Thành phố Vinh",
+      "value": "Thành phố Vinh",
       "level": "Thành phố",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "413",
-      "name": "Thị xã Cửa Lò",
+      "value": "Thị xã Cửa Lò",
       "level": "Thị xã",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "414",
-      "name": "Thị xã Thái Hoà",
+      "value": "Thị xã Thái Hoà",
       "level": "Thị xã",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "415",
-      "name": "Huyện Quế Phong",
+      "value": "Huyện Quế Phong",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "416",
-      "name": "Huyện Quỳ Châu",
+      "value": "Huyện Quỳ Châu",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "417",
-      "name": "Huyện Kỳ Sơn",
+      "value": "Huyện Kỳ Sơn",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "418",
-      "name": "Huyện Tương Dương",
+      "value": "Huyện Tương Dương",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "419",
-      "name": "Huyện Nghĩa Đàn",
+      "value": "Huyện Nghĩa Đàn",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "420",
-      "name": "Huyện Quỳ Hợp",
+      "value": "Huyện Quỳ Hợp",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "421",
-      "name": "Huyện Quỳnh Lưu",
+      "value": "Huyện Quỳnh Lưu",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "422",
-      "name": "Huyện Con Cuông",
+      "value": "Huyện Con Cuông",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "423",
-      "name": "Huyện Tân Kỳ",
+      "value": "Huyện Tân Kỳ",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "424",
-      "name": "Huyện Anh Sơn",
+      "value": "Huyện Anh Sơn",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "425",
-      "name": "Huyện Diễn Châu",
+      "value": "Huyện Diễn Châu",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "426",
-      "name": "Huyện Yên Thành",
+      "value": "Huyện Yên Thành",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "427",
-      "name": "Huyện Đô Lương",
+      "value": "Huyện Đô Lương",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "428",
-      "name": "Huyện Thanh Chương",
+      "value": "Huyện Thanh Chương",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "429",
-      "name": "Huyện Nghi Lộc",
+      "value": "Huyện Nghi Lộc",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "430",
-      "name": "Huyện Nam Đàn",
+      "value": "Huyện Nam Đàn",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "431",
-      "name": "Huyện Hưng Nguyên",
+      "value": "Huyện Hưng Nguyên",
       "level": "Huyện",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "432",
-      "name": "Thị xã Hoàng Mai",
+      "value": "Thị xã Hoàng Mai",
       "level": "Thị xã",
       "provinceId": "40",
       "province": "Tỉnh Nghệ An"
     },
     {
       "id": "436",
-      "name": "Thành phố Hà Tĩnh",
+      "value": "Thành phố Hà Tĩnh",
       "level": "Thành phố",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "437",
-      "name": "Thị xã Hồng Lĩnh",
+      "value": "Thị xã Hồng Lĩnh",
       "level": "Thị xã",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "439",
-      "name": "Huyện Hương Sơn",
+      "value": "Huyện Hương Sơn",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "440",
-      "name": "Huyện Đức Thọ",
+      "value": "Huyện Đức Thọ",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "441",
-      "name": "Huyện Vũ Quang",
+      "value": "Huyện Vũ Quang",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "442",
-      "name": "Huyện Nghi Xuân",
+      "value": "Huyện Nghi Xuân",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "443",
-      "name": "Huyện Can Lộc",
+      "value": "Huyện Can Lộc",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "444",
-      "name": "Huyện Hương Khê",
+      "value": "Huyện Hương Khê",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "445",
-      "name": "Huyện Thạch Hà",
+      "value": "Huyện Thạch Hà",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "446",
-      "name": "Huyện Cẩm Xuyên",
+      "value": "Huyện Cẩm Xuyên",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "447",
-      "name": "Huyện Kỳ Anh",
+      "value": "Huyện Kỳ Anh",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "448",
-      "name": "Huyện Lộc Hà",
+      "value": "Huyện Lộc Hà",
       "level": "Huyện",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "449",
-      "name": "Thị xã Kỳ Anh",
+      "value": "Thị xã Kỳ Anh",
       "level": "Thị xã",
       "provinceId": "42",
       "province": "Tỉnh Hà Tĩnh"
     },
     {
       "id": "450",
-      "name": "Thành Phố Đồng Hới",
+      "value": "Thành Phố Đồng Hới",
       "englishName": "Dong Hoi City",
       "level": "Thành phố",
       "provinceId": "44",
@@ -2305,357 +2305,357 @@
     },
     {
       "id": "452",
-      "name": "Huyện Minh Hóa",
+      "value": "Huyện Minh Hóa",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "453",
-      "name": "Huyện Tuyên Hóa",
+      "value": "Huyện Tuyên Hóa",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "454",
-      "name": "Huyện Quảng Trạch",
+      "value": "Huyện Quảng Trạch",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "455",
-      "name": "Huyện Bố Trạch",
+      "value": "Huyện Bố Trạch",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "456",
-      "name": "Huyện Quảng Ninh",
+      "value": "Huyện Quảng Ninh",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "457",
-      "name": "Huyện Lệ Thủy",
+      "value": "Huyện Lệ Thủy",
       "level": "Huyện",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "458",
-      "name": "Thị xã Ba Đồn",
+      "value": "Thị xã Ba Đồn",
       "level": "Thị xã",
       "provinceId": "44",
       "province": "Tỉnh Quảng Bình"
     },
     {
       "id": "461",
-      "name": "Thành phố Đông Hà",
+      "value": "Thành phố Đông Hà",
       "level": "Thành phố",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "462",
-      "name": "Thị xã Quảng Trị",
+      "value": "Thị xã Quảng Trị",
       "level": "Thị xã",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "464",
-      "name": "Huyện Vĩnh Linh",
+      "value": "Huyện Vĩnh Linh",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "465",
-      "name": "Huyện Hướng Hóa",
+      "value": "Huyện Hướng Hóa",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "466",
-      "name": "Huyện Gio Linh",
+      "value": "Huyện Gio Linh",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "467",
-      "name": "Huyện Đa Krông",
+      "value": "Huyện Đa Krông",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "468",
-      "name": "Huyện Cam Lộ",
+      "value": "Huyện Cam Lộ",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "469",
-      "name": "Huyện Triệu Phong",
+      "value": "Huyện Triệu Phong",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "470",
-      "name": "Huyện Hải Lăng",
+      "value": "Huyện Hải Lăng",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "471",
-      "name": "Huyện Cồn Cỏ",
+      "value": "Huyện Cồn Cỏ",
       "level": "Huyện",
       "provinceId": "45",
       "province": "Tỉnh Quảng Trị"
     },
     {
       "id": "474",
-      "name": "Thành phố Huế",
+      "value": "Thành phố Huế",
       "level": "Thành phố",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "476",
-      "name": "Huyện Phong Điền",
+      "value": "Huyện Phong Điền",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "477",
-      "name": "Huyện Quảng Điền",
+      "value": "Huyện Quảng Điền",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "478",
-      "name": "Huyện Phú Vang",
+      "value": "Huyện Phú Vang",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "479",
-      "name": "Thị xã Hương Thủy",
+      "value": "Thị xã Hương Thủy",
       "level": "Thị xã",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "480",
-      "name": "Thị xã Hương Trà",
+      "value": "Thị xã Hương Trà",
       "level": "Thị xã",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "481",
-      "name": "Huyện A Lưới",
+      "value": "Huyện A Lưới",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "482",
-      "name": "Huyện Phú Lộc",
+      "value": "Huyện Phú Lộc",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "483",
-      "name": "Huyện Nam Đông",
+      "value": "Huyện Nam Đông",
       "level": "Huyện",
       "provinceId": "46",
       "province": "Tỉnh Thừa Thiên Huế"
     },
     {
       "id": "490",
-      "name": "Quận Liên Chiểu",
+      "value": "Quận Liên Chiểu",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "491",
-      "name": "Quận Thanh Khê",
+      "value": "Quận Thanh Khê",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "492",
-      "name": "Quận Hải Châu",
+      "value": "Quận Hải Châu",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "493",
-      "name": "Quận Sơn Trà",
+      "value": "Quận Sơn Trà",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "494",
-      "name": "Quận Ngũ Hành Sơn",
+      "value": "Quận Ngũ Hành Sơn",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "495",
-      "name": "Quận Cẩm Lệ",
+      "value": "Quận Cẩm Lệ",
       "level": "Quận",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "497",
-      "name": "Huyện Hòa Vang",
+      "value": "Huyện Hòa Vang",
       "level": "Huyện",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "498",
-      "name": "Huyện Hoàng Sa",
+      "value": "Huyện Hoàng Sa",
       "level": "Huyện",
       "provinceId": "48",
       "province": "Thành phố Đà Nẵng"
     },
     {
       "id": "502",
-      "name": "Thành phố Tam Kỳ",
+      "value": "Thành phố Tam Kỳ",
       "level": "Thành phố",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "503",
-      "name": "Thành phố Hội An",
+      "value": "Thành phố Hội An",
       "level": "Thành phố",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "504",
-      "name": "Huyện Tây Giang",
+      "value": "Huyện Tây Giang",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "505",
-      "name": "Huyện Đông Giang",
+      "value": "Huyện Đông Giang",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "506",
-      "name": "Huyện Đại Lộc",
+      "value": "Huyện Đại Lộc",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "507",
-      "name": "Thị xã Điện Bàn",
+      "value": "Thị xã Điện Bàn",
       "level": "Thị xã",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "508",
-      "name": "Huyện Duy Xuyên",
+      "value": "Huyện Duy Xuyên",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "509",
-      "name": "Huyện Quế Sơn",
+      "value": "Huyện Quế Sơn",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "510",
-      "name": "Huyện Nam Giang",
+      "value": "Huyện Nam Giang",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "511",
-      "name": "Huyện Phước Sơn",
+      "value": "Huyện Phước Sơn",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "512",
-      "name": "Huyện Hiệp Đức",
+      "value": "Huyện Hiệp Đức",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "513",
-      "name": "Huyện Thăng Bình",
+      "value": "Huyện Thăng Bình",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "514",
-      "name": "Huyện Tiên Phước",
+      "value": "Huyện Tiên Phước",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "515",
-      "name": "Huyện Bắc Trà My",
+      "value": "Huyện Bắc Trà My",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "516",
-      "name": "Huyện Nam Trà My",
+      "value": "Huyện Nam Trà My",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "517",
-      "name": "Huyện Núi Thành",
+      "value": "Huyện Núi Thành",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "518",
-      "name": "Huyện Phú Ninh",
+      "value": "Huyện Phú Ninh",
       "englishName": "Phú Ninh District",
       "level": "Huyện",
       "provinceId": "49",
@@ -2663,182 +2663,182 @@
     },
     {
       "id": "519",
-      "name": "Huyện Nông Sơn",
+      "value": "Huyện Nông Sơn",
       "level": "Huyện",
       "provinceId": "49",
       "province": "Tỉnh Quảng Nam"
     },
     {
       "id": "522",
-      "name": "Thành phố Quảng Ngãi",
+      "value": "Thành phố Quảng Ngãi",
       "level": "Thành phố",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "524",
-      "name": "Huyện Bình Sơn",
+      "value": "Huyện Bình Sơn",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "525",
-      "name": "Huyện Trà Bồng",
+      "value": "Huyện Trà Bồng",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "527",
-      "name": "Huyện Sơn Tịnh",
+      "value": "Huyện Sơn Tịnh",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "528",
-      "name": "Huyện Tư Nghĩa",
+      "value": "Huyện Tư Nghĩa",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "529",
-      "name": "Huyện Sơn Hà",
+      "value": "Huyện Sơn Hà",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "530",
-      "name": "Huyện Sơn Tây",
+      "value": "Huyện Sơn Tây",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "531",
-      "name": "Huyện Minh Long",
+      "value": "Huyện Minh Long",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "532",
-      "name": "Huyện Nghĩa Hành",
+      "value": "Huyện Nghĩa Hành",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "533",
-      "name": "Huyện Mộ Đức",
+      "value": "Huyện Mộ Đức",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "534",
-      "name": "Thị xã Đức Phổ",
+      "value": "Thị xã Đức Phổ",
       "level": "Thị xã",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "535",
-      "name": "Huyện Ba Tơ",
+      "value": "Huyện Ba Tơ",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "536",
-      "name": "Huyện Lý Sơn",
+      "value": "Huyện Lý Sơn",
       "level": "Huyện",
       "provinceId": "51",
       "province": "Tỉnh Quảng Ngãi"
     },
     {
       "id": "540",
-      "name": "Thành phố Quy Nhơn",
+      "value": "Thành phố Quy Nhơn",
       "level": "Thành phố",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "542",
-      "name": "Huyện An Lão",
+      "value": "Huyện An Lão",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "543",
-      "name": "Thị xã Hoài Nhơn",
+      "value": "Thị xã Hoài Nhơn",
       "level": "Thị xã",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "544",
-      "name": "Huyện Hoài Ân",
+      "value": "Huyện Hoài Ân",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "545",
-      "name": "Huyện Phù Mỹ",
+      "value": "Huyện Phù Mỹ",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "546",
-      "name": "Huyện Vĩnh Thạnh",
+      "value": "Huyện Vĩnh Thạnh",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "547",
-      "name": "Huyện Tây Sơn",
+      "value": "Huyện Tây Sơn",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "548",
-      "name": "Huyện Phù Cát",
+      "value": "Huyện Phù Cát",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "549",
-      "name": "Thị xã An Nhơn",
+      "value": "Thị xã An Nhơn",
       "level": "Thị xã",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "550",
-      "name": "Huyện Tuy Phước",
+      "value": "Huyện Tuy Phước",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "551",
-      "name": "Huyện Vân Canh",
+      "value": "Huyện Vân Canh",
       "level": "Huyện",
       "provinceId": "52",
       "province": "Tỉnh Bình Định"
     },
     {
       "id": "555",
-      "name": "Thành phố Tuy Hoà",
+      "value": "Thành phố Tuy Hoà",
       "englishName": "Tuy Hoa City",
       "level": "Thành phố",
       "provinceId": "54",
@@ -2846,42 +2846,42 @@
     },
     {
       "id": "557",
-      "name": "Thị xã Sông Cầu",
+      "value": "Thị xã Sông Cầu",
       "level": "Thị xã",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "558",
-      "name": "Huyện Đồng Xuân",
+      "value": "Huyện Đồng Xuân",
       "level": "Huyện",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "559",
-      "name": "Huyện Tuy An",
+      "value": "Huyện Tuy An",
       "level": "Huyện",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "560",
-      "name": "Huyện Sơn Hòa",
+      "value": "Huyện Sơn Hòa",
       "level": "Huyện",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "561",
-      "name": "Huyện Sông Hinh",
+      "value": "Huyện Sông Hinh",
       "level": "Huyện",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "562",
-      "name": "Huyện Tây Hoà",
+      "value": "Huyện Tây Hoà",
       "englishName": "Tay Hoa commune",
       "level": "Huyện",
       "provinceId": "54",
@@ -2889,119 +2889,119 @@
     },
     {
       "id": "563",
-      "name": "Huyện Phú Hoà",
+      "value": "Huyện Phú Hoà",
       "level": "Huyện",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "564",
-      "name": "Thị xã Đông Hòa",
+      "value": "Thị xã Đông Hòa",
       "level": "Thị xã",
       "provinceId": "54",
       "province": "Tỉnh Phú Yên"
     },
     {
       "id": "568",
-      "name": "Thành phố Nha Trang",
+      "value": "Thành phố Nha Trang",
       "level": "Thành phố",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "569",
-      "name": "Thành phố Cam Ranh",
+      "value": "Thành phố Cam Ranh",
       "level": "Thành phố",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "570",
-      "name": "Huyện Cam Lâm",
+      "value": "Huyện Cam Lâm",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "571",
-      "name": "Huyện Vạn Ninh",
+      "value": "Huyện Vạn Ninh",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "572",
-      "name": "Thị xã Ninh Hòa",
+      "value": "Thị xã Ninh Hòa",
       "level": "Thị xã",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "573",
-      "name": "Huyện Khánh Vĩnh",
+      "value": "Huyện Khánh Vĩnh",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "574",
-      "name": "Huyện Diên Khánh",
+      "value": "Huyện Diên Khánh",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "575",
-      "name": "Huyện Khánh Sơn",
+      "value": "Huyện Khánh Sơn",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "576",
-      "name": "Huyện Trường Sa",
+      "value": "Huyện Trường Sa",
       "level": "Huyện",
       "provinceId": "56",
       "province": "Tỉnh Khánh Hòa"
     },
     {
       "id": "582",
-      "name": "Thành phố Phan Rang-Tháp Chàm",
+      "value": "Thành phố Phan Rang-Tháp Chàm",
       "level": "Thành phố",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "584",
-      "name": "Huyện Bác Ái",
+      "value": "Huyện Bác Ái",
       "level": "Huyện",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "585",
-      "name": "Huyện Ninh Sơn",
+      "value": "Huyện Ninh Sơn",
       "level": "Huyện",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "586",
-      "name": "Huyện Ninh Hải",
+      "value": "Huyện Ninh Hải",
       "level": "Huyện",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "587",
-      "name": "Huyện Ninh Phước",
+      "value": "Huyện Ninh Phước",
       "level": "Huyện",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "588",
-      "name": "Huyện Thuận Bắc",
+      "value": "Huyện Thuận Bắc",
       "englishName": "Thuan Bac province",
       "level": "Huyện",
       "provinceId": "58",
@@ -3009,140 +3009,140 @@
     },
     {
       "id": "589",
-      "name": "Huyện Thuận Nam",
+      "value": "Huyện Thuận Nam",
       "level": "Huyện",
       "provinceId": "58",
       "province": "Tỉnh Ninh Thuận"
     },
     {
       "id": "593",
-      "name": "Thành phố Phan Thiết",
+      "value": "Thành phố Phan Thiết",
       "level": "Thành phố",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "594",
-      "name": "Thị xã La Gi",
+      "value": "Thị xã La Gi",
       "level": "Thị xã",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "595",
-      "name": "Huyện Tuy Phong",
+      "value": "Huyện Tuy Phong",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "596",
-      "name": "Huyện Bắc Bình",
+      "value": "Huyện Bắc Bình",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "597",
-      "name": "Huyện Hàm Thuận Bắc",
+      "value": "Huyện Hàm Thuận Bắc",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "598",
-      "name": "Huyện Hàm Thuận Nam",
+      "value": "Huyện Hàm Thuận Nam",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "599",
-      "name": "Huyện Tánh Linh",
+      "value": "Huyện Tánh Linh",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "600",
-      "name": "Huyện Đức Linh",
+      "value": "Huyện Đức Linh",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "601",
-      "name": "Huyện Hàm Tân",
+      "value": "Huyện Hàm Tân",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "602",
-      "name": "Huyện Phú Quí",
+      "value": "Huyện Phú Quí",
       "level": "Huyện",
       "provinceId": "60",
       "province": "Tỉnh Bình Thuận"
     },
     {
       "id": "608",
-      "name": "Thành phố Kon Tum",
+      "value": "Thành phố Kon Tum",
       "level": "Thành phố",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "610",
-      "name": "Huyện Đắk Glei",
+      "value": "Huyện Đắk Glei",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "611",
-      "name": "Huyện Ngọc Hồi",
+      "value": "Huyện Ngọc Hồi",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "612",
-      "name": "Huyện Đắk Tô",
+      "value": "Huyện Đắk Tô",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "613",
-      "name": "Huyện Kon Plông",
+      "value": "Huyện Kon Plông",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "614",
-      "name": "Huyện Kon Rẫy",
+      "value": "Huyện Kon Rẫy",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "615",
-      "name": "Huyện Đắk Hà",
+      "value": "Huyện Đắk Hà",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "616",
-      "name": "Huyện Sa Thầy",
+      "value": "Huyện Sa Thầy",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "617",
-      "name": "Huyện Tu Mơ Rông",
+      "value": "Huyện Tu Mơ Rông",
       "englishName": "Tu Mo Rong district",
       "level": "Huyện",
       "provinceId": "62",
@@ -3150,245 +3150,245 @@
     },
     {
       "id": "618",
-      "name": "Huyện Ia H' Drai",
+      "value": "Huyện Ia H' Drai",
       "level": "Huyện",
       "provinceId": "62",
       "province": "Tỉnh Kon Tum"
     },
     {
       "id": "622",
-      "name": "Thành phố Pleiku",
+      "value": "Thành phố Pleiku",
       "level": "Thành phố",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "623",
-      "name": "Thị xã An Khê",
+      "value": "Thị xã An Khê",
       "level": "Thị xã",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "624",
-      "name": "Thị xã Ayun Pa",
+      "value": "Thị xã Ayun Pa",
       "level": "Thị xã",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "625",
-      "name": "Huyện KBang",
+      "value": "Huyện KBang",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "626",
-      "name": "Huyện Đăk Đoa",
+      "value": "Huyện Đăk Đoa",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "627",
-      "name": "Huyện Chư Păh",
+      "value": "Huyện Chư Păh",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "628",
-      "name": "Huyện Ia Grai",
+      "value": "Huyện Ia Grai",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "629",
-      "name": "Huyện Mang Yang",
+      "value": "Huyện Mang Yang",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "630",
-      "name": "Huyện Kông Chro",
+      "value": "Huyện Kông Chro",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "631",
-      "name": "Huyện Đức Cơ",
+      "value": "Huyện Đức Cơ",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "632",
-      "name": "Huyện Chư Prông",
+      "value": "Huyện Chư Prông",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "633",
-      "name": "Huyện Chư Sê",
+      "value": "Huyện Chư Sê",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "634",
-      "name": "Huyện Đăk Pơ",
+      "value": "Huyện Đăk Pơ",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "635",
-      "name": "Huyện Ia Pa",
+      "value": "Huyện Ia Pa",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "637",
-      "name": "Huyện Krông Pa",
+      "value": "Huyện Krông Pa",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "638",
-      "name": "Huyện Phú Thiện",
+      "value": "Huyện Phú Thiện",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "639",
-      "name": "Huyện Chư Pưh",
+      "value": "Huyện Chư Pưh",
       "level": "Huyện",
       "provinceId": "64",
       "province": "Tỉnh Gia Lai"
     },
     {
       "id": "643",
-      "name": "Thành phố Buôn Ma Thuột",
+      "value": "Thành phố Buôn Ma Thuột",
       "level": "Thành phố",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "644",
-      "name": "Thị Xã Buôn Hồ",
+      "value": "Thị Xã Buôn Hồ",
       "level": "Thị xã",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "645",
-      "name": "Huyện Ea H'leo",
+      "value": "Huyện Ea H'leo",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "646",
-      "name": "Huyện Ea Súp",
+      "value": "Huyện Ea Súp",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "647",
-      "name": "Huyện Buôn Đôn",
+      "value": "Huyện Buôn Đôn",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "648",
-      "name": "Huyện Cư M'gar",
+      "value": "Huyện Cư M'gar",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "649",
-      "name": "Huyện Krông Búk",
+      "value": "Huyện Krông Búk",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "650",
-      "name": "Huyện Krông Năng",
+      "value": "Huyện Krông Năng",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "651",
-      "name": "Huyện Ea Kar",
+      "value": "Huyện Ea Kar",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "652",
-      "name": "Huyện M'Đrắk",
+      "value": "Huyện M'Đrắk",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "653",
-      "name": "Huyện Krông Bông",
+      "value": "Huyện Krông Bông",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "654",
-      "name": "Huyện Krông Pắc",
+      "value": "Huyện Krông Pắc",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "655",
-      "name": "Huyện Krông A Na",
+      "value": "Huyện Krông A Na",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "656",
-      "name": "Huyện Lắk",
+      "value": "Huyện Lắk",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "657",
-      "name": "Huyện Cư Kuin",
+      "value": "Huyện Cư Kuin",
       "level": "Huyện",
       "provinceId": "66",
       "province": "Tỉnh Đắk Lắk"
     },
     {
       "id": "660",
-      "name": "Thành phố Gia Nghĩa",
+      "value": "Thành phố Gia Nghĩa",
       "level": "Thành phố",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "661",
-      "name": "Huyện Đăk Glong",
+      "value": "Huyện Đăk Glong",
       "englishName": "Dak Glong province",
       "level": "Huyện",
       "provinceId": "67",
@@ -3396,63 +3396,63 @@
     },
     {
       "id": "662",
-      "name": "Huyện Cư Jút",
+      "value": "Huyện Cư Jút",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "663",
-      "name": "Huyện Đắk Mil",
+      "value": "Huyện Đắk Mil",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "664",
-      "name": "Huyện Krông Nô",
+      "value": "Huyện Krông Nô",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "665",
-      "name": "Huyện Đắk Song",
+      "value": "Huyện Đắk Song",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "666",
-      "name": "Huyện Đắk R'Lấp",
+      "value": "Huyện Đắk R'Lấp",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "667",
-      "name": "Huyện Tuy Đức",
+      "value": "Huyện Tuy Đức",
       "level": "Huyện",
       "provinceId": "67",
       "province": "Tỉnh Đắk Nông"
     },
     {
       "id": "672",
-      "name": "Thành phố Đà Lạt",
+      "value": "Thành phố Đà Lạt",
       "level": "Thành phố",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "673",
-      "name": "Thành phố Bảo Lộc",
+      "value": "Thành phố Bảo Lộc",
       "level": "Thành phố",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "674",
-      "name": "Huyện Đam Rông",
+      "value": "Huyện Đam Rông",
       "englishName": "Dam Rong Province",
       "level": "Huyện",
       "provinceId": "68",
@@ -3460,1085 +3460,1085 @@
     },
     {
       "id": "675",
-      "name": "Huyện Lạc Dương",
+      "value": "Huyện Lạc Dương",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "676",
-      "name": "Huyện Lâm Hà",
+      "value": "Huyện Lâm Hà",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "677",
-      "name": "Huyện Đơn Dương",
+      "value": "Huyện Đơn Dương",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "678",
-      "name": "Huyện Đức Trọng",
+      "value": "Huyện Đức Trọng",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "679",
-      "name": "Huyện Di Linh",
+      "value": "Huyện Di Linh",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "680",
-      "name": "Huyện Bảo Lâm",
+      "value": "Huyện Bảo Lâm",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "681",
-      "name": "Huyện Đạ Huoai",
+      "value": "Huyện Đạ Huoai",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "682",
-      "name": "Huyện Đạ Tẻh",
+      "value": "Huyện Đạ Tẻh",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "683",
-      "name": "Huyện Cát Tiên",
+      "value": "Huyện Cát Tiên",
       "level": "Huyện",
       "provinceId": "68",
       "province": "Tỉnh Lâm Đồng"
     },
     {
       "id": "688",
-      "name": "Thị xã Phước Long",
+      "value": "Thị xã Phước Long",
       "level": "Thị xã",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "689",
-      "name": "Thành phố Đồng Xoài",
+      "value": "Thành phố Đồng Xoài",
       "level": "Thành phố",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "690",
-      "name": "Thị xã Bình Long",
+      "value": "Thị xã Bình Long",
       "level": "Thị xã",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "691",
-      "name": "Huyện Bù Gia Mập",
+      "value": "Huyện Bù Gia Mập",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "692",
-      "name": "Huyện Lộc Ninh",
+      "value": "Huyện Lộc Ninh",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "693",
-      "name": "Huyện Bù Đốp",
+      "value": "Huyện Bù Đốp",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "694",
-      "name": "Huyện Hớn Quản",
+      "value": "Huyện Hớn Quản",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "695",
-      "name": "Huyện Đồng Phú",
+      "value": "Huyện Đồng Phú",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "696",
-      "name": "Huyện Bù Đăng",
+      "value": "Huyện Bù Đăng",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "697",
-      "name": "Huyện Chơn Thành",
+      "value": "Huyện Chơn Thành",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "698",
-      "name": "Huyện Phú Riềng",
+      "value": "Huyện Phú Riềng",
       "level": "Huyện",
       "provinceId": "70",
       "province": "Tỉnh Bình Phước"
     },
     {
       "id": "703",
-      "name": "Thành phố Tây Ninh",
+      "value": "Thành phố Tây Ninh",
       "level": "Thành phố",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "705",
-      "name": "Huyện Tân Biên",
+      "value": "Huyện Tân Biên",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "706",
-      "name": "Huyện Tân Châu",
+      "value": "Huyện Tân Châu",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "707",
-      "name": "Huyện Dương Minh Châu",
+      "value": "Huyện Dương Minh Châu",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "708",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "709",
-      "name": "Thị xã Hòa Thành",
+      "value": "Thị xã Hòa Thành",
       "level": "Thị xã",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "710",
-      "name": "Huyện Gò Dầu",
+      "value": "Huyện Gò Dầu",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "711",
-      "name": "Huyện Bến Cầu",
+      "value": "Huyện Bến Cầu",
       "level": "Huyện",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "712",
-      "name": "Thị xã Trảng Bàng",
+      "value": "Thị xã Trảng Bàng",
       "level": "Thị xã",
       "provinceId": "72",
       "province": "Tỉnh Tây Ninh"
     },
     {
       "id": "718",
-      "name": "Thành phố Thủ Dầu Một",
+      "value": "Thành phố Thủ Dầu Một",
       "level": "Thành phố",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "719",
-      "name": "Huyện Bàu Bàng",
+      "value": "Huyện Bàu Bàng",
       "level": "Huyện",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "720",
-      "name": "Huyện Dầu Tiếng",
+      "value": "Huyện Dầu Tiếng",
       "level": "Huyện",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "721",
-      "name": "Thị xã Bến Cát",
+      "value": "Thị xã Bến Cát",
       "level": "Thị xã",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "722",
-      "name": "Huyện Phú Giáo",
+      "value": "Huyện Phú Giáo",
       "level": "Huyện",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "723",
-      "name": "Thị xã Tân Uyên",
+      "value": "Thị xã Tân Uyên",
       "level": "Thị xã",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "724",
-      "name": "Thành phố Dĩ An",
+      "value": "Thành phố Dĩ An",
       "level": "Thành phố",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "725",
-      "name": "Thành phố Thuận An",
+      "value": "Thành phố Thuận An",
       "level": "Thành phố",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "726",
-      "name": "Huyện Bắc Tân Uyên",
+      "value": "Huyện Bắc Tân Uyên",
       "level": "Huyện",
       "provinceId": "74",
       "province": "Tỉnh Bình Dương"
     },
     {
       "id": "731",
-      "name": "Thành phố Biên Hòa",
+      "value": "Thành phố Biên Hòa",
       "level": "Thành phố",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "732",
-      "name": "Thành phố Long Khánh",
+      "value": "Thành phố Long Khánh",
       "level": "Thành phố",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "734",
-      "name": "Huyện Tân Phú",
+      "value": "Huyện Tân Phú",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "735",
-      "name": "Huyện Vĩnh Cửu",
+      "value": "Huyện Vĩnh Cửu",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "736",
-      "name": "Huyện Định Quán",
+      "value": "Huyện Định Quán",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "737",
-      "name": "Huyện Trảng Bom",
+      "value": "Huyện Trảng Bom",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "738",
-      "name": "Huyện Thống Nhất",
+      "value": "Huyện Thống Nhất",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "739",
-      "name": "Huyện Cẩm Mỹ",
+      "value": "Huyện Cẩm Mỹ",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "740",
-      "name": "Huyện Long Thành",
+      "value": "Huyện Long Thành",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "741",
-      "name": "Huyện Xuân Lộc",
+      "value": "Huyện Xuân Lộc",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "742",
-      "name": "Huyện Nhơn Trạch",
+      "value": "Huyện Nhơn Trạch",
       "level": "Huyện",
       "provinceId": "75",
       "province": "Tỉnh Đồng Nai"
     },
     {
       "id": "747",
-      "name": "Thành phố Vũng Tàu",
+      "value": "Thành phố Vũng Tàu",
       "level": "Thành phố",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "748",
-      "name": "Thành phố Bà Rịa",
+      "value": "Thành phố Bà Rịa",
       "level": "Thành phố",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "750",
-      "name": "Huyện Châu Đức",
+      "value": "Huyện Châu Đức",
       "level": "Huyện",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "751",
-      "name": "Huyện Xuyên Mộc",
+      "value": "Huyện Xuyên Mộc",
       "level": "Huyện",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "752",
-      "name": "Huyện Long Điền",
+      "value": "Huyện Long Điền",
       "level": "Huyện",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "753",
-      "name": "Huyện Đất Đỏ",
+      "value": "Huyện Đất Đỏ",
       "level": "Huyện",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "754",
-      "name": "Thị xã Phú Mỹ",
+      "value": "Thị xã Phú Mỹ",
       "level": "Thị xã",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "755",
-      "name": "Huyện Côn Đảo",
+      "value": "Huyện Côn Đảo",
       "level": "Huyện",
       "provinceId": "77",
       "province": "Tỉnh Bà Rịa - Vũng Tàu"
     },
     {
       "id": "760",
-      "name": "Quận 1",
+      "value": "Quận 1",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "761",
-      "name": "Quận 12",
+      "value": "Quận 12",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "764",
-      "name": "Quận Gò Vấp",
+      "value": "Quận Gò Vấp",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "765",
-      "name": "Quận Bình Thạnh",
+      "value": "Quận Bình Thạnh",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "766",
-      "name": "Quận Tân Bình",
+      "value": "Quận Tân Bình",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "767",
-      "name": "Quận Tân Phú",
+      "value": "Quận Tân Phú",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "768",
-      "name": "Quận Phú Nhuận",
+      "value": "Quận Phú Nhuận",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "769",
-      "name": "Thành phố Thủ Đức",
+      "value": "Thành phố Thủ Đức",
       "level": "Thành phố",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "770",
-      "name": "Quận 3",
+      "value": "Quận 3",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "771",
-      "name": "Quận 10",
+      "value": "Quận 10",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "772",
-      "name": "Quận 11",
+      "value": "Quận 11",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "773",
-      "name": "Quận 4",
+      "value": "Quận 4",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "774",
-      "name": "Quận 5",
+      "value": "Quận 5",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "775",
-      "name": "Quận 6",
+      "value": "Quận 6",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "776",
-      "name": "Quận 8",
+      "value": "Quận 8",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "777",
-      "name": "Quận Bình Tân",
+      "value": "Quận Bình Tân",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "778",
-      "name": "Quận 7",
+      "value": "Quận 7",
       "level": "Quận",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "783",
-      "name": "Huyện Củ Chi",
+      "value": "Huyện Củ Chi",
       "level": "Huyện",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "784",
-      "name": "Huyện Hóc Môn",
+      "value": "Huyện Hóc Môn",
       "level": "Huyện",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "785",
-      "name": "Huyện Bình Chánh",
+      "value": "Huyện Bình Chánh",
       "level": "Huyện",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "786",
-      "name": "Huyện Nhà Bè",
+      "value": "Huyện Nhà Bè",
       "level": "Huyện",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "787",
-      "name": "Huyện Cần Giờ",
+      "value": "Huyện Cần Giờ",
       "level": "Huyện",
       "provinceId": "79",
       "province": "Thành phố Hồ Chí Minh"
     },
     {
       "id": "794",
-      "name": "Thành phố Tân An",
+      "value": "Thành phố Tân An",
       "level": "Thành phố",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "795",
-      "name": "Thị xã Kiến Tường",
+      "value": "Thị xã Kiến Tường",
       "level": "Thị xã",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "796",
-      "name": "Huyện Tân Hưng",
+      "value": "Huyện Tân Hưng",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "797",
-      "name": "Huyện Vĩnh Hưng",
+      "value": "Huyện Vĩnh Hưng",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "798",
-      "name": "Huyện Mộc Hóa",
+      "value": "Huyện Mộc Hóa",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "799",
-      "name": "Huyện Tân Thạnh",
+      "value": "Huyện Tân Thạnh",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "800",
-      "name": "Huyện Thạnh Hóa",
+      "value": "Huyện Thạnh Hóa",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "801",
-      "name": "Huyện Đức Huệ",
+      "value": "Huyện Đức Huệ",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "802",
-      "name": "Huyện Đức Hòa",
+      "value": "Huyện Đức Hòa",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "803",
-      "name": "Huyện Bến Lức",
+      "value": "Huyện Bến Lức",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "804",
-      "name": "Huyện Thủ Thừa",
+      "value": "Huyện Thủ Thừa",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "805",
-      "name": "Huyện Tân Trụ",
+      "value": "Huyện Tân Trụ",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "806",
-      "name": "Huyện Cần Đước",
+      "value": "Huyện Cần Đước",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "807",
-      "name": "Huyện Cần Giuộc",
+      "value": "Huyện Cần Giuộc",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "808",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "80",
       "province": "Tỉnh Long An"
     },
     {
       "id": "815",
-      "name": "Thành phố Mỹ Tho",
+      "value": "Thành phố Mỹ Tho",
       "level": "Thành phố",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "816",
-      "name": "Thị xã Gò Công",
+      "value": "Thị xã Gò Công",
       "level": "Thị xã",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "817",
-      "name": "Thị xã Cai Lậy",
+      "value": "Thị xã Cai Lậy",
       "level": "Thị xã",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "818",
-      "name": "Huyện Tân Phước",
+      "value": "Huyện Tân Phước",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "819",
-      "name": "Huyện Cái Bè",
+      "value": "Huyện Cái Bè",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "820",
-      "name": "Huyện Cai Lậy",
+      "value": "Huyện Cai Lậy",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "821",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "822",
-      "name": "Huyện Chợ Gạo",
+      "value": "Huyện Chợ Gạo",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "823",
-      "name": "Huyện Gò Công Tây",
+      "value": "Huyện Gò Công Tây",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "824",
-      "name": "Huyện Gò Công Đông",
+      "value": "Huyện Gò Công Đông",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "825",
-      "name": "Huyện Tân Phú Đông",
+      "value": "Huyện Tân Phú Đông",
       "level": "Huyện",
       "provinceId": "82",
       "province": "Tỉnh Tiền Giang"
     },
     {
       "id": "829",
-      "name": "Thành phố Bến Tre",
+      "value": "Thành phố Bến Tre",
       "level": "Thành phố",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "831",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "832",
-      "name": "Huyện Chợ Lách",
+      "value": "Huyện Chợ Lách",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "833",
-      "name": "Huyện Mỏ Cày Nam",
+      "value": "Huyện Mỏ Cày Nam",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "834",
-      "name": "Huyện Giồng Trôm",
+      "value": "Huyện Giồng Trôm",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "835",
-      "name": "Huyện Bình Đại",
+      "value": "Huyện Bình Đại",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "836",
-      "name": "Huyện Ba Tri",
+      "value": "Huyện Ba Tri",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "837",
-      "name": "Huyện Thạnh Phú",
+      "value": "Huyện Thạnh Phú",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "838",
-      "name": "Huyện Mỏ Cày Bắc",
+      "value": "Huyện Mỏ Cày Bắc",
       "level": "Huyện",
       "provinceId": "83",
       "province": "Tỉnh Bến Tre"
     },
     {
       "id": "842",
-      "name": "Thành phố Trà Vinh",
+      "value": "Thành phố Trà Vinh",
       "level": "Thành phố",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "844",
-      "name": "Huyện Càng Long",
+      "value": "Huyện Càng Long",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "845",
-      "name": "Huyện Cầu Kè",
+      "value": "Huyện Cầu Kè",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "846",
-      "name": "Huyện Tiểu Cần",
+      "value": "Huyện Tiểu Cần",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "847",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "848",
-      "name": "Huyện Cầu Ngang",
+      "value": "Huyện Cầu Ngang",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "849",
-      "name": "Huyện Trà Cú",
+      "value": "Huyện Trà Cú",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "850",
-      "name": "Huyện Duyên Hải",
+      "value": "Huyện Duyên Hải",
       "level": "Huyện",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "851",
-      "name": "Thị xã Duyên Hải",
+      "value": "Thị xã Duyên Hải",
       "level": "Thị xã",
       "provinceId": "84",
       "province": "Tỉnh Trà Vinh"
     },
     {
       "id": "855",
-      "name": "Thành phố Vĩnh Long",
+      "value": "Thành phố Vĩnh Long",
       "level": "Thành phố",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "857",
-      "name": "Huyện Long Hồ",
+      "value": "Huyện Long Hồ",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "858",
-      "name": "Huyện Mang Thít",
+      "value": "Huyện Mang Thít",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "859",
-      "name": "Huyện  Vũng Liêm",
+      "value": "Huyện  Vũng Liêm",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "860",
-      "name": "Huyện Tam Bình",
+      "value": "Huyện Tam Bình",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "861",
-      "name": "Thị xã Bình Minh",
+      "value": "Thị xã Bình Minh",
       "level": "Thị xã",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "862",
-      "name": "Huyện Trà Ôn",
+      "value": "Huyện Trà Ôn",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "863",
-      "name": "Huyện Bình Tân",
+      "value": "Huyện Bình Tân",
       "level": "Huyện",
       "provinceId": "86",
       "province": "Tỉnh Vĩnh Long"
     },
     {
       "id": "866",
-      "name": "Thành phố Cao Lãnh",
+      "value": "Thành phố Cao Lãnh",
       "level": "Thành phố",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "867",
-      "name": "Thành phố Sa Đéc",
+      "value": "Thành phố Sa Đéc",
       "level": "Thành phố",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "868",
-      "name": "Thành phố Hồng Ngự",
+      "value": "Thành phố Hồng Ngự",
       "level": "Thành phố",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "869",
-      "name": "Huyện Tân Hồng",
+      "value": "Huyện Tân Hồng",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "870",
-      "name": "Huyện Hồng Ngự",
+      "value": "Huyện Hồng Ngự",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "871",
-      "name": "Huyện Tam Nông",
+      "value": "Huyện Tam Nông",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "872",
-      "name": "Huyện Tháp Mười",
+      "value": "Huyện Tháp Mười",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "873",
-      "name": "Huyện Cao Lãnh",
+      "value": "Huyện Cao Lãnh",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "874",
-      "name": "Huyện Thanh Bình",
+      "value": "Huyện Thanh Bình",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "875",
-      "name": "Huyện Lấp Vò",
+      "value": "Huyện Lấp Vò",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "876",
-      "name": "Huyện Lai Vung",
+      "value": "Huyện Lai Vung",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "877",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "87",
       "province": "Tỉnh Đồng Tháp"
     },
     {
       "id": "883",
-      "name": "Thành phố Long Xuyên",
+      "value": "Thành phố Long Xuyên",
       "level": "Thành phố",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "884",
-      "name": "Thành phố Châu Đốc",
+      "value": "Thành phố Châu Đốc",
       "level": "Thành phố",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "886",
-      "name": "Huyện An Phú",
+      "value": "Huyện An Phú",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "887",
-      "name": "Thị xã Tân Châu",
+      "value": "Thị xã Tân Châu",
       "level": "Thị xã",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "888",
-      "name": "Huyện Phú Tân",
+      "value": "Huyện Phú Tân",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "889",
-      "name": "Huyện Châu Phú",
+      "value": "Huyện Châu Phú",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "890",
-      "name": "Huyện Tịnh Biên",
+      "value": "Huyện Tịnh Biên",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "891",
-      "name": "Huyện Tri Tôn",
+      "value": "Huyện Tri Tôn",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "892",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "893",
-      "name": "Huyện Chợ Mới",
+      "value": "Huyện Chợ Mới",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "894",
-      "name": "Huyện Thoại Sơn",
+      "value": "Huyện Thoại Sơn",
       "level": "Huyện",
       "provinceId": "89",
       "province": "Tỉnh An Giang"
     },
     {
       "id": "899",
-      "name": "Thành phố Rạch Giá",
+      "value": "Thành phố Rạch Giá",
       "englishName": "Rach Gia city",
       "level": "Thành phố",
       "provinceId": "91",
@@ -4546,343 +4546,343 @@
     },
     {
       "id": "900",
-      "name": "Thành phố Hà Tiên",
+      "value": "Thành phố Hà Tiên",
       "level": "Thành phố",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "902",
-      "name": "Huyện Kiên Lương",
+      "value": "Huyện Kiên Lương",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "903",
-      "name": "Huyện Hòn Đất",
+      "value": "Huyện Hòn Đất",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "904",
-      "name": "Huyện Tân Hiệp",
+      "value": "Huyện Tân Hiệp",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "905",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "906",
-      "name": "Huyện Giồng Riềng",
+      "value": "Huyện Giồng Riềng",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "907",
-      "name": "Huyện Gò Quao",
+      "value": "Huyện Gò Quao",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "908",
-      "name": "Huyện An Biên",
+      "value": "Huyện An Biên",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "909",
-      "name": "Huyện An Minh",
+      "value": "Huyện An Minh",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "910",
-      "name": "Huyện Vĩnh Thuận",
+      "value": "Huyện Vĩnh Thuận",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "911",
-      "name": "Thành phố Phú Quốc",
+      "value": "Thành phố Phú Quốc",
       "level": "Thành phố",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "912",
-      "name": "Huyện Kiên Hải",
+      "value": "Huyện Kiên Hải",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "913",
-      "name": "Huyện U Minh Thượng",
+      "value": "Huyện U Minh Thượng",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "914",
-      "name": "Huyện Giang Thành",
+      "value": "Huyện Giang Thành",
       "level": "Huyện",
       "provinceId": "91",
       "province": "Tỉnh Kiên Giang"
     },
     {
       "id": "916",
-      "name": "Quận Ninh Kiều",
+      "value": "Quận Ninh Kiều",
       "level": "Quận",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "917",
-      "name": "Quận Ô Môn",
+      "value": "Quận Ô Môn",
       "level": "Quận",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "918",
-      "name": "Quận Bình Thuỷ",
+      "value": "Quận Bình Thuỷ",
       "level": "Quận",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "919",
-      "name": "Quận Cái Răng",
+      "value": "Quận Cái Răng",
       "level": "Quận",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "923",
-      "name": "Quận Thốt Nốt",
+      "value": "Quận Thốt Nốt",
       "level": "Quận",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "924",
-      "name": "Huyện Vĩnh Thạnh",
+      "value": "Huyện Vĩnh Thạnh",
       "level": "Huyện",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "925",
-      "name": "Huyện Cờ Đỏ",
+      "value": "Huyện Cờ Đỏ",
       "level": "Huyện",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "926",
-      "name": "Huyện Phong Điền",
+      "value": "Huyện Phong Điền",
       "level": "Huyện",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "927",
-      "name": "Huyện Thới Lai",
+      "value": "Huyện Thới Lai",
       "level": "Huyện",
       "provinceId": "92",
       "province": "Thành phố Cần Thơ"
     },
     {
       "id": "930",
-      "name": "Thành phố Vị Thanh",
+      "value": "Thành phố Vị Thanh",
       "level": "Thành phố",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "931",
-      "name": "Thành phố Ngã Bảy",
+      "value": "Thành phố Ngã Bảy",
       "level": "Thành phố",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "932",
-      "name": "Huyện Châu Thành A",
+      "value": "Huyện Châu Thành A",
       "level": "Huyện",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "933",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "934",
-      "name": "Huyện Phụng Hiệp",
+      "value": "Huyện Phụng Hiệp",
       "level": "Huyện",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "935",
-      "name": "Huyện Vị Thuỷ",
+      "value": "Huyện Vị Thuỷ",
       "level": "Huyện",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "936",
-      "name": "Huyện Long Mỹ",
+      "value": "Huyện Long Mỹ",
       "level": "Huyện",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "937",
-      "name": "Thị xã Long Mỹ",
+      "value": "Thị xã Long Mỹ",
       "level": "Thị xã",
       "provinceId": "93",
       "province": "Tỉnh Hậu Giang"
     },
     {
       "id": "941",
-      "name": "Thành phố Sóc Trăng",
+      "value": "Thành phố Sóc Trăng",
       "level": "Thành phố",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "942",
-      "name": "Huyện Châu Thành",
+      "value": "Huyện Châu Thành",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "943",
-      "name": "Huyện Kế Sách",
+      "value": "Huyện Kế Sách",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "944",
-      "name": "Huyện Mỹ Tú",
+      "value": "Huyện Mỹ Tú",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "945",
-      "name": "Huyện Cù Lao Dung",
+      "value": "Huyện Cù Lao Dung",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "946",
-      "name": "Huyện Long Phú",
+      "value": "Huyện Long Phú",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "947",
-      "name": "Huyện Mỹ Xuyên",
+      "value": "Huyện Mỹ Xuyên",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "948",
-      "name": "Thị xã Ngã Năm",
+      "value": "Thị xã Ngã Năm",
       "level": "Thị xã",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "949",
-      "name": "Huyện Thạnh Trị",
+      "value": "Huyện Thạnh Trị",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "950",
-      "name": "Thị xã Vĩnh Châu",
+      "value": "Thị xã Vĩnh Châu",
       "level": "Thị xã",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "951",
-      "name": "Huyện Trần Đề",
+      "value": "Huyện Trần Đề",
       "level": "Huyện",
       "provinceId": "94",
       "province": "Tỉnh Sóc Trăng"
     },
     {
       "id": "954",
-      "name": "Thành phố Bạc Liêu",
+      "value": "Thành phố Bạc Liêu",
       "level": "Thành phố",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "956",
-      "name": "Huyện Hồng Dân",
+      "value": "Huyện Hồng Dân",
       "level": "Huyện",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "957",
-      "name": "Huyện Phước Long",
+      "value": "Huyện Phước Long",
       "level": "Huyện",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "958",
-      "name": "Huyện Vĩnh Lợi",
+      "value": "Huyện Vĩnh Lợi",
       "level": "Huyện",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "959",
-      "name": "Thị xã Giá Rai",
+      "value": "Thị xã Giá Rai",
       "level": "Thị xã",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "960",
-      "name": "Huyện Đông Hải",
+      "value": "Huyện Đông Hải",
       "level": "Huyện",
       "provinceId": "95",
       "province": "Tỉnh Bạc Liêu"
     },
     {
       "id": "961",
-      "name": "Huyện Hoà Bình",
+      "value": "Huyện Hoà Bình",
       "englishName": "Hoa Binh district",
       "level": "Huyện",
       "provinceId": "95",
@@ -4890,69 +4890,69 @@
     },
     {
       "id": "964",
-      "name": "Thành phố Cà Mau",
+      "value": "Thành phố Cà Mau",
       "level": "Thành phố",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "966",
-      "name": "Huyện U Minh",
+      "value": "Huyện U Minh",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "967",
-      "name": "Huyện Thới Bình",
+      "value": "Huyện Thới Bình",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "968",
-      "name": "Huyện Trần Văn Thời",
+      "value": "Huyện Trần Văn Thời",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "969",
-      "name": "Huyện Cái Nước",
+      "value": "Huyện Cái Nước",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "970",
-      "name": "Huyện Đầm Dơi",
+      "value": "Huyện Đầm Dơi",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "971",
-      "name": "Huyện Năm Căn",
+      "value": "Huyện Năm Căn",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "972",
-      "name": "Huyện Phú Tân",
+      "value": "Huyện Phú Tân",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
       "id": "973",
-      "name": "Huyện Ngọc Hiển",
+      "value": "Huyện Ngọc Hiển",
       "level": "Huyện",
       "provinceId": "96",
       "province": "Tỉnh Cà Mau"
     },
     {
-      "name": "Số lượng : 705"
+      "value": "Số lượng : 705"
     }
   ]
 }
