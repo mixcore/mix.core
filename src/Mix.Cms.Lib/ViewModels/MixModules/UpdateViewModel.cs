@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         [JsonProperty("cultures")]
         public List<SupportedCulture> Cultures { get; set; }
 
+        [Required]
         [JsonProperty("name")]
         public string Name { get; set; }
 
