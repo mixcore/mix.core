@@ -21,15 +21,6 @@ namespace Mix.Cms.Lib.Migrations
                 nullable: true,
                 collation: "Vietnamese_CI_AS");
 
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "mix_portal_page_role",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .Annotation("SqlServer:Identity", "1, 1");
-
             migrationBuilder.AddColumn<string>(
                 name: "EditorType",
                 table: "mix_page",
@@ -109,15 +100,6 @@ namespace Mix.Cms.Lib.Migrations
             migrationBuilder.DropColumn(
                 name: "EditorValue",
                 table: "mix_database_data_value");
-
-            migrationBuilder.AlterColumn<int>(
-                name: "Id",
-                table: "mix_portal_page_role",
-                type: "int",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "int")
-                .OldAnnotation("SqlServer:Identity", "1, 1");
         }
     }
 }
