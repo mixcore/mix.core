@@ -140,7 +140,6 @@ namespace Mix.Cms.Web
                 ContentTypeProvider = provider
             });
 
-            //app.UseStaticFiles();
             //app.UseGraphiQl("/api/graphql");
 
             app.UseStaticFiles();
