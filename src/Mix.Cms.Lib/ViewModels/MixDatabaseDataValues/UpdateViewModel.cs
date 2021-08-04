@@ -226,7 +226,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (exist)
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} = {StringValue} is existed");
+                        Errors.Add($"{DataId}: {Column.Title} = {StringValue} is existed");
                     }
                 }
                 if (Column.IsRequire)
@@ -234,7 +234,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (string.IsNullOrEmpty(StringValue))
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} is required");
+                        Errors.Add($"{DataId}: {Column.Title} is required");
                     }
                 }
                 if (!string.IsNullOrEmpty(Column.Regex))
@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (!m.Success)
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} is invalid");
+                        Errors.Add($"{DataId}: {Column.Title} is invalid");
                     }
                 }
             }

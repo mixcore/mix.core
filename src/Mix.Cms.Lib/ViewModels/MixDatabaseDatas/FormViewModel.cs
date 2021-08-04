@@ -97,6 +97,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         {
         }
 
+        public void UpdateValues(JObject values)
+        {
+            foreach (var item in values.Properties())
+            {
+                if (Obj.ContainsKey(item.Name))
+                {
+                    Obj[item.Name] = item.Value;
+                }
+            }
+        }
+
         public FormViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }

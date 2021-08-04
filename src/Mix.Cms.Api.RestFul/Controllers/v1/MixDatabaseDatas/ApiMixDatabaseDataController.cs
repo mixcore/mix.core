@@ -62,6 +62,20 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
             return BadRequest(mixDatabase);
         }
+        
+        [HttpPost("save-values/{dataId}")]
+        public async Task<ActionResult<FormViewModel>> SaveValue([FromRoute] string dataId, [FromBody] JObject values)
+        {
+            var getFormData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == dataId && m.Specificulture == _lang);
+            if (getFormData.IsSucceed)
+            {
+                var formData = getFormData.Data;
+                formData.UpdateValues(values);
+                var result = await SaveAsync(formData, true);
+                return GetResponse(result);
+            }
+            return NotFound(dataId);
+        }
 
         private async Task<FormViewModel> getFormDataAsync(string mixDatabase)
         {
