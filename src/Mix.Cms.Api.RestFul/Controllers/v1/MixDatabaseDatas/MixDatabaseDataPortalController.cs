@@ -79,7 +79,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                         MixDatabaseName = getAttrSet.Data.Name,
                         Status = MixContentStatus.Published,
                         Columns = getAttrSet.Data.Columns,
-                        ParentType = parentType
+                        ParentType = parentType,
+                        CreatedDateTime = DateTime.UtcNow
                     };
                     result.ExpandView();
                     return Ok(result);
