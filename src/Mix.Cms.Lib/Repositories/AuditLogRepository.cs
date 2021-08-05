@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
@@ -41,7 +42,10 @@ namespace Mix.Cms.Lib.Repositories
                 };
                 _dbContext.AuditLog.Add(msg);
             }
-            msg.Exception = JsonSerializer.Serialize(exception);
+            if (exception!=null)
+            {
+                msg.Exception = JObject.FromObject(exception).ToString(Newtonsoft.Json.Formatting.None);
+            }
             msg.Success = isSucceed;
             _dbContext.SaveChanges();
         }
