@@ -139,7 +139,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             Status = MixContentStatus.Published,
                             Columns = getAttrSet.Data.Columns,
                             ParentType = parentType,
-                            ParentId = parentId
+                            ParentId = parentId,
+                            CreatedDateTime = DateTime.UtcNow
                         };
                         await result.SaveModelAsync(false, context, transaction);
                         result.ExpandView(context, transaction);
