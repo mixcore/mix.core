@@ -95,6 +95,9 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("domain")]
         public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 

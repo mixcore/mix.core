@@ -136,7 +136,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(data, true);
+                var result = await base.SaveGenericAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();

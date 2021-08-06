@@ -43,6 +43,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             return GetResponse(getData);
         }
 
+        protected override async Task<RepositoryResponse<UpdateViewModel>> SaveAsync(UpdateViewModel vm, bool isSaveSubModel)
+        {
+            var result = await base.SaveAsync(vm, isSaveSubModel);
+            if (result.IsSucceed && vm.IsClone)
+            {
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures);
+                if (!cloneResult.IsSucceed)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Cannot clone");
+                    result.Errors.AddRange(cloneResult.Errors);
+                }
+            }
+            return result;
+        }
+
         public override ActionResult<UpdateViewModel> Default()
         {
             using (MixCmsContext context = new MixCmsContext())

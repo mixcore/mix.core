@@ -119,6 +119,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("templatePath")]
         public string TemplatePath { get; set; }
 
