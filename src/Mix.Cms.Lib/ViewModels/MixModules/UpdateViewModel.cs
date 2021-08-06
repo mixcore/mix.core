@@ -178,66 +178,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         #endregion Template
 
-        #region Form
-
-        [JsonProperty("forms")]
-        public List<MixTemplates.UpdateViewModel> Forms { get; set; }// Post Forms
-
-        [JsonIgnore]
-        public string FormFolderType
-        {
-            get
-            {
-                return MixTemplateFolders.Forms.ToString();
-            }
-        }
-
-        [JsonProperty("formView")]
-        public MixTemplates.UpdateViewModel FormView { get; set; }
-
-        [JsonProperty("formFolder")]
-        public string FormFolder
-        {
-            get
-            {
-                return $"{MixFolders.TemplatesFolder}/" +
-                    $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
-                    $"{MixTemplateFolders.Forms}";
-            }
-        }
-
-        #endregion Form
-
-        #region Edm
-
-        [JsonProperty("edms")]
-        public List<MixTemplates.UpdateViewModel> Edms { get; set; }// Post Edms
-
-        [JsonIgnore]
-        public string EdmFolderType
-        {
-            get
-            {
-                return MixTemplateFolders.Edms.ToString();
-            }
-        }
-
-        [JsonProperty("edmView")]
-        public MixTemplates.UpdateViewModel EdmView { get; set; }
-
-        [JsonProperty("edmFolder")]
-        public string EdmFolder
-        {
-            get
-            {
-                return $"{MixFolders.TemplatesFolder}/" +
-                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
-                   $"{MixTemplateFolders.Edms}";
-            }
-        }
-
-        #endregion Edm
-
         //Parent Post Id
         [JsonProperty("postId")]
         public string PostId { get; set; }
@@ -295,8 +235,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 CreatedDateTime = DateTime.UtcNow;
             }
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
-            FormTemplate = FormView != null ? $"{FormView.FolderType}/{FormView.FileName}{FormView.Extension}" : FormTemplate;
-            EdmTemplate = EdmView != null ? $"{EdmView.FolderType}/{EdmView.FileName}{EdmView.Extension}" : EdmTemplate;
 
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
@@ -326,18 +264,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             this.View = Templates.FirstOrDefault(t => !string.IsNullOrEmpty(templateName) && templateName.Equals($"{t.FileName}{t.Extension}"));
             this.View ??= Templates.FirstOrDefault();
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View?.Extension}";
-
-            this.Forms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.FormFolderType
-                , _context, _transaction).Data;
-            this.FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, MixTemplateFolders.Forms, _context, _transaction);
-            this.FormTemplate = $"{FormView?.FileFolder}/{FormView?.FileName}{View?.Extension}";
-
-            this.Edms = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
-                t => t.Theme.Id == ActivedTheme && t.FolderType == this.EdmFolderType
-                , _context, _transaction).Data;
-            this.EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, MixTemplateFolders.Edms, _context, _transaction);
-            this.EdmTemplate = $"{EdmView?.FileFolder}/{EdmView?.FileName}{View?.Extension}";
         }
 
         #region Async
@@ -355,17 +281,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 var saveViewResult = await View.SaveModelAsync(true, _context, _transaction);
                 ViewModelHelper.HandleResult(saveViewResult, ref result);
-            }
-
-            if (FormView.Id == 0 && result.IsSucceed && !string.IsNullOrEmpty(FormView.Content))
-            {
-                var saveResult = await FormView.SaveModelAsync(true, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
-            }
-            if (EdmView.Id == 0 && result.IsSucceed && !string.IsNullOrEmpty(EdmView.Content))
-            {
-                var saveResult = await EdmView.SaveModelAsync(true, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
             }
             return result;
         }

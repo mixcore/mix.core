@@ -108,10 +108,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             if (Id > 0)
             {
                 Columns ??= MixDatabaseColumns.UpdateViewModel
-                .Repository.GetModelListBy(a => a.MixDatabaseId == Id, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
+                .Repository.GetModelListBy(a => a.MixDatabaseId == Id || a.MixDatabaseName == Name, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixDatabaseColumns.UpdateViewModel>();
-                //FormView = MixTemplates.UpdateViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-                //EdmView = MixTemplates.UpdateViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             }
             else
             {
@@ -126,8 +124,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 Id = Repository.Max(s => s.Id, _context, _transaction).Data + 1;
                 CreatedDateTime = DateTime.UtcNow;
             }
-            //FormTemplate = FormView != null ? string.Format(@"{0}/{1}{2}", FormView.FolderType, FormView.FileName, FormView.Extension) : FormTemplate;
-            //EdmTemplate = EdmView != null ? string.Format(@"{0}/{1}{2}", EdmView.FolderType, EdmView.FileName, EdmView.Extension) : EdmTemplate;
             return base.ParseModel(_context, _transaction);
         }
 
