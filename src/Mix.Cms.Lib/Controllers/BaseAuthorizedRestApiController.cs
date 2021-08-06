@@ -106,6 +106,26 @@ namespace Mix.Cms.Lib.Controllers
         }
 
         [MixAuthorize]
+        [HttpGet("clone/{id}/{cloneCulture}")]
+        public virtual async Task<ActionResult<TUpdate>> Clone(string id, string cloneCulture)
+        {
+            var getData = await GetSingleAsync(id);
+            var cultures = new List<SupportedCulture>() { new SupportedCulture()
+            {
+                Specificulture = cloneCulture
+            } };
+            var result = await getData.Data.CloneAsync(getData.Data.Model, cultures);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data.FirstOrDefault());
+            }
+            else
+            {
+                return BadRequest(result.Errors);
+            }
+        }
+
+        [MixAuthorize]
         [HttpGet("duplicate/{id}")]
         public virtual async Task<ActionResult<TUpdate>> Duplicate(string id)
         {
@@ -496,7 +516,12 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
+        protected virtual Task<RepositoryResponse<TUpdate>> SaveAsync(TUpdate vm, bool isSaveSubModel)
+        {
+            return SaveGenericAsync(vm, isSaveSubModel);
+        }
+        
+        protected async Task<RepositoryResponse<T>> SaveGenericAsync<T>(T vm, bool isSaveSubModel)
             where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)

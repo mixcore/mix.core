@@ -102,7 +102,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 data.LastModified = DateTime.UtcNow;
             }
 
-            var result = await base.SaveAsync<AdditionalViewModel>(data, true);
+            var result = await base.SaveGenericAsync<AdditionalViewModel>(data, true);
             if (result.IsSucceed)
             {
                 return Ok(result.Data);

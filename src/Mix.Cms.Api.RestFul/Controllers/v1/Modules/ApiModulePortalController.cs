@@ -15,6 +15,7 @@ using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -61,6 +62,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 return BadRequest(getData.Errors);
             }
+        }
+
+        protected override async Task<RepositoryResponse<UpdateViewModel>> SaveAsync(UpdateViewModel vm, bool isSaveSubModel)
+        {
+            var result = await base.SaveAsync(vm, isSaveSubModel);
+            if (result.IsSucceed && vm.IsClone)
+            {
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m=>m.Specificulture != _lang).ToList());
+                if (!cloneResult.IsSucceed)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Cannot clone");
+                    result.Errors.AddRange(cloneResult.Errors);
+                }
+            }
+            return result;
         }
 
         public override async Task<ActionResult<UpdateViewModel>> Duplicate(string id)

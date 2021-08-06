@@ -122,6 +122,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
