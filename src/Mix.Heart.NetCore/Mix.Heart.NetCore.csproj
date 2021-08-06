@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Mix.Heart" Version="1.0.4.0" />
+    <PackageReference Include="Mix.Heart" Version="1.0.3.9" />
   </ItemGroup>
 
 </Project>

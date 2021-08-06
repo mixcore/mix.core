@@ -15,6 +15,7 @@ using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
 using Mix.Identity.Helpers;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
@@ -48,7 +49,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             var result = await base.SaveAsync(vm, isSaveSubModel);
             if (result.IsSucceed && vm.IsClone)
             {
-                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures);
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m => m.Specificulture != _lang).ToList());
                 if (!cloneResult.IsSucceed)
                 {
                     result.IsSucceed = false;

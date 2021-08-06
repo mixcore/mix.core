@@ -69,7 +69,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             var result = await base.SaveAsync(vm, isSaveSubModel);
             if (result.IsSucceed && vm.IsClone)
             {
-                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures);
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m=>m.Specificulture != _lang).ToList());
                 if (!cloneResult.IsSucceed)
                 {
                     result.IsSucceed = false;
