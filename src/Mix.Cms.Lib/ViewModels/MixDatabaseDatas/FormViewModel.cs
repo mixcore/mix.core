@@ -58,6 +58,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("detailsUrl")]
         public string DetailsUrl
         {
@@ -127,11 +130,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
             if (Columns.Any(c => c.DataType == MixDataType.Reference))
             {
-                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, 
+                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture,
                     Columns
-                    .Where(c=>c.DataType == MixDataType.Reference)
-                    .Select(c => new MixDatabaseColumn() 
-                    { 
+                    .Where(c => c.DataType == MixDataType.Reference)
+                    .Select(c => new MixDatabaseColumn()
+                    {
                         Name = c.Name,
                         ReferenceId = c.ReferenceId,
                         DataType = c.DataType
@@ -235,32 +238,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
 
-            // Save Edm html
-            //var getAttrSet = Mix.Cms.Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseName, _context, _transaction);
-            //var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
-            //var edmField = Values.FirstOrDefault(f => f.MixDatabaseColumnName == "edm");
-            //if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
-            //{
-            //    string body = getEdm.Data.Content;
-            //    foreach (var prop in Obj.Properties())
-            //    {
-            //        body = body.Replace($"[[{prop.Name}]]", Obj[prop.Name].Value<string>());
-            //    }
-            //    var edmFile = new FileViewModel()
-            //    {
-            //        Content = body,
-            //        Extension = MixFileExtensions.Html,
-            //        FileFolder = MixTemplateFolders.Edms,
-            //        Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
-            //    };
-            //    if (MixFileRepository.Instance.SaveWebFile(edmFile))
-            //    {
-            //        Obj["edm"] = edmFile.WebPath;
-            //        edmField.StringValue = edmFile.WebPath;
-            //    }
-            //}
-            //End save edm
-
             return base.ParseModel(_context, _transaction); ;
         }
 
@@ -276,6 +253,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId) && ParentId != "0")
                 {
+
+
                     var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.CheckIsExists(
                         m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
@@ -289,14 +268,29 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             MixDatabaseName = MixDatabaseName,
                             ParentType = ParentType,
                             ParentId = ParentId,
-                            Status = MixContentStatus.Published
+                            Status = MixContentStatus.Published,
                         };
                         var saveResult = await nav.SaveModelAsync(false, context, transaction);
+
                         if (!saveResult.IsSucceed)
                         {
                             result.IsSucceed = false;
                             result.Exception = saveResult.Exception;
-                            result.Errors = saveResult.Errors;
+                            result.Errors.Add("Cannot save navigation");
+                            result.Errors.AddRange(saveResult.Errors);
+                        }
+
+                        if (IsClone)
+                        {
+                            var cloneData = await CloneAsync(ParseModel(), Cultures, context, transaction);
+                            var cloneNav = await nav.CloneAsync(nav.ParseModel(), Cultures, context, transaction);
+                            if (!cloneNav.IsSucceed)
+                            {
+                                result.IsSucceed = false;
+                                result.Exception = saveResult.Exception;
+                                result.Errors.Add("Cannot clone navigation");
+                                result.Errors.AddRange(saveResult.Errors);
+                            }
                         }
                     }
                 }
@@ -321,6 +315,24 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     context.Dispose();
                 }
             }
+        }
+
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseData parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Values.Count > 0)
+            {
+                foreach (var item in Values)
+                {
+                    if (result.IsSucceed)
+                    {
+                        item.Cultures = Cultures;
+                        var cloneValue = await item.CloneAsync(item.ParseModel(), Cultures, _context, _transaction);
+                        ViewModelHelper.HandleResult(cloneValue, ref result);
+                    }
+                }
+            }
+            return result;
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)

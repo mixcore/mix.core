@@ -224,7 +224,7 @@ namespace Mix.Cms.Lib.ViewModels
         public RepositoryResponse<bool> Validate<T>(IConvertible id, string specificulture, JObject jItem, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where T : class
         {
-            string val = jItem[Name]["value"].Value<string>();
+            string val = jItem[Name]["value"]?.Value<string>();
             var jVal = new JProperty(Name, jItem[Name]);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (IsUnique)

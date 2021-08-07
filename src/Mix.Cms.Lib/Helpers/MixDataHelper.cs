@@ -20,19 +20,36 @@ namespace Mix.Cms.Lib.Helpers
 {
     public static class MixDataHelper
     {
+        public static async Task<PaginationModel<ViewModels.MixDatabaseDatas.ReadMvcViewModel>> GetMixData(
+              string mixDatabaseName,
+              string culture = null,
+              string keyword = null,
+              string fieldName = null,
+              string filterType = "contain", // or "equal"
+              int? pageIndex = 0,
+              int pageSize = 100,
+              string orderBy = "Priority",
+              DisplayDirection direction = DisplayDirection.Asc,
+              MixCmsContext _context = null,
+              IDbContextTransaction _transaction = null)
+        {
+            return await GetMixData<ViewModels.MixDatabaseDatas.ReadMvcViewModel>(mixDatabaseName, culture, keyword, fieldName, filterType, pageIndex, pageSize
+                , orderBy, direction);
+        }
+
         public static async Task<PaginationModel<TView>> GetMixData<TView>(
-            string mixDatabaseName,
-            string culture = null,
-            string keyword = null,
-            string fieldName = null,
-            string filterType = "contain",
-            int? pageIndex = 0,
-            int pageSize = 100,
-            string orderBy = "Priority",
-            DisplayDirection direction = DisplayDirection.Asc,
-            MixCmsContext _context = null,
-            IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
+        string mixDatabaseName,
+        string culture = null,
+        string keyword = null,
+        string fieldName = null,
+        string filterType = "contain", // or "equal"
+        int? pageIndex = 0,
+        int pageSize = 100,
+        string orderBy = "Priority",
+        DisplayDirection direction = DisplayDirection.Asc,
+        MixCmsContext _context = null,
+        IDbContextTransaction _transaction = null)
+        where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
         {
             culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -54,7 +71,7 @@ namespace Mix.Cms.Lib.Helpers
                 {
                     // filter by all fields if have keyword
                     Expression<Func<MixDatabaseDataValue, bool>> pre = null;
-                    
+
                     if (!string.IsNullOrEmpty(fieldName)) // filter by specific field name
                     {
                         pre = m => m.MixDatabaseColumnName == fieldName;
@@ -92,9 +109,9 @@ namespace Mix.Cms.Lib.Helpers
                         pageSize,
                         pageIndex,
                         null, null,
-                        context, 
+                        context,
                         transaction);
-                
+
                 return getData.Data;
             }
             catch (Exception ex)
