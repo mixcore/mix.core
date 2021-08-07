@@ -5,6 +5,7 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
+using Mix.Heart.Enums;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Heart.NetCore.Attributes;
@@ -247,6 +248,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
+                string sortBy = Property<string>("sortBy") ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy);
+                Enum.TryParse(typeof(DisplayDirection), Property<string>("sortDirection"), out object direction);
+                DisplayDirection sortDirection = direction != null 
+                    ? (DisplayDirection)direction 
+                    : MixService.GetEnumConfig<DisplayDirection>(MixAppSettingKeywords.SortBy); ;
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex > 0 ? pageIndex : 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
@@ -274,10 +280,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
-                        dataExp
-                        , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy
-                        ), 0
-                        , pageSize, pageIndex
+                        dataExp, 
+                        sortBy, 
+                        sortDirection,
+                        pageSize, pageIndex
                         , _context: context, _transaction: transaction);
                     if (getDataResult.IsSucceed)
                     {
@@ -290,7 +296,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getPosts = MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
+                    , sortBy, sortDirection
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)

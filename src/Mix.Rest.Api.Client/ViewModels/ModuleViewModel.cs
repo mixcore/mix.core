@@ -236,7 +236,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                     var getDataResult = Cms.Lib.ViewModels.MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
-                        , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy
+                        , MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy
                         ), 0
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
@@ -251,7 +251,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                 {
                     var getPosts = Cms.Lib.ViewModels.MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
+                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)

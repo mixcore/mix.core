@@ -232,7 +232,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                     var postIds = context.MixPagePost.Where(postExp).Select(m => m.PostId);
                     Posts = PostViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture && postIds.Any(n => n == m.Id),
-                        MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy),
+                        MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy),
                         0,
                         pageSize,
                         pageIndex

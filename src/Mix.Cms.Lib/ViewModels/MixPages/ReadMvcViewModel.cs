@@ -265,7 +265,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 {
                     var getPosts = MixPagePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
+                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -424,7 +424,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             var getPosts = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
                 n => n.PageId == Id && n.Specificulture == Specificulture,
-                MixService.GetAppSetting<string>(MixAppSettingKeywords.OrderBy), 0
+                MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy), 0
                 , 4, 0
                , _context: _context, _transaction: _transaction
                );

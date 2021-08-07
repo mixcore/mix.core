@@ -5,7 +5,8 @@
         public const string IsInit = "IsInit";
         public const string SiteName = "SiteName";
         public const string ConnectionString = "ConnectionString";
-        public const string OrderBy = "OrderBy";
+        public const string SortBy = "SortBy";
+        public const string SortDirection = "SortDirection";
         public const string DefaultBlankTemplateFolder = "DefaultTemplateFolder";
         public const string DefaultTemplateFolder = "DefaultTemplateFolder";
         public const string Language = "Language";
