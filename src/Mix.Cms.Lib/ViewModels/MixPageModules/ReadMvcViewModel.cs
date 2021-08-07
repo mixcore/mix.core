@@ -76,6 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
             if (Id == 0)
             {
                 Id = Repository.Max(m => m.Id, _context, _transaction).Data + 1;
+                CreatedDateTime = DateTime.UtcNow;
             }
             return base.ParseModel(_context, _transaction);
         }
@@ -88,7 +89,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
             if (getModule.IsSucceed)
             {
                 Module = getModule.Data;
-                //Module.LoadData();
             }
         }
 
