@@ -577,28 +577,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        //private async Task<RepositoryResponse<bool>> SaveSubModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        //{
-        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
-        //    foreach (var navModule in ModuleNavs)
-        //    {
-        //        navModule.PostId = id;
-        //        navModule.Specificulture = Specificulture;
-        //        navModule.Status = MixContentStatus.Published;
-        //        if (navModule.IsActived)
-        //        {
-        //            var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //        else
-        //        {
-        //            var saveResult = await navModule.RemoveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //    }
-        //    return result;
-        //}
-
         private async Task<RepositoryResponse<bool>> SaveMediasAsync(int newPostid, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
@@ -656,10 +634,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            string parentId = Id.ToString();
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
                 IsSucceed = true
             };
+
+            if (result.IsSucceed)
+            {
+                var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
+                    true,
+                    m => m.ParentId == parentId
+                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
+                        && m.ParentType == MixDatabaseParentType.Module
+                        && m.Specificulture == Specificulture,
+                    _context, _transaction);
+                ViewModelHelper.HandleResult(removeAdditionalData, ref result);
+            }
 
             if (result.IsSucceed)
             {

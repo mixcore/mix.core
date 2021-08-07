@@ -59,6 +59,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("relatedData")]
         public List<MixDatabaseDataAssociations.UpdateViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.UpdateViewModel>();
 
@@ -172,9 +175,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         MixDatabaseId = result.Data.MixDatabaseId,
                         MixDatabaseName = result.Data.MixDatabaseName,
                         ParentId = ParentId,
-                        ParentType = ParentType
+                        ParentType = ParentType,
+                        IsClone = IsClone,
+                        Cultures = Cultures
                     };
                     var saveNav = await nav.SaveModelAsync(true, context, transaction);
+                    if (IsClone)
+                    {
+
+                    }
                     result.IsSucceed = result.IsSucceed && saveNav.IsSucceed;
                     result.Errors = saveNav.Errors;
                     result.Exception = saveNav.Exception;
@@ -236,6 +245,26 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
 
+            return result;
+        }
+
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseData parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Values.Count > 0)
+            {
+                foreach (var item in Values)
+                {
+                    if (result.IsSucceed)
+                    {
+                        item.Cultures = Cultures;
+                        var model = item.ParseModel();
+                        var cloneValue = await item.CloneAsync(model, Cultures, _context, _transaction);
+                        ViewModelHelper.HandleResult(cloneValue, ref result);
+                    }
+                }
+            }
             return result;
         }
 

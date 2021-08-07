@@ -513,7 +513,7 @@ namespace Mix.Cms.Lib.Helpers
             }
             return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
                 type, keyword,
-                MixDatabaseNames.ADDITIONAL_FIELD_POST,
+                MixDatabaseNames.ADDITIONAL_COLUMN_POST,
                 pagingRequest,
                 culture, _context, _transaction);
         }

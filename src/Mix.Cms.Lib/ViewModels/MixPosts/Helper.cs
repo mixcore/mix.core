@@ -165,7 +165,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             try
             {
                 culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
-                postType ??= MixDatabaseNames.ADDITIONAL_FIELD_POST;
+                postType ??= MixDatabaseNames.ADDITIONAL_COLUMN_POST;
 
                 var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
 

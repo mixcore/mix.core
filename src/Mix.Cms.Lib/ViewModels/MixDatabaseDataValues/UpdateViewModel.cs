@@ -5,8 +5,10 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -94,6 +96,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
         #endregion Models
 
         #region Views
+
+        [JsonProperty("cultures")]
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("column")]
         public MixDatabaseColumns.UpdateViewModel Column { get; set; }

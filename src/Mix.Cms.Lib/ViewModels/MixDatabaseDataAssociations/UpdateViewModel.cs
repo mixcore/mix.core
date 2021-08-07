@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 {
@@ -38,6 +39,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
 
         [JsonProperty("cultures")]
         public List<SupportedCulture> Cultures { get; set; }
@@ -144,15 +148,21 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == MixDatabaseId)?.Name;
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    tasks.Add(Task.Factory.StartNew(() =>
-        //    {
-        //        Data.GenerateCache(Data.Model, Data);
-        //    }));
-        //    return tasks;
-        //}
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseDataAssociation parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Data != null)
+            {
+                    Data.Cultures = Cultures;
+                    if (result.IsSucceed)
+                    {
+                        var model = Data.ParseModel();
+                        var cloneValue = await Data.CloneAsync(model, Cultures, _context, _transaction);
+                        ViewModelHelper.HandleResult(cloneValue, ref result);
+                    }
+            }
+            return result;
+        }
 
         #endregion overrides
     }

@@ -271,7 +271,7 @@ namespace Mix.Rest.Api.Client.ViewModels
             var dataId = _context.MixDatabaseDataAssociation.Where(
                 a => a.ParentId == Id.ToString()
                     && a.Specificulture == Specificulture
-                    && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_PAGE)
+                    && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_PAGE)
                 .Select(m => m.DataId)
                 .FirstOrDefault();
             AdditionalData = MixLibViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(

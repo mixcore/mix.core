@@ -62,7 +62,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             var pagingData = new PagingRequest(Request);
             var result = await Helper.GetModelistByMeta<ReadMvcViewModel>(
-                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], MixDatabaseNames.ADDITIONAL_FIELD_POST, pagingData, _lang);
+                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], MixDatabaseNames.ADDITIONAL_COLUMN_POST, pagingData, _lang);
             if (result.IsSucceed)
             {
                 return result.Data;

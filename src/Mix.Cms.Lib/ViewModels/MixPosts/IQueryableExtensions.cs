@@ -17,7 +17,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             Expression<Func<MixDatabaseDataValue, bool>> valExp,
             MixCmsContext context,
             string culture = null,
-            string postType = MixDatabaseNames.ADDITIONAL_FIELD_POST)
+            string postType = MixDatabaseNames.ADDITIONAL_COLUMN_POST)
         {
             culture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
 
