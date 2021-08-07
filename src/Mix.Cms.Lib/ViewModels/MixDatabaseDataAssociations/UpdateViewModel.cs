@@ -165,5 +165,23 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
         }
 
         #endregion overrides
+
+        #region Expand
+
+        public async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync()
+        {
+            Id = null;
+            DataId = Guid.NewGuid().ToString();
+            Data.Id = DataId;
+            foreach (var item in Data.Values)
+            {
+                item.Id = null;
+                item.DataId = DataId;
+            }
+            await Data.SaveModelAsync(true);
+            return await SaveModelAsync(true);
+        }
+
+        #endregion
     }
 }

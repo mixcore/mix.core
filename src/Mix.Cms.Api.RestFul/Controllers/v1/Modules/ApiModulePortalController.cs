@@ -91,6 +91,20 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 data.Name = $"Copy_{data.Name}";
                 var result = await data.SaveModelAsync(true);
+
+                if (result.IsSucceed)
+                {
+                    var getAdditionaData = await Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                            m => m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
+                                && m.ParentType == MixDatabaseParentType.Module
+                                && m.ParentId == id
+                                && m.Specificulture == _lang);
+                    if (getAdditionaData.IsSucceed)
+                    {
+                        getAdditionaData.Data.ParentId = result.Data.Id.ToString();
+                        await getAdditionaData.Data.DuplicateAsync();
+                    }
+                }
                 return GetResponse(result);
             }
             return NotFound();
