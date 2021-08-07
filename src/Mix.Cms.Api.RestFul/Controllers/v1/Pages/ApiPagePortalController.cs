@@ -12,6 +12,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixPages;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
+using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using System;
 using System.Linq;
@@ -78,6 +79,36 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 }
             }
             return result;
+        }
+
+        public override async Task<ActionResult<UpdateViewModel>> Duplicate(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                var data = getData.Data;
+                data.Id = 0;
+                data.CreatedDateTime = DateTime.UtcNow;
+                data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
+                data.Title = $"Copy of {data.Title}";
+                var result = await data.SaveModelAsync(true);
+
+                if (result.IsSucceed)
+                {
+                    var getAdditionaData = await Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                            m => m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_PAGE
+                                && m.ParentType == MixDatabaseParentType.Post
+                                && m.ParentId == id
+                                && m.Specificulture == _lang);
+                    if (getAdditionaData.IsSucceed)
+                    {
+                        getAdditionaData.Data.ParentId = result.Data.Id.ToString();
+                        await getAdditionaData.Data.DuplicateAsync();
+                    }
+                }
+                return GetResponse(result);
+            }
+            return NotFound();
         }
 
 

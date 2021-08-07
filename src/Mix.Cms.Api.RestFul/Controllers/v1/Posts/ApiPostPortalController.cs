@@ -14,7 +14,9 @@ using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
+using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,11 +28,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixPost, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         public ApiPostController(
-            DefaultRepository<MixCmsContext, MixPost, ReadViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixPost, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPost, ReadViewModel> repo,
+            DefaultRepository<MixCmsContext, MixPost, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixPost, DeleteViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
-            AuditLogRepository auditlogRepo) 
+            AuditLogRepository auditlogRepo)
             : base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
@@ -78,6 +80,36 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 var result = new UpdateViewModel(model, context, transaction);
                 return Ok(result);
             }
+        }
+
+        public override async Task<ActionResult<UpdateViewModel>> Duplicate(string id)
+        {
+            var getData = await GetSingleAsync(id);
+            if (getData.IsSucceed)
+            {
+                var data = getData.Data;
+                data.Id = 0;
+                data.CreatedDateTime = DateTime.UtcNow;
+                data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
+                data.Title = $"Copy of {data.Title}";
+                var result = await data.SaveModelAsync(true);
+
+                if (result.IsSucceed)
+                {
+                    var getAdditionaData = await Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                            m => m.MixDatabaseName == result.Data.Type
+                                && m.ParentType == MixDatabaseParentType.Post
+                                && m.ParentId == id
+                                && m.Specificulture == _lang);
+                    if (getAdditionaData.IsSucceed)
+                    {
+                        getAdditionaData.Data.ParentId = result.Data.Id.ToString();
+                        await getAdditionaData.Data.DuplicateAsync();
+                    }
+                }
+                return GetResponse(result);
+            }
+            return NotFound();
         }
     }
 }
