@@ -210,7 +210,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             if (result.IsSucceed)
             {
                 // TODO: Double check logic code
-                var additionalSet = _context.MixDatabase.FirstOrDefault(m => m.Name == "sys_additional_field");
+                var additionalSet = _context.MixDatabase.FirstOrDefault(m => m.Name == MixDatabaseNames.ADDITIONAL_COLUMN);
                 foreach (var item in Values)
                 {
                     if (item.DataId != parent.Id)

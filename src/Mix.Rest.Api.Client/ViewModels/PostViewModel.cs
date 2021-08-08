@@ -265,7 +265,7 @@ namespace Mix.Rest.Api.Client.ViewModels
         /// <param name="_transaction">The transaction.</param>
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST : Type;
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST : Type;
             var dataId = _context.MixDatabaseDataAssociation.Where(
                 a => a.ParentId == Id.ToString()
                     && a.Specificulture == Specificulture

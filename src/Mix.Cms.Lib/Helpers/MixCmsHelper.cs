@@ -324,7 +324,7 @@ namespace Mix.Cms.Lib.Helpers
                     }
                 };
                 // Get Value Predicate By Type
-                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST
                    && m.MixDatabaseColumnName == fieldName;
 
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);

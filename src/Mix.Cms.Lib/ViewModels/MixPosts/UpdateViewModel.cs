@@ -261,7 +261,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST : Type;
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST : Type;
             EditorValue ??= Content;
             EditorType ??= MixEditorType.Html;
             Cultures = LoadCultures(Specificulture, _context, _transaction);

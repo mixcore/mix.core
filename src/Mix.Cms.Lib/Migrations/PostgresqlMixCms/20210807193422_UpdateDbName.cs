@@ -26,6 +26,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             migrationBuilder.UpdateData("mix_database_data_value", "MixDatabaseName", "sys_additional_field_module", "MixDatabaseName", "sys_additional_column_module");
             migrationBuilder.UpdateData("mix_database_data_value", "MixDatabaseName", "sys_additional_field", "MixDatabaseName", "sys_additional_column");
 
+            migrationBuilder.UpdateData("mix_post", "Type", "sys_additional_field_post", "Type", "sys_additional_column_post");
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

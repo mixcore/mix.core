@@ -624,7 +624,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var tasks = new List<Task<RepositoryResponse<TView>>>();
                 // Get Value
                 var dataIds = await context.MixDatabaseDataValue.Where(
-                    m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST && m.Specificulture == culture
+                    m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST && m.Specificulture == culture
                         && EF.Functions.Like(m.StringValue, value) && m.MixDatabaseColumnName == fieldName)
                     .Select(m => m.DataId)?.ToListAsync();
                 if (dataIds != null && dataIds.Count > 0)

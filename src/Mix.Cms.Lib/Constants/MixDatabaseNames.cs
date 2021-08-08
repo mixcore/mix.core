@@ -5,6 +5,7 @@
         public const string ADDITIONAL_COLUMN_PAGE = "sys_additional_column_page";
         public const string ADDITIONAL_COLUMN_POST = "sys_additional_column_post";
         public const string ADDITIONAL_COLUMN_MODULE = "sys_additional_column_module";
+        public const string ADDITIONAL_COLUMN = "sys_additional_column";
         public const string NAVIGATION = "sys_navigation";
         public const string MENU_ITEM = "sys_menu_item";
         public const string SYSTEM_CATEGORY = "sys_category";
