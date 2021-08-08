@@ -410,7 +410,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <param name="_transaction">The transaction.</param>
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST, _context, _transaction);
+            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(

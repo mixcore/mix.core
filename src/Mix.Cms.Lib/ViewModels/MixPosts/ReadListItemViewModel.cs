@@ -229,7 +229,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            string type = Type ?? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST;
+            string type = Type ?? MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST;
             var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(
                 m => m.Name == type, _context, _transaction);
             if (getAttrs.IsSucceed)

@@ -218,7 +218,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
+            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_MODULE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
                 AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(

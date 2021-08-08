@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
@@ -305,7 +306,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (result.IsSucceed)
                 {
-                    if (field.MixDatabaseName == "sys_additional_field")
+                    if (field.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN)
                     {
                         // Add field to additional_field set
                         var saveField = await field.SaveModelAsync(false, context, transaction);
