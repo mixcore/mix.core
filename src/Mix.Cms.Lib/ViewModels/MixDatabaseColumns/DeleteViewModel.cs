@@ -106,7 +106,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
             }
             return result;
         }
-
+        public override async Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            string key = $"_{MixDatabaseId}";
+            await MixCacheService.RemoveCacheAsync(typeof(MixDatabase), key);
+            await base.RemoveCache(model, _context, _transaction);
+        }
         #endregion overrides
     }
 }
