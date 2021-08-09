@@ -3,6 +3,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Newtonsoft.Json;
@@ -153,13 +154,13 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (Data != null)
             {
-                    Data.Cultures = Cultures;
-                    if (result.IsSucceed)
-                    {
-                        var model = Data.ParseModel();
-                        var cloneValue = await Data.CloneAsync(model, Cultures, _context, _transaction);
-                        ViewModelHelper.HandleResult(cloneValue, ref result);
-                    }
+                Data.Cultures = Cultures;
+                if (result.IsSucceed)
+                {
+                    var model = Data.ParseModel();
+                    var cloneValue = await Data.CloneAsync(model, Cultures, _context, _transaction);
+                    ViewModelHelper.HandleResult(cloneValue, ref result);
+                }
             }
             return result;
         }
@@ -168,18 +169,28 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 
         #region Expand
 
-        public async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync()
+        public async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Id = null;
-            DataId = Guid.NewGuid().ToString();
-            Data.Id = DataId;
-            foreach (var item in Data.Values)
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
             {
-                item.Id = null;
-                item.DataId = DataId;
+                Id = null;
+                var data = await Data.DuplicateAsync(context, transaction);
+                DataId = data.Data.Id;
+                return await SaveModelAsync(true, context, transaction);
             }
-            await Data.SaveModelAsync(true);
-            return await SaveModelAsync(true);
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    await transaction.CommitAsync();
+                    await context.SaveChangesAsync();
+                }
+            }
         }
 
         #endregion

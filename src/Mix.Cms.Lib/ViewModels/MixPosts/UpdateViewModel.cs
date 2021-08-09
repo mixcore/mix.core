@@ -645,8 +645,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
                     true,
                     m => m.ParentId == parentId
-                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
-                        && m.ParentType == MixDatabaseParentType.Module
+                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_POST
+                        && m.ParentType == MixDatabaseParentType.Post
                         && m.Specificulture == Specificulture,
                     _context, _transaction);
                 ViewModelHelper.HandleResult(removeAdditionalData, ref result);
@@ -708,9 +708,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        public override Task<RepositoryResponse<List<UpdateViewModel>>> CloneAsync(MixPost model, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixPost parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            return base.CloneAsync(model, cloneCultures, _context, _transaction);
+            string parentId = Id.ToString();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                    m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Post && m.Specificulture == Specificulture,
+                    _context, _transaction);
+            if (getAdditionalData.IsSucceed)
+            {
+                getAdditionalData.Data.Cultures = Cultures;
+                var model = getAdditionalData.Data.ParseModel();
+                var cloneData = await getAdditionalData.Data.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneData, ref result);
+            }
+            return result;
         }
 
         #endregion Async Methods
