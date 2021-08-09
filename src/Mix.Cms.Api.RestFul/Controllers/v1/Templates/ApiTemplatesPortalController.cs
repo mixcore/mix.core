@@ -51,8 +51,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
             predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime <= toDate);
             predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(folderType),model => model.FolderType == folderType);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword),model => EF.Functions.Like(model.FileName, $"%{keyword}%")
-             || EF.Functions.Like(model.Content, $"%{keyword}%"));
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword),model => EF.Functions.Like(model.FileName, $"%{keyword}%"));
 
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)

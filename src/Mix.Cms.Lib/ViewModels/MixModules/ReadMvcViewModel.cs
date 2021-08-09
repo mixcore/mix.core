@@ -206,8 +206,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-            this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             // call load data from controller for padding parameter (postId, productId, ...)
             LoadAttributes(_context, _transaction);
         }

@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         {
             if (Id > 0)
             {
-                Columns ??= MixDatabaseColumns.UpdateViewModel
+                Columns = MixDatabaseColumns.UpdateViewModel
                 .Repository.GetModelListBy(a => a.MixDatabaseId == Id || a.MixDatabaseName == Name, _context, _transaction).Data?.OrderBy(a => a.Priority).ToList()
                 ?? new List<MixDatabaseColumns.UpdateViewModel>();
             }

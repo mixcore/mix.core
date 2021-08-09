@@ -67,22 +67,28 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Views
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }
@@ -118,19 +124,22 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<ReadListItemViewModel> result = new RepositoryResponse<ReadListItemViewModel>();
-            string[] temp = path.Split('/');
-            if (temp.Length < 2)
+            if (!string.IsNullOrEmpty(path))
             {
-                result.IsSucceed = false;
-                result.Errors.Add("Template Not Found");
-            }
-            else
-            {
-                int activeThemeId = MixService.GetConfig<int>(
-                    MixAppSettingKeywords.ThemeId, culture);
-                string name = temp[1].Split('.')[0];
-                result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
-                    , _context, _transaction);
+                string[] temp = path.Split('/');
+                if (temp.Length < 2)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Template Not Found");
+                }
+                else
+                {
+                    int activeThemeId = MixService.GetConfig<int>(
+                        MixAppSettingKeywords.ThemeId, culture);
+                    string name = temp[1].Split('.')[0];
+                    result = Repository.GetSingleModel(t => t.FolderType == temp[0] && t.FileName == name && t.ThemeId == activeThemeId
+                        , _context, _transaction);
+                }
             }
             return result;
         }
