@@ -299,6 +299,23 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             return result;
         }
 
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixModule parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            string parentId = Id.ToString();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                    m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Module && m.Specificulture == Specificulture,
+                    _context, _transaction);
+            if (getAdditionalData.IsSucceed)
+            {
+                getAdditionalData.Data.Cultures = Cultures;
+                var model = getAdditionalData.Data.ParseModel();
+                var cloneData = await getAdditionalData.Data.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneData, ref result);
+            }
+            return result;
+        }
+
         #endregion Async
 
         #endregion Overrides

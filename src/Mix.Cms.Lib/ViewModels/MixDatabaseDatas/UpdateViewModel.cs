@@ -159,6 +159,52 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return base.ParseModel(_context, _transaction);
         }
 
+        internal async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(
+            MixCmsContext _context = null, 
+            IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var newId = Guid.NewGuid().ToString();
+                foreach (var item in Values)
+                {
+                    if (item.Column.DataType == MixDataType.Reference)
+                    {
+                        var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
+                                m => m.ParentId == Id 
+                                    && m.ParentType == MixDatabaseParentType.Set 
+                                    && m.Specificulture == Specificulture
+                                    , context, transaction);
+                        foreach (var subNav in getSubData.Data)
+                        {
+                            subNav.ParentId = newId;
+                            await subNav.DuplicateAsync(context, transaction);
+                        }
+                    }
+                    else
+                    {
+                        item.Id = null;
+                        item.DataId = newId;
+                    }
+                }
+                Id = newId;
+                return await SaveModelAsync(true, context, transaction);
+            }
+            catch(Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    await transaction.CommitAsync();
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -258,10 +304,25 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     if (result.IsSucceed)
                     {
-                        item.Cultures = Cultures;
-                        var model = item.ParseModel();
-                        var cloneValue = await item.CloneAsync(model, Cultures, _context, _transaction);
-                        ViewModelHelper.HandleResult(cloneValue, ref result);
+                        if (item.Column.DataType == MixDataType.Reference)
+                        {
+                            var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
+                                m => m.ParentId == Id
+                                    && m.ParentType == MixDatabaseParentType.Set
+                                    && m.Specificulture == Specificulture
+                                    , _context, _transaction);
+                            foreach (var subNav in getSubData.Data)
+                            {
+                                await subNav.CloneAsync(subNav.ParseModel(), Cultures, _context, _transaction);
+                            }
+                        }
+                        else
+                        {
+                            item.Cultures = Cultures;
+                            var model = item.ParseModel();
+                            var cloneValue = await item.CloneAsync(model, Cultures, _context, _transaction);
+                            ViewModelHelper.HandleResult(cloneValue, ref result);
+                        }
                     }
                 }
             }

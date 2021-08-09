@@ -355,10 +355,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixPage parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-
             string parentId = Id.ToString();
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetSingleModelAsync(
+            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
                     m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Page && m.Specificulture == Specificulture,
                     _context, _transaction);
             if (getAdditionalData.IsSucceed)
@@ -378,8 +377,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
                     true,
                     m => m.ParentId == parentId
-                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
-                        && m.ParentType == MixDatabaseParentType.Module
+                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_PAGE
+                        && m.ParentType == MixDatabaseParentType.Page
                         && m.Specificulture == Specificulture,
                     _context, _transaction);
             ViewModelHelper.HandleResult(removeAdditionalData, ref result);
