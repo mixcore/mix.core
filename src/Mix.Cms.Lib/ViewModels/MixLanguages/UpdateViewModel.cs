@@ -141,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
             if (result.IsSucceed)
             {
-                MixService.LoadFromDatabase();
+                MixService.LoadFromDatabase(_context, _transaction);
                 MixService.SaveSettings();
             }
             return result;
@@ -154,7 +154,7 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             {
                 if (result.IsSucceed)
                 {
-                    MixService.LoadFromDatabase();
+                    MixService.LoadFromDatabase(_context, _transaction);
                     MixService.SaveSettings();
                 }
             }
@@ -168,7 +168,9 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                IsValid = !Repository.CheckIsExists(m => m.Keyword == Keyword && m.Specificulture == Specificulture && m.Id != Id);
+                IsValid = !Repository.CheckIsExists(
+                    m => m.Keyword == Keyword && m.Specificulture == Specificulture && m.Id != Id,
+                    _context, _transaction);
                 if (!IsValid)
                 {
                     Errors.Add($"The keyword: {Keyword} is existed");

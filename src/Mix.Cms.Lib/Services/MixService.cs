@@ -257,10 +257,6 @@ namespace Mix.Cms.Lib.Services
         public static T Translate<T>(string name, string culture, T defaultVaule = default)
         {
             var result = Instance.Translator[culture][name];
-            //if (result == null)
-            //{
-            //    result = DefaultInstance.Translator[culture][name];
-            //}
             return result != null ? result.Value<T>() : defaultVaule;
         }
 
