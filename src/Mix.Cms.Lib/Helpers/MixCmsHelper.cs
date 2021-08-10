@@ -536,19 +536,6 @@ namespace Mix.Cms.Lib.Helpers
                 culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
-            string culture, string mixDatabaseName,
-            string parentId, MixDatabaseParentType parentType,
-            string orderBy = "CreatedDateTime", DisplayDirection direction = DisplayDirection.Desc,
-            int? pageSize = null, int? pageIndex = 0,
-            MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixDatabaseData, TView>
-        {
-            return await ViewModels.MixDatabaseDatas.Helper.GetAttributeDataByParent<TView>(
-                culture, mixDatabaseName,
-                parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
-        }
-
         public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixPagePosts.ReadViewModel>>> GetPostListByPageId(
             HttpContext context
             , int pageId

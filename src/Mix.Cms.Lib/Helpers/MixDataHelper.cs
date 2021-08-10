@@ -4,6 +4,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Common.Helper;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
@@ -20,7 +21,7 @@ namespace Mix.Cms.Lib.Helpers
 {
     public static class MixDataHelper
     {
-        public static async Task<PaginationModel<ViewModels.MixDatabaseDatas.ReadMvcViewModel>> GetMixData(
+        public static async Task<PaginationModel<ReadMvcViewModel>> GetMixData(
               string mixDatabaseName,
               string culture = null,
               string keyword = null,
@@ -33,9 +34,29 @@ namespace Mix.Cms.Lib.Helpers
               MixCmsContext _context = null,
               IDbContextTransaction _transaction = null)
         {
-            return await GetMixData<ViewModels.MixDatabaseDatas.ReadMvcViewModel>(mixDatabaseName, culture, keyword, fieldName, filterType, pageIndex, pageSize
+            return await GetMixData<ReadMvcViewModel>(mixDatabaseName, culture, keyword, fieldName, filterType, pageIndex, pageSize
                 , orderBy, direction);
         }
+
+        public static async Task<RepositoryResponse<PaginationModel<ReadMvcViewModel>>> GetMixDataByParent<TView>(
+            string mixDatabaseName,
+            string parentId,
+            MixDatabaseParentType parentType,
+            string culture = null,
+            string orderBy = "CreatedDateTime",
+            DisplayDirection direction = DisplayDirection.Desc,
+            int? pageSize = null,
+            int? pageIndex = 0,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
+        {
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
+            return await Helper.GetMixDataByParent<ReadMvcViewModel>(
+                culture, mixDatabaseName,
+                parentId, parentType, orderBy, direction, pageSize, pageIndex, _context, _transaction);
+        }
+
+        #region Generic
 
         public static async Task<PaginationModel<TView>> GetMixData<TView>(
         string mixDatabaseName,
@@ -128,5 +149,8 @@ namespace Mix.Cms.Lib.Helpers
                 }
             }
         }
+
+
+        #endregion
     }
 }
