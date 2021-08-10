@@ -38,7 +38,7 @@ namespace Mix.Cms.Lib.Helpers
                 , orderBy, direction);
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<ReadMvcViewModel>>> GetMixDataByParent<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<ReadMvcViewModel>>> GetMixDataByParent(
             string mixDatabaseName,
             string parentId,
             MixDatabaseParentType parentType,
