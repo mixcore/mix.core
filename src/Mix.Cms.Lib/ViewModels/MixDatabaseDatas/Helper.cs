@@ -815,7 +815,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetMixDataByParent<TView>(
             string culture, string mixDatabaseName,
             string parentId, MixDatabaseParentType parentType,
             string orderBy, Heart.Enums.DisplayDirection direction,
