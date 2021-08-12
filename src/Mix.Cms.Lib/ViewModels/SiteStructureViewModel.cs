@@ -18,6 +18,12 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("isIncludeAssets")]
         public bool IsIncludeAssets { get; set; } = true;
 
+        [JsonProperty("isIncludeTemplates")]
+        public bool IsIncludeTemplates { get; set; } = true;
+
+        [JsonProperty("isIncludeConfigurations")]
+        public bool IsIncludeConfigurations { get; set; } = true;
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
@@ -37,10 +43,10 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixTemplates.ImportViewModel> Templates { get; set; }
 
         [JsonProperty("configurations")]
-        public List<MixConfigurations.ImportViewModel> Configurations { get; set; }
+        public List<MixConfigurations.ImportViewModel> Configurations { get; set; } = new List<MixConfigurations.ImportViewModel>();
 
         [JsonProperty("languages")]
-        public List<MixLanguages.ImportViewModel> Languages { get; set; }
+        public List<MixLanguages.ImportViewModel> Languages { get; set; } = new List<MixLanguages.ImportViewModel>();
 
         [JsonProperty("relatedData")]
         public List<MixDatabaseDataAssociations.ImportViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.ImportViewModel>();
@@ -86,16 +92,22 @@ namespace Mix.Cms.Lib.ViewModels
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             try
             {
-                Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
-                    m => m.Specificulture == Specificulture, context, transaction).Data;
-                Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
-                    m => m.Specificulture == Specificulture, context, transaction).Data;
+                if (IsIncludeConfigurations)
+                {
+                    Configurations = MixConfigurations.ImportViewModel.Repository.GetModelListBy(
+                        m => m.Specificulture == Specificulture, context, transaction).Data;
+                    Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
+                        m => m.Specificulture == Specificulture, context, transaction).Data;
+                }
 
                 ExportPages(context, transaction);
                 ExportModules(context, transaction);
                 ExportMixDatabasesAsync(context, transaction);
                 ExportDatas(context, transaction);
-                ExportTemplates(context, transaction);
+                if (IsIncludeTemplates)
+                {
+                    ExportTemplates(context, transaction);
+                }
                 return result;
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only

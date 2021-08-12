@@ -130,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<int> progress, HttpService httpService)
         {
-            string name = theme.Value<string>("title");
+            string name = theme.Value<string>("name");
             var newtheme = new UpdateViewModel()
             {
                 Title = name,
