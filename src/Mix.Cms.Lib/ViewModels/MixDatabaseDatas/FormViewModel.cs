@@ -173,7 +173,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             Obj ??= new JObject();
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == field.Name);
                 if (val == null)
                 {
                     val = new MixDatabaseDataValues.UpdateViewModel()
@@ -371,34 +371,54 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
+        public async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Values)
+            try
             {
-                if (result.IsSucceed)
+                foreach (var item in Values)
                 {
-                    if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
+                    if (result.IsSucceed)
                     {
-                        item.DataId = parent.Id;
-                        item.Specificulture = parent.Specificulture;
-                        item.Priority = item.Column.Priority;
-                        item.Status = MixContentStatus.Published;
-                        var saveResult = await item.SaveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+                        if (Columns.Any(f => f.Name == item.MixDatabaseColumnName))
+                        {
+                            item.DataId = parent.Id;
+                            item.Specificulture = parent.Specificulture;
+                            item.Priority = item.Column.Priority;
+                            item.Status = MixContentStatus.Published;
+                            var saveResult = await item.SaveModelAsync(false, context, transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+                        else
+                        {
+                            var delResult = await item.RemoveModelAsync(false, context, transaction);
+                            ViewModelHelper.HandleResult(delResult, ref result);
+                        }
                     }
                     else
                     {
-                        var delResult = await item.RemoveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(delResult, ref result);
+                        break;
                     }
                 }
-                else
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                result.Data = true;
+                return result;
+            }
+            catch(Exception ex)
+            {
+                result.Errors.Add(ex.Message);
+                result.Exception = ex;
+                return result;
+            }
+            finally
+            {
+                if (isRoot)
                 {
-                    break;
+                    transaction.Dispose();
+                    context.Dispose();
                 }
             }
-            return result;
         }
 
         private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
