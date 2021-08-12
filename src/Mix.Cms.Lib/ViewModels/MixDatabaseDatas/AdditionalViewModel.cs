@@ -114,7 +114,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                    .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             Columns.AddRange(
                 getValues.Data
-                .Where(v => !Columns.Any(f => f.Id == v.Column?.Id))
+                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
                 .Select(v => v.Column)
                 .ToList());
             var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
