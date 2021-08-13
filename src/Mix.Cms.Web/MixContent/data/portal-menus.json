@@ -52,10 +52,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -70,10 +70,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }

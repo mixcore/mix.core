@@ -40,7 +40,7 @@ namespace Mix.Cms.Lib.ViewModels
         public List<MixDatabases.ImportViewModel> MixDatabases { get; set; }
 
         [JsonProperty("mixTemplates")]
-        public List<MixTemplates.ImportViewModel> Templates { get; set; }
+        public List<MixTemplates.ImportViewModel> Templates { get; set; } = new List<MixTemplates.ImportViewModel>();
 
         [JsonProperty("configurations")]
         public List<MixConfigurations.ImportViewModel> Configurations { get; set; } = new List<MixConfigurations.ImportViewModel>();
