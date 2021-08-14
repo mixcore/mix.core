@@ -28,7 +28,7 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
         private static MixDatabaseService _databaseService;
-        private static MixAppSettingService _appSettingService;
+        private static GlobalConfigService _globalConfigService;
 
         public MixCmsAccountContext()
         {
@@ -40,11 +40,11 @@ namespace Mix.Database.Entities.Account
         /// <param name="options">The options.</param>
         public MixCmsAccountContext(
             MixDatabaseService databaseService,
-            MixAppSettingService appSettingService)
+            GlobalConfigService globalConfigService)
                     : base()
         {
             _databaseService = databaseService;
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
         }
 
         protected override void OnConfiguring(
@@ -53,7 +53,7 @@ namespace Mix.Database.Entities.Account
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                switch (_appSettingService.DatabaseProvider)
+                switch (_globalConfigService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
@@ -80,9 +80,9 @@ namespace Mix.Database.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
-            if (_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ClearDbPool))
+            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.ClearDbPool))
             {
-                switch (_appSettingService.DatabaseProvider)
+                switch (_globalConfigService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
@@ -98,7 +98,7 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            switch (_appSettingService.DatabaseProvider)
+            switch (_globalConfigService.DatabaseProvider)
             {
                 case MixDatabaseProvider.PostgreSQL:
                     modelBuilder.ApplyPostgresIddentityConfigurations();

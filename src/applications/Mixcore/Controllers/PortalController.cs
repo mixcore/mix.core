@@ -17,7 +17,7 @@ namespace Mixcore.Controllers
         {
             get
             {
-                var allowedIps = _appSettingService.GetConfig(MixAppSettingsSection.IpSecuritySettings, MixAppSettingKeywords.AllowedPortalIps, new JArray());
+                var allowedIps = _ipSecurityConfigService.GetConfig(MixAppSettingKeywords.AllowedPortalIps, new JArray());
                 string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
                 return forbidden || (
                         // add in allowedIps "::1" to allow localhost
@@ -28,10 +28,10 @@ namespace Mixcore.Controllers
         }
 
         public PortalController(
-            MixAppSettingService appSettingService, 
-            MixService mixService, 
-            MixDatabaseService databaseService)
-            : base(appSettingService, mixService)
+            GlobalConfigService globalConfigService,
+            MixService mixService,
+            MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService)
+            : base(globalConfigService, mixService, ipSecurityConfigService)
         {
             _databaseService = databaseService;
         }
@@ -73,8 +73,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (_appSettingService.GetConfig<bool>(
-                   MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -83,8 +82,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = _appSettingService.GetConfig<string>(
-                        MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus);
+                    var status = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.InitStatus);
                     _redirectUrl = $"/init/step{status}";
                 }
             }

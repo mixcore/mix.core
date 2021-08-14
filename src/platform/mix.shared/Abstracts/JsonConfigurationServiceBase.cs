@@ -5,13 +5,13 @@ using System;
 using System.IO;
 using System.Threading;
 
-namespace Mix.Lib.Abstracts
+namespace Mix.Shared.Abstracts
 {
     public abstract class JsonConfigurationServiceBase
     {
-        private static string filePath;
-        protected static JObject AppSettings { get; set; }
-        protected static string FilePath { get => filePath; set => filePath = value; }
+        private string filePath;
+        protected JObject AppSettings { get; set; }
+        protected string FilePath { get => filePath; set => filePath = value; }
 
         protected readonly FileSystemWatcher watcher = new();
 
@@ -70,7 +70,7 @@ namespace Mix.Lib.Abstracts
 
         protected void WatchFile()
         {
-            watcher.Path = Directory.GetCurrentDirectory();
+            watcher.Path = FilePath[..FilePath.LastIndexOf('/')];
             watcher.Filter = "";
             watcher.Changed += new FileSystemEventHandler(OnChanged);
             watcher.EnableRaisingEvents = true;
@@ -84,9 +84,7 @@ namespace Mix.Lib.Abstracts
 
         protected virtual void LoadAppSettings()
         {
-            // Load configurations from appSettings.json
             var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true);
-
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             JObject jsonSettings = JObject.Parse(content);
             AppSettings = jsonSettings;

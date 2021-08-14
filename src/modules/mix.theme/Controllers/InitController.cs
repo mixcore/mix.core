@@ -22,14 +22,14 @@ namespace Mix.Theme.Controllers
         private readonly InitCmsService _initCmsService;
 
         public InitController(
-            ILogger<MixApiControllerBase> logger, 
-            MixAppSettingService appSettingService, 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService)
-            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _initCmsService = initCmsService;
         }
@@ -50,13 +50,12 @@ namespace Mix.Theme.Controllers
         public async Task<ActionResult<bool>> InitSite([FromBody] InitCmsDto model)
         {
             if (model != null
-                && _appSettingService.GetConfig<int>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus) == 0)
+                && _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus) == 0)
             {
                 await _initCmsService.InitSiteAsync(model);
-                _appSettingService.SetConfig(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture, model.Culture.Specificulture, false);
-                _appSettingService.SetConfig(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, InitStep.InitSite, true);
+                _globalConfigService.SetConfig(
+                    MixAppSettingKeywords.DefaultCulture, model.Culture.Specificulture, false);
+                _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, InitStep.InitSite);
                 return NoContent();
             }
             return BadRequest();
@@ -74,12 +73,11 @@ namespace Mix.Theme.Controllers
         public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterViewModel model)
         {
             if (model != null
-                && _appSettingService.GetEnumConfig<InitStep>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus) == InitStep.InitSite)
+                && _globalConfigService.GetEnumConfig<InitStep>(
+                    MixAppSettingKeywords.InitStatus) == InitStep.InitSite)
             {
                 await _initCmsService.InitAccountAsync(model);
-                _appSettingService.SetConfig(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, InitStep.InitAccount, true);
+                _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, InitStep.InitAccount);
                 return NoContent();
             }
             return BadRequest();

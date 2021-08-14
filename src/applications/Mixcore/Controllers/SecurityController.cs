@@ -7,8 +7,10 @@ namespace Mixcore.Controllers
 {
     public class SecurityController : MixControllerBase
     {
-        public SecurityController(MixAppSettingService appSettingService, MixService mixService) 
-            : base(appSettingService, mixService)
+        public SecurityController(GlobalConfigService globalConfigService, 
+            MixService mixService,
+            IPSecurityConfigService ipSecurityConfigService)
+            : base(globalConfigService, mixService, ipSecurityConfigService)
         {
         }
 

@@ -34,14 +34,14 @@ namespace Mix.Lib.Abstracts
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
-            ILogger<MixApiControllerBase> logger, 
-            MixAppSettingService appSettingService, 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             Repository<TDbContext, TEntity, TPrimaryKey> repository,
             MixIdentityService mixIdentityService) 
-            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _repository = repository;
         }
@@ -55,8 +55,7 @@ namespace Mix.Lib.Abstracts
 
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = _appSettingService.GetConfig(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
+                req.PageSize = _globalConfigService.GetConfig(MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
             }
             
             if (req.Culture != null)

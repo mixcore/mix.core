@@ -30,27 +30,29 @@ namespace Mix.Common.Controllers
         private readonly QueryRepository<MixCmsContext, MixConfigurationContent, int> _configRepo;
         private readonly QueryRepository<MixCmsContext, MixLanguageContent, int> _langRepo;
         private readonly MixFileService _fileService;
+        private readonly AuthConfigService authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
 
         public SharedApiController(
-            ILogger<MixApiControllerBase> logger, 
-            MixAppSettingService appSettingService, 
-            MixService mixService, 
-            TranslatorService translator, 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService,
+            MixService mixService,
+            TranslatorService translator,
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             MixFileService fileService,
             QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo,
             QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo,
             IActionDescriptorCollectionProvider routeProvider,
-            MixIdentityService mixIdentityService)
-            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService, AuthConfigService authConfigService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
-            _authConfigurations = _appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
+            _authConfigurations = authConfigService.AuthConfigurations;
             _configRepo = configRepo;
             _langRepo = langRepo;
             _routeProvider = routeProvider;
+            this.authConfigService = authConfigService;
         }
 
         #region Routes
@@ -118,8 +120,7 @@ namespace Mix.Common.Controllers
         [Route("check-config/{lastSync}")]
         public ActionResult<JObject> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = _appSettingService.GetConfig<DateTime>(
-                                MixAppSettingsSection.GlobalSettings, "LastUpdateConfiguration");
+            var lastUpdate = _globalConfigService.GetConfig<DateTime>(MixAppSettingKeywords.LastUpdateConfiguration);
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettingsAsync());
@@ -152,22 +153,17 @@ namespace Mix.Common.Controllers
 
         private async Task<AllSettingModel> GetAllSettingsAsync(string lang = null)
         {
-            lang ??= _appSettingService.GetConfig<string>(
-                        MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
-            var cultures = _appSettingService.Cultures;
+            lang ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            var cultures = _globalConfigService.Cultures;
             var culture = cultures?.FirstOrDefault(c => c == lang);
             // Get Settings
             AppSettingModel globalSettings = new()
             {
-                Domain = _appSettingService.GetConfig<string>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain),
+                Domain = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain),
                 Lang = lang,
-                PortalThemeSettings = _appSettingService.GetConfig<JObject>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.PortalThemeSettings),
-                ApiEncryptKey = _appSettingService.GetConfig<string>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey),
-                IsEncryptApi = _appSettingService.GetConfig<bool>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsEncryptApi),
+                PortalThemeSettings = _globalConfigService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
+                ApiEncryptKey = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
+                IsEncryptApi = _globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
@@ -182,8 +178,7 @@ namespace Mix.Common.Controllers
                     new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
                     new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
                 },
-                LastUpdateConfiguration = _appSettingService.GetConfig<DateTime?>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.LastUpdateConfiguration)
+                LastUpdateConfiguration = _globalConfigService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
 
             };
 

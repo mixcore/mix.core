@@ -16,10 +16,11 @@ namespace Mixcore.Controllers
         private readonly MixDatabaseService _databaseService;
         public HomeController(
             ILogger<HomeController> logger,
-            MixAppSettingService appSettingService,
+            GlobalConfigService globalConfigService,
+            IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator, 
-            MixDatabaseService databaseService) : base(appSettingService, mixService)
+            MixDatabaseService databaseService) : base(globalConfigService, mixService, ipSecurityConfigService)
         {
             _logger = logger;
             _translator = translator;
@@ -31,8 +32,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (_appSettingService.GetConfig<bool>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -41,8 +41,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = _appSettingService.GetConfig<string>(
-                        MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus);
+                    var status = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.InitStatus);
                     _redirectUrl = $"/init/step{status}";
                 }
             }

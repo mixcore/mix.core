@@ -26,14 +26,14 @@ namespace Mix.Lib.Abstracts
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
     {
         public MixRestApiControllerBase(
-            ILogger<MixApiControllerBase> logger, 
-            MixAppSettingService appSettingService, 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository, 
             Repository<TDbContext, TEntity, TPrimaryKey> repository,
             MixIdentityService mixIdentityService)
-            : base(logger, appSettingService, mixService, translator, cultureRepository, repository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, repository, mixIdentityService)
         {
         }
 

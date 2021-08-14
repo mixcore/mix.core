@@ -8,8 +8,8 @@ namespace Mix.Database.Entities.v2
 {
     public class PostgresqlMixCmsContext : MixCmsContext
     {
-        public PostgresqlMixCmsContext(MixDatabaseService databaseService, MixAppSettingService appSettingService) 
-            : base(databaseService, appSettingService){
+        public PostgresqlMixCmsContext(MixDatabaseService databaseService, GlobalConfigService globalConfigService) 
+            : base(databaseService, globalConfigService){
             
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

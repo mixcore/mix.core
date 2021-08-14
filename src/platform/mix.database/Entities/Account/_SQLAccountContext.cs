@@ -16,8 +16,9 @@ namespace Mix.Database.Entities.Account
         /// </summary>
         /// <param name="options">The options.</param>
         public SQLAccountContext(
-            MixDatabaseService databaseService, MixAppSettingService appSettingService)
-                    : base(databaseService, appSettingService)
+            MixDatabaseService databaseService,
+            GlobalConfigService globalConfigService)
+                    : base(databaseService, globalConfigService)
         {
         }
 

@@ -17,8 +17,8 @@ namespace Mix.Database.Entities.Account
         /// <param name="options">The options.</param>
         public PostgresSQLAccountContext(
             MixDatabaseService databaseService, 
-            MixAppSettingService appSettingService)
-                    : base(databaseService, appSettingService)
+            GlobalConfigService globalConfigService)
+                    : base(databaseService, globalConfigService)
         {
         }
 

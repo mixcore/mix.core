@@ -16,13 +16,13 @@ namespace Mix.Portal.Controllers
     public class CommonController : MixApiControllerBase
     {
         public CommonController(
-            ILogger<MixApiControllerBase> logger, 
-            MixAppSettingService appSettingService, 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService)
-            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
         }
 

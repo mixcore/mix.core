@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Lib.Abstracts;
 using Mix.Shared.Constants;
 using Mix.Database.Entities.Cms;
+using Mix.Shared.Abstracts;
 
 namespace Mix.Lib.Services
 {
     public class TranslatorService : JsonConfigurationServiceBase
     {
-        public TranslatorService() : base(MixAppConfigFilePath.Translator)
+        public TranslatorService() : base(MixAppConfigFilePaths.Translator)
         {
         }
         public T Translate<T>(string name, string culture, T defaultVaule = default)
