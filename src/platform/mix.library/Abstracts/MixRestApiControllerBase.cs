@@ -10,17 +10,14 @@ using Mix.Shared.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Model;
 using System.Collections.Generic;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Mix.Identity.Attributes;
+using Mix.Identity.Services;
+using Mix.Identity.Constants;
 
 namespace Mix.Lib.Abstracts
-{
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [MixAuthorize]
+{ 
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
@@ -34,8 +31,9 @@ namespace Mix.Lib.Abstracts
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository, 
-            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
-            : base(logger, appSettingService, mixService, translator, cultureRepository, repository)
+            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            MixIdentityService mixIdentityService)
+            : base(logger, appSettingService, mixService, translator, cultureRepository, repository, mixIdentityService)
         {
         }
 
@@ -50,6 +48,8 @@ namespace Mix.Lib.Abstracts
             {
                 return BadRequest("Null Object");
             }
+            data.CreatedDateTime = DateTime.UtcNow;
+            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync();
             return Ok(id);
         }

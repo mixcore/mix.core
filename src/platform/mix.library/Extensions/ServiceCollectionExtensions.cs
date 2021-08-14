@@ -18,7 +18,7 @@ using Mix.Database.Services;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Extenstions;
 using Mix.Lib.Filters;
 using Mix.Lib.Attributes;

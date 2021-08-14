@@ -1,4 +1,4 @@
-﻿using Mix.Database.Entities.Cms.v2;
+﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Portal.Domain.ViewModels;

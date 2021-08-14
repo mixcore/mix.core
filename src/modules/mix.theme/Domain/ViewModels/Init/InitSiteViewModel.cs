@@ -1,4 +1,4 @@
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.ViewModel;
 using Mix.Theme.Domain.Dtos;

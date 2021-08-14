@@ -1,5 +1,5 @@
 ﻿using Mix.Common.Domain.ViewModels;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using System.Collections.Generic;
 
 namespace Mix.Common.Models

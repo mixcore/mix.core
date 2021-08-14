@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;

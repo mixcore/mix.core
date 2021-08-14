@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;

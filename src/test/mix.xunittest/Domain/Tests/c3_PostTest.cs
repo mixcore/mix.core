@@ -1,4 +1,4 @@
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Portal.Domain.ViewModels;
 using Mix.Xunittest.Domain.Base;
 using Xunit;

@@ -19,7 +19,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -74,7 +74,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixConfiguration");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfigurationContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfigurationContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -154,7 +154,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixConfigurationContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixCulture", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixCulture", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +222,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixCulture");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixData", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +265,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixData");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -385,7 +385,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDataContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContentAssociation", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContentAssociation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -449,7 +449,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDataContentAssociation");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContentValue", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContentValue", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -551,7 +551,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDataContentValue");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDatabase", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -611,7 +611,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDatabase");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDatabaseColumn", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -685,7 +685,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDatabaseColumn");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDomain", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -734,7 +734,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixDomain");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixLanguage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -789,7 +789,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixLanguage");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixLanguageContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguageContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -869,7 +869,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixLanguageContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModule", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -929,7 +929,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixModule");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModuleContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1059,7 +1059,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixModuleContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1113,7 +1113,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixPage");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPageContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1239,7 +1239,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixPageContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPost", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1283,7 +1283,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixPost");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPostContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1416,7 +1416,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixPostContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixSite", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixSite", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1466,7 +1466,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1529,7 +1529,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixTheme");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAlias", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1578,7 +1578,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixUrlAlias");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAliasContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAliasContent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1656,7 +1656,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixUrlAliasContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixViewTemplate", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1753,9 +1753,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.ToTable("MixViewTemplate");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1764,13 +1764,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfigurationContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfigurationContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixConfiguration", "MixConfiguration")
+                    b.HasOne("Mix.Database.Entities.Cms.MixConfiguration", "MixConfiguration")
                         .WithMany("MixConfigurationContents")
                         .HasForeignKey("MixConfigurationId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1781,9 +1781,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixCulture");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixCulture", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixCulture", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1792,9 +1792,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixData", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixData", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDatabase", "MixDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
                         .WithMany()
                         .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1803,19 +1803,19 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixDatabase");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId1");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixData", "MixData")
+                    b.HasOne("Mix.Database.Entities.Cms.MixData", "MixData")
                         .WithMany("MixDataContents")
                         .HasForeignKey("MixDataId");
 
@@ -1826,9 +1826,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixDataContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContentAssociation", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContentAssociation", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1837,21 +1837,21 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixCulture");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContentValue", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContentValue", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany("MixDataContentValues")
                         .HasForeignKey("MixDataContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDatabaseColumn", "MixDatabaseColumn")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabaseColumn", "MixDatabaseColumn")
                         .WithMany()
                         .HasForeignKey("MixDatabaseColumnId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1864,9 +1864,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixDataContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDatabase", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1875,9 +1875,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDatabaseColumn", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDatabase", "MixDatabase")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
                         .WithMany("MixDatabaseColumns")
                         .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1886,9 +1886,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixDatabase");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDomain", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1897,9 +1897,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixLanguage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1908,15 +1908,15 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixLanguageContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguageContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixLanguage", "MixLanguage")
+                    b.HasOne("Mix.Database.Entities.Cms.MixLanguage", "MixLanguage")
                         .WithMany("MixLanguageContents")
                         .HasForeignKey("MixLanguageId");
 
@@ -1925,9 +1925,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixLanguage");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModule", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModule", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany("MixModules")
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1936,19 +1936,19 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModuleContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixModule", "MixModule")
+                    b.HasOne("Mix.Database.Entities.Cms.MixModule", "MixModule")
                         .WithMany("MixModuleContents")
                         .HasForeignKey("MixModuleId");
 
@@ -1959,13 +1959,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixModule");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPostContent", null)
+                    b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
                         .WithMany("MixPages")
                         .HasForeignKey("MixPostContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany("MixPages")
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1974,19 +1974,19 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPageContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPage", "MixPage")
+                    b.HasOne("Mix.Database.Entities.Cms.MixPage", "MixPage")
                         .WithMany("MixPageContents")
                         .HasForeignKey("MixPageId");
 
@@ -1997,9 +1997,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixPage");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPost", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany("MixPosts")
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2008,31 +2008,31 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPostContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixModuleContent", null)
+                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", null)
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixModuleContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPageContent", null)
+                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPageContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPostContent", null)
+                    b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPostContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixPost", "MixPost")
+                    b.HasOne("Mix.Database.Entities.Cms.MixPost", "MixPost")
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPostId");
 
@@ -2043,15 +2043,15 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixPost");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixDataContent", "MixDataContent")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2062,9 +2062,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAlias", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
                         .WithMany()
                         .HasForeignKey("MixSiteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2073,15 +2073,15 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixSite");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixUrlAliasContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAliasContent", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixCulture", "MixCulture")
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
                         .WithMany()
                         .HasForeignKey("MixCultureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixUrlAlias", "MixUrlAlias")
+                    b.HasOne("Mix.Database.Entities.Cms.MixUrlAlias", "MixUrlAlias")
                         .WithMany()
                         .HasForeignKey("MixUrlAliasId");
 
@@ -2090,9 +2090,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixUrlAlias");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixViewTemplate", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.v2.MixTheme", "MixTheme")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTheme", "MixTheme")
                         .WithMany("MixViewTemplates")
                         .HasForeignKey("MixThemeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2101,64 +2101,64 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixTheme");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixConfiguration", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Navigation("MixConfigurationContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixData", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixData", b =>
                 {
                     b.Navigation("MixDataContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDataContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
                 {
                     b.Navigation("MixDataContentValues");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixDatabase", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
                     b.Navigation("MixDatabaseColumns");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixLanguage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
                 {
                     b.Navigation("MixLanguageContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModule", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModule", b =>
                 {
                     b.Navigation("MixModuleContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixModuleContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleContent", b =>
                 {
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPage", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
                     b.Navigation("MixPageContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPageContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
                 {
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPost", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixPostContent", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostContent", b =>
                 {
                     b.Navigation("MixPages");
 
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixSite", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixSite", b =>
                 {
                     b.Navigation("MixDatabases");
 
@@ -2169,7 +2169,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Navigation("MixPosts");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.v2.MixTheme", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
                 {
                     b.Navigation("MixViewTemplates");
                 });
