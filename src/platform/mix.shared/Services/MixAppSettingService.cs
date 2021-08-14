@@ -17,6 +17,7 @@ namespace Mix.Shared.Services
         private static JObject DefaultAppSettings { get; set; }
         private static readonly FileSystemWatcher watcher = new();
         private static MixFileService _fileService;
+        public readonly MixAuthenticationConfigurations AuthConfigurations;
         public MixDatabaseProvider DatabaseProvider
         {
             get => GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
@@ -37,6 +38,7 @@ namespace Mix.Shared.Services
             watcher.EnableRaisingEvents = true;
             LoadAppSettings();
             LoadDefaultAppSettings();
+            AuthConfigurations = LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
         }
 
         private static void LoadAppSettings()

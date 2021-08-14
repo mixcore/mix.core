@@ -95,7 +95,7 @@ namespace Mix.Identity.Helpers
         public async Task<string> GenerateTokenAsync(
             MixUser user, 
             DateTime expires, 
-            string refreshToken, 
+            Guid refreshToken, 
             string aesKey, 
             string rsaPublicKey, 
             MixAuthenticationConfigurations appConfigs)
@@ -105,7 +105,7 @@ namespace Mix.Identity.Helpers
                 {
                     new Claim(MixClaims.Id, user.Id.ToString()),
                     new Claim(MixClaims.Username, user.UserName),
-                    new Claim(MixClaims.RefreshToken, refreshToken),
+                    new Claim(MixClaims.RefreshToken, refreshToken.ToString()),
                     new Claim(MixClaims.AESKey, aesKey),
                     new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
                 });

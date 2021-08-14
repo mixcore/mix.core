@@ -1,15 +1,18 @@
-﻿namespace Mix.Shared.Models
+﻿using System;
+
+namespace Mix.Shared.Models
 {
     public class MixAuthenticationConfigurations
     {
-        public int AccessTokenExpiration { get; set; }
-        public int RefreshTokenExpiration { get; set; }
+        public int AccessTokenExpiration { get; set; } = 20;
+        public int RefreshTokenExpiration { get; set; } = 20;
         public bool ValidateIssuer { get; set; }
         public bool ValidateAudience { get; set; }
         public bool ValidateLifetime { get; set; }
         public bool ValidateIssuerSigningKey { get; set; }
         public string TokenType { get; set; }
         public string Audience { get; set; }
+        public Guid ClientId { get; set; }
         public string SecretKey { get; set; }
         public string Issuer { get; set; }
         public string Issuers { get; set; }
