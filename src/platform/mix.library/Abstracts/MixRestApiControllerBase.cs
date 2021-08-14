@@ -13,9 +13,14 @@ using System.Collections.Generic;
 using Mix.Database.Entities.Cms.v2;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mix.Identity.Attributes;
 
 namespace Mix.Lib.Abstracts
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable

@@ -10,5 +10,7 @@ namespace Mix.Lib.Attributes
         public string Name { get; set; }
 
         public bool QueryOnly{ get; set; }
+
+        public bool IsAuthorized{ get; set; }
     }
 }

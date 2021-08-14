@@ -8,9 +8,14 @@ using Mix.Lib.Abstracts;
 using Mix.Database.Entities.Cms.v2;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
+using Mix.Identity.Attributes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mix.Lib.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
     public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
         : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable

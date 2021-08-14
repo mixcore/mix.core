@@ -21,11 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mix.library\mix.library.csproj" />
+    <Folder Include="Abstracts\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Filters\" />
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Mix.Lib.Dtos
+namespace Mix.Identity.Dtos
 {
     public class RenewTokenDto
     {
