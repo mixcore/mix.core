@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Identity.Services;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Services;
 using Mix.Portal.Domain.Models;
@@ -19,8 +20,9 @@ namespace Mix.Portal.Controllers
             MixAppSettingService appSettingService, 
             MixService mixService, 
             TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository) 
-            : base(logger, appSettingService, mixService, translator, cultureRepository)
+            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            MixIdentityService mixIdentityService)
+            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
         {
         }
 

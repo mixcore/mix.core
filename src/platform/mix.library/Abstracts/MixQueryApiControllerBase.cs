@@ -14,9 +14,10 @@ using Mix.Shared.Enums;
 using Mix.Shared.Constants;
 using Mix.Heart.Helpers;
 using System.Linq.Expressions;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
+using Mix.Identity.Services;
 
 namespace Mix.Lib.Abstracts
 {
@@ -38,8 +39,9 @@ namespace Mix.Lib.Abstracts
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
-            : base(logger, appSettingService, mixService, translator, cultureRepository)
+            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            MixIdentityService mixIdentityService) 
+            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _repository = repository;
         }

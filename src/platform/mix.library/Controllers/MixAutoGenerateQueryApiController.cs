@@ -5,9 +5,10 @@ using Mix.Heart.Repository;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
 using Mix.Lib.Abstracts;
-using Mix.Database.Entities.Cms.v2;
+using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
+using Mix.Identity.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -24,8 +25,9 @@ namespace Mix.Lib.Controllers
             MixService mixService, 
             TranslatorService translator, 
             Repository<MixCmsContext, MixCulture, int> cultureRepository, 
-            Repository<TDbContext, TEntity, TPrimaryKey> repository) 
-            : base(logger, appSettingService, mixService, translator, cultureRepository, repository)
+            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            MixIdentityService mixIdentityService)
+            : base(logger, appSettingService, mixService, translator, cultureRepository, repository, mixIdentityService)
         {
         }
     }

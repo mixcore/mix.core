@@ -1,4 +1,4 @@
-﻿using Mix.Database.Entities.Cms.v2;
+﻿using Mix.Database.Entities.Cms;
 using System.Collections.Generic;
 
 namespace Mix.Theme.Domain.ViewModels

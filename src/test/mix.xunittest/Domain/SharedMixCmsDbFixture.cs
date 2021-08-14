@@ -1,4 +1,4 @@
-﻿using Mix.Database.Entities.Cms.v2;
+﻿using Mix.Database.Entities.Cms;
 using Mix.Xunittest.Domain.Base;
 
 namespace Mix.Xunittest.Domain

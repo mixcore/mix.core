@@ -1,4 +1,4 @@
-﻿using Mix.Database.Entities.Cms.v2;
+﻿using Mix.Database.Entities.Cms;
 using System.Linq;
 
 namespace Mix.Portal.Domain.Models
