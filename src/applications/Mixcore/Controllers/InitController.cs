@@ -10,8 +10,11 @@ namespace Mixcore.Controllers
 {
     public class InitController : MixControllerBase
     {
-        public InitController(MixAppSettingService appSettingService, MixService mixService) 
-            : base(appSettingService, mixService)
+        public InitController(
+            GlobalConfigService globalConfigService, 
+            MixService mixService,
+            IPSecurityConfigService ipSecurityConfigService) 
+            : base(globalConfigService, mixService, ipSecurityConfigService)
         {
         }
 
@@ -20,15 +23,14 @@ namespace Mixcore.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!_appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 return Redirect("/");
             }
             else
             {
                 page = page ?? "";
-                var initStatus = _appSettingService.GetConfig<int>(
-                    MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus);
+                var initStatus = _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus);
                 switch (initStatus)
                 {
                     case 0:

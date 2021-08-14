@@ -10,7 +10,7 @@ using Mix.Heart.Enums;
 
 namespace Mix.Shared.Services
 {
-    public class MixAppSettingService
+    public class MixAppSettingService1
     {
         public List<string> Cultures { get; set; }
         private static JObject AppSettings { get; set; }
@@ -23,13 +23,13 @@ namespace Mix.Shared.Services
             get => GetEnumConfig<MixDatabaseProvider>(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER);
         }
 
-        public MixAppSettingService()
+        public MixAppSettingService1()
         {
             _fileService = new MixFileService();
             LoadAppSettings();
             LoadDefaultAppSettings();
         }
-        public MixAppSettingService(MixFileService fileService)
+        public MixAppSettingService1(MixFileService fileService)
         {
             _fileService = fileService;
             watcher.Path = Directory.GetCurrentDirectory();

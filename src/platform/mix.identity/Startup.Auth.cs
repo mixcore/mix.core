@@ -26,8 +26,8 @@ namespace Mix.Identity
         public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services)
             where TDbContext : DbContext
         {
-            MixAppSettingService appSettingService = new();
-            var authConfigurations = appSettingService.LoadSection<MixAuthenticationConfigurations>(MixAppSettingsSection.Authentication);
+            AuthConfigService authConfigService = new();
+            var authConfigurations = authConfigService.AuthConfigurations;
             PasswordOptions pOpt = new PasswordOptions()
             {
                 RequireDigit = false,

@@ -35,7 +35,8 @@ namespace Mix.Identity.Services
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly MixAppSettingService _mixAppSettingService;
+        private readonly AuthConfigService _authConfigService;
+        private readonly GlobalConfigService _globalConfigService;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public readonly MixIdentityHelper _idHelper;
@@ -45,18 +46,20 @@ namespace Mix.Identity.Services
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             MixIdentityHelper helper,
-            MixAppSettingService mixService,
-            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo, 
-            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo)
+            AuthConfigService authConfigService,
+            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo,
+            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
+            GlobalConfigService globalConfigService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _idHelper = helper;
-            _mixAppSettingService = mixService;
+            _authConfigService = authConfigService;
             _roleRepo = roleRepo;
-            LoadRoles();
+            _globalConfigService = globalConfigService;
             _refreshTokenRepo = refreshTokenRepo;
+            LoadRoles();
         }
 
         public async Task<JObject> Login(LoginViewModel model)
@@ -108,8 +111,8 @@ namespace Mix.Identity.Services
             try
             {
                 var dtIssued = DateTime.UtcNow;
-                var dtExpired = dtIssued.AddMinutes(_mixAppSettingService.AuthConfigurations.AccessTokenExpiration);
-                var dtRefreshTokenExpired = dtIssued.AddMinutes(_mixAppSettingService.AuthConfigurations.RefreshTokenExpiration);
+                var dtExpired = dtIssued.AddMinutes(_authConfigService.AuthConfigurations.AccessTokenExpiration);
+                var dtRefreshTokenExpired = dtIssued.AddMinutes(_authConfigService.AuthConfigurations.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
                 if (isRemember)
@@ -121,7 +124,7 @@ namespace Mix.Identity.Services
                                     Id = refreshToken,
                                     Email = user.Email,
                                     IssuedUtc = dtIssued,
-                                    ClientId = _mixAppSettingService.AuthConfigurations.ClientId,
+                                    ClientId = _authConfigService.AuthConfigurations.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
                                 });
@@ -133,13 +136,13 @@ namespace Mix.Identity.Services
                 AccessTokenViewModel token = new AccessTokenViewModel()
                 {
                     AccessToken = await _idHelper.GenerateTokenAsync(
-                        user, dtExpired, refreshToken, aesKey, rsaPublicKey, _mixAppSettingService.AuthConfigurations),
+                        user, dtExpired, refreshToken, aesKey, rsaPublicKey, _authConfigService.AuthConfigurations),
                     RefreshToken = refreshTokenId,
-                    TokenType = _mixAppSettingService.AuthConfigurations.TokenType,
-                    ExpiresIn = _mixAppSettingService.AuthConfigurations.AccessTokenExpiration,
+                    TokenType = _authConfigService.AuthConfigurations.TokenType,
+                    ExpiresIn = _authConfigService.AuthConfigurations.AccessTokenExpiration,
                     Issued = dtIssued,
                     Expires = dtExpired,
-                    LastUpdateConfiguration = _mixAppSettingService.GetConfig<DateTime?>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.LastUpdateConfiguration)
+                    LastUpdateConfiguration = _globalConfigService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
                 };
                 return token;
             }
@@ -152,7 +155,7 @@ namespace Mix.Identity.Services
 
         public async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
-            var verifiedAccessToken = await _idHelper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _mixAppSettingService.AuthConfigurations);
+            var verifiedAccessToken = await _idHelper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AuthConfigurations);
             if (verifiedAccessToken != null)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -189,7 +192,7 @@ namespace Mix.Identity.Services
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
-                    var principle = _idHelper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _mixAppSettingService.AuthConfigurations);
+                    var principle = _idHelper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AuthConfigurations);
                     if (principle != null && oldToken.Username == _idHelper.GetClaim(principle, MixClaims.Username))
                     {
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
@@ -406,7 +409,7 @@ namespace Mix.Identity.Services
 
         private void LoadRoles()
         {
-            if (!_mixAppSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 Roles = _roleRepo.GetListViewAsync<RoleViewModel>(m => true).GetAwaiter().GetResult();
                 using (var ctx = new MixCmsContext())

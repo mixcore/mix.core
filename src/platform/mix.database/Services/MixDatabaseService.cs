@@ -13,42 +13,39 @@ namespace Mix.Database.Services
 {
     public class MixDatabaseService
     {
-        public MixAppSettingService _appSettingService;
-        public MixDatabaseService()
+        public GlobalConfigService _globalConfigService;
+        public MixDatabaseService(GlobalConfigService globalConfigService)
         {
-        }
-        public MixDatabaseService(MixAppSettingService appSettingService)
-        {
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
         }
 
         public string GetConnectionString(string connectionName)
         {
-            return _appSettingService.GetConfig<string>(MixAppSettingsSection.ConnectionStrings, connectionName);
+            return _globalConfigService.GetConnectionString(connectionName);
         }
         
         public void SetConnectionString(string connectionName, string connection)
         {
-            _appSettingService.SetConfig(MixAppSettingsSection.ConnectionStrings, connectionName, connection);
+            _globalConfigService.SetConnectionString(connectionName, connection);
         }
 
         public MixCmsContext GetDbContext()
         {
-            return _appSettingService.DatabaseProvider switch
+            return _globalConfigService.DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this, _appSettingService),
-                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this, _appSettingService),
-                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this, _appSettingService),
-                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this, _appSettingService),
+                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this, _globalConfigService),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this, _globalConfigService),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this, _globalConfigService),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this, _globalConfigService),
                 _ => null,
             };
         }
         public MixCmsAccountContext GetAccountDbContext()
         {
-            return _appSettingService.DatabaseProvider switch
+            return _globalConfigService.DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(this, _appSettingService),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this, _appSettingService),
+                MixDatabaseProvider.SQLSERVER or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(this, _globalConfigService),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this, _globalConfigService),
                 _ => null,
             };
         }
@@ -58,13 +55,11 @@ namespace Mix.Database.Services
             string defaultCulture)
         {
             SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
-            _appSettingService.SetConfig(
-                MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_DATABASE_PROVIDER, databaseProvider.ToString());
-            _appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
+            _globalConfigService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, databaseProvider.ToString());
+            _globalConfigService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
-            _appSettingService.SaveSettings();
-            _appSettingService.Reload();
+            _globalConfigService.SaveSettings();
         }
 
         public void InitMixCmsContext()

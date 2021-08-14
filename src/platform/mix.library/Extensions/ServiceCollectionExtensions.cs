@@ -65,7 +65,12 @@ namespace Mix.Lib.Extensions
 
         #region Apps
 
-        public static IApplicationBuilder UseMixApps(this IApplicationBuilder app, Assembly executingAssembly, IConfiguration configuration, bool isDevelop, MixAppSettingService appSettingService)
+        public static IApplicationBuilder UseMixApps(
+            this IApplicationBuilder app, 
+            Assembly executingAssembly, 
+            IConfiguration configuration, 
+            bool isDevelop,
+            GlobalConfigService globalConfigService)
         {
             app.UseResponseCompression();
             app.UseCors(MixcoreAllowSpecificOrigins);
@@ -74,7 +79,7 @@ namespace Mix.Lib.Extensions
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsHttps))
+            if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
             {
                 app.UseHttpsRedirection();
             }
@@ -158,7 +163,11 @@ namespace Mix.Lib.Extensions
         private static IServiceCollection InitMixContext(this IServiceCollection services)
         {
             InitAppSettings();
-            services.AddScoped<MixAppSettingService>();
+            services.AddScoped<GlobalConfigService>();
+            services.AddScoped<AuthConfigService>();
+            services.AddScoped<SmtpConfigService>();
+            services.AddScoped<IPSecurityConfigService>();
+
             services.AddScoped<MixDatabaseService>();
             services.AddScoped<MixDataService>();
 
@@ -175,14 +184,15 @@ namespace Mix.Lib.Extensions
                 File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}{MixFileExtensions.Json}", $"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}");
             }
 
-            MixAppSettingService appSettingService = new();
-            var mixDatabaseService = new MixDatabaseService(appSettingService);
+            GlobalConfigService globalConfigService = new();
+            AuthConfigService authConfigService = new();
+            var mixDatabaseService = new MixDatabaseService(globalConfigService);
             var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-            appSettingService.SetConfig(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
-            appSettingService.SetConfig(MixAppSettingsSection.Authentication, MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
-            appSettingService.SaveSettings();
+            globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
+            authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+            globalConfigService.SaveSettings();
 
-            if (!appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit))
+            if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 mixDatabaseService.InitMixCmsContext();
 
@@ -194,8 +204,8 @@ namespace Mix.Lib.Extensions
         private static IServiceCollection AddSSL(this IServiceCollection services)
         {
             var serviceProvider = services.BuildServiceProvider();
-            var appSettingService = serviceProvider.GetService<MixAppSettingService>();
-            if (appSettingService.GetConfig<bool>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsHttps))
+            var globalConfigService = serviceProvider.GetService<GlobalConfigService>();
+            if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
             {
                 services.AddHttpsRedirection(options =>
                 {

@@ -34,7 +34,7 @@ namespace Mixcore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MixAppSettingService appSettingService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GlobalConfigService globalConfigService)
         {
             if (env.IsDevelopment())
             {
@@ -47,7 +47,7 @@ namespace Mixcore
                 app.UseHsts();
             }
 
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), appSettingService);
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

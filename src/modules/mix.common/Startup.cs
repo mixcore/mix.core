@@ -28,9 +28,9 @@ namespace Mix.Common
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MixAppSettingService appSettingService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GlobalConfigService globalConfigService)
         {
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), appSettingService);
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
         }
     }
 }

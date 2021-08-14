@@ -23,10 +23,10 @@ namespace Mix.Database.Entities.Cms
         }
 
         public MixCmsContext(MixDatabaseService databaseService,
-            MixAppSettingService appSettingService)
+            GlobalConfigService globalConfigService)
         {
             _connectionString = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = appSettingService.DatabaseProvider;
+            _databaseProvider = globalConfigService.DatabaseProvider;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

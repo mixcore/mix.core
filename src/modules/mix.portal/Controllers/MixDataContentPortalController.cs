@@ -24,14 +24,14 @@ namespace Mix.Portal.Controllers
 
         public MixDataContentPortalController(
             ILogger<MixApiControllerBase> logger,
-            MixAppSettingService appSettingService,
+            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             Repository<MixCmsContext, MixDataContent, Guid> contentRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService)
-            : base(logger, appSettingService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _contentRepository = contentRepository;
             _mixDataService = mixDataService;

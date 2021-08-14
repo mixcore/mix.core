@@ -26,15 +26,15 @@ namespace Mix.Account.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<MixAccountController> _logger;
         private readonly MixIdentityService _idService;
-        private readonly MixAppSettingService _appSettingService;
+        private readonly GlobalConfigService _globalConfigService;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixAccountController(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<MixAccountController> logger,
-            MixIdentityService idService, Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
-            MixAppSettingService appSettingService)
+            MixIdentityService idService, Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+            GlobalConfigService globalConfigService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -42,7 +42,7 @@ namespace Mix.Account.Controllers
             _logger = logger;
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
         }
 
 
@@ -60,7 +60,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDto requestDto)
         {
-            string key = _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey);
+            string key = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.Login(model);

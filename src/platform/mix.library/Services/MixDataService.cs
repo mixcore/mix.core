@@ -24,20 +24,20 @@ namespace Mix.Lib.Services
 {
     public class MixDataService: IDisposable
     {
-        private readonly MixAppSettingService _appSettingService;
+        private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _dbContext;
         private QueryRepository<MixCmsContext, MixDatabaseColumn, int> _colRepo;
         private QueryRepository<MixCmsContext, MixDataContent, Guid> _contentRepo;
         private QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> _assoRepo;
 
         public MixDataService(
-            MixAppSettingService appSettingService,
+            GlobalConfigService globalConfigService,
             MixCmsContext dbContext,
             QueryRepository<MixCmsContext, MixDatabaseColumn, int> colRepo,
             QueryRepository<MixCmsContext, MixDataContent, Guid> contentRepo, 
             QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> assoRepo)
         {
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
             _dbContext = dbContext;
             _colRepo = colRepo;
             _contentRepo = contentRepo;
@@ -58,9 +58,7 @@ namespace Mix.Lib.Services
                     _colRepo.SetUowInfo(uowInfo);
                 }
                 var tasks = new List<Task<TView>>();
-                culture = culture ?? _appSettingService.GetConfig<string>
-                                        (MixAppSettingsSection.GlobalSettings,
-                                        MixAppSettingKeywords.DefaultCulture);
+                culture = culture ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
 
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName).ToListAsync();

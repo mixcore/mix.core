@@ -9,15 +9,15 @@ namespace Mix.MixQuartz.Jobs
     public class KeepPoolAliveJob : BaseJob
     {
         private readonly HttpService _httpService;
-        private readonly MixAppSettingService _appSettingService;
-        public KeepPoolAliveJob(HttpService httpService, MixAppSettingService appSettingService)
+        private readonly GlobalConfigService _globalConfigService;
+        public KeepPoolAliveJob(HttpService httpService, GlobalConfigService globalConfigService)
         {
             _httpService = httpService;
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
         }
         public override async Task Execute(IJobExecutionContext context)
         {
-            var domain = _appSettingService.GetConfig<string>(Shared.Enums.MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain);
+            var domain = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain);
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;

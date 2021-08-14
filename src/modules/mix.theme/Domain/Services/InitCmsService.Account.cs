@@ -46,19 +46,15 @@ namespace Mix.Theme.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                    var aesKey = _appSettingService.GetConfig<string>(
-                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey);
+                    var aesKey = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
 
                     var token = await _identityService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
 
-                        _appSettingService.SetConfig(
-                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.IsInit, false);
-                        _appSettingService.SetConfig(
-                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                        _appSettingService.SetConfig(
-                            MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.InitStatus, 2, true);
+                        _globalConfigService.SetConfig(MixAppSettingKeywords.IsInit, false);
+                        _globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
+                        _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, 2);
                     }
                     return token;
                 }

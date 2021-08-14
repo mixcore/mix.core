@@ -1,6 +1,4 @@
-﻿using Mix.Heart.Helpers;
-using Mix.Shared.Constants;
-using Mix.Shared.Enums;
+﻿using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,32 +10,34 @@ namespace Mix.Lib.Services
 {
     public class MixService
     {
-        public readonly MixAppSettingService _appSettingService;
+        public readonly GlobalConfigService _globalConfigService;
+        public readonly SmtpConfigService _smtpConfigService;
         public readonly MixConfigurationService _configService;
         public readonly MixFileService _fileService;
 
         public MixService(
-            MixAppSettingService appSettingService,
-            MixConfigurationService configService, 
-            MixFileService fileService)
+            GlobalConfigService globalConfigService,
+            MixConfigurationService configService,
+            MixFileService fileService, 
+            SmtpConfigService smtpConfigService)
         {
-            _appSettingService = appSettingService;
+            _globalConfigService = globalConfigService;
             _configService = configService;
             _fileService = fileService;
+            _smtpConfigService = smtpConfigService;
         }
 
         public string GetAssetFolder(string culture = null)
         {
-            culture ??= _appSettingService.GetConfig<string>(
-                MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
-            return $"{_appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.Domain)}/" +
+            culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            return $"{_globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public string GetUploadFolder(string culture = null)
         {
-            culture ??= _appSettingService.GetConfig<string>(MixAppSettingsSection.GlobalSettings, MixAppSettingKeywords.DefaultCulture);
+            culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
@@ -55,11 +55,11 @@ namespace Mix.Lib.Services
             mailMessage.Subject = subject;
             try
             {
-                string server = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Server");
-                string user = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "User");
-                string pwd = _appSettingService.GetConfig<string>(MixAppSettingsSection.Smtp, "Password");
-                int port = _appSettingService.GetConfig<int>(MixAppSettingsSection.Smtp, "Port");
-                bool ssl = _appSettingService.GetConfig<bool>(MixAppSettingsSection.Smtp, "SSL");
+                string server = _smtpConfigService.GetConfig<string>("Server");
+                string user = _smtpConfigService.GetConfig<string>("User");
+                string pwd = _smtpConfigService.GetConfig<string>("Password");
+                int port = _smtpConfigService.GetConfig<int>("Port");
+                bool ssl = _smtpConfigService.GetConfig<bool>("SSL");
                 SmtpClient client = new(server)
                 {
                     UseDefaultCredentials = false,
