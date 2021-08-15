@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Mix.Portal.Domain.Base
 {
     public abstract class SiteDataWithContentViewModelBase
-        <TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent> 
+        <TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
         where TDbContext : DbContext
          where TPrimaryKey : IComparable
@@ -44,7 +44,7 @@ namespace Mix.Portal.Domain.Base
         public virtual string Description { get; set; }
 
         public virtual string Image { get; set; }
-        
+
         public int MixSiteId { get; set; }
 
         public List<TContent> Contents { get; set; }
@@ -78,9 +78,13 @@ namespace Mix.Portal.Domain.Base
                 }
             }
         }
+
+        protected override async Task DeleteHandlerAsync()
+        {
+            Repository<TDbContext, TContentEntity, TPrimaryKey> contentRepo = new(UowInfo);
+            await contentRepo.DeleteManyAsync(m => m.ParentId.Equals(Id));
+            await base.DeleteHandlerAsync();
+        }
         #endregion
-
-
-
     }
 }
