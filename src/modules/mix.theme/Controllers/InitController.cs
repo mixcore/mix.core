@@ -53,8 +53,7 @@ namespace Mix.Theme.Controllers
                 && _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus) == 0)
             {
                 await _initCmsService.InitSiteAsync(model);
-                _globalConfigService.SetConfig(
-                    MixAppSettingKeywords.DefaultCulture, model.Culture.Specificulture, false);
+                _globalConfigService.SetConfig(MixAppSettingKeywords.DefaultCulture, model.Culture.Specificulture);
                 _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, InitStep.InitSite);
                 return NoContent();
             }

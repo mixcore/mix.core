@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Shared.Constants;
 using Mix.Database.Entities.Cms;
-using Mix.Shared.Abstracts;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Services
 {

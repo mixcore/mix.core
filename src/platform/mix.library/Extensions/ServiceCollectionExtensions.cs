@@ -177,23 +177,23 @@ namespace Mix.Lib.Extensions
         private static void InitAppSettings()
         {
             MixFileService _fileService = new();
-            _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
-
-            if (!File.Exists($"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}"))
+            
+            if (Directory.Exists(MixFolders.SharedConfigurationFolder))
             {
-                File.Copy($"{MixConstants.CONST_DEFAULT_FILE_APPSETTING}{MixFileExtensions.Json}", $"{MixConstants.CONST_FILE_APPSETTING}{MixFileExtensions.Json}");
+                _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
 
             GlobalConfigService globalConfigService = new();
-            AuthConfigService authConfigService = new();
-            var mixDatabaseService = new MixDatabaseService(globalConfigService);
-            var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-            globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
-            authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
-            globalConfigService.SaveSettings();
-
+            
             if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
+                AuthConfigService authConfigService = new();
+                var mixDatabaseService = new MixDatabaseService(globalConfigService);
+                var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+                globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
+                authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+                globalConfigService.SaveSettings();
+
                 mixDatabaseService.InitMixCmsContext();
 
                 // TODO: Update cache service

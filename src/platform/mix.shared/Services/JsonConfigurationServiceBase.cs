@@ -1,13 +1,12 @@
 ﻿using Mix.Shared.Constants;
-using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Threading;
 
-namespace Mix.Shared.Abstracts
+namespace Mix.Shared.Services
 {
-    public abstract class JsonConfigurationServiceBase
+    public class JsonConfigurationServiceBase
     {
         private string filePath;
         protected JObject AppSettings { get; set; }
@@ -47,11 +46,13 @@ namespace Mix.Shared.Abstracts
         public void SetConfig<T>(string name, T value)
         {
             AppSettings[name] = value != null ? JToken.FromObject(value) : null;
+            SaveSettings();
         }
 
         public void SetConfig<T>(string culture, string name, T value)
         {
             AppSettings[culture][name] = value.ToString();
+            SaveSettings();
         }
 
         public bool SaveSettings()
