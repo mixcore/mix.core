@@ -69,11 +69,11 @@ namespace Mix.Lib.Abstracts
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(TPrimaryKey id)
         {
-            var predicate = ReflectionHelper.GetExpression<TEntity>("id", id, ExpressionMethod.Eq);
-            await _repository.DeleteAsync(predicate);
-            return Ok();
+            var getData = await _repository.GetSingleViewAsync<TView>(id);
+            await getData.DeleteAsync();
+            return Ok(getData);
         }
 
         [HttpPatch("{id}")]
