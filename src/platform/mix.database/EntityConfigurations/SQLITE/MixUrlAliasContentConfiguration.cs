@@ -14,21 +14,21 @@ namespace Mix.Database.EntityConfigurations.SQLITE
             base.Configure(builder);
 
             builder.Property(e => e.SourceId)
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Alias)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Type)
                 .HasConversion(new EnumToStringConverter<MixUrlAliasType>())
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
     }
 }

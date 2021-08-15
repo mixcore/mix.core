@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{_config.NString}{_config.MediumLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MediumLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
         }
     }
 }

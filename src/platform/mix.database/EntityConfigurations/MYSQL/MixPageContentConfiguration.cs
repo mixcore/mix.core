@@ -15,14 +15,14 @@ namespace Mix.Database.EntityConfigurations.MYSQL
             base.Configure(builder);
 
             builder.Property(e => e.ClassName)
-                .HasColumnType($"{_config.String}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet);
+                .HasColumnType($"{Config.String}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet);
             
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixPageType>())
-                .HasColumnType($"{_config.String}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet);
+                .HasColumnType($"{Config.String}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet);
         }
     }
 }

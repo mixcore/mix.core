@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.Models
 
         public DashboardModel(string culture)
         {
-            using (MixCmsContext context = new MixCmsContext())
+            using (MixCmsContext context = new())
             {
                 TotalPage = context.MixPageContent.Count(p => p.Specificulture == culture);
                 TotalPost = context.MixPostContent.Count(p => p.Specificulture == culture);

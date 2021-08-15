@@ -12,42 +12,42 @@ namespace Mix.Database.EntityConfigurations.Base
         where T : EntityBase<TPrimaryKey>
         where TConfig: IDatabaseConstants
     {
-        protected virtual IDatabaseConstants _config { get; set; }
+        protected virtual IDatabaseConstants Config { get; set; }
 
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            _config = (TConfig)Activator.CreateInstance(typeof(TConfig));
+            Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
             string key = $"PK_{typeof(T).Name}";
             builder.HasKey(e => new { e.Id })
                    .HasName(key);
 
             builder.Property(e => e.Id)
-                .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), _config.GenerateUUID)
+                .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), Config.GenerateUUID)
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)
-                .HasColumnType(_config.DateTime);
+                .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.LastModified)
-                .HasColumnType(_config.DateTime);
+                .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.CreatedBy)
-                .HasColumnType($"{_config.String}{_config.MediumLength}");
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.ModifiedBy)
-                .HasColumnType(_config.Guid);
+                .HasColumnType(Config.Guid);
 
             builder.Property(e => e.Priority)
-                .HasColumnType(_config.Integer);
+                .HasColumnType(Config.Integer);
 
             builder.Property(e => e.Priority)
-                .HasColumnType(_config.Integer);
+                .HasColumnType(Config.Integer);
 
             builder.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
-                .HasColumnType($"{_config.String}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet);
+                .HasColumnType($"{Config.String}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet);
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Mix.Database.EntityConfigurations.Base
 
             builder.Property(e => e.SystemName)
                .IsRequired()
-               .HasColumnType($"{_config.NString}{_config.MediumLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
         }
 

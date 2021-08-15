@@ -23,6 +23,7 @@
   <ItemGroup>
     <Folder Include="Abstracts\" />
     <Folder Include="Filters\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <ItemGroup>

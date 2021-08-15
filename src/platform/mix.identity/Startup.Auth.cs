@@ -11,11 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using Mix.Identity.Extensions;
-using Mix.Identity.Helpers;
-using Mix.Shared.Models;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Services;
-using Mix.Shared.Enums;
 using Mix.Shared.Services;
 
 namespace Mix.Identity
@@ -28,7 +25,7 @@ namespace Mix.Identity
         {
             AuthConfigService authConfigService = new();
             var authConfigurations = authConfigService.AuthConfigurations;
-            PasswordOptions pOpt = new PasswordOptions()
+            PasswordOptions pOpt = new()
             {
                 RequireDigit = false,
                 RequiredLength = 6,
@@ -105,7 +102,6 @@ namespace Mix.Identity
                 options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
-            services.AddScoped<MixIdentityHelper>();
             services.AddScoped<MixIdentityService>();
             return services;
         }

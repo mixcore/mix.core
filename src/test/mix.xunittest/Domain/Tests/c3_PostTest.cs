@@ -6,11 +6,11 @@ using Xunit;
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 3 - Post")]
-    public class c3_PostTest 
+    public class C3_PostTest 
         : ViewModelTestBase<SharedMixCmsDbFixture, MixPostViewModel, MixCmsContext, MixPost, int>
         , IClassFixture<SharedMixCmsDbFixture>
     {
-        public c3_PostTest(SharedMixCmsDbFixture fixture) : base(fixture)
+        public C3_PostTest(SharedMixCmsDbFixture fixture) : base(fixture)
         {
         }
 

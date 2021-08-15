@@ -17,8 +17,8 @@ namespace Mix.Database.EntityConfigurations.SQLITE
             builder.Property(e => e.ParentType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDatabaseParentType>())
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
         }
     }
 }

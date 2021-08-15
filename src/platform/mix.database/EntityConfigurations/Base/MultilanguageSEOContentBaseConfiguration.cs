@@ -16,67 +16,67 @@ namespace Mix.Database.EntityConfigurations.Base
 
             builder.Property(e => e.Title)
                .IsRequired()
-               .HasColumnType($"{_config.NString}{_config.MediumLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Excerpt)
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.Content)
-                .HasColumnType($"{_config.Text}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.Text}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Layout)
-              .HasColumnType($"{_config.NString}{_config.MediumLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MediumLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Template)
-              .HasColumnType($"{_config.NString}{_config.MediumLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MediumLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.PublishedDateTime)
-                .HasColumnType(_config.DateTime);
+                .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.Image)
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Source)
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SeoDescription)
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SeoKeywords)
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SeoName)
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SeoName)
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
         }
 

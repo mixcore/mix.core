@@ -29,7 +29,7 @@ namespace Mixcore.Controllers
             }
             else
             {
-                page = page ?? "";
+                page ??= "";
                 var initStatus = _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus);
                 switch (initStatus)
                 {

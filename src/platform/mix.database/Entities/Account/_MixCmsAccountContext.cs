@@ -80,6 +80,7 @@ namespace Mix.Database.Entities.Account
         //Ref https://github.com/dotnet/efcore/issues/10169
         public override void Dispose()
         {
+            GC.SuppressFinalize(this);
             if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.ClearDbPool))
             {
                 switch (_globalConfigService.DatabaseProvider)

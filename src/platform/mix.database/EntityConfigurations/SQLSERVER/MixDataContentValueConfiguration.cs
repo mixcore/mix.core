@@ -15,44 +15,44 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
             base.Configure(builder);
 
             builder.Property(e => e.MixDatabaseColumnName)
-              .HasColumnType($"{_config.NString}{_config.MediumLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MediumLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.MixDatabaseName)
-              .HasColumnType($"{_config.NString}{_config.MediumLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MediumLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.DateTimeValue)
-              .HasColumnType(_config.DateTime);
+              .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.StringValue)
-              .HasColumnType(_config.Text)
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType(Config.Text)
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.EncryptValue)
-              .HasColumnType(_config.Text)
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType(Config.Text)
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.EncryptKey)
-              .HasColumnType($"{_config.NString}{_config.MaxLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.MaxLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.EncryptType)
               .HasConversion(new EnumToStringConverter<MixEncryptType>())
-              .HasColumnType($"{_config.NString}{_config.SmallLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.SmallLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
         }
     }
 }

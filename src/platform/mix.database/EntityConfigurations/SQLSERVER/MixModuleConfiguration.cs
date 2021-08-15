@@ -16,8 +16,8 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
             builder.Property(e => e.Type)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixModuleType>())
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
         }
     }
 }

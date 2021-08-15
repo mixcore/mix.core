@@ -17,37 +17,37 @@ namespace Mix.Database.EntityConfigurations.MYSQL
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.SystemName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.MixDatabaseName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.Configurations)
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.DefaultValue)
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.DataType)
                .IsRequired()
                .HasConversion(new EnumToStringConverter<MixDataType>())
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
         }
     }
 }

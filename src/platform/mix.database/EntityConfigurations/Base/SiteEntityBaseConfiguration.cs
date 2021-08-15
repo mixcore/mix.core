@@ -16,14 +16,14 @@ namespace Mix.Database.EntityConfigurations.Base
 
             builder.Property(e => e.DisplayName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Description)
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
         }
 

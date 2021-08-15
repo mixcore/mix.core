@@ -14,63 +14,63 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
             base.Configure(builder);
 
             builder.Property(e => e.Content)
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Extension)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
              builder.Property(e => e.FileFolder)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MediumLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
              builder.Property(e => e.FileName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.FolderType)
               .HasConversion(new EnumToStringConverter<MixTemplateFolderType>())
-              .HasColumnType($"{_config.NString}{_config.SmallLength}")
-              .HasCharSet(_config.CharSet)
-              .UseCollation(_config.DatabaseCollation);
+              .HasColumnType($"{Config.NString}{Config.SmallLength}")
+              .HasCharSet(Config.CharSet)
+              .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Scripts)
                 .IsRequired()
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Styles)
                 .IsRequired()
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
             
             builder.Property(e => e.SpaContent)
                 .IsRequired()
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.MobileContent)
                 .IsRequired()
-                .HasColumnType(_config.Text)
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType(Config.Text)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
 
              builder.Property(e => e.MixThemeName)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
     }
 }

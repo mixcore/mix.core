@@ -26,9 +26,9 @@ namespace Mix.Lib.Services
     {
         private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _dbContext;
-        private QueryRepository<MixCmsContext, MixDatabaseColumn, int> _colRepo;
-        private QueryRepository<MixCmsContext, MixDataContent, Guid> _contentRepo;
-        private QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> _assoRepo;
+        private readonly QueryRepository<MixCmsContext, MixDatabaseColumn, int> _colRepo;
+        private readonly QueryRepository<MixCmsContext, MixDataContent, Guid> _contentRepo;
+        private readonly QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> _assoRepo;
 
         public MixDataService(
             GlobalConfigService globalConfigService,
@@ -58,7 +58,7 @@ namespace Mix.Lib.Services
                     _colRepo.SetUowInfo(uowInfo);
                 }
                 var tasks = new List<Task<TView>>();
-                culture = culture ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
 
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName).ToListAsync();
@@ -71,7 +71,7 @@ namespace Mix.Lib.Services
                 // val predicate
                 Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseName == mixDatabaseName);
 
-                PagingResponseModel<TView> result = new PagingResponseModel<TView>()
+                PagingResponseModel<TView> result = new()
                 {
                     Items = new List<TView>()
                 };
@@ -101,7 +101,7 @@ namespace Mix.Lib.Services
                         attrPredicate = attrPredicate.AndAlsoIf(pre != null, pre);
                     }
 
-                    if (request.Fields != null && request.Fields.Properties().Count() > 0) // filter by specific field name
+                    if (request.Fields != null && request.Fields.Properties().Any()) // filter by specific field name
                     {
                         var valPredicate = GetFilterValueByFields(fields, request.Fields, request.CompareKind);
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
@@ -172,7 +172,7 @@ namespace Mix.Lib.Services
                     && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
             var relatedContents = await _assoRepo.GetListViewAsync<TView>(predicate);
 
-            JArray arr = new JArray();
+            JArray arr = new();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
             {
                 arr.Add(nav);
@@ -180,7 +180,7 @@ namespace Mix.Lib.Services
             return arr;
         }
 
-        private Expression<Func<MixDataContentValue, bool>> GetFilterValueByFields(
+        private static Expression<Func<MixDataContentValue, bool>> GetFilterValueByFields(
                 List<MixDatabaseColumn> fields, JObject fieldQueries, MixCompareOperatorKind compareKind)
         {
             Expression<Func<MixDataContentValue, bool>> valPredicate = null;

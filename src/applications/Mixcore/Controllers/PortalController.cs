@@ -2,7 +2,6 @@
 using Mix.Shared.Constants;
 using Mix.Lib.Abstracts;
 using Mix.Shared.Services;
-using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Mix.Database.Services;
 using Newtonsoft.Json.Linq;
@@ -13,20 +12,7 @@ namespace Mixcore.Controllers
     public class PortalController : MixControllerBase
     {
         private readonly MixDatabaseService _databaseService;
-        protected bool _forbiddenPortal
-        {
-            get
-            {
-                var allowedIps = _ipSecurityConfigService.GetConfig(MixAppSettingKeywords.AllowedPortalIps, new JArray());
-                string remoteIp = Request.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-                return forbidden || (
-                        // add in allowedIps "::1" to allow localhost
-                        allowedIps.Count > 0 &&
-                        !allowedIps.Any(t => t["text"].Value<string>() == remoteIp)
-                );
-            }
-        }
-
+       
         public PortalController(
             GlobalConfigService globalConfigService,
             MixService mixService,
@@ -64,7 +50,7 @@ namespace Mixcore.Controllers
         protected override void ValidateRequest()
         {
             // If IP retricted in appsettings
-            if (_forbiddenPortal)
+            if (ForbiddenPortal)
             {
                 isValid = false;
                 _redirectUrl = $"/403";
