@@ -9,7 +9,7 @@ namespace Mix.Xunittest.Domain.Base
     public abstract class SharedDatabaseFixture<TDbContext> 
         where TDbContext : DbContext
     {
-        private static readonly object _lock = new object();
+        private static readonly object _lock = new();
         private static bool _databaseInitialized;
         protected static ConstructorInfo ctor;
 
@@ -29,18 +29,16 @@ namespace Mix.Xunittest.Domain.Base
 
         public void Seed()
         {
-            using (var dbContext = CreateContext())
+            using var dbContext = CreateContext();
+            lock (_lock)
             {
-                lock (_lock)
+                if (!_databaseInitialized)
                 {
-                    if (!_databaseInitialized)
-                    {
-                        dbContext.Database.EnsureDeleted();
-                        dbContext.Database.EnsureCreated();
-                        dbContext.Database.Migrate();
-                        SeedData(dbContext);
-                        _databaseInitialized = true;
-                    }
+                    dbContext.Database.EnsureDeleted();
+                    dbContext.Database.EnsureCreated();
+                    dbContext.Database.Migrate();
+                    SeedData(dbContext);
+                    _databaseInitialized = true;
                 }
             }
         }

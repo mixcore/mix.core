@@ -64,24 +64,22 @@ namespace Mix.Database.Services
 
         public void InitMixCmsContext()
         {
-            using (var ctx = GetDbContext())
-            {
-                ctx.Database.Migrate();
-                //var transaction = ctx.Database.BeginTransaction();
-                //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-                //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
-                //foreach (var db in sysDatabases)
-                //{
-                //    if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
-                //    {
-                //        db.SaveModel(true, ctx, transaction);
-                //    }
-                //}
-                //transaction.Commit();
-                //transaction.Dispose();
-                //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
-                //Console.WriteLine(query);
-            }
+            using var ctx = GetDbContext();
+            ctx.Database.Migrate();
+            //var transaction = ctx.Database.BeginTransaction();
+            //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+            //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
+            //foreach (var db in sysDatabases)
+            //{
+            //    if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
+            //    {
+            //        db.SaveModel(true, ctx, transaction);
+            //    }
+            //}
+            //transaction.Commit();
+            //transaction.Dispose();
+            //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
+            //Console.WriteLine(query);
         }
 
     }

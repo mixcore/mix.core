@@ -30,8 +30,8 @@ namespace Mix.Xunittest.Domain.Base
     {
         public TFixture Fixture { get; set; }
 
-        protected Repository<TDbContext, TEntity, TPrimaryKey> _repository { get; set; }
-        protected UnitOfWorkInfo _uowInfo { get; set; }
+        protected Repository<TDbContext, TEntity, TPrimaryKey> Repository { get; set; }
+        protected UnitOfWorkInfo UowInfo { get; set; }
 
         public ViewModelTestBase(TFixture fixture)
         {
@@ -55,8 +55,8 @@ namespace Mix.Xunittest.Domain.Base
         [Fact, TestPriority(2)]
         public async Task Step_2_GetList()
         {
-            _repository = new(Fixture.CreateContext());
-            var data = await _repository.GetListViewAsync<TView>(m => true);
+            Repository = new(Fixture.CreateContext());
+            var data = await Repository.GetListViewAsync<TView>(m => true);
             Assert.True(data.Count > 0);
         }
 
@@ -65,9 +65,9 @@ namespace Mix.Xunittest.Domain.Base
         {
             try
             {
-                _repository = new(Fixture.CreateContext());
+                Repository = new(Fixture.CreateContext());
                 var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
-                await _repository.DeleteAsync(predicate);
+                await Repository.DeleteAsync(predicate);
                 Assert.True(true);
             }
             catch (MixException mex)

@@ -9,12 +9,10 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
-using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
@@ -39,13 +37,11 @@ namespace Mix.Identity.Services
         private readonly GlobalConfigService _globalConfigService;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
-        public readonly MixIdentityHelper _idHelper;
         public List<RoleViewModel> Roles { get; set; }
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            MixIdentityHelper helper,
             AuthConfigService authConfigService,
             Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo,
             Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
@@ -54,7 +50,6 @@ namespace Mix.Identity.Services
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-            _idHelper = helper;
             _authConfigService = authConfigService;
             _roleRepo = roleRepo;
             _globalConfigService = globalConfigService;
@@ -118,7 +113,7 @@ namespace Mix.Identity.Services
                 if (isRemember)
                 {
                     refreshToken = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new RefreshTokenViewModel(
+                    RefreshTokenViewModel vmRefreshToken = new(
                                 new RefreshTokens()
                                 {
                                     Id = refreshToken,
@@ -133,10 +128,10 @@ namespace Mix.Identity.Services
                     refreshTokenId = saveRefreshTokenResult;
                 }
 
-                AccessTokenViewModel token = new AccessTokenViewModel()
+                AccessTokenViewModel token = new()
                 {
-                    AccessToken = await _idHelper.GenerateTokenAsync(
-                        user, dtExpired, refreshToken, aesKey, rsaPublicKey, _authConfigService.AuthConfigurations),
+                    AccessToken = await GenerateTokenAsync(
+                        user, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AuthConfigurations),
                     RefreshToken = refreshTokenId,
                     TokenType = _authConfigService.AuthConfigurations.TokenType,
                     ExpiresIn = _authConfigService.AuthConfigurations.AccessTokenExpiration,
@@ -155,7 +150,7 @@ namespace Mix.Identity.Services
 
         public async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
-            var verifiedAccessToken = await _idHelper.VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AuthConfigurations);
+            var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AuthConfigurations);
             if (verifiedAccessToken != null)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -192,8 +187,8 @@ namespace Mix.Identity.Services
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
-                    var principle = _idHelper.GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AuthConfigurations);
-                    if (principle != null && oldToken.Username == _idHelper.GetClaim(principle, MixClaims.Username))
+                    var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AuthConfigurations);
+                    if (principle != null && oldToken.Username == GetClaim(principle, MixClaims.Username))
                     {
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
@@ -243,7 +238,10 @@ namespace Mix.Identity.Services
             //        );
         }
 
-        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs)
+        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
+            MixExternalLoginProviders provider, 
+            string accessToken, 
+            MixAuthenticationConfigurations appConfigs)
         {
             ParsedExternalAccessToken parsedToken = null;
 
@@ -313,7 +311,7 @@ namespace Mix.Identity.Services
             string rsaPublicKey,
             MixAuthenticationConfigurations appConfigs)
         {
-            List<Claim> claims = await GetClaimsAsync(user, appConfigs);
+            List<Claim> claims = await GetClaimsAsync(user);
             claims.AddRange(new[]
                 {
                     new Claim(MixClaims.Id, user.Id.ToString()),
@@ -323,7 +321,7 @@ namespace Mix.Identity.Services
                     new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
                 });
 
-            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+            JwtSecurityToken jwtSecurityToken = new(
                 issuer: appConfigs.Issuer,
                 audience: appConfigs.Audience,
                 claims: claims,
@@ -333,9 +331,9 @@ namespace Mix.Identity.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        public async Task<List<Claim>> GetClaimsAsync(MixUser user, MixAuthenticationConfigurations appConfigs)
+        public async Task<List<Claim>> GetClaimsAsync(MixUser user)
         {
-            List<Claim> claims = new List<Claim>();
+            List<Claim> claims = new();
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var claim in user.Claims)
             {
@@ -358,35 +356,33 @@ namespace Mix.Identity.Services
             return claims;
         }
 
-        public Claim CreateClaim(string type, string value)
+        public static Claim CreateClaim(string type, string value)
         {
             return new Claim(type, value, ClaimValueTypes.String);
         }
 
-        public string GetClaim(ClaimsPrincipal User, string claimType)
+        public static string GetClaim(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
         }
 
-        public IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
+        public static IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
         }
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
+        public static ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
         {
             var tokenValidationParameters = GetValidationParameters(appConfigs, false);
             var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 return null;
 
             return principal;
         }
 
-        public TokenValidationParameters GetValidationParameters(MixAuthenticationConfigurations appConfigs, bool validateLifetime)
+        public static TokenValidationParameters GetValidationParameters(MixAuthenticationConfigurations appConfigs, bool validateLifetime)
         {
             return new TokenValidationParameters
             {
@@ -412,12 +408,10 @@ namespace Mix.Identity.Services
             if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 Roles = _roleRepo.GetListViewAsync<RoleViewModel>(m => true).GetAwaiter().GetResult();
-                using (var ctx = new MixCmsContext())
-                {
-                    var transaction = ctx.Database.BeginTransaction();
-                    // TODO:
-                    //Roles.ForEach(m => m.LoadMixPermissions(ctx, transaction).GetAwaiter().GetResult());
-                }
+                using var ctx = new MixCmsContext();
+                var transaction = ctx.Database.BeginTransaction();
+                // TODO:
+                //Roles.ForEach(m => m.LoadMixPermissions(ctx, transaction).GetAwaiter().GetResult());
             }
         }
     }

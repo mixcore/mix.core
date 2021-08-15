@@ -12,28 +12,28 @@ namespace Mix.Database.EntityConfigurations.MYSQL
             base.Configure(builder);
 
             builder.Property(e => e.Alias)
-               .HasColumnType($"{_config.NString}{_config.MediumLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Icon)
-               .HasColumnType($"{_config.NString}{_config.MaxLength}")
-               .HasCharSet(_config.CharSet);
+               .HasColumnType($"{Config.NString}{Config.MaxLength}")
+               .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.Lcid)
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Specificulture)
-               .HasColumnType($"{_config.NString}{_config.SmallLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.Lcid)
-               .HasColumnType($"{_config.NString}{_config.MediumLength}")
-               .HasCharSet(_config.CharSet)
-               .UseCollation(_config.DatabaseCollation);
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
         }
     }
 }

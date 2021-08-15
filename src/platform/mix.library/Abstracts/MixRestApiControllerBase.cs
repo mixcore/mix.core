@@ -49,7 +49,7 @@ namespace Mix.Lib.Abstracts
                 return BadRequest("Null Object");
             }
             data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+            data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync();
             return Ok(id);
         }

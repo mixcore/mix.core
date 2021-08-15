@@ -16,9 +16,9 @@ namespace Mix.Database.EntityConfigurations.Base
 
             builder.Property(e => e.Specificulture)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.SmallLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
 
     }

@@ -9,7 +9,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataContent, MixDataContentViewModel>
     {
-        private string databaseName;
+        private readonly string databaseName;
         private JObject data;
 
         #region Properties

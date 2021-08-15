@@ -6,11 +6,11 @@ using Xunit;
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 2 - Configuration Content")]
-    public class c2_ConfigurationContentTest
+    public class C2_ConfigurationContentTest
         : ViewModelTestBase<SharedMixCmsDbFixture, MixConfigurationContentViewModel, MixCmsContext, MixConfigurationContent, int>
         , IClassFixture<SharedMixCmsDbFixture>
     {
-        public c2_ConfigurationContentTest(SharedMixCmsDbFixture fixture) : base(fixture)
+        public C2_ConfigurationContentTest(SharedMixCmsDbFixture fixture) : base(fixture)
         {
         }
 

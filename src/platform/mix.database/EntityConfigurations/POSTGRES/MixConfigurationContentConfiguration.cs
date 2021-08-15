@@ -13,9 +13,9 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
 
             builder.Property(e => e.DefaultContent)
                 .IsRequired()
-                .HasColumnType($"{_config.NString}{_config.MaxLength}")
-                .HasCharSet(_config.CharSet)
-                .UseCollation(_config.DatabaseCollation);
+                .HasColumnType($"{Config.NString}{Config.MaxLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
     }
 }

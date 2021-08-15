@@ -67,7 +67,7 @@ namespace Mix.MixQuartz
             var mixJobs = assembly
                 .GetExportedTypes()
                 .Where(m => m.BaseType.Name == typeof(BaseJob).Name);
-            StdSchedulerFactory factory = new StdSchedulerFactory();
+            StdSchedulerFactory factory = new();
             IScheduler scheduler = await factory.GetScheduler();
             foreach (var job in mixJobs)
             {
