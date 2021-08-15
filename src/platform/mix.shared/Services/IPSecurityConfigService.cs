@@ -1,7 +1,4 @@
-﻿using Mix.Heart.Enums;
-using Mix.Shared.Abstracts;
-using Mix.Shared.Constants;
-using Newtonsoft.Json.Linq;
+﻿using Mix.Shared.Constants;
 
 namespace Mix.Shared.Services
 {
