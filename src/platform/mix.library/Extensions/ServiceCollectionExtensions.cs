@@ -178,7 +178,7 @@ namespace Mix.Lib.Extensions
         {
             MixFileService _fileService = new();
             
-            if (Directory.Exists(MixFolders.SharedConfigurationFolder))
+            if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
                 _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
