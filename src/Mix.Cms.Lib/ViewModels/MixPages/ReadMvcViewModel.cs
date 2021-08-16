@@ -19,7 +19,6 @@ using System.Text;
 
 namespace Mix.Cms.Lib.ViewModels.MixPages
 {
-    [GeneratedController("api/v1/rest/{culture}/mix-page/mvc")]
     public class ReadMvcViewModel : ViewModelBase<MixCmsContext, MixPage, ReadMvcViewModel>, IMvcViewModel
     {
         #region Properties
