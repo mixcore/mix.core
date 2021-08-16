@@ -21,7 +21,7 @@ using Mix.Heart.Extensions;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/post/mvc")]
+    [Route("api/v1/rest/{culture}/mix-post/mvc")]
     public class ApiPostMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, ReadMvcViewModel>
     {
