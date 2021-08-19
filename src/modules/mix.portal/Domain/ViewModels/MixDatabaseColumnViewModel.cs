@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GenerateRestApiController]
     public class MixDatabaseColumnViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseColumn, int>
     {

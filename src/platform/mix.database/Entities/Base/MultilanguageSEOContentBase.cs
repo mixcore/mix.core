@@ -18,9 +18,5 @@ namespace Mix.Database.Entities.Base
         public string SeoName { get; set; }
         public string SeoTitle { get; set; }
         public DateTime? PublishedDateTime { get; set; }
-        public string MixDatabaseName { get; set; }
-
-        public Guid? MixDataContentId { get; set; }
-        public MixDataContent MixDataContent { get; set; }
     }
 }

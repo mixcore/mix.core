@@ -50,21 +50,26 @@ namespace Mix.Lib.Abstracts
         [HttpGet]
         public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
+            var searchRequest = BuildSearchRequest(req);
+
+            return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
+        }
+
+        protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
+        {
             Expression<Func<TEntity, bool>> andPredicate = null;
 
             if (!req.PageSize.HasValue)
             {
                 req.PageSize = _globalConfigService.GetConfig(MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
             }
-            
+
             if (req.Culture != null)
             {
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
                         MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq);
             }
-            var searchRequest = new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
-
-            return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
+            return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
         }
 
         [HttpGet("{id}")]

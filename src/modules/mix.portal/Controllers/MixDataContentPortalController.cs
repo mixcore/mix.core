@@ -17,9 +17,11 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-data-content")]
     [ApiController]
-    public class MixDataContentPortalController : MixApiControllerBase
+    public class MixDataContentPortalController 
+        : MixRestApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {
         private readonly Repository<MixCmsContext, MixDataContent, Guid> _contentRepository;
+        private readonly Repository<MixCmsContext, MixDatabaseColumn, int> _colRepository;
         private readonly MixDataService _mixDataService;
 
         public MixDataContentPortalController(
@@ -30,15 +32,17 @@ namespace Mix.Portal.Controllers
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             Repository<MixCmsContext, MixDataContent, Guid> contentRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService, 
+            Repository<MixCmsContext, MixDatabaseColumn, int> colRepository)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, contentRepository, mixIdentityService)
         {
             _contentRepository = contentRepository;
             _mixDataService = mixDataService;
+            _colRepository = colRepository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Get([FromQuery] SearchMixDataDto request)
+        [HttpGet("search")]
+        public async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Search([FromQuery] SearchMixDataDto request)
         {
             var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(request, _lang);
             return Ok(result);
@@ -51,14 +55,26 @@ namespace Mix.Portal.Controllers
             var result = await mixData.SaveAsync();
             return Ok(result);
         }
+        
+        [HttpGet("init/{databaseName}")]
+        [HttpGet("{lang}/init/{databaseName}")]
+        public async Task<ActionResult> InitData([FromRoute] string databaseName)
+        {
+            var columns = await _colRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
+                    m => m.MixDatabaseName == databaseName);
+            var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject()) { 
+                Columns = columns
+            };
+            return Ok(mixData);
+        }
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateData(Guid id, [FromBody] JObject data)
         {
             var mixData = await _contentRepository.GetSingleViewAsync<MixDataContentViewModel>(m => m.Id == id);
             if (mixData != null)
             {
-                mixData.Obj = data;
+                mixData.Data = data;
                 var result = await mixData.SaveAsync();
                 return Ok(result);
             }

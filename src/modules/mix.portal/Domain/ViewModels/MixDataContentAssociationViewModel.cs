@@ -39,7 +39,7 @@ namespace Mix.Portal.Domain.ViewModels
         public Guid GuidParentId { get; set; }
         public int IntParentId { get; set; }
 
-        public MixDataContentViewModel DataContent{ get; set; }
+        public MixDataContentViewModel ChildDataContent { get; set; }
 
         #endregion
 
@@ -47,8 +47,6 @@ namespace Mix.Portal.Domain.ViewModels
 
         public override async Task ExpandView()
         {
-            using var valRepo = new QueryRepository<MixCmsContext, MixDataContent, Guid>(UowInfo);
-            DataContent = await valRepo.GetSingleViewAsync<MixDataContentViewModel>(m => m.MixDataContentId == DataContentId);
         }
 
         #endregion

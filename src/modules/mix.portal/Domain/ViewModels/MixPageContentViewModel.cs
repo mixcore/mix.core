@@ -3,13 +3,14 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixPageContentViewModel 
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixPageContent, int>
+        : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixPageContent, int>
     {
         #region Contructors
 

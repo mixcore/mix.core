@@ -10,6 +10,7 @@ using Mix.Database.Entities.Account;
 using Mix.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Mix.Identity.Constants;
+using Mix.Shared.Services;
 
 namespace Mix.Theme.Domain.Services
 {
@@ -19,7 +20,7 @@ namespace Mix.Theme.Domain.Services
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();
-
+            AuthConfigService authConfigService = new();
             if (!_roleManager.Roles.Any())
             {
                 await _roleManager.CreateAsync(new IdentityRole()
@@ -55,6 +56,7 @@ namespace Mix.Theme.Domain.Services
                         _globalConfigService.SetConfig(MixAppSettingKeywords.IsInit, false);
                         _globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
                         _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, 2);
+                        authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
                     }
                     return token;
                 }

@@ -214,7 +214,7 @@ namespace Mix.Portal.Domain.Helpers
             JArray arr = new JArray();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
             {
-                arr.Add(nav.DataContent);
+                arr.Add(nav.ChildDataContent);
             }
             return arr;
         }

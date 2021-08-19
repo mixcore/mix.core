@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixPostContent: MultilanguageSEOContentBase<int>
+    public class MixPostContent: ExtraColumnMultilanguageSEOContentBase<int>
     {
         public string ClassName { get; set; }
 

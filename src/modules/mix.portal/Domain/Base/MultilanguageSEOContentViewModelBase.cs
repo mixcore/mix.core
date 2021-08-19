@@ -49,9 +49,12 @@ namespace Mix.Portal.Domain.Base
         public string SeoName { get; set; }
         public string SeoTitle { get; set; }
         public DateTime? PublishedDateTime { get; set; }
-        public string MixDatabaseName { get; set; }
+        
+        #region Extra
 
-        public Guid MixDataContentId { get; set; }
+        public bool IsClone { get; set; }
+
+        #endregion
 
         #endregion
 
