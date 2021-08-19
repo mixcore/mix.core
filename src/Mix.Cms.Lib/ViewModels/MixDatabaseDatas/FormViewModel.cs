@@ -169,7 +169,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 .Data.OrderBy(a => a.Priority).ToList();
             Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
             , _context, _transaction).Data;
-
+            Columns.AddRange(
+                Values
+                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
+                .Select(v => v.Column)
+                .ToList());
             Obj ??= new JObject();
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
@@ -255,12 +259,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
 
 
-                    var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.CheckIsExists(
+                    var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModel(
                         m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
-                    if (!getNav)
+                    if (!getNav.IsSucceed)
                     {
-                        var nav = new MixDatabaseDataAssociations.UpdateViewModel()
+                        getNav.Data = new MixDatabaseDataAssociations.UpdateViewModel()
                         {
                             DataId = Id,
                             Specificulture = Specificulture,
@@ -270,7 +274,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             ParentId = ParentId,
                             Status = MixContentStatus.Published,
                         };
-                        var saveResult = await nav.SaveModelAsync(false, context, transaction);
+                        var saveResult = await getNav.Data.SaveModelAsync(false, context, transaction);
 
                         if (!saveResult.IsSucceed)
                         {
@@ -279,18 +283,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             result.Errors.Add("Cannot save navigation");
                             result.Errors.AddRange(saveResult.Errors);
                         }
-
-                        if (IsClone)
+                    }
+                    if (IsClone)
+                    {
+                        var cloneData = await CloneAsync(ParseModel(), Cultures, context, transaction);
+                        var cloneNav = await getNav.Data.CloneAsync(getNav.Data.ParseModel(), Cultures, context, transaction);
+                        if (!cloneNav.IsSucceed)
                         {
-                            var cloneData = await CloneAsync(ParseModel(), Cultures, context, transaction);
-                            var cloneNav = await nav.CloneAsync(nav.ParseModel(), Cultures, context, transaction);
-                            if (!cloneNav.IsSucceed)
-                            {
-                                result.IsSucceed = false;
-                                result.Exception = saveResult.Exception;
-                                result.Errors.Add("Cannot clone navigation");
-                                result.Errors.AddRange(saveResult.Errors);
-                            }
+                            result.IsSucceed = false;
+                            result.Exception = cloneNav.Exception;
+                            result.Errors.Add("Cannot clone navigation");
+                            result.Errors.AddRange(cloneNav.Errors);
                         }
                     }
                 }

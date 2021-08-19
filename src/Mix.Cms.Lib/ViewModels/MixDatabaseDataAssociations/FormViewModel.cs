@@ -174,6 +174,18 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             }
         }
 
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseDataAssociation parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (AttributeData != null)
+            {
+                AttributeData.Cultures = Cultures;
+                var model = AttributeData.ParseModel(_context, _transaction);
+                var cloneValue = await AttributeData.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneValue, ref result);
+            }
+            return result;
+        }
         #endregion overrides
     }
 }

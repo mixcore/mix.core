@@ -159,6 +159,34 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return base.ParseModel(_context, _transaction);
         }
 
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            // Remove values
+            var removeValues = await MixDatabaseDataValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.DataId == Id && f.Specificulture == Specificulture, _context, _transaction);
+            ViewModelHelper.HandleResult(removeValues, ref result);
+
+            // remove related navs
+            if (result.IsSucceed)
+            {
+                var removeRelated = await MixDatabaseDataAssociations.DeleteViewModel.Repository.RemoveListModelAsync
+                    (true, d => (d.DataId == Id || d.ParentId == Id) && d.Specificulture == Specificulture
+                    , _context, _transaction);
+                ViewModelHelper.HandleResult(removeRelated, ref result);
+            }
+
+            if (result.IsSucceed)
+            {
+                var removeChildFields = await MixDatabaseDataValues.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.DataId == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                ViewModelHelper.HandleResult(removeChildFields, ref result);
+                var removeChilds = await MixDatabaseDatas.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.Id == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                ViewModelHelper.HandleResult(removeChilds, ref result);
+            }
+            return result;
+        }
+
         internal async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(
             MixCmsContext _context = null, 
             IDbContextTransaction _transaction = null)
