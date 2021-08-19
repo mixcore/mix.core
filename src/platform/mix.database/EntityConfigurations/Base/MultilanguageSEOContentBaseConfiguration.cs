@@ -40,11 +40,6 @@ namespace Mix.Database.EntityConfigurations.Base
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
 
-            builder.Property(e => e.MixDatabaseName)
-                .HasColumnType($"{Config.NString}{Config.MediumLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
-
             builder.Property(e => e.PublishedDateTime)
                 .HasColumnType(Config.DateTime);
 
@@ -73,10 +68,6 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
-            builder.Property(e => e.SeoName)
-                .HasColumnType($"{Config.NString}{Config.MaxLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
 
         }
 

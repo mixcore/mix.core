@@ -3,8 +3,8 @@
     public class MixConstants
     {
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
-        public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
+        public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
         public const string CONST_SETTING_IS_MYSQL = "IsMysql";
         public const string CONST_SETTING_DATABASE_PROVIDER = "DatabaseProvider";
         public const string CONST_SETTING_LANGUAGE = "Language";

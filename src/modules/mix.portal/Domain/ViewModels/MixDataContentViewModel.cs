@@ -1,6 +1,7 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
+using Mix.Lib.Attributes;
 using Mix.Lib.Helpers;
 using Mix.Portal.Domain.Base;
 using Mix.Portal.Domain.Helpers;
@@ -38,16 +39,19 @@ namespace Mix.Portal.Domain.ViewModels
             Specificulture = lang;
             MixCultureId = cultureId;
             MixDatabaseName = databaseName;
-            Obj = data;
+            Data = data;
         }
         #endregion
 
         #region Properties
         public int MixDatabaseId { get; set; }
+        public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }
         public List<MixDataContentValueViewModel> Values { get; set; }
-        public JObject Obj { get; set; }
-        public List<MixDataContentViewModel> RefData { get; set; } = new();
+        public JObject Data { get; set; }
+
+        public List<MixDataContentViewModel> ChildData { get; set; } = new();
+        public List<MixDataContentAssociationViewModel> RelatedData { get; set; } = new();
 
         #endregion
 
@@ -61,25 +65,12 @@ namespace Mix.Portal.Domain.ViewModels
             Columns ??= await colRepo.GetListViewAsync<MixDatabaseColumnViewModel>(m => m.MixDatabaseName == MixDatabaseName);
             Values ??= await valRepo.GetListViewAsync<MixDataContentValueViewModel>(m => m.MixDataContentId == Id);
 
-            if (Obj == null)
+            if (Data == null)
             {
-                Obj = MixDataHelper.ParseData(Id, UowInfo);
+                Data = MixDataHelper.ParseData(Id, UowInfo);
             }
 
-            await Obj.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
-        }
-
-        protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
-        {
-            if (Values != null)
-            {
-                foreach (var item in Values)
-                {
-                    item.MixDataContentId = parentEntity.Id;
-                    item.MixDatabaseName = parentEntity.MixDatabaseName;
-                    await item.SaveAsync(UowInfo);
-                }
-            }
+            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
 
         public override async Task<MixDataContent> ParseEntity<T>(T view)
@@ -99,36 +90,39 @@ namespace Mix.Portal.Domain.ViewModels
             Columns ??= await colRepo.GetListViewAsync<MixDatabaseColumnViewModel>(m => m.MixDatabaseName == MixDatabaseName);
             Values = await valRepo.GetListViewAsync<MixDataContentValueViewModel>(m => m.MixDataContentId == Id);
 
-            Obj ??= new JObject();
+            await ParseObjectToValues();
+
+            return await base.ParseEntity(view);
+        }
+
+        protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
+        {
+            if (Values != null)
+            {
+                foreach (var item in Values)
+                {
+                    item.MixDataContentId = parentEntity.Id;
+                    item.MixDatabaseName = parentEntity.MixDatabaseName;
+                    await item.SaveAsync(UowInfo);
+                }
+            }
+        }
+        #endregion
+
+        #region Helper
+
+        private async Task ParseObjectToValues()
+        {
+            Data ??= new JObject();
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
-                if (val == null)
-                {
-                    val = new MixDataContentValueViewModel()
-                    {
-                        MixDatabaseColumnId = field.Id,
-                        MixDatabaseColumnName = field.SystemName,
-                        StringValue = field.DefaultValue,
-                        Priority = field.Priority,
-                        Column = field,
-                        MixDataContentId = Id
-                    };
-                    await val.ExpandView();
-                    Values.Add(val);
-                }
-                else
-                {
-                    val.LastModified = DateTime.UtcNow;
-                }
-                val.Status = Status;
-                val.Priority = field.Priority;
-                val.MixDatabaseName = MixDatabaseName;
-                if (Obj[val.MixDatabaseColumnName] != null)
+                var val = await GetFieldValue(field);
+
+                if (Data[val.MixDatabaseColumnName] != null)
                 {
                     if (val.Column.DataType == MixDataType.Reference)
                     {
-                        var arr = Obj[val.MixDatabaseColumnName].Value<JArray>();
+                        var arr = Data[val.MixDatabaseColumnName].Value<JArray>();
                         val.IntegerValue = val.Column.ReferenceId;
                         val.StringValue = val.Column.ReferenceId.ToString();
                         if (arr != null)
@@ -140,16 +134,16 @@ namespace Mix.Portal.Domain.ViewModels
                                 if (id != Guid.Empty)
                                 {
                                     var data = await Repository.GetSingleViewAsync<MixDataContentViewModel>(m => m.Id == id);
-                                    data.Obj = objData;
-                                    RefData.Add(data);
+                                    data.Data = objData;
+                                    ChildData.Add(data);
                                 }
                                 else
                                 {
-                                    RefData.Add(new MixDataContentViewModel()
+                                    ChildData.Add(new MixDataContentViewModel()
                                     {
                                         Specificulture = Specificulture,
                                         MixDatabaseId = field.ReferenceId.Value,
-                                        Obj = objData["obj"].Value<JObject>()
+                                        Data = objData["obj"].Value<JObject>()
                                     });
                                 }
                             }
@@ -157,24 +151,46 @@ namespace Mix.Portal.Domain.ViewModels
                     }
                     else
                     {
-                        val.ToModelValue(Obj[val.MixDatabaseColumnName]);
+                        val.ToModelValue(Data[val.MixDatabaseColumnName]);
                     }
                 }
             }
-
-            return await base.ParseEntity(view);
         }
 
-        #endregion
+        private async Task<MixDataContentValueViewModel> GetFieldValue(MixDatabaseColumnViewModel field)
+        {
+            var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
+            if (val == null)
+            {
+                val = new MixDataContentValueViewModel()
+                {
+                    MixDatabaseColumnId = field.Id,
+                    MixDatabaseColumnName = field.SystemName,
+                    StringValue = field.DefaultValue,
+                    Priority = field.Priority,
+                    Column = field,
+                    MixDataContentId = Id,
+                    CreatedDateTime = DateTime.UtcNow,
+                    CreatedBy = CreatedBy
+                };
+                await val.ExpandView();
+                Values.Add(val);
+            }
+            val.Status = Status;
+            val.LastModified = DateTime.UtcNow;
+            val.Priority = field.Priority;
+            val.MixDatabaseName = MixDatabaseName;
+            return val;
+        }
 
         public bool HasValue(string fieldName)
         {
-            return Obj != null ? Obj.Value<string>(fieldName) != null : false;
+            return Data != null ? Data.Value<string>(fieldName) != null : false;
         }
 
         public T Property<T>(string fieldName)
         {
-            return MixCmsHelper.Property<T>(Obj, fieldName);
+            return MixCmsHelper.Property<T>(Data, fieldName);
         }
 
         public override async Task<Guid> CreateParentAsync()
@@ -186,5 +202,7 @@ namespace Mix.Portal.Domain.ViewModels
             };
             return await parent.SaveAsync();
         }
+
+        #endregion
     }
 }

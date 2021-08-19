@@ -3,13 +3,14 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Portal.Domain.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixPostContentViewModel 
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixPostContent, int>
+        : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixPostContent, int>
     {
         #region Contructors
 
@@ -34,6 +35,8 @@ namespace Mix.Portal.Domain.ViewModels
 
         public string ClassName { get; set; }
 
+        #endregion
+
         public override async Task<int> CreateParentAsync()
         {
             MixPostViewModel parent = new(UowInfo)
@@ -43,8 +46,5 @@ namespace Mix.Portal.Domain.ViewModels
             };
             return await parent.SaveAsync();
         }
-
-        #endregion
-
     }
 }

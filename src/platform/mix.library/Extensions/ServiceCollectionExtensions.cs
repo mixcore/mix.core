@@ -187,13 +187,7 @@ namespace Mix.Lib.Extensions
             
             if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
-                AuthConfigService authConfigService = new();
                 var mixDatabaseService = new MixDatabaseService(globalConfigService);
-                var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
-                globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
-                globalConfigService.SaveSettings();
-
                 mixDatabaseService.InitMixCmsContext();
 
                 // TODO: Update cache service
