@@ -275,15 +275,18 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             string parentId = Id.ToString();
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
-                    true,
+            var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
                     m => m.ParentId == parentId
                         && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
                         && m.ParentType == MixDatabaseParentType.Module
                         && m.Specificulture == Specificulture,
                     _context, _transaction
                         );
-            ViewModelHelper.HandleResult(removeAdditionalData, ref result);
+            foreach (var item in removeAdditionalData.Data)
+            {
+                var temp = await item.Data.RemoveModelAsync(true, _context, _transaction);
+                ViewModelHelper.HandleResult(temp, ref result);
+            }
             return result;
         }
 
@@ -303,13 +306,17 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             string parentId = Id.ToString();
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+            var getAdditionalData = await MixDatabaseDataAssociations.FormViewModel.Repository.GetFirstModelAsync(
                     m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Module && m.Specificulture == Specificulture,
                     _context, _transaction);
             if (getAdditionalData.IsSucceed)
             {
+                //getAdditionalData.Data.Cultures = Cultures;
+                //var m = getAdditionalData.Data.AttributeData.ParseModel(_context, _transaction);
+                //var cloneValue = await getAdditionalData.Data.AttributeData.CloneAsync(m, Cultures, _context, _transaction);
+
                 getAdditionalData.Data.Cultures = Cultures;
-                var model = getAdditionalData.Data.ParseModel();
+                var model = getAdditionalData.Data.ParseModel(_context, _transaction);
                 var cloneData = await getAdditionalData.Data.CloneAsync(model, Cultures, _context, _transaction);
                 ViewModelHelper.HandleResult(cloneData, ref result);
             }

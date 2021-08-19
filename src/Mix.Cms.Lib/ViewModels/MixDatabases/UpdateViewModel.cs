@@ -39,18 +39,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
         [JsonProperty("formTemplate")]
         public string FormTemplate { get; set; }
 
-        //[JsonProperty("edmTemplate")]
-        //public string EdmTemplate { get; set; }
-
-        //[JsonProperty("edmSubject")]
-        //public string EdmSubject { get; set; }
-
-        //[JsonProperty("edmFrom")]
-        //public string EdmFrom { get; set; }
-
-        //[JsonProperty("edmAutoSend")]
-        //public bool? EdmAutoSend { get; set; }
-
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
