@@ -53,8 +53,9 @@ namespace Mix.Portal.Domain.Base
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
+            UowInfo ??= uowInfo;
             using var _contentQueryRepository = new QueryRepository<TDbContext, TContentEntity, TPrimaryKey>(UowInfo);
 
             Contents = await _contentQueryRepository.GetListViewAsync<TContent>(

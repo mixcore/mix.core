@@ -59,15 +59,15 @@ namespace Mix.Portal.Domain.ViewModels
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
-
+            
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-
             return base.ParseEntity(view);
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(UnitOfWorkInfo uowInfo)
         {
+            UowInfo ??= uowInfo;
             var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
             Column = await colRepo.GetSingleViewAsync<MixDatabaseColumnViewModel>(MixDatabaseColumnId);
             if (MixDatabaseColumnId > 0)

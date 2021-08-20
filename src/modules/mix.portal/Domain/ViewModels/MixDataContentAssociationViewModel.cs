@@ -45,9 +45,6 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView()
-        {
-        }
 
         #endregion
 
