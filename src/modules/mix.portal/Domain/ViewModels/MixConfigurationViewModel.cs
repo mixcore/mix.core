@@ -45,8 +45,9 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
+            UowInfo ??= uowInfo;
             _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(UowInfo);
 
             Contents = await _contentQueryRepository.GetListViewAsync<MixConfigurationContentViewModel>(

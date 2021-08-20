@@ -1,7 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
 using Mix.Lib.Helpers;
 using Mix.Portal.Domain.Base;
 using Mix.Portal.Domain.Helpers;
@@ -41,6 +40,10 @@ namespace Mix.Portal.Domain.ViewModels
             MixDatabaseName = databaseName;
             Data = data;
         }
+
+        public MixDataContentViewModel(MixDataContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        {
+        }
         #endregion
 
         #region Properties
@@ -57,8 +60,9 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
+            UowInfo ??= uowInfo;
             using var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
             using var valRepo = new QueryRepository<MixCmsContext, MixDataContentValue, Guid>(UowInfo);
 
@@ -78,6 +82,12 @@ namespace Mix.Portal.Domain.ViewModels
             using var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
             using var valRepo = new QueryRepository<MixCmsContext, MixDataContentValue, Guid>(UowInfo);
 
+            if (IsDefaultId(Id))
+            {
+                Id = Guid.NewGuid();
+                CreatedDateTime = DateTime.UtcNow;
+            }
+
             if (string.IsNullOrEmpty(MixDatabaseName))
             {
                 MixDatabaseName = Context.MixDatabase.First(m => m.Id == MixDatabaseId)?.SystemName;
@@ -91,6 +101,9 @@ namespace Mix.Portal.Domain.ViewModels
             Values = await valRepo.GetListViewAsync<MixDataContentValueViewModel>(m => m.MixDataContentId == Id);
 
             await ParseObjectToValues();
+
+            Title = Id.ToString();
+            Content = Data.ToString(Newtonsoft.Json.Formatting.None);
 
             return await base.ParseEntity(view);
         }
@@ -173,7 +186,7 @@ namespace Mix.Portal.Domain.ViewModels
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy
                 };
-                await val.ExpandView();
+                await val.ExpandView(UowInfo);
                 Values.Add(val);
             }
             val.Status = Status;
@@ -197,6 +210,12 @@ namespace Mix.Portal.Domain.ViewModels
         {
             MixDataViewModel parent = new MixDataViewModel(UowInfo)
             {
+                Id = Guid.NewGuid(),
+                CreatedDateTime = DateTime.UtcNow,
+                MixSiteId = 1,
+                MixDatabaseId = MixDatabaseId,
+                MixDatabaseName = MixDatabaseName,
+                CreatedBy = CreatedBy,
                 DisplayName = Title,
                 Description = Excerpt
             };

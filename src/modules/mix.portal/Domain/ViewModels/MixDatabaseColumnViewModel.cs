@@ -50,6 +50,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public override Task<MixDatabaseColumn> ParseEntity<T>(T view)
         {
+            ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
                     ColumnConfigurations, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             return base.ParseEntity(view);
