@@ -5,12 +5,11 @@ using Mix.Identity.Models.AccountViewModels;
 using System.Linq;
 using Mix.Shared.Constants;
 using Mix.Heart.Helpers;
-using Mix.Shared.Enums;
 using Mix.Database.Entities.Account;
-using Mix.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Mix.Identity.Constants;
 using Mix.Shared.Services;
+using Mix.Lib.Models;
 
 namespace Mix.Theme.Domain.Services
 {

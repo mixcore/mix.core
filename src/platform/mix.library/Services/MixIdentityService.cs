@@ -12,7 +12,10 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
+using Mix.Lib.Helpers;
+using Mix.Lib.Models;
 using Mix.Shared.Constants;
+using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
@@ -44,7 +47,7 @@ namespace Mix.Lib.Services
             RoleManager<IdentityRole> roleManager,
             AuthConfigService authConfigService,
             Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo,
-            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo, 
+            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             GlobalConfigService globalConfigService)
         {
             _userManager = userManager;
@@ -87,6 +90,10 @@ namespace Mix.Lib.Services
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
+                token.Info = await MixDataHelper.GetAdditionalDataAsync(
+                    MixDatabaseParentType.User,
+                    MixDatabaseNames.SYSTEM_USER_DATA,
+                    Guid.Parse(user.Id));
                 var plainText = JObject.FromObject(token).ToString(Formatting.None).Replace("\r\n", string.Empty);
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
 
@@ -239,8 +246,8 @@ namespace Mix.Lib.Services
         }
 
         public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
-            MixExternalLoginProviders provider, 
-            string accessToken, 
+            MixExternalLoginProviders provider,
+            string accessToken,
             MixAuthenticationConfigurations appConfigs)
         {
             ParsedExternalAccessToken parsedToken = null;
