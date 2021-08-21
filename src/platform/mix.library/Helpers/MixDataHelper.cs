@@ -1,8 +1,12 @@
-﻿using Mix.Database.Entities.Cms;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Cms;
+using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
+using Mix.Shared.Constants;
 using Mix.Shared.Enums;
+using Mix.Shared.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -219,5 +223,51 @@ namespace Mix.Lib.Helpers
             return arr;
         }
 
+        public static async Task<MixDataContentViewModel> GetAdditionalDataAsync(
+            MixDatabaseParentType parentType,
+            Guid parentId,
+            string databaseName,
+            string culture = null)
+        {
+            using var context = new MixCmsContext();
+            UnitOfWorkInfo uow = new(context);
+            Repository<MixCmsContext, MixDataContent, Guid> contentRepo= new(uow);
+            Repository<MixCmsContext, MixDatabase, int> mixDbRepo= new(uow);
+            GlobalConfigService configSrv = new();
+            culture = culture ?? configSrv.DefaultCulture;
+            var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(
+                m => m.MixDatabaseName == databaseName
+                    && m.ParentType == parentType
+                    && m.GuidParentId == parentId
+                    && m.Specificulture == culture))?.DataContentId;
+            if (dataId != null)
+            {
+                var result = await contentRepo.GetSingleViewAsync<MixDataContentViewModel>(
+                    m => m.Id == dataId && m.Specificulture == culture);
+                return result;
+            }
+            else
+            {
+                // Init default data
+                var mixDb = await mixDbRepo.GetSingleViewAsync<MixDatabaseViewModel>(
+                m => m.SystemName == databaseName);
+                if (mixDb != null)
+                {
+                    MixDataContentViewModel result = new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Specificulture = culture,
+                        MixDatabaseId = mixDb.Id,
+                        MixDatabaseName = mixDb.SystemName,
+                        Status = MixContentStatus.Published,
+                        Columns = mixDb.Columns,
+                        CreatedDateTime = DateTime.UtcNow
+                    };
+                    await result.SaveAsync();
+                    return result;
+                }
+                return null;
+            }
+        }
     }
 }

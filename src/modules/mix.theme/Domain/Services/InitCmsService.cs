@@ -1,10 +1,10 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Microsoft.AspNetCore.Identity;
-using Mix.Identity.Services;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mix.Database.Services;
+using Mix.Lib.Services;
 
 namespace Mix.Theme.Domain.Services
 {

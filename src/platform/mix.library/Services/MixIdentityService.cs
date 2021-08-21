@@ -26,7 +26,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.Identity.Services
+namespace Mix.Lib.Services
 {
     public class MixIdentityService
     {

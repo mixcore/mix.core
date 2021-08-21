@@ -8,7 +8,6 @@ using Mix.Lib.Abstracts;
 using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
-using Mix.Identity.Services;
 
 namespace Mix.Lib.Controllers
 {

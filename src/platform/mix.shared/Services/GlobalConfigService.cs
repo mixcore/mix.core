@@ -13,6 +13,8 @@ namespace Mix.Shared.Services
         {
         }
 
+        public string DefaultCulture => GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+
         public MixDatabaseProvider DatabaseProvider
         {
             get => GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);

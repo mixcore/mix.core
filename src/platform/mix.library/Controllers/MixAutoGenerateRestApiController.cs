@@ -8,10 +8,9 @@ using Mix.Lib.Abstracts;
 using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
-using Mix.Identity.Attributes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Mix.Identity.Services;
+using Mix.Lib.Attributes;
 
 namespace Mix.Lib.Controllers
 {

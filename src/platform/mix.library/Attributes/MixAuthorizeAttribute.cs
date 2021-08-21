@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Identity.Services;
+using Mix.Lib.Services;
 
-namespace Mix.Identity.Attributes
+namespace Mix.Lib.Attributes
 {
     public class MixAuthorizeAttribute : TypeFilterAttribute
     {
