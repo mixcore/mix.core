@@ -12,10 +12,10 @@ using System;
 using System.Text;
 using Mix.Identity.Extensions;
 using Mix.Database.Entities.Account;
-using Mix.Identity.Services;
 using Mix.Shared.Services;
+using Mix.Lib.Services;
 
-namespace Mix.Identity
+namespace Mix.Lib.Startups
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public static class AuthServiceCollectionExtensions
@@ -76,20 +76,6 @@ namespace Mix.Identity
                                 ValidAudiences = authConfigurations.Audiences.Split(','),
                                 IssuerSigningKey = JwtSecurityKey.Create(authConfigurations.SecretKey)
                             };
-                    // TODO Handle Custom Auth
-                    //options.Events = new JwtBearerEvents
-                    //{
-                    //    OnAuthenticationFailed = context =>
-                    //    {
-                    //        Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                    //        return Task.CompletedTask;
-                    //    },
-                    //    OnTokenValidated = context =>
-                    //    {
-                    //        Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                    //        return Task.CompletedTask;
-                    //    },
-                    //};
                 });
 
             services.ConfigureApplicationCookie(options =>
