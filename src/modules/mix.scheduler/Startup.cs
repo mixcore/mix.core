@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Identity;
 using Mix.Lib.Extensions;
+using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
 

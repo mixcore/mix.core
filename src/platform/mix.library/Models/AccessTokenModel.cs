@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Mix.Lib.ViewModels;
+using System;
 
-namespace Mix.Identity.Models
+namespace Mix.Lib.Models
 {
     public class AccessTokenViewModel
     {
@@ -20,7 +21,7 @@ namespace Mix.Identity.Models
 
         public string DeviceId { get; set; }
 
-        //public MixUserViewModel Info { get; set; }
+        public AdditionalDataContentViewModel Info { get; set; }
 
         public DateTime? LastUpdateConfiguration { get; set; }
     }
