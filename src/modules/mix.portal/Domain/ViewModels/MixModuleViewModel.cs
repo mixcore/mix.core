@@ -2,13 +2,14 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
-using Mix.Portal.Domain.Base;
+using Mix.Lib.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixModuleViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixModule, int, MixModuleContent, MixModuleContentViewModel>
+    public class MixModuleViewModel 
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixModule, int, MixModuleContent, MixModuleContentViewModel>
     {
         #region Contructors
 

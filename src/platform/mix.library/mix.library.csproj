@@ -55,8 +55,4 @@
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
 </Project>

@@ -1,15 +1,14 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
+using Mix.Lib.Base;
 using Mix.Shared.Enums;
 using System;
-using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
-    public class MixDataContentAssociationViewModel 
-        : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+    public class MixDataContentAssociationViewModel
+        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
     {
         #region Contructors
 
@@ -17,7 +16,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDataContentAssociationViewModel(Repository<MixCmsContext, MixDataContentAssociation, Guid> repository) : base(repository)
+        public MixDataContentAssociationViewModel(Repository<MixCmsContext, MixDataContentAssociation, Guid> repository) 
+            : base(repository)
         {
         }
 
@@ -44,6 +44,7 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Overrides
+
 
         #endregion
 

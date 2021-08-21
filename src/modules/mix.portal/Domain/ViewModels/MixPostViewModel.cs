@@ -2,7 +2,7 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
-using Mix.Portal.Domain.Base;
+using Mix.Lib.Base;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels

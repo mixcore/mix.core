@@ -5,7 +5,7 @@ using Mix.Lib.Base;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
     public class MixDataViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataContent, MixDataContentViewModel>
     {

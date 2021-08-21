@@ -3,7 +3,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
-using Mix.Portal.Domain.Base;
+using Mix.Lib.Base;
 using System;
 using System.Threading.Tasks;
 

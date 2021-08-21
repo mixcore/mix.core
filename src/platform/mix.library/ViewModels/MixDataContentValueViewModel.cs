@@ -6,7 +6,7 @@ using Mix.Shared.Enums;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
     public class MixDataContentValueViewModel
         : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid>
