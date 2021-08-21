@@ -1,7 +1,7 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
-using Mix.Portal.Domain.ViewModels;
+using Mix.Lib.ViewModels;
 using Mix.Shared.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.Helpers
+namespace Mix.Lib.Helpers
 {
     public static class MixDataHelper
     {

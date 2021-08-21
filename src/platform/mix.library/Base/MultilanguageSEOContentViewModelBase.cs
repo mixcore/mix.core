@@ -6,7 +6,7 @@ using Mix.Heart.UnitOfWork;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.Base
+namespace Mix.Lib.Base
 {
     public abstract class MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
         : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey>

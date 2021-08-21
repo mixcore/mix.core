@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Helpers\" />
+  </ItemGroup>
+
 </Project>

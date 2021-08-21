@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.Base
+namespace Mix.Lib.Base
 {
     public abstract class SiteDataWithContentViewModelBase
         <TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent>

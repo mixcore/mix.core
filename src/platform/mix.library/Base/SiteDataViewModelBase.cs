@@ -6,7 +6,7 @@ using Mix.Heart.ViewModel;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mix.Portal.Domain.Base
+namespace Mix.Lib.Base
 {
     public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey>

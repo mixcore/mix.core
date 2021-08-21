@@ -4,7 +4,7 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using System;
 
-namespace Mix.Portal.Domain.Base
+namespace Mix.Lib.Base
 {
     public abstract class ExtraColumnMultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
         : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey>

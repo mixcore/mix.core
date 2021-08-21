@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public class MixDatabaseViewModel

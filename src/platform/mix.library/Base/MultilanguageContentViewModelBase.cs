@@ -5,7 +5,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
 
-namespace Mix.Portal.Domain.Base
+namespace Mix.Lib.Base
 {
     public abstract class MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey> : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
          where TDbContext : DbContext
