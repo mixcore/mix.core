@@ -4,7 +4,6 @@ using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
-using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
@@ -15,6 +14,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
 
 namespace Mix.Lib.Helpers
 {
@@ -223,26 +223,32 @@ namespace Mix.Lib.Helpers
             return arr;
         }
 
-        public static async Task<MixDataContentViewModel> GetAdditionalDataAsync(
+        public static async Task<AdditionalDataContentViewModel> GetAdditionalDataAsync(
             MixDatabaseParentType parentType,
-            Guid parentId,
             string databaseName,
+            Guid? guidParentId = null,
+            int? intParentId = null,
             string culture = null)
         {
             using var context = new MixCmsContext();
             UnitOfWorkInfo uow = new(context);
-            Repository<MixCmsContext, MixDataContent, Guid> contentRepo= new(uow);
-            Repository<MixCmsContext, MixDatabase, int> mixDbRepo= new(uow);
+            Repository<MixCmsContext, MixDataContent, Guid> contentRepo = new(uow);
+            Repository<MixCmsContext, MixDatabase, int> mixDbRepo = new(uow);
             GlobalConfigService configSrv = new();
-            culture = culture ?? configSrv.DefaultCulture;
-            var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(
+
+            Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType
-                    && m.GuidParentId == parentId
-                    && m.Specificulture == culture))?.DataContentId;
+                    && m.Specificulture == culture;
+
+            predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
+            predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
+
+            culture = culture ?? configSrv.DefaultCulture;
+            var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
             if (dataId != null)
             {
-                var result = await contentRepo.GetSingleViewAsync<MixDataContentViewModel>(
+                var result = await contentRepo.GetSingleViewAsync<AdditionalDataContentViewModel>(
                     m => m.Id == dataId && m.Specificulture == culture);
                 return result;
             }
@@ -253,7 +259,7 @@ namespace Mix.Lib.Helpers
                 m => m.SystemName == databaseName);
                 if (mixDb != null)
                 {
-                    MixDataContentViewModel result = new()
+                    AdditionalDataContentViewModel result = new()
                     {
                         Id = Guid.NewGuid(),
                         Specificulture = culture,
