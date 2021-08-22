@@ -20,6 +20,7 @@ using Mix.Shared.Models;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -94,7 +95,9 @@ namespace Mix.Lib.Services
                     MixDatabaseParentType.User,
                     MixDatabaseNames.SYSTEM_USER_DATA,
                     Guid.Parse(user.Id));
-                var plainText = JObject.FromObject(token).ToString(Formatting.None).Replace("\r\n", string.Empty);
+                var plainText = JsonConvert.SerializeObject(
+                    token, 
+                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
 
                 var resp = new JObject()

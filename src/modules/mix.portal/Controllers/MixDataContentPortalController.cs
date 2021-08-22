@@ -6,8 +6,10 @@ using Mix.Heart.Repository;
 using Mix.Identity.Services;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
+using Mix.Lib.Helpers;
 using Mix.Lib.Services;
 using Mix.Portal.Domain.ViewModels;
+using Mix.Shared.Enums;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,7 +19,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-data-content")]
     [ApiController]
-    public class MixDataContentPortalController 
+    public class MixDataContentPortalController
         : MixRestApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {
         private readonly Repository<MixCmsContext, MixDataContent, Guid> _contentRepository;
@@ -32,7 +34,7 @@ namespace Mix.Portal.Controllers
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             Repository<MixCmsContext, MixDataContent, Guid> contentRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService, 
+            MixIdentityService mixIdentityService,
             Repository<MixCmsContext, MixDatabaseColumn, int> colRepository)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, contentRepository, mixIdentityService)
         {
@@ -48,6 +50,21 @@ namespace Mix.Portal.Controllers
             return Ok(result);
         }
 
+        [HttpGet("additional-data")]
+        public async Task<ActionResult<MixDataContentViewModel>> GetAdditionalData([FromQuery] string databaseName)
+        {
+            Guid guidParentId = Guid.Empty;
+            bool isParent = int.TryParse(Request.Query["parentId"].ToString(), out int intParentId);
+            isParent = isParent || Guid.TryParse(Request.Query["parentId"].ToString(), out guidParentId);
+            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
+                && isParent)
+            {
+                var getData = await MixDataHelper.GetAdditionalDataAsync(parentType, databaseName, guidParentId, intParentId, _lang);
+                return Ok(getData);
+            }
+            return BadRequest();
+        }
+
         [HttpPost("{lang}/{databaseName}")]
         public async Task<ActionResult> CreateData([FromRoute] string databaseName, [FromBody] JObject data)
         {
@@ -55,14 +72,15 @@ namespace Mix.Portal.Controllers
             var result = await mixData.SaveAsync();
             return Ok(result);
         }
-        
+
         [HttpGet("init/{databaseName}")]
         [HttpGet("{lang}/init/{databaseName}")]
         public async Task<ActionResult> InitData([FromRoute] string databaseName)
         {
             var columns = await _colRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
                     m => m.MixDatabaseName == databaseName);
-            var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject()) { 
+            var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject())
+            {
                 Columns = columns
             };
             return Ok(mixData);
