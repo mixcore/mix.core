@@ -13,7 +13,7 @@ namespace Mix.Lib.Models
 
         public int ExpiresIn { get; set; }
 
-        public string Client_id { get; set; }
+        public string ClientId { get; set; }
 
         public DateTime Issued { get; set; }
 
