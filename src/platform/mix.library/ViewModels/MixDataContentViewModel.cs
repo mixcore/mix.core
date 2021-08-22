@@ -46,6 +46,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Properties
+        
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }
@@ -54,6 +55,11 @@ namespace Mix.Lib.ViewModels
 
         public List<MixDataContentViewModel> ChildData { get; set; } = new();
         public List<MixDataContentAssociationViewModel> RelatedData { get; set; } = new();
+
+        public Guid? ContentGuidParentId { get; set; }
+        public int? ContentIntParentId { get; set; }
+        public MixDatabaseParentType ContentParentType { get; set; }
+
 
         #endregion
 

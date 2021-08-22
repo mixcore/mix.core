@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Helpers
@@ -61,6 +62,12 @@ namespace Mix.Lib.Helpers
             {
                 return 0;
             }
+        }
+
+        internal static bool IsDefaultId<TPrimaryKey>(TPrimaryKey? id)
+        {
+            return id == null || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
+                || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
         }
     }
 }

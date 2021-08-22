@@ -5,6 +5,7 @@
         public const string Authentication = "MixContent/AppConfigs/authentication";
         public const string Global = "MixContent/AppConfigs/global";
         public const string Cloudflare = "MixContent/AppConfigs/cloudflare";
+        public const string Culture = "MixContent/AppConfigs/culture";
         public const string ConnectionString = "MixContent/AppConfigs/connection_string";
         public const string EPPlus = "MixContent/AppConfigs/epplus";
         public const string IPSecurity = "MixContent/AppConfigs/ip_security";

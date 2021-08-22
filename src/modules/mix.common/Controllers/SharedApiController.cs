@@ -30,6 +30,7 @@ namespace Mix.Common.Controllers
         private readonly QueryRepository<MixCmsContext, MixConfigurationContent, int> _configRepo;
         private readonly QueryRepository<MixCmsContext, MixLanguageContent, int> _langRepo;
         private readonly MixFileService _fileService;
+        protected readonly CultureService _cultureService;
         private readonly AuthConfigService authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
@@ -44,7 +45,8 @@ namespace Mix.Common.Controllers
             QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo,
             QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo,
             IActionDescriptorCollectionProvider routeProvider,
-            MixIdentityService mixIdentityService, AuthConfigService authConfigService)
+            MixIdentityService mixIdentityService, AuthConfigService authConfigService,
+            CultureService cultureService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
@@ -53,6 +55,7 @@ namespace Mix.Common.Controllers
             _langRepo = langRepo;
             _routeProvider = routeProvider;
             this.authConfigService = authConfigService;
+            _cultureService = cultureService;
         }
 
         #region Routes
@@ -154,8 +157,8 @@ namespace Mix.Common.Controllers
         private async Task<AllSettingModel> GetAllSettingsAsync(string lang = null)
         {
             lang ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            var cultures = _globalConfigService.Cultures;
-            var culture = cultures?.FirstOrDefault(c => c == lang);
+            var cultures = _cultureService.Cultures;
+            var culture = _cultureService.LoadCulture(lang);
             // Get Settings
             AppSettingModel globalSettings = new()
             {

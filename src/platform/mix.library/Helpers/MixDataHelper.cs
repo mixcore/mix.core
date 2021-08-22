@@ -15,6 +15,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Helpers
 {
@@ -228,28 +229,28 @@ namespace Mix.Lib.Helpers
             string databaseName,
             Guid? guidParentId = null,
             int? intParentId = null,
-            string culture = null)
+            string specificulture = null)
         {
             using var context = new MixCmsContext();
             UnitOfWorkInfo uow = new(context);
             Repository<MixCmsContext, MixDataContent, Guid> contentRepo = new(uow);
             Repository<MixCmsContext, MixDatabase, int> mixDbRepo = new(uow);
-            GlobalConfigService configSrv = new();
+            CultureService cultureSrv = new();
 
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType
-                    && m.Specificulture == culture;
+                    && m.Specificulture == specificulture;
 
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
 
-            culture = culture ?? configSrv.DefaultCulture;
+            var culture = cultureSrv.LoadCulture(specificulture);
             var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
             if (dataId != null)
             {
                 var result = await contentRepo.GetSingleViewAsync<AdditionalDataContentViewModel>(
-                    m => m.Id == dataId && m.Specificulture == culture);
+                    m => m.Id == dataId && m.Specificulture == specificulture);
                 return result;
             }
             else
@@ -262,7 +263,11 @@ namespace Mix.Lib.Helpers
                     AdditionalDataContentViewModel result = new()
                     {
                         Id = Guid.NewGuid(),
-                        Specificulture = culture,
+                        MixCultureId = culture.Id,
+                        Specificulture = culture.Specificulture,
+                        ContentParentType = MixDatabaseParentType.User,
+                        ContentGuidParentId = guidParentId,
+                        ContentIntParentId = intParentId,
                         MixDatabaseId = mixDb.Id,
                         MixDatabaseName = mixDb.SystemName,
                         Status = MixContentStatus.Published,
