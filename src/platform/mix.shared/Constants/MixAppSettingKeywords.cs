@@ -12,6 +12,7 @@
         public const string DefaultTemplateFolder = "DefaultTemplateFolder";
         public const string Language = "Language";
         public const string DefaultCulture = "DefaultCulture";
+        public const string Cultures = "Cultures";
         public const string IsMysql = "IsMysql";
         public const string Domain = "Domain";
         public const string PortalThemeSettings = "PortalThemeSettings";

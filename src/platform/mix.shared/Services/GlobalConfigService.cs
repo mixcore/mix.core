@@ -7,13 +7,9 @@ namespace Mix.Shared.Services
 {
     public class GlobalConfigService : JsonConfigurationServiceBase
     {
-        public List<string> Cultures { get; set; }
-
         public GlobalConfigService() : base(MixAppConfigFilePaths.Global)
         {
         }
-
-        public string DefaultCulture => GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
 
         public MixDatabaseProvider DatabaseProvider
         {

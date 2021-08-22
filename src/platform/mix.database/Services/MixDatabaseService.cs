@@ -4,10 +4,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Shared.Services;
-using System;
-using System.Linq;
 
 namespace Mix.Database.Services
 {

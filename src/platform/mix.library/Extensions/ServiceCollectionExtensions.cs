@@ -164,6 +164,7 @@ namespace Mix.Lib.Extensions
         {
             InitAppSettings();
             services.AddScoped<GlobalConfigService>();
+            services.AddScoped<CultureService>();
             services.AddScoped<AuthConfigService>();
             services.AddScoped<SmtpConfigService>();
             services.AddScoped<IPSecurityConfigService>();

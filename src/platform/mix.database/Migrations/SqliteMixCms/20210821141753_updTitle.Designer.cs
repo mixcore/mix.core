@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.v2;
 
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
-    partial class SqliteMixCmsContextModelSnapshot : ModelSnapshot
+    [Migration("20210821141753_updTitle")]
+    partial class updTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,10 +391,10 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("DataContentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("GuidParentId")
+                    b.Property<Guid>("GuidParentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("IntParentId")
+                    b.Property<int>("IntParentId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")

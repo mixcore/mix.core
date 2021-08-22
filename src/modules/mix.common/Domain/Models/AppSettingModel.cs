@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Mix.Database.Entities.Cms;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +22,7 @@ namespace Mix.Common.Models
 
         public bool IsEncryptApi { get; set; }
 
-        public List<string> Cultures { get; set; }
+        public List<MixCulture> Cultures { get; set; }
 
         public string[] PageTypes { get; set; }
 
