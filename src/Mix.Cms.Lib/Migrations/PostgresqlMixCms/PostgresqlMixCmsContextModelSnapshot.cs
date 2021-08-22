@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Cms.Lib.Models.Cms;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {
@@ -15,9 +15,9 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.8")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixCmsUser", b =>
                 {
@@ -78,7 +78,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -99,7 +99,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -145,7 +145,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -170,8 +170,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(150)")
@@ -216,7 +216,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
@@ -243,8 +243,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -297,7 +297,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -326,11 +326,11 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -370,7 +370,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
@@ -394,10 +394,10 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ReferenceId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Regex")
                         .HasColumnType("varchar(250)")
@@ -448,7 +448,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
@@ -461,7 +461,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -480,7 +480,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixDatabaseDataAssociation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -510,7 +510,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
@@ -535,7 +535,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -588,7 +588,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<double?>("DoubleValue")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("EditorType")
                         .IsRequired()
@@ -609,7 +609,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("EncryptType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("EncryptValue")
                         .HasColumnType("text")
@@ -617,13 +617,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("IntegerValue")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MixDatabaseColumnId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MixDatabaseColumnName")
                         .IsRequired()
@@ -642,7 +642,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Regex")
                         .HasColumnType("varchar(250)")
@@ -672,8 +672,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -716,7 +716,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -731,7 +731,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("ThemeId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
@@ -749,7 +749,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixLanguage", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -800,7 +800,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -824,7 +824,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixMedia", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -885,7 +885,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
@@ -922,7 +922,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModule", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -990,13 +990,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1020,7 +1020,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
                         .HasName("PK_mix_module");
@@ -1065,16 +1065,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("PageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1104,7 +1104,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixModulePost", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1138,13 +1138,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1165,7 +1165,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPage", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1232,7 +1232,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Level")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
@@ -1240,13 +1240,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("PostType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("SeoDescription")
                         .HasColumnType("text")
@@ -1301,7 +1301,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Views")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
                         .HasName("PK_mix_page");
@@ -1314,7 +1314,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPageModule", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1348,16 +1348,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Position")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1378,7 +1378,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPagePost", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1412,13 +1412,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("PageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1440,8 +1440,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -1465,7 +1465,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Level")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
@@ -1473,7 +1473,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1505,8 +1505,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -1535,13 +1535,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("PageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1563,13 +1563,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -1580,23 +1580,23 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("PageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("RoleId")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_mix_portal_page_role");
@@ -1609,7 +1609,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPost", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1676,7 +1676,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -1738,7 +1738,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("Views")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
                         .HasName("PK_mix_post");
@@ -1751,7 +1751,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostAssociation", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1772,7 +1772,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("DestinationId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(450)")
@@ -1788,10 +1788,10 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("SourceId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1812,7 +1812,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostMedia", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1841,7 +1841,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("MediaId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(50)")
@@ -1849,13 +1849,13 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Position")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1876,7 +1876,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixPostModule", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -1910,16 +1910,16 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ModuleId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Position")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1941,8 +1941,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -1996,7 +1996,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Scripts")
                         .HasColumnType("text")
@@ -2020,7 +2020,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("ThemeId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ThemeName")
                         .IsRequired()
@@ -2040,8 +2040,8 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(50)")
@@ -2076,7 +2076,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2102,7 +2102,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
             modelBuilder.Entity("Mix.Cms.Lib.Models.Cms.MixUrlAlias", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(10)")
@@ -2136,7 +2136,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("SourceId")
                         .HasColumnType("varchar(250)")
@@ -2150,7 +2150,7 @@ namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id", "Specificulture")
                         .HasName("PK_mix_url_alias");
