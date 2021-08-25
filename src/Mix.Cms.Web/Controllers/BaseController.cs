@@ -271,6 +271,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["BodyClass"] = getPage.Data.CssClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
                 ViewData["Keyword"] = keyword;
+                ViewData["DetailsUrl"] = getPage.Data.DetailsUrl;
 
                 ViewBag.viewMode = MixMvcViewMode.Page;
                 getPage.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
