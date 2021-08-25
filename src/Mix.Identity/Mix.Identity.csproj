@@ -8,7 +8,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.1" />
