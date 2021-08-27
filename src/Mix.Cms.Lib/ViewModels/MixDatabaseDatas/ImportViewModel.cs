@@ -133,7 +133,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == field.Name);
                 if (val == null)
                 {
                     val = new MixDatabaseDataValues.UpdateViewModel(
