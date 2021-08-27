@@ -415,7 +415,7 @@ namespace Mix.Lib.Services
 
         private void LoadRoles()
         {
-            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.IsInit)
             {
                 Roles = _roleRepo.GetListViewAsync<RoleViewModel>(m => true).GetAwaiter().GetResult();
                 using var ctx = new MixCmsContext();

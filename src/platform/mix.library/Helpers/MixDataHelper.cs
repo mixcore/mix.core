@@ -235,7 +235,8 @@ namespace Mix.Lib.Helpers
             UnitOfWorkInfo uow = new(context);
             Repository<MixCmsContext, MixDataContent, Guid> contentRepo = new(uow);
             Repository<MixCmsContext, MixDatabase, int> mixDbRepo = new(uow);
-            CultureService cultureSrv = new();
+            GlobalConfigService globalConfigService= new();
+            CultureService cultureSrv = new(globalConfigService);
 
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName

@@ -10,16 +10,20 @@ namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
-        public CultureService() : base(MixAppConfigFilePaths.Culture)
+        private readonly GlobalConfigService _globalConfigService;
+        public CultureService(GlobalConfigService globalConfigService) : base(MixAppConfigFilePaths.Culture)
         {
-            Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
-            if (Cultures == null)
+            _globalConfigService = globalConfigService;
+            if (!_globalConfigService.IsInit)
             {
-                using var ctx = new MixCmsContext();
-                Cultures = ctx.MixCulture.ToList();
-                SetConfig(MixAppSettingKeywords.Cultures, Cultures);
+                Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
+                if (Cultures == null)
+                {
+                    using var ctx = new MixCmsContext();
+                    Cultures = ctx.MixCulture.ToList();
+                    SetConfig(MixAppSettingKeywords.Cultures, Cultures);
+                }
             }
-            
         }
 
         public List<MixCulture> Cultures { get; set; }
