@@ -356,6 +356,11 @@ namespace Mix.Cms.Lib.ViewModels
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
+                if (result.IsSucceed && Templates.Count > 0)
+                {
+                    result = await ImportTemplates(themeId, themeName, context, transaction);
+                }
+
                 if (Configurations != null && Configurations.Count > 0)
                 {
                     result = await ImportConfigurationsAsync(destCulture, context, transaction);
@@ -393,10 +398,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
-                if (result.IsSucceed && Templates.Count > 0)
-                {
-                    result = await ImportTemplates(themeId, themeName, context, transaction);
-                }
+                
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }

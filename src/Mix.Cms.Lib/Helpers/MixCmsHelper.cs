@@ -22,6 +22,11 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Mix.Infrastructure.Repositories;
+using System.Web;
+using MixDatas = Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
+using MixPagePosts = Mix.Cms.Lib.ViewModels.MixPagePosts;
+using MixPosts = Mix.Cms.Lib.ViewModels.MixPosts;
+using System.Collections.Specialized;
 
 namespace Mix.Cms.Lib.Helpers
 {
@@ -80,9 +85,8 @@ namespace Mix.Cms.Lib.Helpers
                 var value = prop.GetValue(routeValues, null).ToString();
                 url += $"/{value}";
             }
-            return string.Format("{0}://{1}{2}", request.Scheme, request.Host,
-                        url
-                        );
+
+            return string.Format("{0}://{1}{2}", request.Scheme, request.Host, url);
         }
 
         public static string FormatPrice(double? price, string oldPrice = "0")
@@ -173,7 +177,7 @@ namespace Mix.Cms.Lib.Helpers
             }
         }
 
-        public static System.Threading.Tasks.Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture = null, IUrlHelper url = null)
+        public static Task<ViewModels.MixModules.ReadMvcViewModel> GetModuleAsync(string name, string culture = null, IUrlHelper url = null)
         {
             var cacheKey = $"vm_{culture}_module_{name}_mvc";
             var module = new RepositoryResponse<ViewModels.MixModules.ReadMvcViewModel>();
@@ -185,7 +189,6 @@ namespace Mix.Cms.Lib.Helpers
             }
 
             // If load successful => load details
-
             return Task.FromResult(module.Data);
         }
 
@@ -196,7 +199,7 @@ namespace Mix.Cms.Lib.Helpers
                     + path;
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
+        public static async Task<ViewModels.MixPages.ReadMvcViewModel> GetPageAsync(int id, string culture)
         {
             RepositoryResponse<ViewModels.MixPages.ReadMvcViewModel> getPage = null;
             if (getPage == null)
@@ -219,7 +222,7 @@ namespace Mix.Cms.Lib.Helpers
             return page.Data;
         }
 
-        public static async System.Threading.Tasks.Task<ViewModels.MixTemplates.ReadViewModel> GetTemplateByPath(string themeName, string templatePath)
+        public static async Task<ViewModels.MixTemplates.ReadViewModel> GetTemplateByPath(string themeName, string templatePath)
         {
             string[] tmp = templatePath.Split('/');
             if (tmp[1].IndexOf('.') > 0)
@@ -227,16 +230,18 @@ namespace Mix.Cms.Lib.Helpers
                 tmp[1] = tmp[1].Substring(0, tmp[1].IndexOf('.'));
             }
             var getData = await ViewModels.MixTemplates.ReadViewModel.Repository.GetFirstModelAsync(
-                m => m.ThemeName == themeName && m.FolderType == tmp[0] && m.FileName == tmp[1]);
+                m => m.ThemeName == themeName
+                && m.FolderType == tmp[0]
+                && m.FileName == tmp[1]);
 
             return getData.Data;
         }
 
-        public static async Task<MixNavigation> GetNavigationAsync(
-            string name, string culture, IUrlHelper Url)
+        public static async Task<MixNavigation> GetNavigationAsync(string name, string culture, IUrlHelper Url)
         {
-            var navs = await ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<ViewModels.MixDatabaseDatas.NavigationViewModel>(
-                culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+            var navs = await MixDatas.Helper
+                .FilterByKeywordAsync<MixDatas.NavigationViewModel>(culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
 
@@ -268,11 +273,11 @@ namespace Mix.Cms.Lib.Helpers
             return nav;
         }
 
-        public static MixNavigation GetNavigation(
-            string name, string culture, IUrlHelper Url)
+        public static MixNavigation GetNavigation(string name, string culture, IUrlHelper Url)
         {
-            var navs = ViewModels.MixDatabaseDatas.Helper.FilterByKeyword<ViewModels.MixDatabaseDatas.NavigationViewModel>(
-                culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+            var navs = MixDatas.Helper
+                .FilterByKeyword<MixDatas.NavigationViewModel>(culture, MixConstants.MixDatabaseName.NAVIGATION, "equal", "name", name);
+
             var nav = navs.Data?.FirstOrDefault()?.Nav;
             string activePath = Url.ActionContext.HttpContext.Request.Path;
 
@@ -305,11 +310,17 @@ namespace Mix.Cms.Lib.Helpers
         }
 
         public static async Task<RepositoryResponse<PaginationModel<TView>>> GetListPostByAdditionalField<TView>(
-            string fieldName, object fieldValue, string culture, MixDataType dataType
-            , MixCompareOperatorKind filterType = MixCompareOperatorKind.Equal
-            , string orderByPropertyName = null, Heart.Enums.DisplayDirection direction = Heart.Enums.DisplayDirection.Asc, int? pageSize = null, int? pageIndex = null
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+            string fieldName,
+            object fieldValue,
+            string culture,
+            MixDataType dataType,
+            MixCompareOperatorKind filterType = MixCompareOperatorKind.Equal,
+            string orderByPropertyName = null,
+            DisplayDirection direction = DisplayDirection.Asc,
+            int? pageSize = null,
+            int? pageIndex = null,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null) where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
@@ -324,8 +335,9 @@ namespace Mix.Cms.Lib.Helpers
                     }
                 };
                 // Get Value Predicate By Type
-                Expression<Func<MixDatabaseDataValue, bool>> valPredicate = m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST
-                   && m.MixDatabaseColumnName == fieldName;
+                Expression<Func<MixDatabaseDataValue, bool>> valPredicate =
+                    m => m.MixDatabaseName == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST
+                    && m.MixDatabaseColumnName == fieldName;
 
                 var pre = GetValuePredicate(fieldValue.ToString(), filterType, dataType);
                 if (pre != null)
@@ -335,16 +347,25 @@ namespace Mix.Cms.Lib.Helpers
 
                 var query = context.MixDatabaseDataValue.Where(valPredicate).Select(m => m.DataId).Distinct();
                 var dataIds = query.ToList();
+
                 var relatedQuery = context.MixDatabaseDataAssociation.Where(
-                         m => m.ParentType == MixDatabaseParentType.Post && m.Specificulture == culture
-                            && dataIds.Any(d => d == m.DataId));
+                    m => m.ParentType == MixDatabaseParentType.Post
+                    && m.Specificulture == culture
+                    && dataIds.Any(d => d == m.DataId));
+
                 var postIds = relatedQuery.Select(m => int.Parse(m.ParentId)).Distinct().AsEnumerable().ToList();
+
                 result = await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                    m => m.Specificulture == culture && postIds.Any(p => p == m.Id)
-                    , orderByPropertyName, direction
-                    , pageSize ?? 100, pageIndex ?? 0
-                    , null, null
-                    , context, transaction);
+                    m => m.Specificulture == culture && postIds.Any(p => p == m.Id),
+                    orderByPropertyName,
+                    direction,
+                    pageSize ?? 100,
+                    pageIndex ?? 0,
+                    null,
+                    null,
+                    context,
+                    transaction);
+
                 return result;
             }
             catch (Exception ex)
@@ -361,8 +382,7 @@ namespace Mix.Cms.Lib.Helpers
             }
         }
 
-        private static Expression<Func<MixDatabaseDataValue, bool>> GetValuePredicate(string fieldValue
-            , MixCompareOperatorKind filterType, MixDataType dataType)
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetValuePredicate(string fieldValue, MixCompareOperatorKind filterType, MixDataType dataType)
         {
             Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
             switch (dataType)
@@ -494,15 +514,14 @@ namespace Mix.Cms.Lib.Helpers
         }
 
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByMeta<TView>(
-            HttpContext context
-            , string keyword = null
-            , string culture = null
-            , string type = MixConstants.MixDatabaseName.SYSTEM_TAG
-            , int? pageSize = null
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+            HttpContext context,
+            string keyword = null,
+            string culture = null,
+            string type = MixConstants.MixDatabaseName.SYSTEM_TAG,
+            int? pageSize = null,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null) where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
-
             culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             keyword ??= context.Request.Query["Keyword"];
 
@@ -511,61 +530,73 @@ namespace Mix.Cms.Lib.Helpers
             {
                 pagingRequest.PageSize = pageSize.Value;
             }
-            return await ViewModels.MixPosts.Helper.GetModelistByMeta<TView>(
-                type, keyword,
+            return await MixPosts.Helper.GetModelistByMeta<TView>(
+                type,
+                keyword,
                 MixDatabaseNames.ADDITIONAL_COLUMN_POST,
                 pagingRequest,
-                culture, _context, _transaction);
+                culture,
+                _context,
+                _transaction);
         }
 
         public async static Task<RepositoryResponse<PaginationModel<TView>>> GetPostlistByAdditionalField<TView>(
-
-            string fieldName, string value, string culture
-            , string orderByPropertyName = null, DisplayDirection direction = DisplayDirection.Asc
-            , int? pageSize = null, int? pageIndex = 0
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-            where TView : ViewModelBase<MixCmsContext, MixPost, TView>
+            string fieldName,
+            string value,
+            string culture,
+            string orderByPropertyName = null,
+            DisplayDirection direction = DisplayDirection.Asc,
+            int? pageSize = null,
+            int? pageIndex = 0,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null) where TView : ViewModelBase<MixCmsContext, MixPost, TView>
         {
             int maxPageSize = MixService.GetAppSetting<int>("MaxPageSize");
             string orderBy = MixService.GetAppSetting<string>("OrderBy");
             pageSize = (pageSize > 0 && pageSize < maxPageSize) ? pageSize : maxPageSize;
             pageIndex = (pageIndex >= 0) ? pageIndex : 0;
 
-            return await Mix.Cms.Lib.ViewModels.MixPosts.Helper.SearchPostByField<TView>(
-                fieldName, value,
-                culture, orderByPropertyName ?? orderBy, direction, pageSize, pageIndex - 1, _context, _transaction);
+            return await MixPosts.Helper.SearchPostByField<TView>(
+                fieldName,
+                value,
+                culture,
+                orderByPropertyName ?? orderBy,
+                direction,
+                pageSize,
+                pageIndex - 1,
+                _context,
+                _transaction);
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixPagePosts.ReadViewModel>>> GetPostListByPageId(
-            HttpContext context
-            , int pageId
-            , string keyword = null
-            , string culture = null
-            , string orderBy = "CreatedDateTime"
-            , Heart.Enums.DisplayDirection direction = DisplayDirection.Desc
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null
-            )
+        public static async Task<RepositoryResponse<PaginationModel<MixPagePosts.ReadViewModel>>> GetPostListByPageId(
+            HttpContext context,
+            int pageId,
+            string keyword = null,
+            string culture = null,
+            string orderBy = "CreatedDateTime",
+            DisplayDirection direction = DisplayDirection.Desc,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
         {
             int.TryParse(context.Request.Query[MixRequestQueryKeywords.Page], out int page);
             int.TryParse(context.Request.Query[MixRequestQueryKeywords.PageSize], out int pageSize);
             page = (page > 0) ? page : 1;
-            var result = await ViewModels.MixPosts.Helper.GetPostListByPageId<Lib.ViewModels.MixPagePosts.ReadViewModel>(
+            var result = await MixPosts.Helper.GetPostListByPageId<MixPagePosts.ReadViewModel>(
                 pageId, keyword, culture,
                 orderBy, direction, pageSize, page - 1, _context, _transaction);
             result.Data.Items.ForEach(m => m.LoadPost(_context, _transaction));
             return result;
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
-            HttpContext context
-            , string mixDatabaseName
-            , string culture = null
-            , Heart.Enums.DisplayDirection direction = DisplayDirection.Desc
-            , MixCmsContext _context = null, IDbContextTransaction _transaction = null
-            )
+        public static async Task<RepositoryResponse<PaginationModel<MixDatas.ReadMvcViewModel>>> GetAttributeDataListBySet(
+            HttpContext context,
+            string mixDatabaseName,
+            string culture = null,
+            DisplayDirection direction = DisplayDirection.Desc,
+            MixCmsContext _context = null,
+            IDbContextTransaction _transaction = null)
         {
-            var result = await ViewModels.MixDatabaseDatas.Helper.FilterByKeywordAsync<ViewModels.MixDatabaseDatas.ReadMvcViewModel>(
-                    context.Request, culture, mixDatabaseName);
+            var result = await MixDatas.Helper.FilterByKeywordAsync<MixDatas.ReadMvcViewModel>(context.Request, culture, mixDatabaseName);
             return result;
         }
 
@@ -574,6 +605,27 @@ namespace Mix.Cms.Lib.Helpers
             return url.Contains($"/{srcCulture}")
                 ? url.Replace(srcCulture, destCulture)
                 : $"/{destCulture}{url}";
+        }
+
+        public static string BuildUrl(HttpContext context, NameValueCollection nameValueCollection)
+        {
+            var request = context.Request;
+            var uri = string.Format("{0}://{1}{2}", request.Scheme, request.Host, request.Path);
+            var queryString = HttpUtility.ParseQueryString(request.QueryString.Value);
+            var uriBuilder = new UriBuilder(uri);
+            queryString.Add(nameValueCollection);
+            uriBuilder.Query = queryString.ToString();
+            return uriBuilder.ToString();
+        }
+
+        public static string BuildUrl(HttpContext context, string key, string value)
+        {
+            var nameValueCollection = new NameValueCollection
+            {
+                { key, value }
+            };
+
+            return BuildUrl(context, nameValueCollection);
         }
     }
 }
