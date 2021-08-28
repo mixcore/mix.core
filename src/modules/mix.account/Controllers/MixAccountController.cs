@@ -114,7 +114,7 @@ namespace Mix.Account.Controllers
                 user.LastName = model.User.LastName;
                 user.Avatar = model.User.Avatar;
                 var updInfo = await _userManager.UpdateAsync(user);
-                var saveData = await model.UserData.SaveAsync();
+                //var saveData = await model.UserData.SaveAsync();
                 if (model.IsChangePassword)
                 {
                     var changePwd = await _userManager.ChangePasswordAsync(
