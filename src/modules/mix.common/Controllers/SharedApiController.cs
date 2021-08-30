@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
 using Mix.Identity.Services;
+using Mix.Common.Domain.Dtos;
 
 namespace Mix.Common.Controllers
 {
@@ -59,6 +60,24 @@ namespace Mix.Common.Controllers
         }
 
         #region Routes
+
+        [HttpPost]
+        [Route("encrypt-message")] 
+        public ActionResult EncryptMessage(CryptoMessageDto encryptMessage)
+        {
+            string key = encryptMessage.Key ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string msg = AesEncryptionHelper.EncryptString(encryptMessage.Message, key);
+            return Ok(msg);
+        }
+        
+        [HttpPost]
+        [Route("decrypt-message")] 
+        public ActionResult DecryptMessage(CryptoMessageDto encryptMessage)
+        {
+            string key = encryptMessage.Key ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string msg = AesEncryptionHelper.DecryptString(encryptMessage.Message, key);
+            return Ok(msg);
+        }
 
         [HttpGet]
         [Route("routes")]
