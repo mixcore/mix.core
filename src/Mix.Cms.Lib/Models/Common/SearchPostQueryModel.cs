@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.Common
         public SearchPostQueryModel(HttpRequest request, string culture): base(request, culture)
         {
             PostType = request.Query.TryGetValue("postType", out var postType)
-                ? postType : MixDatabaseNames.ADDITIONAL_COLUMN_POST;
+                ? postType : string.Empty;
             Category = request.Query.TryGetValue(MixRequestQueryKeywords.Category, out var category)
                 ? category: string.Empty;
             Tag = request.Query.TryGetValue(MixRequestQueryKeywords.Tag, out var tag)
