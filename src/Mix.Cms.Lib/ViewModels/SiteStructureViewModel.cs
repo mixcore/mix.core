@@ -24,6 +24,9 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("isIncludeConfigurations")]
         public bool IsIncludeConfigurations { get; set; } = true;
 
+        [JsonProperty("isIncludePermissions")]
+        public bool IsIncludePermissions { get; set; } = true;
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
@@ -44,6 +47,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("configurations")]
         public List<MixConfigurations.ImportViewModel> Configurations { get; set; } = new List<MixConfigurations.ImportViewModel>();
+
+        [JsonProperty("permissions")]
+        public List<MixPortalPages.UpdateViewModel> Permissions { get; set; } = new();
 
         [JsonProperty("languages")]
         public List<MixLanguages.ImportViewModel> Languages { get; set; } = new List<MixLanguages.ImportViewModel>();
@@ -98,6 +104,11 @@ namespace Mix.Cms.Lib.ViewModels
                         m => m.Specificulture == Specificulture, context, transaction).Data;
                     Languages = MixLanguages.ImportViewModel.Repository.GetModelListBy(
                         m => m.Specificulture == Specificulture, context, transaction).Data;
+                }
+
+                if (IsIncludePermissions)
+                {
+                    Permissions = MixPortalPages.UpdateViewModel.Repository.GetModelList(context, transaction).Data;
                 }
 
                 ExportPages(context, transaction);
@@ -340,6 +351,7 @@ namespace Mix.Cms.Lib.ViewModels
 
         private Dictionary<int, int> dicConfigurationIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicLanguageIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicPermissionIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicModuleIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
@@ -368,6 +380,10 @@ namespace Mix.Cms.Lib.ViewModels
                 if (result.IsSucceed && Languages != null && Languages.Count > 0)
                 {
                     result = await ImportLanguagesAsync(destCulture, context, transaction);
+                }
+                if (result.IsSucceed && Permissions != null && Permissions.Count > 0)
+                {
+                    result = await ImportPermissionsAsync(context, transaction);
                 }
                 if (result.IsSucceed && Pages != null && Pages.Count > 0)
                 {
@@ -398,7 +414,7 @@ namespace Mix.Cms.Lib.ViewModels
                 {
                     result = await ImportRelatedDatas(destCulture, context, transaction);
                 }
-                
+
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
             }
@@ -677,6 +693,57 @@ namespace Mix.Cms.Lib.ViewModels
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
             {
                 var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPages.ImportViewModel>(ex, isRoot, transaction);
+                result.IsSucceed = false;
+                result.Errors = error.Errors;
+                result.Exception = error.Exception;
+            }
+            finally
+            {
+                //if current Context is Root
+                if (isRoot)
+                {
+                    UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
+                }
+            }
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> ImportPermissionsAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                int startId = MixPortalPages.UpdateViewModel.ModelRepository.Max(m => m.Id, context, transaction).Data;
+                foreach (var item in Permissions)
+                {
+                    var oldId = item.Id;
+                    item.CreatedBy = CreatedBy;
+                    startId++;
+                    item.Id = startId;
+
+                    item.CreatedDateTime = DateTime.UtcNow;
+
+                    var saveResult = await item.SaveModelAsync(false, context, transaction);
+                    if (!saveResult.IsSucceed)
+                    {
+                        result.IsSucceed = false;
+                        result.Exception = saveResult.Exception;
+                        result.Errors = saveResult.Errors;
+                        break;
+                    }
+
+                    if (!dicPermissionIds.Any(m => m.Key == item.Id))
+                    {
+                        dicPermissionIds.Add(oldId, startId);
+                    }
+                }
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+            }
+            catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
+            {
+                var error = UnitOfWorkHelper<MixCmsContext>.HandleException<MixPortalPages.UpdateViewModel>(ex, isRoot, transaction);
                 result.IsSucceed = false;
                 result.Errors = error.Errors;
                 result.Exception = error.Exception;
