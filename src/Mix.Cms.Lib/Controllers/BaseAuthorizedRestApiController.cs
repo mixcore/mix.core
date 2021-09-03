@@ -244,6 +244,21 @@ namespace Mix.Cms.Lib.Controllers
             return GetResponse(result);
         }
 
+        // POST api/update-infos
+        [HttpPost]
+        [Route("save-many")]
+        public async Task<RepositoryResponse<List<TUpdate>>> UpdateInfos([FromBody] List<TUpdate> models)
+        {
+            if (models != null)
+            {
+                return await SaveManyAsync(models, false);
+            }
+            else
+            {
+                return new RepositoryResponse<List<TUpdate>>();
+            }
+        }
+
         [HttpPost]
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
@@ -355,7 +370,7 @@ namespace Mix.Cms.Lib.Controllers
             {
                 ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
             }
-            return await SaveListAsync(data.Data.Items, false);
+            return await SaveManyAsync(data.Data.Items, false);
         }
 
         protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
@@ -562,7 +577,7 @@ namespace Mix.Cms.Lib.Controllers
             return new RepositoryResponse<TModel>();
         }
 
-        protected async Task<RepositoryResponse<List<TUpdate>>> SaveListAsync(List<TUpdate> lstVm, bool isSaveSubModel)
+        protected async Task<RepositoryResponse<List<TUpdate>>> SaveManyAsync(List<TUpdate> lstVm, bool isSaveSubModel)
         {
             var result = await DefaultRepository<TDbContext, TModel, TUpdate>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 
