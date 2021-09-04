@@ -607,25 +607,28 @@ namespace Mix.Cms.Lib.Helpers
                 : $"/{destCulture}{url}";
         }
 
-        public static string BuildUrl(HttpContext context, NameValueCollection nameValueCollection)
-        {
-            var request = context.Request;
-            var uri = string.Format("{0}://{1}{2}", request.Scheme, request.Host, request.Path);
-            var queryString = HttpUtility.ParseQueryString(request.QueryString.Value);
-            var uriBuilder = new UriBuilder(uri);
-            queryString.Add(nameValueCollection);
-            uriBuilder.Query = queryString.ToString();
-            return uriBuilder.ToString();
-        }
-
         public static string BuildUrl(HttpContext context, string key, string value)
         {
             var nameValueCollection = new NameValueCollection
             {
                 { key, value }
             };
+            var request = context.Request;
+            var uri = string.Format("{0}://{1}{2}", request.Scheme, request.Host, request.Path);
+            var queryString = HttpUtility.ParseQueryString(request.QueryString.Value);
 
-            return BuildUrl(context, nameValueCollection);
+            var uriBuilder = new UriBuilder(uri);
+
+            if (context.Request.Query.ContainsKey(key))
+            {
+                queryString.Set(key, value);
+            }
+            else
+            {
+                queryString.Add(nameValueCollection);
+            }
+            uriBuilder.Query = queryString.ToString();
+            return uriBuilder.ToString();
         }
     }
 }

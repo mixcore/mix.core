@@ -245,7 +245,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                 Expression<Func<MixPagePost, bool>> postExp = null;
                 foreach (var item in Modules)
                 {
-                    item.Module.LoadData(_context: context, _transaction: transaction);
+                    item.Module.LoadData(_context: context, _transaction: transaction, pageIndex: pageIndex);
                 }
                 switch (Type)
                 {

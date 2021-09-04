@@ -167,6 +167,27 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
+        public static async Task<FormViewModel> GetFormDataAsync(string mixDatabase, string culture)
+        {
+            _ = int.TryParse(mixDatabase, out int mixDatabaseId);
+            var getAttrSet = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(
+                m => m.Name == mixDatabase || m.Id == mixDatabaseId);
+            if (getAttrSet.IsSucceed)
+            {
+                FormViewModel result = new FormViewModel()
+                {
+                    Specificulture = culture,
+                    MixDatabaseId = getAttrSet.Data.Id,
+                    MixDatabaseName = getAttrSet.Data.Name,
+                    Status = MixContentStatus.Published,
+                    Columns = getAttrSet.Data.Columns
+                };
+                result.ExpandView();
+                return result;
+            }
+            return null;
+        }
+
         public static RepositoryResponse<AdditionalViewModel> LoadAdditionalData(
             MixDatabaseParentType parentType,
             string parentId,

@@ -117,6 +117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
                 .Select(v => v.Column)
                 .ToList());
+            Columns = Columns.OrderBy(c => c.Priority).ToList();
             var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
             Obj = new JObject(
                 new JProperty("id", Id),

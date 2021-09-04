@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels
 
                 if (IsIncludePermissions)
                 {
-                    Permissions = MixPortalPages.UpdateViewModel.Repository.GetModelList(context, transaction).Data;
+                    Permissions = MixPortalPages.UpdateViewModel.Repository.GetModelListBy(m => m.Level == 0, context, transaction).Data;
                 }
 
                 ExportPages(context, transaction);
