@@ -72,7 +72,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Route("login")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] JObject data)
         {
@@ -80,6 +80,20 @@ namespace Mix.Cms.Api.Controllers.v1
             string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+            loginResult = await _idService.Login(model);
+            if (loginResult.IsSucceed)
+            {
+                return Ok(loginResult.Data);
+            }
+            return BadRequest(loginResult.Errors);
+        }
+
+        [Route("user-login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> UserLogin([FromBody] LoginViewModel model)
+        {
             RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
             loginResult = await _idService.Login(model);
             if (loginResult.IsSucceed)
@@ -114,7 +128,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Route("Register")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Register([FromBody] MixRegisterViewModel model)
         {
@@ -134,6 +148,20 @@ namespace Mix.Cms.Api.Controllers.v1
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)
                 {
+                    // Save Additional Data
+                    var formData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.GetFormDataAsync(
+                            MixDatabaseNames.SYSTEM_USER_DATA, MixService.GetAppSetting<string>("DefaultCulture"));
+                    if (formData != null)
+                    {
+                        formData.ParentId = user.UserName;
+                        formData.ParentType = MixDatabaseParentType.User;
+                        formData.Obj = model.UserData;
+                        var saveData = await formData.SaveModelAsync(true);
+                        result.IsSucceed = saveData.IsSucceed;
+                        result.Errors = saveData.Errors;
+                        result.Exception = saveData.Exception;
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
@@ -172,7 +200,7 @@ namespace Mix.Cms.Api.Controllers.v1
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             var result = new RepositoryResponse<bool>();
-            
+
             List<string> errors = new List<string>();
 
             if (role == null)
@@ -264,7 +292,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return BadRequest();
         }
 
-        // POST api/template
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [MixAuthorize]
         [HttpPost]
@@ -275,6 +303,62 @@ namespace Mix.Cms.Api.Controllers.v1
             var result = new RepositoryResponse<MixUserViewModel>() { IsSucceed = true };
             if (model != null && model.User != null)
             {
+                var user = await _userManager.FindByIdAsync(model.User.Id);
+                user.Email = model.User.Email;
+                user.FirstName = model.User.FirstName;
+                user.LastName = model.User.LastName;
+                user.Avatar = model.User.Avatar;
+                var updInfo = await _userManager.UpdateAsync(user);
+                result.IsSucceed = updInfo.Succeeded;
+                if (result.IsSucceed)
+                {
+                    var saveData = await model.UserData.SaveModelAsync(true);
+                    result.IsSucceed = saveData.IsSucceed;
+                    result.Errors = saveData.Errors;
+                    result.Exception = saveData.Exception;
+                }
+                if (result.IsSucceed && model.IsChangePassword)
+                {
+                    var changePwd = await _userManager.ChangePasswordAsync(model.User, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
+                    if (!changePwd.Succeeded)
+                    {
+                        foreach (var err in changePwd.Errors)
+                        {
+                            result.Errors.Add(err.Description);
+                        }
+                    }
+                    else
+                    {
+                        // Remove other token if change password success
+                        var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
+                        await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                    }
+                }
+                MixFileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.User.Id}");
+                return result;
+            }
+            return result;
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("save-my-profile")]
+        public async Task<RepositoryResponse<MixUserViewModel>> SaveMyProfile(
+            [FromBody] MixUserViewModel model)
+        {
+            var result = new RepositoryResponse<MixUserViewModel>() { IsSucceed = true };
+            string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
+
+
+            if (model != null && model.User != null)
+            {
+                if (id != model.User.Id)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Invalid request");
+                    return result;
+                }
+
                 var user = await _userManager.FindByIdAsync(model.User.Id);
                 user.Email = model.User.Email;
                 user.FirstName = model.User.FirstName;
