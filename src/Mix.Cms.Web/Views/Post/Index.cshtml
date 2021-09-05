@@ -54,7 +54,7 @@ else
     var domain = url.IndexOf("http") == -1 ? $"{Context.Request.Scheme}://{Context.Request.Host}" : string.Empty;
 }
 @section Seo{
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
+    <title>@Model.SeoTitle</title>
     <meta property="og:type" content="website" />
     <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
     <link rel="canonical" href="@domain@url">

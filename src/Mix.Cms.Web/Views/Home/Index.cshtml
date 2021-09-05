@@ -48,7 +48,7 @@ else
     string image = ViewData["OgImage"] != null ? (string)ViewData["OgImage"] : Model.ThumbnailUrl;
 }
 @section Seo{
-    <title>@(MixService.GetConfig<string>("SiteName", ViewBag.culture)) - @Model.SeoTitle</title>
+    <title>@Model.SeoTitle</title>
     <meta property="og:type" content="post" />
     <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
     <link rel="canonical" href="@domain@url" />
