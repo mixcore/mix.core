@@ -252,9 +252,9 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (user != null)
             {
-                var mixUser = new MixUserViewModel(user);
+                var mixUser = new MixPortalUserViewModel(user);
                 await mixUser.LoadUserDataAsync();
-                return Ok(new RepositoryResponse<MixUserViewModel>()
+                return Ok(new RepositoryResponse<MixPortalUserViewModel>()
                 {
                     IsSucceed = true,
                     Data = mixUser
