@@ -167,6 +167,35 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
+        public static async Task<RepositoryResponse<FormViewModel>> SaveObjAsync(string databaseName, JObject obj, string parentId = null, MixDatabaseParentType? parentType = null, string culture = null)
+        {
+            culture ??= MixService.GetAppSetting<string>("DefaultCulture");
+            string id = obj.Value<string>("id");
+            FormViewModel formData;
+            
+            if (id == null)
+            {
+                formData = await GetFormDataAsync(databaseName, culture);
+            }
+            else
+            {
+                var getFormData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == id && m.Specificulture == culture);
+                formData = getFormData.Data;
+            }
+
+            if (formData != null)
+            {                
+                formData.ParentId = parentId;
+                if (parentType.HasValue)
+                {
+                    formData.ParentType = parentType.Value;
+                }
+                formData.Obj = obj;
+                return await formData.SaveModelAsync(true);
+            }
+            return new();
+        }
+
         public static async Task<FormViewModel> GetFormDataAsync(string mixDatabase, string culture)
         {
             _ = int.TryParse(mixDatabase, out int mixDatabaseId);

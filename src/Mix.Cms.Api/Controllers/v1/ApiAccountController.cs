@@ -148,19 +148,11 @@ namespace Mix.Cms.Api.Controllers.v1
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)
                 {
-                    // Save Additional Data
-                    var formData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.GetFormDataAsync(
-                            MixDatabaseNames.SYSTEM_USER_DATA, MixService.GetAppSetting<string>("DefaultCulture"));
-                    if (formData != null)
-                    {
-                        formData.ParentId = user.UserName;
-                        formData.ParentType = MixDatabaseParentType.User;
-                        formData.Obj = model.UserData;
-                        var saveData = await formData.SaveModelAsync(true);
-                        result.IsSucceed = saveData.IsSucceed;
-                        result.Errors = saveData.Errors;
-                        result.Exception = saveData.Exception;
-                    }
+                    var saveData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.SaveObjAsync(
+                        MixDatabaseNames.SYSTEM_USER_DATA, model.UserData, user.UserName, MixDatabaseParentType.User);
+                    result.IsSucceed = saveData.IsSucceed;
+                    result.Errors = saveData.Errors;
+                    result.Exception = saveData.Exception;
 
                     _logger.LogInformation("User created a new account with password.");
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
@@ -274,16 +266,16 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("my-profile")]
-        public async Task<ActionResult<MixUserViewModel>> MyProfile()
+        public async Task<ActionResult<MixPortalUserViewModel>> MyProfile()
         {
             string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
             ApplicationUser user = await _userManager.FindByIdAsync(id); ;
 
             if (user != null)
             {
-                var mixUser = new MixUserViewModel(user);
+                var mixUser = new MixPortalUserViewModel(user);
                 await mixUser.LoadUserDataAsync();
-                return Ok(new RepositoryResponse<MixUserViewModel>()
+                return Ok(new RepositoryResponse<MixPortalUserViewModel>()
                 {
                     IsSucceed = true,
                     Data = mixUser
@@ -297,10 +289,10 @@ namespace Mix.Cms.Api.Controllers.v1
         [MixAuthorize]
         [HttpPost]
         [Route("save")]
-        public async Task<RepositoryResponse<MixUserViewModel>> Save(
-            [FromBody] MixUserViewModel model)
+        public async Task<RepositoryResponse<MixPortalUserViewModel>> Save(
+            [FromBody] MixPortalUserViewModel model)
         {
-            var result = new RepositoryResponse<MixUserViewModel>() { IsSucceed = true };
+            var result = new RepositoryResponse<MixPortalUserViewModel>() { IsSucceed = true };
             if (model != null && model.User != null)
             {
                 var user = await _userManager.FindByIdAsync(model.User.Id);
@@ -350,32 +342,32 @@ namespace Mix.Cms.Api.Controllers.v1
             string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
 
 
-            if (model != null && model.User != null)
+            if (model != null)
             {
-                if (id != model.User.Id)
+                if (id != model.Id)
                 {
                     result.IsSucceed = false;
                     result.Errors.Add("Invalid request");
                     return result;
                 }
 
-                var user = await _userManager.FindByIdAsync(model.User.Id);
-                user.Email = model.User.Email;
-                user.FirstName = model.User.FirstName;
-                user.LastName = model.User.LastName;
-                user.Avatar = model.User.Avatar;
+                var user = await _userManager.FindByIdAsync(model.Id);
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
                 var updInfo = await _userManager.UpdateAsync(user);
                 result.IsSucceed = updInfo.Succeeded;
                 if (result.IsSucceed)
                 {
-                    var saveData = await model.UserData.SaveModelAsync(true);
+                    var saveData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.SaveObjAsync(
+                        MixDatabaseNames.SYSTEM_USER_DATA, model.UserData, user.UserName, MixDatabaseParentType.User);
                     result.IsSucceed = saveData.IsSucceed;
                     result.Errors = saveData.Errors;
                     result.Exception = saveData.Exception;
                 }
                 if (result.IsSucceed && model.IsChangePassword)
                 {
-                    var changePwd = await _userManager.ChangePasswordAsync(model.User, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
+                    var changePwd = await _userManager.ChangePasswordAsync(user, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
                     if (!changePwd.Succeeded)
                     {
                         foreach (var err in changePwd.Errors)
@@ -390,7 +382,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
                     }
                 }
-                MixFileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.User.Id}");
+                MixFileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
                 return result;
             }
             return result;

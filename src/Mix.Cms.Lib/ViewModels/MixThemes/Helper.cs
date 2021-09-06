@@ -85,13 +85,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
         }
 
-        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string userName, string culture, IFormFile assets, IFormFile theme)
+        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string username, string culture, IFormFile assets, IFormFile theme)
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<InitViewModel>();
             if (data != null)
             {
-                data.CreatedBy = userName;
+                data.CreatedBy = username;
                 data.Status = MixContentStatus.Published;
                 string importFolder = MixFolders.ThemePackage;
                 if (theme != null)

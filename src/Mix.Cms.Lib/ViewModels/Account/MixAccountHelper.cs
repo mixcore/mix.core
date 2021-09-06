@@ -15,14 +15,14 @@ namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class MixAccountHelper
     {
-        public static async Task<MixDatabaseDatas.AdditionalViewModel> LoadUserInfoAsync(string userName,
+        public static async Task<MixDatabaseDatas.AdditionalViewModel> LoadUserInfoAsync(string username,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var culture = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                var getInfo = await MixDatabaseDatas.Helper.LoadAdditionalDataAsync(MixDatabaseParentType.User, userName, MixDatabaseNames.SYSTEM_USER_DATA
+                var getInfo = await MixDatabaseDatas.Helper.LoadAdditionalDataAsync(MixDatabaseParentType.User, username, MixDatabaseNames.SYSTEM_USER_DATA
                     , culture, context, transaction);
                 return getInfo.Data;
             }
