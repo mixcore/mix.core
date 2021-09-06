@@ -160,8 +160,8 @@ a,
 }
 
 .main-sidebar {
-  width: 15%;
-  max-width: 250px;
+  width: 280px;
+  max-width: 280px;
   z-index: 1;
 }
 .main-sidebar hr {
