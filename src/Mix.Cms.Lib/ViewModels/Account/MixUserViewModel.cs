@@ -59,7 +59,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
                 if(UserData == null)
                 {
                     var data = await MixAccountHelper.LoadUserInfoAsync(Username);
-                    UserData = data.Obj;
+                    UserData = data?.Obj;
                 }
                 UserRoles = MixAccountHelper.GetRoleNavs(Id);
             }
