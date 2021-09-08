@@ -170,8 +170,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             }
         }
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
+        [JsonProperty("additionalData")]
+        public MixDatabaseDataAssociations.ReadMvcViewModel AdditionalData { get; set; }
 
         [JsonProperty("bodyClass")]
         public string BodyClass => CssClass;
@@ -439,7 +439,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_PAGE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
+                AdditionalData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
@@ -452,12 +452,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public bool HasValue(string fieldName)
         {
-            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+            return AdditionalData != null && AdditionalData.Data.Obj.GetValue(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
         {
-            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
+            return MixCmsHelper.Property<T>(AdditionalData?.Data?.Obj, fieldName);
         }
 
         #endregion Expands

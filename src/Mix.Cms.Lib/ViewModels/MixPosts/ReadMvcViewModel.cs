@@ -173,8 +173,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("Databases")]
         public List<MixDatabases.ReadViewModel> Databases { get; set; } = new List<MixDatabases.ReadViewModel>();
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
+        [JsonProperty("additionalData")]
+        public MixDatabaseDataAssociations.ReadMvcViewModel AdditionalData { get; set; }
 
         [JsonProperty("sysTags")]
         public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
@@ -326,7 +326,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == Type, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
+                AdditionalData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data ?? new MixDatabaseDataAssociations.ReadMvcViewModel();
             }
@@ -334,7 +334,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public bool HasValue(string fieldName)
         {
-            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+            return AdditionalData != null && AdditionalData.Data.Obj.GetValue(fieldName) != null;
         }
 
         /// <summary>Get Post's Property by type and name</summary>
@@ -343,7 +343,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <returns>T</returns>
         public T Property<T>(string fieldName)
         {
-            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
+            return MixCmsHelper.Property<T>(AdditionalData?.Data?.Obj, fieldName);
         }
 
         /// <summary>Gets the module.</summary>
