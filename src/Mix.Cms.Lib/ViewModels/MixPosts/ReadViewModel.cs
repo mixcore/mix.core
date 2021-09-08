@@ -152,8 +152,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
+        [JsonProperty("additionalData")]
+        public MixDatabaseDataAssociations.ReadMvcViewModel AdditionalData { get; set; }
 
         [JsonProperty("sysTags")]
         public List<MixDatabaseDataAssociations.FormViewModel> SysTags { get; set; } = new List<MixDatabaseDataAssociations.FormViewModel>();
@@ -413,7 +413,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
+                AdditionalData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
@@ -425,9 +425,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         /// <returns>T</returns>
         public T Property<T>(string fieldName)
         {
-            if (AttributeData != null)
+            if (AdditionalData != null)
             {
-                var field = AttributeData.Data.Obj.GetValue(fieldName);
+                var field = AdditionalData.Data.Obj.GetValue(fieldName);
                 if (field != null)
                 {
                     return field.Value<T>();

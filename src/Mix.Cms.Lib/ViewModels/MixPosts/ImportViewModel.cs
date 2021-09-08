@@ -120,8 +120,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("attributes")]
         public MixDatabases.ImportViewModel Attributes { get; set; }
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.UpdateViewModel AttributeData { get; set; }
+        [JsonProperty("additionalData")]
+        public MixDatabaseDataAssociations.UpdateViewModel AdditionalData { get; set; }
 
         [JsonProperty("sysCategories")]
         public List<MixDatabaseDataAssociations.FormViewModel> SysCategories { get; set; }
