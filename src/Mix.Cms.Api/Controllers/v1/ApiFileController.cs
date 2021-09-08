@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
@@ -102,6 +103,10 @@ namespace Mix.Cms.Api.Controllers.v1
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
+            if (!request.Key.StartsWith(MixFolders.WebRootPath))
+            {
+                return new();
+            }
             var files = MixFileRepository.Instance.GetTopFiles(request.Key);
             var directories = MixFileRepository.Instance.GetTopDirectories(request.Key);
             return new RepositoryResponse<FilePageViewModel>()
