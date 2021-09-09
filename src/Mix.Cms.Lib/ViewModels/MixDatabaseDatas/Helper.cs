@@ -74,13 +74,32 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             if (getEdmInfo.IsSucceed)
             {
                 var edm = getEdmInfo.Data;
-                string body = GetEdmBody(edm.Property<string>("template"), data);
-                MixService.SendMail(
-                    edm.Property<string>("title"),
-                    body,
-                    edm.Property<string>("recipients"),
-                    edm.Property<string>("from")
-                    );
+                bool sendToSender = edm.Property<bool>("sendToSender");
+                string senderColumnName = edm.Property<string>("senderColumnName");
+                string recipients = edm.Property<string>("recipients");
+                string senderEmail = GetJToken(senderColumnName, data)?.Value<string>();
+
+                if (sendToSender && !string.IsNullOrEmpty(senderEmail))
+                {
+                    string senderBody = GetEdmBody(edm.Property<string>("senderTemplate"), data);
+                    MixService.SendMail(
+                        edm.Property<string>("title"),
+                        senderBody,
+                        senderEmail,
+                        edm.Property<string>("from")
+                        );
+                }
+
+                if (!string.IsNullOrEmpty(recipients))
+                {
+                    string senderBody = GetEdmBody(edm.Property<string>("adminTemplate"), data);
+                    MixService.SendMail(
+                        edm.Property<string>("title"),
+                        senderBody,
+                        senderEmail,
+                        edm.Property<string>("from")
+                        );
+                }
             }
         }
 
@@ -88,18 +107,32 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         {
             string regex = @"(\[\[)(\w+)(\]\])";
             Regex rgx = new Regex(regex, RegexOptions.IgnoreCase);
-            while (rgx.IsMatch(template))
+            var matches = rgx.Matches(template);
+            if (matches.Count > 0)
             {
-                Match m = rgx.Match(template);
-                JToken val = data;
-                string[] names = m.Groups[2].Value.Split('.');
-                foreach (var name in names)
+                foreach (Match m in matches)
                 {
-                    val = val[name];
+                    var colName = m.Groups[2].Value;
+                    JToken val = GetJToken(m.Groups[2].Value, data);
+                    template = template.Replace($"[[{colName}]]", val?.Value<string>() ?? m.Groups[0].Value);
                 }
-                template = rgx.Replace(template, val.Value<string>());
             }
             return template;
+        }
+
+        private static JToken GetJToken(string path, JObject data)
+        {
+            JToken result = data;
+            string[] names = path.Split('.');
+            foreach (var name in names)
+            {
+                result = result[name];
+                if (result is null)
+                {
+                    break;
+                }
+            }
+            return result;
         }
 
         public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
