@@ -23,6 +23,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 {
@@ -65,6 +66,40 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
+        }
+
+        public static async Task SendMail(string mixDatabase, string culture, JObject data)
+        {
+            var getEdmInfo = await GetSingleDataAsync<FormViewModel>(mixDatabase, "databaseName", MixDatabaseNames.EDM, culture);
+            if (getEdmInfo.IsSucceed)
+            {
+                var edm = getEdmInfo.Data;
+                string body = GetEdmBody(edm.Property<string>("template"), data);
+                MixService.SendMail(
+                    edm.Property<string>("title"),
+                    body,
+                    edm.Property<string>("recipients"),
+                    edm.Property<string>("from")
+                    );
+            }
+        }
+
+        private static string GetEdmBody(string template, JObject data)
+        {
+            string regex = @"(\[\[)(\w+)(\]\])";
+            Regex rgx = new Regex(regex, RegexOptions.IgnoreCase);
+            while (rgx.IsMatch(template))
+            {
+                Match m = rgx.Match(template);
+                JToken val = data;
+                string[] names = m.Groups[2].Value.Split('.');
+                foreach (var name in names)
+                {
+                    val = val[name];
+                }
+                template = rgx.Replace(template, val.Value<string>());
+            }
+            return template;
         }
 
         public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
@@ -199,17 +234,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         public static async Task<FormViewModel> GetFormDataAsync(string mixDatabase, string culture)
         {
             _ = int.TryParse(mixDatabase, out int mixDatabaseId);
-            var getAttrSet = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(
+            var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(
                 m => m.Name == mixDatabase || m.Id == mixDatabaseId);
-            if (getAttrSet.IsSucceed)
+            if (getDatabase.IsSucceed)
             {
                 FormViewModel result = new FormViewModel()
                 {
                     Specificulture = culture,
-                    MixDatabaseId = getAttrSet.Data.Id,
-                    MixDatabaseName = getAttrSet.Data.Name,
+                    MixDatabaseId = getDatabase.Data.Id,
+                    MixDatabaseName = getDatabase.Data.Name,
                     Status = MixContentStatus.Published,
-                    Columns = getAttrSet.Data.Columns
+                    Columns = getDatabase.Data.Columns
                 };
                 result.ExpandView();
                 return result;
