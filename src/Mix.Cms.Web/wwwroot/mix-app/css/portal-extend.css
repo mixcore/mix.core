@@ -125,7 +125,8 @@ a,
   border-radius: 1rem;
   border-color: #fff;
 }
-.card .card-img, .card .card-img-top {
+.card .card-img,
+.card .card-img-top {
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
@@ -202,6 +203,14 @@ a,
 
 .sub-sidebar {
   width: 35%;
+}
+
+.list-thumbnail-img-fluid {
+  /* max-width: 100%; */
+  height: 25px;
+  /* max-height: 197.89px; */
+  width: 50px;
+  object-fit: cover;
 }
 
 .page-header-feature {
