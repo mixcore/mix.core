@@ -111,7 +111,7 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
-            instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
+            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
             instance.DefaultCulture = instance.GlobalSettings[MixAppSettingKeywords.DefaultCulture].Value<string>();
             MixCommonHelper.WebConfigInstance = jsonSettings;
         }
@@ -419,14 +419,16 @@ namespace Mix.Cms.Lib.Services
                 SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"))
                 {
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password")),
+                    Credentials = new NetworkCredential(
+                        instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password")
+                        ),
                     Port = instance.Smtp.Value<int>("Port"),
                     EnableSsl = instance.Smtp.Value<bool>("SSL")
                 };
 
                 client.Send(mailMessage);
             }
-            catch
+            catch(Exception e)
             {
                 try
                 {

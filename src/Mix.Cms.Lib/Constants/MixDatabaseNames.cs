@@ -2,6 +2,7 @@
 {
     public class MixDatabaseNames
     {
+        public const string EDM = "sys_mix_edm";
         public const string ADDITIONAL_COLUMN_PAGE = "sys_additional_column_page";
         public const string ADDITIONAL_COLUMN_POST = "sys_additional_column_post";
         public const string ADDITIONAL_COLUMN_MODULE = "sys_additional_column_module";

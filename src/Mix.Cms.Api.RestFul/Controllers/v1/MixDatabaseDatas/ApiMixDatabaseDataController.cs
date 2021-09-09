@@ -44,20 +44,25 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
-            var formData = await getFormDataAsync(mixDatabase);
+            var formData = Helper.GetFormDataAsync(mixDatabase, _lang);
             return formData != null
                 ? Ok(formData)
                 : BadRequest(mixDatabase);
         }
 
         [HttpPost("save-data/{mixDatabase}")]
-        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, [FromBody] JObject data)
+        [HttpPost("save-data/{mixDatabase}/{sendMail}/{sendSms}")]
+        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, bool? sendMail, bool? sendSms, [FromBody] JObject data)
         {
-            var formData = await getFormDataAsync(mixDatabase);
+            var formData = await Helper.GetFormDataAsync(mixDatabase, _lang);
             if (formData != null)
             {
                 formData.Obj = data;
                 var result = await SaveAsync(formData, true);
+                if (result.IsSucceed && sendMail.HasValue && sendMail.Value)
+                {
+                    await Helper.SendMail(mixDatabase, _lang, data);
+                }
                 return GetResponse(result);
             }
             return BadRequest(mixDatabase);
@@ -76,26 +81,5 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
             return NotFound(dataId);
         }
-
-        private async Task<FormViewModel> getFormDataAsync(string mixDatabase)
-        {
-            _ = int.TryParse(mixDatabase, out int mixDatabaseId);
-            var getAttrSet = await Lib.ViewModels.MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Name == mixDatabase || m.Id == mixDatabaseId);
-            if (getAttrSet.IsSucceed)
-            {
-                FormViewModel result = new FormViewModel()
-                {
-                    Specificulture = _lang,
-                    MixDatabaseId = getAttrSet.Data.Id,
-                    MixDatabaseName = getAttrSet.Data.Name,
-                    Status = MixContentStatus.Published,
-                    Columns = getAttrSet.Data.Columns
-                };
-                result.ExpandView();
-                return result;
-            }
-            return null;
-        }
-
     }
 }
