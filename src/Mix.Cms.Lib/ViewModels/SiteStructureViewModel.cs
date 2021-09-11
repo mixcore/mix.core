@@ -154,9 +154,9 @@ namespace Mix.Cms.Lib.ViewModels
         {
             foreach (var item in MixDatabases)
             {
-                item.Fields = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
+                item.Columns = MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(a => a.MixDatabaseId == item.Id, context, transaction).Data?.OrderBy(a => a.Priority).ToList();
                 // Filter list reference field => Add to Export Data if not exist
-                var refFields = item.Fields.Where(f => f.DataType == MixDataType.Reference);
+                var refFields = item.Columns.Where(f => f.DataType == MixDataType.Reference);
 
                 foreach (var field in refFields)
                 {
@@ -274,7 +274,7 @@ namespace Mix.Cms.Lib.ViewModels
         {
             if (!RelatedData.Any(m => m.ParentId == id && m.ParentType == type))
             {
-                var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetSingleModel(
+                var getRelatedData = MixDatabaseDataAssociations.ImportViewModel.Repository.GetFirstModel(
                             m => m.Specificulture == Specificulture && m.ParentType == type
                                 && m.ParentId == id, context, transaction);
                 if (getRelatedData.IsSucceed)
@@ -543,7 +543,7 @@ namespace Mix.Cms.Lib.ViewModels
                             dicMixDatabaseIds.Add(set.Id, startId);
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
-                            mixDatabaseColumns.AddRange(set.Fields
+                            mixDatabaseColumns.AddRange(set.Columns
                                     .Where(m => !mixDatabaseColumns.Any(n => n.Id == m.Id))
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
@@ -839,12 +839,12 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Columns = item.Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Fields;
+                        item.Columns = item.Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Columns;
                         foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;
                             var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
-                            var newField = newSet?.Fields.FirstOrDefault(m => m.Name == field.Name);
+                            var newField = newSet?.Columns.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {
                                 field.Id = newField.Id;

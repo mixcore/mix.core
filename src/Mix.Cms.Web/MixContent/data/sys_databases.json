@@ -18,7 +18,7 @@
       "lastModified": "2020-06-18T05:20:33.207",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 1,
           "specificulture": null,
@@ -523,7 +523,7 @@
       "lastModified": null,
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 13,
           "specificulture": null,
@@ -653,7 +653,7 @@
       "lastModified": "2021-02-07T18:09:23.0925602",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 16,
           "specificulture": null,
@@ -891,7 +891,7 @@
       "lastModified": null,
       "priority": 0,
       "status": 2,
-      "fields": [],
+      "columns": [],
       "isExportData": true
     },
     {
@@ -912,7 +912,7 @@
       "lastModified": "2021-02-10T15:35:42.5384643",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 22,
           "specificulture": null,
@@ -1006,7 +1006,7 @@
       "lastModified": null,
       "priority": 1,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 24,
           "specificulture": null,
@@ -1136,7 +1136,7 @@
       "lastModified": null,
       "priority": 2,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 27,
           "specificulture": null,
@@ -1351,7 +1351,7 @@
       "lastModified": null,
       "priority": 3,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 32,
           "specificulture": null,
@@ -1481,7 +1481,7 @@
       "lastModified": "2020-09-26T10:19:31",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 35,
           "specificulture": null,
@@ -1611,7 +1611,7 @@
       "lastModified": "2021-02-12T12:34:37.0145546",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 39,
           "specificulture": null,
@@ -1741,7 +1741,7 @@
       "lastModified": "2021-02-12T06:33:00.5099852",
       "priority": 0,
       "status": 2,
-      "fields": [
+      "columns": [
         {
           "id": 42,
           "specificulture": null,
@@ -1935,7 +1935,7 @@
       "isExportData": true
     },
     {
-      "id": 18,
+      "id": 13,
       "ReferenceId": null,
       "type": "System",
       "title": "Mix Edm",

@@ -73,8 +73,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 
         #region Views
 
-        [JsonProperty("fields")]
-        public List<Lib.ViewModels.MixDatabaseColumns.UpdateViewModel> Fields { get; set; }
+        [JsonProperty("columns")]
+        public List<Lib.ViewModels.MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
 
         [JsonIgnore]
         [JsonProperty("data")]
@@ -135,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {
@@ -158,7 +158,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (result.IsSucceed)
             {
-                foreach (var item in Fields)
+                foreach (var item in Columns)
                 {
                     if (result.IsSucceed)
                     {
