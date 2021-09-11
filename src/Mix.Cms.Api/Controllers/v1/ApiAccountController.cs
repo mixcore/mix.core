@@ -148,6 +148,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, MixDefaultRoles.Guest);
                     var saveData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.SaveObjAsync(
                         MixDatabaseNames.SYSTEM_USER_DATA, model.UserData, user.UserName, MixDatabaseParentType.User);
                     result.IsSucceed = saveData.IsSucceed;

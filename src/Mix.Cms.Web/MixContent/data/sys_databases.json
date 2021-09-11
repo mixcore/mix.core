@@ -1938,6 +1938,162 @@
       "id": 13,
       "ReferenceId": null,
       "type": "System",
+      "title": "Permission Endpoint",
+      "name": "sys_permission_endpoint",
+      "description": null,
+      "formTemplate": null,
+      "createdBy": "tinku",
+      "createdDateTime": "2021-06-18T01:25:48",
+      "modifiedBy": null,
+      "lastModified": null,
+      "priority": 0,
+      "status": "Published",
+      "specificulture": null,
+      "columns": [
+        {
+          "id": 90,
+          "specificulture": null,
+          "mixDatabaseId": 13,
+          "mixDatabaseName": "sys_permission_endpoint",
+          "configurations": "{\"maxLength\":null,\"belongTo\":null,\"optionsConfigurationName\":null,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\",\"width\":null,\"height\":null,\"isCrop\":false}}",
+          "referenceId": null,
+          "regex": null,
+          "isRegex": false,
+          "title": "TItle",
+          "dataType": "Custom",
+          "defaultValue": null,
+          "strOptions": "[]",
+          "options": [],
+          "name": "title",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "isMultiple": false,
+          "createdBy": null,
+          "createdDateTime": "2021-06-18T01:25:49",
+          "modifiedBy": null,
+          "lastModified": null,
+          "priority": 1,
+          "status": "Published",
+          "columnConfigurations": {
+            "maxLength": null,
+            "belongTo": null,
+            "optionsConfigurationName": null,
+            "upload": {
+              "arrayAccepts": [],
+              "accepts": "",
+              "width": null,
+              "height": null,
+              "isCrop": false
+            }
+          }
+        },
+        {
+          "id": 91,
+          "specificulture": null,
+          "mixDatabaseId": 13,
+          "mixDatabaseName": "sys_permission_endpoint",
+          "configurations": "{\"maxLength\":null,\"belongTo\":null,\"optionsConfigurationName\":null,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\",\"width\":null,\"height\":null,\"isCrop\":false}}",
+          "referenceId": null,
+          "regex": null,
+          "isRegex": false,
+          "title": "Endpoint",
+          "dataType": "Custom",
+          "defaultValue": null,
+          "strOptions": "[]",
+          "options": [],
+          "name": "endpoint",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": false,
+          "isUnique": false,
+          "isMultiple": false,
+          "createdBy": null,
+          "createdDateTime": "2021-06-18T01:25:49",
+          "modifiedBy": null,
+          "lastModified": null,
+          "priority": 2,
+          "status": "Published",
+          "columnConfigurations": {
+            "maxLength": null,
+            "belongTo": null,
+            "optionsConfigurationName": null,
+            "upload": {
+              "arrayAccepts": [],
+              "accepts": "",
+              "width": null,
+              "height": null,
+              "isCrop": false
+            }
+          }
+        },
+        {
+          "id": 92,
+          "specificulture": null,
+          "mixDatabaseId": 13,
+          "mixDatabaseName": "sys_permission_endpoint",
+          "configurations": "{\"maxLength\":null,\"belongTo\":null,\"optionsConfigurationName\":null,\"upload\":{\"arrayAccepts\":[],\"accepts\":\"\",\"width\":null,\"height\":null,\"isCrop\":false}}",
+          "referenceId": null,
+          "regex": null,
+          "isRegex": false,
+          "title": "Method",
+          "dataType": "Text",
+          "defaultValue": null,
+          "strOptions": "[\r\n  {\r\n    \"value\": \"GET\",\r\n    \"dataType\": 7\r\n  },\r\n  {\r\n    \"value\": \"POST\",\r\n    \"dataType\": 7\r\n  },\r\n  {\r\n    \"value\": \"PUT\",\r\n    \"dataType\": 7\r\n  },\r\n  {\r\n    \"value\": \"PATCH\",\r\n    \"dataType\": 7\r\n  },\r\n  {\r\n    \"value\": \"DELETE\",\r\n    \"dataType\": 7\r\n  }\r\n]",
+          "options": [
+            {
+              "value": "GET",
+              "dataType": 7
+            },
+            {
+              "value": "POST",
+              "dataType": 7
+            },
+            {
+              "value": "PUT",
+              "dataType": 7
+            },
+            {
+              "value": "PATCH",
+              "dataType": 7
+            },
+            {
+              "value": "DELETE",
+              "dataType": 7
+            }
+          ],
+          "name": "method",
+          "isRequire": false,
+          "isEncrypt": false,
+          "isSelect": true,
+          "isUnique": false,
+          "isMultiple": false,
+          "createdBy": null,
+          "createdDateTime": "2021-06-18T01:25:49",
+          "modifiedBy": null,
+          "lastModified": null,
+          "priority": 3,
+          "status": "Published",
+          "columnConfigurations": {
+            "maxLength": null,
+            "belongTo": null,
+            "optionsConfigurationName": null,
+            "upload": {
+              "arrayAccepts": [],
+              "accepts": "",
+              "width": null,
+              "height": null,
+              "isCrop": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "ReferenceId": null,
+      "type": "System",
       "title": "Mix Edm",
       "name": "sys_mix_edm",
       "description": null,

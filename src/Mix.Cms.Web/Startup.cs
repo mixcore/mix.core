@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -95,6 +96,7 @@ namespace Mix.Cms.Web
             //services.AddMixGprc();
             services.AddMixScheduler(Configuration);
 
+            services.AddScoped<InitCmsService>();
             services.AddSingleton<MixCacheService>();
             services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
             services.AddScoped<MixIdentityService>();
@@ -182,6 +184,7 @@ namespace Mix.Cms.Web
                     {
                         if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
                         {
+                            db.Id = 0;
                             db.SaveModel(true, ctx, transaction);
                         }
                     }
@@ -192,6 +195,9 @@ namespace Mix.Cms.Web
                 {
                     cacheCtx.Database.Migrate();
                 }
+                var serviceProvider = services.BuildServiceProvider();
+                var _roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+                InitCmsService.InitRolesAsync(_roleManager).GetAwaiter();
             }
 
             // Mix: Check if require ssl

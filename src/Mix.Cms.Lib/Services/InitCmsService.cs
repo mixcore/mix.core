@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
@@ -23,6 +24,26 @@ namespace Mix.Cms.Lib.Services
     {
         public InitCmsService()
         {
+        }
+
+        public static async Task InitRolesAsync(RoleManager<IdentityRole> _roleManager)
+        {
+            await CreateRoleIfNotExist(_roleManager, MixDefaultRoles.SuperAdmin);
+            await CreateRoleIfNotExist(_roleManager, MixDefaultRoles.Admin);
+            await CreateRoleIfNotExist(_roleManager, MixDefaultRoles.Guest);
+        }
+
+        private static async Task CreateRoleIfNotExist(RoleManager<IdentityRole> _roleManager, string role)
+        {
+            var isExist = await _roleManager.RoleExistsAsync(role);
+            if (!isExist)
+            {
+                await _roleManager.CreateAsync(new IdentityRole()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = role
+                });
+            }
         }
 
         /// <summary>
@@ -55,7 +76,7 @@ namespace Mix.Cms.Lib.Services
                     if (pendingMigration == 0)
                     {
                         return await InitSiteData(siteName, culture);
-                    }                    
+                    }
                 }
                 return result;
             }
