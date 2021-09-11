@@ -269,7 +269,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (result.IsSucceed)
             {
-                await InitRolesAsync();
+                await InitCmsService.InitRolesAsync(_roleManager);
                 result.IsSucceed = true;
                 MixService.LoadFromDatabase();
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
@@ -286,22 +286,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SaveSettings();
             }
             return result;
-        }
-
-        private async Task<bool> InitRolesAsync()
-        {
-            bool isSucceed = true;
-            var getRoles = await RoleViewModel.Repository.GetModelListAsync();
-            if (getRoles.IsSucceed && getRoles.Data.Count == 0)
-            {
-                var saveResult = await _roleManager.CreateAsync(new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = MixDefaultRoles.SuperAdmin
-                });
-                isSucceed = saveResult.Succeeded;
-            }
-            return isSucceed;
         }
 
         #endregion Helpers
