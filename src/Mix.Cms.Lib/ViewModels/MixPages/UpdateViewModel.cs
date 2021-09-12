@@ -496,15 +496,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             // Load Actived Modules
             var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture
-            , context, transaction).Data;
-            result.ForEach(nav =>
-            {
-                nav.IsActived = true;
-            });
-            var moduleids = result.Select(m => m.ModuleId);
+            , context, transaction).Data;            
             // Load inactived modules
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => m.Specificulture == Specificulture && !moduleids.Any(r => r == m.Id)
+                m => m.Specificulture == Specificulture
                 , context, transaction).Data;
             foreach (var item in otherModules)
             {
@@ -514,10 +509,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     PageId = Id,
                     ModuleId = item.Id,
                     Image = item.ImageUrl,
-                    Description = item.Title
+                    Description = item.Title,
+                    IsActived = result.Any(m=>m.ModuleId == item.Id)
                 });
             }
-            return result.OrderBy(m => m.Priority).ToList();
+            return result.OrderByDescending(m=>m.IsActived).ThenBy(m => m.Priority).ToList();
         }
 
         #endregion Expands

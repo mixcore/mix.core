@@ -117,6 +117,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     template = template.Replace($"[[{colName}]]", val?.Value<string>() ?? m.Groups[0].Value);
                 }
             }
+            template = template.Replace($"[[createdDateTime]]", DateTime.Now.ToLongDateString());
             return template;
         }
 
@@ -240,7 +241,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             culture ??= MixService.GetAppSetting<string>("DefaultCulture");
             string id = obj.Value<string>("id");
             FormViewModel formData;
-            
+
             if (id == null)
             {
                 formData = await GetFormDataAsync(databaseName, culture);
@@ -252,7 +253,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
 
             if (formData != null)
-            {                
+            {
                 formData.ParentId = parentId;
                 if (parentType.HasValue)
                 {
@@ -277,9 +278,13 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     MixDatabaseId = getDatabase.Data.Id,
                     MixDatabaseName = getDatabase.Data.Name,
                     Status = MixContentStatus.Published,
-                    Columns = getDatabase.Data.Columns
+                    Columns = getDatabase.Data.Columns,
+                    Obj = new()
                 };
-                result.ExpandView();
+                foreach (var item in result.Columns)
+                {
+                    result.Obj.Add(new JProperty(item.Name, item.DefaultValue ?? string.Empty));
+                }
                 return result;
             }
             return null;

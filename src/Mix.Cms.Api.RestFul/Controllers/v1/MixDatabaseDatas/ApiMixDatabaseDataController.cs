@@ -44,14 +44,13 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
-            var formData = Helper.GetFormDataAsync(mixDatabase, _lang);
+            var formData = await Helper.GetFormDataAsync(mixDatabase, _lang);
             return formData != null
                 ? Ok(formData)
                 : BadRequest(mixDatabase);
         }
 
         [HttpPost("save-data/{mixDatabase}")]
-        [HttpPost("save-data/{mixDatabase}/{sendMail}/{sendSms}")]
         public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, bool? sendMail, bool? sendSms, [FromBody] JObject data)
         {
             var formData = await Helper.GetFormDataAsync(mixDatabase, _lang);
@@ -59,7 +58,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 formData.Obj = data;
                 var result = await SaveAsync(formData, true);
-                if (result.IsSucceed && sendMail.HasValue && sendMail.Value)
+                if (result.IsSucceed)
                 {
                     await Helper.SendMail(mixDatabase, _lang, data);
                 }
