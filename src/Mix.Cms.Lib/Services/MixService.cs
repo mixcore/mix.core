@@ -174,7 +174,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetAuthConfig<T>(string name, T defaultValue = default)
         {
-            var result = Instance.Authentication[name];
+            var result = GetJToken(name, Instance.Authentication);
             if (result == null)
             {
                 result = DefaultInstance.Authentication[name];
@@ -189,7 +189,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetIpConfig<T>(string name)
         {
-            var result = Instance.IpSecuritySettings[name];
+            var result = GetJToken(name, Instance.IpSecuritySettings);
             if (result == null)
             {
                 result = DefaultInstance.IpSecuritySettings[name];
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetMixConfig<T>(string name)
         {
-            var result = Instance.MixConfigurations[name];
+            var result = GetJToken(name, Instance.MixConfigurations);
             if (result == null)
             {
                 result = DefaultInstance.MixConfigurations[name];
@@ -219,7 +219,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetAppSetting<T>(string name)
         {
-            var result = Instance.GlobalSettings[name];
+            var result = GetJToken(name, Instance.GlobalSettings);
             if (result == null)
             {
                 result = DefaultInstance.GlobalSettings[name];
@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib.Services
             culture ??= GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             if (Instance.LocalSettings[culture] != null)
             {
-                result = Instance.LocalSettings[culture][name];
+                result = GetJToken(name, Instance.LocalSettings[culture].Value<JObject>());
             }
             return result != null ? result.Value<T>() : defaultValue;
         }
@@ -540,6 +540,21 @@ namespace Mix.Cms.Lib.Services
                 default:
                     return null;
             }
+        }
+
+        private static JToken GetJToken(string path, JObject data)
+        {
+            JToken result = data;
+            string[] names = path.Split('.');
+            foreach (var name in names)
+            {
+                result = result[name];
+                if (result is null)
+                {
+                    break;
+                }
+            }
+            return result;
         }
     }
 }

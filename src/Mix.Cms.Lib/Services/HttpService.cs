@@ -1,6 +1,8 @@
-﻿using Mix.Cms.Lib.Constants;
+﻿using Microsoft.IdentityModel.Protocols;
+using Mix.Cms.Lib.Constants;
 using Mix.Infrastructure.Repositories;
 using Mix.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +42,7 @@ namespace Mix.Cms.Lib.Services
                 response.EnsureSuccessStatusCode();
                 string fullPath = $"{downloadPath}/{fileName}{extension}";
                 MixFileRepository.Instance.CreateDirectoryIfNotExist(downloadPath);
-                using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
+                using (Stream contentStream = await response.Content.ReadAsStreamAsync(),
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {
                     var totalRead = 0L;
@@ -91,21 +93,52 @@ namespace Mix.Cms.Lib.Services
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
 
+        public Task<T> GetBasicAuthAsync<T>(
+            string requestUrl,
+            string username, string password,
+            List<KeyValuePair<string, string>> queryParams = null,
+            List<KeyValuePair<string, string>> requestHeaders = null)
+        {
+            var urlQueryParamsPart = queryParams != null
+                ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
+                : string.Empty;
+            var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
+                ? (!requestUrl.Contains("?") ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
+                : requestUrl;
+            return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), username, password, requestHeaders);
+        }
+
         public Task<T> PostAsync<T, T1>(string requestUrl, T1 content, string bearerToken = null, List<KeyValuePair<string, string>> requestHeaders = null) =>
             SendRequestAsync<T>(
                 client => client.PostAsync(requestUrl, CreateHttpContent(content)), bearerToken, requestHeaders);
 
-        private HttpContent CreateHttpContent<T>(T content) =>
-            new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, "application/json");
+        public Task<T> PostBasicAuthAsync<T, T1>(
+            string requestUrl,
+            List<KeyValuePair<string, string>> content,
+            string username, string password,
+            List<KeyValuePair<string, string>> requestHeaders = null)
+        {
+            var body = new FormUrlEncodedContent(content);
+            return SendRequestAsync<T>(
+                client => client.PostAsync(requestUrl, body),
+                    username, password, requestHeaders);
+        }
 
-        private Task<T> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, string token = null, List<KeyValuePair<string, string>> requestHeaders = null) =>
+        private HttpContent CreateHttpContent<T>(T content, string mediaType = "application/json") =>
+            new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions),
+                Encoding.UTF8, mediaType);
+
+        private Task<T> SendRequestAsync<T>(
+            Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, string token = null,
+            List<KeyValuePair<string, string>> requestHeaders = null) =>
             Task.Run(async () =>
             {
                 using (var client = _httpClientFactory.CreateClient())
                 {
                     if (token != null)
                     {
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                            "Bearer", token);
                     }
 
                     requestHeaders?.ForEach(p => client.DefaultRequestHeaders.Add(p.Key, p.Value));
@@ -114,6 +147,29 @@ namespace Mix.Cms.Lib.Services
                     response.EnsureSuccessStatusCode();
                     var data = await response.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<T>(data, _sharedJsonSerializerOptions);
+                }
+            });
+
+        private Task<T> SendRequestAsync<T>(
+                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, string username, string password,
+                List<KeyValuePair<string, string>> requestHeaders = null) =>
+            Task.Run(async () =>
+            {
+                using (var client = _httpClientFactory.CreateClient())
+                {
+                    if (!string.IsNullOrEmpty(username))
+                    {
+                        var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                            "Basic", Convert.ToBase64String(byteArray));
+                    }
+
+                    requestHeaders?.ForEach(p => client.DefaultRequestHeaders.Add(p.Key, p.Value));
+
+                    var response = await sendRequestFn(client);
+                    response.EnsureSuccessStatusCode();
+                    var data = await response.Content.ReadAsStringAsync();
+                    return JObject.Parse(data).ToObject<T>();
                 }
             });
     }
