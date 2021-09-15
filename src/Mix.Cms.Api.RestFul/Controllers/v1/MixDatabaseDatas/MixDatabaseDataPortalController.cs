@@ -124,7 +124,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
-            var formData = await Helper.GetFormDataAsync(mixDatabase, _lang);
+            var formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
             return formData != null
                 ? Ok(formData)
                 : BadRequest(mixDatabase);
@@ -133,7 +133,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost("save-data/{mixDatabase}")]
         public async Task<ActionResult<FormViewModel>> SaveData([FromRoute]string mixDatabase, [FromBody] JObject data)
         {
-            var formData = await Helper.GetFormDataAsync(mixDatabase, _lang);
+            var formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
             if (formData!=null)
             {
                 formData.Obj = data;

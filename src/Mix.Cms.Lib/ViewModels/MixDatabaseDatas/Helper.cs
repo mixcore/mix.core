@@ -244,7 +244,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
             if (id == null)
             {
-                formData = await GetFormDataAsync(databaseName, culture);
+                formData = await GetBlankFormDataAsync(databaseName, culture);
             }
             else
             {
@@ -265,7 +265,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return new();
         }
 
-        public static async Task<FormViewModel> GetFormDataAsync(string mixDatabase, string culture)
+        public static async Task<FormViewModel> GetBlankFormDataAsync(string mixDatabase, string culture)
         {
             _ = int.TryParse(mixDatabase, out int mixDatabaseId);
             var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(

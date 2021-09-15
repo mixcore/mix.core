@@ -300,7 +300,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 if (result.IsSucceed)
                 {
                     Model.CleanCache(context);
-                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+                    // Set null to refresh all data
+                    Obj = null;
+                    ExpandView(context, transaction);
                 }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
