@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -146,8 +147,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
         }
 
+        [JsonProperty("aliases")]
+        public List<MixUrlAliases.UpdateViewModel> Aliases { get; set; }
+
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/{MixController.Post}/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("properties")]
         public List<ExtraProperty> Properties { get; set; }
@@ -363,6 +367,18 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             LoadTags(_context, _transaction);
             LoadCategories(_context, _transaction);
             LoadAuthor(_context, _transaction);
+            LoadAliased(_context, _transaction);
+            DetailsUrl = Aliases.Count > 0
+               ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{Aliases[0].Alias}")
+               : Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                   : null;
+        }
+        private void LoadAliased(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            Aliases = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(
+                m => m.Type == (int)MixUrlAliasType.Post && m.SourceId == Id.ToString(),
+                context, transaction).Data;
         }
 
         private void LoadTags(MixCmsContext context, IDbContextTransaction transaction)
