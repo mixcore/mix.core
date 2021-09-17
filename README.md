@@ -21,6 +21,7 @@
 
 ## Special features (Out of the box)
 
+- [x] **Databases** -MySQL, SQL Server, PostgreSQL, SQLite
 - [x] **Reliability** - Member roles and permissions.
 - [x] **High Security** - Strong Data Encryption and Security compliance.
 - [x] **Multilingual** - Flexible multilingual content migration.
