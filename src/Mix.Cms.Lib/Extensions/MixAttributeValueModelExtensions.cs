@@ -67,7 +67,15 @@ namespace Mix.Cms.Lib.Extensions
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));
-
+                case MixDataType.Tag:
+                    try
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, JArray.Parse(item.StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, new JArray()));
+                    }
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -88,7 +96,7 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
             }
         }
-        
+
         public static JProperty ToJProperty(
             this ViewModels.MixDatabaseDataValues.UpdateViewModel item,
             MixCmsContext _context,
@@ -137,7 +145,15 @@ namespace Mix.Cms.Lib.Extensions
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));
-
+                case MixDataType.Tag:
+                    try
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, JArray.Parse(item.StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, new JArray()));
+                    }
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -159,7 +175,7 @@ namespace Mix.Cms.Lib.Extensions
             }
         }
 
-        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, 
+        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item,
             JToken property,
             MixCmsContext _context = null,
             IDbContextTransaction _transaction = null)
@@ -241,6 +257,9 @@ namespace Mix.Cms.Lib.Extensions
                             item.StringValue = mediaData;
                         }
                         break;
+                    case MixDataType.Tag:
+                        item.StringValue = property.Value<JArray>().ToString();
+                        break;
 
                     case MixDataType.Custom:
                     case MixDataType.Duration:
@@ -277,7 +296,7 @@ namespace Mix.Cms.Lib.Extensions
                    m => m.MixDatabaseId == mixDatabaseId
                     && m.DataType == MixDataType.Reference).ToList();
 
-            foreach (var item in refColumns.Where(p=>p.DataType == MixDataType.Reference))
+            foreach (var item in refColumns.Where(p => p.DataType == MixDataType.Reference))
             {
                 JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, context, transaction);
 
