@@ -162,6 +162,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
 
+        [JsonProperty("urlAliases")]
+        public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
         #endregion Views
 
         #endregion Properties
@@ -182,6 +184,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            UrlAliases = GetAliases(_context, _transaction);
+
             var countPost = MixPagePosts.ReadViewModel.Repository.Count(c => c.PageId == Id && c.Specificulture == Specificulture
                 , _context: _context, _transaction: _transaction);
 
@@ -189,14 +193,31 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 TotalPost = countPost.Data;
             }
-            DetailsUrl = Id > 0
-                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PageController", Specificulture, "page")}/{Id}/{SeoName}")
-                   : null;
+
+            DetailsUrl = UrlAliases.Count > 0
+             ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{UrlAliases[0].Alias}")
+             : Id > 0
+                 ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{SeoName}")
+                 : null;
         }
 
         #endregion Overrides
 
         #region Expands
+
+        public List<MixUrlAliases.UpdateViewModel> GetAliases(MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(p => p.Specificulture == Specificulture
+                        && p.SourceId == Id.ToString() && p.Type == (int)MixUrlAliasType.Page, context, transaction);
+            if (result.IsSucceed && result.Data != null)
+            {
+                return result.Data;
+            }
+            else
+            {
+                return new List<MixUrlAliases.UpdateViewModel>();
+            }
+        }
 
         public static async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfosAsync(List<ReadViewModel> cates)
         {

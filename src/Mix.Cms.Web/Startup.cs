@@ -26,6 +26,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Unicode;
 
 namespace Mix.Cms.Web
 {
@@ -44,6 +45,11 @@ namespace Mix.Cms.Web
         {
             string[] allowedHosts = MixService.GetAppSetting<JArray>(MixAppSettingKeywords.AllowedHosts)
                                         .Select(m => m.Value<string>("text")).ToArray();
+
+            services.AddWebEncoders(options => {
+                options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(UnicodeRanges.All);
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MixcoreAllowSpecificOrigins,
