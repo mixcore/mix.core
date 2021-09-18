@@ -190,7 +190,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
             if (MixDatabaseColumnId > 0)
             {
                 Column = MixDatabaseColumns.UpdateViewModel.Repository.GetSingleModel(
-                    f => f.Id == MixDatabaseColumnId
+                    f => f.Name == MixDatabaseColumnName && f.MixDatabaseName == MixDatabaseName
                     , _context, _transaction).Data;
                 if (Column != null && DataType == MixDataType.Reference)
                 {

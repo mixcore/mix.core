@@ -164,32 +164,33 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 MixDatabaseId = _context.MixDatabase.First(m => m.Name == MixDatabaseName)?.Id ?? 0;
             }
             Values ??= MixDatabaseDataValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
+                .Repository.GetModelListBy(a => a.DataId == Id && a.MixDatabaseName == MixDatabaseName && a.Specificulture == Specificulture
                 , _context, _transaction)
                 .Data.OrderBy(a => a.Priority).ToList();
             Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
             , _context, _transaction).Data;
             Columns.AddRange(
                 Values
-                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
+                .Where(v => v.Column != null && !Columns.Any(f => f.Name == v.Column?.Name))
                 .Select(v => v.Column)
                 .ToList());
             Obj ??= new JObject();
-            foreach (var field in Columns.OrderBy(f => f.Priority))
+            foreach (var col in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == field.Name);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == col.Name);
                 if (val == null)
                 {
                     val = new MixDatabaseDataValues.UpdateViewModel()
                     {
-                        MixDatabaseColumnId = field.Id,
-                        MixDatabaseColumnName = field.Name,
-                        StringValue = field.DefaultValue,
-                        Priority = field.Priority,
-                        Column = field,
+                        MixDatabaseColumnId = col.Id,
+                        MixDatabaseColumnName = col.Name,
+                        StringValue = col.DefaultValue,
+                        Priority = col.Priority,
+                        Column = col,
                         DataId = Id
                     };
                     val.ExpandView(_context, _transaction);
+                    val.Column = col;
                     Values.Add(val);
                 }
                 else
@@ -198,11 +199,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 val.Status = Status;
                 val.Specificulture = Specificulture;
-                val.Priority = field.Priority;
+                val.Priority = col.Priority;
                 val.MixDatabaseName = MixDatabaseName;
                 if (Obj[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Column.DataType == MixDataType.Reference)
+                    if (val.Column?.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.MixDatabaseColumnName].Value<JArray>();
                         val.IntegerValue = val.Column.ReferenceId;
@@ -227,7 +228,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                                     RefData.Add(new FormViewModel()
                                     {
                                         Specificulture = Specificulture,
-                                        MixDatabaseId = field.ReferenceId.Value,
+                                        MixDatabaseId = col.ReferenceId.Value,
                                         Status = MixContentStatus.Published,
                                         Obj = objData
                                     });

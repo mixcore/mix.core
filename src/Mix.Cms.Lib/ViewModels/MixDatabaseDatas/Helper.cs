@@ -283,7 +283,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 };
                 foreach (var item in result.Columns)
                 {
-                    result.Obj.Add(new JProperty(item.Name, item.DefaultValue ?? string.Empty));
+                    if (item.DataType!= MixDataType.Reference)
+                    {
+                        result.Obj.Add(new JProperty(item.Name, item.DefaultValue ?? string.Empty));
+                    }
+                    else
+                    {
+                        result.Obj.Add(new JProperty(item.Name, new JArray()));
+                    }
+                    
                 }
                 return result;
             }
