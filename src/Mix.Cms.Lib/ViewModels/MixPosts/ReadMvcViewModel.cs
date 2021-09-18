@@ -251,9 +251,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                 }
 
-                // Related Posts
-                PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
             }
+            // Related Posts
+            PostNavs = MixPostPosts.ReadViewModel.Repository.GetModelListBy(n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction).Data;
 
             LoadAliased(_context, _transaction);
             DetailsUrl = Aliases.Count > 0

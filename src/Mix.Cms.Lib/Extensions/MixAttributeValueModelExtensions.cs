@@ -67,7 +67,24 @@ namespace Mix.Cms.Lib.Extensions
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));
-
+                case MixDataType.Json:
+                    try
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, JObject.Parse(item.StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, new JObject()));
+                    }
+                case MixDataType.Tag:
+                    try
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, JArray.Parse(item.StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, new JArray()));
+                    }
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -88,7 +105,7 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
             }
         }
-        
+
         public static JProperty ToJProperty(
             this ViewModels.MixDatabaseDataValues.UpdateViewModel item,
             MixCmsContext _context,
@@ -137,7 +154,15 @@ namespace Mix.Cms.Lib.Extensions
                         : item.StringValue
                    : null;
                     return (new JProperty(item.MixDatabaseColumnName, url));
-
+                case MixDataType.Tag:
+                    try
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, JArray.Parse(item.StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(item.MixDatabaseColumnName, new JArray()));
+                    }
                 case MixDataType.Custom:
                 case MixDataType.Duration:
                 case MixDataType.PhoneNumber:
@@ -159,7 +184,7 @@ namespace Mix.Cms.Lib.Extensions
             }
         }
 
-        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item, 
+        public static void ToModelValue(this ViewModels.MixDatabaseDataValues.UpdateViewModel item,
             JToken property,
             MixCmsContext _context = null,
             IDbContextTransaction _transaction = null)
@@ -178,89 +203,98 @@ namespace Mix.Cms.Lib.Extensions
             }
             else
             {
-                switch (item.Column.DataType)
+                if (property.HasValues)
                 {
-                    case MixDataType.DateTime:
-                        item.DateTimeValue = property.Value<DateTime?>();
-                        item.StringValue = property.Value<string>();
-                        break;
+                    switch (item.Column.DataType)
+                    {
+                        case MixDataType.DateTime:
+                            item.DateTimeValue = property.Value<DateTime?>();
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Date:
-                        item.DateTimeValue = property.Value<DateTime?>();
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Date:
+                            item.DateTimeValue = property.Value<DateTime?>();
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Time:
-                        item.DateTimeValue = property.Value<DateTime?>();
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Time:
+                            item.DateTimeValue = property.Value<DateTime?>();
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Double:
-                        item.DoubleValue = property.Value<double?>();
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Double:
+                            item.DoubleValue = property.Value<double?>();
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Boolean:
-                        item.BooleanValue = property.Value<bool?>();
-                        item.StringValue = property.Value<string>()?.ToLower();
-                        break;
+                        case MixDataType.Boolean:
+                            item.BooleanValue = property.Value<bool?>();
+                            item.StringValue = property.Value<string>()?.ToLower();
+                            break;
 
-                    case MixDataType.Integer:
-                        item.IntegerValue = property.Value<int?>();
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Integer:
+                            item.IntegerValue = property.Value<int?>();
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Reference:
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Reference:
+                            item.StringValue = property.Value<string>();
+                            break;
 
-                    case MixDataType.Upload:
-                        string mediaData = property.Value<string>();
-                        if (mediaData.IsBase64())
-                        {
-                            ViewModels.MixMedias.UpdateViewModel media = new ViewModels.MixMedias.UpdateViewModel()
+                        case MixDataType.Upload:
+                            string mediaData = property.Value<string>();
+                            if (mediaData.IsBase64())
                             {
-                                Specificulture = item.Specificulture,
-                                Status = MixContentStatus.Published,
-                                MediaFile = new FileViewModel()
+                                ViewModels.MixMedias.UpdateViewModel media = new ViewModels.MixMedias.UpdateViewModel()
                                 {
-                                    FileStream = mediaData,
-                                    Extension = ".png",
-                                    Filename = Guid.NewGuid().ToString(),
-                                    FileFolder = "Attributes"
+                                    Specificulture = item.Specificulture,
+                                    Status = MixContentStatus.Published,
+                                    MediaFile = new FileViewModel()
+                                    {
+                                        FileStream = mediaData,
+                                        Extension = ".png",
+                                        Filename = Guid.NewGuid().ToString(),
+                                        FileFolder = "Attributes"
+                                    }
+                                };
+                                var saveMedia = media.SaveModel(true, _context, _transaction);
+                                if (saveMedia.IsSucceed)
+                                {
+                                    item.StringValue = saveMedia.Data.FullPath;
                                 }
-                            };
-                            var saveMedia = media.SaveModel(true, _context, _transaction);
-                            if (saveMedia.IsSucceed)
-                            {
-                                item.StringValue = saveMedia.Data.FullPath;
                             }
-                        }
-                        else
-                        {
-                            item.StringValue = mediaData;
-                        }
-                        break;
+                            else
+                            {
+                                item.StringValue = mediaData;
+                            }
+                            break;
+                        case MixDataType.Json:
+                            item.StringValue = property.Value<JObject>().ToString();
+                            break;
+                        case MixDataType.Tag:
+                            item.StringValue = property.Value<JArray>().ToString();
+                            break;
 
-                    case MixDataType.Custom:
-                    case MixDataType.Duration:
-                    case MixDataType.PhoneNumber:
-                    case MixDataType.Text:
-                    case MixDataType.Html:
-                    case MixDataType.MultilineText:
-                    case MixDataType.EmailAddress:
-                    case MixDataType.Password:
-                    case MixDataType.Url:
-                    case MixDataType.ImageUrl:
-                    case MixDataType.CreditCard:
-                    case MixDataType.PostalCode:
-                    case MixDataType.Color:
-                    case MixDataType.Icon:
-                    case MixDataType.VideoYoutube:
-                    case MixDataType.TuiEditor:
-                    default:
-                        item.StringValue = property.Value<string>();
-                        break;
+                        case MixDataType.Custom:
+                        case MixDataType.Duration:
+                        case MixDataType.PhoneNumber:
+                        case MixDataType.Text:
+                        case MixDataType.Html:
+                        case MixDataType.MultilineText:
+                        case MixDataType.EmailAddress:
+                        case MixDataType.Password:
+                        case MixDataType.Url:
+                        case MixDataType.ImageUrl:
+                        case MixDataType.CreditCard:
+                        case MixDataType.PostalCode:
+                        case MixDataType.Color:
+                        case MixDataType.Icon:
+                        case MixDataType.VideoYoutube:
+                        case MixDataType.TuiEditor:
+                        default:
+                            item.StringValue = property.Value<string>();
+                            break;
+                    }
                 }
             }
         }
@@ -277,7 +311,7 @@ namespace Mix.Cms.Lib.Extensions
                    m => m.MixDatabaseId == mixDatabaseId
                     && m.DataType == MixDataType.Reference).ToList();
 
-            foreach (var item in refColumns.Where(p=>p.DataType == MixDataType.Reference))
+            foreach (var item in refColumns.Where(p => p.DataType == MixDataType.Reference))
             {
                 JArray arr = GetRelatedData(item.ReferenceId.Value, dataId, culture, context, transaction);
 
