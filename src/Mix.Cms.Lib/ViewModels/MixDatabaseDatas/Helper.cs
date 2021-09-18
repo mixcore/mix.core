@@ -76,7 +76,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 var edm = getEdmInfo.Data;
                 bool sendToSender = edm.Property<bool>("sendToSender");
                 string senderColumnName = edm.Property<string>("senderColumnName");
-                string recipients = edm.Property<string>("recipients");
+                var recipients = edm.Property<JArray>("recipients")?.Select(m => m.Value<string>("text"));
                 string senderEmail = GetJToken(senderColumnName, data)?.Value<string>();
 
                 if (sendToSender && !string.IsNullOrEmpty(senderEmail))
@@ -90,13 +90,13 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         );
                 }
 
-                if (!string.IsNullOrEmpty(recipients))
+                if (recipients.Count() > 0)
                 {
                     string senderBody = GetEdmBody(edm.Property<string>("adminTemplate"), data);
                     MixService.SendMail(
                         edm.Property<string>("title"),
                         senderBody,
-                        senderEmail,
+                        string.Join(',', recipients),
                         edm.Property<string>("from")
                         );
                 }
@@ -283,7 +283,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 };
                 foreach (var item in result.Columns)
                 {
-                    if (item.DataType!= MixDataType.Reference)
+                    if (item.DataType != MixDataType.Reference)
                     {
                         result.Obj.Add(new JProperty(item.Name, item.DefaultValue ?? string.Empty));
                     }
@@ -291,7 +291,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     {
                         result.Obj.Add(new JProperty(item.Name, new JArray()));
                     }
-                    
+
                 }
                 return result;
             }

@@ -226,8 +226,8 @@ namespace Mix.Cms.Lib.Extensions
                         break;
 
                     case MixDataType.Boolean:
-                        item.BooleanValue = property.HasValues ? property.Value<bool?>() : null;
-                        item.StringValue = property.HasValues ? property.Value<string>()?.ToLower() : null;
+                        item.BooleanValue = property.Value<bool?>();
+                        item.StringValue = property.Value<string>()?.ToLower();
                         break;
 
                     case MixDataType.Integer:
