@@ -99,13 +99,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
-        
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
-        
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
@@ -187,22 +187,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixTemplateFolders.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/" +
                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                   $"{MixTemplateFolders.Pages}";
@@ -496,10 +502,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         {
             // Load Actived Modules
             var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture
-            , context, transaction).Data;            
+            , context, transaction).Data;
+            
+            result.ForEach(m => m.IsActived = true);
+
             // Load inactived modules
+            LoadInActivedModules(result, context, transaction);
+
+            return result.OrderByDescending(m => m.IsActived).ThenBy(m => m.Priority).ToList();
+        }
+
+        private void LoadInActivedModules(List<MixPageModules.ReadMvcViewModel> result, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var activedModuleIds = result.Select(m => m.ModuleId).ToList();
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => m.Specificulture == Specificulture
+                m => m.Specificulture == Specificulture && !activedModuleIds.Any(o => o == m.Id)
                 , context, transaction).Data;
             foreach (var item in otherModules)
             {
@@ -510,10 +527,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     ModuleId = item.Id,
                     Image = item.ImageUrl,
                     Description = item.Title,
-                    IsActived = result.Any(m=>m.ModuleId == item.Id)
+                    IsActived = false
                 });
             }
-            return result.OrderByDescending(m=>m.IsActived).ThenBy(m => m.Priority).ToList();
         }
 
         #endregion Expands
