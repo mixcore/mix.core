@@ -51,6 +51,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpPost("save-data/{mixDatabase}")]
+        [HttpPost("save-data/{mixDatabase}/{sendMail}")]
         public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, bool? sendMail, bool? sendSms, [FromBody] JObject data)
         {
             var formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
@@ -58,7 +59,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 formData.Obj = data;
                 var result = await SaveAsync(formData, true);
-                if (result.IsSucceed)
+                var isSendMail = result.IsSucceed && sendMail.HasValue && sendMail.Value;
+                
+                if (isSendMail)
                 {
                     await Helper.SendMail(mixDatabase, _lang, data);
                 }
