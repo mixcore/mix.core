@@ -54,8 +54,10 @@ namespace Mix.Cms.Lib.Services
             watcher.EnableRaisingEvents = true;
         }
 
-        public static MixService Instance {
-            get {
+        public static MixService Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -72,8 +74,10 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static MixService DefaultInstance {
-            get {
+        public static MixService DefaultInstance
+        {
+            get
+            {
                 if (defaultInstance == null)
                 {
                     lock (syncRoot)
@@ -162,7 +166,7 @@ namespace Mix.Cms.Lib.Services
             }
             return Instance.Cultures.Any(c => c == specificulture);
         }
-        
+
         public bool CheckValidAlias(string culture, string path)
         {
             if (Instance.Aliases == null)
@@ -185,6 +189,21 @@ namespace Mix.Cms.Lib.Services
         public static void SetAuthConfig<T>(string name, T value)
         {
             Instance.Authentication[name] = value.ToString();
+        }
+        
+        public static T GetSmtpConfig<T>(string name, T defaultValue = default)
+        {
+            var result = GetJToken(name, Instance.Smtp);
+            if (result == null)
+            {
+                result = DefaultInstance.Authentication[name];
+            }
+            return result != null ? result.Value<T>() : defaultValue;
+        }
+
+        public static void SetSmtpConfig<T>(string name, T value)
+        {
+            Instance.Smtp[name] = value.ToString();
         }
 
         public static T GetIpConfig<T>(string name)
@@ -248,7 +267,7 @@ namespace Mix.Cms.Lib.Services
             }
             return result != null ? result.Value<T>() : defaultValue;
         }
-        
+
         public static void SetConfig<T>(string name, string culture, T value)
         {
             Instance.LocalSettings[culture][name] = value.ToString();
@@ -428,21 +447,9 @@ namespace Mix.Cms.Lib.Services
 
                 client.Send(mailMessage);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                try
-                {
-                    SmtpClient smtpClient = new SmtpClient
-                    {
-                        UseDefaultCredentials = true
-                    };
-                    smtpClient.Send(mailMessage);
-                }
-                catch (Exception ex)
-                {
-                    MixService.LogException(ex);
-                    // ToDo: cannot send mail
-                }
+                MixService.LogException(e);
             }
         }
 

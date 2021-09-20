@@ -89,6 +89,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPageModules
             if (getModule.IsSucceed)
             {
                 Module = getModule.Data;
+                Description = getModule.Data.Title;
+                Image = getModule.Data.ImageUrl;
             }
         }
 

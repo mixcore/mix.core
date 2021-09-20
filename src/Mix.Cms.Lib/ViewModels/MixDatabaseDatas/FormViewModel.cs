@@ -373,12 +373,26 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
 
             //// Save Related Data
-            //if (result.IsSucceed)
-            //{
-            //    RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
-            //    ViewModelHelper.HandleResult(saveRelated, ref result);
-            //}
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
 
+            return result;
+        }
+
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            foreach (var item in RelatedData)
+            {
+                item.ParentId = parent.Id;
+                item.ParentType = MixDatabaseParentType.Set;
+                item.Specificulture = Specificulture;
+                var saveRelated = await item.SaveModelAsync(false, context, transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
             return result;
         }
 
@@ -388,7 +402,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             try
             {
-                foreach (var item in Values)
+                foreach (var item in Values.Where(v => v.Column.DataType != MixDataType.Reference))
                 {
                     if (result.IsSucceed)
                     {
@@ -441,10 +455,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 {
                     if (string.IsNullOrEmpty(item.Id))
                     {
-
                         item.Specificulture = Specificulture;
-                        item.ParentId = parent.Id;
-                        item.ParentType = MixDatabaseParentType.Set;
                         item.Status = MixContentStatus.Published;
                         var saveRef = await item.SaveModelAsync(true, context, transaction);
                         if (saveRef.IsSucceed)
@@ -461,6 +472,28 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             }, context, transaction));
                         }
                         ViewModelHelper.HandleResult(saveRef, ref result);
+                    }
+                    else
+                    {
+                        var getRelated = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetSingleModelAsync(
+                                m => m.DataId == item.Id && m.Specificulture == item.Specificulture, context, transaction);
+                        if (getRelated.IsSucceed)
+                        {
+                            RelatedData.Add(getRelated.Data);
+                        }
+                        else
+                        {
+                            RelatedData.Add(new MixDatabaseDataAssociations.UpdateViewModel(new()
+                            {
+                                DataId = item.Id,
+                                ParentId = Id,
+                                ParentType = MixDatabaseParentType.Set,
+                                MixDatabaseId = item.MixDatabaseId,
+                                MixDatabaseName = item.MixDatabaseName,
+                                CreatedDateTime = DateTime.UtcNow,
+                                Specificulture = Specificulture
+                            }, context, transaction));
+                        }
                     }
                 }
                 else
