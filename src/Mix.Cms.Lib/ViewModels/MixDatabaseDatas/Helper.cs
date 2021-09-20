@@ -464,6 +464,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 mixDatabaseName = mixDatabaseName ?? request.Query["mixDatabaseName"].ToString().Trim();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
+                var compareType = request.Query["compareType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["mixDatabaseId"], out int mixDatabaseId);
                 bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.DisplayDirection direction);
@@ -519,8 +520,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
-                    var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                    predicate = predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Any(id => m.Id == id));
+                    var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate)
+                            .Select(m => m.DataId);
+
+                    if (compareType== "and")
+                    {
+                        valDataIds = valDataIds.GroupBy(m => m)
+                            .Select(g => new { count = g.Count(), id = g.Key })
+                            .Where(g => g.count == fieldQueries.Count)
+                            .Select(g => g.id);
+                    }
+                    predicate = predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Distinct().Any(id => m.Id == id));
                 }
                 else
                 {
