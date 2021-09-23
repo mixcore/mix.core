@@ -201,6 +201,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     {
                         var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
                                 m => m.ParentId == Id 
+                                    && m.MixDatabaseId == item.Column.ReferenceId
                                     && m.ParentType == MixDatabaseParentType.Set 
                                     && m.Specificulture == Specificulture
                                     , context, transaction);
