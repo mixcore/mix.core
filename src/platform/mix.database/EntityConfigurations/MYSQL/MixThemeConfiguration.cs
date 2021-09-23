@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MixThemeConfiguration : MySqlSiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : MySqlTenantEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {

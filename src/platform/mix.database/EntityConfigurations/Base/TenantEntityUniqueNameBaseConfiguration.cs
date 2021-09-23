@@ -5,9 +5,9 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class SiteEntityUniqueNameBaseConfiguration<T, TPrimaryKey, TConfig> : SiteEntityBaseConfiguration<T, TPrimaryKey, TConfig>
+    public abstract class TenantEntityUniqueNameBaseConfiguration<T, TPrimaryKey, TConfig> : TenantEntityBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
-        where T : SiteEntityUniqueNameBase<TPrimaryKey>
+        where T : TenantEntityUniqueNameBase<TPrimaryKey>
         where TConfig: IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)

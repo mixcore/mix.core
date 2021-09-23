@@ -8,8 +8,8 @@ namespace Mix.Xunittest.Domain
     {
         protected override void SeedData(MixCmsContext dbContext)
         {
-            dbContext.MixSite.Add(
-                   new MixSite()
+            dbContext.MixTenant.Add(
+                   new MixTenant()
                    {
                        Id = 1,
                        SystemName = "test_site",
@@ -18,16 +18,16 @@ namespace Mix.Xunittest.Domain
             dbContext.MixCulture.Add(new MixCulture()
             {
                 Specificulture = "en-us",
-                MixSiteId = 1,
+                MixTenantId = 1,
             });
             dbContext.MixConfiguration.Add(new MixConfiguration()
             {
-                MixSiteId = 1,
+                MixTenantId = 1,
                 Id = 1,
             });
             dbContext.MixPost.Add(new MixPost()
             {
-                MixSiteId = 1,
+                MixTenantId = 1,
                 Id = 1,
             });
             dbContext.SaveChanges();

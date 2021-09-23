@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Cms;
-using Mix.Database.EntityConfigurations.MYSQL.Base;
+using Mix.Database.EntityConfigurations.POSTGRES.Base;
 
-namespace Mix.Database.EntityConfigurations.MYSQL
+namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixSiteConfiguration : MySqlEntityBaseConfiguration<MixSite, int>
+    public class MixTenantConfiguration : PostgresEntityBaseConfiguration<MixTenant, int>
     {
-        public override void Configure(EntityTypeBuilder<MixSite> builder)
+        public override void Configure(EntityTypeBuilder<MixTenant> builder)
         {
             base.Configure(builder);
 

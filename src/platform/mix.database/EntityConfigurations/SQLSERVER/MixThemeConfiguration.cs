@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixThemeConfiguration : SqlServerSiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : SqlServerTenantEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {

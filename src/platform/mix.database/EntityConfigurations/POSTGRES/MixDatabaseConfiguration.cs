@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixDatabaseConfiguration : PostgresSiteEntityUniqueNameBaseConfiguration<MixDatabase, int>
+    public class MixDatabaseConfiguration : PostgresTenantEntityUniqueNameBaseConfiguration<MixDatabase, int>
     {
         public override void Configure(EntityTypeBuilder<MixDatabase> builder)
         {

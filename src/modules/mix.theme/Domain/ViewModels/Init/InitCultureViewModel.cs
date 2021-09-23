@@ -19,7 +19,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public virtual string SystemName { get; set; }
         public virtual string Description { get; set; }
 
-        public int MixSiteId { get; set; }
+        public int MixTenantId { get; set; }
 
         public InitCultureViewModel(Repository<MixCmsContext, MixCulture, int> repository) : base(repository)
         {

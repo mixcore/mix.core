@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixCultureConfiguration : SqlServerSiteEntityBaseConfiguration<MixCulture, int>
+    public class MixCultureConfiguration : SqlServerTenantEntityBaseConfiguration<MixCulture, int>
     {
         public override void Configure(EntityTypeBuilder<MixCulture> builder)
         {

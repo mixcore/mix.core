@@ -10,7 +10,7 @@ using Mix.Heart.Repository;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
-    public class InitSiteViewModel : ViewModelBase<MixCmsContext, MixSite, int>
+    public class InitSiteViewModel : ViewModelBase<MixCmsContext, MixTenant, int>
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
@@ -20,7 +20,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         private readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
         public InitSiteViewModel(
-            Repository<MixCmsContext, MixSite, int> repository,
+            Repository<MixCmsContext, MixTenant, int> repository,
             Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(repository)
         {
             _cultureRepository = cultureRepository;
@@ -50,15 +50,15 @@ namespace Mix.Theme.Domain.ViewModels.Init
             };
         }
 
-        protected override async Task<MixSite> SaveHandlerAsync()
+        protected override async Task<MixTenant> SaveHandlerAsync()
         {
             var entity = await base.SaveHandlerAsync();
             return entity;
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixSite parent)
+        protected override async Task SaveEntityRelationshipAsync(MixTenant parent)
         {
-            Culture.MixSiteId = parent.Id;
+            Culture.MixTenantId = parent.Id;
 
             // Save and subscribe result for current consumer
             // Or can use this instead of _consumer to listen result in this viewmodel 

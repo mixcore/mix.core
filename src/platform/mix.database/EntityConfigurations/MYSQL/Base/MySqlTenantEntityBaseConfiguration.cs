@@ -4,10 +4,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.MYSQL.Base
 {
-    public abstract class MySqlSiteEntityBaseConfiguration<T, TPrimaryKey> 
-        : SiteEntityBaseConfiguration<T, TPrimaryKey, MySqlDatabaseConstants>
+    public abstract class MySqlTenantEntityBaseConfiguration<T, TPrimaryKey> 
+        : TenantEntityBaseConfiguration<T, TPrimaryKey, MySqlDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : SiteEntityBase<TPrimaryKey>
+        where T : TenantEntityBase<TPrimaryKey>
     {
     }
 }

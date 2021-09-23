@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixThemeConfiguration : PostgresSiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : PostgresTenantEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {

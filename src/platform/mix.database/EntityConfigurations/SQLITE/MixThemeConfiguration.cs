@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixThemeConfiguration : SqliteSiteEntityBaseConfiguration<MixTheme, int>
+    public class MixThemeConfiguration : SqliteTenantEntityBaseConfiguration<MixTheme, int>
     {
         public override void Configure(EntityTypeBuilder<MixTheme> builder)
         {

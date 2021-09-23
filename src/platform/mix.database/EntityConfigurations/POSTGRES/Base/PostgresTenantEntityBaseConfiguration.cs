@@ -4,10 +4,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES.Base
 {
-    public abstract class PostgresSiteEntityBaseConfiguration<T, TPrimaryKey> 
-        : SiteEntityBaseConfiguration<T, TPrimaryKey, PostgresDatabaseConstants>
+    public abstract class PostgresTenantEntityBaseConfiguration<T, TPrimaryKey> 
+        : TenantEntityBaseConfiguration<T, TPrimaryKey, PostgresDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : SiteEntityBase<TPrimaryKey>
+        where T : TenantEntityBase<TPrimaryKey>
     {
     }
 }
