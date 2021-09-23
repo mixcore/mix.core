@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixDomainConfiguration : SqlServerSiteEntityBaseConfiguration<MixDomain, int>
+    public class MixDomainConfiguration : SqlServerTenantEntityBaseConfiguration<MixDomain, int>
     {
         public override void Configure(EntityTypeBuilder<MixDomain> builder)
         {

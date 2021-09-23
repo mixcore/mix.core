@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixDomainConfiguration : SqliteSiteEntityBaseConfiguration<MixDomain, int>
+    public class MixDomainConfiguration : SqliteTenantEntityBaseConfiguration<MixDomain, int>
     {
         public override void Configure(EntityTypeBuilder<MixDomain> builder)
         {

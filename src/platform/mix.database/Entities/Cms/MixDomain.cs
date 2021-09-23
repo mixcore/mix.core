@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixDomain : SiteEntityBase<int>
+    public class MixDomain : TenantEntityBase<int>
     {
     }
 }

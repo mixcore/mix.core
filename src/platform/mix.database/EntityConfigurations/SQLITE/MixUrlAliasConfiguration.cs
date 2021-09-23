@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixUrlAliasConfiguration : SqliteSiteEntityBaseConfiguration<MixUrlAlias, int>
+    public class MixUrlAliasConfiguration : SqliteTenantEntityBaseConfiguration<MixUrlAlias, int>
     {
         public override void Configure(EntityTypeBuilder<MixUrlAlias> builder)
         {

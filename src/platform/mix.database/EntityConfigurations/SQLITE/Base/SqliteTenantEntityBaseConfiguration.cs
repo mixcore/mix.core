@@ -4,10 +4,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.SQLITE.Base
 {
-    public abstract class SqliteSiteEntityBaseConfiguration<T, TPrimaryKey> 
-        : SiteEntityBaseConfiguration<T, TPrimaryKey, SqliteDatabaseConstants>
+    public abstract class SqliteTenantEntityBaseConfiguration<T, TPrimaryKey> 
+        : TenantEntityBaseConfiguration<T, TPrimaryKey, SqliteDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : SiteEntityBase<TPrimaryKey>
+        where T : TenantEntityBase<TPrimaryKey>
     {
     }
 }

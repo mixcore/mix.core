@@ -294,7 +294,7 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
-                MixSiteId = 1,
+                MixTenantId = 1,
                 MixDatabaseId = MixDatabaseId,
                 MixDatabaseName = MixDatabaseName,
                 CreatedBy = CreatedBy,

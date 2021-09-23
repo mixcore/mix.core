@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixCultureConfiguration : PostgresSiteEntityBaseConfiguration<MixCulture, int>
+    public class MixCultureConfiguration : PostgresTenantEntityBaseConfiguration<MixCulture, int>
     {
         public override void Configure(EntityTypeBuilder<MixCulture> builder)
         {

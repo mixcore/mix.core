@@ -40,7 +40,7 @@ namespace Mix.Lib.Base
         public virtual string Image { get; set; }
         [Required]
         public virtual string DisplayName { get; set; }
-        public int MixSiteId { get; set; }
+        public int MixTenantId { get; set; }
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace Mix.Lib.Base
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
-            MixSiteId = 1;
+            MixTenantId = 1;
         }
 
         #endregion

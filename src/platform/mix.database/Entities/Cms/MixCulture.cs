@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixCulture : SiteEntityBase<int>
+    public class MixCulture : TenantEntityBase<int>
     {
         public string Alias { get; set; }
         public string Icon { get; set; }

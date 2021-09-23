@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixDatabase : SiteEntityUniqueNameBase<int>
+    public class MixDatabase : TenantEntityUniqueNameBase<int>
     {
         public MixDatabaseType Type { get; set; }
 

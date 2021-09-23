@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixTheme : SiteEntityBase<int>
+    public class MixTheme : TenantEntityBase<int>
     {
         public string PreviewUrl { get; set; }
 

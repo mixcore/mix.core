@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Base;
-using System;
+using Mix.Database.Entities.Cms;
+using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
-namespace Mix.Database.EntityConfigurations.Base
+namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public abstract class SiteEntityBaseConfiguration<T, TPrimaryKey, TConfig> : EntityBaseConfiguration<T, TPrimaryKey, TConfig>
-        where TPrimaryKey : IComparable
-        where T : SiteEntityBase<TPrimaryKey>
-        where TConfig: IDatabaseConstants
+    public class MixTenantConfiguration : SqlServerEntityBaseConfiguration<MixTenant, int>
     {
-        public override void Configure(EntityTypeBuilder<T> builder)
+        public override void Configure(EntityTypeBuilder<MixTenant> builder)
         {
             base.Configure(builder);
 
@@ -20,12 +17,16 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
+            builder.Property(e => e.SystemName)
+                .IsRequired()
+                .HasColumnType($"{Config.NString}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
+
             builder.Property(e => e.Description)
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-
         }
-
     }
 }

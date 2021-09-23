@@ -47,7 +47,13 @@ namespace Mix.Lib.Startups
 
             services.AddAuthorization();
 
-            services.AddAuthentication(authConfigurations.TokenType)
+            services.AddAuthentication(
+                    opts =>
+                    {
+                        opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }
+                )
                 .AddFacebookIf(
                 !string.IsNullOrEmpty(authConfigurations.Facebook?.AppId),
                 authConfigurations.Facebook, accessDeniedPath)
