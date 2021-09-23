@@ -177,7 +177,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
                 Id = null;
                 var data = await Data.DuplicateAsync(context, transaction);
                 DataId = data.Data.Id;
-                return await SaveModelAsync(true, context, transaction);
+                return await SaveModelAsync(false, context, transaction);
             }
             catch (Exception ex)
             {
