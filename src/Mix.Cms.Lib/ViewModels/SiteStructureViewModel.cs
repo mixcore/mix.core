@@ -543,7 +543,11 @@ namespace Mix.Cms.Lib.ViewModels
                             dicMixDatabaseIds.Add(set.Id, startId);
                             set.Id = startId;
                             set.CreatedDateTime = DateTime.UtcNow;
-                            mixDatabaseColumns.AddRange(set.Columns
+
+                            // Fields used in old version and will removed in latest
+                            var cols = set.Columns ?? set.Fields; 
+
+                            mixDatabaseColumns.AddRange(cols
                                     .Where(m => !mixDatabaseColumns.Any(n => n.Id == m.Id))
                                     .ToList());
                             var saveResult = await set.SaveModelAsync(false, context, transaction);
@@ -796,7 +800,7 @@ namespace Mix.Cms.Lib.ViewModels
                             break;
                         }
                     }
-                    if (!dicPageIds.Any(m => m.Key == item.Id))
+                    if (!dicPageIds.Any(m => m.Key == oldId))
                     {
                         dicPageIds.Add(oldId, startId);
                     }
@@ -839,12 +843,13 @@ namespace Mix.Cms.Lib.ViewModels
                         {
                             item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                         }
-                        item.Columns = item.Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Columns;
+                        item.Columns = item.Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Columns ?? MixDatabases.FirstOrDefault(m => m.Name == item.MixDatabaseName).Fields;
                         foreach (var field in item.Columns)
                         {
                             field.Specificulture = destCulture;
                             var newSet = MixDatabases.FirstOrDefault(m => m.Name == field.MixDatabaseName);
-                            var newField = newSet?.Columns.FirstOrDefault(m => m.Name == field.Name);
+                            var cols = newSet?.Columns ?? newSet?.Fields;
+                            var newField = cols?.FirstOrDefault(m => m.Name == field.Name);
                             if (newField != null)
                             {
                                 field.Id = newField.Id;
