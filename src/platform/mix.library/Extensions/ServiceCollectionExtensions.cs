@@ -15,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Mix.Shared.Services;
 using Mix.Database.Services;
-using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
 using Mix.Database.Entities.Cms;
@@ -23,10 +22,8 @@ using Mix.Database.Extenstions;
 using Mix.Lib.Filters;
 using Mix.Lib.Attributes;
 using System.Collections.Generic;
-using Mix.Heart.Helpers;
 using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Controllers;
 using System.Text.Json.Serialization;
 
 namespace Mix.Lib.Extensions
@@ -40,11 +37,12 @@ namespace Mix.Lib.Extensions
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
+            // Clone Settings from shared folder
+            InitAppSettings();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
-
 
             services.AddSingleton<MixFileService>();
             services.InitMixContext();
@@ -66,18 +64,19 @@ namespace Mix.Lib.Extensions
         #region Apps
 
         public static IApplicationBuilder UseMixApps(
-            this IApplicationBuilder app, 
-            Assembly executingAssembly, 
-            IConfiguration configuration, 
+            this IApplicationBuilder app,
+            Assembly executingAssembly,
+            IConfiguration configuration,
             bool isDevelop,
             GlobalConfigService globalConfigService)
         {
-            app.UseResponseCompression();
             app.UseCors(MixcoreAllowSpecificOrigins);
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+           
 
             if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
             {
@@ -86,6 +85,7 @@ namespace Mix.Lib.Extensions
 
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
+
             app.UseResponseCompression();
             return app;
         }
@@ -162,7 +162,6 @@ namespace Mix.Lib.Extensions
 
         private static IServiceCollection InitMixContext(this IServiceCollection services)
         {
-            InitAppSettings();
             services.AddScoped<GlobalConfigService>();
             services.AddScoped<CultureService>();
             services.AddScoped<AuthConfigService>();
@@ -178,14 +177,14 @@ namespace Mix.Lib.Extensions
         private static void InitAppSettings()
         {
             MixFileService _fileService = new();
-            
+
             if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
                 _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
 
             GlobalConfigService globalConfigService = new();
-            
+
             if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
             {
                 var mixDatabaseService = new MixDatabaseService(globalConfigService);
