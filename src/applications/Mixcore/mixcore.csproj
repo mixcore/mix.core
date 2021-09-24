@@ -7,14 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Domain\Protos\greet.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
+    <ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
     <ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
     <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
@@ -25,5 +31,9 @@
 
   <ItemGroup>
     <Folder Include="Domain\ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Domain\Protos\greet.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

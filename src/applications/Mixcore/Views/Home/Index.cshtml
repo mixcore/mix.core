@@ -1,8 +1,15 @@
-﻿@{
+﻿@using Grpc.Net.Client;
+@using Mixcore;
+
+@{
     ViewData["Title"] = "Home Page";
+    using var channel = GrpcChannel.ForAddress("https://localhost:5010");
+    var client = new Greeter.GreeterClient(channel);
+    var reply = await client.SayHelloAsync(
+                      new HelloRequest { Name = "Greeter Client" });
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome @reply.Message</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
