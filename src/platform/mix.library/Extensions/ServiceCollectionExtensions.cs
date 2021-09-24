@@ -166,6 +166,7 @@ namespace Mix.Lib.Extensions
             services.AddScoped<CultureService>();
             services.AddScoped<AuthConfigService>();
             services.AddScoped<SmtpConfigService>();
+            services.AddScoped<MixEndpointService>();
             services.AddScoped<IPSecurityConfigService>();
 
             services.AddScoped<MixDatabaseService>();

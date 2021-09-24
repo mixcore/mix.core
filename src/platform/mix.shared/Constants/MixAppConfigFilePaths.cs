@@ -12,6 +12,7 @@
         public const string MixHeart = "MixContent/AppConfigs/mix_heart";
         public const string Quartz = "MixContent/AppConfigs/quartz";
         public const string Smtp = "MixContent/AppConfigs/smtp";
+        public const string Endpoint = "MixContent/AppConfigs/endpoint";
         public const string MixConfigurations = "MixContent/AppConfigs/authentication";
         public const string Translator = "MixContent/AppConfigs/translator";
         public const string Configration = "MixContent/AppConfigs/configuration";
