@@ -79,14 +79,18 @@ namespace Mix.Cms.Api.Controllers.v1
             string message = data.Value<string>("message");
             string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
-            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
-            RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
-            loginResult = await _idService.Login(model);
-            if (loginResult.IsSucceed)
+            if (!string.IsNullOrEmpty(decryptMsg))
             {
-                return Ok(loginResult.Data);
+                var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+                RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+                loginResult = await _idService.Login(model);
+                if (loginResult.IsSucceed)
+                {
+                    return Ok(loginResult.Data);
+                }
+                return BadRequest(loginResult.Errors);
             }
-            return BadRequest(loginResult.Errors);
+            return BadRequest();
         }
 
         [Route("user-login")]

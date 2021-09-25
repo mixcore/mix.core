@@ -54,7 +54,17 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost("save-data/{mixDatabase}/{sendMail}")]
         public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, bool? sendMail, bool? sendSms, [FromBody] JObject data)
         {
-            var formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
+            FormViewModel formData;
+            string id = data.Value<string>("id");
+            if (!string.IsNullOrEmpty(id))
+            {
+                var getData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == id && m.Specificulture == _lang);
+                formData = getData.Data;
+            }
+            else
+            {
+                formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
+            }
             if (formData != null)
             {
                 formData.Obj = data;
