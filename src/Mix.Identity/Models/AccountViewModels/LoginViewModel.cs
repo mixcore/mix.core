@@ -2,6 +2,7 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
@@ -14,6 +15,8 @@ namespace Mix.Identity.Models.AccountViewModels
         /// <value>
         /// The UserName.
         /// </value>
+        /// 
+        [JsonProperty("email")]
         public string Email { get; set; }
 
         /// <summary>
@@ -22,6 +25,8 @@ namespace Mix.Identity.Models.AccountViewModels
         /// <value>
         /// The UserName.
         /// </value>
+        /// 
+        [JsonProperty("userName")]
         public string UserName { get; set; }
 
         /// <summary>
@@ -32,6 +37,7 @@ namespace Mix.Identity.Models.AccountViewModels
         /// </value>
         [Required]
         [DataType(DataType.Password)]
+        [JsonProperty("password")]
         public string Password { get; set; }
 
         /// <summary>
@@ -41,8 +47,9 @@ namespace Mix.Identity.Models.AccountViewModels
         /// {D255958A-8513-4226-94B9-080D98F904A1}  <c>true</c> if [remember me]; otherwise, <c>false</c>.
         /// </value>
         [Display(Name = "Remember me?")]
+        [JsonProperty("rememberMe")]
         public bool RememberMe { get; set; }
-
+        [JsonProperty("returnUrl")]
         public string ReturnUrl { get; set; }
     }
 }

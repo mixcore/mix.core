@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Mix.Cms.Api.RestFul.Domain.Dtos;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Helpers;
@@ -8,6 +9,7 @@ using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
+using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Infrastructure.Repositories;
@@ -31,6 +33,23 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             this.applicationLifetime = applicationLifetime;
             _roleManager = roleManager;
+        }
+
+        [HttpPost]
+        [Route("encrypt-object")]
+        public string Encrypt([FromBody] EncryptDataDto requestDto)
+        {
+            string data = requestDto.ObjectData.ToString(Newtonsoft.Json.Formatting.None);
+            var key = requestDto.Key ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
+            return AesEncryptionHelper.EncryptString(data, key);
+        }
+
+        [HttpPost]
+        [Route("decrypt-object")]
+        public JObject Decrypt([FromBody] EncryptDataDto requestDto)
+        {
+            var key = requestDto.Key ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
+            return JObject.Parse(AesEncryptionHelper.DecryptString(requestDto.StringData, key));
         }
 
         [HttpGet]
