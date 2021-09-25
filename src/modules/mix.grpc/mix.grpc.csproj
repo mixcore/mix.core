@@ -6,10 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\crud.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\crud.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
   </ItemGroup>
 

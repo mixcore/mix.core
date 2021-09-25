@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option csharp_namespace = "Mix.Grpc";
+
+package crud;
+
+// The greeting service definition.
+service Crud {
+    rpc GetAll (Empty) returns (ModelList) {}
+    rpc Get (Id) returns (Model) {}
+    rpc Insert (Model) returns (Model) {}
+    rpc Update (Model) returns (Model) {}
+    rpc Delete (Id) returns (Empty) {}
+}
+
+message Empty {}
+message Model {
+    int32 id = 1;
+    string className = 2;
+    string data = 3;
+}
+message ModelList {
+}
+message Id {
+    int32 id = 1;
+}

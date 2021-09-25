@@ -77,12 +77,11 @@ namespace Mix.Lib.Extensions
                 builder.AllowAnyHeader();
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
+
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
-           
 
             if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
             {
