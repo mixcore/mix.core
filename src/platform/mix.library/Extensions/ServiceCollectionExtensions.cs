@@ -70,7 +70,13 @@ namespace Mix.Lib.Extensions
             bool isDevelop,
             GlobalConfigService globalConfigService)
         {
-            app.UseCors(MixcoreAllowSpecificOrigins);
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+                builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
+            });
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

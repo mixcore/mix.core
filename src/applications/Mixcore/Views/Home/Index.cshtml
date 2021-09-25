@@ -1,13 +1,13 @@
 ﻿@inject MixEndpointService endpointService
+@using Mix.Grpc.Models;
 @using Grpc.Net.Client;
 
 @using Mixcore;
 
 @{
     ViewData["Title"] = "Home Page";
-    using var channel = GrpcChannel.ForAddress(endpointService.Grpc);
-    var client = new Greeter.GreeterClient(channel);
-    var reply = await client.SayHelloAsync(
+    var grpc = new GrpcClientModel<Greeter.GreeterClient>(endpointService.Account);
+    var reply = await grpc.Client.SayHelloAsync(
                       new HelloRequest { Name = "Greeter Client" });
 }
 
