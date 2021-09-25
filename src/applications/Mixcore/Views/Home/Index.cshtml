@@ -1,17 +1,20 @@
-﻿@inject MixEndpointService endpointService
-@using Mix.Grpc.Models;
+﻿@using Mix.Grpc.Models;
+@using System.Reflection;
+
+@inject MixEndpointService endpointService
 @using Grpc.Net.Client;
 
 @using Mixcore;
 
 @{
     ViewData["Title"] = "Home Page";
-    var grpc = new GrpcClientModel<Greeter.GreeterClient>(endpointService.Account);
+    Context.Request.Headers.TryGetValue("Authorization", out  var token);
+    var grpc = new GrpcClientModel<Greeter.GreeterClient>(endpointService.Account, Context);
     var reply = await grpc.Client.SayHelloAsync(
-                      new HelloRequest { Name = "Greeter Client" });
+                      new HelloRequest { Name = Assembly.GetExecutingAssembly().GetName().Name }) ;
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome @reply.Message</h1>
+    <h1 class="display-4">@reply.Message</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

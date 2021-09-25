@@ -8,10 +8,19 @@
   <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Domain\Helpers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Domain\Protos\greet.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>

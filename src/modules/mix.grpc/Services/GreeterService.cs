@@ -15,6 +15,7 @@ namespace Mix.Grpc
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
         {
+            _logger.LogInformation($"Hello {request.Name} from {Assembly.GetEntryAssembly().FullName}");
             return Task.FromResult(new HelloReply
             {
                 Message = $"Hello {request.Name} from {Assembly.GetEntryAssembly().FullName}" 

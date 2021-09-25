@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
-using Mix.Identity.Services;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
@@ -14,6 +13,7 @@ using System.Linq.Expressions;
 using Mix.Heart.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Mix.Grpc.Models;
 
 namespace Mix.Portal.Controllers
 {
@@ -24,6 +24,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly Repository<MixCmsContext, MixDatabaseColumn, int> _columnRepository;
         private readonly MixDataService _mixDataService;
+        private readonly MixEndpointService _endpointService;
 
         public MixDatabaseColumnPortalController(
             ILogger<MixApiControllerBase> logger,
@@ -33,19 +34,25 @@ namespace Mix.Portal.Controllers
             Repository<MixCmsContext, MixCulture, int> cultureRepository,
             Repository<MixCmsContext, MixDatabaseColumn, int> columnRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService)
+            MixIdentityService mixIdentityService, 
+            MixEndpointService endpointService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, columnRepository, mixIdentityService)
         {
             _columnRepository = columnRepository;
             _mixDataService = mixDataService;
+            _endpointService = endpointService;
+            
         }
 
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<List<MixDatabaseColumnViewModel>>> Init(string mixDatabase)
         {
+            var grpc = new GrpcClientModel<Greeter.GreeterClient>(_endpointService.Account, HttpContext);
             int.TryParse(mixDatabase, out int mixDatabaseId);
             var getData = await _columnRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
                 f => f.MixDatabaseName == mixDatabase || f.MixDatabaseId == mixDatabaseId);
+            var reply = await grpc.Client.SayHelloAsync(new HelloRequest() { Name = mixDatabase });
+            Console.WriteLine(reply);
             return Ok(getData);
         }
 
