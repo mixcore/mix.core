@@ -15,12 +15,13 @@
       "launchUrl": "api/v2/mix-account/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": ""
     },
     "mix.account": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/v2/mix-portal/swagger",
+      "launchUrl": "api/v2/mix-account/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -1,5 +1,6 @@
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Mix.Grpc
@@ -16,7 +17,7 @@ namespace Mix.Grpc
         {
             return Task.FromResult(new HelloReply
             {
-                Message = "Hello test " + request.Name
+                Message = $"Hello {request.Name} from {Assembly.GetEntryAssembly().FullName}" 
             });
         }
     }

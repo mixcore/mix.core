@@ -29,3 +29,12 @@
         }
     }
 ```
+
+## 6. Using MixGrpc
+
+```
+    @using Mix.Grpc.Models;
+    var grpc = new GrpcClientModel<Greeter.GreeterClient>(endpointService.Mixcore);
+    var reply = await grpc.Client.SayHelloAsync(
+                        new HelloRequest { Name = "Greeter Client" });
+```
