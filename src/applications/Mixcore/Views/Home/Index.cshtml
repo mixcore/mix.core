@@ -1,36 +1,9 @@
-﻿@using Mix.Grpc.Models;
-@using System.Reflection;
-
-@inject MixEndpointService endpointService
-@using Grpc.Net.Client;
-
-@using Mixcore;
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
     Context.Request.Headers.TryGetValue("Authorization", out  var token);
-
-    var grpc = new GrpcClientModel<MixGrpc.MixGrpcClient>(endpointService.Account, Context);
-
-    var cts = new System.Threading.CancellationTokenSource(System.TimeSpan.FromSeconds(20));
-    using var streamingCall = grpc.Client.GetStream(new MixGrpcRequest(), cancellationToken: cts.Token);
-
-    try
-    {
-        while (await streamingCall.ResponseStream.MoveNext(cts.Token))
-        {
-            Console.WriteLine("Greeting: " + streamingCall.ResponseStream.Current.Message);
-        }
-    }
-    catch (Grpc.Core.RpcException ex) when (ex.StatusCode == Grpc.Core.StatusCode.Cancelled)
-    {
-        System.Console.WriteLine("Stream cancelled.");
-    }
-    var reply = await grpc.Client.SendAsync(
-              new MixGrpcRequest { From = MixModuleNames.Mixcore, To = MixModuleNames.Account }) ;
 }
 
 <div class="text-center">
-    <h1 class="display-4">@Html.Raw(reply.Message)</h1>
+    <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

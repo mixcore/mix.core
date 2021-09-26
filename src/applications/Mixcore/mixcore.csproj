@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Domain\Protos\mix_grpc.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
     <ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
@@ -31,9 +27,5 @@
 
   <ItemGroup>
     <Folder Include="Domain\ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="Domain\Protos\mix_grpc.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>

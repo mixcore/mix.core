@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Mix.Grpc.Models
 {
-    public class GrpcClientModel<T>
+    public class GrpcChannelModel<T>
     {
         public readonly T Client;
         private GrpcChannel _channel;
         private string _token;
 
-        public GrpcClientModel(string address, HttpContext context = null)
+        public GrpcChannelModel(string address, HttpContext context = null)
         {
             _token = context?.Request.Headers["Authorization"].ToString();
             _channel = CreateChannel(address);
