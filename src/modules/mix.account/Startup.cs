@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Mix.Account.Domain.Services;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
@@ -31,6 +32,11 @@ namespace Mix.Account
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GlobalConfigService globalConfigService)
         {
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<MixGrpcAccountService>();
+            });
         }
     }
 }

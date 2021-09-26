@@ -31,7 +31,7 @@ namespace Mix.Grpc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<MixGrpcrService>();
 
                 endpoints.MapGet("/", async context =>
                 {

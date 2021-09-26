@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Domain\Protos\greet.proto" />
+    <None Remove="Domain\Protos\mix_grpc.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Domain\Protos\greet.proto" GrpcServices="Client" />
+    <Protobuf Include="Domain\Protos\mix_grpc.proto" GrpcServices="Client" />
   </ItemGroup>
 </Project>
