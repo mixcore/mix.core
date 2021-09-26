@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "Mixcore";
+
+package greet;
+
+service MixGrpc {
+  rpc Send (MixGrpcRequest) returns (MixGrpcReply);
+  rpc SendAuthorized (MixGrpcRequest) returns (MixGrpcReply);
+  rpc GetStream (MixGrpcRequest) returns (stream MixGrpcReply);
+  rpc GetStreamAuthorized (MixGrpcRequest) returns (stream MixGrpcReply);
+}
+
+message MixGrpcRequest {
+  string from = 1;
+  string to = 2;
+  string action = 3;
+  string type = 4;
+  string objectData = 5;
+  string stringData = 6;
+}
+
+message MixGrpcReply {
+  string status = 1;
+  string type = 2;
+  string objectData = 3;
+  string stringData = 4;
+  string message = 5;
+}

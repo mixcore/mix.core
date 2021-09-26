@@ -14,10 +14,6 @@ namespace Mix.Grpc
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGrpcService<GreeterService>();
-            });
         }
     }
 }
