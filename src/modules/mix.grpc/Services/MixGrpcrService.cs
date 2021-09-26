@@ -36,6 +36,11 @@ namespace Mix.Grpc
             });
         }
 
+        public override Task<MixGrpcReply> SendStream(IAsyncStreamReader<MixGrpcRequest> requestStream, ServerCallContext context)
+        {
+            return base.SendStream(requestStream, context);
+        }
+
         public override async Task GetStream(
             MixGrpcRequest request, 
             IServerStreamWriter<MixGrpcReply> responseStream, 

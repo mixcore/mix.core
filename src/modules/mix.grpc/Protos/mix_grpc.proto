@@ -2,13 +2,17 @@ syntax = "proto3";
 
 option csharp_namespace = "Mix.Grpc";
 
-package greet;
+package MixGrpc;
 
 service MixGrpc {
     rpc Send (MixGrpcRequest) returns (MixGrpcReply);
     rpc SendAuthorized (MixGrpcRequest) returns (MixGrpcReply);
+    rpc SendStream (stream MixGrpcRequest) returns (MixGrpcReply);
+    rpc SendSteamAuthorized (stream MixGrpcRequest) returns (MixGrpcReply);
     rpc GetStream (MixGrpcRequest) returns (stream MixGrpcReply);
     rpc GetStreamAuthorized (MixGrpcRequest) returns (stream MixGrpcReply);
+    rpc StartStream (stream MixGrpcRequest) returns (stream MixGrpcReply);
+    rpc StartStreamAuthorized (stream MixGrpcRequest) returns (stream MixGrpcReply);
 }
 
 message MixGrpcRequest {

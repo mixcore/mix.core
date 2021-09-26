@@ -47,12 +47,9 @@ namespace Mix.Portal.Controllers
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<List<MixDatabaseColumnViewModel>>> Init(string mixDatabase)
         {
-            var grpc = new GrpcClientModel<Greeter.GreeterClient>(_endpointService.Account, HttpContext);
             int.TryParse(mixDatabase, out int mixDatabaseId);
             var getData = await _columnRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
                 f => f.MixDatabaseName == mixDatabase || f.MixDatabaseId == mixDatabaseId);
-            var reply = await grpc.Client.SayHelloAsync(new HelloRequest() { Name = mixDatabase });
-            Console.WriteLine(reply);
             return Ok(getData);
         }
 
