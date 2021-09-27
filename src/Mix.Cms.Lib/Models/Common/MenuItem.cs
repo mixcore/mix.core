@@ -9,7 +9,6 @@ namespace Mix.Cms.Lib.Models.Common
 {
     public class MenuItem
     {
-        [JsonIgnore]
         [JsonProperty("obj")]
         public JObject Obj { get; set; }
 
@@ -63,15 +62,7 @@ namespace Mix.Cms.Lib.Models.Common
         {
             if (Obj != null)
             {
-                var field = Obj.GetValue(fieldName);
-                if (field != null)
-                {
-                    return field.Value<T>();
-                }
-                else
-                {
-                    return default;
-                }
+                return Obj.Value<T>(fieldName);
             }
             else
             {
