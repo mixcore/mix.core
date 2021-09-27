@@ -27,18 +27,40 @@ namespace Mix.Cms.Lib.Models.Common
         [JsonProperty("actived_menu_item")]
         public MenuItem ActivedMenuItem { get; set; }
 
+        [JsonProperty("obj")]
+        public JObject Obj { get; set; }
+
         public MixNavigation()
         {
         }
 
         public MixNavigation(JObject obj, string culture)
         {
+            Obj = obj;
             Id = obj["id"].Value<string>();
             Specificulture = culture;
             Title = obj["title"].Value<string>();
             Name = obj["name"].Value<string>();
-            MenuItems = obj["menu_items"].ToObject<List<MenuItem>>();
-            MenuItems.ForEach(m => m.Specificulture = Specificulture);
+            var arr = obj["menu_items"].ToObject<JArray>();
+            foreach (JObject item in arr)
+            {
+                var menuItem = item.ToObject<MenuItem>();
+                menuItem.Obj = item;
+                menuItem.Specificulture = Specificulture;
+                MenuItems.Add(menuItem);
+            }
+        }
+
+        public T Property<T>(string fieldName)
+        {
+            if (Obj != null)
+            {
+                return Obj.Value<T>(fieldName);
+            }
+            else
+            {
+                return default;
+            }
         }
     }
 }

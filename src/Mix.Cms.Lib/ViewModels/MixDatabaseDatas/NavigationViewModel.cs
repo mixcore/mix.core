@@ -73,7 +73,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (MixDatabaseName == MixConstants.MixDatabaseName.NAVIGATION && Obj != null)
                 {
-                    return Obj.ToObject<MixNavigation>();
+                    return new MixNavigation(Obj, Specificulture);
                 }
                 return null;
             }
