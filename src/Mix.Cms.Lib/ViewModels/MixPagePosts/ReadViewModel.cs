@@ -145,8 +145,15 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                var navCategoryPostViewModels = context.MixPage.Include(cp => cp.MixPagePost).Where(a => a.Specificulture == specificulture
-                    && (a.Type == MixPageType.ListPost)
+                var result = MixPagePosts.ReadViewModel.Repository.GetModelListBy(
+                        m => m.PostId == postId && m.Specificulture == specificulture,
+                                context, transaction).Data;
+                var activeIds = result.Select(n => n.PageId);
+
+                var inactiveNavs = context.MixPage
+                    .Where(a => a.Specificulture == specificulture
+                        && !activeIds.Any(m => m == a.Id)
+                        && (a.Type == MixPageType.ListPost)
                     )
                     .AsEnumerable()
                     .Select(p => new MixPagePosts.ReadViewModel(
@@ -161,10 +168,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                         IsActived = p.MixPagePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
+                
+                result.AddRange(inactiveNavs.ToList());
+
                 return new RepositoryResponse<List<ReadViewModel>>()
                 {
                     IsSucceed = true,
-                    Data = navCategoryPostViewModels.ToList()
+                    Data = result
                 };
             }
             catch (Exception ex) // TODO: Add more specific exeption types instead of Exception only
