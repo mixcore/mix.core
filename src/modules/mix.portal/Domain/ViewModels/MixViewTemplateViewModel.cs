@@ -2,11 +2,12 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
+using Mix.Lib.Attributes;
 using Mix.Shared.Enums;
-using System;
 
 namespace Mix.Portal.Domain.ViewModels
 {
+    [GenerateRestApiController]
     public class MixViewTemplateViewModel 
         : ViewModelBase<MixCmsContext, MixViewTemplate, int>
     {

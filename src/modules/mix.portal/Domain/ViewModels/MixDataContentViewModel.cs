@@ -120,6 +120,21 @@ namespace Mix.Portal.Domain.ViewModels
                 }
             }
         }
+
+        protected override async Task DeleteHandlerAsync()
+        {
+            if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
+            {
+                MixDataViewModel.Repository = new(UowInfo);
+
+                await Repository.DeleteAsync(Id);
+                await MixDataViewModel.Repository.DeleteAsync(m => m.Id == ParentId);
+            }
+            else
+            {
+                await base.DeleteHandlerAsync();
+            }
+        }
         #endregion
 
         #region Helper
