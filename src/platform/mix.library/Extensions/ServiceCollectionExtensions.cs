@@ -222,14 +222,17 @@ namespace Mix.Lib.Extensions
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
             services.AddControllers(options =>
-                options.Filters.Add(new HttpResponseExceptionFilter()))
-                .AddJsonOptions(opts =>
-                {
-                    var enumConverter = new JsonStringEnumConverter();
-                    opts.JsonSerializerOptions.Converters.Add(enumConverter);
-                })
-                .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
+            {
+                options.Filters.Add(new HttpResponseExceptionFilter());
+                options.Conventions.Add(new ControllerDocumentationConvention());
+            })
+            .AddJsonOptions(opts =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                opts.JsonSerializerOptions.Converters.Add(enumConverter);
+            })
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });

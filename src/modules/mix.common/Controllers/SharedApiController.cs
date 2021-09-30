@@ -26,6 +26,7 @@ using Mix.Common.Domain.Dtos;
 namespace Mix.Common.Controllers
 {
     [Route("api/v2/shared")]
+    [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
         private readonly QueryRepository<MixCmsContext, MixConfigurationContent, int> _configRepo;
