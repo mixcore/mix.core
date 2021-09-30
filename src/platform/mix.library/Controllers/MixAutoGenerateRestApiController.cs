@@ -14,8 +14,8 @@ using Mix.Lib.Attributes;
 
 namespace Mix.Lib.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [MixAuthorize]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[MixAuthorize]
     public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
         : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
