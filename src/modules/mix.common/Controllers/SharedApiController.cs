@@ -20,7 +20,6 @@ using Mix.Lib.Abstracts;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
-using Mix.Identity.Services;
 using Mix.Common.Domain.Dtos;
 
 namespace Mix.Common.Controllers
@@ -64,19 +63,23 @@ namespace Mix.Common.Controllers
 
         [HttpPost]
         [Route("encrypt-message")] 
-        public ActionResult EncryptMessage(CryptoMessageDto encryptMessage)
+        public ActionResult<string> EncryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
-            string msg = AesEncryptionHelper.EncryptString(encryptMessage.Message, key);
-            return Ok(msg);
+            string key = encryptMessage.Key 
+                        ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string msg = encryptMessage.ObjectData != null
+                    ? encryptMessage.ObjectData.ToString(Newtonsoft.Json.Formatting.None)
+                    : encryptMessage.StringData;
+            var result = AesEncryptionHelper.EncryptString(msg, key);
+            return Ok(result);
         }
         
         [HttpPost]
         [Route("decrypt-message")] 
-        public ActionResult DecryptMessage(CryptoMessageDto encryptMessage)
+        public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
             string key = encryptMessage.Key ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
-            string msg = AesEncryptionHelper.DecryptString(encryptMessage.Message, key);
+            string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key);
             return Ok(msg);
         }
 

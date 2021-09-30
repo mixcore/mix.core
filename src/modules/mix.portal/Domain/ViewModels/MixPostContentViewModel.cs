@@ -4,12 +4,13 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPostContentViewModel 
+    public class MixPostContentViewModel
         : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixPostContent, int>
     {
         #region Contructors
@@ -45,6 +46,21 @@ namespace Mix.Portal.Domain.ViewModels
                 Description = Excerpt
             };
             return await parent.SaveAsync();
+        }
+
+        protected override async Task DeleteHandlerAsync()
+        {
+            if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
+            {
+                MixPostViewModel.Repository = new(UowInfo);
+
+                await Repository.DeleteAsync(Id);
+                await MixPostViewModel.Repository.DeleteAsync(m => m.Id == ParentId);
+            }
+            else
+            {
+                await base.DeleteHandlerAsync();
+            }
         }
     }
 }

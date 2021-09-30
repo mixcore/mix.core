@@ -4,6 +4,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Shared.Enums;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.ViewModels
@@ -51,5 +52,19 @@ namespace Mix.Portal.Domain.ViewModels
             return await parent.SaveAsync();
         }
 
+        protected override async Task DeleteHandlerAsync()
+        {
+            if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
+            {
+                MixModuleViewModel.Repository = new(UowInfo);
+
+                await Repository.DeleteAsync(Id);
+                await MixModuleViewModel.Repository.DeleteAsync(m => m.Id == ParentId);
+            }
+            else
+            {
+                await base.DeleteHandlerAsync();
+            }
+        }
     }
 }
