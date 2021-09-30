@@ -6,7 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
+using Mix.Shared.Constants;
 using Mix.Shared.Services;
+using System.IO;
 using System.Reflection;
 
 namespace Mix.Portal
@@ -21,6 +23,12 @@ namespace Mix.Portal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Directory.Exists(MixFolders.MixCoreConfigurationFolder))
+            {
+                MixFileService _fileService = new();
+                _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
+            }
+
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
             // Must app Auth config after Add mixservice to init App config 

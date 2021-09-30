@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using System.Threading.Tasks;
 using Mix.Shared.Services;
@@ -12,11 +11,11 @@ using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Abstracts;
 using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms;
-using Mix.Identity.Services;
 
 namespace Mix.Theme.Controllers
 {
     [Route("api/v2/mix-theme/setup")]
+    [ApiController]
     public class InitController : MixApiControllerBase
     {
         private readonly InitCmsService _initCmsService;
