@@ -130,9 +130,10 @@ namespace Mix.Cms.Lib.ViewModels.MixLanguages
                     _context.MixLanguage.Remove(lang);
                 }
             }
+            await _context.SaveChangesAsync();
             return new RepositoryResponse<bool>()
             {
-                IsSucceed = (await _context.SaveChangesAsync()) > 0
+                IsSucceed = true
             };
         }
 
