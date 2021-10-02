@@ -56,10 +56,10 @@ namespace Mix.Portal.Domain.ViewModels
         {
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
-                MixModuleViewModel.Repository = new(UowInfo);
+                var mdlRepo = MixModuleViewModel.GetRepository(UowInfo);
 
                 await Repository.DeleteAsync(Id);
-                await MixModuleViewModel.Repository.DeleteAsync(m => m.Id == ParentId);
+                await mdlRepo.DeleteAsync(m => m.Id == ParentId);
             }
             else
             {

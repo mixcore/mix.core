@@ -3,7 +3,6 @@ using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -52,10 +51,10 @@ namespace Mix.Portal.Domain.ViewModels
         {
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
-                MixPageViewModel.Repository = new(UowInfo);
+                var pageRepo = MixPageViewModel.GetRepository(UowInfo);
 
                 await Repository.DeleteAsync(Id);
-                await MixPageViewModel.Repository.DeleteAsync(m => m.Id == ParentId);
+                await pageRepo.DeleteAsync(m => m.Id == ParentId);
             }
             else
             {
