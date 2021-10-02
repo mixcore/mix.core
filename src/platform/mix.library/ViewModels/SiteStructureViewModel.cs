@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
-using Newtonsoft.Json;
+using Mix.Database.Entities.Cms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,33 +20,35 @@ namespace Mix.Lib.ViewModels
 
         public string CreatedBy { get; set; }
 
-        public List<MixPosts.ImportViewModel> Posts { get; set; } = new List<MixPosts.ImportViewModel>();
+        public List<MixPost> Posts { get; set; } = new();
 
-        public List<MixPages.ImportViewModel> Pages { get; set; }
+        public List<MixPage> Pages { get; set; } = new();
 
-        public List<MixModules.ImportViewModel> Modules { get; set; }
+        public List<MixModule> Modules { get; set; }
 
-        public List<MixDatabases.ImportViewModel> MixDatabases { get; set; }
+        public List<MixData> Datas { get; set; }
 
-        public List<MixTemplates.ImportViewModel> Templates { get; set; } = new List<MixTemplates.ImportViewModel>();
+        public List<MixDatabase> MixDatabases { get; set; }
 
-        public List<MixConfigurations.ImportViewModel> Configurations { get; set; } = new List<MixConfigurations.ImportViewModel>();
+        public List<MixViewTemplate> Templates { get; set; } = new();
 
-        public List<MixPortalPages.UpdateViewModel> Permissions { get; set; } = new();
+        public List<MixConfiguration> Configurations { get; set; } = new();
 
-        public List<MixLanguages.ImportViewModel> Languages { get; set; } = new List<MixLanguages.ImportViewModel>();
+        public List<MixLanguage> Languages { get; set; } = new();
 
-        public List<MixDatabaseDataAssociations.ImportViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.ImportViewModel>();
+        public List<MixDataContentAssociation> RelatedData { get; set; } = new();
 
-        public List<MixPagePosts.ImportViewModel> PagePostNavs { get; set; } = new List<MixPagePosts.ImportViewModel>();
+        public List<MixDataContent> MixDatabaseDatas { get; set; } = new();
 
-        public List<MixPageModules.ImportViewModel> PageModuleNavs { get; set; } = new List<MixPageModules.ImportViewModel>();
+        public List<MixModuleData> ModuleDatas { get; set; } = new();
 
-        public List<MixModulePosts.ImportViewModel> ModulePostNavs { get; set; } = new List<MixModulePosts.ImportViewModel>();
+        public List<MixPagePostAssociation> PagePostNavs { get; set; } = new();
 
-        public List<MixModuleDatas.ImportViewModel> ModuleDatas { get; set; } = new List<MixModuleDatas.ImportViewModel>();
+        public List<MixPageModuleAssociation> PageModuleNavs { get; set; } = new();
 
-        public List<MixDatabaseDatas.ImportViewModel> MixDatabaseDatas { get; set; } = new List<MixDatabaseDatas.ImportViewModel>();
+        public List<MixModulePostAssociation> ModulePostNavs { get; set; } = new();
+
+
 
         public string Specificulture { get; set; }
 
@@ -519,7 +521,7 @@ namespace Mix.Lib.ViewModels
                             set.CreatedDateTime = DateTime.UtcNow;
 
                             // Fields used in old version and will removed in latest
-                            var cols = set.Columns ?? set.Fields; 
+                            var cols = set.Columns ?? set.Fields;
 
                             mixDatabaseColumns.AddRange(cols
                                     .Where(m => !mixDatabaseColumns.Any(n => n.Id == m.Id))
