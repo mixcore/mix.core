@@ -3,11 +3,12 @@ using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Lib.Abstracts;
-using Mix.Lib.Attributes;
+using Mix.Lib.Dtos;
 using Mix.Lib.Services;
+using Mix.Lib.ViewModels;
 using Mix.Portal.Domain.ViewModels;
 using Mix.Shared.Services;
-using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Mix.Portal.Controllers
 {
@@ -16,16 +17,27 @@ namespace Mix.Portal.Controllers
     public class MixThemeController
         : MixRestApiControllerBase<MixThemeViewModel, MixCmsContext, MixTheme, int>
     {
+        private readonly MixThemeExportService _exportService;
         public MixThemeController(
-            ILogger<MixApiControllerBase> logger, 
-            GlobalConfigService globalConfigService, 
-            MixService mixService, 
-            TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
-            Repository<MixCmsContext, MixTheme, int> repository, 
-            MixIdentityService mixIdentityService) 
+            ILogger<MixApiControllerBase> logger,
+            GlobalConfigService globalConfigService,
+            MixService mixService,
+            TranslatorService translator,
+            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            Repository<MixCmsContext, MixTheme, int> repository,
+            MixIdentityService mixIdentityService, 
+            MixThemeExportService exportService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, repository, mixIdentityService)
         {
+            
+            _exportService = exportService;
+        }
+
+        [HttpPost("export")]
+        public async Task<ActionResult<SiteDataViewModel>> ExportThemeAsync(ExportThemeDto dto)
+        {
+            var siteData = await _exportService.ExportSelectedItemsAsync(dto);
+            return Ok(siteData);
         }
     }
 }

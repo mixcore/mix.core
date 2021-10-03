@@ -38,7 +38,6 @@
     <Compile Remove="Helpers\MixAssociationHelper.cs" />
     <Compile Remove="Services\HttpService.cs" />
     <Compile Remove="Services\MixAppSettingService.cs" />
-    <Compile Remove="ViewModels\SiteStructureViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
