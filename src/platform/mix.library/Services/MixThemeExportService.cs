@@ -1,5 +1,4 @@
 ﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
 using System;
 using Mix.Heart.Exceptions;
@@ -15,19 +14,17 @@ namespace Mix.Lib.Services
     public class MixThemeExportService
     {
         private readonly MixCmsContext _context;
-        private readonly UnitOfWorkInfo _uow;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
 
         public MixThemeExportService(MixCmsContext context)
         {
             _context = context;
-            _uow = new UnitOfWorkInfo(_context);
         }
 
         #region Export
 
-        public async Task<SiteDataViewModel> ExportSelectedItemsAsync(ExportThemeDto request)
+        public SiteDataViewModel ExportSelectedItems(ExportThemeDto request)
         {
             try
             {

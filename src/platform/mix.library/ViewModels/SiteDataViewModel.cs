@@ -108,6 +108,11 @@ namespace Mix.Lib.ViewModels
             }
         }
 
+        public SiteDataViewModel(ImportThemeDto dto)
+        {
+
+        }
+
         private void LoadAllSiteData()
         {
             using var ctx = new MixCmsContext();
