@@ -3,26 +3,24 @@ using Mix.Heart.Entities;
 using Mix.Heart.Enums;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
+using Mix.Heart.ViewModel;
 using System;
 using System.Threading.Tasks;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
-        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
-        where TDbContext : DbContext
-        where TPrimaryKey : IComparable
+    public abstract class MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView> 
+        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+         where TDbContext : DbContext
+         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 
         public MultilanguageSEOContentViewModelBase()
         {
 
-        }
-
-        protected MultilanguageSEOContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
-        {
         }
 
         protected MultilanguageSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)

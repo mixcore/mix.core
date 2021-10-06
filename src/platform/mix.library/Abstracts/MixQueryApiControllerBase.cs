@@ -16,17 +16,17 @@ using System.Linq.Expressions;
 using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
-using Mix.Identity.Services;
 
 namespace Mix.Lib.Abstracts
 {
-    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> : MixApiControllerBase
+    public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
+        : MixApiControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        protected readonly Repository<TDbContext, TEntity, TPrimaryKey> _repository;
+        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
         
         protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
@@ -36,13 +36,12 @@ namespace Mix.Lib.Abstracts
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
             MixService mixService, 
-            TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
-            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            TranslatorService translator,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService) 
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
-            _repository = repository;
+            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository();
         }
 
         #region Routes
@@ -52,7 +51,7 @@ namespace Mix.Lib.Abstracts
         {
             var searchRequest = BuildSearchRequest(req);
 
-            return await _repository.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
+            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
@@ -75,7 +74,7 @@ namespace Mix.Lib.Abstracts
         [HttpGet("{id}")]
         public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
         {
-            var getData = await _repository.GetSingleViewAsync<TView>(id);
+            var getData = await _repository.GetSingleAsync(id);
             return Ok(getData);
         }
 

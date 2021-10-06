@@ -16,17 +16,16 @@ namespace Mix.Lib.Controllers
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
-        where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+        where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixAutoGenerateQueryApiController(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
-            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
             MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, repository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
         }
     }

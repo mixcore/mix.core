@@ -8,28 +8,120 @@ using System.Linq;
 using Mix.Shared.Enums;
 using System.Linq.Expressions;
 using Mix.Heart.Extensions;
+using Mix.Shared.Constants;
+using Mix.Shared.Services;
+using Mix.Heart.UnitOfWork;
+using Mix.Shared.Models;
+using Newtonsoft.Json.Linq;
+using Mix.Heart.Repository;
 
 namespace Mix.Lib.Services
 {
     public class MixThemeExportService
     {
+        private readonly GlobalConfigService _globalConfigService;
+        private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
+        private MixThemeViewModel _exporTheme;
+        private string tempPath;
+        private string outputPath;
 
-        public MixThemeExportService(MixCmsContext context)
+        public MixThemeExportService(
+            MixCmsContext context,
+            GlobalConfigService globalConfigService)
         {
             _context = context;
+            _globalConfigService = globalConfigService;
+            _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
         }
 
         #region Export
 
-        public SiteDataViewModel ExportSelectedItems(ExportThemeDto request)
+        public async Task<string> ExportTheme(ExportThemeDto request)
+        {
+            _dto = request;
+            _siteData = new(_dto);
+            _exporTheme = await _themeRepository.GetSingleAsync(
+                m => m.Id == request.ThemeId);
+
+            //path to temporary folder
+            tempPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}/temp";
+            outputPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}";
+
+            _siteData = ExportSelectedItems();
+
+            ExportSchema(_siteData);
+
+            if (_dto.IsIncludeAssets)
+            {
+                ExportAssets();
+            }
+
+            // Zip to [theme_name].zip ( wwwroot for web path)
+            return ZipTheme();
+        }
+
+        private string ZipTheme()
+        {
+            // Zip to [theme_name].zip ( wwwroot for web path)
+            string filePath = MixFileService.Instance.ZipFolder(
+                $"{tempPath}", outputPath, $"{_exporTheme.SystemName}-{Guid.NewGuid()}");
+
+            // Delete temp folder
+            MixFileService.Instance.DeleteFolder($"{outputPath}/Assets");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/Uploads");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/Data");
+            return filePath;
+        }
+
+        private void ExportAssets()
+        {
+            if (_dto.IsIncludeAssets)
+            {
+                // Copy current assets files
+                MixFileService.Instance.CopyFolder(
+                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/Assets");
+                // Copy current uploads files
+                MixFileService.Instance.CopyFolder(
+                    $"{MixFolders.WebRootPath}/{_exporTheme.UploadsFolder}",
+                    $"{tempPath}/Uploads");
+            }
+        }
+
+        private void ExportSchema(SiteDataViewModel siteData)
+        {
+            string filename = $"schema";
+            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/assets";
+            string content = JObject.FromObject(siteData).ToString()
+                .Replace(accessFolder, "[ACCESS_FOLDER]")
+                .Replace($"/{_dto.Specificulture}/", "/[CULTURE]/")
+                .Replace($"/{siteData.ThemeName}/", "/[THEME_NAME]/");
+            if (!string.IsNullOrEmpty(_globalConfigService.Domain))
+            {
+                content = content.Replace(_globalConfigService.Domain, string.Empty);
+            }
+            FileViewModel schema = new FileViewModel()
+            {
+                Filename = filename,
+                Extension = MixFileExtensions.Json,
+                FileFolder = $"{tempPath}/Data",
+                Content = content
+            };
+
+            // Save Site Structures
+            MixFileService.Instance.SaveFile(schema);
+        }
+
+        public SiteDataViewModel ExportSelectedItems()
         {
             try
             {
-                _dto = request;
-                _siteData = new(_dto);
+                if (_dto.IsExportAll)
+                {
+                    LoadAllSiteData();
+                }
 
                 ExportPostData();
 
@@ -55,7 +147,25 @@ namespace Mix.Lib.Services
             }
         }
 
-        
+        private void LoadAllSiteData()
+        {
+            _siteData.Posts = _context.MixPost.ToList();
+            _siteData.Pages = _context.MixPage.ToList();
+            _siteData.Modules = _context.MixModule.ToList();
+            _siteData.Databases = _context.MixDatabase.ToList();
+            _siteData.Templates = _context.MixViewTemplate.ToList();
+            _siteData.Configurations = _context.MixConfiguration.ToList();
+            _siteData.Languages = _context.MixLanguage.ToList();
+
+            _siteData.PageIds = _siteData.Pages.Select(m => m.Id).ToList();
+            _siteData.PostIds = _siteData.Posts.Select(m => m.Id).ToList();
+            _siteData.ModuleIds = _siteData.Modules.Select(m => m.Id).ToList();
+            _siteData.DatabaseIds = _siteData.Databases.Select(m => m.Id).ToList();
+            _siteData.ConfigurationIds = _siteData.Configurations.Select(m => m.Id).ToList();
+            _siteData.LanguageIds = _siteData.Languages.Select(m => m.Id).ToList();
+        }
+
+
         #region Export Page Data
 
         private void ExportPageData()
@@ -220,14 +330,14 @@ namespace Mix.Lib.Services
                 .ToList();
             _siteData.PostContentIds = _siteData.PostContents.Select(p => p.Id).ToList();
         }
-        
+
         private void ExportConfigurationData()
         {
             _siteData.ConfigurationContents = _context.MixConfigurationContent
                 .Where(m => _siteData.ConfigurationIds.Contains(m.ParentId))
                 .ToList();
         }
-        
+
         private void ExportLanguageData()
         {
             _siteData.LanguageContents = _context.MixLanguageContent
@@ -254,13 +364,13 @@ namespace Mix.Lib.Services
         private void ExportAdditionalData()
         {
             Expression<Func<MixDataContentAssociation, bool>> predicate =
-                m => m.IntParentId.HasValue &&  
+                m => m.IntParentId.HasValue &&
                     (
-                        (_siteData.PageIds.Any(p => p == m.IntParentId.Value) 
+                        (_siteData.PageIds.Any(p => p == m.IntParentId.Value)
                         && m.ParentType == MixDatabaseParentType.Page)
-                        || (_siteData.PostIds.Any(p => p == m.IntParentId.Value) 
+                        || (_siteData.PostIds.Any(p => p == m.IntParentId.Value)
                             && m.ParentType == MixDatabaseParentType.Post)
-                        || (_siteData.ModuleIds.Any(p => p == m.IntParentId.Value) 
+                        || (_siteData.ModuleIds.Any(p => p == m.IntParentId.Value)
                             && m.ParentType == MixDatabaseParentType.Module));
             var associations = _context.MixDataContentAssociation
                     .Where(predicate);

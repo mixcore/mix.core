@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.Dtos;
+using Mix.Heart.UnitOfWork;
 
 namespace Mix.Common.Controllers
 {
@@ -28,8 +29,8 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
-        private readonly QueryRepository<MixCmsContext, MixConfigurationContent, int> _configRepo;
-        private readonly QueryRepository<MixCmsContext, MixLanguageContent, int> _langRepo;
+        private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
+        private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly MixFileService _fileService;
         protected readonly CultureService _cultureService;
         private readonly AuthConfigService authConfigService;
@@ -41,19 +42,18 @@ namespace Mix.Common.Controllers
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixFileService fileService,
-            QueryRepository<MixCmsContext, MixConfigurationContent, int> configRepo,
-            QueryRepository<MixCmsContext, MixLanguageContent, int> langRepo,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
-            CultureService cultureService)
+            CultureService cultureService,
+            UnitOfWorkInfo uow)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
             _authConfigurations = authConfigService.AuthConfigurations;
-            _configRepo = configRepo;
-            _langRepo = langRepo;
+            _configRepo = MixConfigurationContentViewModel.GetRepository(uow);
+            _langRepo = MixLanguageContentViewModel.GetRepository(uow);
             _routeProvider = routeProvider;
             this.authConfigService = authConfigService;
             _cultureService = cultureService;
@@ -211,7 +211,7 @@ namespace Mix.Common.Controllers
             return new AllSettingModel()
             {
                 AppSettings = globalSettings,
-                MixConfigurations = await _configRepo.GetListViewAsync<MixConfigurationContentViewModel>(m => m.Specificulture == lang),
+                MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };
         }

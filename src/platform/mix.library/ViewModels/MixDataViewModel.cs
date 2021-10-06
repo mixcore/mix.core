@@ -7,7 +7,9 @@ using System;
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixDataViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataContent, MixDataContentViewModel>
+    public class MixDataViewModel 
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel
+            , MixDataContent, MixDataContentViewModel>
     {
         #region Properties
 
@@ -22,10 +24,6 @@ namespace Mix.Lib.ViewModels
         public MixDataViewModel()
         {
 
-        }
-
-        public MixDataViewModel(Repository<MixCmsContext, MixData, Guid> repository) : base(repository)
-        {
         }
 
         public MixDataViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)

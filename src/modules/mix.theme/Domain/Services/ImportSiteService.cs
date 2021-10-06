@@ -10,11 +10,11 @@ namespace Mix.Theme.Domain.Services
 {
     public class ImportSiteService
     {
-        private readonly Repository<MixCmsContext, MixConfiguration, int> _configRepo;
-        private readonly Repository<MixCmsContext, MixLanguage, int> _languageRepo;
-        private readonly Repository<MixCmsContext, MixPost, int> _postRepo;
-        private readonly Repository<MixCmsContext, MixPage, int> _pageRepo;
-        private readonly Repository<MixCmsContext, MixModule, int> _moduleRepo;
+        private readonly EntityRepository<MixCmsContext, MixConfiguration, int> _configRepo;
+        private readonly EntityRepository<MixCmsContext, MixLanguage, int> _languageRepo;
+        private readonly EntityRepository<MixCmsContext, MixPost, int> _postRepo;
+        private readonly EntityRepository<MixCmsContext, MixPage, int> _pageRepo;
+        private readonly EntityRepository<MixCmsContext, MixModule, int> _moduleRepo;
         private readonly UnitOfWorkInfo _uowInfo;
 
         private readonly Dictionary<int, int> dicConfigurationIds = new();
@@ -27,11 +27,11 @@ namespace Mix.Theme.Domain.Services
 
         public ImportSiteService(
             MixCmsContext dbContext,
-            Repository<MixCmsContext, MixConfiguration, int> configRepo,
-            Repository<MixCmsContext, MixLanguage, int> languageRepo,
-            Repository<MixCmsContext, MixPost, int> postRepo,
-            Repository<MixCmsContext, MixPage, int> pageRepo,
-            Repository<MixCmsContext, MixModule, int> moduleRepo)
+            EntityRepository<MixCmsContext, MixConfiguration, int> configRepo,
+            EntityRepository<MixCmsContext, MixLanguage, int> languageRepo,
+            EntityRepository<MixCmsContext, MixPost, int> postRepo,
+            EntityRepository<MixCmsContext, MixPage, int> pageRepo,
+            EntityRepository<MixCmsContext, MixModule, int> moduleRepo)
         {
             _configRepo = configRepo;
             _languageRepo = languageRepo;

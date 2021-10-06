@@ -9,15 +9,11 @@ using System.Threading.Tasks;
 namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentAssociationViewModel 
-        : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+        : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
         #region Contructors
 
         public MixDataContentAssociationViewModel()
-        {
-        }
-
-        public MixDataContentAssociationViewModel(Repository<MixCmsContext, MixDataContentAssociation, Guid> repository) : base(repository)
         {
         }
 

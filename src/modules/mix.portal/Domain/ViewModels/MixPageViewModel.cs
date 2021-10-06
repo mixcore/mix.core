@@ -7,7 +7,9 @@ using Mix.Lib.Base;
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPageViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixPage, int, MixPageContent, MixPageContentViewModel>
+    public class MixPageViewModel
+        : SiteDataWithContentViewModelBase
+            <MixCmsContext, MixPage, int, MixPageViewModel, MixPageContent, MixPageContentViewModel>
     {
         #region Contructors
 
@@ -16,10 +18,6 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixPageViewModel(MixPage entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
-        {
-        }
-
-        public MixPageViewModel(Repository<MixCmsContext, MixPage, int> repository) : base(repository)
         {
         }
 

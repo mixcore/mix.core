@@ -11,20 +11,17 @@ using System.Threading.Tasks;
 namespace Mix.Lib.Base
 {
     public abstract class SiteDataWithContentViewModelBase
-        <TDbContext, TEntity, TPrimaryKey, TContentEntity, TContent>
-        : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+        <TDbContext, TEntity, TPrimaryKey, TView, TContentEntity, TContent>
+        : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
-         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TPrimaryKey : IComparable
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TContentEntity : MultilanguageContentBase<TPrimaryKey>
-        where TContent : MultilanguageContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey>
+        where TContent : MultilanguageContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>
     {
         #region Contructors
         protected SiteDataWithContentViewModelBase()
-        {
-        }
-
-        protected SiteDataWithContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 
@@ -56,9 +53,10 @@ namespace Mix.Lib.Base
         public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
-            using var _contentQueryRepository = new QueryRepository<TDbContext, TContentEntity, TPrimaryKey>(UowInfo);
+            using var _contentRepository = 
+                ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
 
-            Contents = await _contentQueryRepository.GetListViewAsync<TContent>(
+            Contents = await _contentRepository.GetListAsync(
                         m => m.ParentId.Equals(Id));
         }
 
@@ -82,8 +80,10 @@ namespace Mix.Lib.Base
 
         protected override async Task DeleteHandlerAsync()
         {
-            Repository<TDbContext, TContentEntity, TPrimaryKey> contentRepo = new(UowInfo);
-            await contentRepo.DeleteManyAsync(m => m.ParentId.Equals(Id));
+            using var _contentRepository =
+               ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
+
+            await _contentRepository.DeleteManyAsync(m => m.ParentId.Equals(Id));
             await base.DeleteHandlerAsync();
         }
         #endregion

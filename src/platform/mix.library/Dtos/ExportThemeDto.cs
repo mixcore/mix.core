@@ -15,7 +15,11 @@ namespace Mix.Lib.Dtos
 
         public bool IsIncludePermissions { get; set; } = true;
 
+        public int ThemeId { get; set; }
+
         public string CreatedBy { get; set; }
+
+        public string Specificulture { get; set; }
 
         public List<MixPost> Posts { get; set; } = new();
 

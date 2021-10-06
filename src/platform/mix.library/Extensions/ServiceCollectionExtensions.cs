@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
 using System.Text.Json.Serialization;
+using Mix.Heart.UnitOfWork;
 
 namespace Mix.Lib.Extensions
 {
@@ -186,7 +187,7 @@ namespace Mix.Lib.Extensions
 
             if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
-                _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
+                _fileService.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
 
             GlobalConfigService globalConfigService = new();
@@ -311,7 +312,7 @@ namespace Mix.Lib.Extensions
             assemblies.ForEach(
                 a => types.AddRange(a.GetExportedTypes()
                         .Where(
-                            x => x.BaseType?.Name == typeof(ViewModelBase<,,>).Name
+                            x => x.BaseType?.Name == typeof(ViewModelBase<,,,>).Name
                             )
                         ));
             return types;

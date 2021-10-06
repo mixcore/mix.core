@@ -8,14 +8,10 @@ using System.Threading.Tasks;
 
 namespace Mix.Identity.ViewModels
 {
-    public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid>
+    public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel>
     {
         #region Contructors
         public RoleViewModel()
-        {
-        }
-
-        public RoleViewModel(Repository<MixCmsAccountContext, AspNetRoles, Guid> repository) : base(repository)
         {
         }
 
@@ -45,13 +41,13 @@ namespace Mix.Identity.ViewModels
         #endregion Properties
 
         #region Overrides
-        public override Task<AspNetRoles> ParseEntity<T>(T view)
+        public override Task<AspNetRoles> ParseEntity()
         {
-            if (view.Id == Guid.Empty)
+            if (Id == Guid.Empty)
             {
-                view.Id = Guid.NewGuid();
+                Id = Guid.NewGuid();
             }
-            return base.ParseEntity(view);
+            return base.ParseEntity();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

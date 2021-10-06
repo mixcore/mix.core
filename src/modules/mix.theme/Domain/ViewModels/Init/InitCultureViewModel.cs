@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
-    public class InitCultureViewModel : ViewModelBase<MixCmsContext, MixCulture, int>
+    public class InitCultureViewModel : ViewModelBase<MixCmsContext, MixCulture, int, InitCultureViewModel>
     {
         public string Title { get; set; }
         public string Alias { get; set; }
@@ -20,10 +20,6 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public virtual string Description { get; set; }
 
         public int MixTenantId { get; set; }
-
-        public InitCultureViewModel(Repository<MixCmsContext, MixCulture, int> repository) : base(repository)
-        {
-        }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {

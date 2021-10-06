@@ -40,7 +40,7 @@ namespace Mix.Shared.Services
                 response.EnsureSuccessStatusCode();
                 string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
-                _fileService.CreateDirectoryIfNotExist(folder);
+                _fileService.CreateFolderIfNotExist(folder);
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {

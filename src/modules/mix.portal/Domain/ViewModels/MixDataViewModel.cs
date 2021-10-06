@@ -7,7 +7,8 @@ using System;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataViewModel : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataContent, MixDataContentViewModel>
+    public class MixDataViewModel 
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
     {
         private readonly string databaseName;
         private JObject data;
@@ -25,10 +26,6 @@ namespace Mix.Portal.Domain.ViewModels
         public MixDataViewModel()
         {
 
-        }
-
-        public MixDataViewModel(Repository<MixCmsContext, MixData, Guid> repository) : base(repository)
-        {
         }
 
         public MixDataViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)

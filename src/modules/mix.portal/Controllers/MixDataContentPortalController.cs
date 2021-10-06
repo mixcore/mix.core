@@ -22,8 +22,7 @@ namespace Mix.Portal.Controllers
     public class MixDataContentPortalController
         : MixRestApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {
-        private readonly Repository<MixCmsContext, MixDataContent, Guid> _contentRepository;
-        private readonly Repository<MixCmsContext, MixDatabaseColumn, int> _colRepository;
+        private readonly Repository<MixCmsContext, MixDatabaseColumn, int, MixDatabaseColumnViewModel> _colRepository;
         private readonly MixDataService _mixDataService;
 
         public MixDataContentPortalController(
@@ -31,16 +30,13 @@ namespace Mix.Portal.Controllers
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
-            Repository<MixCmsContext, MixDataContent, Guid> contentRepository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService,
-            Repository<MixCmsContext, MixDatabaseColumn, int> colRepository)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, contentRepository, mixIdentityService)
+            MixIdentityService mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
-            _contentRepository = contentRepository;
             _mixDataService = mixDataService;
-            _colRepository = colRepository;
+            _colRepository = MixDatabaseColumnViewModel.GetRepository();
         }
 
         [HttpGet("search")]
@@ -77,7 +73,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("{lang}/init/{databaseName}")]
         public async Task<ActionResult> InitData([FromRoute] string databaseName)
         {
-            var columns = await _colRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
+            var columns = await _colRepository.GetListAsync(
                     m => m.MixDatabaseName == databaseName);
             var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject())
             {
@@ -89,7 +85,7 @@ namespace Mix.Portal.Controllers
         [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateData(Guid id, [FromBody] JObject data)
         {
-            var mixData = await _contentRepository.GetSingleViewAsync<MixDataContentViewModel>(m => m.Id == id);
+            var mixData = await _repository.GetSingleAsync(m => m.Id == id);
             if (mixData != null)
             {
                 mixData.Data = data;

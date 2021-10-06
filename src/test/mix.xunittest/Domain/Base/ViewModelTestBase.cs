@@ -23,14 +23,14 @@ namespace Mix.Xunittest.Domain.Base
     public abstract class ViewModelTestBase<TFixture, TView, TDbContext, TEntity, TPrimaryKey>
          : IClassFixture<TFixture>
         where TFixture : SharedDatabaseFixture<TDbContext>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
     {
         public TFixture Fixture { get; set; }
 
-        protected Repository<TDbContext, TEntity, TPrimaryKey> Repository { get; set; }
+        protected Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository { get; set; }
         protected UnitOfWorkInfo UowInfo { get; set; }
 
         public ViewModelTestBase(TFixture fixture)
@@ -56,7 +56,7 @@ namespace Mix.Xunittest.Domain.Base
         public async Task Step_2_GetList()
         {
             Repository = new(Fixture.CreateContext());
-            var data = await Repository.GetListViewAsync<TView>(m => true);
+            var data = await Repository.GetListAsync(m => true);
             Assert.True(data.Count > 0);
         }
 

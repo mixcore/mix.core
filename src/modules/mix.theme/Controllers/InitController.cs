@@ -25,7 +25,7 @@ namespace Mix.Theme.Controllers
             GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)

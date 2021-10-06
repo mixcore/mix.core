@@ -19,6 +19,7 @@ using Mix.Heart.Extensions;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Enums;
 using Mix.Lib.Dtos;
+using Mix.Lib.ViewModels;
 
 namespace Mix.Lib.Services
 {
@@ -26,9 +27,6 @@ namespace Mix.Lib.Services
     {
         private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _dbContext;
-        private readonly QueryRepository<MixCmsContext, MixDatabaseColumn, int> _colRepo;
-        private readonly QueryRepository<MixCmsContext, MixDataContent, Guid> _contentRepo;
-        private readonly QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> _assoRepo;
 
         public MixDataService(
             GlobalConfigService globalConfigService,
@@ -39,9 +37,6 @@ namespace Mix.Lib.Services
         {
             _globalConfigService = globalConfigService;
             _dbContext = dbContext;
-            _colRepo = colRepo;
-            _contentRepo = contentRepo;
-            _assoRepo = assoRepo;
         }
 
         public async Task<PagingResponseModel<TView>> FilterByKeywordAsync<TView>(
@@ -49,14 +44,13 @@ namespace Mix.Lib.Services
             string culture = null,
             string mixDatabaseName = null,
             UnitOfWorkInfo uowInfo = null)
-           where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid>
+           where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
             try
             {
-                if (uowInfo != null)
-                {
-                    _colRepo.SetUowInfo(uowInfo);
-                }
+                var _colRepo = MixDatabaseColumnViewModel.GetRepository(uowInfo);
+                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(uowInfo);
+                
                 var tasks = new List<Task<TView>>();
                 culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
 
@@ -122,7 +116,7 @@ namespace Mix.Lib.Services
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
                 }
 
-                result = await _contentRepo.GetPagingViewAsync<TView>(searchRequest.Predicate, searchRequest.PagingData);
+                result = await _contentRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
                 return result;
             }
             catch (Exception ex)
@@ -137,7 +131,7 @@ namespace Mix.Lib.Services
             string mixDatabaseName,
             UnitOfWorkInfo uowInfo,
             List<MixDatabaseColumn> refColumns = null)
-             where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+             where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
             var context = (MixCmsContext)uowInfo.ActiveDbContext;
             refColumns ??= context.MixDatabaseColumn.Where(
@@ -163,14 +157,14 @@ namespace Mix.Lib.Services
             int referenceId, 
             Guid dataContentId, 
             UnitOfWorkInfo uowInfo = null)
-            where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+            where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
-            if (uowInfo != null) _assoRepo.SetUowInfo(uowInfo);
+            var _assoRepo = MixDataContentAssociationViewModel.GetRepository(uowInfo);
 
             Expression<Func<MixDataContentAssociation, bool>> predicate = 
                     model => (model.MixDatabaseId == referenceId)
                     && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
-            var relatedContents = await _assoRepo.GetListViewAsync<TView>(predicate);
+            var relatedContents = await _assoRepo.GetListAsync(predicate);
 
             JArray arr = new();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))

@@ -6,9 +6,7 @@ using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Shared.Services;
-using System.Threading.Tasks;
 
 namespace Mix.Portal.Controllers
 {
@@ -23,11 +21,10 @@ namespace Mix.Portal.Controllers
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
-            Repository<MixCmsContext, MixTheme, int> repository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService, 
             MixThemeExportService exportService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, repository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             
             _exportService = exportService;
@@ -36,7 +33,7 @@ namespace Mix.Portal.Controllers
         [HttpPost("export")]
         public ActionResult<SiteDataViewModel> ExportTheme(ExportThemeDto dto)
         {
-            var siteData = _exportService.ExportSelectedItems(dto);
+            var siteData = _exportService.ExportTheme(dto);
             return Ok(siteData);
         }
     }

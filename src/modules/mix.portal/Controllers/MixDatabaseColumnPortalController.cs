@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 using Mix.Heart.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Mix.Grpc.Models;
 
 namespace Mix.Portal.Controllers
 {
@@ -22,7 +21,6 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseColumnPortalController
         : MixRestApiControllerBase<MixDatabaseColumnViewModel, MixCmsContext, MixDatabaseColumn, int>
     {
-        private readonly Repository<MixCmsContext, MixDatabaseColumn, int> _columnRepository;
         private readonly MixDataService _mixDataService;
         private readonly MixEndpointService _endpointService;
 
@@ -31,24 +29,21 @@ namespace Mix.Portal.Controllers
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
-            Repository<MixCmsContext, MixDatabaseColumn, int> columnRepository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService, 
             MixEndpointService endpointService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, columnRepository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
-            _columnRepository = columnRepository;
             _mixDataService = mixDataService;
             _endpointService = endpointService;
-            
         }
 
         [HttpGet("init/{mixDatabase}")]
         public async Task<ActionResult<List<MixDatabaseColumnViewModel>>> Init(string mixDatabase)
         {
             int.TryParse(mixDatabase, out int mixDatabaseId);
-            var getData = await _columnRepository.GetListViewAsync<MixDatabaseColumnViewModel>(
+            var getData = await _repository.GetListAsync(
                 f => f.MixDatabaseName == mixDatabase || f.MixDatabaseId == mixDatabaseId);
             return Ok(getData);
         }

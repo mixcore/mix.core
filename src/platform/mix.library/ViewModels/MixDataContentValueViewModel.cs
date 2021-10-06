@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Mix.Lib.ViewModels
 {
     public class MixDataContentValueViewModel
-        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid>
+        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties
 
@@ -39,10 +39,6 @@ namespace Mix.Lib.ViewModels
 
         }
 
-        public MixDataContentValueViewModel(Repository<MixCmsContext, MixDataContentValue, Guid> repository) : base(repository)
-        {
-        }
-
         public MixDataContentValueViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
@@ -55,24 +51,24 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity<T>(T view)
+        public override Task<MixDataContentValue> ParseEntity()
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
             
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity(view);
+            return base.ParseEntity();
         }
 
         public override async Task ExpandView(UnitOfWorkInfo uowInfo)
         {
             UowInfo ??= uowInfo;
-            var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
-            Column = await colRepo.GetSingleViewAsync<MixDatabaseColumnViewModel>(MixDatabaseColumnId);
+            using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
+            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);
             if (MixDatabaseColumnId > 0)
             {
-                Column ??= await colRepo.GetSingleViewAsync<MixDatabaseColumnViewModel>(MixDatabaseColumnId);
+                Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId);
                 MixDatabaseName = Column.MixDatabaseName;
             }
             else // additional field for page / post / module => id = 0

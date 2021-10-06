@@ -2,7 +2,6 @@
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Attributes;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDatabaseColumnViewModel
-        : ViewModelBase<MixCmsContext, MixDatabaseColumn, int>
+        : ViewModelBase<MixCmsContext, MixDatabaseColumn, int, MixDatabaseColumnViewModel>
     {
         #region Properties
         public string SystemName { get; set; }
@@ -33,10 +32,6 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(Repository<MixCmsContext, MixDatabaseColumn, int> repository) : base(repository)
-        {
-        }
-
         public MixDatabaseColumnViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
@@ -48,12 +43,12 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override Task<MixDatabaseColumn> ParseEntity<T>(T view)
+        public override Task<MixDatabaseColumn> ParseEntity()
         {
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
                     ColumnConfigurations, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return base.ParseEntity(view);
+            return base.ParseEntity();
         }
 
         public override void ParseView<TSource>(TSource sourceObject)
