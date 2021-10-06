@@ -29,8 +29,9 @@ namespace Mix.Lib.Controllers
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
-            MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService,
+            TDbContext context)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
     }

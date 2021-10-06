@@ -10,9 +10,6 @@ namespace Mix.Portal.Domain.ViewModels
     public class MixDataViewModel 
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
     {
-        private readonly string databaseName;
-        private JObject data;
-
         #region Properties
 
         public int MixDatabaseId { get; set; }
@@ -35,7 +32,6 @@ namespace Mix.Portal.Domain.ViewModels
         public MixDataViewModel(string lang, int cultureId, string databaseName, JObject data)
         {
             MixDatabaseName = databaseName;
-            this.data = data;
             SaveDataContent = new(lang, cultureId, databaseName, data);
         }
 

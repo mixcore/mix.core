@@ -32,11 +32,12 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService,
+            MixCmsContext context)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             _mixDataService = mixDataService;
-            _colRepository = MixDatabaseColumnViewModel.GetRepository();
+            _colRepository = MixDatabaseColumnViewModel.GetRepository(context);
         }
 
         [HttpGet("search")]

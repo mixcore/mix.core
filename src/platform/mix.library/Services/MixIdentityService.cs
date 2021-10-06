@@ -57,9 +57,9 @@ namespace Mix.Lib.Services
             _signInManager = signInManager;
             _roleManager = roleManager;
             _authConfigService = authConfigService;
-            _roleRepo = RoleViewModel.GetRepository(_uow);
+            _roleRepo = RoleViewModel.GetRepository(context);
             _globalConfigService = globalConfigService;
-            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_uow);
+            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(context);
             LoadRoles();
         }
 

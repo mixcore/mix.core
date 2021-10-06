@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
+using Mix.Heart.UnitOfWork;
 
 namespace Mix.Lib.Abstracts
 {
@@ -30,6 +31,7 @@ namespace Mix.Lib.Abstracts
         
         protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
+        protected UnitOfWorkInfo _uow;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
@@ -38,10 +40,11 @@ namespace Mix.Lib.Abstracts
             MixService mixService, 
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
-            MixIdentityService mixIdentityService) 
+            MixIdentityService mixIdentityService,
+            TDbContext context) 
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
-            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository();
+            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(context);
         }
 
         #region Routes
@@ -82,7 +85,7 @@ namespace Mix.Lib.Abstracts
         [HttpGet("{lang}/default")]
         public ActionResult<TView> GetDefault(string culture = null)
         {
-            var result = (TView)Activator.CreateInstance(typeof(TView));
+            var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow});
             result.InitDefaultValues(_lang, _culture.Id);
             return Ok(result);
         }

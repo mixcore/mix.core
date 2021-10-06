@@ -23,8 +23,9 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService, 
-            MixThemeExportService exportService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixThemeExportService exportService,
+            MixCmsContext context)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             
             _exportService = exportService;

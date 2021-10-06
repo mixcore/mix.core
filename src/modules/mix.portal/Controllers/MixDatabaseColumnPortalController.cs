@@ -32,8 +32,9 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService, 
-            MixEndpointService endpointService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixEndpointService endpointService,
+            MixCmsContext context)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             _mixDataService = mixDataService;
             _endpointService = endpointService;
