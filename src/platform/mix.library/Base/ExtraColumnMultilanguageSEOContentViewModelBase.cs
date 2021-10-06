@@ -2,25 +2,24 @@
 using Mix.Heart.Entities;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
+using Mix.Heart.ViewModel;
 using System;
 
 namespace Mix.Lib.Base
 {
-    public abstract class ExtraColumnMultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
-        : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
+    public abstract class ExtraColumnMultilanguageSEOContentViewModelBase
+        <TDbContext, TEntity, TPrimaryKey, TView> 
+        : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : DbContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 
         public ExtraColumnMultilanguageSEOContentViewModelBase()
         {
 
-        }
-
-        protected ExtraColumnMultilanguageSEOContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
-        {
         }
 
         protected ExtraColumnMultilanguageSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)

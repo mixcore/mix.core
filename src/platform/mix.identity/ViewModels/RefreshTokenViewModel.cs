@@ -8,17 +8,12 @@ using System;
 namespace Mix.Identity.ViewModels
 {
     public class RefreshTokenViewModel
-        : ViewModelBase<MixCmsAccountContext, RefreshTokens, Guid>
+        : ViewModelBase<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel>
     {
         public RefreshTokenViewModel()
         {
         }
         #region Contructors
-
-        public RefreshTokenViewModel(Repository<MixCmsAccountContext, RefreshTokens, Guid> commandRepository)
-            : base(commandRepository)
-        {
-        }
 
         public RefreshTokenViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {

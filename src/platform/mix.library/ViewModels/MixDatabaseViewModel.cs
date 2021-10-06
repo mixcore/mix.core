@@ -12,7 +12,7 @@ namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public class MixDatabaseViewModel
-        : SiteDataWithContentViewModelBase<MixCmsContext, MixDatabase, int>
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]
@@ -30,10 +30,6 @@ namespace Mix.Lib.ViewModels
 
         }
 
-        public MixDatabaseViewModel(Repository<MixCmsContext, MixDatabase, int> repository) : base(repository)
-        {
-        }
-
         public MixDatabaseViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
@@ -49,8 +45,8 @@ namespace Mix.Lib.ViewModels
         public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
-            var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
-            Columns = await colRepo.GetListViewAsync<MixDatabaseColumnViewModel>(c => c.MixDatabaseId == Id);
+            var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)

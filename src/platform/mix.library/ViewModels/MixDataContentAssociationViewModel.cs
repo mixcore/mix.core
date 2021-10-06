@@ -8,16 +8,11 @@ using System;
 namespace Mix.Lib.ViewModels
 {
     public class MixDataContentAssociationViewModel
-        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid>
+        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
         #region Contructors
 
         public MixDataContentAssociationViewModel()
-        {
-        }
-
-        public MixDataContentAssociationViewModel(Repository<MixCmsContext, MixDataContentAssociation, Guid> repository) 
-            : base(repository)
         {
         }
 

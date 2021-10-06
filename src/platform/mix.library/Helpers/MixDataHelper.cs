@@ -210,11 +210,11 @@ namespace Mix.Lib.Helpers
 
         private static async Task<JArray> GetRelatedDataAsync(int referenceId, Guid dataContentId, UnitOfWorkInfo uowInfo)
         {
-            using var assoRepo = new QueryRepository<MixCmsContext, MixDataContentAssociation, Guid>(uowInfo);
+            using var assoRepo = MixDataContentAssociationViewModel.GetRepository(uowInfo);
             Expression<Func<MixDataContentAssociation, bool>> predicate = model =>
                     (model.MixDatabaseId == referenceId)
                     && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
-            var relatedContents = await assoRepo.GetListViewAsync<MixDataContentAssociationViewModel>(predicate);
+            var relatedContents = await assoRepo.GetListAsync(predicate);
 
             JArray arr = new JArray();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
@@ -233,8 +233,8 @@ namespace Mix.Lib.Helpers
         {
             using var context = new MixCmsContext();
             UnitOfWorkInfo uow = new(context);
-            Repository<MixCmsContext, MixDataContent, Guid> contentRepo = new(uow);
-            Repository<MixCmsContext, MixDatabase, int> mixDbRepo = new(uow);
+            var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
+            var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
             GlobalConfigService globalConfigService= new();
             CultureService cultureSrv = new(globalConfigService);
 
@@ -250,14 +250,14 @@ namespace Mix.Lib.Helpers
             var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
             if (dataId != null)
             {
-                var result = await contentRepo.GetSingleViewAsync<AdditionalDataContentViewModel>(
+                var result = await contentRepo.GetSingleAsync(
                     m => m.Id == dataId && m.Specificulture == specificulture);
                 return result;
             }
             else
             {
                 // Init default data
-                var mixDb = await mixDbRepo.GetSingleViewAsync<MixDatabaseViewModel>(
+                var mixDb = await mixDbRepo.GetSingleAsync(
                 m => m.SystemName == databaseName);
                 if (mixDb != null)
                 {

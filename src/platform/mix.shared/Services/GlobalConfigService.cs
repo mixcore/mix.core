@@ -13,6 +13,11 @@ namespace Mix.Shared.Services
 
         public bool IsInit => GetConfig<bool>(MixAppSettingKeywords.IsInit);
 
+        public string Domain
+        {
+            get => GetConfig<string>(MixAppSettingKeywords.Domain);
+        }
+
         public MixDatabaseProvider DatabaseProvider
         {
             get => GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);

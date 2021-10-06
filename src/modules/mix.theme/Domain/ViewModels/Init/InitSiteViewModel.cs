@@ -5,12 +5,10 @@ using Mix.Theme.Domain.Dtos;
 using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
-using System.Linq;
-using Mix.Heart.Repository;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
-    public class InitSiteViewModel : ViewModelBase<MixCmsContext, MixTenant, int>
+    public class InitSiteViewModel : ViewModelBase<MixCmsContext, MixTenant, int, InitSiteViewModel>
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
@@ -18,12 +16,8 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public InitCultureViewModel Culture { get; set; }
 
-        private readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
-        public InitSiteViewModel(
-            Repository<MixCmsContext, MixTenant, int> repository,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository) : base(repository)
+        public InitSiteViewModel() : base()
         {
-            _cultureRepository = cultureRepository;
         }
 
         public void InitSiteData(InitCmsDto model)
@@ -35,7 +29,7 @@ namespace Mix.Theme.Domain.ViewModels.Init
             Status = MixContentStatus.Published;
             CreatedDateTime = DateTime.UtcNow;
 
-            Culture = new InitCultureViewModel(_cultureRepository)
+            Culture = new InitCultureViewModel()
             {
                 Id = 1,
                 Title = model.Culture.FullName,

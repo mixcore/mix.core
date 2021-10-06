@@ -8,18 +8,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base
 {
-    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
-        : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
-         where TPrimaryKey : IComparable
+        where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
         protected SiteDataWithContentViewModelBase()
-        {
-        }
-
-        protected SiteDataWithContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
         {
         }
 

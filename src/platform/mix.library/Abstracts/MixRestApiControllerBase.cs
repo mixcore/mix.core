@@ -23,17 +23,16 @@ namespace Mix.Lib.Abstracts
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixRestApiControllerBase(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
             MixService mixService, 
-            TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
-            Repository<TDbContext, TEntity, TPrimaryKey> repository,
+            TranslatorService translator,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, repository, mixIdentityService)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
         }
 
@@ -71,7 +70,7 @@ namespace Mix.Lib.Abstracts
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
-            var getData = await _repository.GetSingleViewAsync<TView>(id);
+            var getData = await _repository.GetSingleAsync(id);
             await getData.DeleteAsync();
             return Ok(getData);
         }
@@ -79,7 +78,7 @@ namespace Mix.Lib.Abstracts
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
-            var result = await _repository.GetSingleViewAsync<TView>(id);
+            var result = await _repository.GetSingleAsync(id);
             await result.SaveFieldsAsync(properties);
             return Ok();
         }

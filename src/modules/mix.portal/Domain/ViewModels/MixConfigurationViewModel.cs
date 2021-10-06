@@ -9,19 +9,17 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController(Route = "api/v2/rest/portal/mix-configuration", Name = "Mix Configuration")]
     public class MixConfigurationViewModel
-        : SiteDataWithContentViewModelBase<MixCmsContext, MixConfiguration, int, MixConfigurationContent, MixConfigurationContentViewModel>
+        : SiteDataWithContentViewModelBase
+            <MixCmsContext, MixConfiguration, int, MixConfigurationViewModel,
+            MixConfigurationContent, MixConfigurationContentViewModel>
     {
-        private QueryRepository<MixCmsContext, MixConfigurationContent, int> _contentQueryRepository;
+        private Repository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _contentQueryRepository;
 
         #region Contructores
 
         public MixConfigurationViewModel()
         {
 
-        }
-
-        public MixConfigurationViewModel(Repository<MixCmsContext, MixConfiguration, int> repository) : base(repository)
-        {
         }
 
         public MixConfigurationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
@@ -46,9 +44,9 @@ namespace Mix.Portal.Domain.ViewModels
         public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
-            _contentQueryRepository = new QueryRepository<MixCmsContext, MixConfigurationContent, int>(UowInfo);
+            _contentQueryRepository = MixConfigurationContentViewModel.GetRepository(UowInfo);
 
-            Contents = await _contentQueryRepository.GetListViewAsync<MixConfigurationContentViewModel>(
+            Contents = await _contentQueryRepository.GetListAsync(
                         m => m.ParentId == Id);
         }
 

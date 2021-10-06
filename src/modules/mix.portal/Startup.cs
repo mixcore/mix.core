@@ -26,7 +26,7 @@ namespace Mix.Portal
             if (Directory.Exists(MixFolders.MixCoreConfigurationFolder))
             {
                 MixFileService _fileService = new();
-                _fileService.CopyDirectory(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
+                _fileService.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);

@@ -14,15 +14,11 @@ using System.Threading.Tasks;
 namespace Mix.Lib.ViewModels
 {
     public class AdditionalDataContentViewModel
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid>
+        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
     {
         #region Contructors
 
         public AdditionalDataContentViewModel()
-        {
-        }
-
-        public AdditionalDataContentViewModel(Repository<MixCmsContext, MixDataContent, Guid> repository) : base(repository)
         {
         }
 
@@ -45,7 +41,7 @@ namespace Mix.Lib.ViewModels
         public List<MixDataContentValueViewModel> Values { get; set; }
         public JObject Data { get; set; }
 
-        public List<MixDataContentViewModel> ChildData { get; set; } = new();
+        public List<AdditionalDataContentViewModel> ChildData { get; set; } = new();
         public List<MixDataContentAssociationViewModel> RelatedData { get; set; } = new();
 
         public Guid? ContentGuidParentId { get; set; }
@@ -55,10 +51,10 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task<MixDataContent> ParseEntity<T>(T view)
+        public override async Task<MixDataContent> ParseEntity()
         {
-            using var colRepo = new QueryRepository<MixCmsContext, MixDatabaseColumn, int>(UowInfo);
-            using var valRepo = new QueryRepository<MixCmsContext, MixDataContentValue, Guid>(UowInfo);
+            using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
+            using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
             if (IsDefaultId(Id))
             {
@@ -75,26 +71,26 @@ namespace Mix.Lib.ViewModels
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Columns ??= await colRepo.GetListViewAsync<MixDatabaseColumnViewModel>(m => m.MixDatabaseName == MixDatabaseName);
-            Values = await valRepo.GetListViewAsync<MixDataContentValueViewModel>(m => m.MixDataContentId == Id);
+            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
+            Values = await valRepo.GetListAsync(m => m.MixDataContentId == Id);
 
             await ParseObjectToValues();
 
             Title = Id.ToString();
             Content = Data.ToString(Newtonsoft.Json.Formatting.None);
 
-            return await base.ParseEntity(view);
+            return await base.ParseEntity();
         }
 
         protected override async Task<MixDataContent> SaveHandlerAsync()
         {
             var result = await base.SaveHandlerAsync();
 
-            Repository<MixCmsContext, MixDataContentAssociation, Guid> assoRepo = new(UowInfo);
+            var assoRepo = new Repository<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>(UowInfo);
 
             if (!MixCmsHelper.IsDefaultId(ContentGuidParentId) || !MixCmsHelper.IsDefaultId(ContentIntParentId))
             {
-                var getNav = assoRepo.CheckIsExists(
+                var getNav = await assoRepo.CheckIsExistsAsync(
                     m => m.DataContentId == Id
                     && (m.GuidParentId == ContentGuidParentId || m.IntParentId == ContentIntParentId)
                     && m.ParentType == ContentParentType
@@ -161,13 +157,13 @@ namespace Mix.Lib.ViewModels
                                 // if have id => update data, else add new
                                 if (id != Guid.Empty)
                                 {
-                                    var data = await Repository.GetSingleViewAsync<MixDataContentViewModel>(m => m.Id == id);
+                                    var data = await Repository.GetSingleAsync(m => m.Id == id);
                                     data.Data = objData;
                                     ChildData.Add(data);
                                 }
                                 else
                                 {
-                                    ChildData.Add(new MixDataContentViewModel()
+                                    ChildData.Add(new AdditionalDataContentViewModel()
                                     {
                                         Specificulture = Specificulture,
                                         MixDatabaseId = field.ReferenceId.Value,

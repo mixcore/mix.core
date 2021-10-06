@@ -18,7 +18,7 @@ namespace Mix.Portal.Controllers
             GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
-            Repository<MixCmsContext, MixCulture, int> cultureRepository,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {

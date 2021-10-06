@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 
 namespace Mix.Shared.Services
 {
@@ -57,7 +59,7 @@ namespace Mix.Shared.Services
             }
             else if (isCreate)
             {
-                CreateDirectoryIfNotExist(FileFolder);
+                CreateFolderIfNotExist(FileFolder);
                 fileinfo.Create();
                 result = new FileViewModel()
                 {
@@ -74,34 +76,8 @@ namespace Mix.Shared.Services
         #endregion
 
         #region Create / Delete File or Folder
-        public void CreateDirectoryIfNotExist(string fullPath)
-        {
-            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
-            {
-                Directory.CreateDirectory(fullPath);
-            }
-        }
 
-        public bool CopyDirectory(string srcPath, string desPath)
-        {
-            if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
-            {
-                //Now Create all of the directories
-                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories))
-                {
-                    Directory.CreateDirectory(dirPath.Replace(srcPath, desPath));
-                }
-
-                //Copy all the files & Replaces any files with the same name
-                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(srcPath, desPath), true);
-                }
-
-                return true;
-            }
-            return true;
-        }
+        #region File
 
         public bool SaveFile(FileViewModel file)
         {
@@ -109,7 +85,7 @@ namespace Mix.Shared.Services
             {
                 if (!string.IsNullOrEmpty(file.Filename))
                 {
-                    CreateDirectoryIfNotExist(file.FileFolder);
+                    CreateFolderIfNotExist(file.FileFolder);
 
                     string filePath = $"{file.Filename}{file.Extension}";
                     if (!string.IsNullOrEmpty(file.FileFolder))
@@ -167,6 +143,138 @@ namespace Mix.Shared.Services
             }
             return true;
         }
+
+        public List<FileViewModel> GetTopFiles(string folder)
+        {
+            List<FileViewModel> result = new List<FileViewModel>();
+            if (Directory.Exists(folder))
+            {
+                DirectoryInfo path = new DirectoryInfo(folder);
+                string folderName = path.Name;
+
+                var Files = path.GetFiles();
+                foreach (var file in Files.OrderByDescending(f => f.CreationTimeUtc))
+                {
+                    result.Add(new FileViewModel()
+                    {
+                        FolderName = folderName,
+                        FileFolder = folder,
+
+                        Filename = file.Name.Substring(0, file.Name.LastIndexOf('.') >= 0 ? file.Name.LastIndexOf('.') : 0),
+                        Extension = file.Extension,
+                        //Content = s.ReadToEnd()
+                    });
+                }
+            }
+            return result;
+        }
+        #endregion
+
+        #region Folder
+
+        public bool CopyFolder(string srcPath, string desPath)
+        {
+            if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
+            {
+                //Now Create all of the directories
+                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories))
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, desPath));
+                }
+
+                //Copy all the files & Replaces any files with the same name
+                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, desPath), true);
+                }
+
+                return true;
+            }
+            return true;
+        }
+
+        public bool DeleteFolder(string folderPath)
+        {
+            if (Directory.Exists(folderPath))
+            {
+                Directory.Delete(folderPath, true);
+                return true;
+            }
+            return false;
+        }
+
+        public bool EmptyFolder(string folderPath)
+        {
+            DeleteFolder(folderPath);
+            CreateFolderIfNotExist(folderPath);
+            return true;
+        }
+
+        public void CreateFolderIfNotExist(string fullPath)
+        {
+            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+        }
+
+        public List<string> GetTopFolders(string folder)
+        {
+            List<string> result = new List<string>();
+            if (Directory.Exists(folder))
+            {
+                foreach (string dirPath in Directory.GetDirectories(folder, "*",
+                    SearchOption.TopDirectoryOnly))
+                {
+                    DirectoryInfo path = new DirectoryInfo(dirPath);
+                    result.Add(path.Name);
+                }
+            }
+            return result;
+        }
+
+        public string ZipFolder(string tmpPath, string outputPath, string fileName)
+        {
+            try
+            {
+                //string tmpPath = $"wwwroot/Exports/temp/{fileName}-{DateTime.UtcNow.ToShortDateString()}";
+                string outputFile = $"{outputPath}/{fileName}.zip";
+                string outputFilePath = $"{outputPath}/{fileName}.zip";
+
+                if (Directory.Exists(tmpPath))
+                {
+                    //CopyDirectory(srcFolder, tmpPath);
+                    if (File.Exists(outputFile))
+                    {
+                        File.Delete(outputFile);
+                    }
+                    ZipFile.CreateFromDirectory(tmpPath, outputFile);
+                    DeleteFolder(tmpPath);
+                    return outputFilePath;
+                }
+                else
+                {
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public void UnZipFile(string filePath, string webFolder)
+        {
+            try
+            {
+                ZipFile.ExtractToDirectory(filePath, webFolder);
+            }
+            catch
+            {
+                //throw;
+            }
+        }
+        #endregion
 
         #endregion
     }

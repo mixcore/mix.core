@@ -7,21 +7,18 @@ using System;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey> 
-        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey>
-         where TDbContext : DbContext
-         where TPrimaryKey : IComparable
+    public abstract class MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView> 
+        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TDbContext : DbContext
+        where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
+        where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 
         public MultilanguageUniqueNameContentViewModelBase()
         {
 
-        }
-
-        protected MultilanguageUniqueNameContentViewModelBase(Repository<TDbContext, TEntity, TPrimaryKey> repository) : base(repository)
-        {
         }
 
         protected MultilanguageUniqueNameContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)

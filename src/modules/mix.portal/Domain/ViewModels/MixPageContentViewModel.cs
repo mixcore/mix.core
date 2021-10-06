@@ -10,7 +10,8 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixPageContentViewModel 
-        : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixPageContent, int>
+        : ExtraColumnMultilanguageSEOContentViewModelBase
+            <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
         #region Contructors
 
@@ -18,11 +19,8 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixPageContentViewModel(Repository<MixCmsContext, MixPageContent, int> repository) : base(repository)
-        {
-        }
-
-        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) 
+            : base(entity, uowInfo)
         {
         }
 

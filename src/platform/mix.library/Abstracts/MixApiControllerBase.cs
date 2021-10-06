@@ -18,13 +18,13 @@ namespace Mix.Lib.Abstracts
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
         protected readonly TranslatorService _translator;
-        protected readonly Repository<MixCmsContext, MixCulture, int> _cultureRepository;
+        protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
         public MixApiControllerBase(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
-            Repository<MixCmsContext, MixCulture, int> cultureRepository, 
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
             MixIdentityService mixIdentityService) : base()
         {
             _logger = logger;

@@ -7,8 +7,8 @@ using Mix.Lib.Attributes;
 namespace Mix.Common.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
-    public class MixConfigurationContentViewModel
-        : ViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>
+    public class MixLanguageContentViewModel
+        : ViewModelBase<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel>
     {
         #region Properties
 
@@ -19,21 +19,21 @@ namespace Mix.Common.Domain.ViewModels
         public string Content { get; set; }
         public int MixCultureId { get; set; }
         public string DefaultContent { get; set; }
-        public int MixConfigurationId { get; set; }
+        public int MixLanguageId { get; set; }
         public int MixTenantId { get; set; }
 
         #endregion
 
         #region Contructors
-        public MixConfigurationContentViewModel()
+        public MixLanguageContentViewModel()
         {
         }
 
-        public MixConfigurationContentViewModel(MixConfigurationContent entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
+        public MixLanguageContentViewModel(MixLanguageContent entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
 
-        public MixConfigurationContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixLanguageContentViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
         #endregion

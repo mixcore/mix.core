@@ -83,53 +83,30 @@ namespace Mix.Lib.ViewModels
 
         #endregion
 
-        public SiteDataViewModel(ExportThemeDto dto)
+        public SiteDataViewModel(ExportThemeDto requestDto)
         {
-            if (!dto.IsExportAll)
+            if (!requestDto.IsExportAll)
             {
-                Templates = dto.Templates;
-                Pages = dto.Pages;
-                Posts = dto.Posts;
-                Modules = dto.Modules;
-                Databases = dto.MixDatabases;
-                Configurations = dto.Configurations;
-                Languages = dto.Languages;
+                Templates = requestDto.Templates;
+                Pages = requestDto.Pages;
+                Posts = requestDto.Posts;
+                Modules = requestDto.Modules;
+                Databases = requestDto.MixDatabases;
+                Configurations = requestDto.Configurations;
+                Languages = requestDto.Languages;
 
                 PageIds = Pages.Select(m => m.Id).ToList();
                 PostIds = Posts.Select(m => m.Id).ToList();
                 ModuleIds = Modules.Select(m => m.Id).ToList();
                 DatabaseIds = Databases.Select(m => m.Id).ToList();
-                ConfigurationIds = Languages.Select(m => m.Id).ToList();
-                LanguageIds = Configurations.Select(m => m.Id).ToList();
-            }
-            else
-            {
-                LoadAllSiteData();
+                ConfigurationIds = Configurations.Select(m => m.Id).ToList();
+                LanguageIds = Languages.Select(m => m.Id).ToList();
             }
         }
 
         public SiteDataViewModel(ImportThemeDto dto)
         {
 
-        }
-
-        private void LoadAllSiteData()
-        {
-            using var ctx = new MixCmsContext();
-            Pages = ctx.MixPage.ToList();
-            Posts = ctx.MixPost.ToList();
-            Modules = ctx.MixModule.ToList();
-            Databases = ctx.MixDatabase.ToList();
-            Templates = ctx.MixViewTemplate.ToList();
-            Configurations = ctx.MixConfiguration.ToList();
-            Languages = ctx.MixLanguage.ToList();
-
-            PageIds = Pages.Select(m => m.Id).ToList();
-            PostIds = Posts.Select(m => m.Id).ToList();
-            ModuleIds = Modules.Select(m => m.Id).ToList();
-            DatabaseIds = Databases.Select(m => m.Id).ToList();
-            ConfigurationIds = Languages.Select(m => m.Id).ToList();
-            LanguageIds = Configurations.Select(m => m.Id).ToList();
         }
     }
 }

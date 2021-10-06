@@ -7,6 +7,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
+using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models;
@@ -34,30 +35,31 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService
     {
+        private readonly UnitOfWorkInfo _uow;
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
         private readonly GlobalConfigService _globalConfigService;
-        private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid> _roleRepo;
-        private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
+        private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
+        private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             AuthConfigService authConfigService,
-            Repository<MixCmsAccountContext, AspNetRoles, Guid> roleRepo,
-            Repository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            GlobalConfigService globalConfigService)
+            GlobalConfigService globalConfigService,
+            MixCmsAccountContext context)
         {
+            _uow = new(context);
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _authConfigService = authConfigService;
-            _roleRepo = roleRepo;
+            _roleRepo = RoleViewModel.GetRepository(_uow);
             _globalConfigService = globalConfigService;
-            _refreshTokenRepo = refreshTokenRepo;
+            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_uow);
             LoadRoles();
         }
 
@@ -132,7 +134,7 @@ namespace Mix.Lib.Services
                                     ClientId = _authConfigService.AuthConfigurations.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
-                                });
+                                }, _uow);
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
                     refreshTokenId = saveRefreshTokenResult;
@@ -191,7 +193,7 @@ namespace Mix.Lib.Services
         public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
             JObject result = new();
-            var oldToken = await _refreshTokenRepo.GetSingleViewAsync<RefreshTokenViewModel>(t => t.Id == refreshTokenDto.RefreshToken);
+            var oldToken = await _refreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken);
             if (oldToken != null)
             {
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
@@ -417,9 +419,9 @@ namespace Mix.Lib.Services
         {
             if (!_globalConfigService.IsInit)
             {
-                Roles = _roleRepo.GetListViewAsync<RoleViewModel>(m => true).GetAwaiter().GetResult();
-                using var ctx = new MixCmsContext();
-                var transaction = ctx.Database.BeginTransaction();
+                Roles = _roleRepo.GetListAsync(m => true).GetAwaiter().GetResult();
+                //using var ctx = new MixCmsContext();
+                //var transaction = ctx.Database.BeginTransaction();
                 // TODO:
                 //Roles.ForEach(m => m.LoadMixPermissions(ctx, transaction).GetAwaiter().GetResult());
             }
