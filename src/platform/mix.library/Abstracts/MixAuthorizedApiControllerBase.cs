@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Services;
 using Mix.Shared.Constants;
@@ -18,6 +19,7 @@ namespace Mix.Lib.Abstracts
     {
         protected string _lang;
         protected MixCulture _culture;
+        protected UnitOfWorkInfo _uow;
         protected readonly ILogger<MixApiControllerBase> _logger;
         protected readonly GlobalConfigService _globalConfigService;
         protected readonly MixIdentityService _mixIdentityService;
@@ -30,8 +32,11 @@ namespace Mix.Lib.Abstracts
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
-            MixIdentityService mixIdentityService) : base()
+            MixIdentityService mixIdentityService,
+            MixCmsContext context
+            ) : base()
         {
+            _uow = new UnitOfWorkInfo(context);
             _logger = logger;
             _globalConfigService = globalConfigService;
             _mixService = mixService;

@@ -7,17 +7,15 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Entities;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Services;
-using Mix.Heart.Enums;
 using Mix.Heart.Model;
 using System.Collections.Generic;
 using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
-using Mix.Identity.Services;
 using Mix.Identity.Constants;
 
 namespace Mix.Lib.Abstracts
-{ 
+{
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
@@ -31,8 +29,9 @@ namespace Mix.Lib.Abstracts
             MixService mixService, 
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
-            MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService,
+            TDbContext context)
+            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
 
