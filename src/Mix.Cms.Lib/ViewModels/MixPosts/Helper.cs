@@ -32,12 +32,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             {
 
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
-                valPredicate = valPredicate.AndAlsoIf(
-                    !string.IsNullOrEmpty(searchPostData.Category),
-                     Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_CATEGORY, searchPostData.Category, searchPostData.Specificulture));
-                valPredicate = valPredicate.AndAlsoIf(
-                    !string.IsNullOrEmpty(searchPostData.Tag),
-                     Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_TAG, searchPostData.Tag, searchPostData.Specificulture));
+                Expression<Func<MixDatabaseDataValue, bool>> catePredicate = GetCategoryPredicate(searchPostData);
+                Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = GetTagPredicate(searchPostData);
+
+                valPredicate = valPredicate
+                                .AndAlsoIf(catePredicate !=null, catePredicate)
+                                .AndAlsoIf(tagPredicate != null, tagPredicate);
 
                 if (valPredicate != null)
                 {
@@ -65,6 +65,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             }
                         };
                     }
+
                     return await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
                         predicate,
                         searchPostData.PagingData.OrderBy,
@@ -88,6 +89,35 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     UnitOfWorkHelper<MixCmsContext>.CloseDbContext(ref context, ref transaction);
                 }
             }
+        }
+
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetTagPredicate(SearchPostQueryModel searchPostData)
+        {
+            Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = null;
+            tagPredicate = tagPredicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(searchPostData.Tag),
+                     Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_TAG, searchPostData.Tag, searchPostData.Specificulture));
+            return tagPredicate;
+        }
+
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetCategoryPredicate(
+            SearchPostQueryModel searchPostData)
+        {
+            Expression<Func<MixDatabaseDataValue, bool>> catePredicate = null;
+            if (searchPostData.Categories.Count > 0)
+            {
+                foreach (var cate in searchPostData.Categories)
+                {
+                    catePredicate = catePredicate.OrIf(
+                        !string.IsNullOrEmpty(cate),
+                         Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_CATEGORY, cate, searchPostData.Specificulture));
+                }
+            }
+
+            catePredicate = catePredicate.OrIf(
+            !string.IsNullOrEmpty(searchPostData.Category),
+             Expressions.GetMetaExpression(MixDatabaseNames.SYSTEM_CATEGORY, searchPostData.Category, searchPostData.Specificulture));
+            return catePredicate;
         }
 
         private static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByValue<TView>(
@@ -674,7 +704,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             using (var context = new MixCmsContext())
             {
-                var now =  DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm"));
+                var now = DateTime.Parse(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm"));
                 var sheduledPosts = context.MixPost
                     .Where(m => m.Status == MixContentStatus.Schedule
                         && Equals(m.PublishedDateTime.Value, now));
