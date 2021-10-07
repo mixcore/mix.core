@@ -17,6 +17,7 @@
         public const string ParentType = "parentType";
         public const string ParentId = "parentId";
         public const string Category = "category";
+        public const string Categories = "categories";
         public const string Tag = "tag";
     }
 }

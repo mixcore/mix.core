@@ -1,4 +1,4 @@
-/* Wed Sep 08 2021 16:56:27 GMT+0700 (Indochina Time) */fb-login {
+/* Thu Oct 07 2021 10:37:10 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -51,6 +51,13 @@ main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
 
 .attr-set-value-item:last-child {
   border-bottom: 0 !important; }
+
+mix-database-nav-values .row {
+  padding: 10px 0; }
+
+mix-database-nav-values mix-column-preview .rowx {
+  max-height: 110px;
+  overflow: hidden; }
 
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
