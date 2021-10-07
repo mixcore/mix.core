@@ -47,13 +47,13 @@ namespace Mix.Common.Controllers
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
-            UnitOfWorkInfo uow)
+            MixCmsContext context)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
             _authConfigurations = authConfigService.AuthConfigurations;
-            _configRepo = MixConfigurationContentViewModel.GetRepository(uow);
-            _langRepo = MixLanguageContentViewModel.GetRepository(uow);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(context);
+            _langRepo = MixLanguageContentViewModel.GetRepository(context);
             _routeProvider = routeProvider;
             this.authConfigService = authConfigService;
             _cultureService = cultureService;

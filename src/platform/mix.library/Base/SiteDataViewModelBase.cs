@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
-using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
@@ -8,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base
 {
-    public abstract class SiteDataWithContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class SiteDataViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
@@ -16,15 +15,15 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
-        protected SiteDataWithContentViewModelBase()
+        protected SiteDataViewModelBase()
         {
         }
 
-        protected SiteDataWithContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected SiteDataViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteDataWithContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
+        protected SiteDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
 

@@ -13,6 +13,12 @@ using System.Collections.Generic;
 using Mix.Heart.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Mix.Shared.Models;
+using Mix.Shared.Services;
+using Mix.Shared.Constants;
+using System.IO;
 
 namespace Mix.Lib.Services
 {
@@ -38,6 +44,72 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
+
+        //public MixThemeViewModel Import(string model, IFormFile assetFile, IFormFile themeFile)
+        //{
+        //    var data = JsonConvert.DeserializeObject<MixThemeViewModel>(model);
+
+        //    //Save file to temporary folder
+        //    SaveThemeFiles(data.SystemName, assetFile, themeFile);
+
+        //    // Load default blank if created new without upload theme
+        //    if (data.Id == 0 && themeFile == null)
+        //    {
+        //        if (data.IsCloneFromCurrentTheme)
+        //        {
+        //            var currentThemeFolder = $"{MixFolders.TemplatesFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}";
+        //            var assetFolder = $"{MixFolders.SiteContentAssetsFolder}/{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, _lang)}/assets";
+        //            MixFileRepository.Instance.CopyDirectory(currentThemeFolder, data.TemplateFolder);
+        //            MixFileRepository.Instance.CopyDirectory(assetFolder, $"wwwroot/{data.AssetFolder}");
+        //        }
+        //        else
+        //        {
+        //            data.TemplateAsset = new FileViewModel()
+        //            {
+        //                Filename = "_blank",
+        //                Extension = MixFileExtensions.Zip,
+        //                FileFolder = MixFolders.DataFolder
+        //            };
+        //        }
+        //    }
+
+        //    if (data != null)
+        //    {
+        //        data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
+        //        data.Specificulture = _lang;
+        //        var result = await base.SaveGenericAsync<UpdateViewModel>(data, true);
+        //        if (result.IsSucceed)
+        //        {
+        //            MixService.LoadFromDatabase();
+        //            MixService.SaveSettings();
+        //            return Ok(result.Data);
+        //        }
+        //        else
+        //        {
+        //            return BadRequest(result.Errors);
+        //        }
+
+        //    }
+        //}
+
+        private void SaveThemeFiles(string name, IFormFile assetFile, IFormFile themeFile)
+        {
+            if (assetFile != null)
+            {
+                string assetFolder =
+                    $"{MixFolders.TempFolder}/{MixFolders.ThemePackage}/{name}/{MixThemeFolders.Assets}";
+                var assets = new FileViewModel(assetFile, assetFolder);
+                MixFileService.Instance.SaveFile(assets);
+            }
+
+            if (themeFile != null)
+            {
+                string importFolder = $"{MixFolders.TempFolder}/{MixFolders.ThemePackage}/{name}/{MixThemeFolders.Templates}";
+                var templateAsset = new FileViewModel(themeFile, importFolder);
+                MixFileService.Instance.SaveFile(templateAsset);
+            }
+        }
+
         private Dictionary<int, int> dicColumnIds = new Dictionary<int, int>();
 
         #endregion

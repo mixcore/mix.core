@@ -70,9 +70,9 @@ namespace Mix.Lib.Services
                 $"{tempPath}", outputPath, $"{_exporTheme.SystemName}-{Guid.NewGuid()}");
 
             // Delete temp folder
-            MixFileService.Instance.DeleteFolder($"{outputPath}/Assets");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/Uploads");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/Data");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Assets}");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Uploads}");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Schema}");
             return filePath;
         }
 
@@ -82,7 +82,7 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileService.Instance.CopyFolder(
-                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/Assets");
+                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/{MixThemeFolders.Assets}");
                 // Copy current uploads files
                 MixFileService.Instance.CopyFolder(
                     $"{MixFolders.WebRootPath}/{_exporTheme.UploadsFolder}",
@@ -93,7 +93,7 @@ namespace Mix.Lib.Services
         private void ExportSchema(SiteDataViewModel siteData)
         {
             string filename = $"schema";
-            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/assets";
+            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/{MixThemeFolders.Assets}";
             string content = JObject.FromObject(siteData).ToString()
                 .Replace(accessFolder, "[ACCESS_FOLDER]")
                 .Replace($"/{_dto.Specificulture}/", "/[CULTURE]/")
@@ -106,7 +106,7 @@ namespace Mix.Lib.Services
             {
                 Filename = filename,
                 Extension = MixFileExtensions.Json,
-                FileFolder = $"{tempPath}/Data",
+                FileFolder = $"{tempPath}/{MixThemeFolders.Schema}",
                 Content = content
             };
 
