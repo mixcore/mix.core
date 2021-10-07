@@ -7,9 +7,9 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixViewTemplateContentConfiguration : SqliteEntityBaseConfiguration<MixViewTemplate, int>
+    public class MixViewTemplateContentConfiguration : SqliteEntityBaseConfiguration<MixTemplate, int>
     {
-        public override void Configure(EntityTypeBuilder<MixViewTemplate> builder)
+        public override void Configure(EntityTypeBuilder<MixTemplate> builder)
         {
             base.Configure(builder);
 

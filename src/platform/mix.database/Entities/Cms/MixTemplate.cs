@@ -3,7 +3,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixViewTemplate : EntityBase<int>
+    public class MixTemplate : EntityBase<int>
     {
         public string Content { get; set; }
         public string Extension { get; set; }

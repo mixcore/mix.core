@@ -7,9 +7,9 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixViewTemplateContentConfiguration : PostgresEntityBaseConfiguration<MixViewTemplate, int>
+    public class MixViewTemplateContentConfiguration : PostgresEntityBaseConfiguration<MixTemplate, int>
     {
-        public override void Configure(EntityTypeBuilder<MixViewTemplate> builder)
+        public override void Configure(EntityTypeBuilder<MixTemplate> builder)
         {
             base.Configure(builder);
 

@@ -7,9 +7,9 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixViewTemplateContentConfiguration : SqlServerEntityBaseConfiguration<MixViewTemplate, int>
+    public class MixViewTemplateContentConfiguration : SqlServerEntityBaseConfiguration<MixTemplate, int>
     {
-        public override void Configure(EntityTypeBuilder<MixViewTemplate> builder)
+        public override void Configure(EntityTypeBuilder<MixTemplate> builder)
         {
             base.Configure(builder);
 

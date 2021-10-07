@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Mix.Lib.ViewModels
 {
     public class MixTemplateViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixViewTemplate, int, MixTemplateViewModel>
+        : SiteDataViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
     {
         #region Properties
         public string Content { get; set; }
@@ -34,7 +34,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixTemplateViewModel(MixViewTemplate entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixTemplateViewModel(MixTemplate entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -61,7 +61,7 @@ namespace Mix.Lib.ViewModels
             return Task.CompletedTask;
         }
 
-        public override async Task<MixViewTemplate> ParseEntity()
+        public override async Task<MixTemplate> ParseEntity()
         {
             if (Id == 0)
             {
@@ -98,7 +98,7 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        protected override async Task<MixViewTemplate> SaveHandlerAsync()
+        protected override async Task<MixTemplate> SaveHandlerAsync()
         {
             var result = await base.SaveHandlerAsync();
             SaveTemplateToLocalFile();

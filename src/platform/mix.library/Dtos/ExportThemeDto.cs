@@ -29,7 +29,7 @@ namespace Mix.Lib.Dtos
 
         public List<MixDatabase> MixDatabases { get; set; }
 
-        public List<MixViewTemplate> Templates { get; set; } = new();
+        public List<MixTemplate> Templates { get; set; } = new();
 
         public List<MixConfiguration> Configurations { get; set; } = new();
 
