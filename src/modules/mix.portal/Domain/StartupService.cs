@@ -11,6 +11,7 @@ namespace Mix.Portal
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<MixThemeExportService>();
+            services.AddScoped<MixThemeImportService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

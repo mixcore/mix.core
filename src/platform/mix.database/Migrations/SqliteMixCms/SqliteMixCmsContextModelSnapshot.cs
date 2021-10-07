@@ -45,7 +45,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -113,7 +113,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixCultureId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ParentId")
@@ -192,7 +192,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -240,7 +240,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -307,7 +307,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -407,7 +407,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -505,7 +505,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ParentId")
@@ -568,7 +568,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -643,7 +643,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -700,7 +700,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -748,7 +748,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -816,7 +816,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixLanguageId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ParentId")
@@ -881,7 +881,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -962,7 +962,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("PageSize")
@@ -1078,7 +1078,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ParentId")
@@ -1147,7 +1147,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
@@ -1199,7 +1199,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -1271,7 +1271,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixPageId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("PageSize")
@@ -1365,7 +1365,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
@@ -1403,7 +1403,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
@@ -1447,7 +1447,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -1526,7 +1526,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixPostId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ParentId")
@@ -1626,7 +1626,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -1675,7 +1675,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid>("MixDataContentId")
+                    b.Property<Guid?>("MixDataContentId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("MixDatabaseName")
@@ -1684,7 +1684,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PreviewUrl")
@@ -1746,7 +1746,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
@@ -1827,25 +1827,13 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("MobileContent")
-                        .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<Guid?>("ModifiedBy")
+                    b.Property<string>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Scripts")
-                        .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SpaContent")
                         .IsRequired()
                         .HasColumnType("ntext")
                         .UseCollation("NOCASE")
@@ -2175,9 +2163,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
-                        .HasForeignKey("MixDataContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MixDataContentId");
 
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()

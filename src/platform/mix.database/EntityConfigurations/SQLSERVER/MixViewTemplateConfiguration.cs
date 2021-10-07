@@ -54,18 +54,6 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
             
-            builder.Property(e => e.SpaContent)
-                .IsRequired()
-                .HasColumnType(Config.Text)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
-
-            builder.Property(e => e.MobileContent)
-                .IsRequired()
-                .HasColumnType(Config.Text)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
-
              builder.Property(e => e.MixThemeName)
                 .IsRequired()
                 .HasColumnType($"{Config.NString}{Config.SmallLength}")

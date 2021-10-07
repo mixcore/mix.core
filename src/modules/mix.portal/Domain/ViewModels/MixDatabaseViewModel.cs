@@ -12,7 +12,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixDatabaseViewModel
-        : SiteDataWithContentViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
+        : SiteDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]

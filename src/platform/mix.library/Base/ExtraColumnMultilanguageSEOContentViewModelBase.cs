@@ -35,7 +35,7 @@ namespace Mix.Lib.Base
         #region Properties
 
         public string MixDatabaseName { get; set; }
-        public Guid MixDataContentId { get; set; }
+        public Guid? MixDataContentId { get; set; }
 
         #endregion
 

@@ -1,0 +1,136 @@
+﻿using Mix.Database.Entities.Cms;
+using Mix.Heart.UnitOfWork;
+using Mix.Lib.Base;
+using Mix.Shared.Constants;
+using Mix.Shared.Enums;
+using Mix.Shared.Services;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Mix.Lib.ViewModels
+{
+    public class MixTemplateViewModel
+        : SiteDataViewModelBase<MixCmsContext, MixViewTemplate, int, MixTemplateViewModel>
+    {
+        #region Properties
+        public string Content { get; set; }
+        public string Extension { get; set; }
+        public string FileFolder { get; set; }
+        public string FileName { get; set; }
+        public MixTemplateFolderType FolderType { get; set; }
+        public string Scripts { get; set; }
+        public string Styles { get; set; }
+
+        public string MixThemeName { get; set; }
+        public int MixThemeId { get; set; }
+
+        #endregion
+
+        #region Contructors
+
+        public MixTemplateViewModel()
+        {
+        }
+
+        public MixTemplateViewModel(MixViewTemplate entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        {
+        }
+
+        public MixTemplateViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        {
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override Task ExpandView(UnitOfWorkInfo uowInfo)
+        {
+            if (!string.IsNullOrEmpty(FileName))
+            {
+                var file = MixFileService.Instance.GetFile(FileName, Extension, FileFolder);
+                if (!string.IsNullOrWhiteSpace(file?.Content))
+                {
+                    Content = file.Content;
+                }
+            }
+            Scripts ??= "<script>\r\n\r\n</script>";
+            Styles ??= "<style>\r\n\r\n</style>";
+            return Task.CompletedTask;
+        }
+
+        public override async Task<MixViewTemplate> ParseEntity()
+        {
+            if (Id == 0)
+            {
+                CreatedDateTime = DateTime.UtcNow;
+            }
+
+            FileFolder = $"{MixFolders.TemplatesFolder}/{MixThemeName}/{FolderType}";
+            Content = Content?.Trim();
+            Scripts = Scripts?.Trim();
+            Styles = Styles?.Trim();
+            return await base.ParseEntity();
+        }
+
+        public override async Task Validate()
+        {
+            await base.Validate();
+            if (IsValid)
+            {
+                if (Id == 0)
+                {
+                    if (Context.MixViewTemplate.Any(
+                            t => t.FileName == FileName 
+                                && t.FolderType == FolderType 
+                                && t.MixThemeId == MixThemeId))
+                    {
+                        IsValid = false;
+                        Errors.Add(new ValidationResult($"{FileName} is existed") { });
+                    }
+                }
+                if (string.IsNullOrEmpty(MixThemeName) && MixThemeId > 0)
+                {
+                    MixThemeName = Context.MixTheme.FirstOrDefault(m => m.Id == MixThemeId)?.SystemName;
+                }
+            }
+        }
+
+        protected override async Task<MixViewTemplate> SaveHandlerAsync()
+        {
+            var result = await base.SaveHandlerAsync();
+            SaveTemplateToLocalFile();
+            return result;
+        }
+
+
+        #endregion
+
+        #region Expands
+        
+        private void SaveTemplateToLocalFile()
+        {
+            MixFileService.Instance.SaveFile(new Shared.Models.FileViewModel()
+            {
+                Filename = FileName,
+                Extension = Extension,
+                Content = Content,
+                FileFolder = FileFolder
+            });
+        }
+
+        public async Task<MixTemplateViewModel> CopyAsync()
+        {
+            var result = await Repository.GetSingleAsync(m => m.Id == Id);
+            result.Id = 0;
+            result.FileName = $"Copy_{result.FileName}";
+            // Not write file to disk
+            result.Id = await result.SaveAsync();
+            return result;
+        }
+
+        #endregion
+    }
+}

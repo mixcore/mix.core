@@ -1,7 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
+using Mix.Lib.Base;
 using Mix.Shared.Constants;
 using System;
 using System.Threading.Tasks;
@@ -9,13 +8,13 @@ using System.Threading.Tasks;
 namespace Mix.Lib.ViewModels
 {
     public class MixThemeViewModel
-        : ViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
+        : SiteDataViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
     {
         #region Properties
         public string SystemName { get; set; }
         public string PreviewUrl { get; set; }
         public string MixDatabaseName { get; set; }
-        public Guid MixDataContentId { get; set; }
+        public Guid? MixDataContentId { get; set; }
 
         public string AssetFolder
         {
