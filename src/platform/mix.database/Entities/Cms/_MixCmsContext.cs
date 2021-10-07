@@ -89,7 +89,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
         public virtual DbSet<MixDatabase> MixDatabase { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
-        public virtual DbSet<MixViewTemplate> MixViewTemplate { get; set; }
+        public virtual DbSet<MixTemplate> MixViewTemplate { get; set; }
         public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }
         public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }

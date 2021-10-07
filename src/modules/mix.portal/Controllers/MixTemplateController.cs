@@ -13,7 +13,7 @@ namespace Mix.Portal.Controllers
     [Route("api/v2/rest/mix-portal/mix-template")]
     [ApiController]
     public class MixTemplateController
-        : MixRestApiControllerBase<MixTemplateViewModel, MixCmsContext, MixViewTemplate, int>
+        : MixRestApiControllerBase<MixTemplateViewModel, MixCmsContext, MixTemplate, int>
     {
         public MixTemplateController(
             ILogger<MixApiControllerBase> logger,

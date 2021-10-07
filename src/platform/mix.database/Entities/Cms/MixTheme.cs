@@ -11,6 +11,6 @@ namespace Mix.Database.Entities.Cms
         public string MixDatabaseName { get; set; }
         public Guid? MixDataContentId { get; set; }
         public MixDataContent MixDataContent { get; set; }
-        public virtual ICollection<MixViewTemplate> MixViewTemplates { get; set; }
+        public virtual ICollection<MixTemplate> MixViewTemplates { get; set; }
     }
 }

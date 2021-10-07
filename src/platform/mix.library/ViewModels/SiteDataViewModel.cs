@@ -24,7 +24,7 @@ namespace Mix.Lib.ViewModels
 
         public List<MixDatabase> Databases { get; set; } = new();
 
-        public List<MixViewTemplate> Templates { get; set; } = new();
+        public List<MixTemplate> Templates { get; set; } = new();
 
         public List<MixConfiguration> Configurations { get; set; } = new();
 
