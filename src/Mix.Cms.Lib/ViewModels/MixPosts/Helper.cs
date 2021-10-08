@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
                 if (valPredicate != null)
                 {
-                    return await SearchPostByValue<TView>(valPredicate, searchPostData.PagingData, searchPostData.PostType, searchPostData.Specificulture, context, transaction);
+                    return await SearchPostByValue<TView>(valPredicate, searchPostData, context, transaction);
                 }
                 else
                 {
@@ -94,17 +94,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     && p.PageId == searchPostData.PageId
                     && allPostIds.Contains(p.PostId))
                 .OrderBy(p => p.Priority);
-            var posts = allPosts.Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
+            var posts = allPosts
+                .Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
                 .Take(searchPostData.PagingData.PageSize)
                 .Include(m => m.MixPost)
                 .Select(m => m.MixPost)
                 .ToList();
             var total = allPosts.Count();
-            var totalPage = total / searchPostData.PagingData.PageSize;
-            if (total % searchPostData.PagingData.PageSize > 0)
-            {
-                totalPage += 1;
-            }
+            var totalPage = (int)Math.Ceiling((double)total / searchPostData.PagingData.PageSize);
             return new RepositoryResponse<PaginationModel<TView>>()
             {
                 IsSucceed = true,
@@ -175,9 +172,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         private static async Task<RepositoryResponse<PaginationModel<TView>>> SearchPostByValue<TView>(
              Expression<Func<MixDatabaseDataValue, bool>> valPredicate,
-            PagingRequest pagingData,
-            string postType,
-            string specificulture,
+            SearchPostQueryModel searchPostData,
             MixCmsContext context,
             IDbContextTransaction transaction)
             where TView : ViewModelBase<MixCmsContext, MixPost, TView>
@@ -185,21 +180,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var allPostIds = IQueryableHelper.GetPostIdsByValue(
                         valPredicate,
                         context,
-                        specificulture,
-                        postType);
-            var resultIds = IQueryableHelper.SortParentIds(
-                allPostIds.Skip(pagingData.PageIndex * pagingData.PageSize)
-                            .Take(pagingData.PageSize),
-                context,
-                pagingData,
-                specificulture,
-                postType)
-                .AsEnumerable()
-                .Select(p => int.Parse(p))
-                .ToList();
+                        searchPostData.Specificulture,
+                        searchPostData.PostType);
+
+            var resultIds = searchPostData.PagingData.OrderBy.StartsWith("additionalData.")
+                ? GetSortedIdsByValue(allPostIds, context, searchPostData.PagingData, searchPostData.Specificulture, searchPostData.PostType)
+                : searchPostData.PageId.HasValue 
+                    ? GetSortedIdsByPage(allPostIds, searchPostData, context, transaction)
+                    : allPostIds.Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
+                                .Take(searchPostData.PagingData.PageSize)
+                                .Select(p => int.Parse(p)).ToList();
+
 
             var getPosts = (await DefaultRepository<MixCmsContext, MixPost, TView>.Instance.GetModelListByAsync(
-                        m => resultIds.Any(p => p == m.Id) && m.Specificulture == specificulture,
+                        m => resultIds.Any(p => p == m.Id) && m.Specificulture == searchPostData.Specificulture,
                         context,
                         transaction));
             var items = getPosts.Data.OrderBy(
@@ -211,13 +205,39 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 Data = new PaginationModel<TView>()
                 {
                     Items = items,
-                    PageIndex = pagingData.PageIndex,
-                    PageSize = pagingData.PageSize,
+                    PageIndex = searchPostData.PagingData.PageIndex,
+                    PageSize = searchPostData.PagingData.PageSize,
                     TotalItems = total,
-                    TotalPage = (int)Math.Ceiling((double)total / pagingData.PageSize)
+                    TotalPage = (int)Math.Ceiling((double)total / searchPostData.PagingData.PageSize)
                 }
             };
             return result;
+        }
+
+        private static List<int> GetSortedIdsByPage(
+            IQueryable<string> allPostIds, SearchPostQueryModel searchPostData, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            return context.MixPagePost.Where(p =>
+                    p.Specificulture == searchPostData.Specificulture
+                    && p.PageId == searchPostData.PageId
+                    && allPostIds.Contains(p.PostId.ToString()))
+                    .OrderBy(p => p.Priority)
+                    .Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
+                    .Take(searchPostData.PagingData.PageSize)
+                    .Select(p=>p.PostId)
+                    .ToList();
+        }
+
+        private static List<int> GetSortedIdsByValue(IQueryable<string> allPostIds, MixCmsContext context, PagingRequest pagingData, string specificulture, string postType)
+        {
+            return IQueryableHelper.SortParentIds(allPostIds,
+                    context,
+                    pagingData,
+                    specificulture,
+                    postType)
+                    .AsEnumerable()
+                    .Select(p => int.Parse(p))
+                    .ToList();
         }
 
         private static Expression<Func<MixPost, bool>> BuildPostExpression(SearchPostQueryModel searchPostData)
@@ -251,8 +271,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 postType ??= MixDatabaseNames.ADDITIONAL_COLUMN_POST;
 
                 var valExp = Expressions.GetMetaExpression(metaName, metaValue, culture);
-
-                return await SearchPostByValue<TView>(valExp, pagingData, postType, culture, context, transaction);
+                var searchPostData = new SearchPostQueryModel()
+                {
+                    PagingData = pagingData,
+                    PostType = postType,
+                    Specificulture = culture
+                };
+                return await SearchPostByValue<TView>(valExp, searchPostData, context, transaction);
             }
             catch (Exception ex)
             {
