@@ -15,6 +15,7 @@ namespace Mix.Cms.Lib.Models.Common
         public string Tag { get; set; }
         public string PostType { get; set; }
         public JObject Query { get; set; }
+        public int? PageId { get; set; }
 
         public SearchPostQueryModel()
         {
@@ -22,6 +23,8 @@ namespace Mix.Cms.Lib.Models.Common
         }
         public SearchPostQueryModel(HttpRequest request, string culture): base(request, culture)
         {
+            PageId = request.Query.TryGetValue("pageId", out var page)
+               ? int.Parse(page) : null;
             PostType = request.Query.TryGetValue("postType", out var postType)
                 ? postType : string.Empty;
             Category = request.Query.TryGetValue(MixRequestQueryKeywords.Category, out var category)
