@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             && m.ParentType == MixDatabaseParentType.Post;
 
             var associations = context.MixDatabaseDataAssociation.Where(relatedExp);
-            var parentIds = associations.Select(m => m.ParentId);
+            var parentIds = associations.Select(m => m.ParentId).Distinct();
 
 
             return parentIds;
@@ -42,11 +42,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string culture,
             string postType)
         {
-            if (!pagingData.OrderBy.StartsWith("additionalData."))
-            {
-                return parentIds;
-            }
-
             string orderCol = pagingData.OrderBy.Split('.')[1];
             var sortQuery = context.MixDatabaseDataValue
                 .Where(
