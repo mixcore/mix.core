@@ -8,6 +8,8 @@ using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
+using Mixcore.Domain.Extensions;
+using Ocelot.DependencyInjection;
 
 namespace Mixcore
 {
@@ -37,7 +39,7 @@ namespace Mixcore
             
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<ApplicationDbContext>();
-            
+            services.AddOcelot(Configuration);
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson();
@@ -65,7 +67,7 @@ namespace Mixcore
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseMixOcelot(Configuration, env.IsDevelopment());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
