@@ -11,7 +11,6 @@
     <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
     <ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
     <ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
-    <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
     <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>
 
@@ -23,6 +22,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Ocelot" Version="17.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/portal/common")]
+    [Route("api/v2/rest/mix-portal/common")]
     [ApiController]
     public class CommonController : MixApiControllerBase
     {
