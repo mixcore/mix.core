@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Cms;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Helpers;
@@ -31,10 +32,13 @@ namespace Mix.Account.Domain.ViewModels
 
         public ChangePasswordViewModel ChangePassword { get; set; }
 
+        private readonly MixCmsContext _context;
+
         #endregion Change Password
 
-        public MixUserViewModel(MixUser user)
+        public MixUserViewModel(MixCmsContext context, MixUser user)
         {
+            _context = context;
             User = user;
         }
 
@@ -43,6 +47,7 @@ namespace Mix.Account.Domain.ViewModels
             if (User != null)
             {
                 UserData ??= await MixDataHelper.GetAdditionalDataAsync(
+                    _context,
                     MixDatabaseParentType.User,
                     MixDatabaseNames.SYSTEM_USER_DATA,
                     Guid.Parse(User.Id));

@@ -170,12 +170,12 @@ namespace Mix.Lib.Extensions
 
         private static IServiceCollection InitMixContext(this IServiceCollection services)
         {
-            services.AddSingleton<GlobalConfigService>();
-            services.AddSingleton<CultureService>();
-            services.AddSingleton<AuthConfigService>();
-            services.AddSingleton<SmtpConfigService>();
-            services.AddSingleton<MixEndpointService>();
-            services.AddSingleton<IPSecurityConfigService>();
+            services.AddScoped<GlobalConfigService>();
+            services.AddScoped<CultureService>();
+            services.AddScoped<AuthConfigService>();
+            services.AddScoped<SmtpConfigService>();
+            services.AddScoped<MixEndpointService>();
+            services.AddScoped<IPSecurityConfigService>();
 
             services.AddScoped<MixDatabaseService>();
             services.AddScoped<MixDataService>();

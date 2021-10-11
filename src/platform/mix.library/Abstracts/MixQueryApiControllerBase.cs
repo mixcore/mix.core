@@ -28,7 +28,7 @@ namespace Mix.Lib.Abstracts
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
-        
+        protected readonly TDbContext _context;
         protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
         protected UnitOfWorkInfo _uow;
@@ -44,8 +44,9 @@ namespace Mix.Lib.Abstracts
             TDbContext context) 
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
-            _uow = new(context);
-            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(context);
+            _context = context;
+            _uow = new(_context);
+            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRootRepository(_context);
         }
 
         #region Routes
