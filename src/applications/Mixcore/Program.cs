@@ -20,8 +20,7 @@ namespace Mixcore
                    config
                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                        .AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
-                       .AddJsonFile("ocelot.json")
+                       .AddJsonFile("MixContent/AppConfigs/ocelot.json", true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>
