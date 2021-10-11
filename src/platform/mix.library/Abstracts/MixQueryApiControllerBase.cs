@@ -44,6 +44,7 @@ namespace Mix.Lib.Abstracts
             TDbContext context) 
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
+            _uow = new(context);
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(context);
         }
 
@@ -87,6 +88,7 @@ namespace Mix.Lib.Abstracts
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow});
             result.InitDefaultValues(_lang, _culture.Id);
+            result.ExpandView(_uow);
             return Ok(result);
         }
 

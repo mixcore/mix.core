@@ -26,6 +26,8 @@ using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
 using System.Text.Json.Serialization;
 using Mix.Heart.UnitOfWork;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Mix.Lib.Extensions
 {
@@ -168,12 +170,12 @@ namespace Mix.Lib.Extensions
 
         private static IServiceCollection InitMixContext(this IServiceCollection services)
         {
-            services.AddScoped<GlobalConfigService>();
-            services.AddScoped<CultureService>();
-            services.AddScoped<AuthConfigService>();
-            services.AddScoped<SmtpConfigService>();
-            services.AddScoped<MixEndpointService>();
-            services.AddScoped<IPSecurityConfigService>();
+            services.AddSingleton<GlobalConfigService>();
+            services.AddSingleton<CultureService>();
+            services.AddSingleton<AuthConfigService>();
+            services.AddSingleton<SmtpConfigService>();
+            services.AddSingleton<MixEndpointService>();
+            services.AddSingleton<IPSecurityConfigService>();
 
             services.AddScoped<MixDatabaseService>();
             services.AddScoped<MixDataService>();
@@ -222,6 +224,17 @@ namespace Mix.Lib.Extensions
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+                c.CustomSchemaIds(x => x.FullName);
+            });
+            return services;
+        }
+
+        private static IServiceCollection AddMixModuleServices(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddControllers(options =>
             {
                 options.Filters.Add(new HttpResponseExceptionFilter());
@@ -233,17 +246,11 @@ namespace Mix.Lib.Extensions
                 opts.JsonSerializerOptions.Converters.Add(enumConverter);
             })
             .AddNewtonsoftJson(options =>
-                options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
-            services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
-                c.CustomSchemaIds(x => x.FullName);
+                options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
-            return services;
-        }
 
-        private static IServiceCollection AddMixModuleServices(this IServiceCollection services, IConfiguration configuration)
-        {
             foreach (var assembly in MixAssemblies)
             {
                 var startupServices = assembly.GetExportedTypes().Where(IsStartupService);
