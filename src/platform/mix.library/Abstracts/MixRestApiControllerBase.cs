@@ -13,6 +13,7 @@ using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mix.Identity.Constants;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mix.Lib.Abstracts
 {
@@ -34,6 +35,14 @@ namespace Mix.Lib.Abstracts
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            if (_uow.ActiveTransaction!=null)
+            {
+                _uow.Complete();
+            }
+            base.OnActionExecuted(context);
+        }
 
         #region Routes
 
@@ -48,7 +57,7 @@ namespace Mix.Lib.Abstracts
             }
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
-            var id = await data.SaveAsync();
+            var id = await data.SaveAsync(_uow);
             return Ok(id);
         }
 
@@ -62,16 +71,15 @@ namespace Mix.Lib.Abstracts
             {
                 return BadRequest();
             }
-            var result = await data.SaveAsync();
+            var result = await data.SaveAsync(_uow);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
-            var getData = await _repository.GetSingleAsync(id);
-            await getData.DeleteAsync();
-            return Ok(getData);
+            await _repository.DeleteAsync(id);
+            return Ok();
         }
 
         [HttpPatch("{id}")]

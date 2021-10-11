@@ -46,7 +46,7 @@ namespace Mix.Lib.Abstracts
         {
             _context = context;
             _uow = new(_context);
-            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRootRepository(_context);
+            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
 
         #region Routes
