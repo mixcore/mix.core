@@ -231,7 +231,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (exist)
                     {
                         IsValid = false;
-                        Errors.Add($"{DataId}: {Column.Title} = {StringValue} is existed");
+                        Errors.Add($"{StringValue} is existed");
                     }
                 }
                 if (Column.IsRequire)

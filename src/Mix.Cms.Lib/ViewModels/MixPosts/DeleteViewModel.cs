@@ -91,7 +91,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var navMedia = await _context.MixPostMedia.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navMedia)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
             if (result.IsSucceed)
@@ -99,7 +99,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var navModule = await _context.MixPostModule.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navModule)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
 
@@ -108,7 +108,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var navRelated = await _context.MixPostMedia.Where(n => n.PostId == Id && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navRelated)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
 
@@ -117,16 +117,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var navs = await _context.MixUrlAlias.Where(n => n.SourceId == Id.ToString() && n.Type == (int)MixUrlAliasType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
 
             if (result.IsSucceed)
             {
-                var navs = await _context.MixRelatedPost.Where(n => (n.Id == Id || n.DestinationId == Id) && n.Specificulture == Specificulture).ToListAsync();
+                var navs = await _context.MixRelatedPost.Where(n => (n.SourceId == Id || n.DestinationId == Id) && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
 
@@ -135,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 var navs = await _context.MixDatabaseDataAssociation.Where(n => n.ParentId == Id.ToString() && n.ParentType == MixDatabaseParentType.Post && n.Specificulture == Specificulture).ToListAsync();
                 foreach (var item in navs)
                 {
-                    _context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+                    _context.Entry(item).State = EntityState.Deleted;
                 }
             }
 
