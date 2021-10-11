@@ -37,7 +37,7 @@ namespace Mix.Portal.Controllers
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             _mixDataService = mixDataService;
-            _colRepository = MixDatabaseColumnViewModel.GetRepository(context);
+            _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
 
         [HttpGet("search")]
@@ -56,7 +56,7 @@ namespace Mix.Portal.Controllers
             if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
                 && isParent)
             {
-                var getData = await MixDataHelper.GetAdditionalDataAsync(parentType, databaseName, guidParentId, intParentId, _lang);
+                var getData = await MixDataHelper.GetAdditionalDataAsync(_context, parentType, databaseName, guidParentId, intParentId, _lang);
                 return Ok(getData);
             }
             return BadRequest();

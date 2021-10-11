@@ -52,8 +52,8 @@ namespace Mix.Common.Controllers
         {
             _fileService = fileService;
             _authConfigurations = authConfigService.AuthConfigurations;
-            _configRepo = MixConfigurationContentViewModel.GetRepository(context);
-            _langRepo = MixLanguageContentViewModel.GetRepository(context);
+            _configRepo = MixConfigurationContentViewModel.GetRootRepository(context);
+            _langRepo = MixLanguageContentViewModel.GetRootRepository(context);
             _routeProvider = routeProvider;
             this.authConfigService = authConfigService;
             _cultureService = cultureService;

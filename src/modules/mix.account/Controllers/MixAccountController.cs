@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Account.Domain.Dtos;
 using Mix.Account.Domain.ViewModels;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Cms;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
@@ -33,6 +34,7 @@ namespace Mix.Account.Controllers
         private readonly ILogger<MixAccountController> _logger;
         private readonly MixIdentityService _idService;
         private readonly GlobalConfigService _globalConfigService;
+        private readonly MixCmsContext _context;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixAccountController(
             UserManager<MixUser> userManager,
@@ -40,7 +42,8 @@ namespace Mix.Account.Controllers
             RoleManager<IdentityRole> roleManager,
             ILogger<MixAccountController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            GlobalConfigService globalConfigService)
+            GlobalConfigService globalConfigService,
+            MixCmsContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -49,6 +52,7 @@ namespace Mix.Account.Controllers
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
             _globalConfigService = globalConfigService;
+            _context = context;
         }
 
 
@@ -91,7 +95,7 @@ namespace Mix.Account.Controllers
 
             if (user != null)
             {
-                var mixUser = new MixUserViewModel(user);
+                var mixUser = new MixUserViewModel(_context, user);
                 await mixUser.LoadUserDataAsync();
                 return Ok(mixUser);
             }

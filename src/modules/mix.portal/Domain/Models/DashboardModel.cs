@@ -1,4 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
+using Mix.Shared.Services;
 using System.Linq;
 
 namespace Mix.Portal.Domain.Models
@@ -15,13 +17,10 @@ namespace Mix.Portal.Domain.Models
 
         public int TotalUser { get; set; }
 
-        public DashboardModel(string culture)
+        public DashboardModel(string culture, MixCmsContext context)
         {
-            using (MixCmsContext context = new())
-            {
-                TotalPage = context.MixPageContent.Count(p => p.Specificulture == culture);
-                TotalPost = context.MixPostContent.Count(p => p.Specificulture == culture);
-            }
+            TotalPage = context.MixPageContent.Count(p => p.Specificulture == culture);
+            TotalPost = context.MixPostContent.Count(p => p.Specificulture == culture);
         }
     }
 }

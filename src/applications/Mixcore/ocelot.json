@@ -1,7 +1,7 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/v2/rest/mix-portal/mix-post-content",
+      "DownstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,7 +9,7 @@
           "Port": 5006
         }
       ],
-      "UpstreamPathTemplate": "/api/v2/rest/mix-portal/mix-post-content",
+      "UpstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
     }
   ],

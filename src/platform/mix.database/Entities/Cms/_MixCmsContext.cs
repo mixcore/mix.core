@@ -11,10 +11,6 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixCmsContext : DbContext
     {
-        public MixCmsContext()
-        {
-        }
-
         // For Unit Test
         public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider)
         {

@@ -11,7 +11,8 @@ namespace Mix.Lib.Services
     public class CultureService : JsonConfigurationServiceBase
     {
         private readonly GlobalConfigService _globalConfigService;
-        public CultureService(GlobalConfigService globalConfigService) : base(MixAppConfigFilePaths.Culture)
+        public CultureService(GlobalConfigService globalConfigService, MixCmsContext ctx) 
+            : base(MixAppConfigFilePaths.Culture)
         {
             _globalConfigService = globalConfigService;
             if (!_globalConfigService.IsInit)
@@ -19,7 +20,6 @@ namespace Mix.Lib.Services
                 Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
                 if (Cultures == null)
                 {
-                    using var ctx = new MixCmsContext();
                     Cultures = ctx.MixCulture.ToList();
                     SetConfig(MixAppSettingKeywords.Cultures, Cultures);
                 }

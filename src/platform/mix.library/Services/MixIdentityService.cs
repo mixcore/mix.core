@@ -41,6 +41,7 @@ namespace Mix.Lib.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
         private readonly GlobalConfigService _globalConfigService;
+        private readonly MixCmsContext _context;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
@@ -50,16 +51,18 @@ namespace Mix.Lib.Services
             RoleManager<IdentityRole> roleManager,
             AuthConfigService authConfigService,
             GlobalConfigService globalConfigService,
-            MixCmsAccountContext context)
+            MixCmsContext context,
+            MixCmsAccountContext accountContext)
         {
-            _uow = new(context);
+            _context = context;
+            _uow = new(_context);
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _authConfigService = authConfigService;
-            _roleRepo = RoleViewModel.GetRepository(context);
+            _roleRepo = RoleViewModel.GetRootRepository(accountContext);
             _globalConfigService = globalConfigService;
-            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(context);
+            _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
             LoadRoles();
         }
 
@@ -78,7 +81,7 @@ namespace Mix.Lib.Services
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                return await GetAuthData(user, model.RememberMe);
+                return await GetAuthData(_context, user, model.RememberMe);
             }
             else
             {
@@ -86,7 +89,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<JObject> GetAuthData(MixUser user, bool rememberMe)
+        public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
@@ -94,6 +97,7 @@ namespace Mix.Lib.Services
             if (token != null)
             {
                 token.Info = await MixDataHelper.GetAdditionalDataAsync(
+                    context,
                     MixDatabaseParentType.User,
                     MixDatabaseNames.SYSTEM_USER_DATA,
                     Guid.Parse(user.Id));
@@ -170,7 +174,7 @@ namespace Mix.Lib.Services
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(user, true);
+                    return await GetAuthData(_context, user, true);
                 }
                 else if (!string.IsNullOrEmpty(model.Email))// register new account
                 {
@@ -180,7 +184,7 @@ namespace Mix.Lib.Services
                         UserName = model.Email
                     };
                     await _userManager.CreateAsync(user);
-                    return await GetAuthData(user, true);
+                    return await GetAuthData(_context, user, true);
                 }
                 else
                 {
@@ -205,7 +209,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(user, true);
+                        var token = await GetAuthData(_context, user, true);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();
