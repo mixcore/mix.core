@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Model;
 using Mix.Heart.Repository;
 using Mix.Lib.Abstracts;
+using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Shared.Services;
 using System.Threading.Tasks;
+using Mix.Heart.Extensions;
+using System;
+using Mix.Shared.Enums;
 
 namespace Mix.Portal.Controllers
 {
@@ -27,6 +32,17 @@ namespace Mix.Portal.Controllers
         {
 
         }
+
+        public override async Task<ActionResult<PagingResponseModel<MixTemplateViewModel>>> Get([FromQuery] SearchRequestDto req)
+        {
+            var searchRequest = BuildSearchRequest(req);
+
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                Enum.TryParse(Request.Query["folderType"], out MixTemplateFolderType folderType),
+                m => m.FolderType == folderType);
+            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+        }
+
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<MixTemplateViewModel>> Copy(int id)
         {
