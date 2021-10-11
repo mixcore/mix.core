@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
+using Mix.Database.Services;
 
 namespace Mix.Lib.Helpers
 {
@@ -236,7 +237,8 @@ namespace Mix.Lib.Helpers
             var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
             GlobalConfigService globalConfigService= new();
-            CultureService cultureSrv = new(globalConfigService, context);
+            MixDatabaseService databaseService = new(globalConfigService);
+            CultureService cultureSrv = new(globalConfigService, databaseService);
 
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName

@@ -5,21 +5,24 @@ using Mix.Shared.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Mix.Database.Services;
 
 namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
         private readonly GlobalConfigService _globalConfigService;
-        public CultureService(GlobalConfigService globalConfigService, MixCmsContext ctx) 
+        public CultureService(GlobalConfigService globalConfigService, MixDatabaseService databaseService) 
             : base(MixAppConfigFilePaths.Culture)
         {
+            
             _globalConfigService = globalConfigService;
             if (!_globalConfigService.IsInit)
             {
                 Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
                 if (Cultures == null)
                 {
+                    using var ctx = new MixCmsContext(databaseService, _globalConfigService);
                     Cultures = ctx.MixCulture.ToList();
                     SetConfig(MixAppSettingKeywords.Cultures, Cultures);
                 }
