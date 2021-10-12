@@ -24,6 +24,7 @@ using Mix.Rest.Api.Client;
 using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Unicode;
@@ -62,7 +63,7 @@ namespace Mix.Cms.Web
             });
 
             services.AddResponseCompression();
-
+            services.AddResponseCaching();
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
@@ -136,8 +137,26 @@ namespace Mix.Cms.Web
             }
 
             app.UseResponseCompression();
+            
 
             app.UseCors(MixcoreAllowSpecificOrigins);
+
+            app.UseResponseCaching();
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(100),
+                        NoStore = false,
+                        
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "accept-encoding" };
+
+                await next();
+            });
 
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
