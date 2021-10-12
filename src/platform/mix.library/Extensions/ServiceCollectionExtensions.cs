@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using Mix.Database.Entities.Account;
 using Mix.Heart.ViewModel;
 using System.Text.Json.Serialization;
-using Mix.Heart.UnitOfWork;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -73,14 +72,6 @@ namespace Mix.Lib.Extensions
             bool isDevelop,
             GlobalConfigService globalConfigService)
         {
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-                builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
-            });
-
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
