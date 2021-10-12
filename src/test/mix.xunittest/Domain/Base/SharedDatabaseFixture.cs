@@ -12,13 +12,14 @@ namespace Mix.Xunittest.Domain.Base
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
         protected static ConstructorInfo ctor;
-
+        public TDbContext Context { get; private set; }
         protected readonly string _connectionString = "Data Source=mix-test.db";
         protected readonly MixDatabaseProvider _dbProvider = MixDatabaseProvider.SQLITE;
 
         public SharedDatabaseFixture()
         {
             ctor = typeof(TDbContext).GetConstructor(new Type[] { typeof(string), typeof(MixDatabaseProvider) });
+            Context = CreateContext();
             Seed();
         }
 
@@ -29,15 +30,15 @@ namespace Mix.Xunittest.Domain.Base
 
         public void Seed()
         {
-            using var dbContext = CreateContext();
+            
             lock (_lock)
             {
                 if (!_databaseInitialized)
                 {
-                    dbContext.Database.EnsureDeleted();
-                    dbContext.Database.EnsureCreated();
-                    dbContext.Database.Migrate();
-                    SeedData(dbContext);
+                    Context.Database.EnsureDeleted();
+                    Context.Database.EnsureCreated();
+                    Context.Database.Migrate();
+                    SeedData(Context);
                     _databaseInitialized = true;
                 }
             }

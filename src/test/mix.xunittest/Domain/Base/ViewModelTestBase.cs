@@ -36,6 +36,8 @@ namespace Mix.Xunittest.Domain.Base
         public ViewModelTestBase(TFixture fixture)
         {
             Fixture = fixture;
+            UowInfo = new UnitOfWorkInfo(fixture.Context);
+            Repository = new(UowInfo);
         }
 
         #region Abstracts
@@ -48,14 +50,14 @@ namespace Mix.Xunittest.Domain.Base
         public async Task Step_1_Save()
         {
             TView valueToAdd = CreateSampleValue();
-            var key = await valueToAdd.SaveAsync();
+            var key = await valueToAdd.SaveAsync(UowInfo);
+            await UowInfo.CompleteAsync();
             Assert.True(key != null, key.ToString());
         }
 
         [Fact, TestPriority(2)]
         public async Task Step_2_GetList()
         {
-            Repository = new(Fixture.CreateContext());
             var data = await Repository.GetListAsync(m => true);
             Assert.True(data.Count > 0);
         }
@@ -65,9 +67,9 @@ namespace Mix.Xunittest.Domain.Base
         {
             try
             {
-                Repository = new(Fixture.CreateContext());
                 var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
                 await Repository.DeleteAsync(predicate);
+                await UowInfo.CompleteAsync();
                 Assert.True(true);
             }
             catch (MixException mex)
