@@ -602,6 +602,22 @@ namespace Mix.Cms.Lib.Helpers
 
         public static string TranslateUrl(string url, string srcCulture, string destCulture)
         {
+            using var context = new MixCmsContext();
+            string seoUrl = url.TrimStart('/').Replace($"{srcCulture}/", string.Empty);
+            if (context.MixUrlAlias.Any(m => m.Alias == seoUrl))
+            {
+                return context.MixUrlAlias.FirstOrDefault(
+                        m => m.Alias == seoUrl && m.Specificulture == destCulture)?.Alias;
+            }
+
+            var page = context.MixPage.FirstOrDefault(m => m.SeoName == seoUrl && m.Specificulture == srcCulture);
+            if (page != null)
+            {
+                var destPage = context.MixPage.FirstOrDefault(
+                        m => m.Id == page.Id && m.Specificulture == destCulture);
+                return $"/{destCulture}/{destPage.SeoName}";
+            }
+
             return url.Contains($"/{srcCulture}")
                 ? url.Replace(srcCulture, destCulture)
                 : $"/{destCulture}{url}";
