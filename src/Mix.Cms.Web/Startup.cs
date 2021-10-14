@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,8 @@ namespace Mix.Cms.Web
             string[] allowedHosts = MixService.GetAppSetting<JArray>(MixAppSettingKeywords.AllowedHosts)
                                         .Select(m => m.Value<string>("text")).ToArray();
 
-            services.AddWebEncoders(options => {
+            services.AddWebEncoders(options =>
+            {
                 options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(UnicodeRanges.All);
             });
 
@@ -62,8 +64,8 @@ namespace Mix.Cms.Web
                                   });
             });
 
-            services.AddResponseCompression();
-            services.AddResponseCaching();
+
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
@@ -111,6 +113,7 @@ namespace Mix.Cms.Web
             VerifyInitData(services);
             /* End Additional Config for Mixcore Cms  */
 
+            services.AddResponseCaching();
             #endregion Additionals Config for Mixcore Cms
         }
 
@@ -137,26 +140,30 @@ namespace Mix.Cms.Web
             }
 
             app.UseResponseCompression();
-            
+
 
             app.UseCors(MixcoreAllowSpecificOrigins);
 
-            app.UseResponseCaching();
-            app.Use(async (context, next) =>
+            int responseCache = MixService.GetAppSetting<int>(MixAppSettingKeywords.ResponseCache);
+            if (responseCache > 0)
             {
-                context.Response.GetTypedHeaders().CacheControl =
-                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-                    {
-                        Public = true,
-                        MaxAge = TimeSpan.FromSeconds(100),
-                        NoStore = false,
-                        
-                    };
-                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-                    new string[] { "accept-encoding" };
+                app.UseResponseCaching();
+                app.Use(async (context, next) =>
+                {
+                    context.Response.GetTypedHeaders().CacheControl =
+                        new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                        {
+                            Public = true,
+                            NoCache = false,
+                            SharedMaxAge = TimeSpan.FromSeconds(responseCache),
+                            MaxAge = TimeSpan.FromSeconds(responseCache),
 
-                await next();
-            });
+                        };
+                    context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                        new string[] { "Accept-Encoding" };
+                    await next();
+                });
+            }
 
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings

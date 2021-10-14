@@ -3,6 +3,7 @@
     public class MixAppSettingKeywords
     {
         public const string IsInit = "IsInit";
+        public const string ResponseCache = "ResponseCache";
         public const string SiteName = "SiteName";
         public const string ConnectionString = "ConnectionString";
         public const string SortBy = "SortBy";
