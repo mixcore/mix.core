@@ -623,6 +623,25 @@ namespace Mix.Cms.Lib.Helpers
                 : $"/{destCulture}{url}";
         }
 
+        public static string GetUrlByPageId(int pageId, string culture)
+        {
+            using var context = new MixCmsContext();
+            var seoName = context.MixPage.Where(p => p.Id == pageId && p.Specificulture == culture).Select(p => p.SeoName).FirstOrDefault();
+            if (seoName == null)
+            {
+                return $"/{culture}";
+            }
+
+            string seoUrl = $"/{culture}/{seoName}";
+            var urlAlias = context.MixUrlAlias.Where(m => m.SourceId == pageId.ToString() && m.Specificulture == culture).Select(p => p.Alias).FirstOrDefault();
+            if (urlAlias == null)
+            {
+                return seoUrl;
+            }
+
+            return urlAlias;
+        }
+
         public static string BuildUrl(HttpContext context, string key, string value)
         {
             var nameValueCollection = new NameValueCollection
