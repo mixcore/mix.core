@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Mix.Grpc
 {
-    public class MixGrpcrService : MixGrpc.MixGrpcBase
+    public class MixGrpcService : MixGrpc.MixGrpcBase
     {
-        private readonly ILogger<MixGrpcrService> _logger;
-        public MixGrpcrService(ILogger<MixGrpcrService> logger)
+        private readonly ILogger<MixGrpcService> _logger;
+        public MixGrpcService(ILogger<MixGrpcService> logger)
         {
             _logger = logger;
         }

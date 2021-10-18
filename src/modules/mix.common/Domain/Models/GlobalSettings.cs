@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Mix.Common.Models
 {
-    public class AppSettingModel
+    public class GlobalSettings
 
     {
         public string Domain { get; set; }

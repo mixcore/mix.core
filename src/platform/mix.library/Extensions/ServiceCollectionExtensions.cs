@@ -58,6 +58,7 @@ namespace Mix.Lib.Extensions
             services.AddSSL();
 
             services.AddResponseCompression();
+            services.AddResponseCaching();
             return services;
         }
 
@@ -72,6 +73,7 @@ namespace Mix.Lib.Extensions
             bool isDevelop,
             GlobalConfigService globalConfigService)
         {
+            
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
@@ -86,6 +88,7 @@ namespace Mix.Lib.Extensions
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
 
             app.UseResponseCompression();
+            app.UseMixResponseCaching();
             return app;
         }
 
@@ -138,6 +141,25 @@ namespace Mix.Lib.Extensions
             });
 
             return app;
+        }
+        
+        // Must call after use cors
+        private static void UseMixResponseCaching(this IApplicationBuilder app)
+        {
+            app.UseResponseCaching();
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(10)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "Accept-Encoding" };
+
+                await next();
+            });
         }
 
         private static IApplicationBuilder UseMixModuleApps(this IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
