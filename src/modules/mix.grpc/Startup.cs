@@ -31,7 +31,7 @@ namespace Mix.Grpc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<MixGrpcrService>();
+                endpoints.MapGrpcService<MixGrpcService>();
             });
         }
     }

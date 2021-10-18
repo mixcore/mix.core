@@ -35,14 +35,6 @@ namespace Mix.Lib.Abstracts
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            if (_uow.ActiveTransaction!=null)
-            {
-                _uow.Complete();
-            }
-            base.OnActionExecuted(context);
-        }
 
         #region Routes
 

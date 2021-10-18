@@ -2,13 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using Mix.Shared.Services;
-using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Shared.Models;
 using Mix.Heart.Repository;
@@ -21,11 +19,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.Dtos;
-using Mix.Heart.UnitOfWork;
+using Mix.Common.Domain.Helpers;
 
 namespace Mix.Common.Controllers
 {
-    [Route("api/v2/shared")]
+    [Route("api/v2/rest/shared")]
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
@@ -179,38 +177,9 @@ namespace Mix.Common.Controllers
 
         private async Task<AllSettingModel> GetAllSettingsAsync(string lang = null)
         {
-            lang ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            var cultures = _cultureService.Cultures;
-            var culture = _cultureService.LoadCulture(lang);
-            // Get Settings
-            AppSettingModel globalSettings = new()
-            {
-                Domain = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain),
-                Lang = lang,
-                PortalThemeSettings = _globalConfigService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
-                ApiEncryptKey = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                IsEncryptApi = _globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
-                Cultures = cultures,
-                PageTypes = Enum.GetNames(typeof(MixPageType)),
-                ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
-                MixDatabaseTypes = Enum.GetNames(typeof(MixDatabaseType)),
-                DataTypes = Enum.GetNames(typeof(MixDataType)),
-                Statuses = Enum.GetNames(typeof(MixContentStatus)),
-                RSAKeys = RSAEncryptionHelper.GenerateKeys(),
-                ExternalLoginProviders = new JObject()
-                {
-                    new JProperty("Facebook", _authConfigurations.Facebook?.AppId),
-                    new JProperty("Google", _authConfigurations.Google?.AppId),
-                    new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
-                    new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
-                },
-                LastUpdateConfiguration = _globalConfigService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
-
-            };
-
             return new AllSettingModel()
             {
-                AppSettings = globalSettings,
+                GlobalSettings = CommonHelper.GetAppSettings(lang, _authConfigurations, _globalConfigService, _cultureService),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };

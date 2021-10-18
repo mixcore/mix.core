@@ -45,7 +45,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8D3FF4E3-4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.xunittest", "src\test\mix.xunittest\mix.xunittest.csproj", "{CD0F866F-FF61-456B-AAEA-9960B17107E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.grpc", "src\modules\mix.grpc\mix.grpc.csproj", "{80A478DE-09AD-4C60-B446-73946D8B0E51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.grpc", "src\modules\mix.grpc\mix.grpc.csproj", "{80A478DE-09AD-4C60-B446-73946D8B0E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.queue", "mix.queue\mix.queue.csproj", "{561D553F-6D90-425A-8AD6-01A597AFC3C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{80A478DE-09AD-4C60-B446-73946D8B0E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A478DE-09AD-4C60-B446-73946D8B0E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A478DE-09AD-4C60-B446-73946D8B0E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561D553F-6D90-425A-8AD6-01A597AFC3C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561D553F-6D90-425A-8AD6-01A597AFC3C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561D553F-6D90-425A-8AD6-01A597AFC3C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561D553F-6D90-425A-8AD6-01A597AFC3C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -143,6 +149,7 @@ Global
 		{8D3FF4E3-4C56-4FA6-81CC-686DE037FF59} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
 		{CD0F866F-FF61-456B-AAEA-9960B17107E3} = {8D3FF4E3-4C56-4FA6-81CC-686DE037FF59}
 		{80A478DE-09AD-4C60-B446-73946D8B0E51} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
+		{561D553F-6D90-425A-8AD6-01A597AFC3C6} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

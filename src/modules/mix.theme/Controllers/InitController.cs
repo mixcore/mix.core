@@ -80,8 +80,24 @@ namespace Mix.Theme.Controllers
             }
             return BadRequest();
         }
+            
+        /// <returns status> init status </returns>
+
+        [HttpGet]
+
+        [Route("get-init-status")]
+
+        public ActionResult<InitStep> GetInitStatus()
+
+        {
+
+            var initStatus = _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus);
 
 
+
+            return Ok(initStatus);
+
+        }
 
 
         #endregion Helpers

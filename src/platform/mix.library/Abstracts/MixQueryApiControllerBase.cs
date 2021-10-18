@@ -17,6 +17,7 @@ using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mix.Heart.UnitOfWork;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mix.Lib.Abstracts
 {
@@ -48,6 +49,18 @@ namespace Mix.Lib.Abstracts
             _uow = new(_context);
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
+
+        #region Overrides
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            if (_uow.ActiveTransaction != null)
+            {
+                _uow.Complete();
+            }
+            _context.Dispose();
+            base.OnActionExecuted(context);
+        }
+        #endregion
 
         #region Routes
 
