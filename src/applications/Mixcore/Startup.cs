@@ -10,8 +10,8 @@ using Mix.Shared.Services;
 using System.Reflection;
 using Mixcore.Domain.Extensions;
 using Ocelot.DependencyInjection;
-using Mixcore.Domain.Services;
-using Mix.Lib.Publishers.Google;
+using Mix.Lib.Subscribers.Google;
+using Mixcore.Domain.Subscribers.Google;
 
 namespace Mixcore
 {
@@ -36,10 +36,7 @@ namespace Mixcore
                     builder.AllowAnyMethod();
                 });
             });
-
-            services.AddHostedService<PostSubscriberJobService>();
-            services.AddHostedService<GooglePublisherService>();
-
+            services.AddHostedService<ThemeSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             
             // Must app Auth config after Add mixservice to init App config 

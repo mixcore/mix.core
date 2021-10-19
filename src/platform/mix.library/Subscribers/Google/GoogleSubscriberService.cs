@@ -13,18 +13,19 @@ using System.Threading.Tasks;
 
 namespace Mix.Lib.Subscribers.Google
 {
-    public abstract class GoogleSubscriberJobService<T> : IHostedService
+    public abstract class GoogleSubscriberService<T> : IHostedService
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
         private readonly string modelName;
 
-        public GoogleSubscriberJobService(
+        public GoogleSubscriberService(
+            string subscriptionId,
             IConfiguration configuration)
         {
             _configuration = configuration;
             modelName = typeof(T).FullName;
-            _subscriber = CreateSubscriber();
+            _subscriber = CreateSubscriber(subscriptionId);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -45,7 +46,7 @@ namespace Mix.Lib.Subscribers.Google
             return Task.CompletedTask;
         }
 
-        private IQueueSubscriber CreateSubscriber()
+        private IQueueSubscriber CreateSubscriber(string subscriptionName)
         {
             try
             {
@@ -62,7 +63,7 @@ namespace Mix.Lib.Subscribers.Google
                         settingPath.Bind(googleSetting);
 
                         return QueueEngineFactory.CreateGoogleSubscriber(
-                            provider, googleSetting, "ModelCreatedQueue", MesageHandler);
+                            provider, googleSetting, subscriptionName, MesageHandler);
                 }
             }
             catch (Exception ex)

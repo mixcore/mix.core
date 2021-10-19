@@ -16,13 +16,14 @@ using System.Threading.Tasks;
 
 namespace Mix.Lib.Publishers.Google
 {
-    public class GooglePublisherService : IHostedService
+    public abstract class GooglePublisherService<T> : IHostedService
     {
         private readonly IQueueService<QueueMessageModel> _queueService;
         private readonly List<IQueuePublisher<QueueMessageModel>> _publishers;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private const int MAX_CONSUME_LENGTH = 100;
+        private readonly string _modelName;
 
         public GooglePublisherService(
             IQueueService<QueueMessageModel> queueService,
@@ -31,7 +32,8 @@ namespace Mix.Lib.Publishers.Google
             _queueService = queueService;
             _configuration = configuration;
             _environment = environment;
-            _publishers = CreatePublisher();
+            _modelName = typeof(T).FullName;
+            _publishers = CreatePublisher("ModelCreatedQueue");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -57,7 +59,7 @@ namespace Mix.Lib.Publishers.Google
             return Task.CompletedTask;
         }
 
-        private List<IQueuePublisher<QueueMessageModel>> CreatePublisher()
+        private List<IQueuePublisher<QueueMessageModel>> CreatePublisher(string topicName)
         {
             try
             {
@@ -74,7 +76,9 @@ namespace Mix.Lib.Publishers.Google
                         settingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = Path.Combine(_environment.ContentRootPath, googleSetting.CredentialFile);
 
-                        queuePublishers.Add(QueueEngineFactory.CreateGooglePublisher<QueueMessageModel>(provider, googleSetting, "ModelCreatedQueue"));
+                        queuePublishers.Add(
+                            QueueEngineFactory.CreateGooglePublisher<QueueMessageModel>(
+                                provider, googleSetting, topicName));
                         break;
                 }
 
@@ -85,5 +89,6 @@ namespace Mix.Lib.Publishers.Google
                 throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
             }
         }
+
     }
 }
