@@ -10,6 +10,8 @@ using Mix.Shared.Services;
 using System.Reflection;
 using Mixcore.Domain.Extensions;
 using Ocelot.DependencyInjection;
+using Mixcore.Domain.Services;
+using Mix.Lib.Publishers.Google;
 
 namespace Mixcore
 {
@@ -34,6 +36,9 @@ namespace Mixcore
                     builder.AllowAnyMethod();
                 });
             });
+
+            services.AddHostedService<PostSubscriberJobService>();
+            services.AddHostedService<GooglePublisherService>();
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             

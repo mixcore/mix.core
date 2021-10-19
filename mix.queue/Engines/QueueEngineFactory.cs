@@ -3,6 +3,7 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Enums;
 using System;
+using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines
 {
@@ -20,7 +21,11 @@ namespace Mix.Queue.Engines
             return publisher;
         }
 
-        public static IQueueSubscriber CreateGoogleSubscriber(MixQueueProvider provider, QueueSetting queueSetting, string subscriptionName, Action<string> handler)
+        public static IQueueSubscriber CreateGoogleSubscriber(
+            MixQueueProvider provider, 
+            QueueSetting queueSetting, 
+            string subscriptionName,
+            Func<string, Task> handler)
         {
             IQueueSubscriber subscriber = default;
             switch (provider)

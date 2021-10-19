@@ -17,9 +17,12 @@ namespace Mix.Queue.Engines.Google
         private SubscriberClient _subscriber;
         private readonly GoogleQueueSetting _queueSetting;
         private SubscriptionName _subscriptionName;
-        private readonly Action<string> _messageHandler;
+        private readonly Func<string, Task> _messageHandler;
 
-        public GoogleQueueSubscriber(QueueSetting queueSetting, string subscriptionName, Action<string> messageHandler)
+        public GoogleQueueSubscriber(
+            QueueSetting queueSetting, 
+            string subscriptionName,
+            Func<string, Task> messageHandler)
         {
             _queueSetting = queueSetting as GoogleQueueSetting;
             _messageHandler = messageHandler;

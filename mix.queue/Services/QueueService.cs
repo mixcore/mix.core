@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Mix.Queue.Services
 {
-    internal class QueueService<T> : IQueueService<T>
+    public class QueueService<T> : IQueueService<T>
     {
         private ConcurrentQueue<T> _queue = new ConcurrentQueue<T>();
 
@@ -22,7 +22,7 @@ namespace Mix.Queue.Services
 
             int i = 1;
 
-            while (i <= lenght)
+            while (i <= lenght && _queue.Any())
             {
                 _queue.TryDequeue(out T data);
                 if (data != null)
