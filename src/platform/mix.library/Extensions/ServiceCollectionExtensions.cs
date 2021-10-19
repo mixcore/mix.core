@@ -27,6 +27,10 @@ using Mix.Heart.ViewModel;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Mix.Queue.Interfaces;
+using Mix.Lib.Models;
+using Mix.Queue.Services;
+using Mix.Lib.Publishers.Google;
 
 namespace Mix.Lib.Extensions
 {
@@ -47,6 +51,7 @@ namespace Mix.Lib.Extensions
             services.AddDbContext<MixCmsAccountContext>();
 
             services.AddSingleton<MixFileService>();
+            services.AddSingleton<IQueueService<QueueMessageModel>, QueueService<QueueMessageModel>>();
             services.InitMixContext();
             services.AddEntityRepositories();
             services.AddScoped<MixService>();

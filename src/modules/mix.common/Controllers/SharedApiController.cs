@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Helpers;
+using Mix.Queue.Interfaces;
+using Mix.Lib.Models;
 
 namespace Mix.Common.Controllers
 {
@@ -31,10 +33,10 @@ namespace Mix.Common.Controllers
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly MixFileService _fileService;
         protected readonly CultureService _cultureService;
-        private readonly AuthConfigService authConfigService;
+        private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
-
+        private IQueueService<QueueMessageModel> _queueService;
         public SharedApiController(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
@@ -45,7 +47,7 @@ namespace Mix.Common.Controllers
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
-            MixCmsContext context)
+            MixCmsContext context, IQueueService<QueueMessageModel> queueService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
@@ -53,8 +55,9 @@ namespace Mix.Common.Controllers
             _configRepo = MixConfigurationContentViewModel.GetRootRepository(context);
             _langRepo = MixLanguageContentViewModel.GetRootRepository(context);
             _routeProvider = routeProvider;
-            this.authConfigService = authConfigService;
+            _authConfigService = authConfigService;
             _cultureService = cultureService;
+            _queueService = queueService;
         }
 
         #region Routes
