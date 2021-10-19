@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
+using Mix.Portal.Domain.Subscribers.Google;
 using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using System.IO;
@@ -38,7 +39,7 @@ namespace Mix.Portal
                     builder.AllowAnyMethod();
                 });
             });
-
+            services.AddHostedService<ThemeSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
             // Must app Auth config after Add mixservice to init App config 
