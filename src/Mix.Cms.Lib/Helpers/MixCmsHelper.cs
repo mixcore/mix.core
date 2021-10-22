@@ -258,6 +258,11 @@ namespace Mix.Cms.Lib.Helpers
 
                     foreach (var item in cate.MenuItems)
                     {
+                        if (item.Uri.IndexOf('?') > 0)
+                        {
+                            item.Uri = item.Uri[..item.Uri.IndexOf('?')];
+                        }
+
                         item.IsActive = item.Uri == activePath;
                         if (item.IsActive)
                         {
@@ -621,6 +626,25 @@ namespace Mix.Cms.Lib.Helpers
             return url.Contains($"/{srcCulture}")
                 ? url.Replace(srcCulture, destCulture)
                 : $"/{destCulture}{url}";
+        }
+
+        public static string GetUrlByPageId(int pageId, string culture)
+        {
+            using var context = new MixCmsContext();
+            var seoName = context.MixPage.Where(p => p.Id == pageId && p.Specificulture == culture).Select(p => p.SeoName).FirstOrDefault();
+            if (seoName == null)
+            {
+                return $"/{culture}";
+            }
+
+            string seoUrl = $"/{culture}/{seoName}";
+            var urlAlias = context.MixUrlAlias.Where(m => m.SourceId == pageId.ToString() && m.Specificulture == culture).Select(p => p.Alias).FirstOrDefault();
+            if (urlAlias == null)
+            {
+                return seoUrl;
+            }
+
+            return urlAlias;
         }
 
         public static string BuildUrl(HttpContext context, string key, string value)
