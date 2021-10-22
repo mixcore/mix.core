@@ -14,6 +14,7 @@ Update-Database -Context MixCmsContext
 remove ntext type
 remove default value
 
+mysql> SET GLOBAL sort_buffer_size = 1024 * 1024 * 4;
 
 // Clean Init Database
 

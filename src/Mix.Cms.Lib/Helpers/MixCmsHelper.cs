@@ -258,6 +258,11 @@ namespace Mix.Cms.Lib.Helpers
 
                     foreach (var item in cate.MenuItems)
                     {
+                        if (item.Uri.IndexOf('?') > 0)
+                        {
+                            item.Uri = item.Uri[..item.Uri.IndexOf('?')];
+                        }
+
                         item.IsActive = item.Uri == activePath;
                         if (item.IsActive)
                         {
