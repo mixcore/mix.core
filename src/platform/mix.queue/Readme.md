@@ -56,5 +56,5 @@ public class ThemeSubscriberService : GoogleSubscriberService<MixThemeViewModel>
 ```
 - Add Subscriber Host Service
 ```
-ThemeSubscriberService
+services.AddHostedService<ThemeSubscriberService>();
 ```
