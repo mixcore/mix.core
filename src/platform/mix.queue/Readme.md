@@ -2,6 +2,7 @@
 
 - Enable Pub/Sub API https://console.cloud.google.com/apis/library/pubsub.googleapis.com
 - Create Service Account https://console.cloud.google.com/iam-admin/serviceaccounts/create
+- Grant Pub/Sub Admin
 - Edit Service Account => create json key => save to MixContent/AppConfigs/google_credential.json
 - https://console.cloud.google.com/cloudpubsub/topic/list?projec={projectId}
 - Each Subscription have 1 subscriber only => to have multiple subscriber => create multi subscription
