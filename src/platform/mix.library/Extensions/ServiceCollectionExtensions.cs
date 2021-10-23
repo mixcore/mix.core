@@ -28,10 +28,8 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Mix.Queue.Interfaces;
-using Mix.Lib.Models;
 using Mix.Queue.Services;
-using Mix.Lib.Publishers.Google;
-using Mix.Lib.Subscribers.Google;
+using Mix.Queue.Models;
 
 namespace Mix.Lib.Extensions
 {

@@ -3,7 +3,9 @@ using Google.Cloud.PubSub.V1;
 using Grpc.Auth;
 using Grpc.Core;
 using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -16,13 +18,13 @@ namespace Mix.Queue.Engines.GooglePubSub
         private SubscriberClient _subscriber;
         private readonly GoogleQueueSetting _queueSetting;
         private SubscriptionName _subscriptionName;
-        private readonly Func<string, Task> _messageHandler;
+        private readonly Func<QueueMessageModel, Task> _messageHandler;
 
         public GoogleQueueSubscriber(
             QueueSetting queueSetting, 
             string topicId,
             string subscriptionId,
-            Func<string, Task> messageHandler)
+            Func<QueueMessageModel, Task> messageHandler)
         {
             _queueSetting = queueSetting as GoogleQueueSetting;
             _messageHandler = messageHandler;
@@ -75,8 +77,8 @@ namespace Mix.Queue.Engines.GooglePubSub
                  (PubsubMessage message, CancellationToken cancel) =>
                  {
                      string body = System.Text.Encoding.UTF8.GetString(message.Data.ToArray());
-
-                     _messageHandler(body);
+                     var msg = JsonConvert.DeserializeObject<QueueMessageModel>(body);
+                     _messageHandler(msg);
 
                      return Task.FromResult(SubscriberClient.Reply.Ack);
                  });

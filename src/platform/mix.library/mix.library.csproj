@@ -56,4 +56,8 @@
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Subscribers\Google\" />
+  </ItemGroup>
+
 </Project>
