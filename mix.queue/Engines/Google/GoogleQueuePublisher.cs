@@ -1,7 +1,9 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using Google.Api.Gax.Grpc;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Grpc.Auth;
+using Grpc.Core;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models.QueueSetting;
 using Newtonsoft.Json;
@@ -9,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Mix.Queue.Engines.Google
+namespace Mix.Queue.Engines.GooglePubSub
 {
     internal class GoogleQueuePublisher<T> : IQueuePublisher<T>
     {
@@ -26,11 +28,31 @@ namespace Mix.Queue.Engines.Google
         {
             if (_publisher == null)
             {
+                // First create a topic.
+                CreateTopic(topicName);
+
                 var googleCredential = GoogleCredential.FromFile(_queueSetting.CredentialFile);
                 var createSettings = new PublisherClient.ClientCreationSettings(credentials: googleCredential.ToChannelCredentials());
                 var toppicName = new TopicName(_queueSetting.ProjectId, topicName);
                 var publisher = PublisherClient.CreateAsync(toppicName, createSettings);
                 _publisher = publisher.Result;
+            }
+        }
+
+        private Topic CreateTopic(string topicId)
+        {
+            try
+            {
+                PublisherServiceApiClientBuilder builder = new PublisherServiceApiClientBuilder();
+                builder.CredentialsPath = _queueSetting.CredentialFile;
+                PublisherServiceApiClient publisher = builder.Build();
+                TopicName topicName = new TopicName(_queueSetting.ProjectId, topicId);
+                return publisher.CreateTopic(topicName);
+            }
+            catch (RpcException e) when (e.Status.StatusCode == StatusCode.AlreadyExists)
+            {
+                // Already exists.  That's fine.
+                return default;
             }
         }
 

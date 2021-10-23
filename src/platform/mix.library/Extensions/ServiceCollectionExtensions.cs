@@ -54,7 +54,6 @@ namespace Mix.Lib.Extensions
             services.AddSingleton<MixFileService>();
             
             // Message Queue
-            services.AddHostedService<ThemePublisherService>();
             services.AddSingleton<IQueueService<QueueMessageModel>, QueueService<QueueMessageModel>>();
 
 

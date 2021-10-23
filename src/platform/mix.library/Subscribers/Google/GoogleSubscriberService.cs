@@ -20,12 +20,12 @@ namespace Mix.Lib.Subscribers.Google
         private readonly string modelName;
 
         public GoogleSubscriberService(
-            string subscriptionId,
+            string moduleName,
             IConfiguration configuration)
         {
             _configuration = configuration;
             modelName = typeof(T).FullName;
-            _subscriber = CreateSubscriber(subscriptionId);
+            _subscriber = CreateSubscriber(modelName, $"{modelName}_{moduleName}");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ namespace Mix.Lib.Subscribers.Google
             return Task.CompletedTask;
         }
 
-        private IQueueSubscriber CreateSubscriber(string subscriptionName)
+        private IQueueSubscriber CreateSubscriber(string topicId, string subscriptionId)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace Mix.Lib.Subscribers.Google
                         settingPath.Bind(googleSetting);
 
                         return QueueEngineFactory.CreateGoogleSubscriber(
-                            provider, googleSetting, subscriptionName, MesageHandler);
+                            provider, googleSetting,topicId, subscriptionId, MesageHandler);
                 }
             }
             catch (Exception ex)

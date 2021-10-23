@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Extensions;
+using Mix.Lib.Publishers.Google;
 using Mix.Lib.Startups;
 using Mix.Portal.Domain.Subscribers.Google;
 using Mix.Shared.Constants;
@@ -39,6 +40,7 @@ namespace Mix.Portal
                     builder.AllowAnyMethod();
                 });
             });
+            services.AddHostedService<ThemePublisherService>();
             services.AddHostedService<ThemeSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
