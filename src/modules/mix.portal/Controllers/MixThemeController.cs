@@ -5,11 +5,10 @@ using Mix.Heart.Model;
 using Mix.Heart.Repository;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
-using Mix.Lib.Models;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
@@ -21,7 +20,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixThemeExportService _exportService;
         private readonly MixThemeImportService _importService;
-        private IQueueService<QueueMessageModel> _queueService;
+        private readonly IQueueService<QueueMessageModel> _queueService;
         public MixThemeController(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,

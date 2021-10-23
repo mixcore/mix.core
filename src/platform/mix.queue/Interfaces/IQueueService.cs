@@ -7,5 +7,7 @@ namespace Mix.Queue.Interfaces
         void PushQueue(T model);
 
         IList<T> ConsumeQueue(int lenght);
+
+        bool Any();
     }
 }

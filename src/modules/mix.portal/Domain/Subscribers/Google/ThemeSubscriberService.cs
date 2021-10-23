@@ -1,16 +1,18 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Lib.Models;
-using Mix.Lib.Subscribers.Google;
+using Mix.Lib.Subscribers;
 using Mix.Lib.ViewModels;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using System;
 using System.Threading.Tasks;
 
 namespace Mix.Portal.Domain.Subscribers.Google
 {
-    public class ThemeSubscriberService : GoogleSubscriberService<MixThemeViewModel>
+    public class ThemeSubscriberService : SubscriberService<MixThemeViewModel>
     {
         public ThemeSubscriberService(
-            IConfiguration configuration) : base("portal", configuration)
+            IConfiguration configuration,
+            IQueueService<QueueMessageModel> queueService) : base("portal", configuration, queueService)
         {
         }
 

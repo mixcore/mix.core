@@ -14,6 +14,11 @@ namespace Mix.Queue.Services
             _queue = new ConcurrentQueue<T>();
         }
 
+        public bool Any()
+        {
+            return _queue.Any();
+        }
+
         public IList<T> ConsumeQueue(int lenght)
         {
             List<T> result = new List<T>();

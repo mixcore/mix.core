@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
-using Mix.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Enums;
 using System;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Lib.Publishers.Google
 {
-    public abstract class GooglePublisherService<T> : IHostedService
+    public abstract class MixPublisherService<T> : IHostedService
     {
         private readonly IQueueService<QueueMessageModel> _queueService;
         private readonly List<IQueuePublisher<QueueMessageModel>> _publishers;
@@ -25,7 +25,7 @@ namespace Mix.Lib.Publishers.Google
         private const int MAX_CONSUME_LENGTH = 100;
         private readonly string _modelName;
 
-        public GooglePublisherService(
+        public MixPublisherService(
             IQueueService<QueueMessageModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -63,7 +63,8 @@ namespace Mix.Lib.Publishers.Google
         {
             try
             {
-                List<IQueuePublisher<QueueMessageModel>> queuePublishers = new List<IQueuePublisher<QueueMessageModel>>();
+                List<IQueuePublisher<QueueMessageModel>> queuePublishers = 
+                    new List<IQueuePublisher<QueueMessageModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
@@ -77,7 +78,7 @@ namespace Mix.Lib.Publishers.Google
                         googleSetting.CredentialFile = Path.Combine(_environment.ContentRootPath, googleSetting.CredentialFile);
 
                         queuePublishers.Add(
-                            QueueEngineFactory.CreateGooglePublisher<QueueMessageModel>(
+                            QueueEngineFactory.CreatePublisher<QueueMessageModel>(
                                 provider, googleSetting, topicName));
                         break;
                 }

@@ -3,7 +3,9 @@
     public enum MixQueueProvider
     {
         GOOGLE,
+        KAFKA,
         AWS,
-        AZURE
+        AZURE,
+        MIX
     }
 }

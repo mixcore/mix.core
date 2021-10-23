@@ -21,7 +21,7 @@ using Mix.Common.Domain.Models;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Helpers;
 using Mix.Queue.Interfaces;
-using Mix.Lib.Models;
+using Mix.Queue.Models;
 
 namespace Mix.Common.Controllers
 {
@@ -187,7 +187,5 @@ namespace Mix.Common.Controllers
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };
         }
-
-
     }
 }

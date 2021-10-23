@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Mix.Lib.Models
+namespace Mix.Queue.Models
 {
     public class QueueMessageModel
     {

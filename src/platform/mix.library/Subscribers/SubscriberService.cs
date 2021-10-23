@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
-using Mix.Lib.Models;
 using Mix.Queue.Engines;
 using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Enums;
 using Newtonsoft.Json;
@@ -11,19 +11,22 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mix.Lib.Subscribers.Google
+namespace Mix.Lib.Subscribers
 {
-    public abstract class GoogleSubscriberService<T> : IHostedService
+    public abstract class SubscriberService<T> : IHostedService
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
+        private readonly IQueueService<QueueMessageModel> _queueService;
         private readonly string modelName;
 
-        public GoogleSubscriberService(
+        public SubscriberService(
             string moduleName,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IQueueService<QueueMessageModel> queueService)
         {
             _configuration = configuration;
+            _queueService = queueService;
             modelName = typeof(T).FullName;
             _subscriber = CreateSubscriber(modelName, $"{modelName}_{moduleName}");
         }
@@ -52,18 +55,21 @@ namespace Mix.Lib.Subscribers.Google
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
-
+                var settingPath = _configuration.GetSection(
+                                            "MessageQueueSetting:GoogleQueueSetting");
                 switch (provider)
                 {
                     case MixQueueProvider.GOOGLE:
 
                         var googleSetting = new GoogleQueueSetting();
-                        var settingPath = _configuration.GetSection(
-                                            "MessageQueueSetting:GoogleQueueSetting");
                         settingPath.Bind(googleSetting);
-
-                        return QueueEngineFactory.CreateGoogleSubscriber(
-                            provider, googleSetting,topicId, subscriptionId, MesageHandler);
+                        return QueueEngineFactory.CreateSubscriber(
+                            provider, googleSetting,topicId, subscriptionId, MesageHandler, _queueService);
+                    case MixQueueProvider.MIX:
+                        var mixSetting = new MixQueueSetting();
+                        settingPath.Bind(mixSetting);
+                        return QueueEngineFactory.CreateSubscriber(
+                           provider, mixSetting, topicId, subscriptionId, MesageHandler, _queueService);
                 }
             }
             catch (Exception ex)
@@ -74,11 +80,10 @@ namespace Mix.Lib.Subscribers.Google
             return default;
         }
 
-        public Task MesageHandler(string body)
+        public Task MesageHandler(QueueMessageModel data)
         {
             try
             {
-                var data = JsonConvert.DeserializeObject<QueueMessageModel>(body);
                 
                 if (modelName != data.FullName)
                 {
