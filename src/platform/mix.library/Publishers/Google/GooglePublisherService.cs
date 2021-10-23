@@ -33,7 +33,7 @@ namespace Mix.Lib.Publishers.Google
             _configuration = configuration;
             _environment = environment;
             _modelName = typeof(T).FullName;
-            _publishers = CreatePublisher("ModelCreatedQueue");
+            _publishers = CreatePublisher(_modelName);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

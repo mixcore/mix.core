@@ -9,7 +9,7 @@ namespace Mix.Lib.Models
         public string FullName { get; set; }
         public JObject Model { get; set; }
 
-        public void Init<T>(T data)
+        public void Package<T>(T data)
         {
             FullName = typeof(T).FullName;
             Model = JObject.FromObject(data);
