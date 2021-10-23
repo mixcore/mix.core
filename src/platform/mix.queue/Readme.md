@@ -1,9 +1,9 @@
 # Google Cloud Pub/Sub :
 
-- Enable Pub/Sub APi https://console.cloud.google.com/apis/library/pubsub.googleapis.com
+- Enable Pub/Sub API https://console.cloud.google.com/apis/library/pubsub.googleapis.com
 - Create Service Account https://console.cloud.google.com/iam-admin/serviceaccounts/create
 - Edit Service Account => create json key => save to MixContent/AppConfigs/google_credential.json
-- https://console.cloud.google.com/cloudpubsub/topic/list?project=mixcore-225013
+- https://console.cloud.google.com/cloudpubsub/topic/list?projec={projectId}
 - Each Subscription have 1 subscriber only => to have multiple subscriber => create multi subscription
 # Publish Mix Queue
 - Create Publisher for viewmodel to create topic on google if not exist
