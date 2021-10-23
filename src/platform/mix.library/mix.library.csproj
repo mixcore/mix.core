@@ -50,9 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
+    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
