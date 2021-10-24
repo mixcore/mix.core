@@ -18,11 +18,20 @@ namespace Mix.Database.Entities.Cms
             _databaseProvider = databaseProvider;
         }
 
+        public MixCmsContext()
+        {
+            _globalConfigService = new();
+            _databaseService = new(_globalConfigService);
+            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseProvider = _globalConfigService.DatabaseProvider;
+        }
         public MixCmsContext(MixDatabaseService databaseService,
             GlobalConfigService globalConfigService)
         {
-            _connectionString = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = globalConfigService.DatabaseProvider;
+            _globalConfigService = globalConfigService;
+            _databaseService = databaseService;
+            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseProvider = _globalConfigService.DatabaseProvider;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -99,5 +108,7 @@ namespace Mix.Database.Entities.Cms
 
         private static string _connectionString;
         private static MixDatabaseProvider _databaseProvider;
+        private readonly MixDatabaseService _databaseService;
+        private readonly GlobalConfigService _globalConfigService;
     }
 }

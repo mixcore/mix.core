@@ -76,6 +76,7 @@ namespace Mix.Theme.Controllers
             {
                 await _initCmsService.InitAccountAsync(model);
                 _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, InitStep.InitAccount);
+                _globalConfigService.SetConfig(MixAppSettingKeywords.IsInit, false);
                 return NoContent();
             }
             return BadRequest();
