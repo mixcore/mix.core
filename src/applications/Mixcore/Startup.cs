@@ -10,8 +10,7 @@ using Mix.Shared.Services;
 using System.Reflection;
 using Mixcore.Domain.Extensions;
 using Ocelot.DependencyInjection;
-using Mix.Lib.Subscribers;
-using Mixcore.Domain.Subscribers.Google;
+using Mixcore.Domain.Subscribers;
 
 namespace Mixcore
 {

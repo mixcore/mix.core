@@ -5,6 +5,7 @@ using Google.Protobuf;
 using Grpc.Auth;
 using Grpc.Core;
 using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 namespace Mix.Queue.Engines.GooglePubSub
 {
     internal class GoogleQueuePublisher<T> : IQueuePublisher<T>
+        where T : MessageQueueModel
     {
         private PublisherClient _publisher;
         private readonly GoogleQueueSetting _queueSetting;

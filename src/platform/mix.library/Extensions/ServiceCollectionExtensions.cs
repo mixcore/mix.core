@@ -30,6 +30,7 @@ using Newtonsoft.Json.Converters;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Services;
 using Mix.Queue.Models;
+using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Extensions
 {
@@ -52,7 +53,8 @@ namespace Mix.Lib.Extensions
             services.AddSingleton<MixFileService>();
             
             // Message Queue
-            services.AddSingleton<IQueueService<QueueMessageModel>, QueueService<QueueMessageModel>>();
+            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
+            services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
 
 
             services.InitMixContext();
