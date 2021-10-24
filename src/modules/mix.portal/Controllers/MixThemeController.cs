@@ -20,7 +20,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixThemeExportService _exportService;
         private readonly MixThemeImportService _importService;
-        private readonly IQueueService<QueueMessageModel> _queueService;
+        private readonly IQueueService<MessageQueueModel> _queueService;
         public MixThemeController(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
@@ -30,7 +30,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixThemeExportService exportService,
             MixCmsContext context, MixThemeImportService importService,
-            IQueueService<QueueMessageModel> queueService)
+            IQueueService<MessageQueueModel> queueService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
 
@@ -45,7 +45,7 @@ namespace Mix.Portal.Controllers
             {
                 DisplayName = " test queue"
             };
-            var msg = new QueueMessageModel();
+            var msg = new MessageQueueModel();
             msg.Package(post);
             _queueService.PushQueue(msg);
             return base.Get(req);

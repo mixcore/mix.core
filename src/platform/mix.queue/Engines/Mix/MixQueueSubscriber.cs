@@ -1,8 +1,4 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Cloud.PubSub.V1;
-using Grpc.Auth;
-using Grpc.Core;
-using Mix.Queue.Interfaces;
+﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using System;
@@ -10,31 +6,35 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mix.Queue.Engines.GooglePubSub
+namespace Mix.Queue.Engines.MixQueue
 {
     internal class MixQueueSubscriber : IQueueSubscriber
     {
+        private readonly string _subscriptionId;
+        private MixTopicModel _topic;
         private readonly MixQueueSetting _queueSetting;
-        private SubscriptionName _subscriptionName;
-        private readonly Func<QueueMessageModel, Task> _messageHandler;
-        private readonly IQueueService<QueueMessageModel> _queueService;
+        private readonly Func<MessageQueueModel, Task> _messageHandler;
+        private readonly MixMemoryMessageQueue<MessageQueueModel> _queue;
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
-            Func<QueueMessageModel, Task> messageHandler, 
-            IQueueService<QueueMessageModel> queueService)
+            Func<MessageQueueModel, Task> messageHandler,
+            MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             _queueSetting = queueSetting as MixQueueSetting;
+            _queue = queue;
+            _subscriptionId = subscriptionId;
             _messageHandler = messageHandler;
-            InitializeQueue(topicId, subscriptionId);
-            _queueService = queueService;
+            Initialize(topicId, subscriptionId);
+
         }
 
-        private void InitializeQueue(string topicId, string subscriptionId)
+        private void Initialize(string topicId, string subscriptionId)
         {
+            _topic = _queue.GetTopic(topicId);
+            _topic.CreateSubscription(subscriptionId);
         }
-
 
         /// <summary>
         /// Process message queue
@@ -47,7 +47,8 @@ namespace Mix.Queue.Engines.GooglePubSub
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    var inQueueItems = _queueService.ConsumeQueue(10);
+                    _topic = _queue.GetTopic(_topic.Id);
+                    var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
 
                     if (inQueueItems.Any())
                     {
@@ -56,7 +57,7 @@ namespace Mix.Queue.Engines.GooglePubSub
                 }
             }, cancellationToken);
 
-            
+
             return Task.CompletedTask;
         }
     }

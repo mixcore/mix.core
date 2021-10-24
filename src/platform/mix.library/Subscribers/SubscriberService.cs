@@ -2,33 +2,34 @@
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
+using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Enums;
-using Newtonsoft.Json;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Lib.Subscribers
 {
-    public abstract class SubscriberService<T> : IHostedService
+    public abstract class SubscriberService : IHostedService
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
-        private readonly IQueueService<QueueMessageModel> _queueService;
-        private readonly string modelName;
+        private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
+        private readonly string _topicId;
 
         public SubscriberService(
+            string topicId,
             string moduleName,
             IConfiguration configuration,
-            IQueueService<QueueMessageModel> queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService)
         {
             _configuration = configuration;
             _queueService = queueService;
-            modelName = typeof(T).FullName;
-            _subscriber = CreateSubscriber(modelName, $"{modelName}_{moduleName}");
+            _topicId = topicId;
+            _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -80,12 +81,12 @@ namespace Mix.Lib.Subscribers
             return default;
         }
 
-        public Task MesageHandler(QueueMessageModel data)
+        public Task MesageHandler(MessageQueueModel data)
         {
             try
             {
                 
-                if (modelName != data.FullName)
+                if (_topicId != data.FullName)
                 {
                     return Task.CompletedTask;
                 }
@@ -97,6 +98,6 @@ namespace Mix.Lib.Subscribers
             }
         }
 
-        public abstract Task Handler(QueueMessageModel model);
+        public abstract Task Handler(MessageQueueModel model);
     }
 }

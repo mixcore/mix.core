@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
+using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
@@ -14,26 +15,30 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mix.Lib.Publishers.Google
+namespace Mix.Lib.Publishers
 {
-    public abstract class MixPublisherService<T> : IHostedService
+    public abstract class PublisherService : IHostedService
     {
-        private readonly IQueueService<QueueMessageModel> _queueService;
-        private readonly List<IQueuePublisher<QueueMessageModel>> _publishers;
+        private readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly List<IQueuePublisher<MessageQueueModel>> _publishers;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
-        private const int MAX_CONSUME_LENGTH = 100;
-        private readonly string _modelName;
 
-        public MixPublisherService(
-            IQueueService<QueueMessageModel> queueService,
-            IConfiguration configuration, IWebHostEnvironment environment)
+        private const int MAX_CONSUME_LENGTH = 100;
+        private readonly string _topicId;
+
+        // MixQueueMessage<QueueMessageModel> queue when use Mix as queue message only
+        public PublisherService(
+            string topicId,
+            IQueueService<MessageQueueModel> queueService,
+            IConfiguration configuration, IWebHostEnvironment environment, 
+            MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             _queueService = queueService;
             _configuration = configuration;
             _environment = environment;
-            _modelName = typeof(T).FullName;
-            _publishers = CreatePublisher(_modelName);
+            _topicId = topicId;
+            _publishers = CreatePublisher(_topicId, queue);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -59,13 +64,15 @@ namespace Mix.Lib.Publishers.Google
             return Task.CompletedTask;
         }
 
-        private List<IQueuePublisher<QueueMessageModel>> CreatePublisher(string topicName)
+        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName, 
+            MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             try
             {
-                List<IQueuePublisher<QueueMessageModel>> queuePublishers = 
-                    new List<IQueuePublisher<QueueMessageModel>>();
+                List<IQueuePublisher<MessageQueueModel>> queuePublishers = 
+                    new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
+                var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
                 switch (provider)
@@ -73,13 +80,19 @@ namespace Mix.Lib.Publishers.Google
                     case MixQueueProvider.GOOGLE:
 
                         var googleSetting = new GoogleQueueSetting();
-                        var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         settingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = Path.Combine(_environment.ContentRootPath, googleSetting.CredentialFile);
 
                         queuePublishers.Add(
-                            QueueEngineFactory.CreatePublisher<QueueMessageModel>(
+                            QueueEngineFactory.CreatePublisher<MessageQueueModel>(
                                 provider, googleSetting, topicName));
+                        break;
+                    case MixQueueProvider.MIX:
+                        var mixSetting = new MixQueueSetting();
+                        settingPath.Bind(mixSetting);
+                        queuePublishers.Add(
+                           QueueEngineFactory.CreatePublisher(
+                               provider, mixSetting, topicName, queue));
                         break;
                 }
 

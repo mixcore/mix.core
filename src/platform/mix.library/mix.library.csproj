@@ -12,6 +12,7 @@
     <Compile Remove="Entities\EntityConfigurations\**" />
     <Compile Remove="Entities\Messenger\**" />
     <Compile Remove="Enums\**" />
+    <Compile Remove="Subscribers\Google\**" />
     <Compile Remove="ViewModels\Account\**" />
     <Compile Remove="ViewModels\Cms\**" />
     <EmbeddedResource Remove="Abstracts\ViewModels\**" />
@@ -20,6 +21,7 @@
     <EmbeddedResource Remove="Entities\EntityConfigurations\**" />
     <EmbeddedResource Remove="Entities\Messenger\**" />
     <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Subscribers\Google\**" />
     <EmbeddedResource Remove="ViewModels\Account\**" />
     <EmbeddedResource Remove="ViewModels\Cms\**" />
     <None Remove="Abstracts\ViewModels\**" />
@@ -28,6 +30,7 @@
     <None Remove="Entities\EntityConfigurations\**" />
     <None Remove="Entities\Messenger\**" />
     <None Remove="Enums\**" />
+    <None Remove="Subscribers\Google\**" />
     <None Remove="ViewModels\Account\**" />
     <None Remove="ViewModels\Cms\**" />
   </ItemGroup>
@@ -54,10 +57,6 @@
     <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Subscribers\Google\" />
   </ItemGroup>
 
 </Project>

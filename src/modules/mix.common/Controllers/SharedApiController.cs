@@ -36,7 +36,7 @@ namespace Mix.Common.Controllers
         private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
-        private IQueueService<QueueMessageModel> _queueService;
+        private IQueueService<MessageQueueModel> _queueService;
         public SharedApiController(
             ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
@@ -47,7 +47,7 @@ namespace Mix.Common.Controllers
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
-            MixCmsContext context, IQueueService<QueueMessageModel> queueService)
+            MixCmsContext context, IQueueService<MessageQueueModel> queueService)
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;

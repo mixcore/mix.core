@@ -18,13 +18,13 @@ namespace Mix.Queue.Engines.GooglePubSub
         private SubscriberClient _subscriber;
         private readonly GoogleQueueSetting _queueSetting;
         private SubscriptionName _subscriptionName;
-        private readonly Func<QueueMessageModel, Task> _messageHandler;
+        private readonly Func<MessageQueueModel, Task> _messageHandler;
 
         public GoogleQueueSubscriber(
             QueueSetting queueSetting, 
             string topicId,
             string subscriptionId,
-            Func<QueueMessageModel, Task> messageHandler)
+            Func<MessageQueueModel, Task> messageHandler)
         {
             _queueSetting = queueSetting as GoogleQueueSetting;
             _messageHandler = messageHandler;
@@ -77,7 +77,7 @@ namespace Mix.Queue.Engines.GooglePubSub
                  (PubsubMessage message, CancellationToken cancel) =>
                  {
                      string body = System.Text.Encoding.UTF8.GetString(message.Data.ToArray());
-                     var msg = JsonConvert.DeserializeObject<QueueMessageModel>(body);
+                     var msg = JsonConvert.DeserializeObject<MessageQueueModel>(body);
                      _messageHandler(msg);
 
                      return Task.FromResult(SubscriberClient.Reply.Ack);
