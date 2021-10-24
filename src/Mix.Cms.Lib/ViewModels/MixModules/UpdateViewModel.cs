@@ -240,10 +240,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
 
             var arrField = Columns != null ? JArray.Parse(
-                Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
+                JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
                     c => !string.IsNullOrEmpty(c.Name)))) : new JArray();
-            Fields = arrField.ToString(Newtonsoft.Json.Formatting.None);
-            if (!string.IsNullOrEmpty(Image) && Image[0] == '/') { Image = Image.Substring(1); }
+            Fields = arrField.ToString(Formatting.None);
+            if (!string.IsNullOrEmpty(Image)) { Image = Image.TrimStart('/'); }
             return base.ParseModel(_context, _transaction);
         }
 
