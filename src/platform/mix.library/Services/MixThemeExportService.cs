@@ -14,6 +14,8 @@ using Mix.Heart.UnitOfWork;
 using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using Mix.Heart.Repository;
+using Mix.Heart.Models;
+using Mix.Heart.Services;
 
 namespace Mix.Lib.Services
 {
@@ -102,7 +104,7 @@ namespace Mix.Lib.Services
             {
                 content = content.Replace(_globalConfigService.Domain, string.Empty);
             }
-            FileViewModel schema = new FileViewModel()
+            FileModel schema = new()
             {
                 Filename = filename,
                 Extension = MixFileExtensions.Json,

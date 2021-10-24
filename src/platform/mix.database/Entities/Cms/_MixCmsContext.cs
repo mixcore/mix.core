@@ -25,6 +25,7 @@ namespace Mix.Database.Entities.Cms
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             _databaseProvider = _globalConfigService.DatabaseProvider;
         }
+
         public MixCmsContext(MixDatabaseService databaseService,
             GlobalConfigService globalConfigService)
         {

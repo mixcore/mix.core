@@ -1,7 +1,8 @@
 ﻿@inject MixConfigurationService configService
+@inject MixFileService fileService
 @{
     Layout = null;
-    var menus = MixFileService.Instance.GetFile("portal-menus", ".json", MixFolders.JsonDataFolder);
+    var menus = fileService.GetFile("portal-menus", ".json", MixFolders.JsonDataFolder);
 }
 <!doctype html>
 <html lang="en">

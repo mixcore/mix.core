@@ -1,0 +1,1 @@
+** Note: Cannot Use Mix Queue for microservices, Or update this queue using Database or host to seperate microservice

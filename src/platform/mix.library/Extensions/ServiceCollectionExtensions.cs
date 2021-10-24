@@ -31,12 +31,12 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Services;
 using Mix.Queue.Models;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Heart.Services;
 
 namespace Mix.Lib.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        static readonly string MixcoreAllowSpecificOrigins = "_mixcoreAllowSpecificOrigins";
         static List<Assembly> MixAssemblies { get => GetMixAssemblies(); }
 
         #region Services
