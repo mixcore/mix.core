@@ -27,7 +27,6 @@ namespace Mix.Lib.Publishers
         private const int MAX_CONSUME_LENGTH = 100;
         private readonly string _topicId;
 
-        // MixQueueMessage<QueueMessageModel> queue when use Mix as queue message only
         public PublisherService(
             string topicId,
             IQueueService<MessageQueueModel> queueService,

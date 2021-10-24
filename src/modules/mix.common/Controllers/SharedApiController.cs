@@ -22,6 +22,7 @@ using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Helpers;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Heart.Services;
 
 namespace Mix.Common.Controllers
 {

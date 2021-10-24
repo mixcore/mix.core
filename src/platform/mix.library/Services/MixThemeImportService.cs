@@ -19,6 +19,8 @@ using Mix.Shared.Models;
 using Mix.Shared.Services;
 using Mix.Shared.Constants;
 using System.IO;
+using Mix.Heart.Services;
+using Mix.Lib.Helpers;
 
 namespace Mix.Lib.Services
 {
@@ -98,14 +100,14 @@ namespace Mix.Lib.Services
             {
                 string assetFolder =
                     $"{MixFolders.TempFolder}/{MixFolders.ThemePackage}/{name}/{MixThemeFolders.Assets}";
-                var assets = new FileViewModel(assetFile, assetFolder);
+                var assets = MixHelper.GetFileModel(assetFile, assetFolder);
                 MixFileService.Instance.SaveFile(assets);
             }
 
             if (themeFile != null)
             {
                 string importFolder = $"{MixFolders.TempFolder}/{MixFolders.ThemePackage}/{name}/{MixThemeFolders.Templates}";
-                var templateAsset = new FileViewModel(themeFile, importFolder);
+                var templateAsset = MixHelper.GetFileModel(themeFile, importFolder);
                 MixFileService.Instance.SaveFile(templateAsset);
             }
         }

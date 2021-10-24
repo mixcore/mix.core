@@ -1,4 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
+using Mix.Heart.Models;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Shared.Constants;
@@ -112,7 +114,7 @@ namespace Mix.Lib.ViewModels
         
         private void SaveTemplateToLocalFile()
         {
-            MixFileService.Instance.SaveFile(new Shared.Models.FileViewModel()
+            MixFileService.Instance.SaveFile(new FileModel()
             {
                 Filename = FileName,
                 Extension = Extension,

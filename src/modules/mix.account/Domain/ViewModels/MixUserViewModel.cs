@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Helpers;
@@ -18,7 +19,7 @@ namespace Mix.Account.Domain.ViewModels
     {
         public MixUser User { get; set; }
 
-        public FileViewModel MediaFile { get; set; } = new FileViewModel();
+        public FileModel MediaFile { get; set; } = new();
 
         public AdditionalDataContentViewModel UserData { get; set; }
 

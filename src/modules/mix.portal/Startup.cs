@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
+using Mix.Heart.Services;
 using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
 using Mix.Shared.Constants;
