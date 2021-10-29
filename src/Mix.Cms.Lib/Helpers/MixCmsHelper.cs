@@ -608,10 +608,17 @@ namespace Mix.Cms.Lib.Helpers
         {
             using var context = new MixCmsContext();
             string seoUrl = url.TrimStart('/').Replace($"{srcCulture}/", string.Empty);
-            if (context.MixUrlAlias.Any(m => m.Alias == seoUrl))
+            var currentAlias = context.MixUrlAlias.FirstOrDefault(m => m.Alias == seoUrl);
+            if (currentAlias != null)
             {
-                return context.MixUrlAlias.FirstOrDefault(
-                        m => m.Alias == seoUrl && m.Specificulture == destCulture)?.Alias;
+                var alias = context.MixUrlAlias.FirstOrDefault(
+                        m => m.Type == currentAlias.Type 
+                            && m.SourceId == currentAlias.SourceId 
+                            && m.Specificulture == destCulture)?.Alias;
+                if (string.IsNullOrEmpty(alias))
+                {
+                    return GetUrlByAlias(currentAlias, destCulture);
+                }
             }
 
             var page = context.MixPage.FirstOrDefault(m => m.SeoName == seoUrl && m.Specificulture == srcCulture);
@@ -625,6 +632,20 @@ namespace Mix.Cms.Lib.Helpers
             return url.Contains($"/{srcCulture}")
                 ? url.Replace(srcCulture, destCulture)
                 : $"/{destCulture}{url}";
+        }
+
+        private static string GetUrlByAlias(MixUrlAlias alias, string destCulture)
+        {
+            var type = (MixUrlAliasType)alias.Type;
+            switch (type)
+            {
+                case MixUrlAliasType.Page:
+                    return $"/{destCulture}/page/{alias.SourceId}/{alias.Alias.Replace('/', '-')}";
+                case MixUrlAliasType.Post:
+                    return $"/{destCulture}/post/{alias.SourceId}/{alias.Alias.Replace('/', '-')}";
+                default:
+                    return string.Empty;
+            }
         }
 
         public static string GetUrlByPageId(int pageId, string culture)
