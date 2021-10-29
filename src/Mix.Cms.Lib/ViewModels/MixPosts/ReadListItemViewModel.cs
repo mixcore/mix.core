@@ -169,7 +169,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         private void LoadAliased(MixCmsContext context, IDbContextTransaction transaction)
         {
             Aliases = MixUrlAliases.UpdateViewModel.Repository.GetModelListBy(
-                m => m.Type == (int)MixUrlAliasType.Post && m.SourceId == Id.ToString(),
+                m => m.Type == (int)MixUrlAliasType.Post && m.SourceId == Id.ToString() && m.Specificulture == Specificulture,
                 context, transaction).Data;
         }
 
