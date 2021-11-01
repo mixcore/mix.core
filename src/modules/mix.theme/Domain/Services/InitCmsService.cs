@@ -5,6 +5,7 @@ using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mix.Database.Services;
 using Mix.Lib.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Theme.Domain.Services
 {
@@ -17,15 +18,20 @@ namespace Mix.Theme.Domain.Services
         private readonly EntityRepository<MixCmsContext, MixTenant, int> _siteRepo;
         private readonly GlobalConfigService _globalConfigService;
         private readonly MixDatabaseService _databaseService;
+        private readonly IConfiguration _configuration;
+        private readonly MixCmsContext _context;
         public InitCmsService(
+
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepo,
             UserManager<MixUser> userManager,
             GlobalConfigService globalConfigService,
             MixIdentityService identityService,
             MixDatabaseService databaseService,
             RoleManager<IdentityRole> roleManager,
-            EntityRepository<MixCmsContext, MixTenant, int> siteRepo)
+            EntityRepository<MixCmsContext, MixTenant, int> siteRepo,
+            IConfiguration configuration, MixCmsContext context)
         {
+            _configuration = configuration;
             _cultureRepo = cultureRepo;
             _userManager = userManager;
             _globalConfigService = globalConfigService;
@@ -33,6 +39,7 @@ namespace Mix.Theme.Domain.Services
             _databaseService = databaseService;
             _roleManager = roleManager;
             _siteRepo = siteRepo;
+            _context = context;
         }
 
     }

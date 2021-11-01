@@ -55,7 +55,7 @@ namespace Mix.Lib.Services
             MixCmsAccountContext accountContext)
         {
             _context = context;
-            _uow = new(_context);
+            _uow = new(accountContext);
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -122,8 +122,8 @@ namespace Mix.Lib.Services
             try
             {
                 var dtIssued = DateTime.UtcNow;
-                var dtExpired = dtIssued.AddMinutes(_authConfigService.AuthConfigurations.AccessTokenExpiration);
-                var dtRefreshTokenExpired = dtIssued.AddMinutes(_authConfigService.AuthConfigurations.RefreshTokenExpiration);
+                var dtExpired = dtIssued.AddMinutes(_authConfigService.AppSettings.AccessTokenExpiration);
+                var dtRefreshTokenExpired = dtIssued.AddMinutes(_authConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
                 if (isRemember)
@@ -135,7 +135,7 @@ namespace Mix.Lib.Services
                                     Id = refreshToken,
                                     Email = user.Email,
                                     IssuedUtc = dtIssued,
-                                    ClientId = _authConfigService.AuthConfigurations.ClientId,
+                                    ClientId = _authConfigService.AppSettings.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
                                 }, _uow);
@@ -147,13 +147,13 @@ namespace Mix.Lib.Services
                 AccessTokenViewModel token = new()
                 {
                     AccessToken = await GenerateTokenAsync(
-                        user, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AuthConfigurations),
+                        user, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
-                    TokenType = _authConfigService.AuthConfigurations.TokenType,
-                    ExpiresIn = _authConfigService.AuthConfigurations.AccessTokenExpiration,
+                    TokenType = _authConfigService.AppSettings.TokenType,
+                    ExpiresIn = _authConfigService.AppSettings.AccessTokenExpiration,
                     Issued = dtIssued,
                     Expires = dtExpired,
-                    LastUpdateConfiguration = _globalConfigService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
+                    LastUpdateConfiguration = _globalConfigService.AppSettings.LastUpdateConfiguration
                 };
                 return token;
             }
@@ -166,7 +166,7 @@ namespace Mix.Lib.Services
 
         public async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
-            var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AuthConfigurations);
+            var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
             if (verifiedAccessToken != null)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -203,7 +203,7 @@ namespace Mix.Lib.Services
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
-                    var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AuthConfigurations);
+                    var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AppSettings);
                     if (principle != null && oldToken.Username == GetClaim(principle, MixClaims.Username))
                     {
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);

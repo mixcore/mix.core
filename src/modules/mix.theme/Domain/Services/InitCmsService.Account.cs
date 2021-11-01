@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Mix.Identity.Constants;
 using Mix.Shared.Services;
 using Mix.Lib.Models;
+using Mix.Shared.Enums;
 
 namespace Mix.Theme.Domain.Services
 {
@@ -19,7 +20,7 @@ namespace Mix.Theme.Domain.Services
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();
-            AuthConfigService authConfigService = new();
+            AuthConfigService authConfigService = new(_configuration);
             if (!_roleManager.Roles.Any())
             {
                 await _roleManager.CreateAsync(new IdentityRole()
@@ -46,16 +47,18 @@ namespace Mix.Theme.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                    var aesKey = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                    var aesKey = _globalConfigService.AppSettings.ApiEncryptKey;
 
                     var token = await _identityService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
+                        _globalConfigService.AppSettings.ApiEncryptKey = aesKey;
+                        _globalConfigService.AppSettings.InitStatus = InitStep.InitAccount;
+                        _globalConfigService.AppSettings.IsInit = false;
+                        _globalConfigService.SaveSettings();
 
-                        _globalConfigService.SetConfig(MixAppSettingKeywords.IsInit, false);
-                        _globalConfigService.SetConfig(MixAppSettingKeywords.ApiEncryptKey, aesKey);
-                        _globalConfigService.SetConfig(MixAppSettingKeywords.InitStatus, 2);
-                        authConfigService.SetConfig(MixAuthConfigurations.SecretKey, Guid.NewGuid().ToString("N"));
+                        authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
+                        authConfigService.SaveSettings();
                     }
                     return token;
                 }

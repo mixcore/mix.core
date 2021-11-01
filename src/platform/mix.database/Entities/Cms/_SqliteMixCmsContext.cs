@@ -8,8 +8,8 @@ namespace Mix.Database.Entities.v2
 {
     public class SqliteMixCmsContext : MixCmsContext
     {
-        public SqliteMixCmsContext(MixDatabaseService databaseService, GlobalConfigService globalConfigService) 
-            : base(databaseService, globalConfigService)
+        public SqliteMixCmsContext(MixDatabaseService databaseService) 
+            : base(databaseService)
         {
         }
 

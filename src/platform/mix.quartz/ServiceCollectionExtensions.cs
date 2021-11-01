@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 using Mix.MixQuartz.Extensions;
 using Mix.MixQuartz.Helpers;
 using Mix.Shared.Services;
-using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 
 namespace Mix.MixQuartz
 {
@@ -22,7 +20,7 @@ namespace Mix.MixQuartz
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            GlobalConfigService globalConfigService = new();
+            GlobalConfigService globalConfigService = new(configuration);
             // base configuration from appsettings.json
             services.Configure<QuartzOptions>(configuration.GetSection("Quartz"));
 
@@ -45,7 +43,7 @@ namespace Mix.MixQuartz
                     tp.MaxConcurrency = 10;
                 });
 
-                if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+                if (!globalConfigService.AppSettings.IsInit)
                 {
                     q.AddMixQuartzJobsAsync().GetAwaiter().GetResult();
                 }

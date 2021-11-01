@@ -17,7 +17,7 @@ namespace Mix.MixQuartz.Jobs
         }
         public override async Task Execute(IJobExecutionContext context)
         {
-            var domain = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain);
+            var domain = _globalConfigService.AppSettings.Domain;
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;

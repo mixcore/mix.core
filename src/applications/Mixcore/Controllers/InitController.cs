@@ -23,31 +23,31 @@ namespace Mixcore.Controllers
         [Route("init/{page}")]
         public IActionResult Index(string page)
         {
-            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.AppSettings.IsInit)
             {
                 return Redirect("/");
             }
             else
             {
                 page ??= "";
-                var initStatus = _globalConfigService.GetConfig<int>(MixAppSettingKeywords.InitStatus);
+                var initStatus = _globalConfigService.AppSettings.InitStatus;
                 switch (initStatus)
                 {
-                    case 0:
+                    case InitStep.Blank:
                         if (page.ToLower() != "")
                         {
                             return Redirect(InitRoutePath.Default);
                         }
                         break;
 
-                    case 1:
+                    case InitStep.InitSite:
                         if (page.ToLower() != "step2")
                         {
                             return Redirect(InitRoutePath.Step2);
                         }
                         break;
 
-                    case 2:
+                    case InitStep.InitAccount:
                         if (page.ToLower() != "step3")
                         {
                             return Redirect(InitRoutePath.Step3);

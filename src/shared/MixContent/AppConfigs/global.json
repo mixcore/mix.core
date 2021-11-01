@@ -1,14 +1,9 @@
 {
   "GlobalSettings": {
-    "ConnectionStrings": {
-      "MixAccountConnection": null,
-      "MixCmsConnection": null
-    },
     "IsInit": true,
     "InitStatus": "Blank",
     "IsMaintenance": false,
     "IsHttps": false,
-    "ClearDbPool": false,
     "MaxPageSize": 100,
     "DefaultCulture": "en-us",
     "ThemeId": "1",
@@ -16,7 +11,6 @@
     "IsEncryptApi": true,
     "ApiEncryptKey": "RHZhMEFvckY0VUF3Ynd2YUZZTnRIdz09LGx3dk82QlR0WHlPUG5FWC8rUFV2bU1pdUpIMnVQTEF5TW9kMFpPdU5aMlU9",
     "LastUpdateConfiguration": null,
-    "DatabaseProvider": "SQLITE",
     "AllowedHosts": [],
     "Smtp": {
       "Server": "",

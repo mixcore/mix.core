@@ -14,7 +14,7 @@ using Mix.Identity.Extensions;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mix.Lib.Services;
-
+using Mix.Lib.Extensions;
 namespace Mix.Lib.Startups
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
@@ -23,8 +23,9 @@ namespace Mix.Lib.Startups
         public static IServiceCollection AddMixAuthorize<TDbContext>(this IServiceCollection services)
             where TDbContext : DbContext
         {
-            AuthConfigService authConfigService = new();
-            var authConfigurations = authConfigService.AuthConfigurations;
+            AuthConfigService authConfigService = services.GetService<AuthConfigService>();
+            
+            var authConfigurations = authConfigService.AppSettings;
             PasswordOptions pOpt = new()
             {
                 RequireDigit = false,

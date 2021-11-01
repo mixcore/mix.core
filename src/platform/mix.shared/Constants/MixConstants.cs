@@ -7,7 +7,6 @@
         public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";
         public const string CONST_SETTING_IS_MYSQL = "IsMysql";
         public const string CONST_SETTING_DATABASE_PROVIDER = "DatabaseProvider";
-        public const string CONST_SETTING_LANGUAGE = "Language";
         public const string CONST_FILE_CONFIGURATIONS = "configurations.json";
         public const string CONST_FILE_ATTRIBUTE_SETS = "attribute_sets.json";
         public const string CONST_FILE_POSITIONS = "menu-positions.json";

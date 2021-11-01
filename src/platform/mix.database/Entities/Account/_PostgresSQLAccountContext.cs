@@ -15,10 +15,8 @@ namespace Mix.Database.Entities.Account
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public PostgresSQLAccountContext(
-            MixDatabaseService databaseService, 
-            GlobalConfigService globalConfigService)
-                    : base(databaseService, globalConfigService)
+        public PostgresSQLAccountContext(MixDatabaseService databaseService)
+                    : base(databaseService)
         {
         }
 

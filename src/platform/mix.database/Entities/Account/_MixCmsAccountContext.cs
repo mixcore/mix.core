@@ -28,7 +28,6 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
 
         private static MixDatabaseService _databaseService;
-        private static GlobalConfigService _globalConfigService;
 
         public MixCmsAccountContext()
         {
@@ -39,12 +38,10 @@ namespace Mix.Database.Entities.Account
         /// </summary>
         /// <param name="options">The options.</param>
         public MixCmsAccountContext(
-            MixDatabaseService databaseService,
-            GlobalConfigService globalConfigService)
+            MixDatabaseService databaseService)
                     : base()
         {
             _databaseService = databaseService;
-            _globalConfigService = globalConfigService;
         }
 
         protected override void OnConfiguring(
@@ -53,7 +50,7 @@ namespace Mix.Database.Entities.Account
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                switch (_globalConfigService.DatabaseProvider)
+                switch (_databaseService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
@@ -81,9 +78,9 @@ namespace Mix.Database.Entities.Account
         public override void Dispose()
         {
             GC.SuppressFinalize(this);
-            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.ClearDbPool))
+            if (_databaseService.AppSettings.ClearDbPool)
             {
-                switch (_globalConfigService.DatabaseProvider)
+                switch (_databaseService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         SqlConnection.ClearPool((SqlConnection)Database.GetDbConnection());
@@ -99,7 +96,7 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            switch (_globalConfigService.DatabaseProvider)
+            switch (_databaseService.DatabaseProvider)
             {
                 case MixDatabaseProvider.PostgreSQL:
                     modelBuilder.ApplyPostgresIddentityConfigurations();

@@ -14,19 +14,16 @@ namespace Mix.Database.Entities.Account
     public class ApplicationDbContext : IdentityDbContext<MixUser>
     {
         private static MixDatabaseService _databaseService;
-        private static GlobalConfigService _globalConfigservice;
         /// <summary>
         /// Initializes a new instance of the <see cref="MixDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
-            MixDatabaseService databaseService,
-            GlobalConfigService globalConfigservice)
+            MixDatabaseService databaseService)
                     : base(options)
         {
             _databaseService = databaseService;
-            _globalConfigservice = globalConfigservice;
         }
 
         public DbSet<Clients> Clients { get; set; }
@@ -50,7 +47,7 @@ namespace Mix.Database.Entities.Account
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                switch (_globalConfigservice.DatabaseProvider)
+                switch (_databaseService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);

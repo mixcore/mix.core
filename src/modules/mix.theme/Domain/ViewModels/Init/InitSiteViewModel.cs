@@ -5,6 +5,7 @@ using Mix.Theme.Domain.Dtos;
 using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
+using Mix.Heart.UnitOfWork;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -17,6 +18,18 @@ namespace Mix.Theme.Domain.ViewModels.Init
         public InitCultureViewModel Culture { get; set; }
 
         public InitSiteViewModel() : base()
+        {
+        }
+
+        public InitSiteViewModel(MixTenant entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        {
+        }
+
+        public InitSiteViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        {
+        }
+
+        public InitSiteViewModel(MixCmsContext context) : base(context)
         {
         }
 

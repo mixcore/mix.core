@@ -3,6 +3,7 @@
     public class MixAppConfigFilePaths
     {
         public const string Authentication = "MixContent/AppConfigs/authentication";
+        public const string Database = "MixContent/AppConfigs/database";
         public const string Global = "MixContent/AppConfigs/global";
         public const string Cloudflare = "MixContent/AppConfigs/cloudflare";
         public const string Culture = "MixContent/AppConfigs/culture";

@@ -59,7 +59,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (_globalConfigService.AppSettings.IsInit)
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -68,7 +68,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.InitStatus);
+                    var status = _globalConfigService.AppSettings.InitStatus;
                     _redirectUrl = $"/init/step{status}";
                 }
             }

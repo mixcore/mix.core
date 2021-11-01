@@ -52,7 +52,7 @@ namespace Mix.Lib.Services
                 var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(uowInfo);
                 
                 var tasks = new List<Task<TView>>();
-                culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= _globalConfigService.AppSettings.DefaultCulture;
 
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName).ToListAsync();

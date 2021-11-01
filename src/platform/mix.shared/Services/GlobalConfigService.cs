@@ -1,37 +1,37 @@
-﻿using Mix.Heart.Enums;
+﻿using Microsoft.Extensions.Configuration;
+using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Shared.Constants;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+using Mix.Shared.Enums;
+using Mix.Shared.Models;
+using System;
+using System.Linq;
 
 namespace Mix.Shared.Services
 {
-    public class GlobalConfigService : JsonConfigurationServiceBase
+    public class GlobalConfigService : AppSettingServiceBase<GlobalConfigurations>
     {
-        public GlobalConfigService() : base(MixAppConfigFilePaths.Global)
+        public GlobalConfigService(IConfiguration configuration)
+            : base(configuration, MixAppSettingsSection.GlobalSettings, MixAppConfigFilePaths.Global)
         {
         }
+        
+        public bool IsInit => AppSettings.IsInit;
+        public string DefaultCulture => AppSettings.DefaultCulture;
+        public string Domain => AppSettings.Domain;
+        public InitStep InitStatus => AppSettings.InitStatus;
 
-        public bool IsInit => GetConfig<bool>(MixAppSettingKeywords.IsInit);
-
-        public string Domain
+        protected override void BindAppSettings(IConfigurationSection settings)
         {
-            get => GetConfig<string>(MixAppSettingKeywords.Domain);
-        }
-
-        public MixDatabaseProvider DatabaseProvider
-        {
-            get => GetEnumConfig<MixDatabaseProvider>(MixConstants.CONST_SETTING_DATABASE_PROVIDER);
-        }
-
-        public string GetConnectionString(string name)
-        {
-            var result = AppSettings["ConnectionStrings"][name];
-            return result != null ? result.Value<string>() : string.Empty;
-        }
-
-        public void SetConnectionString(string name, string value)
-        {
-            AppSettings["ConnectionStrings"][name] = value;
+            try
+            {
+                AppSettings = new GlobalConfigurations();
+                settings.Bind(AppSettings);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
+            }
         }
     }
 }
