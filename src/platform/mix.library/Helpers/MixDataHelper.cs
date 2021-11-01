@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Mix.Database.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Lib.Helpers
 {
@@ -236,10 +237,6 @@ namespace Mix.Lib.Helpers
             UnitOfWorkInfo uow = new(context);
             var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
-            GlobalConfigService globalConfigService= new();
-            MixDatabaseService databaseService = new(globalConfigService);
-            CultureService cultureSrv = new(globalConfigService, databaseService);
-
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType
@@ -248,7 +245,6 @@ namespace Mix.Lib.Helpers
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
 
-            var culture = cultureSrv.LoadCulture(specificulture);
             var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
             if (dataId != null)
             {
@@ -256,32 +252,7 @@ namespace Mix.Lib.Helpers
                     m => m.Id == dataId && m.Specificulture == specificulture);
                 return result;
             }
-            else
-            {
-                // Init default data
-                var mixDb = await mixDbRepo.GetSingleAsync(
-                m => m.SystemName == databaseName);
-                if (mixDb != null)
-                {
-                    AdditionalDataContentViewModel result = new()
-                    {
-                        Id = Guid.NewGuid(),
-                        MixCultureId = culture.Id,
-                        Specificulture = culture.Specificulture,
-                        ContentParentType = MixDatabaseParentType.User,
-                        ContentGuidParentId = guidParentId,
-                        ContentIntParentId = intParentId,
-                        MixDatabaseId = mixDb.Id,
-                        MixDatabaseName = mixDb.SystemName,
-                        Status = MixContentStatus.Published,
-                        Columns = mixDb.Columns,
-                        CreatedDateTime = DateTime.UtcNow
-                    };
-                    await result.SaveAsync();
-                    return result;
-                }
-                return null;
-            }
+            return default;
         }
     }
 }

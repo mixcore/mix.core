@@ -1,48 +1,74 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Shared.Constants;
+using Mix.Shared.Enums;
+using Mix.Shared.Models;
 using Mix.Shared.Services;
+using System;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService
+    public class MixDatabaseService: AppSettingServiceBase<DatabaseConfigurations>
     {
-        public GlobalConfigService _globalConfigService;
-        public MixDatabaseService(GlobalConfigService globalConfigService)
+        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
+
+        public MixDatabaseService(IConfiguration configuration) 
+            : base(configuration, MixAppSettingsSection.Database, MixAppConfigFilePaths.Database)
         {
-            _globalConfigService = globalConfigService;
         }
 
-        public string GetConnectionString(string connectionName)
+        public string GetConnectionString(string name)
         {
-            return _globalConfigService.GetConnectionString(connectionName);
+            switch (name)
+            {
+                case MixConstants.CONST_CMS_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixCmsConnection;
+                case MixConstants.CONST_ACCOUNT_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixAccountConnection;
+                default:
+                    return string.Empty;
+            }
         }
-        
-        public void SetConnectionString(string connectionName, string connection)
+
+        public void SetConnectionString(string name, string value)
         {
-            _globalConfigService.SetConnectionString(connectionName, connection);
+            switch (name)
+            {
+                case MixConstants.CONST_CMS_CONNECTION:
+                    AppSettings.ConnectionStrings.MixCmsConnection = value;
+                    break;
+                case MixConstants.CONST_ACCOUNT_CONNECTION:
+                    AppSettings.ConnectionStrings.MixAccountConnection = value;
+                    break;
+                default:
+                    break;
+            }
+            SaveSettings();
         }
 
         public MixCmsContext GetDbContext()
         {
-            return _globalConfigService.DatabaseProvider switch
+            return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this, _globalConfigService),
-                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this, _globalConfigService),
-                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this, _globalConfigService),
-                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this, _globalConfigService),
+                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this),
                 _ => null,
             };
         }
+
         public MixCmsAccountContext GetAccountDbContext()
         {
-            return _globalConfigService.DatabaseProvider switch
+            return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(this, _globalConfigService),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this, _globalConfigService),
+                MixDatabaseProvider.SQLSERVER or MixDatabaseProvider.MySQL or MixDatabaseProvider.SQLITE => new SQLAccountContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLAccountContext(this),
                 _ => null,
             };
         }
@@ -52,11 +78,10 @@ namespace Mix.Database.Services
             string defaultCulture)
         {
             SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
-            _globalConfigService.SetConfig(MixConstants.CONST_SETTING_DATABASE_PROVIDER, databaseProvider.ToString());
-            _globalConfigService.SetConfig(MixConstants.CONST_SETTING_LANGUAGE, defaultCulture);
+            AppSettings.DatabaseProvider = databaseProvider;
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
-            _globalConfigService.SaveSettings();
+            SaveSettings();
         }
 
         public void InitMixCmsContext()
@@ -79,6 +104,18 @@ namespace Mix.Database.Services
             //Console.WriteLine(query);
         }
 
+        protected override void BindAppSettings(IConfigurationSection settings)
+        {
+            try
+            {
+                AppSettings = new DatabaseConfigurations();
+                settings.Bind(AppSettings);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
+            }
+        }
     }
 }
  

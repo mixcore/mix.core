@@ -3,10 +3,12 @@
     public enum MixAppSettingsSection
     {
         ConnectionStrings,
+        Database,
         MixConfigurations,
         Authentication,
         IpSecuritySettings,
         GlobalSettings,
-        Smtp
+        Smtp,
+        MixHeart
     }
 }

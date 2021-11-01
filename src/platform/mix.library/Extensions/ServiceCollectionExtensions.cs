@@ -44,7 +44,7 @@ namespace Mix.Lib.Extensions
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             // Clone Settings from shared folder
-            InitAppSettings();
+            services.InitAppSettings();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
@@ -57,7 +57,6 @@ namespace Mix.Lib.Extensions
             services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
 
 
-            services.InitMixContext();
             services.AddEntityRepositories();
             services.AddScoped<MixService>();
             services.AddScoped<TranslatorService>();
@@ -89,7 +88,7 @@ namespace Mix.Lib.Extensions
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
+            if (globalConfigService.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
             }
@@ -191,35 +190,22 @@ namespace Mix.Lib.Extensions
 
         #region Services
 
-        private static IServiceCollection InitMixContext(this IServiceCollection services)
+        private static void InitAppSettings(this IServiceCollection services)
         {
-            services.AddSingleton<GlobalConfigService>();
-            services.AddSingleton<CultureService>();
-            services.AddSingleton<AuthConfigService>();
-            services.AddSingleton<SmtpConfigService>();
-            services.AddSingleton<MixEndpointService>();
-            services.AddSingleton<IPSecurityConfigService>();
-            services.AddSingleton<MixDatabaseService>();
-
+            services.AddScoped<MixHeartConfigService>();
+            services.AddScoped<GlobalConfigService>();
+            services.AddScoped<MixDatabaseService>();
+            services.AddScoped<CultureService>();
+            services.AddScoped<AuthConfigService>();
+            services.AddScoped<SmtpConfigService>();
+            services.AddScoped<MixEndpointService>();
+            services.AddScoped<IPSecurityConfigService>();
             services.AddScoped<MixDataService>();
+            GlobalConfigService globalConfigService = services.GetService<GlobalConfigService>();
 
-            return services;
-        }
-
-        private static void InitAppSettings()
-        {
-            MixFileService _fileService = new();
-
-            if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
+            if (!globalConfigService.IsInit)
             {
-                _fileService.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
-            }
-
-            GlobalConfigService globalConfigService = new();
-
-            if (!globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
-            {
-                var mixDatabaseService = new MixDatabaseService(globalConfigService);
+                var mixDatabaseService = services.GetService<MixDatabaseService>();
                 mixDatabaseService.InitMixCmsContext();
 
                 // TODO: Update cache service
@@ -229,9 +215,8 @@ namespace Mix.Lib.Extensions
 
         private static IServiceCollection AddSSL(this IServiceCollection services)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var globalConfigService = serviceProvider.GetService<GlobalConfigService>();
-            if (globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsHttps))
+            var globalConfigService = services.GetService<GlobalConfigService>();
+            if (globalConfigService.AppSettings.IsHttps)
             {
                 services.AddHttpsRedirection(options =>
                 {
@@ -309,6 +294,12 @@ namespace Mix.Lib.Extensions
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             return services;
+        }
+
+        public static T GetService<T>(this IServiceCollection services)
+        {
+            var sp = services.BuildServiceProvider();
+            return sp.GetService<T>();
         }
 
         #endregion

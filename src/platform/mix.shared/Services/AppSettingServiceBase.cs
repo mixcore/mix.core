@@ -47,7 +47,6 @@ namespace Mix.Shared.Services
             {
                 var settings = _configuration.GetSection(_sectionName);
                 BindAppSettings(settings);
-                Console.WriteLine(AppSettings);
             }
             catch(Exception ex)
             {

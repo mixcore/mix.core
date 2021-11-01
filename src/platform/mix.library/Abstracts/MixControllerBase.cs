@@ -45,7 +45,7 @@ namespace Mix.Lib.Abstracts
             _globalConfigService = globalConfigService;
             _mixService = mixService;
 
-            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.AppSettings.IsInit)
             {
                 LoadCulture();
             }
@@ -60,9 +60,9 @@ namespace Mix.Lib.Abstracts
             }
             //if (!_globalConfigService.Instance.CheckValidCulture(Culture))
             //{
-            //    Culture = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            //    Culture = _globalConfigService.AppSettings.DefaultCulture;
             //}
-            Culture = _globalConfigService.GetConfig(MixAppSettingKeywords.DefaultCulture, string.Empty);
+            Culture = _globalConfigService.AppSettings.DefaultCulture;
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);
@@ -123,7 +123,7 @@ namespace Mix.Lib.Abstracts
             }
 
             // If mode Maintenance enabled in appsettings
-            if (_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsMaintenance)
+            if (_globalConfigService.AppSettings.IsMaintenance
                     && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;

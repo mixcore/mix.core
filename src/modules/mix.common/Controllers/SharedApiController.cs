@@ -52,7 +52,7 @@ namespace Mix.Common.Controllers
             : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
-            _authConfigurations = authConfigService.AuthConfigurations;
+            _authConfigurations = authConfigService.AppSettings;
             _configRepo = MixConfigurationContentViewModel.GetRootRepository(context);
             _langRepo = MixLanguageContentViewModel.GetRootRepository(context);
             _routeProvider = routeProvider;
@@ -68,7 +68,7 @@ namespace Mix.Common.Controllers
         public ActionResult<string> EncryptMessage(CryptoMessageDto encryptMessage)
         {
             string key = encryptMessage.Key 
-                        ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                        ?? _globalConfigService.AppSettings.ApiEncryptKey;
             string msg = encryptMessage.ObjectData != null
                     ? encryptMessage.ObjectData.ToString(Newtonsoft.Json.Formatting.None)
                     : encryptMessage.StringData;
@@ -80,7 +80,7 @@ namespace Mix.Common.Controllers
         [Route("decrypt-message")] 
         public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key ?? _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = encryptMessage.Key ?? _globalConfigService.AppSettings.ApiEncryptKey;
             string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key);
             return Ok(msg);
         }
@@ -148,7 +148,7 @@ namespace Mix.Common.Controllers
         [Route("check-config/{lastSync}")]
         public ActionResult<JObject> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = _globalConfigService.GetConfig<DateTime>(MixAppSettingKeywords.LastUpdateConfiguration);
+            var lastUpdate = _globalConfigService.AppSettings.LastUpdateConfiguration;
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettingsAsync());

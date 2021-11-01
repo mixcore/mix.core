@@ -30,15 +30,15 @@ namespace Mix.Lib.Services
 
         public string GetAssetFolder(string culture = null)
         {
-            culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
-            return $"{_globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain)}/" +
+            culture ??= _globalConfigService.AppSettings.DefaultCulture;
+            return $"{_globalConfigService.AppSettings.Domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public string GetUploadFolder(string culture = null)
         {
-            culture ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture ??= _globalConfigService.AppSettings.DefaultCulture;
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";

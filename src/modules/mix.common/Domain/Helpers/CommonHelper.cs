@@ -18,17 +18,17 @@ namespace Mix.Common.Domain.Helpers
             GlobalConfigService _globalConfigService,
             CultureService _cultureService)
         {
-            lang ??= _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            lang ??= _globalConfigService.AppSettings.DefaultCulture;
             var cultures = _cultureService.Cultures;
             var culture = _cultureService.LoadCulture(lang);
             // Get Settings
             return new()
             {
-                Domain = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.Domain),
+                Domain = _globalConfigService.AppSettings.Domain,
                 Lang = lang,
-                PortalThemeSettings = _globalConfigService.GetConfig<JObject>(MixAppSettingKeywords.PortalThemeSettings),
-                ApiEncryptKey = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey),
-                IsEncryptApi = _globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsEncryptApi),
+                PortalThemeSettings = _globalConfigService.AppSettings.PortalThemeSettings,
+                ApiEncryptKey = _globalConfigService.AppSettings.ApiEncryptKey,
+                IsEncryptApi = _globalConfigService.AppSettings.IsEncryptApi,
                 Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
@@ -43,7 +43,7 @@ namespace Mix.Common.Domain.Helpers
                     new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
                     new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
                 },
-                LastUpdateConfiguration = _globalConfigService.GetConfig<DateTime?>(MixAppSettingKeywords.LastUpdateConfiguration)
+                LastUpdateConfiguration = _globalConfigService.AppSettings.LastUpdateConfiguration
 
             };
         }

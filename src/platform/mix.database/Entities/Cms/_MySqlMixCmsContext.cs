@@ -8,8 +8,8 @@ namespace Mix.Database.Entities.v2
 {
     public class MySqlMixCmsContext : MixCmsContext
     {
-        public MySqlMixCmsContext(MixDatabaseService databaseService, GlobalConfigService globalConfigService) 
-            : base(databaseService, globalConfigService)
+        public MySqlMixCmsContext(MixDatabaseService databaseService) 
+            : base(databaseService)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

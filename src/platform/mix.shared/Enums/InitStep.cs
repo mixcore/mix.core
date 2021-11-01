@@ -1,4 +1,4 @@
-﻿namespace Mix.Theme.Domain.Enums
+﻿namespace Mix.Shared.Enums
 {
     public enum InitStep
     {

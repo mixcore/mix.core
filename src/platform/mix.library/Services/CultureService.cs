@@ -1,18 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Shared.Constants;
+﻿using Mix.Shared.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Shared.Services;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using Mix.Database.Services;
 
 namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
         private readonly GlobalConfigService _globalConfigService;
-        public CultureService(GlobalConfigService globalConfigService, MixDatabaseService databaseService) 
+        public CultureService(MixCmsContext ctx, 
+                GlobalConfigService globalConfigService) 
             : base(MixAppConfigFilePaths.Culture)
         {
             
@@ -22,7 +20,6 @@ namespace Mix.Lib.Services
                 Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
                 if (Cultures == null)
                 {
-                    using var ctx = new MixCmsContext(databaseService, _globalConfigService);
                     Cultures = ctx.MixCulture.ToList();
                     SetConfig(MixAppSettingKeywords.Cultures, Cultures);
                 }

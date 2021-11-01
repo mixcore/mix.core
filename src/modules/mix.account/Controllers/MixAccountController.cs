@@ -70,7 +70,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDto requestDto)
         {
-            string key = _globalConfigService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = _globalConfigService.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.Login(model);

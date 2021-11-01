@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
@@ -20,19 +21,15 @@ namespace Mix.Database.Entities.Cms
 
         public MixCmsContext()
         {
-            _globalConfigService = new();
-            _databaseService = new(_globalConfigService);
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _globalConfigService.DatabaseProvider;
+            _databaseProvider = _databaseService.DatabaseProvider;
         }
 
-        public MixCmsContext(MixDatabaseService databaseService,
-            GlobalConfigService globalConfigService)
+        public MixCmsContext(MixDatabaseService databaseService)
         {
-            _globalConfigService = globalConfigService;
             _databaseService = databaseService;
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _globalConfigService.DatabaseProvider;
+            _databaseProvider = _databaseService.DatabaseProvider;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -110,6 +107,5 @@ namespace Mix.Database.Entities.Cms
         private static string _connectionString;
         private static MixDatabaseProvider _databaseProvider;
         private readonly MixDatabaseService _databaseService;
-        private readonly GlobalConfigService _globalConfigService;
     }
 }

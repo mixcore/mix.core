@@ -49,6 +49,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.grpc", "src\modules\mix
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.queue", "src\platform\mix.queue\mix.queue.csproj", "{2E843175-B948-4D90-A11B-415EE67D9E1A}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "shared", "src\shared\", "{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_65349"
+		Debug.AspNetCompiler.PhysicalPath = "src\shared\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_65349\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_65349"
+		Release.AspNetCompiler.PhysicalPath = "src\shared\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_65349\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "65349"
+		SlnRelativePath = "src\shared\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +144,10 @@ Global
 		{2E843175-B948-4D90-A11B-415EE67D9E1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E843175-B948-4D90-A11B-415EE67D9E1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E843175-B948-4D90-A11B-415EE67D9E1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,6 +175,7 @@ Global
 		{CD0F866F-FF61-456B-AAEA-9960B17107E3} = {8D3FF4E3-4C56-4FA6-81CC-686DE037FF59}
 		{80A478DE-09AD-4C60-B446-73946D8B0E51} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{2E843175-B948-4D90-A11B-415EE67D9E1A} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

@@ -8,8 +8,8 @@ namespace Mix.Database.Entities.v2
 {
     public class SqlServerMixCmsContext : MixCmsContext
     {
-        public SqlServerMixCmsContext(MixDatabaseService databaseService, GlobalConfigService globalConfigService) 
-            : base(databaseService, globalConfigService)
+        public SqlServerMixCmsContext(MixDatabaseService databaseService) 
+            : base(databaseService)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

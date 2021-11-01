@@ -30,7 +30,6 @@ namespace Mix.Lib.Abstracts
     {
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
         protected readonly TDbContext _context;
-        protected const int _defaultPageSize = 1000;
         protected bool _forbidden;
         protected UnitOfWorkInfo _uow;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
@@ -78,7 +77,7 @@ namespace Mix.Lib.Abstracts
 
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = _globalConfigService.GetConfig(MixAppSettingKeywords.MaxPageSize, _defaultPageSize);
+                req.PageSize = _globalConfigService.AppSettings.MaxPageSize;
             }
 
             if (req.Culture != null)

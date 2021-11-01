@@ -38,11 +38,11 @@ namespace Mix.Lib.Abstracts
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            if (!_globalConfigService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!_globalConfigService.AppSettings.IsInit)
             {
                 _lang = RouteData?.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()
-                    : _globalConfigService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                    : _globalConfigService.AppSettings.DefaultCulture;
                 _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
             }
         }
