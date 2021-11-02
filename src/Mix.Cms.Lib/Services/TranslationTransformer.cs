@@ -38,6 +38,7 @@ namespace Mix.Cms.Lib.Services
             if (MixService.Instance.CheckValidAlias(language, path))
             {
                 result["controller"] = "home";
+                result["culture"] = language;
                 result["action"] = "Index";
                 result["seoName"] = path;
                 return ValueTask.FromResult(result);
