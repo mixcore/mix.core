@@ -20,18 +20,5 @@ namespace Mix.Shared.Services
         public string DefaultCulture => AppSettings.DefaultCulture;
         public string Domain => AppSettings.Domain;
         public InitStep InitStatus => AppSettings.InitStatus;
-
-        protected override void BindAppSettings(IConfigurationSection settings)
-        {
-            try
-            {
-                AppSettings = new GlobalConfigurations();
-                settings.Bind(AppSettings);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
-            }
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
@@ -22,7 +23,7 @@ namespace Mix.Portal.Controllers
         private readonly MixThemeImportService _importService;
         private readonly IQueueService<MessageQueueModel> _queueService;
         public MixThemeController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
@@ -31,7 +32,7 @@ namespace Mix.Portal.Controllers
             MixThemeExportService exportService,
             MixCmsContext context, MixThemeImportService importService,
             IQueueService<MessageQueueModel> queueService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
 
             _exportService = exportService;

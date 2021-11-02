@@ -46,14 +46,13 @@ namespace Mix.Shared.Services
             try
             {
                 var settings = _configuration.GetSection(_sectionName);
-                BindAppSettings(settings);
+                AppSettings = (T)Activator.CreateInstance(typeof(T));
+                settings.Bind(AppSettings);
             }
             catch(Exception ex)
             {
                 throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
             }
         }
-
-        protected abstract void BindAppSettings(IConfigurationSection settings);
     }
 }

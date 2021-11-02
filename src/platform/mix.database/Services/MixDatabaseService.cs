@@ -4,12 +4,10 @@ using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
-using System;
 
 namespace Mix.Database.Services
 {
@@ -102,19 +100,6 @@ namespace Mix.Database.Services
             //transaction.Dispose();
             //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
             //Console.WriteLine(query);
-        }
-
-        protected override void BindAppSettings(IConfigurationSection settings)
-        {
-            try
-            {
-                AppSettings = new DatabaseConfigurations();
-                settings.Bind(AppSettings);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
-            }
         }
     }
 }

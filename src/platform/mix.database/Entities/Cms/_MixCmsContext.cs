@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
@@ -17,12 +18,6 @@ namespace Mix.Database.Entities.Cms
         {
             _connectionString = connectionString;
             _databaseProvider = databaseProvider;
-        }
-
-        public MixCmsContext()
-        {
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
         }
 
         public MixCmsContext(MixDatabaseService databaseService)

@@ -14,10 +14,10 @@ using Mix.Shared.Constants;
 using Mix.Heart.Helpers;
 using System.Linq.Expressions;
 using Mix.Database.Entities.Cms;
-using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mix.Heart.UnitOfWork;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Lib.Abstracts
 {
@@ -35,14 +35,14 @@ namespace Mix.Lib.Abstracts
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context) 
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _context = context;
             _uow = new(_context);

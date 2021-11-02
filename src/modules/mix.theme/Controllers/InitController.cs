@@ -10,6 +10,7 @@ using Mix.Lib.Abstracts;
 using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms;
 using Mix.Shared.Enums;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Theme.Controllers
 {
@@ -20,14 +21,14 @@ namespace Mix.Theme.Controllers
         private readonly InitCmsService _initCmsService;
 
         public InitController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _initCmsService = initCmsService;
         }
