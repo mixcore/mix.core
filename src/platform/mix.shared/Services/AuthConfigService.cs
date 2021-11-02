@@ -13,18 +13,5 @@ namespace Mix.Shared.Services
             : base(configuration, MixAppSettingsSection.Authentication, MixAppConfigFilePaths.Authentication)
         {
         }
-
-        protected override void BindAppSettings(IConfigurationSection settings)
-        {
-            try
-            {
-                base.AppSettings = new MixAuthenticationConfigurations();
-                settings.Bind(base.AppSettings);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
-            }
-        }
     }
 }

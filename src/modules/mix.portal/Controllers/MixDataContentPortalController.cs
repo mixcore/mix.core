@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
@@ -25,7 +26,7 @@ namespace Mix.Portal.Controllers
         private readonly MixDataService _mixDataService;
 
         public MixDataContentPortalController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
@@ -33,7 +34,7 @@ namespace Mix.Portal.Controllers
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
             MixCmsContext context)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             _mixDataService = mixDataService;
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);

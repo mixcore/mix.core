@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
@@ -16,14 +17,14 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixCmsContext _context;
         public CommonController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             MixCmsContext context, 
             GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _context = context;
         }

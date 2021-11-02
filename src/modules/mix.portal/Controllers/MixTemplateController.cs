@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using System;
 using Mix.Shared.Enums;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Portal.Controllers
 {
@@ -21,14 +22,14 @@ namespace Mix.Portal.Controllers
         : MixRestApiControllerBase<MixTemplateViewModel, MixCmsContext, MixTemplate, int>
     {
         public MixTemplateController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
 
         }

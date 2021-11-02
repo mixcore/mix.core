@@ -10,10 +10,9 @@ using Mix.Shared.Services;
 using Mix.Heart.Model;
 using System.Collections.Generic;
 using Mix.Database.Entities.Cms;
-using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Mix.Identity.Constants;
-using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Lib.Abstracts
 {
@@ -25,14 +24,14 @@ namespace Mix.Lib.Abstracts
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixRestApiControllerBase(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
 
@@ -47,6 +46,7 @@ namespace Mix.Lib.Abstracts
             {
                 return BadRequest("Null Object");
             }
+            data.SetDbContext(_context);
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync(_uow);
@@ -63,6 +63,7 @@ namespace Mix.Lib.Abstracts
             {
                 return BadRequest();
             }
+            data.SetDbContext(_context);
             var result = await data.SaveAsync(_uow);
             return Ok(result);
         }
@@ -78,6 +79,7 @@ namespace Mix.Lib.Abstracts
         public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
             var result = await _repository.GetSingleAsync(id);
+            result.SetDbContext(_context);
             await result.SaveFieldsAsync(properties);
             return Ok();
         }

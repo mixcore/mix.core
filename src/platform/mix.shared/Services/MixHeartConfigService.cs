@@ -49,18 +49,5 @@ namespace Mix.Shared.Services
             }
             SaveSettings();
         }
-
-        protected override void BindAppSettings(IConfigurationSection settings)
-        {
-            try
-            {
-                AppSettings = new();
-                settings.Bind(AppSettings);
-            }
-            catch (Exception ex)
-            {
-                throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
-            }
-        }
     }
 }

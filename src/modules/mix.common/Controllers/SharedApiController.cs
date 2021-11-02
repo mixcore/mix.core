@@ -23,6 +23,7 @@ using Mix.Common.Domain.Helpers;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Heart.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Common.Controllers
 {
@@ -39,7 +40,7 @@ namespace Mix.Common.Controllers
         private readonly IActionDescriptorCollectionProvider _routeProvider;
         private IQueueService<MessageQueueModel> _queueService;
         public SharedApiController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
@@ -49,7 +50,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
             _authConfigurations = authConfigService.AppSettings;

@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using Mix.Heart.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Portal.Controllers
 {
@@ -25,7 +26,7 @@ namespace Mix.Portal.Controllers
         private readonly MixEndpointService _endpointService;
 
         public MixDatabaseColumnPortalController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
@@ -34,7 +35,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService, 
             MixEndpointService endpointService,
             MixCmsContext context)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
             _mixDataService = mixDataService;
             _endpointService = endpointService;

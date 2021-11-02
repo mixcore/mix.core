@@ -11,6 +11,7 @@ using Mix.Lib.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Mix.Lib.Attributes;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Lib.Controllers
 {
@@ -24,14 +25,14 @@ namespace Mix.Lib.Controllers
         where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixAutoGenerateRestApiController(
-            ILogger<MixApiControllerBase> logger,
+            IConfiguration configuration,
             GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
             MixIdentityService mixIdentityService,
             TDbContext context)
-            : base(logger, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
         {
         }
     }
