@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\mix.heart\src\Mix.Heart\Mix.Heart.csproj" />
+    <Folder Include="Base\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Base\" />
+    <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
   </ItemGroup>
 
 </Project>
