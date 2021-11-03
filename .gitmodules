@@ -1,0 +1,3 @@
+[submodule "src/framework/mix-heart"]
+	path = src/framework/mix-heart
+	url = git@github.com:mixcore/mix.heart.git
