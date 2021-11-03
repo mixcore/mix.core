@@ -45,7 +45,7 @@ docker-compose up
 mkdir mixcore
 cd mixcore
 
-git clone https://github.com/mixcore/mix.core.git
+git clone --recursive https://github.com/mixcore/mix.core.git
 ```
 
 Optional:
@@ -53,6 +53,7 @@ Optional:
 > Optional steps as those packages are Nuget Library
 
 ```bash
+git submodule update --init --recursive
 git clone https://github.com/mixcore/mix.heart.git
 git clone https://github.com/mixcore/mix.identity.git
 ```
