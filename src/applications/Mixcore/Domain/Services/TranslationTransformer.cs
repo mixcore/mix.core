@@ -1,0 +1,74 @@
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
+using Mix.Lib.Services;
+using Mix.Shared.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+
+namespace Mixcore.Domain.Services
+{
+    public class TranslationTransformer : DynamicRouteValueTransformer
+    {
+        private readonly GlobalConfigService _globalConfigService;
+        private readonly MixDatabaseService _databaseService;
+        private readonly CultureService _cultureService;
+
+        public TranslationTransformer(
+            IConfiguration configuration)
+        {
+            _globalConfigService = new(configuration);
+            _databaseService = new(configuration);
+            MixCmsContext ctx = new MixCmsContext(_databaseService);
+            _cultureService = new(ctx, _globalConfigService);
+        }
+
+        public override ValueTask<RouteValueDictionary> TransformAsync(
+            HttpContext httpContext, RouteValueDictionary values)
+        {
+            if (_globalConfigService.IsInit)
+            {
+                return ValueTask.FromResult(values);
+            }
+
+            RouteValueDictionary result = values;
+
+            var keys = values.Keys.ToList();
+
+            var language = (string)values[keys[0]];
+            var keyIndex = 1;
+            if (_cultureService.CheckValidCulture(language))
+            {
+                language = _globalConfigService.AppSettings.DefaultCulture;
+                keyIndex -= 1;
+                result["controller"] = "security";
+                result["culture"] = language;
+                result["action"] = "Index";
+                result["seoName"] = "test";
+            }
+
+            return ValueTask.FromResult(result);
+        }
+
+        private string GetRouteValue(RouteValueDictionary values, List<string> keys, ref int keyIndex)
+        {
+            string value = keys.Count > keyIndex
+               ? values[keys[keyIndex]]?.ToString()
+               : string.Empty;
+            keyIndex += 1;
+            return value;
+        }
+
+        private bool IsValidController(string controller)
+        {
+            string[] controllers = { "post", "page", "module", "data" };
+            return controllers.Contains(controller?.ToLower());
+        }
+    }
+}

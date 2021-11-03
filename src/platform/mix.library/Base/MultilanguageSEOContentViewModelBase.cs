@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
@@ -76,6 +77,9 @@ namespace Mix.Lib.Base
 
         #endregion
 
-        public abstract Task<TPrimaryKey> CreateParentAsync();
+        public virtual Task<TPrimaryKey> CreateParentAsync()
+        {
+            throw new MixException($"Not implemented CreateParentAsync: {typeof(TView).FullName}");
+        }
     }
 }
