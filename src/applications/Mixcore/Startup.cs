@@ -8,9 +8,12 @@ using Mix.Lib.Extensions;
 using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
-using Mixcore.Domain.Extensions;
 using Ocelot.DependencyInjection;
 using Mixcore.Domain.Subscribers;
+using Newtonsoft.Json.Converters;
+using Mixcore.Domain.Services;
+using System.Text.Unicode;
+using System.Text.Encodings.Web;
 
 namespace Mixcore
 {
@@ -26,6 +29,11 @@ namespace Mixcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddWebEncoders(options =>
+            {
+                options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
+            });
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -35,15 +43,15 @@ namespace Mixcore
                     builder.AllowAnyMethod();
                 });
             });
+
             services.AddHostedService<ThemeSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+
+            services.AddMixRoutes();
             
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<ApplicationDbContext>();
             services.AddOcelot(Configuration);
-            services.AddControllersWithViews()
-                .AddRazorRuntimeCompilation()
-                .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,17 +80,11 @@ namespace Mixcore
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
+            
             app.UseMixOcelot(Configuration, env.IsDevelopment());
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMixRoutes();
         }
     }
 }

@@ -44,13 +44,25 @@ namespace Mix.Lib.Extensions
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             // Clone Settings from shared folder
-            services.InitAppSettings();
+            services.AddScoped<MixHeartConfigService>();
+            services.AddScoped<GlobalConfigService>();
+            services.AddScoped<MixDatabaseService>();
+            services.AddScoped<CultureService>();
+            services.AddScoped<AuthConfigService>();
+            services.AddScoped<SmtpConfigService>();
+            services.AddScoped<MixEndpointService>();
+            services.AddScoped<IPSecurityConfigService>();
+            services.AddScoped<MixDataService>();
+            services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
 
+            services.ApplyMigrations();
+
             services.AddSingleton<MixFileService>();
+            services.AddSingleton<HttpService>();
             
             // Message Queue
             services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
@@ -190,17 +202,8 @@ namespace Mix.Lib.Extensions
 
         #region Services
 
-        private static void InitAppSettings(this IServiceCollection services)
+        private static void ApplyMigrations(this IServiceCollection services)
         {
-            services.AddScoped<MixHeartConfigService>();
-            services.AddScoped<GlobalConfigService>();
-            services.AddScoped<MixDatabaseService>();
-            services.AddScoped<CultureService>();
-            services.AddScoped<AuthConfigService>();
-            services.AddScoped<SmtpConfigService>();
-            services.AddScoped<MixEndpointService>();
-            services.AddScoped<IPSecurityConfigService>();
-            services.AddScoped<MixDataService>();
             GlobalConfigService globalConfigService = services.GetService<GlobalConfigService>();
 
             if (!globalConfigService.IsInit)

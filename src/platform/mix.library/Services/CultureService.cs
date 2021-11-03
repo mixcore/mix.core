@@ -29,6 +29,11 @@ namespace Mix.Lib.Services
         public List<MixCulture> Cultures { get; set; }
         public MixCulture DefaultCulture { get => Cultures.FirstOrDefault(); }
 
+        public bool CheckValidCulture(string specificulture)
+        {
+            return Cultures.Any(c => c.Specificulture == specificulture);
+        }
+
         public MixCulture LoadCulture(string specificulture)
         {
             return Cultures.FirstOrDefault(m => m.Specificulture == specificulture) ?? DefaultCulture;

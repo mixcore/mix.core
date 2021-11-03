@@ -6,6 +6,7 @@ using Mix.Shared.Services;
 using Mix.Shared.Enums;
 using Mix.Database.Services;
 using Mix.Lib.Abstracts;
+using Mixcore.Domain.ViewModels;
 
 namespace Mixcore.Controllers
 {
@@ -50,14 +51,15 @@ namespace Mixcore.Controllers
         [Route("")]
         [Route("{seoName}")]
         [Route("{seoName}/{keyword}")]
-        [Route("{culture}/{seoName}/{keyword}")]
         public IActionResult Index(string seoName, string keyword)
         {
             if (!isValid)
             {
                 return Redirect(_redirectUrl);
             }
-            return View();
+            return View(new PageContentViewModel() { 
+                SeoName = seoName
+            });
         }
     }
 }
