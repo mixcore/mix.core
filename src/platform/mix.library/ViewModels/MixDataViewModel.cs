@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Newtonsoft.Json.Linq;
@@ -36,7 +37,9 @@ namespace Mix.Lib.ViewModels
             SaveDataContent = new(lang, cultureId, databaseName, data);
         }
 
-        public MixDataViewModel(MixData entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataViewModel(MixData entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 

@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Entities.Cms;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Shared.Constants;
@@ -47,7 +48,10 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixThemeViewModel(MixTheme entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixThemeViewModel(MixTheme entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
+            : base(entity, cacheService, uowInfo)
         {
         }
 

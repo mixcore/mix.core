@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
@@ -23,7 +24,11 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected SiteDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
+        protected SiteDataViewModelBase(
+            TEntity entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
+            : base(entity, cacheService, uowInfo)
         {
         }
 

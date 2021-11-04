@@ -1,6 +1,7 @@
 using Mix.Database.Entities.Account;
 using Mix.Heart.Enums;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using System;
@@ -15,7 +16,10 @@ namespace Mix.Identity.ViewModels
         {
         }
 
-        public RoleViewModel(AspNetRoles entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public RoleViewModel(
+            AspNetRoles entity, 
+            MixCacheService cacheService = null, 
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 
@@ -41,13 +45,13 @@ namespace Mix.Identity.ViewModels
         #endregion Properties
 
         #region Overrides
-        public override Task<AspNetRoles> ParseEntity()
+        public override Task<AspNetRoles> ParseEntity(MixCacheService cacheService = null)
         {
             if (Id == Guid.Empty)
             {
                 Id = Guid.NewGuid();
             }
-            return base.ParseEntity();
+            return base.ParseEntity(cacheService);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

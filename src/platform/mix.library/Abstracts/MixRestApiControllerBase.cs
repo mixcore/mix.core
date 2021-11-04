@@ -67,6 +67,7 @@ namespace Mix.Lib.Abstracts
             }
             data.SetDbContext(_context);
             var result = await data.SaveAsync(_uow);
+            await _cacheService.RemoveCacheAsync(id, typeof(TView));
             return Ok(result);
         }
 
@@ -74,6 +75,7 @@ namespace Mix.Lib.Abstracts
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
             await _repository.DeleteAsync(id);
+            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
             return Ok();
         }
 

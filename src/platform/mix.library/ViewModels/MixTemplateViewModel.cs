@@ -36,7 +36,10 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixTemplateViewModel(MixTemplate entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixTemplateViewModel(MixTemplate entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
+            : base(entity, cacheService, uowInfo)
         {
         }
 
@@ -48,8 +51,9 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task ExpandView(UnitOfWorkInfo uowInfo)
+        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
         {
+            UowInfo ??= uowInfo;
             if (!string.IsNullOrEmpty(FileName))
             {
                 var file = MixFileService.Instance.GetFile(FileName, Extension, FileFolder);
@@ -63,7 +67,7 @@ namespace Mix.Lib.ViewModels
             return Task.CompletedTask;
         }
 
-        public override async Task<MixTemplate> ParseEntity()
+        public override async Task<MixTemplate> ParseEntity(MixCacheService cacheService = null)
         {
             if (Id == 0)
             {
@@ -74,7 +78,7 @@ namespace Mix.Lib.ViewModels
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
-            return await base.ParseEntity();
+            return await base.ParseEntity(cacheService);
         }
 
         public override async Task Validate()

@@ -1,4 +1,5 @@
 ﻿using Mix.Database.Entities.Cms;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 
@@ -14,8 +15,9 @@ namespace Mixcore.Domain.ViewModels
         {
         }
 
-        public PageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null)
-            : base(entity, uowInfo)
+        public PageContentViewModel(MixPageContent entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 

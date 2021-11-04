@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
+using Mix.Heart.Services;
 
 namespace Mix.Theme.Domain.ViewModels.Init
 {
@@ -21,7 +22,10 @@ namespace Mix.Theme.Domain.ViewModels.Init
         {
         }
 
-        public InitSiteViewModel(MixTenant entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public InitSiteViewModel(MixTenant entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
+            : base(entity, cacheService, uowInfo)
         {
         }
 
