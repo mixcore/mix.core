@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Mix.Shared.Constants;
 using Mix.Lib.Services;
 using Newtonsoft.Json.Linq;

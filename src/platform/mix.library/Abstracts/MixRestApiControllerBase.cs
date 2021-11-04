@@ -13,6 +13,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Lib.Services;
 using Mix.Identity.Constants;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Services;
 
 namespace Mix.Lib.Abstracts
 {
@@ -30,8 +31,9 @@ namespace Mix.Lib.Abstracts
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            TDbContext context)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            TDbContext context,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
         }
 

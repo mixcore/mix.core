@@ -9,6 +9,7 @@ using Mix.Database.Entities.Cms;
 using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -26,8 +27,9 @@ namespace Mix.Lib.Controllers
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
             MixIdentityService mixIdentityService,
-            TDbContext context)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            TDbContext context,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
         }
     }

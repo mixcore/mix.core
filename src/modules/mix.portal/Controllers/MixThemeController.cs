@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
@@ -31,8 +32,9 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixThemeExportService exportService,
             MixCmsContext context, MixThemeImportService importService,
-            IQueueService<MessageQueueModel> queueService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            IQueueService<MessageQueueModel> queueService,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
 
             _exportService = exportService;

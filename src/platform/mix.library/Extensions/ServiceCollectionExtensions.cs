@@ -32,6 +32,8 @@ using Mix.Queue.Services;
 using Mix.Queue.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Heart.Services;
+using Mix.Heart.Repository;
+using Mix.Heart.Entities.Cache;
 
 namespace Mix.Lib.Extensions
 {
@@ -53,11 +55,16 @@ namespace Mix.Lib.Extensions
             services.AddScoped<MixEndpointService>();
             services.AddScoped<IPSecurityConfigService>();
             services.AddScoped<MixDataService>();
+            
             services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
+            services.AddDbContext<MixCacheDbContext>();
+
+            services.AddScoped<EntityRepository<MixCacheDbContext, MixCache, string>>();
+            services.AddScoped<MixCacheService>();
 
             services.ApplyMigrations();
 
