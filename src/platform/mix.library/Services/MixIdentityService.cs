@@ -7,6 +7,7 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
@@ -36,6 +37,7 @@ namespace Mix.Lib.Services
     public class MixIdentityService
     {
         private readonly UnitOfWorkInfo _uow;
+        private readonly MixCacheService _cacheService;
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -52,9 +54,11 @@ namespace Mix.Lib.Services
             AuthConfigService authConfigService,
             GlobalConfigService globalConfigService,
             MixCmsContext context,
-            MixCmsAccountContext accountContext)
+            MixCmsAccountContext accountContext, 
+            MixCacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
             _uow = new(accountContext);
             _userManager = userManager;
             _signInManager = signInManager;
@@ -138,7 +142,7 @@ namespace Mix.Lib.Services
                                     ClientId = _authConfigService.AppSettings.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
-                                }, _uow);
+                                }, _cacheService, _uow);
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
                     refreshTokenId = saveRefreshTokenResult;
@@ -423,7 +427,7 @@ namespace Mix.Lib.Services
         {
             if (!_globalConfigService.IsInit)
             {
-                Roles = _roleRepo.GetListAsync(m => true).GetAwaiter().GetResult();
+                Roles = _roleRepo.GetListAsync(m => true, _cacheService, _uow).GetAwaiter().GetResult();
                 //using var ctx = new MixCmsContext();
                 //var transaction = ctx.Database.BeginTransaction();
                 // TODO:

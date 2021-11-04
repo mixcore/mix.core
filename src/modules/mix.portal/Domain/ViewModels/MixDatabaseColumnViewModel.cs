@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Shared.Enums;
@@ -36,19 +37,22 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDatabaseColumnViewModel(
+            MixDatabaseColumn entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
         #endregion
 
         #region Overrides
 
-        public override Task<MixDatabaseColumn> ParseEntity()
+        public override Task<MixDatabaseColumn> ParseEntity(MixCacheService cacheService = null)
         {
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
                     ColumnConfigurations, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return base.ParseEntity();
+            return base.ParseEntity(cacheService);
         }
 
         public override void ParseView<TSource>(TSource sourceObject)

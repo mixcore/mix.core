@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Shared.Enums;
@@ -43,7 +44,9 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixDataContentValueViewModel(MixDataContentValue entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentValueViewModel(MixDataContentValue entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 
@@ -51,17 +54,19 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity()
+        public override Task<MixDataContentValue> ParseEntity(MixCacheService cacheService = null)
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
             
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity();
+            return base.ParseEntity(cacheService);
         }
 
-        public override async Task ExpandView(UnitOfWorkInfo uowInfo)
+        public override async Task ExpandView(
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);

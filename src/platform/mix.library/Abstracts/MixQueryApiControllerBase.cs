@@ -105,7 +105,7 @@ namespace Mix.Lib.Abstracts
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
             result.InitDefaultValues(_lang, _culture.Id);
-            result.ExpandView(_uow);
+            result.ExpandView(_cacheService, _uow);
             return Ok(result);
         }
 

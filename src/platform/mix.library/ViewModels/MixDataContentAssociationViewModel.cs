@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Shared.Enums;
@@ -20,7 +21,9 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDataContentAssociationViewModel(MixDataContentAssociation entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentAssociationViewModel(MixDataContentAssociation entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
         #endregion

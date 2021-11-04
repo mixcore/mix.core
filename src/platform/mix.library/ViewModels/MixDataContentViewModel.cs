@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mix.Heart.Services;
 
 namespace Mix.Lib.ViewModels
 {
@@ -37,7 +38,9 @@ namespace Mix.Lib.ViewModels
             Data = data;
         }
 
-        public MixDataContentViewModel(MixDataContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentViewModel(MixDataContent entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
         #endregion
@@ -62,14 +65,16 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
-            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id);
+            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
+            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
 
             if (Data == null)
             {
@@ -79,7 +84,7 @@ namespace Mix.Lib.ViewModels
             await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
 
-        public override async Task<MixDataContent> ParseEntity()
+        public override async Task<MixDataContent> ParseEntity(MixCacheService cacheService = null)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
@@ -102,12 +107,12 @@ namespace Mix.Lib.ViewModels
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
             Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id);
 
-            await ParseObjectToValues();
+            await ParseObjectToValues(cacheService);
 
             Title = Id.ToString();
             Content = Data.ToString(Newtonsoft.Json.Formatting.None);
 
-            return await base.ParseEntity();
+            return await base.ParseEntity(cacheService);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
@@ -126,12 +131,12 @@ namespace Mix.Lib.ViewModels
 
         #region Helper
 
-        private async Task ParseObjectToValues()
+        private async Task ParseObjectToValues(MixCacheService cacheService = null)
         {
             Data ??= new JObject();
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
-                var val = await GetFieldValue(field);
+                var val = await GetFieldValue(field, cacheService);
 
                 if (Data[val.MixDatabaseColumnName] != null)
                 {
@@ -172,7 +177,7 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        private async Task<MixDataContentValueViewModel> GetFieldValue(MixDatabaseColumnViewModel field)
+        private async Task<MixDataContentValueViewModel> GetFieldValue(MixDatabaseColumnViewModel field, MixCacheService cacheService = null)
         {
             var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
             if (val == null)
@@ -188,7 +193,7 @@ namespace Mix.Lib.ViewModels
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy
                 };
-                await val.ExpandView(UowInfo);
+                await val.ExpandView(cacheService, UowInfo);
                 Values.Add(val);
             }
             val.Status = Status;

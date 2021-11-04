@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -26,8 +27,9 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo unitOfWorkInfo = null)
-            : base(entity, unitOfWorkInfo)
+        public MixConfigurationViewModel(MixConfiguration entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 
@@ -41,7 +43,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
         {
             UowInfo ??= uowInfo;
             _contentQueryRepository = MixConfigurationContentViewModel.GetRepository(UowInfo);

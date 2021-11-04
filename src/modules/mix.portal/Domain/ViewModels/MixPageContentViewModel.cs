@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -19,8 +20,9 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) 
-            : base(entity, uowInfo)
+        public MixPageContentViewModel(MixPageContent entity,
+            MixCacheService cacheService = null,
+            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
         {
         }
 
