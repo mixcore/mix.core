@@ -14,6 +14,7 @@ using Mix.Heart.Extensions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -34,8 +35,9 @@ namespace Mix.Portal.Controllers
             MixDataService mixDataService,
             MixIdentityService mixIdentityService, 
             MixEndpointService endpointService,
-            MixCmsContext context)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            MixCmsContext context,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
             _mixDataService = mixDataService;
             _endpointService = endpointService;

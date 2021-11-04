@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
+using Mix.Heart.Services;
 using Mix.Lib.Abstracts;
 using Mix.Lib.Dtos;
 using Mix.Lib.Helpers;
@@ -33,8 +34,9 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
-            MixCmsContext context)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            MixCmsContext context,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
             _mixDataService = mixDataService;
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);

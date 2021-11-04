@@ -13,6 +13,7 @@ using Mix.Heart.Extensions;
 using System;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -28,8 +29,9 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCmsContext context)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context)
+            MixCmsContext context,
+            MixCacheService cacheService)
+            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
 
         }

@@ -49,7 +49,7 @@ namespace Mix.Theme.Controllers
         public async Task<ActionResult<bool>> InitSite([FromBody] InitCmsDto model)
         {
             if (model != null
-                && _globalConfigService.AppSettings.InitStatus == 0)
+                && _globalConfigService.AppSettings.InitStatus == InitStep.Blank)
             {
                 await _initCmsService.InitSiteAsync(model);
                 _globalConfigService.AppSettings.DefaultCulture = model.Culture.Specificulture;
