@@ -7,7 +7,7 @@ using Mix.Database.Services;
 using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
 
-namespace Mix.Theme.Domain.Services
+namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {

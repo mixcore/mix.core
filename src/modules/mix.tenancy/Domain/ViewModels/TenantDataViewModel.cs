@@ -1,9 +1,9 @@
 ﻿using Mix.Database.Entities.Cms;
 using System.Collections.Generic;
 
-namespace Mix.Theme.Domain.ViewModels
+namespace Mix.Tenancy.Domain.ViewModels
 {
-    public class SiteDataViewModel
+    public class TenantDataViewModel
     {
         public string CreatedBy { get; set; }
 
@@ -22,7 +22,7 @@ namespace Mix.Theme.Domain.ViewModels
         public List<MixData> MixDatas { get; set; }
         //TODO : double check mixdata content
 
-        public SiteDataViewModel()
+        public TenantDataViewModel()
         {
         }
 

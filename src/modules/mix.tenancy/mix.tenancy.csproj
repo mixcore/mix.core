@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Mix.Theme</RootNamespace>
+    <RootNamespace>Mix.Tenancy</RootNamespace>
     <UserSecretsId>ce99c40c-2b2e-4835-bb26-5d431ba630f8</UserSecretsId>
   </PropertyGroup>
 
@@ -31,13 +31,12 @@
     <Compile Include="Domain\Services\InitCmsService.Site.cs" />
     <Compile Include="Domain\Services\InitCmsService.cs" />
     <Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />
-    <Compile Include="Domain\ViewModels\Init\InitSiteViewModel.cs" />
-    <Compile Include="Domain\ViewModels\SiteDataViewModel.cs" />
+    <Compile Include="Domain\ViewModels\Init\InitTenantViewModel.cs" />
+    <Compile Include="Domain\ViewModels\TenantDataViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\..\..\..\..\..\..\..\Downloads\mix.core\src\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Mix.Theme.Domain.Models
+﻿namespace Mix.Tenancy.Domain.Models
 {
     public class InitCultureModel
     {

@@ -1,16 +1,16 @@
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.ViewModel;
-using Mix.Theme.Domain.Dtos;
+using Mix.Tenancy.Domain.Dtos;
 using System;
 using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.Services;
 
-namespace Mix.Theme.Domain.ViewModels.Init
+namespace Mix.Tenancy.Domain.ViewModels.Init
 {
-    public class InitSiteViewModel : ViewModelBase<MixCmsContext, MixTenant, int, InitSiteViewModel>
+    public class InitTenantViewModel : ViewModelBase<MixCmsContext, MixTenant, int, InitTenantViewModel>
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
@@ -18,22 +18,22 @@ namespace Mix.Theme.Domain.ViewModels.Init
 
         public InitCultureViewModel Culture { get; set; }
 
-        public InitSiteViewModel() : base()
+        public InitTenantViewModel() : base()
         {
         }
 
-        public InitSiteViewModel(MixTenant entity,
+        public InitTenantViewModel(MixTenant entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
-        public InitSiteViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public InitTenantViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public InitSiteViewModel(MixCmsContext context) : base(context)
+        public InitTenantViewModel(MixCmsContext context) : base(context)
         {
         }
 

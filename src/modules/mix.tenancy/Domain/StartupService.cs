@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Lib.Interfaces;
-using Mix.Theme.Domain.Services;
+using Mix.Tenancy.Domain.Services;
 
-namespace Mix.Theme.Domain
+namespace Mix.Tenancy.Domain
 {
     public class StartupService : IStartupService
     {

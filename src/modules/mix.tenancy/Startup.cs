@@ -9,7 +9,7 @@ using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
 
-namespace Mix.Theme
+namespace Mix.Tenancy
 {
     public class Startup
     {
