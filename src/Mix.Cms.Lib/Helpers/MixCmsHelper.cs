@@ -619,6 +619,7 @@ namespace Mix.Cms.Lib.Helpers
                 {
                     return GetUrlByAlias(currentAlias, destCulture);
                 }
+                return $"{destCulture}/{alias}";
             }
 
             var page = context.MixPage.FirstOrDefault(m => m.SeoName == seoUrl && m.Specificulture == srcCulture);

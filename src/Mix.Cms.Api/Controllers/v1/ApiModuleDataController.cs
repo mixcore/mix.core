@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module-data/id
         [AllowAnonymous]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{viewType}/{moduleId}/{id}")]
         [Route("details/{viewType}/{moduleId}")]
         public async Task<RepositoryResponse<UpdateViewModel>> DetailsAsync(string viewType, int moduleId, string id = null)
@@ -70,7 +70,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("edit/{id}")]
         public Task<RepositoryResponse<ReadViewModel>> Edit(string id)
         {
@@ -78,7 +78,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/create/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("create/{moduleId}")]
         public async Task<RepositoryResponse<UpdateViewModel>> CreateAsync(int moduleId)
         {
@@ -113,7 +113,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module-data/create/id
         [AllowAnonymous]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("init-by-name/{moduleName}")]
         public async Task<RepositoryResponse<UpdateViewModel>> InitByName(string moduleName)
         {
@@ -148,7 +148,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module-data/create/id
         [AllowAnonymous]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save/{moduleName}")]
         public async Task<RepositoryResponse<UpdateViewModel>> SaveByName(string moduleName, [FromBody] JObject data)
         {
@@ -183,7 +183,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module-data/create/id
         [AllowAnonymous]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("init/{moduleId}")]
         public async Task<RepositoryResponse<UpdateViewModel>> InitByIdAsync(int moduleId)
         {
@@ -217,7 +217,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module-data/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixModuleData>> DeleteAsync(string id)
         {
@@ -228,7 +228,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/moduleData
         [AllowAnonymous]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Post([FromBody] UpdateViewModel data)
         {
@@ -237,7 +237,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/moduleData
         [AllowAnonymous]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("export")]
         public async Task<ActionResult<RepositoryResponse<PaginationModel<ReadViewModel>>>> ExportData(
             [FromBody] RequestPaging request)
@@ -279,7 +279,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/moduleData
         [AllowAnonymous]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<RepositoryResponse<PaginationModel<ReadViewModel>>>> GetList(
             [FromBody] RequestPaging request, int? level = 0)
@@ -310,7 +310,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/PortalPage
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("update-infos")]
         public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody] List<ReadViewModel> models)
         {

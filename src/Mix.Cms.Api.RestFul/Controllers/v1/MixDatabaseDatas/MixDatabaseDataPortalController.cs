@@ -178,7 +178,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("import-data/{mixDatabaseName}")]
         public async Task<ActionResult<RepositoryResponse<ImportViewModel>>> ImportData(string mixDatabaseName, [FromForm] IFormFile file)
         {

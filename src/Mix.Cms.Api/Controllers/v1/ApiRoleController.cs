@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Produces("application/json")]
     [Route("api/v1/role")]
     public class ApiRoleController : BaseApiController<MixCmsContext>
@@ -66,7 +67,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme
             , Roles = MixDefaultRoles.SuperAdmin)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<JObject> GetDetails(string id, string viewType)
@@ -88,7 +89,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("permissions")]
         public async Task<JObject> GetPermissions()
         {
@@ -115,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet, HttpPost]
         [Route("list")]
         public async Task<RepositoryResponse<List<RoleViewModel>>> GetList()
         {
@@ -123,7 +124,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("create")]
         public async Task<RepositoryResponse<IdentityRole>> Save([FromBody] string name)
         {
@@ -144,7 +145,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/role
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save(
             [FromBody] UpdateViewModel model)
@@ -163,7 +164,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/role
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("update-permission")]
         public async Task<RepositoryResponse<Lib.ViewModels.MixPortalPageRoles.ReadViewModel>> Update(
             [FromBody] Lib.ViewModels.MixPortalPageRoles.ReadViewModel model)
