@@ -90,6 +90,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // POST api/theme
+        /// Swagger cannot generate multi-form value api
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [DisableRequestSizeLimit]

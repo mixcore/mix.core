@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+
     public class BaseApiController<TDbContext> : Controller
         where TDbContext : DbContext
     {

@@ -26,7 +26,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // Post api/files/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details")]
         public RepositoryResponse<FileViewModel> Details(string folder, string filename)
         {
@@ -48,7 +48,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete")]
         public RepositoryResponse<bool> Delete()
         {
@@ -69,7 +69,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <param name="file"></param> Ex: { "base64": "", "fileFolder":"" }
         /// <returns></returns>
         [Route("upload-file")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         public IActionResult Upload([FromForm] string folder, [FromForm] IFormFile file)
         {
             if (ModelState.IsValid)
@@ -81,7 +81,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/files
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public RepositoryResponse<FileViewModel> Save([FromBody] FileViewModel model)
         {
@@ -98,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
         {

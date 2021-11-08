@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/module/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{moduleId}/{postId}")]
         public async Task<RepositoryResponse<MixModulePost>> DeleteAsync(int moduleId, int postId)
         {
@@ -44,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/modules/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("detail/{moduleId}/{postId}/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, int? moduleId, int? postId)
         {
@@ -79,7 +79,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/module
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<ReadViewModel>> Save([FromBody] ReadViewModel model)
         {
@@ -92,7 +92,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/module
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save/{id}/{postId}")]
         public async Task<RepositoryResponse<MixModulePost>> SaveFields(int moduleId, int postId, [FromBody] List<EntityField> fields)
         {
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/module
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
@@ -145,7 +145,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/update-infos
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("update-infos")]
         public async Task<RepositoryResponse<List<ReadViewModel>>> UpdateInfos([FromBody] List<ReadViewModel> models)
         {
@@ -160,7 +160,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/update-infos
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save-list")]
         public async Task<RepositoryResponse<List<ReadViewModel>>> SaveList([FromBody] List<ReadViewModel> models)
         {

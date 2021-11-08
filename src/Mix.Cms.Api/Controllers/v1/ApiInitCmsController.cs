@@ -65,7 +65,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-1")]
         public async Task<RepositoryResponse<bool>> Step1([FromBody] InitCmsViewModel model)
         {
@@ -87,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-2")]
         public async Task<RepositoryResponse<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
         {
@@ -151,7 +151,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // /// </summary>
         // /// <param name="model"></param>
         // /// <returns></returns>
-        // [HttpPost, HttpOptions]
+        // [HttpPost]
         // [Route("init-cms/step-5")]
         // public async Task<RepositoryResponse<bool>> InitConfigurations([FromBody]List<MixConfiguration> model)
         // {
@@ -182,7 +182,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-4")]
         public async Task<RepositoryResponse<bool>> InitLanguages([FromBody] List<MixLanguage> model)
         {
@@ -215,7 +215,10 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        /// 
+        /// Swagger cannot generate multi-form value api
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
         [Route("init-cms/step-3")]
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
@@ -230,7 +233,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-3/active")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult<bool>> Active([FromBody] Lib.ViewModels.MixThemes.UpdateViewModel model)

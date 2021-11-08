@@ -256,7 +256,7 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {

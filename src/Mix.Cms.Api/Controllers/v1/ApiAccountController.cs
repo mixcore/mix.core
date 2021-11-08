@@ -62,7 +62,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST: /Account/Logout
 
         [Route("Logout")]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet, HttpPost]
         public async Task<RepositoryResponse<bool>> Logout()
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true, Data = true };
@@ -192,7 +192,7 @@ namespace Mix.Cms.Api.Controllers.v1
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [MixAuthorize]
         [Route("user-in-role")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
@@ -430,7 +430,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("forgot-password")]
         public async Task<RepositoryResponse<string>> ForgotPassword([FromBody] Mix.Identity.Models.AccountViewModels.ForgotPasswordViewModel model)
         {
