@@ -12,7 +12,7 @@ using Mix.Shared.Services;
 using Mix.Lib.Models;
 using Mix.Shared.Enums;
 
-namespace Mix.Theme.Domain.Services
+namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {

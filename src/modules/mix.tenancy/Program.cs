@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Mix.Theme
+namespace Mix.Tenancy
 {
     public class Program
     {

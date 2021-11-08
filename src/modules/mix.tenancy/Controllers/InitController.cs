@@ -3,18 +3,18 @@ using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using System.Threading.Tasks;
 using Mix.Shared.Services;
-using Mix.Theme.Domain.Dtos;
-using Mix.Theme.Domain.Services;
+using Mix.Tenancy.Domain.Dtos;
+using Mix.Tenancy.Domain.Services;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
 
-namespace Mix.Theme.Controllers
+namespace Mix.Tenancy.Controllers
 {
-    [Route("api/v2/mix-theme/setup")]
+    [Route("api/v2/mix-tenancy/setup")]
     [ApiController]
     public class InitController : MixApiControllerBase
     {
@@ -45,15 +45,15 @@ namespace Mix.Theme.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("init-site")]
-        public async Task<ActionResult<bool>> InitSite([FromBody] InitCmsDto model)
+        [Route("init-tenant")]
+        public async Task<ActionResult<bool>> InitTenant([FromBody] InitCmsDto model)
         {
             if (model != null
                 && _globalConfigService.AppSettings.InitStatus == InitStep.Blank)
             {
-                await _initCmsService.InitSiteAsync(model);
+                await _initCmsService.InitTenantAsync(model);
                 _globalConfigService.AppSettings.DefaultCulture = model.Culture.Specificulture;
-                _globalConfigService.AppSettings.InitStatus = InitStep.InitSite;
+                _globalConfigService.AppSettings.InitStatus = InitStep.InitTenant;
                 _globalConfigService.SaveSettings();
                 return NoContent();
             }
@@ -72,7 +72,7 @@ namespace Mix.Theme.Controllers
         public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterViewModel model)
         {
             if (model != null
-                && _globalConfigService.AppSettings.InitStatus == InitStep.InitSite)
+                && _globalConfigService.AppSettings.InitStatus == InitStep.InitTenant)
             {
                 await _initCmsService.InitAccountAsync(model);
                 return NoContent();

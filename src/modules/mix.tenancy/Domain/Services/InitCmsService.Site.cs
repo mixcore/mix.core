@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Theme.Domain.Dtos;
-using Mix.Theme.Domain.ViewModels.Init;
+using Mix.Tenancy.Domain.Dtos;
+using Mix.Tenancy.Domain.ViewModels.Init;
 using System.Threading.Tasks;
 
-namespace Mix.Theme.Domain.Services
+namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {
-        public async Task InitSiteAsync(InitCmsDto model)
+        public async Task InitTenantAsync(InitCmsDto model)
         {
             _databaseService.InitMixCmsContext(
                 model.ConnectionString,
@@ -17,7 +17,7 @@ namespace Mix.Theme.Domain.Services
             var dbContext = _databaseService.GetDbContext();
             dbContext.Database.Migrate();
 
-            InitSiteViewModel vm = new(_context);
+            InitTenantViewModel vm = new(_context);
             vm.InitSiteData(model);
             await vm.SaveAsync();
         }

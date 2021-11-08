@@ -85,6 +85,7 @@ namespace Mix.Lib.Abstracts
             var result = await _repository.GetSingleAsync(id);
             result.SetDbContext(_context);
             await result.SaveFieldsAsync(properties);
+            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
             return Ok();
         }
 

@@ -1,7 +1,7 @@
 ﻿using Mix.Heart.Enums;
-using Mix.Theme.Domain.Models;
+using Mix.Tenancy.Domain.Models;
 
-namespace Mix.Theme.Domain.Dtos
+namespace Mix.Tenancy.Domain.Dtos
 {
     public class InitCmsDto
     {

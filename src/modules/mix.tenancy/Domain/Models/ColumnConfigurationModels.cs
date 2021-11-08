@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Linq;
 
-namespace Mix.Theme.Domain.Models
+namespace Mix.Tenancy.Domain.Models
 {
     public class ColumnConfigurations
     {

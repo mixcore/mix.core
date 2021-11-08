@@ -5,7 +5,7 @@ using Mix.Heart.ViewModel;
 using System;
 using System.Linq;
 
-namespace Mix.Theme.Domain.ViewModels.Init
+namespace Mix.Tenancy.Domain.ViewModels.Init
 {
     public class InitCultureViewModel : ViewModelBase<MixCmsContext, MixCulture, int, InitCultureViewModel>
     {

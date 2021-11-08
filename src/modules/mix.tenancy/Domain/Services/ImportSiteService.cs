@@ -1,12 +1,12 @@
 ﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
-using Mix.Theme.Domain.ViewModels;
+using Mix.Tenancy.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mix.Theme.Domain.Services
+namespace Mix.Tenancy.Domain.Services
 {
     public class ImportSiteService
     {
@@ -48,7 +48,7 @@ namespace Mix.Theme.Domain.Services
         }
         #region Import
 
-        public async Task ImportAsync(SiteDataViewModel data, string destCulture)
+        public async Task ImportAsync(TenantDataViewModel data, string destCulture)
         {
             if (data.Configurations != null && data.Configurations.Count > 0)
             {
