@@ -39,7 +39,6 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         public void InitSiteData(InitCmsDto model)
         {
-            Id = 1;
             DisplayName = model.SiteName;
             SystemName = model.SiteName.ToSEOString('_');
             Description = model.SiteName;
@@ -48,7 +47,6 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
             Culture = new InitCultureViewModel()
             {
-                Id = 1,
                 Title = model.Culture.FullName,
                 Specificulture = model.Culture.Specificulture,
                 Alias = model.Culture.Alias,
