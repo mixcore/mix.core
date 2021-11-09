@@ -22,9 +22,9 @@ namespace Mix.Tenancy.Controllers
 
         public InitController(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService, 
-            MixService mixService, 
-            TranslatorService translator, 
+            GlobalConfigService globalConfigService,
+            MixService mixService,
+            TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService)
@@ -52,14 +52,11 @@ namespace Mix.Tenancy.Controllers
                 && _globalConfigService.AppSettings.InitStatus == InitStep.Blank)
             {
                 await _initCmsService.InitTenantAsync(model);
-                _globalConfigService.AppSettings.DefaultCulture = model.Culture.Specificulture;
-                _globalConfigService.AppSettings.InitStatus = InitStep.InitTenant;
-                _globalConfigService.SaveSettings();
                 return NoContent();
             }
             return BadRequest();
         }
-        
+
         /// <summary>
         /// When status = 1
         ///     - Init Account Database
@@ -79,7 +76,7 @@ namespace Mix.Tenancy.Controllers
             }
             return BadRequest();
         }
-            
+
         /// <returns status> init status </returns>
 
         [HttpGet]
@@ -87,15 +84,9 @@ namespace Mix.Tenancy.Controllers
         [Route("get-init-status")]
 
         public ActionResult<InitStep> GetInitStatus()
-
         {
-
             var initStatus = _globalConfigService.AppSettings.InitStatus;
-
-
-
             return Ok(initStatus);
-
         }
 
 
