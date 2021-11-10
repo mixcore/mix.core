@@ -132,7 +132,7 @@
       </None>
     </ItemGroup>
 	<ItemGroup>
-		<RazorGenerate Include="Views\_ViewImports.cshtml" Link="Views/_ViewImports.cshtml" />
+		<RazorGenerate Include="Views\_ViewImports.cshtml" />
 	</ItemGroup>
     <ProjectExtensions>
         <VisualStudio>
