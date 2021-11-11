@@ -9,7 +9,7 @@ using Mix.Shared.Services;
 using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
 
-namespace Mix.Lib.Abstracts
+namespace Mix.Lib.Base
 {
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class MixControllerBase : Controller

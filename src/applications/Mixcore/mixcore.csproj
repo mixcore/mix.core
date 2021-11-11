@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Mixcore</RootNamespace>
     <UserSecretsId>18e7166c-3aa3-4569-98f0-d319f894743d</UserSecretsId>
     <ServerGarbageCollection>true</ServerGarbageCollection>
@@ -13,7 +13,6 @@
     <ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
     <ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
     <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
-    <ProjectReference Include="..\..\modules\mix.theme\mix.theme.csproj" />
   </ItemGroup>
 
   <ItemGroup>

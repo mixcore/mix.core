@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Repository;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Portal.Domain.Models;
 using Mix.Shared.Services;

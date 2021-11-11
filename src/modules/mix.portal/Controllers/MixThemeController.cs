@@ -5,7 +5,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
 using Mix.Heart.Services;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Mix.Tenancy</RootNamespace>
     <UserSecretsId>ce99c40c-2b2e-4835-bb26-5d431ba630f8</UserSecretsId>
   </PropertyGroup>
@@ -36,7 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\Downloads\mix.core\src\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
+    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
 </Project>

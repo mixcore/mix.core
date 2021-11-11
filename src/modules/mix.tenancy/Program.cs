@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Mix.Lib.Helpers;
 
 namespace Mix.Tenancy
 {
@@ -11,10 +12,6 @@ namespace Mix.Tenancy
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            MixCmsHelper.CreateHostBuilder<Startup>(args);
     }
 }

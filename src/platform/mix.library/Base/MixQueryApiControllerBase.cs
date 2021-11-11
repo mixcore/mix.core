@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Services;
 
-namespace Mix.Lib.Abstracts
+namespace Mix.Lib.Base
 {
     public class MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         : MixApiControllerBase

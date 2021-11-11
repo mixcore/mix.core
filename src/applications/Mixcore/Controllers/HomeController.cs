@@ -4,7 +4,7 @@ using Mix.Shared.Constants;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mix.Database.Services;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Mixcore.Domain.ViewModels;
 
 namespace Mixcore.Controllers

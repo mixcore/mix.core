@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using System.Threading.Tasks;
 using Mix.Shared.Services;
@@ -14,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Mix.Tenancy.Controllers
 {
-    [Route("api/v2/mix-tenancy/setup")]
+    [Route("api/v2/rest/mix-tenancy/setup")]
     [ApiController]
     public class InitController : MixApiControllerBase
     {
@@ -22,6 +21,7 @@ namespace Mix.Tenancy.Controllers
 
         public InitController(
             IConfiguration configuration,
+
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
@@ -80,9 +80,7 @@ namespace Mix.Tenancy.Controllers
         /// <returns status> init status </returns>
 
         [HttpGet]
-
         [Route("get-init-status")]
-
         public ActionResult<InitStep> GetInitStatus()
         {
             var initStatus = _globalConfigService.AppSettings.InitStatus;

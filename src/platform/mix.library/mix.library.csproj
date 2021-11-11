@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Mix.Lib</RootNamespace>
   </PropertyGroup>
 
@@ -45,7 +45,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
@@ -57,6 +56,10 @@
     <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstracts\" />
   </ItemGroup>
 
 </Project>

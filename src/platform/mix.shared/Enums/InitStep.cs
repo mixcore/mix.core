@@ -3,7 +3,7 @@
     public enum InitStep
     {
         Blank,
-        InitSite,
+        InitTenant,
         InitAccount,
         InitTheme
     }
