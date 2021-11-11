@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Shared.Constants;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
 using Mix.Shared.Enums;
@@ -40,7 +40,7 @@ namespace Mixcore.Controllers
                         }
                         break;
 
-                    case InitStep.InitSite:
+                    case InitStep.InitTenant:
                         if (page.ToLower() != "step2")
                         {
                             return Redirect(InitRoutePath.Step2);

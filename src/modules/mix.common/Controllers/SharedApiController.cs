@@ -13,7 +13,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Common.Models;
 using Mix.Common.Domain.ViewModels;
 using System.Threading.Tasks;
-using Mix.Lib.Abstracts;
+using Mix.Lib.Base;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;

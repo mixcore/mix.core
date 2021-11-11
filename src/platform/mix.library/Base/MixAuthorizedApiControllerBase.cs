@@ -1,34 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
+using Mix.Heart.UnitOfWork;
+using Mix.Lib.Attributes;
 using Mix.Lib.Services;
 using Mix.Shared.Constants;
 using Mix.Shared.Services;
 
-namespace Mix.Lib.Abstracts
+namespace Mix.Lib.Base
 {
-    public abstract class MixApiControllerBase : Controller
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
+    public abstract class MixAuthorizedApiControllerBase : Controller
     {
         protected string _lang;
         protected MixCulture _culture;
-        protected readonly IConfiguration _configuration;
+        protected UnitOfWorkInfo _uow;
+        protected readonly ILogger<MixApiControllerBase> _logger;
         protected readonly GlobalConfigService _globalConfigService;
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
         protected readonly TranslatorService _translator;
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
-        public MixApiControllerBase(
-            IConfiguration configuration,
+        public MixAuthorizedApiControllerBase(
+            ILogger<MixApiControllerBase> logger,
             GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
-            MixIdentityService mixIdentityService) : base()
+            MixIdentityService mixIdentityService,
+            MixCmsContext context
+            ) : base()
         {
-            _configuration = configuration;
+            _uow = new UnitOfWorkInfo(context);
+            _logger = logger;
             _globalConfigService = globalConfigService;
             _mixService = mixService;
             _translator = translator;

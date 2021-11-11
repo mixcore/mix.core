@@ -12,16 +12,16 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/v2/mix-theme/swagger",
+      "launchUrl": "api/v2/mix-tenancy/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "mix.theme": {
+    "mix.tenancy": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
-      "launchUrl": "api/v2/mix-theme/swagger",
+      "launchUrl": "api/v2/mix-tenancy/swagger",
       "applicationUrl": "https://localhost:5008;http://localhost:5009",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -15,7 +15,7 @@ using Mix.Identity.Constants;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Services;
 
-namespace Mix.Lib.Abstracts
+namespace Mix.Lib.Base
 {
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>

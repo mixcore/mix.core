@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Mix.Quartz</RootNamespace>
   </PropertyGroup>
 
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
   </ItemGroup>
 
 </Project>
