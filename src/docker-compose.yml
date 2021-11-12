@@ -1,7 +1,7 @@
 version: "3"
 services:
     mixcore:
-        # image: "mixcore/mix.core:latest"
+        image: "mixcore/mix.core:latest"
         build: .
         ports:
             - "5000:80"
