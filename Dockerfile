@@ -13,6 +13,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS runtime
 WORKDIR /app
 # COPY --from=node-env /app/Mix.Cms.Web/wwwroot .
 COPY --from=build-env /app/Mix.Cms.Web/bin/Release/net6.0/publish .
+ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 ENTRYPOINT ["dotnet", "mixcore.dll"]
 
