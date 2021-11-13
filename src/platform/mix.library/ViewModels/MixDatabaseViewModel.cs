@@ -1,13 +1,5 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System.Collections.Generic;
+﻿using Mix.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.ViewModels
 {
