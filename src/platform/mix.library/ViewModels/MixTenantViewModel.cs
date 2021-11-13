@@ -1,6 +1,5 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public class MixTenantViewModel : ViewModelBase<MixCmsContext, MixTenant, int, MixTenantViewModel>
     {
         #region Properties

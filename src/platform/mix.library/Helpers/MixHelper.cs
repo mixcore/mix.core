@@ -11,14 +11,14 @@ namespace Mix.Lib.Helpers
         {
             return new FileModel()
             {
-                Filename = file.FileName.Substring(0, file.FileName.LastIndexOf('.')),
-                Extension = file.FileName.Substring(file.FileName.LastIndexOf('.')),
+                Filename = file.FileName[..file.FileName.LastIndexOf('.')],
+                Extension = file.FileName[file.FileName.LastIndexOf('.')..],
                 FileFolder = folder
             };
         }
         public static List<object> ParseEnumToObject(Type enumType)
         {
-            List<object> result = new List<object>();
+            List<object> result = new();
             var values = Enum.GetValues(enumType);
             foreach (var item in values)
             {

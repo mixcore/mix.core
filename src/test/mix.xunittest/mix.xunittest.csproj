@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
     <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
   </ItemGroup>
 

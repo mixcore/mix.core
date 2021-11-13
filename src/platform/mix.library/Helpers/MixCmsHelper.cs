@@ -119,10 +119,9 @@ namespace Mix.Lib.Helpers
             return true;
         }
 
-        internal static bool IsDefaultId<TPrimaryKey>(TPrimaryKey? id)
-        {
-            return id == null || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
-                || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
-        }
+        internal static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) => 
+            id == null 
+            || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
+            || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
     }
 }
