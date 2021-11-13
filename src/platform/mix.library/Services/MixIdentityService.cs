@@ -2,35 +2,25 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
-using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Helpers;
 using Mix.Lib.Models;
-using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.Services
 {
