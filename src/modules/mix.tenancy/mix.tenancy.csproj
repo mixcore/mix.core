@@ -1,43 +1,58 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Mix.Tenancy</RootNamespace>
-    <UserSecretsId>ce99c40c-2b2e-4835-bb26-5d431ba630f8</UserSecretsId>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Mix.Tenancy</RootNamespace>
+		<UserSecretsId>ce99c40c-2b2e-4835-bb26-5d431ba630f8</UserSecretsId>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Domain\Helpers\**" />
-    <Compile Remove="Domain\Services\**" />
-    <Compile Remove="Domain\ViewModels\**" />
-    <Content Remove="Domain\Helpers\**" />
-    <Content Remove="Domain\Services\**" />
-    <Content Remove="Domain\ViewModels\**" />
-    <EmbeddedResource Remove="Domain\Helpers\**" />
-    <EmbeddedResource Remove="Domain\Services\**" />
-    <EmbeddedResource Remove="Domain\ViewModels\**" />
-    <None Remove="Domain\Helpers\**" />
-    <None Remove="Domain\Services\**" />
-    <None Remove="Domain\ViewModels\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Shared.Constants" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Lib.Attributes"/>
+		<Using Include="Mix.Lib.Attributes" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Domain\Dtos\InitThemePackageDto.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Domain\Helpers\**" />
+		<Compile Remove="Domain\Services\**" />
+		<Compile Remove="Domain\ViewModels\**" />
+		<Content Remove="Domain\Helpers\**" />
+		<Content Remove="Domain\Services\**" />
+		<Content Remove="Domain\ViewModels\**" />
+		<EmbeddedResource Remove="Domain\Helpers\**" />
+		<EmbeddedResource Remove="Domain\Services\**" />
+		<EmbeddedResource Remove="Domain\ViewModels\**" />
+		<None Remove="Domain\Helpers\**" />
+		<None Remove="Domain\Services\**" />
+		<None Remove="Domain\ViewModels\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="Domain\Services\ImportSiteService.cs" />
-    <Compile Include="Domain\Services\InitCmsService.Account.cs" />
-    <Compile Include="Domain\Services\InitCmsService.Site.cs" />
-    <Compile Include="Domain\Services\InitCmsService.cs" />
-    <Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />
-    <Compile Include="Domain\ViewModels\Init\InitTenantViewModel.cs" />
-    <Compile Include="Domain\ViewModels\TenantDataViewModel.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Domain\Dtos\InitThemePackageDto.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="Domain\Services\ImportSiteService.cs" />
+		<Compile Include="Domain\Services\InitCmsService.Account.cs" />
+		<Compile Include="Domain\Services\InitCmsService.Site.cs" />
+		<Compile Include="Domain\Services\InitCmsService.cs" />
+		<Compile Include="Domain\ViewModels\Init\InitCultureViewModel.cs" />
+		<Compile Include="Domain\ViewModels\Init\InitTenantViewModel.cs" />
+		<Compile Include="Domain\ViewModels\TenantDataViewModel.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
+		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+	</ItemGroup>
 
 </Project>

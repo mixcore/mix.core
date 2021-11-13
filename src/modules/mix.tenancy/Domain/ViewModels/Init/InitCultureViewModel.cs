@@ -1,9 +1,3 @@
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Heart.ViewModel;
-using System;
-using System.Linq;
 
 namespace Mix.Tenancy.Domain.ViewModels.Init
 {

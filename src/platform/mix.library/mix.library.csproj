@@ -1,65 +1,78 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Mix.Lib</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Mix.Lib</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Shared.Constants" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Lib.Attributes"/>
+		<Using Include="Mix.Lib.Attributes" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Abstracts\ViewModels\**" />
+		<Compile Remove="Constants\**" />
+		<Compile Remove="Entities\Cms\**" />
+		<Compile Remove="Entities\EntityConfigurations\**" />
+		<Compile Remove="Entities\Messenger\**" />
+		<Compile Remove="Enums\**" />
+		<Compile Remove="Subscribers\Google\**" />
+		<Compile Remove="ViewModels\Account\**" />
+		<Compile Remove="ViewModels\Cms\**" />
+		<EmbeddedResource Remove="Abstracts\ViewModels\**" />
+		<EmbeddedResource Remove="Constants\**" />
+		<EmbeddedResource Remove="Entities\Cms\**" />
+		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
+		<EmbeddedResource Remove="Entities\Messenger\**" />
+		<EmbeddedResource Remove="Enums\**" />
+		<EmbeddedResource Remove="Subscribers\Google\**" />
+		<EmbeddedResource Remove="ViewModels\Account\**" />
+		<EmbeddedResource Remove="ViewModels\Cms\**" />
+		<None Remove="Abstracts\ViewModels\**" />
+		<None Remove="Constants\**" />
+		<None Remove="Entities\Cms\**" />
+		<None Remove="Entities\EntityConfigurations\**" />
+		<None Remove="Entities\Messenger\**" />
+		<None Remove="Enums\**" />
+		<None Remove="Subscribers\Google\**" />
+		<None Remove="ViewModels\Account\**" />
+		<None Remove="ViewModels\Cms\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Abstracts\ViewModels\**" />
-    <Compile Remove="Constants\**" />
-    <Compile Remove="Entities\Cms\**" />
-    <Compile Remove="Entities\EntityConfigurations\**" />
-    <Compile Remove="Entities\Messenger\**" />
-    <Compile Remove="Enums\**" />
-    <Compile Remove="Subscribers\Google\**" />
-    <Compile Remove="ViewModels\Account\**" />
-    <Compile Remove="ViewModels\Cms\**" />
-    <EmbeddedResource Remove="Abstracts\ViewModels\**" />
-    <EmbeddedResource Remove="Constants\**" />
-    <EmbeddedResource Remove="Entities\Cms\**" />
-    <EmbeddedResource Remove="Entities\EntityConfigurations\**" />
-    <EmbeddedResource Remove="Entities\Messenger\**" />
-    <EmbeddedResource Remove="Enums\**" />
-    <EmbeddedResource Remove="Subscribers\Google\**" />
-    <EmbeddedResource Remove="ViewModels\Account\**" />
-    <EmbeddedResource Remove="ViewModels\Cms\**" />
-    <None Remove="Abstracts\ViewModels\**" />
-    <None Remove="Constants\**" />
-    <None Remove="Entities\Cms\**" />
-    <None Remove="Entities\EntityConfigurations\**" />
-    <None Remove="Entities\Messenger\**" />
-    <None Remove="Enums\**" />
-    <None Remove="Subscribers\Google\**" />
-    <None Remove="ViewModels\Account\**" />
-    <None Remove="ViewModels\Cms\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Extensions\MixAttributeValueModelExtensions.cs" />
+		<Compile Remove="Extensions\ModelBuilderExtensions.cs" />
+		<Compile Remove="Helpers\MixAssociationHelper.cs" />
+		<Compile Remove="Services\HttpService.cs" />
+		<Compile Remove="Services\MixAppSettingService.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Extensions\MixAttributeValueModelExtensions.cs" />
-    <Compile Remove="Extensions\ModelBuilderExtensions.cs" />
-    <Compile Remove="Helpers\MixAssociationHelper.cs" />
-    <Compile Remove="Services\HttpService.cs" />
-    <Compile Remove="Services\MixAppSettingService.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.1.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
+		<ProjectReference Include="..\mix.identity\mix.identity.csproj" />
+		<ProjectReference Include="..\mix.queue\mix.queue.csproj" />
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\mix.database\mix.database.csproj" />
-    <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
-    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Abstracts\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Abstracts\" />
+	</ItemGroup>
 
 </Project>
