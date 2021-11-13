@@ -1,16 +1,7 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Lib.Helpers;
+﻿using Mix.Lib.Helpers;
 using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Mix.Heart.Services;
 
 namespace Mix.Portal.Domain.ViewModels
 {
@@ -297,7 +288,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public bool HasValue(string fieldName)
         {
-            return Data != null ? Data.Value<string>(fieldName) != null : false;
+            return Data != null && Data.Value<string>(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
@@ -307,7 +298,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public override async Task<Guid> CreateParentAsync()
         {
-            MixDataViewModel parent = new MixDataViewModel(UowInfo)
+            MixDataViewModel parent = new(UowInfo)
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
