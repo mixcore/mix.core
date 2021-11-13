@@ -1,11 +1,4 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
-using Mix.Lib.Extensions;
-using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
 

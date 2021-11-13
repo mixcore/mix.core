@@ -6,16 +6,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
 using Mix.Identity.Extensions;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mix.Lib.Services;
-using Mix.Lib.Extensions;
-namespace Mix.Lib.Startups
+namespace Microsoft.Extensions.DependencyInjection
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
     public static class AuthServiceCollectionExtensions

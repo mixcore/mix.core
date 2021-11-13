@@ -10,6 +10,8 @@ namespace Mix.Shared.Models
         public ConnectionStrings ConnectionStrings { get; set; }
         public bool IsInit { get; set; }
         public bool IsEncryptApi { get; set; }
+
+        public bool EnableOcelot { get; set; }
         public JObject PortalThemeSettings { get; set; }
         
         public bool IsMaintenance { get; set; }

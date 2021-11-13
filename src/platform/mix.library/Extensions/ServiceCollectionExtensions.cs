@@ -4,26 +4,18 @@ using Microsoft.OpenApi.Models;
 using Mix.Lib.Conventions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Providers;
-using System;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
-using Mix.Shared.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Mix.Shared.Services;
 using Mix.Database.Services;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
-using Mix.Database.Entities.Cms;
 using Mix.Database.Extenstions;
 using Mix.Lib.Filters;
-using Mix.Lib.Attributes;
-using System.Collections.Generic;
 using Mix.Database.Entities.Account;
-using Mix.Heart.ViewModel;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -31,11 +23,10 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Services;
 using Mix.Queue.Models;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Heart.Services;
 using Mix.Heart.Repository;
 using Mix.Heart.Entities.Cache;
 
-namespace Mix.Lib.Extensions
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {

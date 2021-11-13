@@ -3,6 +3,7 @@
     "IsInit": true,
     "InitStatus": "Blank",
     "IsMaintenance": false,
+    "EnableOcelot": false,
     "IsHttps": false,
     "MaxPageSize": 100,
     "DefaultCulture": "en-us",

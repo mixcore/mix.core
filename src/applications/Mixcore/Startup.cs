@@ -1,19 +1,10 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Mix.Database.Entities.Account;
-using Mix.Lib.Extensions;
-using Mix.Lib.Startups;
 using Mix.Shared.Services;
 using System.Reflection;
 using Ocelot.DependencyInjection;
 using Mixcore.Domain.Subscribers;
-using Newtonsoft.Json.Converters;
-using Mixcore.Domain.Services;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
+using Mix.Database.Entities.Account;
 
 namespace Mixcore
 {
@@ -46,11 +37,11 @@ namespace Mixcore
 
             services.AddHostedService<ThemeSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixAuthorize<ApplicationDbContext>();
 
             services.AddMixRoutes();
-            
+
             // Must app Auth config after Add mixservice to init App config 
-            services.AddMixAuthorize<ApplicationDbContext>();
             services.AddOcelot(Configuration);
         }
 
@@ -80,8 +71,11 @@ namespace Mixcore
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
-            app.UseMixOcelot(Configuration, env.IsDevelopment());
+
+            if (globalConfigService.AppSettings.EnableOcelot)
+            {
+                app.UseMixOcelot(Configuration, env.IsDevelopment());
+            }
             app.UseAuthorization();
 
             app.UseMixRoutes();

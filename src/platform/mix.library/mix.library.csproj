@@ -15,7 +15,7 @@
 		<Using Include="Mix.Heart.ViewModel" />
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
-		<Using Include="Mix.Lib.Attributes"/>
+		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Attributes" />
 	</ItemGroup>
 	<ItemGroup>
