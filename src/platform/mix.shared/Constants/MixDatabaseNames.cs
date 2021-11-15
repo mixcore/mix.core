@@ -2,9 +2,9 @@
 {
     public class MixDatabaseNames
     {
-        public const string ADDITIONAL_FIELD_PAGE = "sys_additional_field_page";
-        public const string ADDITIONAL_FIELD_POST = "sys_additional_field_post";
-        public const string ADDITIONAL_FIELD_MODULE = "sys_additional_field_module";
+        public const string ADDITIONAL_COLUMN_PAGE = "mixdb_page";
+        public const string ADDITIONAL_COLUMN_POST = "mixdb_post";
+        public const string ADDITIONAL_COLUMN_MODULE = "mixdb_module";
         public const string NAVIGATION = "sys_navigation";
         public const string MENU_ITEM = "sys_menu_item";
         public const string SYSTEM_CATEGORY = "sys_category";
