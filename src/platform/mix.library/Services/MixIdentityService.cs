@@ -417,7 +417,7 @@ namespace Mix.Lib.Services
         {
             if (!_globalConfigService.IsInit)
             {
-                Roles = _roleRepo.GetListAsync(m => true, _cacheService, _uow).GetAwaiter().GetResult();
+                //Roles = _roleRepo.GetListAsync(m => true, _cacheService, _uow).GetAwaiter().GetResult();
                 //using var ctx = new MixCmsContext();
                 //var transaction = ctx.Database.BeginTransaction();
                 // TODO:

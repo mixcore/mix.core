@@ -76,6 +76,8 @@ namespace Mix.Database.Services
             string defaultCulture)
         {
             SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
+            // TODO: Seperate Account db. Current Store account to same database
+            SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString);
             AppSettings.DatabaseProvider = databaseProvider;
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());

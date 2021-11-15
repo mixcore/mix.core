@@ -16,7 +16,6 @@
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
-		<Using Include="Mix.Lib.Attributes"/>
 		<Using Include="Mix.Lib.Attributes" />
 	</ItemGroup>
 
@@ -31,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
+		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
 	</ItemGroup>
 
 	<ItemGroup>
