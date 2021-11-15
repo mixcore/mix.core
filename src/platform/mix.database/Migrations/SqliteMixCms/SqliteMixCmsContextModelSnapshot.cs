@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.v2;
 
+#nullable disable
+
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
@@ -13,8 +15,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.7");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
@@ -257,6 +258,138 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasIndex("MixDatabaseId");
 
                     b.ToTable("MixData");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabase");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixDatabase");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Configurations")
+                        .HasColumnType("ntext")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DefaultValue")
+                        .HasColumnType("ntext")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MixDatabaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MixDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReferenceId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabaseColumn");
+
+                    b.HasIndex("MixDatabaseId");
+
+                    b.ToTable("MixDatabaseColumn");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
@@ -537,138 +670,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasIndex("MixDatabaseColumnId");
 
                     b.ToTable("MixDataContentValue");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixDatabase");
-
-                    b.HasIndex("MixTenantId");
-
-                    b.ToTable("MixDatabase");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Configurations")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("DataType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DefaultValue")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MixDatabaseId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("MixDatabaseName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReferenceId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixDatabaseColumn");
-
-                    b.HasIndex("MixDatabaseId");
-
-                    b.ToTable("MixDatabaseColumn");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
@@ -1147,6 +1148,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -1163,6 +1167,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MixModuleContentId");
 
                     b.ToTable("MixModulePostAssociation");
                 });
@@ -1365,6 +1371,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MixPageContentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -1381,6 +1390,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MixPageContentId");
 
                     b.ToTable("MixPageModuleAssociation");
                 });
@@ -1403,6 +1414,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("LeftId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MixPageContentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -1419,6 +1433,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MixPageContentId");
 
                     b.ToTable("MixPagePostAssociation");
                 });
@@ -1514,12 +1530,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("MixModuleContentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("MixPageContentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("MixPostContentId")
                         .HasColumnType("INTEGER");
 
@@ -1589,15 +1599,95 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.HasIndex("MixDataContentId");
 
-                    b.HasIndex("MixModuleContentId");
-
-                    b.HasIndex("MixPageContentId");
-
                     b.HasIndex("MixPostContentId");
 
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("ntext")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("FileFolder")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("FolderType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MixThemeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("MixThemeName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Scripts")
+                        .IsRequired()
+                        .HasColumnType("ntext")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Styles")
+                        .IsRequired()
+                        .HasColumnType("ntext")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixTemplate");
+
+                    b.HasIndex("MixThemeId");
+
+                    b.ToTable("MixViewTemplate");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTenant", b =>
@@ -1774,90 +1864,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.ToTable("MixUrlAlias");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("FileFolder")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("FolderType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("MixThemeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("MixThemeName")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Scripts")
-                        .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Styles")
-                        .IsRequired()
-                        .HasColumnType("ntext")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixViewTemplate");
-
-                    b.HasIndex("MixThemeId");
-
-                    b.ToTable("MixViewTemplate");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
@@ -1901,6 +1907,28 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
                         .WithMany()
+                        .HasForeignKey("MixDatabaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDatabase");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany("MixDatabases")
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixTenant");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
+                        .WithMany("MixDatabaseColumns")
                         .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1958,31 +1986,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.Navigation("MixCulture");
 
-                    b.Navigation("MixDatabaseColumn");
-
                     b.Navigation("MixDataContent");
-                });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
-                        .WithMany("MixDatabases")
-                        .HasForeignKey("MixTenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTenant");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
-                        .WithMany("MixDatabaseColumns")
-                        .HasForeignKey("MixDatabaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixDatabase");
+                    b.Navigation("MixDatabaseColumn");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
@@ -2075,6 +2081,13 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Navigation("MixModule");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModulePostAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", null)
+                        .WithMany("MixPostContents")
+                        .HasForeignKey("MixModuleContentId");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
@@ -2113,6 +2126,20 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Navigation("MixPage");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageModuleAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
+                        .WithMany("MixModuleContents")
+                        .HasForeignKey("MixPageContentId");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPagePostAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
+                        .WithMany("MixPostContents")
+                        .HasForeignKey("MixPageContentId");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
@@ -2136,14 +2163,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .WithMany()
                         .HasForeignKey("MixDataContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixModuleContentId");
-
-                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixPageContentId");
-
                     b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
                         .WithMany("MixPostContents")
                         .HasForeignKey("MixPostContentId");
@@ -2157,6 +2176,17 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Navigation("MixDataContent");
 
                     b.Navigation("MixPost");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixTheme", "MixTheme")
+                        .WithMany("MixViewTemplates")
+                        .HasForeignKey("MixThemeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixTheme");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
@@ -2187,17 +2217,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Navigation("MixTenant");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixTheme", "MixTheme")
-                        .WithMany("MixViewTemplates")
-                        .HasForeignKey("MixThemeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTheme");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Navigation("MixConfigurationContents");
@@ -2208,14 +2227,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Navigation("MixDataContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
-                {
-                    b.Navigation("MixDataContentValues");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
                     b.Navigation("MixDatabaseColumns");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
+                {
+                    b.Navigation("MixDataContentValues");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
@@ -2240,6 +2259,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
                 {
+                    b.Navigation("MixModuleContents");
+
                     b.Navigation("MixPostContents");
                 });
 

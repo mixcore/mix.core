@@ -3,31 +3,15 @@
     {
       "path": "/portal",
       "icon": "mi mi-Tiles",
+      "svg": "tabler-icon-smart-home.svg",
       "title": "Dashboard",
       "subMenus": []
-    },
-    {
-      "title": "Navigations",
-      "path": "#",
-      "icon": "mi mi-Relationship",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
-        },
-        {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
-
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
     },
     {
       "title": "Posts",
       "path": "#",
       "icon": "mi mi-ReadingList",
+      "svg": "tabler-icon-notebook.svg",
       "subMenus": [
         {
           "title": "Create Post",
@@ -45,6 +29,7 @@
       "title": "Pages",
       "path": "#",
       "icon": "mi mi-Page",
+      "svg": "tabler-icon-file-horizontal.svg",
       "subMenus": [
         {
           "title": "Create",
@@ -59,9 +44,65 @@
       ]
     },
     {
+      "title": "Categories",
+      "path": "#",
+      "icon": "mi mi-Label",
+      "svg": "tabler-icon-inbox.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
+          "title": "List",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
+      "title": "Tags",
+      "path": "#",
+      "icon": "mi mi-Tag",
+      "svg": "tabler-icon-tag.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "title": "List",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
+      "title": "Media",
+      "path": "#",
+      "icon": "mi mi-Media",
+      "svg": "tabler-icon-photo.svg",
+      "subMenus": [
+        {
+          "title": "Create New",
+          "icon": "mi mi-Add",
+          "path": "/portal/media/create"
+        },
+        {
+          "path": "/portal/media/list",
+          "title": "List",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
       "title": "Modules",
       "path": "#",
       "icon": "mi mi-Puzzle",
+      "svg": "tabler-icon-layout-grid-add.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create new",
@@ -97,6 +138,8 @@
       "title": "Databases",
       "path": "#",
       "icon": "mi mi-ResolutionLegacy",
+      "svg": "tabler-icon-table.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create New",
@@ -111,51 +154,20 @@
       ]
     },
     {
-      "title": "Categories",
+      "title": "Navigations",
       "path": "#",
-      "icon": "mi mi-Label",
+      "icon": "mi mi-Relationship",
+      "svg": "tabler-icon-directions.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=7&mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
-      "title": "Tags",
-      "path": "#",
-      "icon": "mi mi-Tag",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
-        },
-        {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=8&mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
-      "title": "Media",
-      "path": "#",
-      "icon": "mi mi-Media",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/portal/media/create"
-        },
-        {
-          "path": "/portal/media/list",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -165,7 +177,8 @@
       "title": "Files",
       "path": "#",
       "icon": "mi mi-FileExplorer",
-      "isHiden": false,
+      "svg": "tabler-icon-file.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "path": "/portal/file/list",
@@ -183,6 +196,7 @@
       "title": "Users",
       "path": "#",
       "icon": "mi mi-Emoji",
+      "svg": "tabler-icon-users.svg",
       "subMenus": [
         {
           "title": "Create",
@@ -246,16 +260,38 @@
       "title": "Themes",
       "path": "#",
       "icon": "mi mi-Layout",
+      "svg": "tabler-icon-template.svg",
       "subMenus": [
         {
-          "title": "Create New",
+          "title": "Create Theme",
           "icon": "mi mi-Add",
           "path": "/portal/theme/create"
         },
         {
           "path": "/portal/theme/list",
-          "title": "List",
+          "title": "Theme List",
           "icon": "mi mi-List"
+        },
+        {
+          "title": "Store",
+          "icon": "mi mi-ShoppingCart",
+          "path": "/portal/store/list"
+        },
+        {
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+
+          "title": "Navigations",
+          "icon": "mi mi-ButtonMenu"
+        },
+        {
+          "path": "/portal/module/list",
+          "title": "Modules",
+          "icon": "mi mi-Apps"
+        },
+        {
+          "path": "/portal/mix-database/list",
+          "title": "Databases",
+          "icon": "mi mi-Wheel"
         }
       ]
     },
@@ -263,7 +299,8 @@
       "title": "Mix Store",
       "path": "#",
       "icon": "mi mi-Shop",
-      "isHiden": false,
+      "svg": "tabler-icon-building-store.svg",
+      "isHiden": true,
       "subMenus": [
         {
           "title": "List Online",
@@ -276,21 +313,37 @@
       "title": "Settings",
       "path": "#",
       "icon": "mi mi-Settings  mi-spin",
+      "svg": "tabler-icon-settings.svg",
       "subMenus": [
         {
           "title": "Global Settings",
-          "icon": "mi mi-Apps",
+          "icon": "mi mi-Equalizer",
           "path": "/portal/app-settings/details"
-        },
-        {
-          "path": "/portal/configuration/create",
-          "title": "Create",
-          "icon": "mi mi-Add"
         },
         {
           "path": "/portal/configuration/list",
           "title": "Local settings",
-          "icon": "mi mi-List"
+          "icon": "mi mi-Repair"
+        },
+        {
+          "path": "/portal/language/list",
+          "title": "Languages",
+          "icon": "mi mi-World"
+        },
+        {
+          "path": "/portal/localize/list",
+          "title": "Localization",
+          "icon": "mi mi-TimeLanguage"
+        },
+        {
+          "path": "/portal/file/list",
+          "title": "Files",
+          "icon": "mi mi-FileExplorer"
+        },
+        {
+          "path": "/portal/file/list?folder=MixContent/logs",
+          "title": "Logs",
+          "icon": "mi mi-Error"
         }
       ]
     }

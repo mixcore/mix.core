@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Shared.Constants;
 using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Helpers
@@ -67,6 +64,11 @@ namespace Mix.Lib.Helpers
             {
                 return 0;
             }
+        }
+
+        public static string GetDetailsUrl(string specificulture, string path)
+        {
+            return $"/{specificulture}/{path.TrimStart('/')}";
         }
 
         public static IHostBuilder CreateHostBuilder<Startup>(string[] args)
