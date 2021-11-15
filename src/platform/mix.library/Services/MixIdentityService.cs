@@ -86,7 +86,7 @@ namespace Mix.Lib.Services
         public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-            var aesKey = AesEncryptionHelper.GenerateCombinedKeys(256);
+            var aesKey = AesEncryptionHelper.GenerateCombinedKeys(128);
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
