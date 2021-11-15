@@ -11,6 +11,7 @@ namespace Mix.Database.Entities.Cms
         public MixPageType Type { get; set; }
 
         public virtual MixPage MixPage { get; set; }
-        public virtual ICollection<MixPostContent> MixPostContents { get; set; }
+        public virtual ICollection<MixPagePostAssociation> MixPostContents { get; set; }
+        public virtual ICollection<MixPageModuleAssociation> MixModuleContents { get; set; }
     }
 }

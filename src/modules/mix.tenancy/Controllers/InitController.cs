@@ -69,7 +69,7 @@ namespace Mix.Tenancy.Controllers
         public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterViewModel model)
         {
             if (model != null
-                && _globalConfigService.AppSettings.InitStatus == InitStep.InitAccount)
+                && _globalConfigService.AppSettings.InitStatus == InitStep.InitTenant)
             {
                 await _initCmsService.InitAccountAsync(model);
                 return NoContent();

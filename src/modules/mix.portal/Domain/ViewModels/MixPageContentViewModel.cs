@@ -1,12 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
@@ -32,10 +24,29 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Properties
-
         public string ClassName { get; set; }
+        public int? PageSize { get; set; }
+        public MixPageType Type { get; set; }
+        public string DetailUrl { get; set; }
 
+        public List<MixUrlAliasViewModel> UrlAliases { get; set; }
         #endregion
+
+        #region Overrides
+        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        {
+            await LoadAliasAsync(cacheService, uowInfo);
+        }
+
+        private async Task LoadAliasAsync(MixCacheService cacheService, UnitOfWorkInfo uowInfo)
+        {
+            var aliasRepo = MixUrlAliasViewModel.GetRepository(uowInfo);
+            UrlAliases = await aliasRepo.GetListAsync(
+                m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id,
+                cacheService);
+            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
+                : MixCmsHelper.GetDetailsUrl(Specificulture, SeoName);
+        }
 
         public override async Task<int> CreateParentAsync()
         {
@@ -61,5 +72,6 @@ namespace Mix.Portal.Domain.ViewModels
                 await base.DeleteHandlerAsync();
             }
         }
+        #endregion
     }
 }
