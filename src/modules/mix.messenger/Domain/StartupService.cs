@@ -7,7 +7,7 @@ using Mix.SignalR.Hubs;
 
 namespace Mix.Messenger.Domain
 {
-    public class StartupService : IStartupService
+    public class StartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
