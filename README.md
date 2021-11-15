@@ -54,8 +54,6 @@ Optional:
 
 ```bash
 git submodule update --init --recursive
-git clone https://github.com/mixcore/mix.heart.git
-git clone https://github.com/mixcore/mix.identity.git
 ```
 
 
