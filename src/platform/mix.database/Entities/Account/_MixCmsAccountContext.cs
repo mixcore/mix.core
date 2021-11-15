@@ -47,7 +47,7 @@ namespace Mix.Database.Entities.Account
         protected override void OnConfiguring(
             DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
                 switch (_databaseService.DatabaseProvider)
