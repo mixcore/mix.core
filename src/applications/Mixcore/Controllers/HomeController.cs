@@ -48,8 +48,6 @@ namespace Mixcore.Controllers
         }
 
         [Route("")]
-        [Route("{seoName}")]
-        [Route("{seoName}/{keyword}")]
         public IActionResult Index(string seoName, string keyword)
         {
             if (!isValid)

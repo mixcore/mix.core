@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc.Routing;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace Mixcore.Domain.Services
@@ -47,9 +41,10 @@ namespace Mixcore.Domain.Services
             {
                 language = _globalConfigService.AppSettings.DefaultCulture;
                 keyIndex -= 1;
-                result["controller"] = "security";
+                result["controller"] = "home";
                 result["culture"] = language;
                 result["action"] = "Index";
+                result["keyword"] = "aaa";
                 result["seoName"] = "test";
             }
 

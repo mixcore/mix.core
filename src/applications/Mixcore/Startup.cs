@@ -76,8 +76,13 @@ namespace Mixcore
             {
                 app.UseMixOcelot(Configuration, env.IsDevelopment());
             }
-            app.UseAuthorization();
+            if (globalConfigService.AppSettings.IsHttps)
+            {
+                app.UseHttpsRedirection();
+            }
 
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseMixRoutes();
         }
     }

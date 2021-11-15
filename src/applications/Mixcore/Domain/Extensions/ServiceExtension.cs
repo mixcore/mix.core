@@ -39,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IApplicationBuilder UseMixRoutes(this IApplicationBuilder app)
         {
             string notStartWithPattern = "regex(^(?!(init|security|portal|api|vue|error|swagger|graphql|ReDoc|OpenAPI|.+Hub))(.+)$)";
+            app.UseRouting();
             app.UseEndpoints(routes =>
             {
                 //routes.MapDefaultControllerRoute();

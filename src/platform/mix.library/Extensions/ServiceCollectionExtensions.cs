@@ -94,15 +94,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             
             app.UseMixStaticFiles();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            if (globalConfigService.AppSettings.IsHttps)
-            {
-                app.UseHttpsRedirection();
-            }
-
+           
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
 
@@ -135,17 +127,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.RoutePrefix = routePrefix;
                 });
             }
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
+            
             return app;
         }
 
