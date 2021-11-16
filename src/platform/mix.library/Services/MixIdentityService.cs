@@ -32,7 +32,6 @@ namespace Mix.Lib.Services
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
-        private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _context;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
@@ -42,7 +41,6 @@ namespace Mix.Lib.Services
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             AuthConfigService authConfigService,
-            GlobalConfigService globalConfigService,
             MixCmsContext context,
             MixCmsAccountContext accountContext, 
             MixCacheService cacheService)
@@ -55,7 +53,6 @@ namespace Mix.Lib.Services
             _roleManager = roleManager;
             _authConfigService = authConfigService;
             _roleRepo = RoleViewModel.GetRootRepository(accountContext);
-            _globalConfigService = globalConfigService;
             _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
             LoadRoles();
         }
@@ -145,7 +142,7 @@ namespace Mix.Lib.Services
                     ExpiresIn = _authConfigService.AppSettings.AccessTokenExpiration,
                     Issued = dtIssued,
                     Expires = dtExpired,
-                    LastUpdateConfiguration = _globalConfigService.AppSettings.LastUpdateConfiguration
+                    LastUpdateConfiguration = GlobalConfigService.Instance.AppSettings.LastUpdateConfiguration
                 };
                 return token;
             }
@@ -413,7 +410,7 @@ namespace Mix.Lib.Services
 
         private void LoadRoles()
         {
-            if (!_globalConfigService.IsInit)
+            if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 //Roles = _roleRepo.GetListAsync(m => true, _cacheService, _uow).GetAwaiter().GetResult();
                 //using var ctx = new MixCmsContext();

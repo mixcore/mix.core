@@ -26,14 +26,13 @@ namespace Mix.Lib.Base
     {
         public MixRestApiControllerBase(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService,
             MixService mixService, 
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
             MixCacheService cacheService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
         }
 

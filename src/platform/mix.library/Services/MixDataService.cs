@@ -1,20 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Cms;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
 using Mix.Lib.Models.Common;
-using Mix.Shared.Constants;
 using Mix.Shared.Enums;
-using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Mix.Heart.Extensions;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Enums;
@@ -25,17 +15,14 @@ namespace Mix.Lib.Services
 {
     public class MixDataService: IDisposable
     {
-        private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _dbContext;
 
         public MixDataService(
-            GlobalConfigService globalConfigService,
             MixCmsContext dbContext,
             QueryRepository<MixCmsContext, MixDatabaseColumn, int> colRepo,
             QueryRepository<MixCmsContext, MixDataContent, Guid> contentRepo, 
             QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> assoRepo)
         {
-            _globalConfigService = globalConfigService;
             _dbContext = dbContext;
         }
 
@@ -52,7 +39,7 @@ namespace Mix.Lib.Services
                 var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(uowInfo);
                 
                 var tasks = new List<Task<TView>>();
-                culture ??= _globalConfigService.AppSettings.DefaultCulture;
+                culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
 
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName).ToListAsync();

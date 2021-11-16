@@ -38,7 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Clone Settings from shared folder
             services.AddScoped<MixHeartConfigService>();
-            services.AddScoped<GlobalConfigService>();
             services.AddScoped<MixDatabaseService>();
             services.AddScoped<CultureService>();
             services.AddScoped<AuthConfigService>();
@@ -89,8 +88,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IApplicationBuilder app,
             Assembly executingAssembly,
             IConfiguration configuration,
-            bool isDevelop,
-            GlobalConfigService globalConfigService)
+            bool isDevelop)
         {
 
             app.UseMixStaticFiles();
@@ -98,7 +96,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (globalConfigService.AppSettings.IsHttps)
+            if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
             }
@@ -202,9 +200,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void ApplyMigrations(this IServiceCollection services)
         {
-            GlobalConfigService globalConfigService = services.GetService<GlobalConfigService>();
 
-            if (!globalConfigService.IsInit)
+            if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 var mixDatabaseService = services.GetService<MixDatabaseService>();
                 mixDatabaseService.InitMixCmsContext();
@@ -216,8 +213,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection AddSSL(this IServiceCollection services)
         {
-            var globalConfigService = services.GetService<GlobalConfigService>();
-            if (globalConfigService.AppSettings.IsHttps)
+            if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 services.AddHttpsRedirection(options =>
                 {

@@ -46,7 +46,7 @@ namespace Mixcore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GlobalConfigService globalConfigService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -67,16 +67,16 @@ namespace Mixcore
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
             
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            if (globalConfigService.AppSettings.EnableOcelot)
+            if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
             {
                 app.UseMixOcelot(Configuration, env.IsDevelopment());
             }
-            if (globalConfigService.AppSettings.IsHttps)
+            if (GlobalConfigService.Instance.AppSettings.IsHttps)
             {
                 app.UseHttpsRedirection();
             }

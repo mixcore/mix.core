@@ -1,5 +1,4 @@
-﻿using Mix.Shared.Constants;
-using Mix.Shared.Services;
+﻿using Mix.Shared.Services;
 using Quartz;
 using System;
 using System.Threading.Tasks;
@@ -9,15 +8,13 @@ namespace Mix.MixQuartz.Jobs
     public class KeepPoolAliveJob : BaseJob
     {
         private readonly HttpService _httpService;
-        private readonly GlobalConfigService _globalConfigService;
-        public KeepPoolAliveJob(HttpService httpService, GlobalConfigService globalConfigService)
+        public KeepPoolAliveJob(HttpService httpService)
         {
             _httpService = httpService;
-            _globalConfigService = globalConfigService;
         }
         public override async Task Execute(IJobExecutionContext context)
         {
-            var domain = _globalConfigService.AppSettings.Domain;
+            var domain = GlobalConfigService.Instance.AppSettings.Domain;
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;

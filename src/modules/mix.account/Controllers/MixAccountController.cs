@@ -24,7 +24,6 @@ namespace Mix.Account.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<MixAccountController> _logger;
         private readonly MixIdentityService _idService;
-        private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _context;
         protected readonly MixIdentityService _mixIdentityService;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
@@ -34,7 +33,6 @@ namespace Mix.Account.Controllers
             RoleManager<IdentityRole> roleManager,
             ILogger<MixAccountController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            GlobalConfigService globalConfigService,
             MixCmsContext context, MixIdentityService mixIdentityService)
         {
             _userManager = userManager;
@@ -43,7 +41,6 @@ namespace Mix.Account.Controllers
             _logger = logger;
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
-            _globalConfigService = globalConfigService;
             _context = context;
             _mixIdentityService = mixIdentityService;
         }
@@ -63,7 +60,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] LoginDto requestDto)
         {
-            string key = _globalConfigService.AppSettings.ApiEncryptKey;
+            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.Login(model);

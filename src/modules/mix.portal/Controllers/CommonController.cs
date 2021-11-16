@@ -19,12 +19,11 @@ namespace Mix.Portal.Controllers
         public CommonController(
             IConfiguration configuration,
             MixCmsContext context, 
-            GlobalConfigService globalConfigService, 
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
         {
             _context = context;
         }

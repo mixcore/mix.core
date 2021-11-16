@@ -47,15 +47,15 @@ namespace Mix.Tenancy.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                    var aesKey = _globalConfigService.AppSettings.ApiEncryptKey;
+                    var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
 
                     var token = await _identityService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
-                        _globalConfigService.AppSettings.ApiEncryptKey = aesKey;
-                        _globalConfigService.AppSettings.InitStatus = InitStep.InitAccount;
-                        _globalConfigService.AppSettings.IsInit = false;
-                        _globalConfigService.SaveSettings();
+                        GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;
+                        GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
+                        GlobalConfigService.Instance.AppSettings.IsInit = false;
+                        GlobalConfigService.Instance.SaveSettings();
 
                         authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
                         authConfigService.SaveSettings();

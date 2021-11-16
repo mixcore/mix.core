@@ -21,14 +21,12 @@ namespace Mix.Lib.Base
         protected MixCulture _culture;
         protected UnitOfWorkInfo _uow;
         protected readonly ILogger<MixApiControllerBase> _logger;
-        protected readonly GlobalConfigService _globalConfigService;
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
         protected readonly TranslatorService _translator;
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
         public MixAuthorizedApiControllerBase(
             ILogger<MixApiControllerBase> logger,
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
@@ -38,7 +36,6 @@ namespace Mix.Lib.Base
         {
             _uow = new UnitOfWorkInfo(context);
             _logger = logger;
-            _globalConfigService = globalConfigService;
             _mixService = mixService;
             _translator = translator;
             _cultureRepository = cultureRepository;
@@ -48,11 +45,11 @@ namespace Mix.Lib.Base
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
-            if (!_globalConfigService.AppSettings.IsInit)
+            if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 _lang = RouteData?.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()
-                    : _globalConfigService.AppSettings.DefaultCulture;
+                    : GlobalConfigService.Instance.AppSettings.DefaultCulture;
                 _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
             }
         }

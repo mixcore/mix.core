@@ -11,18 +11,15 @@ namespace Mix.Lib.Services
 {
     public class MixService
     {
-        public readonly GlobalConfigService _globalConfigService;
         public readonly SmtpConfigService _smtpConfigService;
         public readonly MixConfigurationService _configService;
         public readonly MixFileService _fileService;
 
         public MixService(
-            GlobalConfigService globalConfigService,
             MixConfigurationService configService,
             MixFileService fileService, 
             SmtpConfigService smtpConfigService)
         {
-            _globalConfigService = globalConfigService;
             _configService = configService;
             _fileService = fileService;
             _smtpConfigService = smtpConfigService;
@@ -30,15 +27,15 @@ namespace Mix.Lib.Services
 
         public string GetAssetFolder(string culture = null)
         {
-            culture ??= _globalConfigService.AppSettings.DefaultCulture;
-            return $"{_globalConfigService.AppSettings.Domain}/" +
+            culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
+            return $"{GlobalConfigService.Instance.AppSettings.Domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public string GetUploadFolder(string culture = null)
         {
-            culture ??= _globalConfigService.AppSettings.DefaultCulture;
+            culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
