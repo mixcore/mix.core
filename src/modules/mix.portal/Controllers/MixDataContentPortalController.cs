@@ -28,7 +28,6 @@ namespace Mix.Portal.Controllers
 
         public MixDataContentPortalController(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
@@ -36,7 +35,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixCmsContext context,
             MixCacheService cacheService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
             _mixDataService = mixDataService;
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);

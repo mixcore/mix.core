@@ -16,7 +16,6 @@ namespace Mix.Tenancy.Domain.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepo;
         private readonly EntityRepository<MixCmsContext, MixTenant, int> _siteRepo;
-        private readonly GlobalConfigService _globalConfigService;
         private readonly MixDatabaseService _databaseService;
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
@@ -24,7 +23,6 @@ namespace Mix.Tenancy.Domain.Services
 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepo,
             UserManager<MixUser> userManager,
-            GlobalConfigService globalConfigService,
             MixIdentityService identityService,
             MixDatabaseService databaseService,
             RoleManager<IdentityRole> roleManager,
@@ -34,7 +32,6 @@ namespace Mix.Tenancy.Domain.Services
             _configuration = configuration;
             _cultureRepo = cultureRepo;
             _userManager = userManager;
-            _globalConfigService = globalConfigService;
             _identityService = identityService;
             _databaseService = databaseService;
             _roleManager = roleManager;

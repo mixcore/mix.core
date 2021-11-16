@@ -18,7 +18,6 @@ namespace Mix.Lib.Base
         protected bool forbidden = false;
         protected bool isValid = true;
         protected string _redirectUrl;
-        protected readonly GlobalConfigService _globalConfigService;
         protected readonly IPSecurityConfigService _ipSecurityConfigService;
         protected readonly MixService _mixService;
         protected bool ForbiddenPortal
@@ -38,14 +37,12 @@ namespace Mix.Lib.Base
         protected IConfiguration _configuration;
 
         public MixControllerBase(
-            GlobalConfigService globalConfigService,
             MixService mixService, 
             IPSecurityConfigService ipSecurityConfigService)
         {
-            _globalConfigService = globalConfigService;
             _mixService = mixService;
 
-            if (!_globalConfigService.AppSettings.IsInit)
+            if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 LoadCulture();
             }
@@ -60,9 +57,9 @@ namespace Mix.Lib.Base
             }
             //if (!_globalConfigService.Instance.CheckValidCulture(Culture))
             //{
-            //    Culture = _globalConfigService.AppSettings.DefaultCulture;
+            //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             //}
-            Culture = _globalConfigService.AppSettings.DefaultCulture;
+            Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);
@@ -123,7 +120,7 @@ namespace Mix.Lib.Base
             }
 
             // If mode Maintenance enabled in appsettings
-            if (_globalConfigService.AppSettings.IsMaintenance
+            if (GlobalConfigService.Instance.AppSettings.IsMaintenance
                     && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;

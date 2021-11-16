@@ -1,27 +1,17 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Lib.ViewModels;
-using System;
+﻿using Mix.Lib.ViewModels;
 using Mix.Heart.Exceptions;
-using System.Threading.Tasks;
 using Mix.Lib.Dtos;
-using System.Linq;
 using Mix.Shared.Enums;
 using System.Linq.Expressions;
 using Mix.Heart.Extensions;
-using Mix.Shared.Constants;
-using Mix.Shared.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using Mix.Heart.Repository;
 using Mix.Heart.Models;
-using Mix.Heart.Services;
 
 namespace Mix.Lib.Services
 {
     public class MixThemeExportService
     {
-        private readonly GlobalConfigService _globalConfigService;
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
@@ -30,12 +20,9 @@ namespace Mix.Lib.Services
         private string tempPath;
         private string outputPath;
 
-        public MixThemeExportService(
-            MixCmsContext context,
-            GlobalConfigService globalConfigService)
+        public MixThemeExportService(MixCmsContext context)
         {
             _context = context;
-            _globalConfigService = globalConfigService;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
         }
 
@@ -100,9 +87,9 @@ namespace Mix.Lib.Services
                 .Replace(accessFolder, "[ACCESS_FOLDER]")
                 .Replace($"/{_dto.Specificulture}/", "/[CULTURE]/")
                 .Replace($"/{siteData.ThemeName}/", "/[THEME_NAME]/");
-            if (!string.IsNullOrEmpty(_globalConfigService.Domain))
+            if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
             {
-                content = content.Replace(_globalConfigService.Domain, string.Empty);
+                content = content.Replace(GlobalConfigService.Instance.AppSettings.Domain, string.Empty);
             }
             FileModel schema = new()
             {

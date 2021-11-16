@@ -8,9 +8,9 @@ namespace Mix.Lib.Models.Common
 {
     public class MenuItemModel
     {
-        public MenuItemModel(GlobalConfigService globalConfigService)
+        public MenuItemModel()
         {
-            var domain = globalConfigService.AppSettings.Domain;
+            var domain = GlobalConfigService.Instance.AppSettings.Domain;
             Href = Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
         }
 

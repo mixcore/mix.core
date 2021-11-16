@@ -10,23 +10,21 @@ namespace Mixcore.Domain.Services
     // Ref: https://www.strathweb.com/2019/08/dynamic-controller-routing-in-asp-net-core-3-0/
     public class TranslationTransformer : DynamicRouteValueTransformer
     {
-        private readonly GlobalConfigService _globalConfigService;
         private readonly MixDatabaseService _databaseService;
         private readonly CultureService _cultureService;
 
         public TranslationTransformer(
             IConfiguration configuration)
         {
-            _globalConfigService = new();
             _databaseService = new(configuration);
             MixCmsContext ctx = new MixCmsContext(_databaseService);
-            _cultureService = new(ctx, _globalConfigService);
+            _cultureService = new(ctx);
         }
 
         public override ValueTask<RouteValueDictionary> TransformAsync(
             HttpContext httpContext, RouteValueDictionary values)
         {
-            if (_globalConfigService.IsInit)
+            if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 return ValueTask.FromResult(values);
             }
@@ -39,7 +37,7 @@ namespace Mixcore.Domain.Services
             var keyIndex = 1;
             if (_cultureService.CheckValidCulture(language))
             {
-                language = _globalConfigService.AppSettings.DefaultCulture;
+                language = GlobalConfigService.Instance.AppSettings.DefaultCulture;
                 keyIndex -= 1;
                 result["controller"] = "home";
                 result["culture"] = language;

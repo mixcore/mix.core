@@ -40,7 +40,6 @@ namespace Mix.Common.Controllers
         private IQueueService<MessageQueueModel> _queueService;
         public SharedApiController(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
@@ -49,7 +48,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
         {
             _fileService = fileService;
             _authConfigurations = authConfigService.AppSettings;
@@ -68,7 +67,7 @@ namespace Mix.Common.Controllers
         public ActionResult<string> EncryptMessage(CryptoMessageDto encryptMessage)
         {
             string key = encryptMessage.Key 
-                        ?? _globalConfigService.AppSettings.ApiEncryptKey;
+                        ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = encryptMessage.ObjectData != null
                     ? encryptMessage.ObjectData.ToString(Newtonsoft.Json.Formatting.None)
                     : encryptMessage.StringData;
@@ -80,7 +79,7 @@ namespace Mix.Common.Controllers
         [Route("decrypt-message")] 
         public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key ?? _globalConfigService.AppSettings.ApiEncryptKey;
+            string key = encryptMessage.Key ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key);
             return Ok(msg);
         }
@@ -148,7 +147,7 @@ namespace Mix.Common.Controllers
         [Route("check-config/{lastSync}")]
         public ActionResult<JObject> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = _globalConfigService.AppSettings.LastUpdateConfiguration;
+            var lastUpdate = GlobalConfigService.Instance.AppSettings.LastUpdateConfiguration;
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettingsAsync());
@@ -183,7 +182,7 @@ namespace Mix.Common.Controllers
         {
             return new AllSettingModel()
             {
-                GlobalSettings = CommonHelper.GetAppSettings(lang, _authConfigurations, _globalConfigService, _cultureService),
+                GlobalSettings = CommonHelper.GetAppSettings(lang, _authConfigurations, _cultureService),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };

@@ -14,10 +14,9 @@ namespace Mixcore.Controllers
         private readonly MixDatabaseService _databaseService;
        
         public PortalController(
-            GlobalConfigService globalConfigService,
             MixService mixService,
             MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService)
-            : base(globalConfigService, mixService, ipSecurityConfigService)
+            : base(mixService, ipSecurityConfigService)
         {
             _databaseService = databaseService;
         }
@@ -59,7 +58,7 @@ namespace Mixcore.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (_globalConfigService.AppSettings.IsInit)
+            if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -68,7 +67,7 @@ namespace Mixcore.Controllers
                 }
                 else
                 {
-                    var status = _globalConfigService.AppSettings.InitStatus;
+                    var status = GlobalConfigService.Instance.AppSettings.InitStatus;
                     _redirectUrl = $"/init/step{status}";
                 }
             }

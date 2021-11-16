@@ -26,7 +26,6 @@ namespace Mix.Portal.Controllers
         private readonly IQueueService<MessageQueueModel> _queueService;
         public MixThemeController(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
@@ -35,7 +34,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context, MixThemeImportService importService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
         {
 
             _exportService = exportService;

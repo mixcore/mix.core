@@ -38,14 +38,13 @@ namespace Mix.Lib.Base
 
         public MixQueryApiControllerBase(
             IConfiguration configuration,
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
             MixCacheService cacheService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
         {
             _context = context;
             _uow = new(_context);
@@ -81,7 +80,7 @@ namespace Mix.Lib.Base
 
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = _globalConfigService.AppSettings.MaxPageSize;
+                req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
             }
 
             if (req.Culture != null)

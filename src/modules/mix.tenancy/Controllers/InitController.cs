@@ -22,13 +22,12 @@ namespace Mix.Tenancy.Controllers
         public InitController(
             IConfiguration configuration,
 
-            GlobalConfigService globalConfigService,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService)
-            : base(configuration, globalConfigService, mixService, translator, cultureRepository, mixIdentityService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
         {
             _initCmsService = initCmsService;
         }
@@ -49,7 +48,7 @@ namespace Mix.Tenancy.Controllers
         public async Task<ActionResult<bool>> InitTenant([FromBody] InitCmsDto model)
         {
             if (model != null
-                && _globalConfigService.AppSettings.InitStatus == InitStep.Blank)
+                && GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.Blank)
             {
                 await _initCmsService.InitTenantAsync(model);
                 return NoContent();
@@ -69,7 +68,7 @@ namespace Mix.Tenancy.Controllers
         public async Task<ActionResult<bool>> InitAccount([FromBody] RegisterViewModel model)
         {
             if (model != null
-                && _globalConfigService.AppSettings.InitStatus == InitStep.InitTenant)
+                && GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.InitTenant)
             {
                 await _initCmsService.InitAccountAsync(model);
                 return NoContent();
@@ -83,7 +82,7 @@ namespace Mix.Tenancy.Controllers
         [Route("get-init-status")]
         public ActionResult<InitStep> GetInitStatus()
         {
-            var initStatus = _globalConfigService.AppSettings.InitStatus;
+            var initStatus = GlobalConfigService.Instance.AppSettings.InitStatus;
             return Ok(initStatus);
         }
 

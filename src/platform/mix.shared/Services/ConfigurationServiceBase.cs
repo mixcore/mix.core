@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Mix.Shared.Services
 {
-    public class ConfigurationServiceBase<T> : SingletonService<ConfigurationServiceBase<T>>
+    public class ConfigurationServiceBase<T>
     {
         private string filePath;
         private JObject _obj;

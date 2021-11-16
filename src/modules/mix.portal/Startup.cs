@@ -37,7 +37,7 @@ namespace Mix.Portal
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GlobalConfigService globalConfigService)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(builder =>
             {
@@ -46,7 +46,7 @@ namespace Mix.Portal
                 builder.AllowAnyHeader();
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
         }
     }
 }
