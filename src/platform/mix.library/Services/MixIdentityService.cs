@@ -81,6 +81,7 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Login failed");
             }
+            await _uow?.CompleteAsync();
         }
 
         public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)
@@ -90,11 +91,8 @@ namespace Mix.Lib.Services
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
-                token.Info = await MixDataHelper.GetAdditionalDataAsync(
-                    context,
-                    MixDatabaseParentType.User,
-                    MixDatabaseNames.SYSTEM_USER_DATA,
-                    Guid.Parse(user.Id));
+                token.Info = new(context, user);
+                await token.Info.LoadUserDataAsync();
                 var plainText = JsonConvert.SerializeObject(
                     token, 
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -132,7 +130,7 @@ namespace Mix.Lib.Services
                                     ClientId = _authConfigService.AppSettings.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
-                                }, _cacheService, _uow);
+                                }, _cacheService);
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
                     refreshTokenId = saveRefreshTokenResult;
@@ -366,12 +364,12 @@ namespace Mix.Lib.Services
             return claims;
         }
 
-        public static Claim CreateClaim(string type, string value)
+        public Claim CreateClaim(string type, string value)
         {
             return new Claim(type, value, ClaimValueTypes.String);
         }
 
-        public static string GetClaim(ClaimsPrincipal User, string claimType)
+        public string GetClaim(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
         }

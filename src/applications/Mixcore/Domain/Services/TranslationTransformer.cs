@@ -17,7 +17,7 @@ namespace Mixcore.Domain.Services
         public TranslationTransformer(
             IConfiguration configuration)
         {
-            _globalConfigService = new(configuration);
+            _globalConfigService = new();
             _databaseService = new(configuration);
             MixCmsContext ctx = new MixCmsContext(_databaseService);
             _cultureService = new(ctx, _globalConfigService);

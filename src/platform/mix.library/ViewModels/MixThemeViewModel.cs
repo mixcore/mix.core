@@ -1,4 +1,6 @@
-﻿using Mix.Database.Entities.Cms;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.Entities.Cms;
+using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
@@ -74,6 +76,36 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Expands
+
+        public async Task<bool> SaveThemeAsync(IFormFile file, UnitOfWorkInfo uow = null)
+        {
+            // Load default blank if created new without upload theme
+            FileModel fileModel = LoadFile(file);
+
+            MixFileService.Instance.SaveFile(fileModel);
+
+            var result = await SaveAsync(uow);
+            if (result > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private FileModel LoadFile(IFormFile file)
+        {
+            if (Id == 0 && file == null)
+            {
+                return new()
+                {
+                    Filename = "_blank",
+                    Extension = MixFileExtensions.Zip,
+                    FileFolder = MixFolders.JsonDataFolder
+                };
+            }
+            string importFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{SystemName}";
+            return new(file, importFolder);
+        }
 
         #endregion
     }

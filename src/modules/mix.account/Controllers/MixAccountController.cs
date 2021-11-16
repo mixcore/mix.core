@@ -2,25 +2,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Mix.Account.Domain.Dtos;
-using Mix.Account.Domain.ViewModels;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
-using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Attributes;
 using Mix.Lib.Services;
-using Mix.Shared.Constants;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Account.Controllers
 {
@@ -35,6 +26,7 @@ namespace Mix.Account.Controllers
         private readonly MixIdentityService _idService;
         private readonly GlobalConfigService _globalConfigService;
         private readonly MixCmsContext _context;
+        protected readonly MixIdentityService _mixIdentityService;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixAccountController(
             UserManager<MixUser> userManager,
@@ -43,7 +35,7 @@ namespace Mix.Account.Controllers
             ILogger<MixAccountController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             GlobalConfigService globalConfigService,
-            MixCmsContext context)
+            MixCmsContext context, MixIdentityService mixIdentityService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -53,6 +45,7 @@ namespace Mix.Account.Controllers
             _refreshTokenRepo = refreshTokenRepo;
             _globalConfigService = globalConfigService;
             _context = context;
+            _mixIdentityService = mixIdentityService;
         }
 
 
@@ -90,13 +83,12 @@ namespace Mix.Account.Controllers
         [Route("my-profile")]
         public async Task<ActionResult<MixUserViewModel>> MyProfile()
         {
-            string id = MixIdentityService.GetClaim(User, MixClaims.Id);
+            string id = _mixIdentityService.GetClaim(User, MixClaims.Id);
             MixUser user = await _userManager.FindByIdAsync(id); ;
 
             if (user != null)
             {
                 var mixUser = new MixUserViewModel(_context, user);
-                await mixUser.LoadUserDataAsync();
                 return Ok(mixUser);
             }
             return BadRequest();

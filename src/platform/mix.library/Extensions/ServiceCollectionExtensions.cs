@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<MixEndpointService>();
             services.AddScoped<IPSecurityConfigService>();
             services.AddScoped<MixDataService>();
-            
+
             services.AddHttpClient();
             services.AddLogging();
             services.AddDbContext<ApplicationDbContext>();
@@ -61,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton<MixFileService>();
             services.AddSingleton<HttpService>();
-            
+
             // Message Queue
             services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
             services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
@@ -92,9 +92,17 @@ namespace Microsoft.Extensions.DependencyInjection
             bool isDevelop,
             GlobalConfigService globalConfigService)
         {
-            
+
             app.UseMixStaticFiles();
-           
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            if (globalConfigService.AppSettings.IsHttps)
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
 
@@ -127,7 +135,17 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.RoutePrefix = routePrefix;
                 });
             }
-            
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
             return app;
         }
 
@@ -143,7 +161,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return app;
         }
-        
+
         // Must call after use cors
         private static void UseMixResponseCaching(this IApplicationBuilder app)
         {
@@ -215,7 +233,7 @@ namespace Microsoft.Extensions.DependencyInjection
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
             string version = "v2";
             string swaggerBasePath = $"api/{version}/{title.Replace(".", "-").ToHypenCase()}";
-            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
@@ -264,10 +282,10 @@ namespace Microsoft.Extensions.DependencyInjection
                     new GenericControllerRouteConvention()
                 )).
                 ConfigureApplicationPartManager(m =>
-                    {
-                        m.FeatureProviders.Add(
-                            new GenericTypeControllerFeatureProvider(restCandidates));
-                    }
+                {
+                    m.FeatureProviders.Add(
+                        new GenericTypeControllerFeatureProvider(restCandidates));
+                }
                     )
                 .AddJsonOptions(opts =>
                 {

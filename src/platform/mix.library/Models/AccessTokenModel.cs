@@ -1,5 +1,4 @@
 ﻿using Mix.Lib.ViewModels;
-using System;
 
 namespace Mix.Lib.Models
 {
@@ -21,7 +20,9 @@ namespace Mix.Lib.Models
 
         public string DeviceId { get; set; }
 
-        public AdditionalDataContentViewModel Info { get; set; }
+        public MixUserViewModel Info { get; set; }
+
+        public List<string> Roles { get; set; }
 
         public DateTime? LastUpdateConfiguration { get; set; }
     }

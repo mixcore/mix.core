@@ -241,7 +241,7 @@ namespace Mix.Lib.Helpers
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType
                     && m.Specificulture == specificulture;
-
+            var mixDb = await mixDbRepo.GetSingleAsync(m=>m.SystemName == databaseName);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
 
@@ -252,7 +252,19 @@ namespace Mix.Lib.Helpers
                     m => m.Id == dataId && m.Specificulture == specificulture);
                 return result;
             }
-            return default;
+            return new()
+            {
+                Id = Guid.NewGuid(),
+                Specificulture = specificulture,
+                MixDatabaseId = mixDb.Id,
+                MixDatabaseName = mixDb.SystemName,
+                Status = MixContentStatus.Published,
+                Columns = mixDb.Columns,
+                ParentType = parentType,
+                GuidParentId = guidParentId,
+                IntParentId = intParentId,
+                CreatedDateTime = DateTime.UtcNow
+            };
         }
     }
 }

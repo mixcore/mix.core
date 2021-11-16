@@ -3,9 +3,28 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Mix.Account</RootNamespace>
+	  <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Shared.Constants" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Shared.Enums" />
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Identity.Constants" />
+	</ItemGroup>
+
+	
+	<ItemGroup>
     <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
     <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
     <ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
@@ -15,6 +34,7 @@
     <Folder Include="Domain\Helpers\" />
     <Folder Include="Domain\Models\" />
     <Folder Include="Domain\Services\" />
+    <Folder Include="Domain\ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

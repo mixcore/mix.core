@@ -1,11 +1,6 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System;
-using System.Threading.Tasks;
+﻿using Mix.Shared.Enums;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace Mix.Lib.ViewModels
 {
@@ -85,6 +80,84 @@ namespace Mix.Lib.ViewModels
                     SystemName = MixDatabaseColumnName,
                     Priority = Priority
                 };
+            }
+        }
+
+        #endregion
+
+        #region Expands
+
+        public JProperty ToJProperty()
+        {
+            switch (DataType)
+            {
+                case MixDataType.DateTime:
+                    return new JProperty(MixDatabaseColumnName, DateTimeValue);
+
+                case MixDataType.Date:
+                    if (!DateTimeValue.HasValue)
+                    {
+                        if (DateTime.TryParseExact(
+                            StringValue,
+                            "MM/dd/yyyy HH:mm:ss",
+                            CultureInfo.InvariantCulture,
+                            DateTimeStyles.RoundtripKind,
+                            out DateTime date))
+                        {
+                            DateTimeValue = date;
+                        }
+                    }
+                    return (new JProperty(MixDatabaseColumnName, DateTimeValue));
+
+                case MixDataType.Time:
+                    return (new JProperty(MixDatabaseColumnName, DateTimeValue));
+
+                case MixDataType.Double:
+                    return (new JProperty(MixDatabaseColumnName, DoubleValue ?? 0));
+
+                case MixDataType.Boolean:
+                    return (new JProperty(MixDatabaseColumnName, BooleanValue));
+
+                case MixDataType.Integer:
+                    return (new JProperty(MixDatabaseColumnName, IntegerValue ?? 0));
+
+                case MixDataType.Reference:
+                    return (new JProperty(MixDatabaseColumnName, new JArray()));
+
+                case MixDataType.Upload:
+                    string url = !string.IsNullOrEmpty(StringValue)
+                   ? !StringValue.Contains(GlobalConfigService.Instance.AppSettings.Domain)
+                        ? $"{GlobalConfigService.Instance.AppSettings.Domain.TrimEnd('/')}/{StringValue.TrimStart('/')}"
+                        : StringValue
+                   : null;
+                    return (new JProperty(MixDatabaseColumnName, url));
+                case MixDataType.Tag:
+                    try
+                    {
+                        return (new JProperty(MixDatabaseColumnName, JArray.Parse(StringValue)));
+                    }
+                    catch
+                    {
+                        return (new JProperty(MixDatabaseColumnName, new JArray()));
+                    }
+                case MixDataType.Custom:
+                case MixDataType.Duration:
+                case MixDataType.PhoneNumber:
+                case MixDataType.Text:
+                case MixDataType.Html:
+                case MixDataType.MultilineText:
+                case MixDataType.EmailAddress:
+                case MixDataType.Password:
+                case MixDataType.Url:
+                case MixDataType.ImageUrl:
+                case MixDataType.CreditCard:
+                case MixDataType.PostalCode:
+                case MixDataType.Color:
+                case MixDataType.Icon:
+                case MixDataType.VideoYoutube:
+                case MixDataType.TuiEditor:
+                default:
+                    return (new JProperty(MixDatabaseColumnName, StringValue));
             }
         }
 

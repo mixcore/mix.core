@@ -1,18 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
 using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Mix.Shared.Models;
-using System;
-using System.Linq;
 
 namespace Mix.Shared.Services
 {
-    public class GlobalConfigService : AppSettingServiceBase<GlobalConfigurations>
+    public class GlobalConfigService : ConfigurationServiceBase<GlobalConfigurations>
     {
-        public GlobalConfigService(IConfiguration configuration)
-            : base(configuration, MixAppSettingsSection.GlobalSettings, MixAppConfigFilePaths.Global)
+        public GlobalConfigService()
+            : base(MixAppConfigFilePaths.Global)
         {
         }
         

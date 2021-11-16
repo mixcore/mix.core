@@ -12,7 +12,6 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
             base.Configure(builder);
 
             builder.Property(e => e.PreviewUrl)
-               .IsRequired()
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);

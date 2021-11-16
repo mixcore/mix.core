@@ -47,13 +47,35 @@ namespace Mix.Lib.ViewModels
         public List<AdditionalDataContentViewModel> ChildData { get; set; } = new();
         public List<MixDataContentAssociationViewModel> RelatedData { get; set; } = new();
 
-        public Guid? ContentGuidParentId { get; set; }
-        public int? ContentIntParentId { get; set; }
-        public MixDatabaseParentType ContentParentType { get; set; }
-
+        public Guid? GuidParentId { get; set; }
+        public int? IntParentId { get; set; }
+        public MixDatabaseParentType ParentType { get; set; }
+        public JObject Obj { get; set; }
         #endregion
 
         #region Overrides
+
+        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        {
+            var dbRepo = MixDatabaseViewModel.GetRepository(uowInfo);
+            var valRepo = MixDataContentValueViewModel.GetRepository(uowInfo);
+
+            var database = await dbRepo.GetSingleAsync(m => m.Id == MixDatabaseId, cacheService);
+            Columns = database.Columns;
+            var getValues = await valRepo.GetListAsync(
+                a => a.ParentId == Id && a.Specificulture == Specificulture, cacheService);
+            Columns.AddRange(
+                getValues
+                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
+                .Select(v => v.Column)
+                .ToList());
+            Columns = Columns.OrderBy(c => c.Priority).ToList();
+            var properties = getValues.Select(m => m.ToJProperty());
+            Obj = new JObject(
+                new JProperty("id", Id),
+                properties
+            );
+        }
         public override async Task<MixDataContent> ParseEntity(MixCacheService cacheService = null)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
@@ -91,12 +113,12 @@ namespace Mix.Lib.ViewModels
 
             var assoRepo = new Repository<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>(UowInfo);
 
-            if (!MixCmsHelper.IsDefaultId(ContentGuidParentId) || !MixCmsHelper.IsDefaultId(ContentIntParentId))
+            if (!MixCmsHelper.IsDefaultId(GuidParentId) || !MixCmsHelper.IsDefaultId(IntParentId))
             {
                 var getNav = await assoRepo.CheckIsExistsAsync(
                     m => m.DataContentId == Id
-                    && (m.GuidParentId == ContentGuidParentId || m.IntParentId == ContentIntParentId)
-                    && m.ParentType == ContentParentType
+                    && (m.GuidParentId == GuidParentId || m.IntParentId == IntParentId)
+                    && m.ParentType == ParentType
                     && m.Specificulture == Specificulture);
                 if (!getNav)
                 {
@@ -106,9 +128,9 @@ namespace Mix.Lib.ViewModels
                         Specificulture = Specificulture,
                         MixDatabaseId = MixDatabaseId,
                         MixDatabaseName = MixDatabaseName,
-                        ParentType = ContentParentType,
-                        GuidParentId = ContentGuidParentId,
-                        IntParentId = ContentIntParentId,
+                        ParentType = ParentType,
+                        GuidParentId = GuidParentId,
+                        IntParentId = IntParentId,
                         Status = MixContentStatus.Published
                     };
                     var saveResult = await nav.SaveAsync();
@@ -137,6 +159,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Helpers
+
 
         private async Task ParseObjectToValues(MixCacheService cacheService = null)
         {

@@ -20,7 +20,6 @@ namespace Mix.MixQuartz
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            GlobalConfigService globalConfigService = new(configuration);
             // base configuration from appsettings.json
             services.Configure<QuartzOptions>(configuration.GetSection("Quartz"));
 
@@ -43,7 +42,7 @@ namespace Mix.MixQuartz
                     tp.MaxConcurrency = 10;
                 });
 
-                if (!globalConfigService.AppSettings.IsInit)
+                if (!GlobalConfigService.Instance.AppSettings.IsInit)
                 {
                     q.AddMixQuartzJobsAsync().GetAwaiter().GetResult();
                 }
