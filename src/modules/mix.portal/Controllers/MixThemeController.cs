@@ -12,6 +12,7 @@ using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Services;
+using Newtonsoft.Json;
 
 namespace Mix.Portal.Controllers
 {
@@ -52,6 +53,25 @@ namespace Mix.Portal.Controllers
             msg.Package(post);
             _queueService.PushQueue(msg);
             return base.Get(req);
+        }
+
+
+        // POST api/theme
+        /// Swagger cannot generate multi-form value api
+        [HttpPost]
+        [DisableRequestSizeLimit]
+        [Route("save")]
+        public async Task<ActionResult<MixThemeViewModel>> Save(
+            [FromForm] string model, [FromForm] IFormFile theme)
+        {
+            var data = JsonConvert.DeserializeObject<MixThemeViewModel>(model);
+            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+            var saveResult = await data.SaveThemeAsync(theme, _uow);
+            if (saveResult)
+            {
+                return Ok(data);
+            }
+            return BadRequest();
         }
 
         [HttpPost("export")]

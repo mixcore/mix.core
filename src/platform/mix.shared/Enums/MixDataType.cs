@@ -91,6 +91,7 @@
         TuiEditor,
         Integer,
         Reference,
-        QRCode
+        QRCode,
+        Tag
     }
 }

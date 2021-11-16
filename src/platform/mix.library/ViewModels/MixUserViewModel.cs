@@ -1,19 +1,11 @@
 ﻿using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Helpers;
-using Mix.Lib.ViewModels;
-using Mix.Shared.Constants;
 using Mix.Shared.Enums;
-using Mix.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Mix.Account.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
     public class MixUserViewModel
     {
@@ -23,7 +15,7 @@ namespace Mix.Account.Domain.ViewModels
 
         public AdditionalDataContentViewModel UserData { get; set; }
 
-        public List<AspNetUserRoles> UserRoles { get; set; }
+        public List<AspNetUserRoles> Roles { get; set; }
 
         #region Change Password
 
@@ -53,7 +45,7 @@ namespace Mix.Account.Domain.ViewModels
                     MixDatabaseNames.SYSTEM_USER_DATA,
                     Guid.Parse(User.Id));
                 using var context = new MixCmsAccountContext();
-                UserRoles = context.AspNetUserRoles.Where(m => m.UserId == User.Id).ToList();
+                Roles = context.AspNetUserRoles.Where(m => m.UserId == User.Id).ToList();
             }
         }
     }

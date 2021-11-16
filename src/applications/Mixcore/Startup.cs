@@ -66,7 +66,7 @@ namespace Mixcore
                 builder.AllowAnyHeader();
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
-
+            
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment(), globalConfigService);
 
             app.UseHttpsRedirection();
@@ -81,8 +81,7 @@ namespace Mixcore
                 app.UseHttpsRedirection();
             }
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            
             app.UseMixRoutes();
         }
     }

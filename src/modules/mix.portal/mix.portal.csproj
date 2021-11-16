@@ -19,6 +19,7 @@
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Shared.Enums" />
 		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Identity.Constants" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -86,7 +86,6 @@ namespace Mix.Lib.Helpers
                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                        .AddJsonFile("appsettings.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/database.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/global.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/ocelot.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/queue.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/mix_heart.json", true, true)

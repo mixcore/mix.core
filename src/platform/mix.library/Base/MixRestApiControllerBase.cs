@@ -50,7 +50,7 @@ namespace Mix.Lib.Base
             }
             data.SetDbContext(_context);
             data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
+            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync(_uow);
             return Ok(id);
         }
