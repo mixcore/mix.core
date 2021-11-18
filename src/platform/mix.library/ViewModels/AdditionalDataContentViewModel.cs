@@ -48,24 +48,16 @@ namespace Mix.Lib.ViewModels
 
         public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
         {
-            var dbRepo = MixDatabaseViewModel.GetRepository(uowInfo);
-            var valRepo = MixDataContentValueViewModel.GetRepository(uowInfo);
+            UowInfo ??= uowInfo;
+            using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
+            using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            var database = await dbRepo.GetSingleAsync(m => m.Id == MixDatabaseId, cacheService);
-            Columns = database.Columns;
-            var getValues = await valRepo.GetListAsync(
-                a => a.MixDataContentId == Id && a.Specificulture == Specificulture, cacheService);
-            Columns.AddRange(
-                getValues
-                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
-                .Select(v => v.Column)
-                .ToList());
-            Columns = Columns.OrderBy(c => c.Priority).ToList();
-            var properties = getValues.Select(m => m.ToJProperty());
-            Data = new JObject(
-                new JProperty("id", Id),
-                properties
-            );
+            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
+            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
+
+            Data ??= MixDataHelper.ParseData(Id, UowInfo);
+
+            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
         public override async Task<MixDataContent> ParseEntity(MixCacheService cacheService = null)
         {
@@ -199,7 +191,7 @@ namespace Mix.Lib.ViewModels
         }
 
         private async Task<MixDataContentValueViewModel> GetFieldValue(
-            MixDatabaseColumnViewModel field, 
+            MixDatabaseColumnViewModel field,
             MixCacheService cacheService = null)
         {
             var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);

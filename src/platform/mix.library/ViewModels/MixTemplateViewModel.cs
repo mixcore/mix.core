@@ -72,6 +72,7 @@ namespace Mix.Lib.ViewModels
             if (Id == 0)
             {
                 CreatedDateTime = DateTime.UtcNow;
+                MixThemeName = Context.MixTheme.First(m => m.Id == MixThemeId).SystemName;
             }
 
             FileFolder = $"{MixFolders.TemplatesFolder}/{MixThemeName}/{FolderType}";
@@ -89,8 +90,8 @@ namespace Mix.Lib.ViewModels
                 if (Id == 0)
                 {
                     if (Context.MixViewTemplate.Any(
-                            t => t.FileName == FileName 
-                                && t.FolderType == FolderType 
+                            t => t.FileName == FileName
+                                && t.FolderType == FolderType
                                 && t.MixThemeId == MixThemeId))
                     {
                         IsValid = false;
@@ -115,7 +116,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Expands
-        
+
         private void SaveTemplateToLocalFile()
         {
             MixFileService.Instance.SaveFile(new FileModel()

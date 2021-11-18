@@ -5,6 +5,7 @@
         public const string Authentication = "MixContent/AppConfigs/authentication";
         public const string Database = "MixContent/AppConfigs/database";
         public const string Global = "MixContent/AppConfigs/global";
+        public const string Portal = "MixContent/AppConfigs/portal";
         public const string Cloudflare = "MixContent/AppConfigs/cloudflare";
         public const string Culture = "MixContent/AppConfigs/culture";
         public const string ConnectionString = "MixContent/AppConfigs/connection_string";
