@@ -1,16 +1,8 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Enums;
+﻿using Mix.Heart.Enums;
 using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
 using Mix.Lib.Helpers;
 using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.ViewModels
 {
@@ -50,7 +42,6 @@ namespace Mix.Lib.ViewModels
         public Guid? GuidParentId { get; set; }
         public int? IntParentId { get; set; }
         public MixDatabaseParentType ParentType { get; set; }
-        public JObject Obj { get; set; }
         #endregion
 
         #region Overrides
@@ -63,7 +54,7 @@ namespace Mix.Lib.ViewModels
             var database = await dbRepo.GetSingleAsync(m => m.Id == MixDatabaseId, cacheService);
             Columns = database.Columns;
             var getValues = await valRepo.GetListAsync(
-                a => a.ParentId == Id && a.Specificulture == Specificulture, cacheService);
+                a => a.MixDataContentId == Id && a.Specificulture == Specificulture, cacheService);
             Columns.AddRange(
                 getValues
                 .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
@@ -71,7 +62,7 @@ namespace Mix.Lib.ViewModels
                 .ToList());
             Columns = Columns.OrderBy(c => c.Priority).ToList();
             var properties = getValues.Select(m => m.ToJProperty());
-            Obj = new JObject(
+            Data = new JObject(
                 new JProperty("id", Id),
                 properties
             );

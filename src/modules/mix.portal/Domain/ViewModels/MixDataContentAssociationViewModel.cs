@@ -1,16 +1,7 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using Mix.Shared.Enums;
-using System;
-using System.Threading.Tasks;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentAssociationViewModel 
-        : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
+        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
         #region Contructors
 
@@ -36,8 +27,8 @@ namespace Mix.Portal.Domain.ViewModels
         public string MixDatabaseName { get; set; }
         public MixDatabaseParentType ParentType { get; set; }
         public Guid DataContentId { get; set; }
-        public Guid GuidParentId { get; set; }
-        public int IntParentId { get; set; }
+        public Guid? GuidParentId { get; set; }
+        public int? IntParentId { get; set; }
 
         public MixDataContentViewModel ChildDataContent { get; set; }
 

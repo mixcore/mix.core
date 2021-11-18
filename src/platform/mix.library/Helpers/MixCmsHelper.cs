@@ -68,7 +68,7 @@ namespace Mix.Lib.Helpers
 
         public static string GetDetailsUrl(string specificulture, string path)
         {
-            return $"/{specificulture}/{path.TrimStart('/')}";
+            return $"/{specificulture}/{path?.TrimStart('/')}";
         }
 
         public static IHostBuilder CreateHostBuilder<Startup>(string[] args)
@@ -120,7 +120,7 @@ namespace Mix.Lib.Helpers
             return true;
         }
 
-        internal static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) => 
+        public static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) => 
             id == null 
             || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
             || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
