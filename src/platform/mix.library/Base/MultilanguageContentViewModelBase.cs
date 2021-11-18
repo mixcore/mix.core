@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using System;
 
 namespace Mix.Lib.Base
 {
@@ -48,7 +43,7 @@ namespace Mix.Lib.Base
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
-            Specificulture = language;
+            Specificulture ??= language;
             MixCultureId = cultureId ?? 1;
         }
 

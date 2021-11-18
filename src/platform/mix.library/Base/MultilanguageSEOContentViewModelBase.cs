@@ -61,6 +61,11 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
+        public override Task<TEntity> ParseEntity(MixCacheService cacheService = null)
+        {
+            MixCultureId = 1;
+            return base.ParseEntity(cacheService);
+        }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {

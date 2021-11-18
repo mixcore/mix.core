@@ -1,9 +1,4 @@
-﻿using Mix.Lib.Helpers;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentViewModel 
         : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
@@ -47,6 +42,9 @@ namespace Mix.Portal.Domain.ViewModels
         public List<MixDataContentViewModel> ChildData { get; set; } = new();
         public List<MixDataContentAssociationViewModel> RelatedData { get; set; } = new();
 
+        public Guid? GuidParentId { get; set; }
+        public int? IntParentId { get; set; }
+        public MixDatabaseParentType ParentType { get; set; }
         #endregion
 
         #region Overrides
@@ -94,17 +92,52 @@ namespace Mix.Portal.Domain.ViewModels
             await ParseObjectToValues(cacheService);
 
             Title = Id.ToString();
+            Data = MixDataHelper.ParseData(Id, UowInfo);
             Content = Data.ToString(Newtonsoft.Json.Formatting.None);
-
             return await base.ParseEntity();
         }
 
+        protected override async Task<MixDataContent> SaveHandlerAsync()
+        {
+            var result = await base.SaveHandlerAsync();
+
+            var assoRepo = MixDataContentAssociationViewModel.GetRepository(UowInfo);
+
+            if (!MixCmsHelper.IsDefaultId(GuidParentId) || !MixCmsHelper.IsDefaultId(IntParentId))
+            {
+                var getNav = await assoRepo.CheckIsExistsAsync(
+                    m => m.DataContentId == Id
+                    && (m.GuidParentId == GuidParentId || m.IntParentId == IntParentId)
+                    && m.ParentType == ParentType
+                    && m.Specificulture == Specificulture);
+                if (!getNav)
+                {
+                    var nav = new MixDataContentAssociationViewModel(UowInfo)
+                    {
+                        DataContentId = Id,
+                        Specificulture = Specificulture,
+                        MixDatabaseId = MixDatabaseId,
+                        MixDatabaseName = MixDatabaseName,
+                        ParentType = ParentType,
+                        GuidParentId = GuidParentId,
+                        IntParentId = IntParentId,
+                        Status = MixContentStatus.Published
+                    };
+                    var saveResult = await nav.SaveAsync();
+                }
+            }
+            Data = MixDataHelper.ParseData(Id, UowInfo);
+            return result;
+        }
         protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
         {
             if (Values != null)
             {
                 foreach (var item in Values)
                 {
+                    item.SetUowInfo(UowInfo);
+                    item.ParentId = parentEntity.Id;
+                    item.Specificulture = Specificulture;
                     item.MixDataContentId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.MixDatabaseName;
                     await item.SaveAsync(UowInfo);
@@ -215,10 +248,10 @@ namespace Mix.Portal.Domain.ViewModels
         private async Task ParseObjectToValues(MixCacheService cacheService = null)
         {
             Data ??= new JObject();
-            foreach (var field in Columns.OrderBy(f => f.Priority))
+            foreach (var col in Columns.OrderBy(f => f.Priority))
             {
-                var val = await GetFieldValue(field, cacheService);
-
+                var val = await GetFieldValue(col, cacheService);
+                val.DataType = col.DataType;
                 if (Data[val.MixDatabaseColumnName] != null)
                 {
                     if (val.Column.DataType == MixDataType.Reference)
@@ -243,7 +276,7 @@ namespace Mix.Portal.Domain.ViewModels
                                     ChildData.Add(new MixDataContentViewModel()
                                     {
                                         Specificulture = Specificulture,
-                                        MixDatabaseId = field.ReferenceId.Value,
+                                        MixDatabaseId = col.ReferenceId.Value,
                                         Data = objData["obj"].Value<JObject>()
                                     });
                                 }

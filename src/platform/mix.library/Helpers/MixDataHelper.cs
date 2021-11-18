@@ -28,7 +28,7 @@ namespace Mix.Lib.Helpers
            UnitOfWorkInfo uowInfo)
         {
             var context = (MixCmsContext)uowInfo.ActiveDbContext;
-            var values = context.MixDataContentValue.Where(
+            var values = context.MixDataContentValue.AsNoTracking().Where(
                 m => m.MixDataContentId == dataContentId
                     && !string.IsNullOrEmpty(m.MixDatabaseColumnName));
             var properties = values.Select(m => m.ToJProperty());
@@ -241,7 +241,7 @@ namespace Mix.Lib.Helpers
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType
                     && m.Specificulture == specificulture;
-            var mixDb = await mixDbRepo.GetSingleAsync(m=>m.SystemName == databaseName);
+            var mixDb = await mixDbRepo.GetSingleAsync(m => m.SystemName == databaseName);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
             predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
 
@@ -254,7 +254,7 @@ namespace Mix.Lib.Helpers
             }
             return new()
             {
-                Id = Guid.NewGuid(),
+                Data = new(),
                 Specificulture = specificulture,
                 MixDatabaseId = mixDb.Id,
                 MixDatabaseName = mixDb.SystemName,
