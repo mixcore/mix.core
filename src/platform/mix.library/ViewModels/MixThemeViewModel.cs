@@ -1,12 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Models;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Shared.Constants;
-using System;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.ViewModels
 {
@@ -64,6 +57,15 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
+
+        public override Task<MixTheme> ParseEntity(MixCacheService cacheService = null)
+        {
+            if (string.IsNullOrEmpty(SystemName))
+            {
+                SystemName = SeoHelper.GetSEOString(DisplayName);
+            }
+            return base.ParseEntity(cacheService);
+        }
 
         protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity)
         {

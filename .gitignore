@@ -284,3 +284,5 @@ src/applications/Mixcore/mix.settings.json
 src/*/*/MixContent/
 
 src/applications/Mixcore/Properties/PublishProfiles/
+
+src/applications/Mixcore/Views/Shared/Templates/

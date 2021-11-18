@@ -16,6 +16,7 @@
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Shared.Services" />
 	</ItemGroup>
 	<ItemGroup>

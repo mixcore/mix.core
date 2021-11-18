@@ -10,7 +10,7 @@ namespace Mix.Shared.Services
     public class JsonConfigurationServiceBase
     {
         private string filePath;
-        protected JObject AppSettings { get; set; }
+        public JObject AppSettings { get; set; }
         protected string FilePath { get => filePath; set => filePath = value; }
 
         protected readonly FileSystemWatcher watcher = new();

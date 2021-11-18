@@ -1,4 +1,4 @@
-/* Mon Nov 15 2021 17:18:34 GMT+0700 (Indochina Time) */fb-login {
+/* Thu Nov 18 2021 22:34:25 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -31,3 +31,120 @@ mix-module-data-table .preview-container {
 /* canvas{width:300px; height:380px;} */
 upload-croppie .cr-boundary {
   overflow: hidden; }
+
+/* GENERAL STYLE */
+html,
+body {
+  height: 100%; }
+
+.btn,
+.btn-link {
+  cursor: pointer; }
+
+.content-body {
+  max-width: 66vw; }
+
+/* body {
+    color: #212529!important;
+}
+
+#sidebar.sw-toc-sub-link{
+    color: #212529!important;
+} */
+.display-4 {
+  font-size: 2rem !important; }
+
+/* CARD STYLE */
+/* .card.manual{
+    padding: 20px 20px 0 20px;
+} */
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+ul[dnd-list],
+div[dnd-list] {
+  min-height: 42px;
+  padding-left: 0px; }
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+ul[dnd-list] .dndDraggingSource,
+div[dnd-list] .dndDraggingSource {
+  display: none; }
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+ul[dnd-list] .dndPlaceholder,
+div[dnd-list] .dndPlaceholder {
+  background-color: #ddd;
+  display: block;
+  min-height: 42px; }
+
+ul[dnd-list] li,
+div[dnd-list] .dnd-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px; }
+
+/**
+ * Show selected elements in green
+ */
+ul[dnd-list] li.selected,
+div[dnd-list] .dnd-item.selected {
+  background-color: #dff0d8;
+  color: #3c763d; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-item {
+  position: relative; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
+    padding-left: 0; }
+  main-side-bar-dynamic .sw-sidebar .sw-toc-item .btn-group {
+    right: 20px;
+    opacity: 1; }
+
+main-side-bar-dynamic .sw-sidebar ul {
+  padding-left: 15px; }
+
+main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
+  padding: 2px 0; }
+
+.custom-image {
+  max-width: 30vw; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
+
+mix-database-nav-values .row {
+  padding: 10px 0; }
+
+mix-database-nav-values mix-column-preview .rowx {
+  max-height: 110px;
+  overflow: hidden; }
+
+@media (min-width: 992px) {
+  #modal-content-filter .modal-lg,
+  #modal-content-filter .modal-xl {
+    max-width: 80vw; } }
+
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
+.content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: transparent; }

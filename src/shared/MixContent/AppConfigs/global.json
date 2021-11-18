@@ -1,44 +1,15 @@
 {
-  "GlobalSettings": {
-    "IsInit": true,
-    "InitStatus": "Blank",
-    "IsMaintenance": false,
-    "EnableOcelot": false,
-    "IsHttps": false,
-    "MaxPageSize": 100,
-    "DefaultCulture": "en-us",
-    "ThemeId": "1",
-    "Domain": "",
-    "IsEncryptApi": true,
-    "ApiEncryptKey": "RHZhMEFvckY0VUF3Ynd2YUZZTnRIdz09LGx3dk82QlR0WHlPUG5FWC8rUFV2bU1pdUpIMnVQTEF5TW9kMFpPdU5aMlU9",
-    "LastUpdateConfiguration": null,
-    "AllowedHosts": [],
-    "Smtp": {
-      "Server": "",
-      "Port": 587,
-      "SSL": true,
-      "User": "",
-      "Password": "",
-      "From": "support@mixcore.org",
-      "FromName": "mix-core"
-    },
-    "PortalThemeSettings": {
-      "primaryColorHue": 90,
-      "primaryColorSaturation": 35,
-      "primaryColorBrightness": 50,
-      "bgColor": "#fbfbfb",
-      "textColor": "#404040",
-      "primaryColor": "#47c5d1",
-      "bgColorHover": "#d1e0de",
-      "borderColor": "#d1e0de",
-      "borderColorHover": "#e0e4e7",
-      "linkColor": "#47c5d1",
-      "linkColorHover": "#404040",
-      "linkColorActive": "#404040",
-      "textColorHover": "#008b8b",
-      "fontFamily": "",
-      "fontSizeH1": "16",
-      "fontSize": "12"
-    }
-  }
+  "IsInit": true,
+  "InitStatus": "Blank",
+  "IsMaintenance": false,
+  "EnableOcelot": false,
+  "IsHttps": false,
+  "MaxPageSize": 100,
+  "DefaultCulture": "en-us",
+  "ThemeId": "1",
+  "Domain": "",
+  "IsEncryptApi": true,
+  "ApiEncryptKey": "RHZhMEFvckY0VUF3Ynd2YUZZTnRIdz09LGx3dk82QlR0WHlPUG5FWC8rUFV2bU1pdUpIMnVQTEF5TW9kMFpPdU5aMlU9",
+  "LastUpdateConfiguration": null,
+  "AllowedHosts": []
 }
