@@ -242,29 +242,34 @@ namespace Mix.Lib.Helpers
                     && m.ParentType == parentType
                     && m.Specificulture == specificulture;
             var mixDb = await mixDbRepo.GetSingleAsync(m => m.SystemName == databaseName);
-            predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
-            predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
+            if (mixDb != null)
+            {
 
-            var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
-            if (dataId != null)
-            {
-                var result = await contentRepo.GetSingleAsync(
-                    m => m.Id == dataId && m.Specificulture == specificulture);
-                return result;
+                predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
+                predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
+
+                var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
+                if (dataId != null)
+                {
+                    var result = await contentRepo.GetSingleAsync(
+                        m => m.Id == dataId && m.Specificulture == specificulture);
+                    return result;
+                }
+                return new()
+                {
+                    Data = new(),
+                    Specificulture = specificulture,
+                    MixDatabaseId = mixDb.Id,
+                    MixDatabaseName = mixDb.SystemName,
+                    Status = MixContentStatus.Published,
+                    Columns = mixDb.Columns,
+                    ParentType = parentType,
+                    GuidParentId = guidParentId,
+                    IntParentId = intParentId,
+                    CreatedDateTime = DateTime.UtcNow
+                };
             }
-            return new()
-            {
-                Data = new(),
-                Specificulture = specificulture,
-                MixDatabaseId = mixDb.Id,
-                MixDatabaseName = mixDb.SystemName,
-                Status = MixContentStatus.Published,
-                Columns = mixDb.Columns,
-                ParentType = parentType,
-                GuidParentId = guidParentId,
-                IntParentId = intParentId,
-                CreatedDateTime = DateTime.UtcNow
-            };
+            return default;
         }
     }
 }
