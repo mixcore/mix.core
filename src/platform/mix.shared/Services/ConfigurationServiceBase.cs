@@ -1,5 +1,6 @@
 ﻿using Mix.Heart.Services;
 using Mix.Shared.Constants;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
@@ -23,37 +24,39 @@ namespace Mix.Shared.Services
             WatchFile();
         }
 
-        public T GetConfig<T>(string name, T defaultValue = default)
+        public TValue GetConfig<TValue>(string name, TValue defaultValue = default)
         {
             var result = _obj[name];
-            return result != null ? result.Value<T>() : defaultValue;
+            return result != null ? result.Value<TValue>() : defaultValue;
         }
 
-        public T GetConfig<T>(string culture, string name, T defaultValue = default)
+        public TValue GetConfig<TValue>(string culture, string name, TValue defaultValue = default)
         {
             JToken result = null;
             if (!string.IsNullOrEmpty(culture) && _obj[culture] != null)
             {
                 result = _obj[culture][name];
             }
-            return result != null ? result.Value<T>() : defaultValue;
+            return result != null ? result.Value<TValue>() : defaultValue;
         }
 
-        public T GetEnumConfig<T>(string name)
+        public TValue GetEnumConfig<TValue>(string name)
         {
-            Enum.TryParse(typeof(T), _obj[name]?.Value<string>(), true, out object result);
-            return result != null ? (T)result : default;
+            Enum.TryParse(typeof(TValue), _obj[name]?.Value<string>(), true, out object result);
+            return result != null ? (TValue)result : default;
         }
 
-        public void SetConfig<T>(string name, T value)
+        public void SetConfig<TValue>(string name, TValue value)
         {
             _obj[name] = value != null ? JToken.FromObject(value) : null;
+            AppSettings = _obj.ToObject<T>();
             SaveSettings();
         }
 
-        public void SetConfig<T>(string culture, string name, T value)
+        public void SetConfig<TValue>(string culture, string name, TValue value)
         {
             _obj[culture][name] = value.ToString();
+            AppSettings = _obj.ToObject<T>();
             SaveSettings();
         }
 
@@ -62,7 +65,7 @@ namespace Mix.Shared.Services
             var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
             if (settings != null)
             {
-                settings.Content = AppSettings.ToString();
+                settings.Content = JObject.FromObject(AppSettings).ToString(Formatting.None);
                 return MixFileService.Instance.SaveFile(settings);
             }
             else
