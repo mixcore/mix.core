@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Heart.UnitOfWork;
+
+// Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
+// Need to turn off test parallelization so we can validate the run order
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+[assembly: TestCollectionOrderer("Mix.XUnittest.Domain.Orderers.DisplayNameOrderer", "mix.xunittest")]
+
+namespace Mix.Xunittest.Domain.Base
+{
+    [TestCaseOrderer("Mix.XUnittest.Domain.Orderers.PriorityOrderer", "mix.xunittest")]
+    public abstract class TestBase<TFixture, TDbContext>
+         : IClassFixture<TFixture>
+        where TFixture : SharedDatabaseFixture<TDbContext>
+        where TDbContext : DbContext
+    {
+        public TFixture Fixture { get; set; }
+
+        protected UnitOfWorkInfo UowInfo { get; set; }
+
+        public TestBase(TFixture fixture)
+        {
+            Fixture = fixture;
+            UowInfo = new UnitOfWorkInfo(fixture.Context);
+        }
+    }
+}

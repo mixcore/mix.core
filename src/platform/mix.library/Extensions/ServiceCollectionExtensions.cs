@@ -80,6 +80,50 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        public static IServiceCollection AddMixTestServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
+        {
+            // Clone Settings from shared folder
+            services.AddScoped<MixHeartConfigService>();
+            services.AddScoped<MixDatabaseService>();
+            services.AddScoped<CultureService>();
+            services.AddScoped<AuthConfigService>();
+            services.AddScoped<SmtpConfigService>();
+            services.AddScoped<MixEndpointService>();
+            services.AddScoped<IPSecurityConfigService>();
+            services.AddScoped<MixDataService>();
+
+            services.AddHttpClient();
+            services.AddLogging();
+            services.AddDbContext<ApplicationDbContext>();
+            services.AddDbContext<MixCmsContext>();
+            services.AddDbContext<MixCmsAccountContext>();
+            services.AddDbContext<MixCacheDbContext>();
+
+            services.AddScoped<EntityRepository<MixCacheDbContext, MixCache, string>>();
+            services.AddScoped<MixCacheService>();
+
+            services.AddSingleton<MixFileService>();
+            services.AddSingleton<HttpService>();
+
+            // Message Queue
+            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
+            services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
+
+
+            services.AddEntityRepositories();
+            services.AddScoped<MixService>();
+            services.AddScoped<TranslatorService>();
+            services.AddScoped<MixConfigurationService>();
+            services.AddMixModuleServices(configuration);
+            services.AddGeneratedRestApi();
+            services.AddMixSwaggerServices(executingAssembly);
+            services.AddSSL();
+
+            services.AddResponseCompression();
+            services.AddResponseCaching();
+            return services;
+        }
+
         #endregion
 
         #region Apps

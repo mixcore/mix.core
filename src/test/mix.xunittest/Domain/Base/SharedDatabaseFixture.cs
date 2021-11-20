@@ -13,14 +13,14 @@ namespace Mix.Xunittest.Domain.Base
         private static bool _databaseInitialized;
         protected static ConstructorInfo ctor;
         public TDbContext Context { get; private set; }
-        protected readonly string _connectionString = "Data Source=mix-test.db";
+        public readonly string _connectionString = "Data Source=mix-test.db";
         protected readonly MixDatabaseProvider _dbProvider = MixDatabaseProvider.SQLITE;
 
         public SharedDatabaseFixture()
         {
             ctor = typeof(TDbContext).GetConstructor(new Type[] { typeof(string), typeof(MixDatabaseProvider) });
             Context = CreateContext();
-            Seed();
+            //Seed();
         }
 
         public TDbContext CreateContext()

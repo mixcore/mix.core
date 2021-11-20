@@ -21,8 +21,10 @@ namespace Mix.Xunittest.Domain.Tests
                 ParentId = 1,
                 Specificulture = "en-us",
                 MixCultureId = 1,
+                SystemName = "unit_test",
                 DisplayName = "unit test",
-                Content = "test case 1"
+                Content = "test case 1",
+                DefaultContent = ""
             };
             data.InitDefaultValues();
             return data;

@@ -99,7 +99,7 @@ namespace Mix.Lib.Helpers
                 });
         }
 
-        static bool CopyFolder(string srcPath, string desPath)
+        public static bool CopyFolder(string srcPath, string desPath)
         {
             if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
             {

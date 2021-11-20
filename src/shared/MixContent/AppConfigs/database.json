@@ -1,10 +1,8 @@
 {
-  "Database": {
-    "ConnectionStrings": {
-      "MixAccountConnection": null,
-      "MixCmsConnection": null
-    },
-    "ClearDbPool": false,
-    "DatabaseProvider": "SQLITE"
-  }
+  "ConnectionStrings": {
+    "MixAccountConnection": null,
+    "MixCmsConnection": null
+  },
+  "ClearDbPool": false,
+  "DatabaseProvider": "SQLITE"
 }
