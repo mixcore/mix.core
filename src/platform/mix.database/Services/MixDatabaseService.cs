@@ -1,22 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Entities.v2;
 using Mix.Heart.Enums;
 using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService: AppSettingServiceBase<DatabaseConfigurations>
+    public class MixDatabaseService: ConfigurationServiceBase<DatabaseConfigurations>
     {
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
 
-        public MixDatabaseService(IConfiguration configuration) 
-            : base(configuration, MixAppSettingsSection.Database, MixAppConfigFilePaths.Database)
+        public MixDatabaseService() 
+            : base(MixAppConfigFilePaths.Database)
         {
         }
 

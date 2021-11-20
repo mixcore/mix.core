@@ -1,29 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
 
-    <IsPackable>false</IsPackable>
+		<IsPackable>false</IsPackable>
 
-    <RootNamespace>Mix.XUnittest</RootNamespace>
-  </PropertyGroup>
+		<RootNamespace>Mix.XUnittest</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>mix.xunittest</AssemblyName>
+		<RootNamespace>Mix.XUnittest</RootNamespace>
+		<SetupNamespace>$(RootNamespace)</SetupNamespace>
+		<SetupAssembly>$(AssemblyName)</SetupAssembly>
+		<EnableXunitDi>true</EnableXunitDi>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="3.1.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+	</PropertyGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="Xunit" />
+		<Using Include="XUnit.Project.Attributes" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Xunittest.Domain.Base" />
+		<Using Include="Mix.Portal.Domain.ViewModels" />
+		<Using Include="Mix.Database.Entities.Cms" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
-    <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="Xunit.Di" Version="2.4.5" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="coverlet.collector" Version="3.1.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
+		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
+		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
+	</ItemGroup>
 
 </Project>

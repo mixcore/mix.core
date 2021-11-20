@@ -1,39 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
-using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using System;
-using System.Threading.Tasks;
-using Xunit;
-using XUnit.Project.Attributes;
 
-// Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
-// Need to turn off test parallelization so we can validate the run order
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
-[assembly: TestCollectionOrderer("Mix.XUnittest.Domain.Orderers.DisplayNameOrderer", "mix.xunittest")]
 
 namespace Mix.Xunittest.Domain.Base
 {
     [TestCaseOrderer("Mix.XUnittest.Domain.Orderers.PriorityOrderer", "mix.xunittest")]
     public abstract class ViewModelTestBase<TFixture, TView, TDbContext, TEntity, TPrimaryKey>
-         : IClassFixture<TFixture>
+         : TestBase<TFixture, TDbContext>
         where TFixture : SharedDatabaseFixture<TDbContext>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
     {
-        public TFixture Fixture { get; set; }
-
         protected Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository { get; set; }
-        protected UnitOfWorkInfo UowInfo { get; set; }
-
-        public ViewModelTestBase(TFixture fixture)
+        
+        public ViewModelTestBase(TFixture fixture) : base(fixture)
         {
             Fixture = fixture;
             UowInfo = new UnitOfWorkInfo(fixture.Context);
