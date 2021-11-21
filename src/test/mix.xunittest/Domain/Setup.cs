@@ -19,6 +19,15 @@ namespace Mix.XUnittest
             }
             ConfigureAppConfiguration((hostingContext, config) =>
             {
+                config
+                      .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                      .AddJsonFile("appsettings.json", true, true)
+                      .AddJsonFile("MixContent/AppConfigs/database.json", true, true)
+                      .AddJsonFile("MixContent/AppConfigs/ocelot.json", true, true)
+                      .AddJsonFile("MixContent/AppConfigs/queue.json", true, true)
+                      .AddJsonFile("MixContent/AppConfigs/mix_heart.json", true, true)
+                      .AddJsonFile("MixContent/AppConfigs/authentication.json", true, true);
+
                 bool reloadOnChange =
                     hostingContext.Configuration.GetValue("hostBuilder:reloadConfigOnChange", true);
 

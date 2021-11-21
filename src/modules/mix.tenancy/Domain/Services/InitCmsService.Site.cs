@@ -15,9 +15,8 @@ namespace Mix.Tenancy.Domain.Services
                 model.DatabaseProvider,
                 model.Culture.Specificulture);
 
-            var dbContext = _databaseService.GetDbContext();
-            dbContext.Database.Migrate();
-
+            _databaseService.InitMixCmsContext();
+            
             InitTenantViewModel vm = new(_context);
             vm.InitSiteData(model);
             await vm.SaveAsync();
