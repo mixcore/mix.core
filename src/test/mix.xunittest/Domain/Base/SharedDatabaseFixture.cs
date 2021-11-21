@@ -12,9 +12,9 @@ namespace Mix.Xunittest.Domain.Base
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
         protected static ConstructorInfo ctor;
-        public TDbContext Context { get; private set; }
-        public readonly string _connectionString = "Data Source=mix-test.db";
-        protected readonly MixDatabaseProvider _dbProvider = MixDatabaseProvider.SQLITE;
+        public TDbContext Context { get; set; }
+        public string ConnectionString = "Data Source=MixContent\\mix-test.db";
+        public MixDatabaseProvider DbProvider = MixDatabaseProvider.SQLITE;
 
         public SharedDatabaseFixture()
         {
@@ -25,7 +25,7 @@ namespace Mix.Xunittest.Domain.Base
 
         public TDbContext CreateContext()
         {
-            return (TDbContext)ctor.Invoke(new object[] { _connectionString, _dbProvider });
+            return (TDbContext)ctor.Invoke(new object[] { ConnectionString, DbProvider });
         }
 
         public void Seed()

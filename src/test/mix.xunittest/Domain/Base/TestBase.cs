@@ -15,13 +15,18 @@ namespace Mix.Xunittest.Domain.Base
         where TFixture : SharedDatabaseFixture<TDbContext>
         where TDbContext : DbContext
     {
-        public TFixture Fixture { get; set; }
+        public static TFixture DbFixture { get; set; }
 
         protected UnitOfWorkInfo UowInfo { get; set; }
 
         public TestBase(TFixture fixture)
         {
-            Fixture = fixture;
+            DbFixture = fixture;
+            
+            //TODO: Update db connection string here to test other db provider
+            //Fixture._connectionString = "";
+            //Fixture._dbProvider = MixDatabaseProvider.SQLSERVER;
+            
             UowInfo = new UnitOfWorkInfo(fixture.Context);
         }
     }

@@ -23,7 +23,7 @@ namespace Mix.Xunittest.Domain.Base
         
         public ViewModelTestBase(TFixture fixture) : base(fixture)
         {
-            Fixture = fixture;
+            DbFixture = fixture;
             UowInfo = new UnitOfWorkInfo(fixture.Context);
             Repository = new(UowInfo);
         }
