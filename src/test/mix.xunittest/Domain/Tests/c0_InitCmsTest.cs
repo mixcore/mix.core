@@ -3,7 +3,6 @@ using Mix.Shared.Constants;
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Services;
 
-
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 0 - Init")]

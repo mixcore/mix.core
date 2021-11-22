@@ -4,7 +4,6 @@ using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 
-
 namespace Mixcore.Domain.Services
 {
     // Ref: https://www.strathweb.com/2019/08/dynamic-controller-routing-in-asp-net-core-3-0/
