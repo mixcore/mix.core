@@ -234,28 +234,29 @@ namespace Mix.Lib.Helpers
             int? intParentId = null,
             string specificulture = null)
         {
+            AdditionalDataContentViewModel result = null;
             UnitOfWorkInfo uow = new(context);
             var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName
-                    && m.ParentType == parentType
-                    && m.Specificulture == specificulture;
+                    && m.ParentType == parentType;
             var mixDb = await mixDbRepo.GetSingleAsync(m => m.SystemName == databaseName);
             if (mixDb != null)
             {
 
+                predicate = predicate.AndAlsoIf(specificulture is not null, m => m.Specificulture == specificulture);
                 predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.GuidParentId == guidParentId);
-                predicate = predicate.AndAlsoIf(guidParentId.HasValue, m => m.IntParentId == intParentId);
+                predicate = predicate.AndAlsoIf(intParentId.HasValue, m => m.IntParentId == intParentId);
 
                 var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
                 if (dataId != null)
                 {
-                    var result = await contentRepo.GetSingleAsync(
-                        m => m.Id == dataId && m.Specificulture == specificulture);
-                    return result;
+                    result = await contentRepo.GetSingleAsync(
+                        m => m.Id == dataId);
+
                 }
-                return new()
+                result ??= new()
                 {
                     Data = new(),
                     Specificulture = specificulture,
@@ -268,6 +269,7 @@ namespace Mix.Lib.Helpers
                     IntParentId = intParentId,
                     CreatedDateTime = DateTime.UtcNow
                 };
+                return result;
             }
             return default;
         }
