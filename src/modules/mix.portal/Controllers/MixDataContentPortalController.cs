@@ -30,6 +30,13 @@ namespace Mix.Portal.Controllers
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
 
+        public override async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Get([FromQuery] SearchRequestDto req)
+        {
+            SearchMixDataDto searchReq = new SearchMixDataDto(req, Request);
+            var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(searchReq, _lang, _uow);
+            return Ok(result);
+        }
+
         [HttpGet("search")]
         public async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Search([FromQuery] SearchMixDataDto request)
         {
@@ -64,11 +71,14 @@ namespace Mix.Portal.Controllers
         [HttpGet("{lang}/init/{databaseName}")]
         public async Task<ActionResult> InitData([FromRoute] string databaseName)
         {
-            var columns = await _colRepository.GetListAsync(
-                    m => m.MixDatabaseName == databaseName);
+            int.TryParse(databaseName, out int id);
+            var dbRepo = MixDatabaseViewModel.GetRepository(_uow);
+            var mixdb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName);
             var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject())
             {
-                Columns = columns
+                Columns = mixdb.Columns,
+                MixDatabaseId = mixdb.Id,
+                MixDatabaseName = mixdb.SystemName
             };
             return Ok(mixData);
         }

@@ -20,6 +20,7 @@ namespace Mix.Database.Entities.Cms
 
         public Guid MixDataContentId { get; set; }
         public int MixDatabaseColumnId { get; set; }
+        public int MixDatabaseId { get; set; }
 
         public virtual MixDataContent MixDataContent { get; set; }
         public virtual MixDatabaseColumn MixDatabaseColumn { get; set; }

@@ -29,7 +29,6 @@ namespace Mix.Lib.Services
         public async Task<PagingResponseModel<TView>> FilterByKeywordAsync<TView>(
             SearchMixDataDto request,
             string culture = null,
-            string mixDatabaseName = null,
             UnitOfWorkInfo uowInfo = null)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
@@ -42,15 +41,15 @@ namespace Mix.Lib.Services
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
 
                 var fields = await _colRepo.GetListQuery(
-                    m => m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName).ToListAsync();
+                    m => m.MixDatabaseId == request.MixDatabaseId).ToListAsync();
                 
                 // Data predicate
                 Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
-                   && (m.MixDatabaseName == mixDatabaseName);
+                   && (m.MixDatabaseId == request.MixDatabaseId);
 
                 var searchRequest = new SearchQueryModel<MixDataContent, Guid>(request, andPredicate);
                 // val predicate
-                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseName == mixDatabaseName);
+                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == request.MixDatabaseId);
 
                 PagingResponseModel<TView> result = new()
                 {
@@ -95,7 +94,7 @@ namespace Mix.Lib.Services
                 if (request.IsGroup)
                 {
                     var excludeIds = _dbContext.MixDataContentAssociation.Where(
-                        m => (m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == mixDatabaseName)
+                        m => (m.MixDatabaseId == request.MixDatabaseId)
                         && m.Specificulture == culture
                         && m.ParentType == MixDatabaseParentType.Set
                         && m.ParentId != Guid.Empty)
