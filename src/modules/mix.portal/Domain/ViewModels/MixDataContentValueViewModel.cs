@@ -28,6 +28,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public Guid MixDataContentId { get; set; }
         public int MixDatabaseColumnId { get; set; }
+        public int MixDatabaseId { get; set; }
 
         public MixDatabaseColumnViewModel Column { get; set; }
 

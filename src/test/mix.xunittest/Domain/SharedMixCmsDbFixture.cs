@@ -1,7 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Xunittest.Domain.Base;
-
-namespace Mix.Xunittest.Domain
+﻿namespace Mix.Xunittest.Domain
 {
     public class SharedMixCmsDbFixture
         : SharedDatabaseFixture<MixCmsContext>

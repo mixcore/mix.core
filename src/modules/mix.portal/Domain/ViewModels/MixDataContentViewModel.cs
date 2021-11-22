@@ -252,6 +252,9 @@
             {
                 var val = await GetFieldValue(col, cacheService);
                 val.DataType = col.DataType;
+                val.MixDatabaseColumnId = col.Id;
+                val.MixDatabaseName = col.MixDatabaseName;
+                val.MixDatabaseId = col.MixDatabaseId;
                 if (Data[val.MixDatabaseColumnName] != null)
                 {
                     if (val.Column.DataType == MixDataType.Reference)

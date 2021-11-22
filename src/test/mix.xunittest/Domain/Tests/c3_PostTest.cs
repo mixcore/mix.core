@@ -1,8 +1,3 @@
-using Mix.Database.Entities.Cms;
-using Mix.Portal.Domain.ViewModels;
-using Mix.Xunittest.Domain.Base;
-using Xunit;
-
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 3 - Post")]
