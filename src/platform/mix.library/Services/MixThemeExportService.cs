@@ -31,7 +31,7 @@ namespace Mix.Lib.Services
         public async Task<string> ExportTheme(ExportThemeDto request)
         {
             _dto = request;
-            _siteData = new(_dto);
+            _siteData = new();
             _exporTheme = await _themeRepository.GetSingleAsync(
                 m => m.Id == request.ThemeId);
 
@@ -39,7 +39,7 @@ namespace Mix.Lib.Services
             tempPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}/temp";
             outputPath = $"{MixFolders.WebRootPath}/{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}";
 
-            _siteData = ExportSelectedItems();
+            ExportSelectedItems();
 
             ExportSchema(_siteData);
 
