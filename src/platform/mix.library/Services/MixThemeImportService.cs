@@ -1,26 +1,10 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Lib.ViewModels;
-using System;
+﻿using Mix.Lib.ViewModels;
 using Mix.Heart.Exceptions;
-using System.Threading.Tasks;
 using Mix.Lib.Dtos;
-using System.Linq;
-using Mix.Shared.Enums;
-using System.Linq.Expressions;
-using Mix.Heart.Extensions;
-using Mix.Heart.UnitOfWork;
-using System.Collections.Generic;
 using Mix.Heart.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using Mix.Shared.Models;
-using Mix.Shared.Services;
-using Mix.Shared.Constants;
-using System.IO;
-using Mix.Heart.Services;
-using Mix.Lib.Helpers;
 
 namespace Mix.Lib.Services
 {
@@ -131,7 +115,7 @@ namespace Mix.Lib.Services
             {
                 _uow.Begin();
                 _dto = request;
-                _siteData = new(_dto);
+                _siteData = new();
 
                 // Import Configurations
                 ImportData(_siteData.Configurations, dicConfigurationIds);

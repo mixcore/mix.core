@@ -1,7 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using System.Collections.Generic;
-
-namespace Mix.Lib.Dtos
+﻿namespace Mix.Lib.Dtos
 {
     public class ExportThemeDto
     {
@@ -20,20 +17,6 @@ namespace Mix.Lib.Dtos
         public string CreatedBy { get; set; }
 
         public string Specificulture { get; set; }
-
-        public List<MixPost> Posts { get; set; } = new();
-
-        public List<MixPage> Pages { get; set; } = new();
-
-        public List<MixModule> Modules { get; set; }
-
-        public List<MixDatabase> MixDatabases { get; set; }
-
-        public List<MixTemplate> Templates { get; set; } = new();
-
-        public List<MixConfiguration> Configurations { get; set; } = new();
-
-        public List<MixLanguage> Languages { get; set; } = new();
 
         public ExportData ExportData { get; set; }
     }

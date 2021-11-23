@@ -1,8 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Lib.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Mix.Lib.Dtos;
 
 namespace Mix.Lib.ViewModels
 {
@@ -83,28 +79,7 @@ namespace Mix.Lib.ViewModels
 
         #endregion
 
-        public SiteDataViewModel(ExportThemeDto requestDto)
-        {
-            if (!requestDto.IsExportAll)
-            {
-                Templates = requestDto.Templates;
-                Pages = requestDto.Pages;
-                Posts = requestDto.Posts;
-                Modules = requestDto.Modules;
-                Databases = requestDto.MixDatabases;
-                Configurations = requestDto.Configurations;
-                Languages = requestDto.Languages;
-
-                PageIds = Pages.Select(m => m.Id).ToList();
-                PostIds = Posts.Select(m => m.Id).ToList();
-                ModuleIds = Modules.Select(m => m.Id).ToList();
-                DatabaseIds = Databases.Select(m => m.Id).ToList();
-                ConfigurationIds = Configurations.Select(m => m.Id).ToList();
-                LanguageIds = Languages.Select(m => m.Id).ToList();
-            }
-        }
-
-        public SiteDataViewModel(ImportThemeDto dto)
+        public SiteDataViewModel()
         {
 
         }

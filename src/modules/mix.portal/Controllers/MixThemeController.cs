@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Lib.Base;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Shared.Services;
-using Newtonsoft.Json;
 
 namespace Mix.Portal.Controllers
 {
