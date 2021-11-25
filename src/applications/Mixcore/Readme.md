@@ -9,10 +9,10 @@ Ex:
         "DownstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
         "DownstreamScheme": "https",
         "DownstreamHostAndPorts": [
-        {
-            "Host": "localhost",
-            "Port": 5006
-        }
+            {
+                "Host": "localhost",
+                "Port": 5006
+            }
         ],
         "UpstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
         "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
