@@ -18,7 +18,7 @@ namespace Mix.Lib.ViewModels
 
         public List<MixModule> Modules { get; set; }
 
-        public List<MixDatabase> Databases { get; set; } = new();
+        public List<MixDatabase> MixDatabases { get; set; } = new();
 
         public List<MixTemplate> Templates { get; set; } = new();
 
@@ -30,7 +30,7 @@ namespace Mix.Lib.ViewModels
 
         #region Data Objects
 
-        public List<MixDatabaseColumn> DatabaseColumns { get; set; } = new();
+        public List<MixDatabaseColumn> MixDatabaseColumns { get; set; } = new();
 
         public List<MixPostContent> PostContents { get; set; } = new();
 
@@ -59,23 +59,6 @@ namespace Mix.Lib.ViewModels
         public List<MixModulePostAssociation> ModulePosts { get; set; } = new();
 
         public List<MixUrlAlias> MixUrlAliases { get; set; } = new();
-
-        #endregion
-
-        #region Internals
-
-        internal List<int> PageIds { get; set; }
-        internal List<int> ModuleIds { get; set; }
-        internal List<int> PostIds { get; set; }
-        internal List<int> PageContentIds { get; set; }
-        internal List<int> ModuleContentIds { get; set; }
-        internal List<int> PostContentIds { get; set; }
-        internal List<int> DatabaseIds { get; set; }
-        internal List<int> ConfigurationIds { get; set; }
-        internal List<int> LanguageIds { get; set; }
-        internal List<Guid> DataIds { get; set; } = new();
-        internal List<Guid> DataContentIds { get; set; } = new();
-        internal List<Guid> DataContentAssociationIds { get; set; } = new();
 
         #endregion
 

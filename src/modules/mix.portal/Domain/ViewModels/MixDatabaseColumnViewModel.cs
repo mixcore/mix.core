@@ -1,12 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using Mix.Shared.Enums;
-using Mix.Shared.Models;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using Mix.Shared.Models;
 
 namespace Mix.Portal.Domain.ViewModels
 {

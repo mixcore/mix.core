@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base

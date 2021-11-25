@@ -213,7 +213,7 @@ namespace Mix.Lib.Services
         private void ImportDatabases()
         {
             var startId = _context.MixDatabase.Max(m => m.Id);
-            foreach (var item in _siteData.Databases)
+            foreach (var item in _siteData.MixDatabases)
             {
                 startId++;
                 dicMixDatabaseIds.Add(item.Id, startId);
@@ -232,13 +232,13 @@ namespace Mix.Lib.Services
         private void ImportDatabaseColumns()
         {
             var startId = _context.MixDatabaseColumn.Max(m => m.Id);
-            foreach (var item in _siteData.DatabaseColumns)
+            foreach (var item in _siteData.MixDatabaseColumns)
             {
                 startId++;
                 dicColumnIds.Add(item.Id, startId);
                 item.Id = startId;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
-                item.MixDatabaseName = _siteData.Databases.First(m => m.Id == item.MixDatabaseId).SystemName;
+                item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);
             }
 

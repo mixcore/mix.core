@@ -1,12 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Heart.Models;
-using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Mix.Lib.Helpers
 {
     public class MixHelper
     {
+        public static string SerializeObject(object obj)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                },
+                Formatting = Formatting.Indented
+            };
+            settings.Converters.Add(new StringEnumConverter());
+
+            return JsonConvert.SerializeObject(obj, Formatting.None, settings);
+        }
         public static FileModel GetFileModel(IFormFile file, string folder)
         {
             return new FileModel()
