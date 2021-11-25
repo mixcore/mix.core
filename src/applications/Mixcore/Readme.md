@@ -28,3 +28,4 @@ Ex:
   }
 ```
 ## 5. Allow Cors.
+## 6. Update "EnableOcelot" in mixcore -> global.json = true.
