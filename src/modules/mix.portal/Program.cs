@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Mix.Lib.Helpers;
-
 namespace Mix.Portal
 {
     public class Program

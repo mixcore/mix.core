@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Mix.Account</RootNamespace>
-	  <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Mix.Account</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<Using Include="System" />
@@ -23,22 +23,21 @@
 		<Using Include="Mix.Identity.Constants" />
 	</ItemGroup>
 
-	
 	<ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-    <ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
-  </ItemGroup>
+		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
+		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domain\Helpers\" />
-    <Folder Include="Domain\Models\" />
-    <Folder Include="Domain\Services\" />
-    <Folder Include="Domain\ViewModels\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Domain\Helpers\" />
+		<Folder Include="Domain\Models\" />
+		<Folder Include="Domain\Services\" />
+		<Folder Include="Domain\ViewModels\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+	</ItemGroup>
 
 </Project>

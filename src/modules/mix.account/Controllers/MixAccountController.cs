@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 
 namespace Mix.Account.Controllers
 {
-    [Route("api/v2/account")]
+    [Route("api/v2/rest/mix-account")]
     [ApiController]
     public class MixAccountController : ControllerBase
     {
@@ -44,7 +44,6 @@ namespace Mix.Account.Controllers
             _context = context;
             _mixIdentityService = mixIdentityService;
         }
-
 
         [Route("Logout")]
         [HttpGet]

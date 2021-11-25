@@ -67,9 +67,9 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpPost("export")]
-        public ActionResult<SiteDataViewModel> ExportTheme(ExportThemeDto dto)
+        public async Task<ActionResult<SiteDataViewModel>> ExportThemeAsync([FromBody] ExportThemeDto dto)
         {
-            var siteData = _exportService.ExportTheme(dto);
+            var siteData = await _exportService.ExportTheme(dto);
             return Ok(siteData);
         }
     }

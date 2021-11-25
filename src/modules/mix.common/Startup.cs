@@ -1,10 +1,4 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
-using Mix.Shared.Services;
 using System.Reflection;
 
 namespace Mix.Common
@@ -19,6 +13,9 @@ namespace Mix.Common
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            MixFileService _fileService = new();
+            _fileService.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.ConfiguratoinFolder);
+
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
             // Must app Auth config after Add mixservice to init App config 

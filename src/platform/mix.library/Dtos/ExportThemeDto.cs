@@ -18,15 +18,23 @@
 
         public string Specificulture { get; set; }
 
-        public ExportData ExportData { get; set; }
+        public List<int> CultureIds { get; set; }
+
+        public SelectedExport Content { get; set; }
+        public SelectedExport Data { get; set; }
     }
 
-    public class ExportData
+    public class SelectedExport
     {
         public List<int> PageIds { get; set; }
+        public List<int> PageContentIds { get; set; }
+
+        public List<int> PostIds { get; set; }
+        public List<int> PostContentIds { get; set; }
 
         public List<int> ModuleIds { get; set; }
+        public List<int> ModuleContentIds { get; set; }
 
-        public List<int> DatabaseIds { get; set; }
+        public List<int> MixDatabaseIds { get; set; }
     }
 }
