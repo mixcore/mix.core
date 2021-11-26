@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<HttpService>();
 
             // Message Queue
-            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
+            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService>();
             services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
 
 
@@ -106,7 +106,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton<HttpService>();
 
             // Message Queue
-            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService<MessageQueueModel>>();
+            services.AddSingleton<IQueueService<MessageQueueModel>, QueueService>();
             services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
 
 

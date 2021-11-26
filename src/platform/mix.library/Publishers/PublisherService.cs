@@ -38,7 +38,7 @@ namespace Mix.Lib.Publishers
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH);
+                    var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH, _topicId);
 
                     if (inQueueItems.Any() && _publishers != null)
                     {
