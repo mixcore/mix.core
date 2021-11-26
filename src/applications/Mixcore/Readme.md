@@ -6,20 +6,32 @@ Ex:
 ```
 "Routes": [
     {
-        "DownstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
-        "DownstreamScheme": "https",
-        "DownstreamHostAndPorts": [
-            {
-                "Host": "localhost",
-                "Port": 5006
-            }
-        ],
-        "UpstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
-        "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+      "DownstreamPathTemplate": "/api/v2/rest/mix-account/{catchALl}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v2/rest/mix-account/{catchALl}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
     }
 ]
 ```
-## 4. Remove Config Http2 from appsettings.
+## 4. Remove Config Http2 from appsettings if exist.
 ```
 "Kestrel": {
     "EndpointDefaults": {

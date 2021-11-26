@@ -32,8 +32,9 @@ namespace Mix.Lib.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
             MixIdentityService mixIdentityService,
             TDbContext context,
-            MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            MixCacheService cacheService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
         }
     }

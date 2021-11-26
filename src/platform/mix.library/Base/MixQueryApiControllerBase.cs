@@ -35,8 +35,9 @@ namespace Mix.Lib.Base
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
+            MixCacheService cacheService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _uow = new(_context);

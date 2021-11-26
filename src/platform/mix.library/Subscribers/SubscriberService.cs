@@ -3,13 +3,8 @@ using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using Mix.Shared.Enums;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.Subscribers
 {
@@ -61,7 +56,6 @@ namespace Mix.Lib.Subscribers
                 switch (provider)
                 {
                     case MixQueueProvider.GOOGLE:
-
                         var googleSetting = new GoogleQueueSetting();
                         settingPath.Bind(googleSetting);
                         return QueueEngineFactory.CreateSubscriber(
@@ -85,7 +79,6 @@ namespace Mix.Lib.Subscribers
         {
             try
             {
-                
                 if (_topicId != data.FullName)
                 {
                     return Task.CompletedTask;

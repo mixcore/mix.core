@@ -18,6 +18,9 @@
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Shared.Services" />
+		<Using Include="Mix.Queue.Interfaces" />
+		<Using Include="Mix.Queue.Models" />
+
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Abstracts\ViewModels\**" />

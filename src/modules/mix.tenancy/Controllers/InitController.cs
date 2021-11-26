@@ -10,6 +10,8 @@ using Mix.Heart.Repository;
 using Mix.Database.Entities.Cms;
 using Mix.Shared.Enums;
 using Microsoft.Extensions.Configuration;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -26,8 +28,9 @@ namespace Mix.Tenancy.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
-            MixIdentityService mixIdentityService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _initCmsService = initCmsService;
         }

@@ -31,8 +31,9 @@ namespace Mix.Lib.Base
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            MixCacheService cacheService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
         }
 
@@ -57,7 +58,7 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] TView data)
+        public virtual async Task<IActionResult> Update(string id, [FromBody] TView data)
         {
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id != currentId)
@@ -71,7 +72,7 @@ namespace Mix.Lib.Base
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(TPrimaryKey id)
+        public virtual async Task<ActionResult> Delete(TPrimaryKey id)
         {
             await _repository.DeleteAsync(id);
             await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
@@ -79,7 +80,7 @@ namespace Mix.Lib.Base
         }
 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
+        public virtual async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
             var result = await _repository.GetSingleAsync(id);
             result.SetDbContext(_context);

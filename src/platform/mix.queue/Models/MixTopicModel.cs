@@ -51,11 +51,11 @@ namespace Mix.Queue.Models
                 return result;
 
             int i = 1;
-            
 
-            while (i <= lenght && Messages.Any())
+
+            while (i <= lenght && Messages.Any(m => m.FullName == subscription.TopicId))
             {
-                MessageQueueModel data = Messages.First();
+                MessageQueueModel data = Messages.First(m => m.FullName == subscription.TopicId);
                 data.Subscriptions.Add(subscription);
                 if (data.Subscriptions.Count == Subscriptions.Count)
                 {

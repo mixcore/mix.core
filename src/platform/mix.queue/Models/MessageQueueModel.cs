@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Mix.Shared.Enums;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Mix.Queue.Models
 {
     public class MessageQueueModel
     {
-        public string Action { get; set; }
-        public string Status { get; set; }
+        public MixRestAction Action { get; set; }
+        public MixRestStatus Status { get; set; }
         public string FullName { get; set; }
         public JObject Model { get; set; }
 

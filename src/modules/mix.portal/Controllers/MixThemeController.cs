@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Model;
 using Mix.Heart.Repository;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
-using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 
 namespace Mix.Portal.Controllers
 {
@@ -16,7 +13,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixThemeExportService _exportService;
         private readonly MixThemeImportService _importService;
-        private readonly IQueueService<MessageQueueModel> _queueService;
+        
         public MixThemeController(
             IConfiguration configuration,
             MixService mixService,
@@ -27,26 +24,12 @@ namespace Mix.Portal.Controllers
             MixCmsContext context, MixThemeImportService importService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
 
             _exportService = exportService;
             _importService = importService;
-            _queueService = queueService;
         }
-
-        public override System.Threading.Tasks.Task<ActionResult<PagingResponseModel<MixThemeViewModel>>> Get([FromQuery] SearchRequestDto req)
-        {
-            var post = new MixThemeViewModel()
-            {
-                DisplayName = " test queue"
-            };
-            var msg = new MessageQueueModel();
-            msg.Package(post);
-            _queueService.PushQueue(msg);
-            return base.Get(req);
-        }
-
 
         // POST api/theme
         /// Swagger cannot generate multi-form value api
