@@ -1,5 +1,6 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Shared.Enums;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,17 @@ namespace Mix.Queue.Services
                 _queues.Add(model.FullName, _queue);
             }
             _queue.Enqueue(model);
+        }
+
+        public void PushMessage<T>(T data, MixRestAction action, MixRestStatus status)
+        {
+            var msg = new MessageQueueModel()
+            {
+                Action = action,
+                Status = status,
+            };
+            msg.Package(data);
+            PushQueue(msg);
         }
     }
 }
