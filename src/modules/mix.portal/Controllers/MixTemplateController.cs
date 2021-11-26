@@ -30,13 +30,7 @@ namespace Mix.Portal.Controllers
         public override async Task<IActionResult> Update(string id, [FromBody] MixTemplateViewModel data)
         {
             var result = await base.Update(id, data);
-            var msg = new MessageQueueModel()
-            {
-                Action = MixRestAction.Put,
-                Status = MixRestStatus.Success
-            };
-            msg.Package(data);
-            _queueService.PushQueue(msg);
+            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
             return result;
         }
 

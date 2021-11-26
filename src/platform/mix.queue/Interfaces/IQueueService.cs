@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Mix.Shared.Enums;
+using System.Collections.Generic;
 
 namespace Mix.Queue.Interfaces
 {
@@ -9,5 +10,7 @@ namespace Mix.Queue.Interfaces
         IList<T> ConsumeQueue(int lenght, string topicId);
 
         bool Any(string topicId);
+
+        void PushMessage<TModel>(TModel data, MixRestAction action, MixRestStatus status);
     }
 }
