@@ -108,7 +108,6 @@ namespace Mix.Lib.ViewModels
         protected override async Task<MixTemplate> SaveHandlerAsync()
         {
             var result = await base.SaveHandlerAsync();
-            SaveTemplateToLocalFile();
             return result;
         }
 
@@ -116,17 +115,6 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Expands
-
-        private void SaveTemplateToLocalFile()
-        {
-            MixFileService.Instance.SaveFile(new FileModel()
-            {
-                Filename = FileName,
-                Extension = Extension,
-                Content = Content,
-                FileFolder = FileFolder
-            });
-        }
 
         public async Task<MixTemplateViewModel> CopyAsync()
         {
