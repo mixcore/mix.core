@@ -1,19 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
-using Mix.Lib.Base;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
-using Mix.Shared.Services;
-using System.Threading.Tasks;
 using Mix.Heart.Extensions;
-using System;
-using Mix.Shared.Enums;
-using Microsoft.Extensions.Configuration;
-using Mix.Heart.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -29,10 +20,24 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
-            MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            MixCacheService cacheService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
 
+        }
+
+        public override async Task<IActionResult> Update(string id, [FromBody] MixTemplateViewModel data)
+        {
+            var result = await base.Update(id, data);
+            var msg = new MessageQueueModel()
+            {
+                Action = MixRestAction.Put,
+                Status = MixRestStatus.Success
+            };
+            msg.Package(data);
+            _queueService.PushQueue(msg);
+            return result;
         }
 
         public override async Task<ActionResult<PagingResponseModel<MixTemplateViewModel>>> Get([FromQuery] SearchRequestDto req)

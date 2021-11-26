@@ -35,8 +35,9 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService, 
             MixEndpointService endpointService,
             MixCmsContext context,
-            MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService)
+            MixCacheService cacheService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
             _mixDataService = mixDataService;
             _endpointService = endpointService;

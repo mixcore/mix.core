@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Lib.Services;
-using Mix.Shared.Services;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 
 namespace Mix.Lib.Base
 {
@@ -12,6 +12,7 @@ namespace Mix.Lib.Base
     {
         protected string _lang;
         protected MixCulture _culture;
+        protected readonly IQueueService<MessageQueueModel> _queueService;
         protected readonly IConfiguration _configuration;
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
@@ -21,14 +22,16 @@ namespace Mix.Lib.Base
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
-            MixIdentityService mixIdentityService) : base()
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
+            MixIdentityService mixIdentityService, 
+            IQueueService<MessageQueueModel> queueService) : base()
         {
             _configuration = configuration;
             _mixService = mixService;
             _translator = translator;
             _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
+            _queueService = queueService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

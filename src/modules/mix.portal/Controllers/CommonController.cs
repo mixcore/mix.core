@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms;
-using Mix.Database.Services;
 using Mix.Heart.Repository;
-using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Portal.Domain.Models;
-using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -22,8 +16,9 @@ namespace Mix.Portal.Controllers
             MixService mixService, 
             TranslatorService translator, 
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
-            MixIdentityService mixIdentityService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService)
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
         }

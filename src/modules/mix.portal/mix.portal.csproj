@@ -22,6 +22,8 @@
 		<Using Include="Mix.Shared.Enums" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Queue.Interfaces" />
+		<Using Include="Mix.Queue.Models" />
 	</ItemGroup>
 
 	<ItemGroup>

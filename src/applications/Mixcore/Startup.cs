@@ -36,6 +36,7 @@ namespace Mixcore
             });
 
             services.AddHostedService<ThemeSubscriberService>();
+            services.AddHostedService<TemplateSubscriberService>();
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddMixAuthorize<ApplicationDbContext>();
 
