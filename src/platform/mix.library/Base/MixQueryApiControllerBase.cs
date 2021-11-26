@@ -67,6 +67,31 @@ namespace Mix.Lib.Base
             return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, _cacheService);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
+        {
+            var data = await GetById(id);
+            return data != null ? Ok(data) : NotFound(id);
+        }
+
+       
+
+        [HttpGet("default")]
+        [HttpGet("{lang}/default")]
+        public ActionResult<TView> GetDefault(string culture = null)
+        {
+            var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
+            result.InitDefaultValues(_lang, _culture.Id);
+            result.ExpandView(_cacheService, _uow);
+            return Ok(result);
+        }
+
+        #endregion Routes
+
+        #region Helpers
+
+
+
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
             Expression<Func<TEntity, bool>> andPredicate = null;
@@ -84,23 +109,11 @@ namespace Mix.Lib.Base
             return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
+        protected virtual async Task<TView> GetById(TPrimaryKey id)
         {
-            var data = await _repository.GetSingleAsync(id, _cacheService);
-            return data != null ? Ok(data) : NotFound(id);
+            return await _repository.GetSingleAsync(id, _cacheService);
         }
 
-        [HttpGet("default")]
-        [HttpGet("{lang}/default")]
-        public ActionResult<TView> GetDefault(string culture = null)
-        {
-            var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
-            result.InitDefaultValues(_lang, _culture.Id);
-            result.ExpandView(_cacheService, _uow);
-            return Ok(result);
-        }
-
-        #endregion Routes
+        #endregion
     }
 }

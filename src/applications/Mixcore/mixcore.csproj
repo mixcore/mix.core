@@ -37,4 +37,8 @@
 	  <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 	  <ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Views\Shared\Templates\" />
+	</ItemGroup>
 </Project>

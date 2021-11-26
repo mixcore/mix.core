@@ -54,11 +54,6 @@ namespace Mix.Queue.Services
         public void PushQueue(MessageQueueModel model)
         {
             var _queue = GetQueue(model.FullName);
-            if (_queue == null)
-            {
-                _queue = new ConcurrentQueue<MessageQueueModel>();
-                _queues.Add(model.FullName, _queue);
-            }
             _queue.Enqueue(model);
         }
 
