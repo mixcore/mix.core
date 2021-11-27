@@ -65,9 +65,9 @@ namespace Mix.Lib.Services
             string filePath = MixFileService.Instance.ZipFolder(tempPath, outputPath, fileName);
 
             // Delete temp folder
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Assets}");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Uploads}");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemeFolders.Schema}");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.AssetFolder}");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.UploadFolder}");
+            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.SchemaFolder}");
             return $"{webPath}/{fileName}.zip";
         }
 
@@ -77,7 +77,7 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileService.Instance.CopyFolder(
-                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/{MixThemeFolders.Assets}");
+                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileService.Instance.CopyFolder(
                     $"{MixFolders.WebRootPath}/{_exporTheme.UploadsFolder}",
@@ -87,8 +87,8 @@ namespace Mix.Lib.Services
 
         private void ExportSchema(SiteDataViewModel siteData)
         {
-            string filename = $"schema";
-            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/{MixThemeFolders.Assets}";
+            string filename = MixThemePackageConstants.SchemaFilename;
+            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/{MixThemePackageConstants.AssetFolder}";
             string content = MixHelper.SerializeObject(siteData);
             content = content
                 .Replace(accessFolder, "[ACCESS_FOLDER]")
@@ -102,7 +102,7 @@ namespace Mix.Lib.Services
             {
                 Filename = filename,
                 Extension = MixFileExtensions.Json,
-                FileFolder = $"{tempPath}/{MixThemeFolders.Schema}",
+                FileFolder = $"{tempPath}/{MixThemePackageConstants.SchemaFolder}",
                 Content = content
             };
 
