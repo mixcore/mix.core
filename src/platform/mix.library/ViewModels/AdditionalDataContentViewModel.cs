@@ -53,7 +53,7 @@ namespace Mix.Lib.ViewModels
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
 
             Data ??= MixDataHelper.ParseData(Id, UowInfo);
 
@@ -80,7 +80,7 @@ namespace Mix.Lib.ViewModels
             }
 
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values = await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
 
             await ParseObjectToValues(cacheService);
 

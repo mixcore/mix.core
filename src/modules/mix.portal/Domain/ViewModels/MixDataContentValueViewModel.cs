@@ -1,13 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System;
-using System.Threading.Tasks;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentValueViewModel
         : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
@@ -26,7 +17,6 @@ namespace Mix.Portal.Domain.ViewModels
         public string EncryptKey { get; set; }
         public MixEncryptType EncryptType { get; set; }
 
-        public Guid MixDataContentId { get; set; }
         public int MixDatabaseColumnId { get; set; }
         public int MixDatabaseId { get; set; }
 

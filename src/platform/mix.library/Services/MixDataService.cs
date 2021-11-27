@@ -87,7 +87,7 @@ namespace Mix.Lib.Services
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
-                    var valDataIds = _dbContext.MixDataContentValue.Where(attrPredicate).Select(m => m.MixDataContentId).Distinct();
+                    var valDataIds = _dbContext.MixDataContentValue.Where(attrPredicate).Select(m => m.ParentId).Distinct();
                     searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Any(id => m.Id == id));
                 }
 

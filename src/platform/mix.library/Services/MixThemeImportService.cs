@@ -1,11 +1,9 @@
 ﻿using Mix.Lib.ViewModels;
 using Mix.Heart.Exceptions;
-using Mix.Lib.Dtos;
 using Mix.Heart.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Microsoft.AspNetCore.Http;
-using Mix.Heart.Models;
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Lib.Services
@@ -13,9 +11,9 @@ namespace Mix.Lib.Services
     public class MixThemeImportService
     {
         private UnitOfWorkInfo _uow;
+        private CancellationTokenSource _cts;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
-        private ImportThemeDto _dto;
 
         #region Dictionaries
 
@@ -30,16 +28,27 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicPostIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPostContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicTemplateIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
-        public async Task<SiteDataViewModel> ImportTheme(IFormFile themeFile)
+        public MixThemeImportService(MixCmsContext context)
         {
-            //Save file to temporary folder
-            return SaveThemeFiles(themeFile);
+            _context = context;
+            _uow = new UnitOfWorkInfo(_context);
+            _cts = new CancellationTokenSource();
         }
 
-        private SiteDataViewModel SaveThemeFiles(IFormFile themeFile)
+        #region Import
+
+
+        public async Task<SiteDataViewModel> LoadTheme(IFormFile themeFile)
+        {
+            //Save file to temporary folder
+            return LoadThemeFiles(themeFile);
+        }
+
+        private SiteDataViewModel LoadThemeFiles(IFormFile themeFile)
         {
             if (themeFile != null)
             {
@@ -58,58 +67,17 @@ namespace Mix.Lib.Services
 
         #endregion
 
-        public MixThemeImportService(MixCmsContext context)
-        {
-            _context = context;
-            _uow = new UnitOfWorkInfo(_context);
-            
-        }
 
-        #region Import
-
-        public async Task<SiteDataViewModel> ImportSelectedItemsAsync(ImportThemeDto request)
+        public async Task<SiteDataViewModel> ImportSelectedItemsAsync(SiteDataViewModel siteData)
         {
             try
             {
                 _uow.Begin();
-                _dto = request;
-                _siteData = new();
+                _siteData = siteData;
 
-                // Import Configurations
-                ImportData(_siteData.Configurations, dicConfigurationIds);
-                ImportContentData(_siteData.ConfigurationContents, dicConfigurationContentIds, dicConfigurationIds);
-                
-                // Import Languages
-                ImportData(_siteData.Languages, dicLanguageIds);
-                ImportContentData(_siteData.LanguageContents, dicLanguageContentIds, dicLanguageIds);
+                await ImportContent();
+                await ImportData();
 
-                // Import Posts
-                ImportData(_siteData.Posts, dicPostIds);
-                ImportContentData(_siteData.PostContents, dicPostContentIds, dicPostIds);
-
-                // Import Pages
-                ImportData(_siteData.Pages, dicPageIds);
-                ImportPageContents();
-
-                // Import Modules
-                ImportData(_siteData.Modules, dicModuleIds);
-                ImportModuleContents();
-                ImportContentData(_siteData.ModuleDatas, dicModuleDataIds, dicModuleIds);
-
-                // Import Databases
-                ImportDatabases();
-                ImportDatabaseColumns();
-
-
-                ImportAssociationData(_siteData.PageModules, dicPageIds, dicModuleIds);
-                ImportAssociationData(_siteData.PagePosts, dicPageIds, dicPostIds);
-                ImportAssociationData(_siteData.ModulePosts, dicModuleIds, dicPostIds);
-
-                ImportDatabaseData();
-
-                ImportData(_siteData.MixUrlAliases, dicAliasIds);
-
-                await _context.SaveChangesAsync();
                 await _uow.CompleteAsync();
 
                 return _siteData;
@@ -119,13 +87,83 @@ namespace Mix.Lib.Services
                 throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
             }
         }
+        #region Import Contents
 
-        
+
+        private async Task ImportContent()
+        {
+            await ImportTemplates();
+            await ImportModules();
+            await ImportPages();
+            await ImportConfigurations();
+            await ImportLanguages();
+            await ImportPosts();
+            await ImportMixDatabases();
+        }
+
+        private async Task ImportLanguages()
+        {
+            await ImportEntitiesAsync(_siteData.Languages, dicLanguageIds);
+            await ImportContentDataAsync(_siteData.LanguageContents, dicLanguageContentIds, dicLanguageIds);
+        }
+
+        private async Task ImportConfigurations()
+        {
+            await ImportEntitiesAsync(_siteData.Configurations, dicConfigurationIds);
+            await ImportContentDataAsync(_siteData.ConfigurationContents, dicConfigurationContentIds, dicConfigurationIds);
+        }
+
+        private async Task ImportMixDatabases()
+        {
+            await ImportDatabasesAsync();
+            await ImportDatabaseColumnsAsync();
+        }
+
+        private async Task ImportPosts()
+        {
+            await ImportEntitiesAsync(_siteData.Posts, dicPostIds);
+            await ImportContentDataAsync(_siteData.PostContents, dicPostContentIds, dicPostIds);
+        }
+
+        private async Task ImportModules()
+        {
+            await ImportEntitiesAsync(_siteData.Modules, dicModuleIds);
+            await ImportModuleContentsAsync();
+            await ImportContentDataAsync(_siteData.ModuleDatas, dicModuleDataIds, dicModuleIds);
+        }
+
+        private async Task ImportPages()
+        {
+            await ImportEntitiesAsync(_siteData.Pages, dicPageIds);
+            await ImportPageContentsAsync();
+
+        }
+        private async Task ImportTemplates()
+        {
+            await ImportEntitiesAsync(_siteData.Templates, dicTemplateIds);
+        }
+
+        #endregion
+
+        #region Import Datas
+
+        private async Task ImportData()
+        {
+            await ImportAssociationDataAsync(_siteData.PageModules, dicPageIds, dicModuleIds);
+            await ImportAssociationDataAsync(_siteData.PagePosts, dicPageIds, dicPostIds);
+            await ImportAssociationDataAsync(_siteData.ModulePosts, dicModuleIds, dicPostIds);
+
+            await ImportDatabaseDataAsync();
+
+            await ImportEntitiesAsync(_siteData.MixUrlAliases, dicAliasIds);
+        }
+
         #region Import Page Data
 
-        private void ImportPageContents()
+        private async Task ImportPageContentsAsync()
         {
-            var startId = _context.MixPageContent.Max(m => m.Id);
+            var table = _context.MixPageContent.AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.PageContents)
             {
                 startId++;
@@ -140,18 +178,19 @@ namespace Mix.Lib.Services
                 item.ParentId = dicPageIds[item.ParentId];
                 _context.MixPageContent.Add(item);
             }
-
+            await _context.SaveChangesAsync(_cts.Token);
         }
         #endregion Import Page
 
         #region Import Module Data
 
-        private void ImportModuleContents()
+        private async Task ImportModuleContentsAsync()
         {
-            var startId = _context.MixModuleContent.Max(m => m.Id);
+            var table = _context.MixModuleContent.AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.ModuleContents)
             {
-                if(!_context.MixModuleContent.Any(m => m.SystemName == item.SystemName))
+                if (!_context.MixModuleContent.Any(m => m.SystemName == item.SystemName))
                 {
                     startId++;
                     dicModuleContentIds.Add(item.Id, startId);
@@ -160,7 +199,7 @@ namespace Mix.Lib.Services
                     _context.MixModuleContent.Add(item);
                 }
             }
-
+            await _context.SaveChangesAsync(_cts.Token);
         }
 
 
@@ -168,9 +207,10 @@ namespace Mix.Lib.Services
 
         #region Import Database Data
 
-        private void ImportDatabases()
+        private async Task ImportDatabasesAsync()
         {
-            var startId = _context.MixDatabase.Max(m => m.Id);
+            var table = _context.MixDatabase.AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.MixDatabases)
             {
                 startId++;
@@ -184,14 +224,19 @@ namespace Mix.Lib.Services
                 item.Id = startId;
                 _context.MixDatabase.Add(item);
             }
-
+            await _context.SaveChangesAsync(_cts.Token);
         }
 
-        private void ImportDatabaseColumns()
+        private async Task ImportDatabaseColumnsAsync()
         {
-            var startId = _context.MixDatabaseColumn.Max(m => m.Id);
+            var table = _context.MixDatabaseColumn.AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.MixDatabaseColumns)
             {
+                if (table.Any(m=>m.MixDatabaseId == item.MixDatabaseId && m.SystemName == item.SystemName))
+                {
+                    continue;
+                }
                 startId++;
                 dicColumnIds.Add(item.Id, startId);
                 item.Id = startId;
@@ -199,68 +244,86 @@ namespace Mix.Lib.Services
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);
             }
-
+            await _context.SaveChangesAsync(_cts.Token);
         }
 
-        private void ImportDatabaseData()
+        private async Task ImportDatabaseDataAsync()
         {
-            ImportGuidDatas(_siteData.Datas);
-            ImportGuidDatas(_siteData.DataContents);
-            ImportGuidDatas(_siteData.DataContentValues);
-            ImportGuidDatas(_siteData.DataContentAssociations);
+            await ImportGuidDatasAsync(_siteData.Datas);
+            await ImportGuidDatasAsync(_siteData.DataContents);
+            await ImportGuidDatasAsync(_siteData.DataContentValues);
+            await ImportGuidDatasAsync(_siteData.DataContentAssociations);
         }
 
         #endregion Import Module
 
-        private void ImportGuidDatas<T>(List<T> data)
+
+        #endregion
+
+
+        #region Generic
+
+        private async Task ImportGuidDatasAsync<T>(List<T> data)
             where T : EntityBase<Guid>
         {
             foreach (var item in data)
             {
                 _context.Entry(item).State = EntityState.Added;
             }
+            await _context.SaveChangesAsync(_cts.Token);
         }
 
-        private void ImportData<T>(List<T> data, Dictionary<int, int> dic)
-            where T: EntityBase<int>
+        private async Task ImportEntitiesAsync<T>(List<T> data, Dictionary<int, int> dic)
+            where T : EntityBase<int>
         {
-            var startId = _context.Set<T>().Max(m => m.Id);
+            var table = _context.Set<T>().AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in data)
             {
-                dic.Add(item.Id, startId + 1);
-                item.Id = startId + 1;
+                startId += 1;
+                dic.Add(item.Id, startId);
+                item.Id = startId;
                 _context.Entry(item).State = EntityState.Added;
             }
+            await _context.SaveChangesAsync(_cts.Token);
         }
-        
-        private void ImportContentData<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
-            where T: MultilanguageContentBase<int>
+
+        private async Task ImportContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
+            where T : MultilanguageContentBase<int>
         {
-            var startId = _context.Set<T>().Max(m => m.Id);
+            var table = _context.Set<T>().AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in data)
             {
-                dic.Add(item.Id, startId + 1);
-                item.Id = startId + 1;
+                startId += 1;
+                dic.Add(item.Id, startId);
+                item.Id = startId;
                 item.ParentId = parentDic[item.ParentId];
                 _context.Entry(item).State = EntityState.Added;
             }
+            await _context.SaveChangesAsync(_cts.Token);
         }
-        
-        private void ImportAssociationData<T>(
+
+        private async Task ImportAssociationDataAsync<T>(
             List<T> data,
             Dictionary<int, int> leftDic,
             Dictionary<int, int> rightDic)
-            where T: AssociationBase<int>
+            where T : AssociationBase<int>
         {
-            var startId = _context.Set<T>().Max(m => m.Id);
+            var table = _context.Set<T>().AsNoTracking();
+            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in data)
             {
-                item.Id = startId + 1;
+                startId += 1;
+                item.Id = startId;
                 item.LeftId = leftDic[item.LeftId];
                 item.RightId = rightDic[item.RightId];
                 _context.Entry(item).State = EntityState.Added;
             }
+            await _context.SaveChangesAsync(_cts.Token);
         }
+        #endregion
+
         #endregion Import
     }
 }

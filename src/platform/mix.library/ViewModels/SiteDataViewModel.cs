@@ -28,7 +28,7 @@ namespace Mix.Lib.ViewModels
 
         #endregion
 
-        #region Data Objects
+        #region Association Objects
 
         public List<MixDatabaseColumn> MixDatabaseColumns { get; set; } = new();
 

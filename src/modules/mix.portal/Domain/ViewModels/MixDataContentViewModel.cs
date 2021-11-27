@@ -56,7 +56,7 @@
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
 
             if (Data == null)
             {
@@ -87,7 +87,7 @@
             }
 
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values ??= await valRepo.GetListAsync(m => m.MixDataContentId == Id, cacheService, UowInfo);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
 
             await ParseObjectToValues(cacheService);
 
@@ -138,7 +138,7 @@
                     item.SetUowInfo(UowInfo);
                     item.ParentId = parentEntity.Id;
                     item.Specificulture = Specificulture;
-                    item.MixDataContentId = parentEntity.Id;
+                    item.ParentId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.MixDatabaseName;
                     await item.SaveAsync(UowInfo);
                 }
@@ -308,7 +308,7 @@
                     StringValue = field.DefaultValue,
                     Priority = field.Priority,
                     Column = field,
-                    MixDataContentId = Id,
+                    ParentId = Id,
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy
                 };
