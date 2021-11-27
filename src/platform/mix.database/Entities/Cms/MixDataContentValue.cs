@@ -18,7 +18,6 @@ namespace Mix.Database.Entities.Cms
         public string EncryptKey { get; set; }
         public MixEncryptType EncryptType { get; set; }
 
-        public Guid MixDataContentId { get; set; }
         public int MixDatabaseColumnId { get; set; }
         public int MixDatabaseId { get; set; }
 

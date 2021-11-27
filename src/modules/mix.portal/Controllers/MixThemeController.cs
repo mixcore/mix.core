@@ -56,11 +56,19 @@ namespace Mix.Portal.Controllers
             return Ok(siteData);
         }
         
-        [HttpPost("import")]
-        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromForm] IFormFile theme)
+        [HttpPost("load-theme")]
+        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync([FromForm] IFormFile theme)
         {
-            var siteData = await _importService.ImportTheme(theme);
+            var siteData = await _importService.LoadTheme(theme);
             return Ok(siteData);
+        }
+        
+        [HttpPost("import-theme")]
+        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
+        {
+            siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+            var result = await _importService.ImportSelectedItemsAsync(siteData);
+            return Ok(result);
         }
     }
 }

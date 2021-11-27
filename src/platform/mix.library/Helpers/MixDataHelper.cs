@@ -1,23 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
 using Mix.Lib.ViewModels;
 using Mix.Shared.Enums;
-using Mix.Shared.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Mix.Heart.Extensions;
-using Mix.Lib.Services;
-using Mix.Database.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace Mix.Lib.Helpers
 {
@@ -29,7 +18,7 @@ namespace Mix.Lib.Helpers
         {
             var context = (MixCmsContext)uowInfo.ActiveDbContext;
             var values = context.MixDataContentValue.AsNoTracking().Where(
-                m => m.MixDataContentId == dataContentId
+                m => m.ParentId == dataContentId
                     && !string.IsNullOrEmpty(m.MixDatabaseColumnName));
             var properties = values.Select(m => m.ToJProperty());
             var obj = new JObject(
