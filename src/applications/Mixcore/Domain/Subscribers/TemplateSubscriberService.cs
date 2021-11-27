@@ -1,10 +1,6 @@
-﻿using Mix.Heart.Services;
-using Mix.Lib.Subscribers;
+﻿using Mix.Lib.Subscribers;
 using Mix.Lib.ViewModels;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Queue.Models;
-using Mix.Shared.Constants;
-using System.Text.Json;
 
 namespace Mixcore.Domain.Subscribers
 {
@@ -26,15 +22,15 @@ namespace Mixcore.Domain.Subscribers
             var template = data.Model.ToObject<MixTemplateViewModel>();
             switch (data.Action)
             {
-                case Mix.Shared.Enums.MixRestAction.Get:
+                case MixRestAction.Get:
                     break;
-                case Mix.Shared.Enums.MixRestAction.Post:
-                case Mix.Shared.Enums.MixRestAction.Put:
+                case MixRestAction.Post:
+                case MixRestAction.Put:
                     SaveTemplate(template);
                     break;
-                case Mix.Shared.Enums.MixRestAction.Patch:
+                case MixRestAction.Patch:
                     break;
-                case Mix.Shared.Enums.MixRestAction.Delete:
+                case MixRestAction.Delete:
                     DeleteTemplate(template);
                     break;
                 default:

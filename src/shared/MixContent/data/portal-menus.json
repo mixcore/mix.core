@@ -531,6 +531,11 @@
           "path": "/portal/theme/export/:id",
           "templatePath": "/mix-app/views/app-portal/pages/theme/export.html",
           "controller": "ThemeController"
+        },
+        {
+          "path": "/portal/theme/import",
+          "templatePath": "/mix-app/views/app-portal/pages/theme/import.html",
+          "controller": "ThemeController"
         }
       ]
     },

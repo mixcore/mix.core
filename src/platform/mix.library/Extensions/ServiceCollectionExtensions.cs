@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Mix.Lib.Conventions;
 using Mix.Lib.Interfaces;
@@ -7,9 +6,7 @@ using Mix.Lib.Providers;
 using System.Reflection;
 using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
-using Mix.Shared.Services;
 using Mix.Database.Services;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Extensions;
@@ -19,9 +16,7 @@ using Mix.Database.Entities.Account;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Mix.Queue.Interfaces;
 using Mix.Queue.Services;
-using Mix.Queue.Models;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Heart.Repository;
 using Mix.Heart.Entities.Cache;
@@ -277,6 +272,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
+                c.OperationFilter<SwaggerFileOperationFilter>();
                 c.CustomSchemaIds(x => x.FullName);
             });
             return services;

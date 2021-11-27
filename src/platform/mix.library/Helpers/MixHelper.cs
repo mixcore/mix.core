@@ -25,12 +25,13 @@ namespace Mix.Lib.Helpers
         }
         public static FileModel GetFileModel(IFormFile file, string folder)
         {
-            return new FileModel()
+            var result = new FileModel()
             {
                 Filename = file.FileName[..file.FileName.LastIndexOf('.')],
                 Extension = file.FileName[file.FileName.LastIndexOf('.')..],
-                FileFolder = folder
+                FileFolder = folder,
             };
+            return result;
         }
         public static List<object> ParseEnumToObject(Type enumType)
         {

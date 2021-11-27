@@ -55,5 +55,12 @@ namespace Mix.Portal.Controllers
             var siteData = await _exportService.ExportTheme(dto);
             return Ok(siteData);
         }
+        
+        [HttpPost("import")]
+        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromForm] IFormFile theme)
+        {
+            var siteData = await _importService.ImportTheme(theme);
+            return Ok(siteData);
+        }
     }
 }
