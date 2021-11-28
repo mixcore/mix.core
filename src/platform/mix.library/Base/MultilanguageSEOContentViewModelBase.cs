@@ -68,10 +68,10 @@ namespace Mix.Lib.Base
                 var template = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == TemplateId);
                 Template = $"{template.FileFolder}/{template.FileName}{template.Extension}";
             }
-            if (string.IsNullOrEmpty(Template) && LayoutId.HasValue)
+            if (string.IsNullOrEmpty(Layout) && LayoutId.HasValue)
             {
                 var layout = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == LayoutId);
-                Template = $"{layout.FileFolder}/{layout.FileName}{layout.Extension}";
+                Layout = $"{layout.FileFolder}/{layout.FileName}{layout.Extension}";
             }
         }
 

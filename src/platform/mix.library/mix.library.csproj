@@ -11,6 +11,8 @@
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Mix.Lib.Base" />
 		<Using Include="Mix.Shared.Constants" />
+		<Using Include="Mix.Shared.Enums" />
+		<Using Include="Mix.Shared.Services" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="Mix.Heart.ViewModel" />
@@ -18,9 +20,9 @@
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
-		<Using Include="Mix.Shared.Services" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
+		<Using Include="Newtonsoft.Json.Linq" />
 
 	</ItemGroup>
 	<ItemGroup>

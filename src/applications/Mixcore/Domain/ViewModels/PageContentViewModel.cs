@@ -31,5 +31,14 @@ namespace Mixcore.Domain.ViewModels
         public string ClassName { get; set; }
 
         #endregion
+
+        #region Overrides
+
+        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        {
+            return base.ExpandView(cacheService, uowInfo);
+        }
+
+        #endregion
     }
 }
