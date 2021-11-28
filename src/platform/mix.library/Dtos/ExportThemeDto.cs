@@ -21,7 +21,7 @@
         public List<int> CultureIds { get; set; }
 
         public SelectedExport Content { get; set; }
-        public SelectedExport Data { get; set; }
+        public SelectedExport Associations { get; set; }
     }
 
     public class SelectedExport

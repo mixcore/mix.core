@@ -13,7 +13,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixThemeExportService _exportService;
         private readonly MixThemeImportService _importService;
-        
+
         public MixThemeController(
             IConfiguration configuration,
             MixService mixService,
@@ -32,21 +32,13 @@ namespace Mix.Portal.Controllers
         }
 
         // POST api/theme
-        /// Swagger cannot generate multi-form value api
         [HttpPost]
-        [DisableRequestSizeLimit]
         [Route("save")]
-        public async Task<ActionResult<MixThemeViewModel>> Save(
-            [FromForm] string model, [FromForm] IFormFile theme)
+        public async Task<ActionResult<MixThemeViewModel>> Save(MixThemeViewModel data)
         {
-            var data = JsonConvert.DeserializeObject<MixThemeViewModel>(model);
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-            var saveResult = await data.SaveThemeAsync(theme, _uow);
-            if (saveResult)
-            {
-                return Ok(data);
-            }
-            return BadRequest();
+            await data.SaveAsync(_uow);
+            return Ok(data);
         }
 
         [HttpPost("export")]
@@ -55,20 +47,24 @@ namespace Mix.Portal.Controllers
             var siteData = await _exportService.ExportTheme(dto);
             return Ok(siteData);
         }
-        
+
         [HttpPost("load-theme")]
         public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync([FromForm] IFormFile theme)
         {
             var siteData = await _importService.LoadTheme(theme);
             return Ok(siteData);
         }
-        
+
         [HttpPost("import-theme")]
         public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
         {
-            siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-            var result = await _importService.ImportSelectedItemsAsync(siteData);
-            return Ok(result);
+            if (ModelState.IsValid)
+            {
+                siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                var result = await _importService.ImportSelectedItemsAsync(siteData);
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
         }
     }
 }
