@@ -1,29 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Mix.Shared.Constants;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mix.Database.Services;
-using Mix.Lib.Base;
-using Mixcore.Domain.ViewModels;
+using Mixcore.Domain.Bases;
 
 namespace Mixcore.Controllers
 {
-    public class HomeController : MixControllerBase
+    public class HomeController : MvcBaseController
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly TranslatorService _translator;
-        private readonly MixDatabaseService _databaseService;
         public HomeController(
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator, 
-            MixDatabaseService databaseService) : base(mixService, ipSecurityConfigService)
+            MixDatabaseService databaseService,
+            MixCmsContext context) : base(ipSecurityConfigService, mixService, translator, databaseService, context)
         {
             _logger = logger;
-            _translator = translator;
-            _databaseService = databaseService;
         }
         
         protected override void ValidateRequest()
@@ -47,15 +41,13 @@ namespace Mixcore.Controllers
         }
 
         [Route("")]
-        public IActionResult Index(string seoName, string keyword)
+        public async Task<IActionResult> Index(string seoName, string keyword)
         {
             if (!isValid)
             {
                 return Redirect(_redirectUrl);
             }
-            return View(new PageContentViewModel() { 
-                SeoName = seoName
-            });
+            return await Page(1, keyword);
         }
     }
 }

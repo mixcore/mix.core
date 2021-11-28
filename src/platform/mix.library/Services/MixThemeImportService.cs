@@ -165,9 +165,22 @@ namespace Mix.Lib.Services
         {
             if (_siteData.Templates.Any())
             {
-                _siteData.Templates.ForEach(x => { x.MixThemeId = _siteData.ThemeId; x.MixThemeName = _siteData.ThemeSystemName; });
+                _siteData.Templates.ForEach(x =>
+                {
+                    x.MixThemeId = _siteData.ThemeId;
+                    x.MixThemeName = _siteData.ThemeSystemName;
+                    x.Content = ReplaceContent(x.Content);
+                    x.FileFolder = ReplaceContent(x.FileFolder);
+                });
                 await ImportEntitiesAsync(_siteData.Templates, dicTemplateIds);
             }
+        }
+
+        private string ReplaceContent(string content)
+        {
+            string accessFolder = string.Empty;
+            return content.Replace("[ACCESS_FOLDER]", accessFolder)
+                        .Replace("[THEME_NAME]", _siteData.ThemeName);
         }
 
         #endregion

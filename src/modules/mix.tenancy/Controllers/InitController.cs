@@ -39,7 +39,7 @@ namespace Mix.Tenancy.Controllers
         #region Post
 
         /// <summary>
-        /// When status = 0
+        /// When status = Blank
         ///     - Init Cms Database
         ///     - Init Cms Site
         ///     - Init Selected Culture as default
@@ -60,7 +60,7 @@ namespace Mix.Tenancy.Controllers
         }
 
         /// <summary>
-        /// When status = 1
+        /// When status = InitTenant
         ///     - Init Account Database
         ///     - Init Superadmin Account
         /// </summary>

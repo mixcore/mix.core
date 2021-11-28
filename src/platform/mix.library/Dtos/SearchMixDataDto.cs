@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Heart.Enums;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-using System;
 
 namespace Mix.Lib.Dtos
 {
