@@ -38,6 +38,8 @@ namespace Mix.Lib.Services
                 m => m.Id == request.ThemeId);
 
             //path to temporary folder
+            _siteData.ThemeName = _exporTheme.DisplayName;
+            _siteData.ThemeSystemName = _exporTheme.SystemName;
             fileName = $"{_exporTheme.SystemName}-{Guid.NewGuid()}";
             webPath = $"{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}";
             tempPath = $"{MixFolders.WebRootPath}/{webPath}/temp";
@@ -146,7 +148,7 @@ namespace Mix.Lib.Services
         {
             await ExportPageModules();
             await ExportPagePosts();
-            await ExportAdditionalData(_dto.Data.PageIds, MixDatabaseParentType.Page);
+            await ExportAdditionalData(_dto.Associations.PageIds, MixDatabaseParentType.Page);
         }
         
         private async Task ExportPageModules()
@@ -160,10 +162,10 @@ namespace Mix.Lib.Services
         private async Task ExportPagePosts()
         {
             _siteData.PagePosts = await _context.MixPagePostAssociation.Where(
-                    m => _dto.Data.PageContentIds.Any(p => p == m.LeftId)).ToListAsync();
+                    m => _dto.Associations.PageContentIds.Any(p => p == m.LeftId)).ToListAsync();
             // Get Posts unchecked when export but needed in selected Pages.
             var postContentIds = _siteData.PagePosts
-                .Where(m => !_dto.Data.PostContentIds.Any(n => m.RightId == n))
+                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.RightId == n))
                 .Select(m => m.RightId).ToList();
             var postContents = _context.MixPostContent.Where(m => postContentIds.Contains(m.Id));
             var posts = _context.MixPost.Where(m => postContents.Any(p => p.ParentId == m.Id));
@@ -179,22 +181,22 @@ namespace Mix.Lib.Services
         {
             await ExportModuleSimpleDatas();
             await ExportModulePosts();
-            await ExportAdditionalData(_dto.Data.ModuleContentIds, MixDatabaseParentType.Module);
+            await ExportAdditionalData(_dto.Associations.ModuleContentIds, MixDatabaseParentType.Module);
         }
         private async Task ExportModuleSimpleDatas()
         {
             var data = await _context.MixModuleData.Where(
-                    m => _dto.Data.ModuleIds.Any(p => p == m.ParentId)).ToListAsync();
+                    m => _dto.Associations.ModuleIds.Any(p => p == m.ParentId)).ToListAsync();
             _siteData.ModuleDatas.AddRange(data);
         }
 
         private async Task ExportModulePosts()
         {
             _siteData.ModulePosts = await _context.MixModulePostAssociation.Where(
-                    m => _dto.Data.ModuleContentIds.Any(p => p == m.LeftId)).ToListAsync();
+                    m => _dto.Associations.ModuleContentIds.Any(p => p == m.LeftId)).ToListAsync();
             // Get Posts unchecked when export but needed in selected modules.
             var postContentIds = _siteData.ModulePosts
-                .Where(m => !_dto.Data.PostContentIds.Any(n => m.RightId == n))
+                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.RightId == n))
                 .Select(m => m.RightId).ToList();
             var postContents = _context.MixPostContent.Where(m => postContentIds.Contains(m.Id));
             var posts = _context.MixPost.Where(m => postContents.Any(p => p.ParentId == m.Id));
@@ -218,25 +220,31 @@ namespace Mix.Lib.Services
 
         private async Task ExportMixDatasAsync()
         {
-            var datas = await _context.MixData.Where(
-                        m => _dto.Data.MixDatabaseIds.Any(p => p == m.MixDatabaseId)).ToListAsync();
+            var datas = await _context.MixData
+                .Where(m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
+                .AsNoTracking()
+                .ToListAsync();
             _siteData.Datas = _siteData.Datas.Union(datas).ToList();
         }
 
         private async Task ExportDataContentsAsync()
         {
-            _siteData.DataContents = await _context.MixDataContent.Where(
-                   m => _dto.Data.MixDatabaseIds.Any(p => p == m.MixDatabaseId)).ToListAsync();
+            _siteData.DataContents = await _context.MixDataContent
+                .Where(m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
+                .AsNoTracking()
+                .ToListAsync();
         }
         private async Task ExportValuesAsync()
         {
-            _siteData.DataContentValues = await _context.MixDataContentValue.Where(
-                            m => _dto.Data.MixDatabaseIds.Any(n => n == m.MixDatabaseId)).ToListAsync();
+            _siteData.DataContentValues = await _context.MixDataContentValue
+                .Where(m => _dto.Associations.MixDatabaseIds.Any(n => n == m.MixDatabaseId))
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         private async Task ExportDataAssociationsAsync()
         {
-            Expression<Func<MixDataContentAssociation, bool>> predicate = m => _dto.Data.MixDatabaseIds.Any(p => p == m.MixDatabaseId);
+            Expression<Func<MixDataContentAssociation, bool>> predicate = m => _dto.Associations.MixDatabaseIds.Any(p => p == m.MixDatabaseId);
 
             _siteData.DataContentAssociations = await _context.MixDataContentAssociation
                 .Where(predicate).ToListAsync();
@@ -266,13 +274,13 @@ namespace Mix.Lib.Services
             Expression<Func<MixUrlAlias, bool>> predicate =
                 m => m.Type == MixUrlAliasType.Page
                     && m.SourceContentId.HasValue
-                    && _dto.Data.PageContentIds.Contains(m.SourceContentId.Value);
+                    && _dto.Associations.PageContentIds.Contains(m.SourceContentId.Value);
             predicate = predicate.Or(m => m.Type == MixUrlAliasType.Post
                     && m.SourceContentId.HasValue
-                    && _dto.Data.PostContentIds.Contains(m.SourceContentId.Value));
+                    && _dto.Associations.PostContentIds.Contains(m.SourceContentId.Value));
             predicate = predicate.Or(m => m.Type == MixUrlAliasType.Module
                     && m.SourceContentId.HasValue
-                    && _dto.Data.ModuleContentIds.Contains(m.SourceContentId.Value));
+                    && _dto.Associations.ModuleContentIds.Contains(m.SourceContentId.Value));
 
             _siteData.MixUrlAliases = await _context.MixUrlAlias.Where(predicate).ToListAsync();
         }
@@ -298,29 +306,56 @@ namespace Mix.Lib.Services
 
         private async Task ExportTemplates()
         {
-            _siteData.Templates = await _context.MixViewTemplate.Where(m => m.MixThemeId == _dto.ThemeId).ToListAsync();
+            _siteData.Templates = await _context.MixViewTemplate
+                .Where(m => m.MixThemeId == _dto.ThemeId)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         private async Task ExportPages()
         {
-            _siteData.Pages = await _context.MixPage.Where(m => _dto.Content.PageIds.Any(p => p == m.Id)).ToListAsync();
-            _siteData.PageContents = await _context.MixPageContent.Where(m => _dto.Content.PageContentIds.Any(p => p == m.Id)).ToListAsync();
+            _siteData.Pages = await _context.MixPage
+                .Where(m => _dto.Content.PageIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.PageContents = await _context.MixPageContent
+                .Where(m => _dto.Content.PageContentIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
         }
         private async Task ExportModules()
         {
-            _siteData.Modules = await _context.MixModule.Where(m => _dto.Content.ModuleIds.Any(p => p == m.Id)).ToListAsync();
-            _siteData.ModuleContents = await _context.MixModuleContent.Where(m => _dto.Content.ModuleContentIds.Any(p => p == m.Id)).ToListAsync();
+            _siteData.Modules = await _context.MixModule
+                .Where(m => _dto.Content.ModuleIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.ModuleContents = await _context.MixModuleContent
+                .Where(m => _dto.Content.ModuleContentIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
         }
         private async Task ExportPosts()
         {
-            _siteData.Posts = await _context.MixPost.Where(m => _dto.Content.PostIds.Any(p => p == m.Id)).ToListAsync();
-            _siteData.PostContents = await _context.MixPostContent.Where(m => _dto.Content.PostContentIds.Any(p => p == m.Id)).ToListAsync();
+            _siteData.Posts = await _context.MixPost
+                .Where(m => _dto.Content.PostIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.PostContents = await _context.MixPostContent
+                .Where(m => _dto.Content.PostContentIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         private async Task ExportDatabases()
         {
-            _siteData.MixDatabases = await _context.MixDatabase.Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id)).ToListAsync();
-            _siteData.MixDatabaseColumns = await _context.MixDatabaseColumn.Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDatabaseId)).ToListAsync();
+            _siteData.MixDatabaseColumns = await _context.MixDatabaseColumn
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.MixDatabaseId))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.MixDatabases = await _context.MixDatabase
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         #endregion
@@ -329,12 +364,24 @@ namespace Mix.Lib.Services
 
         private async Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
         {
-            var associations = await _context.MixDataContentAssociation.Where(
-                       m => m.IntParentId.HasValue && m.ParentType == type && parentIds.Any(p => p == m.IntParentId.Value)).ToListAsync();
+            var associations = await _context.MixDataContentAssociation
+                .Where(m => 
+                    m.IntParentId.HasValue 
+                    && m.ParentType == type 
+                    && parentIds.Any(p => p == m.IntParentId.Value))
+                .AsNoTracking()
+                .ToListAsync();
             var dataIds = associations.Select(x => x.ParentId).ToList();
             var contentIds = associations.Select(x => x.DataContentId).ToList();
-            var datas = await _context.MixData.Where(m => dataIds.Contains(m.Id)).ToListAsync();
-            var dataContents = await _context.MixDataContent.Where(m => contentIds.Contains(m.Id)).ToListAsync();
+            var datas = await _context.MixData
+                .Where(m => dataIds.Contains(m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            var dataContents = await _context.MixDataContent
+                .Where(m => contentIds.Contains(m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+
             _siteData.Datas = _siteData.Datas.Union(datas).ToList();
             _siteData.DataContents = _siteData.DataContents.Union(dataContents).ToList();
             _siteData.DataContentAssociations = _siteData.DataContentAssociations.Union(associations).ToList();

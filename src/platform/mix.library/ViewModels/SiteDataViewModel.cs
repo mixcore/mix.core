@@ -1,4 +1,5 @@
 ﻿using Mix.Lib.Dtos;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
@@ -8,7 +9,11 @@ namespace Mix.Lib.ViewModels
 
         public string Specificulture { get; set; }
 
+        [Required]
         public string ThemeName { get; set; }
+        public string ThemeSystemName { get; set; }
+
+        public int ThemeId { get; set; }
 
         #region Main Objects
 
