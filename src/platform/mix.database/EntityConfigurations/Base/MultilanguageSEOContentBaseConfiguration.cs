@@ -29,15 +29,11 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
-            builder.Property(e => e.Layout)
-              .HasColumnType($"{Config.NString}{Config.MediumLength}")
-              .HasCharSet(Config.CharSet)
-              .UseCollation(Config.DatabaseCollation);
+            builder.Property(e => e.LayoutId)
+              .HasColumnType(Config.Integer);
 
-            builder.Property(e => e.Template)
-              .HasColumnType($"{Config.NString}{Config.MediumLength}")
-              .HasCharSet(Config.CharSet)
-              .UseCollation(Config.DatabaseCollation);
+            builder.Property(e => e.TemplateId)
+              .HasColumnType(Config.Integer);
 
             builder.Property(e => e.PublishedDateTime)
                 .HasColumnType(Config.DateTime);

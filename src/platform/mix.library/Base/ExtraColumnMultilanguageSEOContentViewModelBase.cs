@@ -1,17 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using System;
+﻿using Mix.Heart.Entities;
 
 namespace Mix.Lib.Base
 {
     public abstract class ExtraColumnMultilanguageSEOContentViewModelBase
         <TDbContext, TEntity, TPrimaryKey, TView> 
         : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-         where TDbContext : DbContext
+         where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
