@@ -54,9 +54,7 @@ namespace Mix.Tenancy.Domain.Services
                     {
                         GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;
                         GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
-                        GlobalConfigService.Instance.AppSettings.IsInit = false;
                         GlobalConfigService.Instance.SaveSettings();
-
                         authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
                         authConfigService.SaveSettings();
                     }

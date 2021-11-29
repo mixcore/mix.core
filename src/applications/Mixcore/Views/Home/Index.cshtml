@@ -1,6 +1,6 @@
 ﻿@model PageContentViewModel
 @{
-    Layout = $"~/{Model.Layout}";
+    Layout = $"~/{Model.Layout}" ?? "Masters/_Layout.cshtml";
     ViewData["Title"] = "Home Page";
     Context.Request.Headers.TryGetValue("Authorization", out  var token);
 }

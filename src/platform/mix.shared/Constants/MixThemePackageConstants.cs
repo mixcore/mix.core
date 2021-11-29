@@ -2,6 +2,7 @@
 {
     public class MixThemePackageConstants
     {
+        public const string DefaultThemeFilePath = "MixContent/default.zip";
         public const string AssetFolder = "Assets";
         public const string UploadFolder = "Uploads";
         public const string SchemaFolder = "Schema";
