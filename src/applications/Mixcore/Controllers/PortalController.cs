@@ -15,8 +15,9 @@ namespace Mixcore.Controllers
        
         public PortalController(
             MixService mixService,
-            MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService)
-            : base(mixService, ipSecurityConfigService)
+            MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
+            MixCacheService cacheService)
+            : base(mixService, ipSecurityConfigService, cacheService)
         {
             _databaseService = databaseService;
         }

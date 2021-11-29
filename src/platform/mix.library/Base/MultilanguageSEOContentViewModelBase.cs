@@ -66,12 +66,12 @@ namespace Mix.Lib.Base
             if (string.IsNullOrEmpty(Template) && TemplateId.HasValue)
             {
                 var template = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == TemplateId);
-                Template = $"{template.FileFolder}/{template.FileName}{template.Extension}";
+                Template = $"/{template.FileFolder}/{template.FileName}{template.Extension}";
             }
             if (string.IsNullOrEmpty(Layout) && LayoutId.HasValue)
             {
                 var layout = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == LayoutId);
-                Layout = $"{layout.FileFolder}/{layout.FileName}{layout.Extension}";
+                Layout = $"/{layout.FileFolder}/{layout.FileName}{layout.Extension}";
             }
         }
 

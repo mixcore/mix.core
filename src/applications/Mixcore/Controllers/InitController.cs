@@ -9,8 +9,9 @@ namespace Mixcore.Controllers
     {
         public InitController(
             MixService mixService,
-            IPSecurityConfigService ipSecurityConfigService) 
-            : base(mixService, ipSecurityConfigService)
+            IPSecurityConfigService ipSecurityConfigService,
+            MixCacheService cacheService)
+            : base(mixService, ipSecurityConfigService, cacheService)
         {
         }
 
