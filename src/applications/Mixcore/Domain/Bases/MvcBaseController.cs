@@ -17,7 +17,8 @@ namespace Mixcore.Domain.Bases
             MixService mixService,
             TranslatorService translator,
             MixDatabaseService databaseService,
-            MixCmsContext context) : base(mixService, ipSecurityConfigService)
+            MixCmsContext context,
+            MixCacheService cacheService) : base(mixService, ipSecurityConfigService, cacheService)
         {
             _context = context;
             _uow = new(_context);
@@ -51,7 +52,7 @@ namespace Mixcore.Domain.Bases
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetSingleAsync(pageId);
+            var page = await pageRepo.GetSingleAsync(pageId, _cacheService);
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;

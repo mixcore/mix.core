@@ -15,7 +15,9 @@ namespace Mixcore.Controllers
             MixService mixService,
             TranslatorService translator, 
             MixDatabaseService databaseService,
-            MixCmsContext context) : base(ipSecurityConfigService, mixService, translator, databaseService, context)
+            MixCmsContext context,
+            MixCacheService cacheService) 
+            : base(ipSecurityConfigService, mixService, translator, databaseService, context, cacheService)
         {
             _logger = logger;
         }
