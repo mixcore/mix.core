@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Shared.Constants;
-using Mix.Lib.Base;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
-using Mix.Shared.Enums;
 using Mix.Lib.Services;
 
 namespace Mixcore.Controllers
@@ -50,6 +47,12 @@ namespace Mixcore.Controllers
                         if (page.ToLower() != "step3")
                         {
                             return Redirect(InitRoutePath.Step3);
+                        }
+                        break;
+                    case InitStep.SelectTheme:
+                        if (page.ToLower() != "step4")
+                        {
+                            return Redirect(InitRoutePath.Step4);
                         }
                         break;
                 }

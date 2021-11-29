@@ -5,6 +5,7 @@
         Blank,
         InitTenant,
         InitAccount,
+        SelectTheme,
         InitTheme
     }
 }

@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Services;
-using System.Threading.Tasks;
-using Mix.Shared.Services;
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Services;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Base;
 using Mix.Heart.Repository;
-using Mix.Database.Entities.Cms;
 using Mix.Shared.Enums;
-using Microsoft.Extensions.Configuration;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Lib.ViewModels;
+using Mix.Identity.Constants;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -20,6 +17,7 @@ namespace Mix.Tenancy.Controllers
     public class InitController : MixApiControllerBase
     {
         private readonly InitCmsService _initCmsService;
+        private readonly MixThemeImportService _importService;
 
         public InitController(
             IConfiguration configuration,
@@ -29,10 +27,12 @@ namespace Mix.Tenancy.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService, 
+            MixThemeImportService importService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _initCmsService = initCmsService;
+            _importService = importService;
         }
 
 
@@ -77,6 +77,51 @@ namespace Mix.Tenancy.Controllers
                 return NoContent();
             }
             return BadRequest();
+        }
+        
+        /// <summary>
+        /// When status = InitAcccount
+        ///     - Upload or load default theme zip file
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("extract-theme")]
+        public ActionResult<bool> ExtractThemeAsync([FromForm] IFormFile theme = null)
+        {
+            _importService.ExtractTheme(theme);
+            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SaveSettings();
+            return Ok();
+        }
+        
+        /// <summary>
+        /// When status = SelectTheme
+        ///     - Load selected theme and show items will be installed
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("load-theme")]
+        public ActionResult<SiteDataViewModel> LoadThemeAsync()
+        {
+            var data = _importService.LoadTheme();
+            return Ok(data);
+        }
+
+        [HttpPost("import-theme")]
+        public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
+        {
+            if (ModelState.IsValid)
+            {
+                siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                var result = await _importService.ImportSelectedItemsAsync(siteData);
+                GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
+                GlobalConfigService.Instance.AppSettings.IsInit = false;
+                GlobalConfigService.Instance.SaveSettings();
+                return Ok(result);
+            }
+            return BadRequest(ModelState);
         }
 
         /// <returns status> init status </returns>

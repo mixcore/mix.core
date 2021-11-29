@@ -6,6 +6,7 @@ using Mix.Database.Entities.Base;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using Mix.Heart.Enums;
+using Mix.Heart.Models;
 
 namespace Mix.Lib.Services
 {
@@ -43,27 +44,26 @@ namespace Mix.Lib.Services
         #region Import
 
 
-        public async Task<SiteDataViewModel> LoadTheme(IFormFile themeFile)
+        public SiteDataViewModel LoadTheme()
         {
-            //Save file to temporary folder
-            return LoadThemeFiles(themeFile);
+            var strSchema = MixFileService.Instance.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+            var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+            return siteStructures;
         }
 
-        private SiteDataViewModel LoadThemeFiles(IFormFile themeFile)
+        public void ExtractTheme(IFormFile themeFile)
         {
+            MixFileService.Instance.EmptyFolder(MixFolders.ThemePackage);
             if (themeFile != null)
             {
-                string importFolder = $"{MixFolders.TempFolder}/{MixFolders.ThemePackage}/{MixThemePackageConstants.TemplateFolder}";
-                MixFileService.Instance.EmptyFolder(importFolder);
-                var templateAsset = MixHelper.GetFileModel(themeFile, importFolder);
-                MixFileService.Instance.SaveFile(themeFile, importFolder);
-                MixFileService.Instance.UnZipFile(templateAsset.FullPath, importFolder);
-                var strSchema = MixFileService.Instance.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{templateAsset.FileFolder}/{MixThemePackageConstants.SchemaFolder}");
-                var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
-
-                return siteStructures;
+                var templateAsset = MixHelper.GetFileModel(themeFile, MixFolders.ThemePackage);
+                MixFileService.Instance.SaveFile(themeFile, MixFolders.ThemePackage);
+                MixFileService.Instance.UnZipFile(templateAsset.FullPath, MixFolders.ThemePackage);
             }
-            return null;
+            else
+            {
+                MixFileService.Instance.UnZipFile(MixThemePackageConstants.DefaultThemeFilePath, MixFolders.ThemePackage);
+            }
         }
 
         private Dictionary<int, int> dicColumnIds = new Dictionary<int, int>();
@@ -171,6 +171,13 @@ namespace Mix.Lib.Services
                     x.MixThemeName = _siteData.ThemeSystemName;
                     x.Content = ReplaceContent(x.Content);
                     x.FileFolder = ReplaceContent(x.FileFolder);
+                    MixFileService.Instance.SaveFile(new FileModel()
+                    {
+                        Content = x.Content,
+                        Extension = x.Extension,
+                        FileFolder = x.FileFolder,
+                        Filename = x.FileName
+                    });
                 });
                 await ImportEntitiesAsync(_siteData.Templates, dicTemplateIds);
             }
