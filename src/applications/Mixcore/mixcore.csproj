@@ -59,6 +59,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="MixContent\Temp\" />
 	  <Folder Include="Views\Shared\Templates\" />
 	</ItemGroup>
 </Project>
