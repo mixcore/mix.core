@@ -52,27 +52,6 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        public override async Task<ActionResult<int>> Create([FromBody] MixTemplateViewModel data)
-        {
-            var result = await base.Create(data);
-            _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
-            return result;
-        }
-
-        public override async Task<IActionResult> Update(string id, [FromBody] MixTemplateViewModel data)
-        {
-            var result = await base.Update(id, data);
-            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
-            return result;
-        }
-
-        public override async Task<ActionResult> Delete(int id)
-        {
-            var template = await GetById(id);
-            var result = await base.Delete(id);
-            _queueService.PushMessage(template, MixRestAction.Delete, MixRestStatus.Success);
-            return result;
-        }
 
         protected override SearchQueryModel<MixTemplate, int> BuildSearchRequest(SearchRequestDto req)
         {

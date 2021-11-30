@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
 using Mix.Heart.Repository;
 using Mix.Heart.Helpers;
 using Mix.Heart.Entities;
-using Mix.Heart.ViewModel;
-using Mix.Shared.Services;
 using Mix.Heart.Model;
-using System.Collections.Generic;
-using Mix.Database.Entities.Cms;
 using Mix.Lib.Services;
 using Mix.Identity.Constants;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Services;
 
 namespace Mix.Lib.Base
 {
@@ -52,6 +45,7 @@ namespace Mix.Lib.Base
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync(_uow);
+            _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
             return Ok(id);
         }
 
@@ -68,14 +62,17 @@ namespace Mix.Lib.Base
             data.SetDbContext(_context);
             var result = await data.SaveAsync(_uow);
             await _cacheService.RemoveCacheAsync(id, typeof(TView));
+            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete(TPrimaryKey id)
         {
+            var data = await _repository.GetSingleAsync(id);
             await _repository.DeleteAsync(id);
             await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
             return Ok();
         }
 
@@ -86,6 +83,7 @@ namespace Mix.Lib.Base
             result.SetDbContext(_context);
             await result.SaveFieldsAsync(properties);
             await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            _queueService.PushMessage(result, MixRestAction.Patch, MixRestStatus.Success);
             return Ok();
         }
 

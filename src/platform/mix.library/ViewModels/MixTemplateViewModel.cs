@@ -1,20 +1,9 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Models;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Shared.Constants;
-using Mix.Shared.Enums;
-using Mix.Shared.Services;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
     public class MixTemplateViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
+        : ViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
     {
         #region Properties
         public string Content { get; set; }
