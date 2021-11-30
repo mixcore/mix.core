@@ -5,11 +5,10 @@ using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Shared.Enums;
 
-namespace Mix.Lib.Publishers
+namespace Mix.Lib.Base
 {
-    public abstract class PublisherService : IHostedService
+    public abstract class MixPublisherServiceBase : IHostedService
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly List<IQueuePublisher<MessageQueueModel>> _publishers;
@@ -19,7 +18,7 @@ namespace Mix.Lib.Publishers
         private const int MAX_CONSUME_LENGTH = 100;
         private readonly string _topicId;
 
-        public PublisherService(
+        public MixPublisherServiceBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment, 

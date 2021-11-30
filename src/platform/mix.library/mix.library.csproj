@@ -80,6 +80,7 @@
 
 	<ItemGroup>
 		<Folder Include="Abstracts\" />
+		<Folder Include="Publishers\" />
 	</ItemGroup>
 
 </Project>

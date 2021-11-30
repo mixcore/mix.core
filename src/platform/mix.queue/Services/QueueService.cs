@@ -4,6 +4,7 @@ using Mix.Shared.Enums;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Mix.Queue.Services
 {
@@ -43,12 +44,12 @@ namespace Mix.Queue.Services
 
         private ConcurrentQueue<MessageQueueModel> GetQueue(string topicId)
         {
-            if (_queues.ContainsKey(topicId))
+            if (!_queues.ContainsKey(topicId))
             {
-                return _queues[topicId];
+                _queues.Add(topicId, new ConcurrentQueue<MessageQueueModel>());
             }
-            _queues.Add(topicId, new ConcurrentQueue<MessageQueueModel>());
-            return _queues[topicId];
+
+            return _queues.ContainsKey(topicId) ? _queues[topicId] : default;
         }
 
         public void PushQueue(MessageQueueModel model)

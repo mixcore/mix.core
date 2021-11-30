@@ -9,10 +9,11 @@ namespace Mix.Portal
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
+            // Queue publisher
             services.AddHostedService<ThemePublisherService>();
             services.AddHostedService<TemplatePublisherService>();
             services.AddHostedService<PageContentPublisherService>();
-            services.AddHostedService<ThemeSubscriberService>();
+
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
         }
