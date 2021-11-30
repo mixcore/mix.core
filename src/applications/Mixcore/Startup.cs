@@ -35,9 +35,10 @@ namespace Mixcore
                 });
             });
 
+            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddHostedService<ThemeSubscriberService>();
             services.AddHostedService<TemplateSubscriberService>();
-            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddHostedService<PageContentSubscriberService>();
             services.AddMixAuthorize<ApplicationDbContext>();
 
             services.AddMixRoutes();

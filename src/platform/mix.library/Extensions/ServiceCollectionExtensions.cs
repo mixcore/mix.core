@@ -46,10 +46,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<ApplicationDbContext>();
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
-            services.AddDbContext<MixCacheDbContext>();
 
-            services.AddScoped<EntityRepository<MixCacheDbContext, MixCache, string>>();
-            services.AddScoped<MixCacheService>();
+            services.AddSingleton<MixCacheDbContext>();
+            services.AddSingleton<EntityRepository<MixCacheDbContext, MixCache, string>>();
+            services.AddSingleton<MixCacheService>();
 
             services.ApplyMigrations();
 

@@ -11,6 +11,7 @@ namespace Mix.Portal
         {
             services.AddHostedService<ThemePublisherService>();
             services.AddHostedService<TemplatePublisherService>();
+            services.AddHostedService<PageContentPublisherService>();
             services.AddHostedService<ThemeSubscriberService>();
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
