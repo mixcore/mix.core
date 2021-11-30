@@ -36,11 +36,13 @@ namespace Mixcore
             });
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+
+            // Queue Subscribers
             services.AddHostedService<ThemeSubscriberService>();
             services.AddHostedService<TemplateSubscriberService>();
             services.AddHostedService<PageContentSubscriberService>();
-            services.AddMixAuthorize<ApplicationDbContext>();
 
+            services.AddMixAuthorize<ApplicationDbContext>();
             services.AddMixRoutes();
 
             // Must app Auth config after Add mixservice to init App config 

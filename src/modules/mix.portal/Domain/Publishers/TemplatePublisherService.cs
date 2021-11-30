@@ -1,10 +1,9 @@
-﻿using Mix.Lib.Publishers;
-using Mix.Lib.ViewModels;
+﻿using Mix.Lib.ViewModels;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Portal.Publishers
 {
-    public class TemplatePublisherService : PublisherService
+    public class TemplatePublisherService : MixPublisherServiceBase
     {
         static string topicId = typeof(MixTemplateViewModel).FullName;
         public TemplatePublisherService(
