@@ -1,4 +1,5 @@
-﻿using Mix.Queue.Interfaces;
+﻿using Microsoft.Extensions.Hosting;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines.MixQueue
 {
-    internal class MixQueueSubscriber : IQueueSubscriber
+    internal class MixQueueSubscriber : BackgroundService, IQueueSubscriber
     {
         private readonly string _subscriptionId;
         private MixTopicModel _topic;
@@ -40,9 +41,8 @@ namespace Mix.Queue.Engines.MixQueue
         /// Process message queue
         /// </summary>
         /// <returns></returns>
-        public Task ProcessQueue()
+        public Task ProcessQueue(CancellationToken cancellationToken)
         {
-            CancellationToken cancellationToken = new CancellationToken();
             Task.Run(async () =>
             {
                 while (!cancellationToken.IsCancellationRequested)
@@ -54,11 +54,17 @@ namespace Mix.Queue.Engines.MixQueue
                     {
                         await _messageHandler.Invoke(inQueueItems[0]);
                     }
+                    await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);
 
 
             return Task.CompletedTask;
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            return ProcessQueue(stoppingToken);
         }
     }
 }

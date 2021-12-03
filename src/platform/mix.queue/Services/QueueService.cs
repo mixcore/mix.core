@@ -4,17 +4,16 @@ using Mix.Shared.Enums;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Mix.Queue.Services
 {
     public class QueueService : IQueueService<MessageQueueModel>
     {
-        private Dictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
-
+        private ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
+        public bool IsNewMessage { get; private set; }
         public QueueService()
         {
-            _queues = new Dictionary<string, ConcurrentQueue<MessageQueueModel>>();
+            _queues = new ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>>();
         }
 
         public bool Any(string topicId)
@@ -39,16 +38,21 @@ namespace Mix.Queue.Services
                     result.Add(data);
                 i++;
             }
+            IsNewMessage = _queues.Any(m => m.Value.Count > 0);
             return result;
         }
 
         private ConcurrentQueue<MessageQueueModel> GetQueue(string topicId)
         {
-            if (!_queues.ContainsKey(topicId))
+            if (string.IsNullOrEmpty(topicId))
             {
-                _queues.Add(topicId, new ConcurrentQueue<MessageQueueModel>());
+                return default;
             }
 
+            if (!_queues.ContainsKey(topicId))
+            {
+                _queues.TryAdd(topicId, new ConcurrentQueue<MessageQueueModel>());
+            }
             return _queues.ContainsKey(topicId) ? _queues[topicId] : default;
         }
 
@@ -56,6 +60,7 @@ namespace Mix.Queue.Services
         {
             var _queue = GetQueue(model.FullName);
             _queue.Enqueue(model);
+            IsNewMessage = true;
         }
 
         public void PushMessage<T>(T data, MixRestAction action, MixRestStatus status)
@@ -67,6 +72,11 @@ namespace Mix.Queue.Services
             };
             msg.Package(data);
             PushQueue(msg);
+        }
+
+        bool IQueueService<MessageQueueModel>.IsNewMessage()
+        {
+            return IsNewMessage;
         }
     }
 }

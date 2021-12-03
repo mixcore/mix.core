@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mix.Queue.Interfaces
 {
     public interface IQueueSubscriber
     {
-        Task ProcessQueue();
+        Task ProcessQueue(CancellationToken cancellationToken);
     }
 }
