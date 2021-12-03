@@ -8,15 +8,15 @@ using Mix.Queue.Models.QueueSetting;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MixPublisherServiceBase : IHostedService
+    public class MixPublisherServiceBase : BackgroundService, IHostedService
     {
-        private readonly IQueueService<MessageQueueModel> _queueService;
-        private readonly List<IQueuePublisher<MessageQueueModel>> _publishers;
-        private readonly IConfiguration _configuration;
-        private readonly IWebHostEnvironment _environment;
-
+        private IQueueService<MessageQueueModel> _queueService;
+        private List<IQueuePublisher<MessageQueueModel>> _publishers;
+        private IConfiguration _configuration;
+        private IWebHostEnvironment _environment;
+        private MixMemoryMessageQueue<MessageQueueModel> _queue;
         private const int MAX_CONSUME_LENGTH = 100;
-        private readonly string _topicId;
+        private string _topicId;
 
         public MixPublisherServiceBase(
             string topicId,
@@ -27,39 +27,17 @@ namespace Mix.Lib.Base
             _queueService = queueService;
             _configuration = configuration;
             _environment = environment;
+            _queue = queue;
             _topicId = topicId;
-            _publishers = CreatePublisher(_topicId, queue);
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            Task.Run(() =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH, _topicId);
-
-                    if (inQueueItems.Any() && _publishers != null)
-                    {
-                        Parallel.ForEach(_publishers, async publisher => { await publisher.SendMessages(inQueueItems); });
-                    }
-                }
-            }, cancellationToken);
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
-
-        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName, 
-            MixMemoryMessageQueue<MessageQueueModel> queue)
+       
+        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName,
+            MixMemoryMessageQueue<MessageQueueModel> queue, CancellationToken cancellationToken)
         {
             try
             {
-                List<IQueuePublisher<MessageQueueModel>> queuePublishers = 
+                List<IQueuePublisher<MessageQueueModel>> queuePublishers =
                     new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
@@ -83,6 +61,7 @@ namespace Mix.Lib.Base
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
                                provider, mixSetting, topicName, queue));
+                        
                         break;
                 }
 
@@ -94,5 +73,34 @@ namespace Mix.Lib.Base
             }
         }
 
+        private Task StartMixQueueEngine(CancellationToken cancellationToken)
+        {
+            return Task.Run(async () =>
+            {
+                while (!cancellationToken.IsCancellationRequested && _queueService.IsNewMessage())
+                {
+                    var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH, _topicId);
+
+                    if (inQueueItems.Any() && _publishers != null)
+                    {
+                        Parallel.ForEach(_publishers, async publisher => { await publisher.SendMessages(inQueueItems); });
+                    }
+                    await Task.Delay(1000, cancellationToken);
+                }
+            }, cancellationToken);
+        }
+
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            var providerSetting = _configuration["MessageQueueSetting:Provider"];
+            var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+            var provider = Enum.Parse<MixQueueProvider>(providerSetting);
+            _publishers = CreatePublisher(_topicId, _queue, stoppingToken);
+            if (provider == MixQueueProvider.MIX)
+            {
+                return StartMixQueueEngine(stoppingToken);
+            }
+            return Task.CompletedTask;
+        }
     }
 }

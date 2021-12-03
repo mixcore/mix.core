@@ -33,7 +33,7 @@ namespace Mix.Lib.Subscribers
             {
                 if (_subscriber != null)
                 {
-                    await _subscriber.ProcessQueue();
+                    await _subscriber.ProcessQueue(cancellationToken);
                 }
             }, cancellationToken);
 

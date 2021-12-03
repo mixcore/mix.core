@@ -71,7 +71,7 @@ namespace Mix.Queue.Engines.GooglePubSub
         /// Process message queue
         /// </summary>
         /// <returns></returns>
-        public async Task ProcessQueue()
+        public async Task ProcessQueue(CancellationToken cancel)
         {
             await _subscriber.StartAsync(
                  (PubsubMessage message, CancellationToken cancel) =>
