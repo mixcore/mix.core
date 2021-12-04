@@ -49,7 +49,25 @@ namespace Mixcore.Controllers
             {
                 return Redirect(_redirectUrl);
             }
-            return await Page(1, keyword);
+            return await Home();
+        }
+
+        protected async Task<IActionResult> Home()
+        {
+            // Home Page
+            var pageRepo = PageContentViewModel.GetRepository(_uow);
+            var page = await pageRepo.GetFirstAsync(p=>p.Type == MixPageType.Home, _cacheService);
+            ViewData["Title"] = page.SeoTitle;
+            ViewData["Description"] = page.SeoDescription;
+            ViewData["Keywords"] = page.SeoKeywords;
+            ViewData["Image"] = page.Image;
+            ViewData["Layout"] = page.Layout.FilePath;
+            ViewData["BodyClass"] = page.ClassName;
+            ViewData["ViewMode"] = MixMvcViewMode.Page;
+            ViewData["Keyword"] = page.SeoKeywords;
+
+            ViewBag.viewMode = MixMvcViewMode.Page;
+            return View(page);
         }
     }
 }

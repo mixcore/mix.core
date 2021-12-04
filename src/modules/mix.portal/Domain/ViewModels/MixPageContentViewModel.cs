@@ -45,7 +45,7 @@ namespace Mix.Portal.Domain.ViewModels
                 m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id,
                 cacheService);
             DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
-                : MixCmsHelper.GetDetailsUrl(Specificulture, SeoName);
+                : $"/page/{Id}";
         }
 
         public override async Task<int> CreateParentAsync()

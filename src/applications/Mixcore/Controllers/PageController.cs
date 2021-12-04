@@ -2,11 +2,10 @@
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
-using Mixcore.Domain.ViewModels;
-using System.Linq.Expressions;
 
 namespace Mixcore.Controllers
 {
+    [Route("{controller}")]
     public class PageController : MixControllerBase
     {
         protected UnitOfWorkInfo _uow;
@@ -78,7 +77,7 @@ namespace Mixcore.Controllers
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;
             ViewData["Image"] = page.Image;
-            ViewData["Layout"] = page.Layout ?? "Masters/_Layout";
+            ViewData["Layout"] = page.Layout.FilePath;
             ViewData["BodyClass"] = page.ClassName;
             ViewData["ViewMode"] = MixMvcViewMode.Page;
             ViewData["Keyword"] = keyword;

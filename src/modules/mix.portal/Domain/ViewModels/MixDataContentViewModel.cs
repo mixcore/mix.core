@@ -329,7 +329,7 @@
 
         public T Property<T>(string fieldName)
         {
-            return MixCmsHelper.Property<T>(Data, fieldName);
+            return Data.Property(fieldName).Value<T>();
         }
 
         public override async Task<Guid> CreateParentAsync()

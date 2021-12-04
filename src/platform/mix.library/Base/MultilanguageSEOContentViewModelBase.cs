@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Entities;
 using Mix.Heart.Exceptions;
+using Mix.Lib.ViewModels;
+using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.Base
 {
@@ -37,8 +39,8 @@ namespace Mix.Lib.Base
         public string Content { get; set; }
         public int? LayoutId { get; set; }
         public int? TemplateId { get; set; }
-        public string Layout { get; set; }
-        public string Template { get; set; }
+        public TemplateViewModel Layout { get; set; }
+        public TemplateViewModel Template { get; set; }
         public string Image { get; set; }
         public string Source { get; set; }
         public string SeoDescription { get; set; }
@@ -63,15 +65,15 @@ namespace Mix.Lib.Base
 
         public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
         {
-            if (string.IsNullOrEmpty(Template) && TemplateId.HasValue)
+            SetUowInfo(uowInfo);
+            var templateRepo = TemplateViewModel.GetRepository(uowInfo);
+            if (Template == null)
             {
-                var template = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == TemplateId);
-                Template = $"/{template.FileFolder}/{template.FileName}{template.Extension}";
+                Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId);
             }
-            if (string.IsNullOrEmpty(Layout) && LayoutId.HasValue)
+            if (Layout == null)
             {
-                var layout = await Context.MixViewTemplate.FirstOrDefaultAsync(m => m.Id == LayoutId);
-                Layout = $"/{layout.FileFolder}/{layout.FileName}{layout.Extension}";
+                Layout = await templateRepo.GetSingleAsync(m => m.Id == LayoutId);
             }
         }
 
