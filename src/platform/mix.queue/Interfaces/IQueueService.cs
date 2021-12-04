@@ -5,8 +5,6 @@ namespace Mix.Queue.Interfaces
 {
     public interface IQueueService<T>
     {
-        bool IsNewMessage();
-
         void PushQueue(T model);
 
         IList<T> ConsumeQueue(int lenght, string topicId);

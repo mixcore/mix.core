@@ -77,7 +77,7 @@ namespace Mix.Lib.Base
         {
             return Task.Run(async () =>
             {
-                while (!cancellationToken.IsCancellationRequested && _queueService.IsNewMessage())
+                while (!cancellationToken.IsCancellationRequested)
                 {
                     var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH, _topicId);
 
@@ -93,7 +93,6 @@ namespace Mix.Lib.Base
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var providerSetting = _configuration["MessageQueueSetting:Provider"];
-            var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
             var provider = Enum.Parse<MixQueueProvider>(providerSetting);
             _publishers = CreatePublisher(_topicId, _queue, stoppingToken);
             if (provider == MixQueueProvider.MIX)
