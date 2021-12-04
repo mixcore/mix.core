@@ -10,7 +10,6 @@ namespace Mix.Queue.Services
     public class QueueService : IQueueService<MessageQueueModel>
     {
         private ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
-        public bool IsNewMessage { get; private set; }
         public QueueService()
         {
             _queues = new ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>>();
@@ -38,7 +37,6 @@ namespace Mix.Queue.Services
                     result.Add(data);
                 i++;
             }
-            IsNewMessage = _queues.Any(m => m.Value.Count > 0);
             return result;
         }
 
@@ -60,7 +58,6 @@ namespace Mix.Queue.Services
         {
             var _queue = GetQueue(model.FullName);
             _queue.Enqueue(model);
-            IsNewMessage = true;
         }
 
         public void PushMessage<T>(T data, MixRestAction action, MixRestStatus status)
@@ -72,11 +69,6 @@ namespace Mix.Queue.Services
             };
             msg.Package(data);
             PushQueue(msg);
-        }
-
-        bool IQueueService<MessageQueueModel>.IsNewMessage()
-        {
-            return IsNewMessage;
         }
     }
 }
