@@ -57,7 +57,7 @@ namespace Mixcore.Domain.Bases
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;
             ViewData["Image"] = page.Image;
-            ViewData["Layout"] = page.Layout ?? "Masters/_Layout";
+            ViewData["Layout"] = page.Layout.FilePath;
             ViewData["BodyClass"] = page.ClassName;
             ViewData["ViewMode"] = MixMvcViewMode.Page;
             ViewData["Keyword"] = keyword;

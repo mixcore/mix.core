@@ -27,6 +27,7 @@
 		<Using Include="Mix.Identity.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
+		<Using Include="Mixcore.Domain.ViewModels" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
