@@ -2,12 +2,9 @@
 using Mix.Heart.Model;
 using Mix.Heart.Repository;
 using Mix.Lib.Models.Common;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Enums;
 using Mix.Lib.Dtos;
 using Mix.Lib.ViewModels;
 

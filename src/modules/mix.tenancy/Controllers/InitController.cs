@@ -105,7 +105,7 @@ namespace Mix.Tenancy.Controllers
         [Route("load-theme")]
         public ActionResult<SiteDataViewModel> LoadThemeAsync()
         {
-            var data = _importService.LoadTheme();
+            var data = _importService.LoadSchema();
             return Ok(data);
         }
 

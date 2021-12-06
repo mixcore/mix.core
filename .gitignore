@@ -288,3 +288,5 @@ src/applications/Mixcore/Properties/PublishProfiles/
 src/applications/Mixcore/Views/Shared/Templates/
 
 src/applications/Mixcore/wwwroot/mix-content/exports/
+
+src/applications/Mixcore/wwwroot/mix-content/

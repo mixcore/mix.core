@@ -166,12 +166,13 @@ namespace Mix.Common.Controllers
             try
             {
                 var data = _fileService.GetFile(
-                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder, false, "[]");
+                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder, false);
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return NotFound();
             }
         }

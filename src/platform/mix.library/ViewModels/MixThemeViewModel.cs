@@ -16,7 +16,7 @@ namespace Mix.Lib.ViewModels
         {
             get
             {
-                return $"{MixFolders.SiteContentAssetsFolder}/{SystemName}/assets";
+                return $"{MixFolders.SiteContentAssetsFolder}/{SystemName}";
             }
         }
 
@@ -24,7 +24,7 @@ namespace Mix.Lib.ViewModels
         {
             get
             {
-                return $"{MixFolders.SiteContentAssetsFolder}/{SystemName}/uploads";
+                return MixFolders.UploadsFolder;
             }
         }
 
