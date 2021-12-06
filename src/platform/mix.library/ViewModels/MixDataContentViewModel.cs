@@ -1,20 +1,7 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Helpers;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Mix.Heart.Services;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public class MixDataContentViewModel 
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
+        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
     {
         #region Contructors
 

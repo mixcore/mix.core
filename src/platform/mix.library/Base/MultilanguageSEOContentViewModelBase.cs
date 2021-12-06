@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
-using Mix.Heart.Exceptions;
-using Mix.Lib.ViewModels;
+﻿using Mix.Heart.Entities;
 using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.Base
@@ -83,21 +80,6 @@ namespace Mix.Lib.Base
             Specificulture = language ?? Specificulture;
             MixCultureId = cultureId ?? 1;
         }
-
-        protected override async Task<TEntity> SaveHandlerAsync()
-        {
-            if (IsDefaultId(ParentId))
-            {
-                ParentId = await CreateParentAsync();
-            }
-            return await base.SaveHandlerAsync();
-        }
-
         #endregion
-
-        public virtual Task<TPrimaryKey> CreateParentAsync()
-        {
-            throw new MixException($"Not implemented CreateParentAsync: {typeof(TView).FullName}");
-        }
     }
 }

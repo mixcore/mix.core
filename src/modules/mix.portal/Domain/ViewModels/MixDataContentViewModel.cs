@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentViewModel 
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
+        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
     {
         #region Contructors
 

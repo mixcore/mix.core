@@ -19,5 +19,6 @@
         public const string Category = "category";
         public const string Tag = "tag";
         public const string ThemeId = "themeId";
+        public const string ModuleContentId = "moduleContentId";
     }
 }

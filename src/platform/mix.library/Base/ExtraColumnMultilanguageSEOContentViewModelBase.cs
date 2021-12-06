@@ -4,7 +4,7 @@ namespace Mix.Lib.Base
 {
     public abstract class ExtraColumnMultilanguageSEOContentViewModelBase
         <TDbContext, TEntity, TPrimaryKey, TView> 
-        : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
