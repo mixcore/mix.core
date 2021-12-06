@@ -1,17 +1,9 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Mix.Portal.Domain.Models;
 
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixModuleContentViewModel 
+    public class MixModuleContentViewModel
         : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixModuleContent, int, MixModuleContentViewModel>
     {
         #region Contructors
@@ -37,8 +29,35 @@ namespace Mix.Portal.Domain.ViewModels
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
         public MixModuleType Type { get; set; }
+        public string SimpleDataColumns { get; set; }
+
+        public List<ModuleColumnModel> Columns { get; set; }
 
         #endregion
+
+        public override Task<MixModuleContent> ParseEntity(MixCacheService cacheService = null)
+        {
+            var arrField = Columns != null ? JArray.Parse(
+               JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
+                   c => !string.IsNullOrEmpty(c.SystemName)))) : new JArray();
+            SimpleDataColumns = arrField.ToString(Formatting.None);
+            return base.ParseEntity(cacheService);
+        }
+
+        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        {
+            if (!string.IsNullOrEmpty(SimpleDataColumns))
+            {
+                JArray arrField = JArray.Parse(SimpleDataColumns);
+                Columns = arrField.ToObject<List<ModuleColumnModel>>();
+            }
+            else
+            {
+                Columns = new List<ModuleColumnModel>();
+            }
+
+            return base.ExpandView(cacheService, uowInfo);
+        }
 
         public override async Task<int> CreateParentAsync()
         {

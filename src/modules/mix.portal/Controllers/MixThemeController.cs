@@ -52,7 +52,7 @@ namespace Mix.Portal.Controllers
         public ActionResult<SiteDataViewModel> LoadTheme([FromForm] IFormFile theme)
         {
             _importService.ExtractTheme(theme);
-            var siteData = _importService.LoadTheme();
+            var siteData = _importService.LoadSchema();
             return Ok(siteData);
         }
 

@@ -8,10 +8,10 @@ namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
-        public CultureService(MixCmsContext ctx) 
+        public CultureService(MixCmsContext ctx)
             : base(MixAppConfigFilePaths.Culture)
         {
-            
+
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
@@ -28,7 +28,7 @@ namespace Mix.Lib.Services
 
         public bool CheckValidCulture(string specificulture)
         {
-            return Cultures.Any(c => c.Specificulture == specificulture);
+            return Cultures != null && Cultures.Any(c => c.Specificulture == specificulture);
         }
 
         public MixCulture LoadCulture(string specificulture)

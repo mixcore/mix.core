@@ -4,8 +4,6 @@ using Mix.Heart.Entities;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json.Linq;
-using Mix.Heart.Enums;
 using Mix.Heart.Models;
 
 namespace Mix.Lib.Services
@@ -44,7 +42,7 @@ namespace Mix.Lib.Services
         #region Import
 
 
-        public SiteDataViewModel LoadTheme()
+        public SiteDataViewModel LoadSchema()
         {
             var strSchema = MixFileService.Instance.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
             var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
@@ -81,6 +79,7 @@ namespace Mix.Lib.Services
                 {
                     await CreateTheme();
                 }
+                ImportAssets();
                 await ImportContent();
                 await ImportData();
 
@@ -92,6 +91,16 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
+        }
+
+        private void ImportAssets()
+        {
+            string srcAssets = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.AssetFolder}";
+            string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
+            string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
+            string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}/{_siteData.ThemeSystemName}";
+            MixFileService.Instance.CopyFolder(srcAssets, destAssets);
+            MixFileService.Instance.CopyFolder(srcUpload, destUpload);
         }
 
         private async Task CreateTheme()
@@ -185,7 +194,7 @@ namespace Mix.Lib.Services
 
         private string ReplaceContent(string content)
         {
-            string accessFolder = string.Empty;
+            string accessFolder = $"/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
             return content.Replace("[ACCESS_FOLDER]", accessFolder)
                         .Replace("[THEME_NAME]", _siteData.ThemeName);
         }

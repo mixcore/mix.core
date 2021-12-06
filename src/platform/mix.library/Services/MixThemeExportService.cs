@@ -49,10 +49,7 @@ namespace Mix.Lib.Services
 
             ExportSchema(_siteData);
 
-            if (_dto.IsIncludeAssets)
-            {
-                ExportAssets();
-            }
+            ExportAssets();
 
             // Zip to [theme_name].zip ( wwwroot for web path)
             return ZipTheme();
@@ -87,12 +84,11 @@ namespace Mix.Lib.Services
         private void ExportSchema(SiteDataViewModel siteData)
         {
             string filename = MixThemePackageConstants.SchemaFilename;
-            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}/{MixThemePackageConstants.AssetFolder}";
+            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}";
             string content = MixHelper.SerializeObject(siteData);
             content = content
                 .Replace(accessFolder, "[ACCESS_FOLDER]")
-                .Replace($"/{_dto.Specificulture}/", "/[CULTURE]/")
-                .Replace($"/{siteData.ThemeName}/", "/[THEME_NAME]/");
+                .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]");
             if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
             {
                 content = content.Replace(GlobalConfigService.Instance.AppSettings.Domain, string.Empty);
@@ -150,7 +146,7 @@ namespace Mix.Lib.Services
             await ExportPagePosts();
             await ExportAdditionalData(_dto.Associations.PageIds, MixDatabaseParentType.Page);
         }
-        
+
         private async Task ExportPageModules()
         {
             _siteData.PageModules = await _context.MixPageModuleAssociation.Where(m => _dto.Content.PageIds.Any(p => p == m.LeftId)).ToListAsync();
@@ -365,9 +361,9 @@ namespace Mix.Lib.Services
         private async Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
         {
             var associations = await _context.MixDataContentAssociation
-                .Where(m => 
-                    m.IntParentId.HasValue 
-                    && m.ParentType == type 
+                .Where(m =>
+                    m.IntParentId.HasValue
+                    && m.ParentType == type
                     && parentIds.Any(p => p == m.IntParentId.Value))
                 .AsNoTracking()
                 .ToListAsync();
