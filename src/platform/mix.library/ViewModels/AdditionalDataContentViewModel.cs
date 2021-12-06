@@ -1,13 +1,9 @@
-﻿using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Lib.Helpers;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
+﻿using Mix.Heart.Repository;
 
 namespace Mix.Lib.ViewModels
 {
     public class AdditionalDataContentViewModel
-        : MultilanguageSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
+        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
     {
         #region Contructors
 

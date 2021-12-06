@@ -493,17 +493,17 @@
           "controller": "ModuleGalleryController"
         },
         {
-          "path": "/portal/module-data/details/:moduleId",
+          "path": "/portal/module-data/details/:moduleContentId",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/details.html",
           "controller": "ModuleDataController"
         },
         {
-          "path": "/portal/module-data/details/:moduleId/:id",
+          "path": "/portal/module-data/details/:moduleContentId/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/details.html",
           "controller": "ModuleDataController"
         },
         {
-          "path": "/portal/module-data/list/:moduleId",
+          "path": "/portal/module-data/list/:moduleContentId",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/list.html",
           "controller": "ModuleDataController"
         }
