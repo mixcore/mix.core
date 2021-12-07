@@ -73,8 +73,7 @@ namespace Mix.Lib.Base
                 List<object> objects = new List<object>();
                 foreach (var item in result.Items)
                 {
-                    var obj = ReflectionHelper.GetMembers(item, _repository.SelectedMembers);
-                    objects.Add(obj);
+                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
                 }
                 return Ok(new PagingResponseModel<object>()
                 {
