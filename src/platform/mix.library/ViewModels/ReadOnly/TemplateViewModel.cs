@@ -38,11 +38,10 @@
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override Task ExpandView(MixCacheService cacheService = null)
         {
-            SetUowInfo(uowInfo);
             FilePath = $"/{FileFolder}/{FileName}{Extension}";
-            return Task.CompletedTask;
+            return base.ExpandView(cacheService);
         }
 
         #endregion

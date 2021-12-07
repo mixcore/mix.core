@@ -55,11 +55,8 @@
             return base.ParseEntity(cacheService);
         }
 
-        public override async Task ExpandView(
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);
             if (MixDatabaseColumnId > 0)

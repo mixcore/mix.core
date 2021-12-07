@@ -55,9 +55,8 @@ namespace Mix.Lib.Base
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             using var _contentRepository = 
                 ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
 

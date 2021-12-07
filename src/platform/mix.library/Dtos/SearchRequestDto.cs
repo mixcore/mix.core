@@ -1,7 +1,4 @@
-﻿using Mix.Heart.Enums;
-using System;
-
-namespace Mix.Lib.Dtos
+﻿namespace Mix.Lib.Dtos
 {
     public class SearchRequestDto
     {
@@ -14,5 +11,6 @@ namespace Mix.Lib.Dtos
         public string OrderBy { get; set; }
         public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
+        public string SelectedMembers { get; set; }
     }
 }

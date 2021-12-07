@@ -48,7 +48,7 @@ namespace Mix.Lib.Base
 
         #region Extra
 
-        public bool IsClone { get; set; }
+        public bool? IsClone { get; set; }
 
         #endregion
 
@@ -60,10 +60,9 @@ namespace Mix.Lib.Base
             return base.ParseEntity(cacheService);
         }
 
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            SetUowInfo(uowInfo);
-            var templateRepo = TemplateViewModel.GetRepository(uowInfo);
+            var templateRepo = TemplateViewModel.GetRepository(UowInfo);
             if (Template == null)
             {
                 Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId);
