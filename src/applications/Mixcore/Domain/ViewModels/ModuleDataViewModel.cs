@@ -31,13 +31,13 @@
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override Task ExpandView(MixCacheService cacheService = null)
         {
             if (!string.IsNullOrEmpty(Value))
             {
                 Data = JObject.Parse(Value);
             }
-            return base.ExpandView(cacheService, uowInfo);
+            return base.ExpandView(cacheService);
         }
 
         #endregion

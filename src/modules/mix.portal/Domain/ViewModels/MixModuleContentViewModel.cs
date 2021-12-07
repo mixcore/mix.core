@@ -28,7 +28,7 @@ namespace Mix.Portal.Domain.ViewModels
         public string SystemName { get; set; }
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
-        public MixModuleType Type { get; set; }
+        public MixModuleType? Type { get; set; }
         public string SimpleDataColumns { get; set; }
 
         public List<ModuleColumnModel> Columns { get; set; }
@@ -44,7 +44,7 @@ namespace Mix.Portal.Domain.ViewModels
             return base.ParseEntity(cacheService);
         }
 
-        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override Task ExpandView(MixCacheService cacheService = null)
         {
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
@@ -56,7 +56,7 @@ namespace Mix.Portal.Domain.ViewModels
                 Columns = new List<ModuleColumnModel>();
             }
 
-            return base.ExpandView(cacheService, uowInfo);
+            return base.ExpandView(cacheService);
         }
 
         public override async Task<int> CreateParentAsync()

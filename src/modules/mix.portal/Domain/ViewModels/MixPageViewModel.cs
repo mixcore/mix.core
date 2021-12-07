@@ -33,9 +33,9 @@ namespace Mix.Portal.Domain.ViewModels
         #region Overrides
 
 
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            var repo = MixPageContentViewModel.GetRepository(uowInfo);
+            var repo = MixPageContentViewModel.GetRepository(UowInfo);
             Contents = await repo.GetListAsync(m => m.ParentId == Id, cacheService);
         }
 

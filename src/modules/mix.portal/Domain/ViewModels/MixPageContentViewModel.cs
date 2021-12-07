@@ -33,14 +33,14 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            await LoadAliasAsync(cacheService, uowInfo);
+            await LoadAliasAsync(cacheService);
         }
 
-        private async Task LoadAliasAsync(MixCacheService cacheService, UnitOfWorkInfo uowInfo)
+        private async Task LoadAliasAsync(MixCacheService cacheService)
         {
-            var aliasRepo = MixUrlAliasViewModel.GetRepository(uowInfo);
+            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
             UrlAliases = await aliasRepo.GetListAsync(
                 m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id,
                 cacheService);

@@ -1,15 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using Mix.Heart.Entities;
 using Mix.Heart.Repository;
-using Mix.Heart.ViewModel;
-using Mix.Shared.Services;
-using Mix.Lib.Base;
-using Mix.Database.Entities.Cms;
-using Microsoft.Extensions.Logging;
 using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Services;
 
 namespace Mix.Lib.Controllers
 {

@@ -49,7 +49,7 @@ namespace Mix.Portal.Controllers
                     ModuleContentId = getModule.Id,
                     SimpleDataColumns =  getModule.SimpleDataColumns
                 };
-                await moduleData.ExpandView(_cacheService, _uow);
+                await moduleData.ExpandView(_cacheService);
                 return Ok(moduleData);
             }
             else

@@ -40,9 +40,8 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             if (!string.IsNullOrEmpty(FileName))
             {
                 var file = MixFileService.Instance.GetFile(FileName, Extension, FileFolder);

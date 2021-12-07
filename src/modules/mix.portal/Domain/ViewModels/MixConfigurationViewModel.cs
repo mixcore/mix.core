@@ -1,12 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using System.Threading.Tasks;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController(Route = "api/v2/rest/portal/mix-configuration", Name = "Mix Configuration")]
     public class MixConfigurationViewModel
@@ -43,9 +35,8 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             _contentQueryRepository = MixConfigurationContentViewModel.GetRepository(UowInfo);
 
             Contents = await _contentQueryRepository.GetListAsync(

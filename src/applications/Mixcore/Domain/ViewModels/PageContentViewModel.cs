@@ -36,11 +36,6 @@ namespace Mixcore.Domain.ViewModels
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
-        {
-            return base.ExpandView(cacheService, uowInfo);
-        }
-
         #endregion
     }
 }

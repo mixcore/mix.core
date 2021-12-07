@@ -63,8 +63,27 @@ namespace Mix.Lib.Base
         public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
+            if (!string.IsNullOrEmpty(req.SelectedMembers))
+            {
+                _repository.SetSelectedMembers(req.SelectedMembers.Split(','));
+            }
+            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, _cacheService);
+            if (!string.IsNullOrEmpty(req.SelectedMembers))
+            {
+                List<object> objects = new List<object>();
+                foreach (var item in result.Items)
+                {
+                    var obj = ReflectionHelper.GetMembers(item, _repository.SelectedMembers);
+                    objects.Add(obj);
+                }
+                return Ok(new PagingResponseModel<object>()
+                {
+                    Items = objects,
+                    PagingData = result.PagingData
+                });
+            }
 
-            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, _cacheService);
+            return result;
         }
 
         [HttpGet("{id}")]
@@ -74,7 +93,7 @@ namespace Mix.Lib.Base
             return data != null ? Ok(data) : NotFound(id);
         }
 
-       
+
 
         [HttpGet("default")]
         [HttpGet("{lang}/default")]
@@ -82,7 +101,7 @@ namespace Mix.Lib.Base
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
             result.InitDefaultValues(_lang, _culture.Id);
-            result.ExpandView(_cacheService, _uow);
+            result.ExpandView(_cacheService);
             return Ok(result);
         }
 

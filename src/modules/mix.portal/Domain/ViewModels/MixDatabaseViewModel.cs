@@ -46,9 +46,8 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cacheService, UowInfo);
         }

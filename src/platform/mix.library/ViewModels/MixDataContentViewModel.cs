@@ -52,11 +52,8 @@
 
         #region Overrides
 
-        public override async Task ExpandView(
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null)
+        public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            UowInfo ??= uowInfo;
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
@@ -169,7 +166,7 @@
             var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
             if (val == null)
             {
-                val = new MixDataContentValueViewModel()
+                val = new MixDataContentValueViewModel(UowInfo)
                 {
                     MixDatabaseColumnId = field.Id,
                     MixDatabaseColumnName = field.SystemName,
@@ -180,7 +177,7 @@
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy
                 };
-                await val.ExpandView(cacheService, UowInfo);
+                await val.ExpandView(cacheService);
                 Values.Add(val);
             }
             val.Status = Status;

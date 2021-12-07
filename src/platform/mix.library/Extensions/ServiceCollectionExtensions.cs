@@ -294,6 +294,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
 
             foreach (var assembly in MixAssemblies)

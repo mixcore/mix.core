@@ -1,10 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Portal.Domain.ViewModels
 {
