@@ -305,7 +305,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     ConstructorInfo classConstructor = startup.GetConstructor(Array.Empty<Type>());
                     var instance = classConstructor.Invoke(Array.Empty<Type>());
                     startup.GetMethod("AddServices").Invoke(instance, new object[] { services, configuration });
-
                 }
             }
             return services;
