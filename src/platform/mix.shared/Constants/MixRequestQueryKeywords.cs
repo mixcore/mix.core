@@ -20,5 +20,7 @@
         public const string Tag = "tag";
         public const string ThemeId = "themeId";
         public const string ModuleContentId = "moduleContentId";
+        public const string LeftId = "leftId";
+        public const string RightId = "rightId";
     }
 }
