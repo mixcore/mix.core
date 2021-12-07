@@ -90,6 +90,23 @@ namespace Mix.Lib.Base
             return Ok();
         }
 
+
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPost("save-many")]
+        public virtual async Task<ActionResult<bool>> SaveMany([FromBody] List<TView> data)
+        {
+            if (data == null)
+            {
+                return BadRequest("Null Object");
+            }
+            foreach (var item in data)
+            {
+                await item.SaveAsync(_uow);
+            }
+            return Ok(true);
+        }
+
         #endregion Routes
     }
 }

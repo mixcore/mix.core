@@ -13,12 +13,6 @@ namespace Mix.Database.EntityConfigurations.Base
         public override void Configure(EntityTypeBuilder<T> builder)
         {
             base.Configure(builder);
-
-            builder.Property(e => e.Specificulture)
-                .HasColumnType($"{Config.NString}{Config.SmallLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
-
         }
 
     }
