@@ -38,7 +38,8 @@ namespace Mix.Xunittest.Domain.Base
         public async Task Step_1_Save()
         {
             TView valueToAdd = CreateSampleValue();
-            var key = await valueToAdd.SaveAsync(UowInfo);
+            valueToAdd.SetUowInfo(UowInfo);
+            var key = await valueToAdd.SaveAsync();
             await UowInfo.CompleteAsync();
             Assert.True(key != null, key.ToString());
         }

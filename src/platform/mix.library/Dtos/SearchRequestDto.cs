@@ -11,6 +11,6 @@
         public string OrderBy { get; set; }
         public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
-        public string SelectedMembers { get; set; }
+        public string Columns { get; set; }
     }
 }

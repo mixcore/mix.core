@@ -60,7 +60,7 @@ namespace Mix.Lib.Base
             using var _contentRepository = 
                 ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
 
-            Contents = await _contentRepository.GetListAsync(m => m.ParentId.Equals(Id), cacheService, UowInfo);
+            Contents = await _contentRepository.GetListAsync(m => m.ParentId.Equals(Id), cacheService);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
@@ -75,8 +75,9 @@ namespace Mix.Lib.Base
             {
                 foreach (var item in Contents)
                 {
+                    item.SetUowInfo(UowInfo);
                     item.ParentId = parentEntity.Id;
-                    await item.SaveAsync(UowInfo);
+                    await item.SaveAsync();
                 }
             }
         }

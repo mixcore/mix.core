@@ -49,7 +49,7 @@ namespace Mix.Portal.Domain.ViewModels
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cacheService, UowInfo);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cacheService);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)
@@ -58,9 +58,10 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 foreach (var item in Columns)
                 {
+                    item.SetUowInfo(UowInfo); 
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
-                    await item.SaveAsync(UowInfo);
+                    await item.SaveAsync();
                 }
             }
         }

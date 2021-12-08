@@ -63,12 +63,12 @@ namespace Mix.Lib.Base
         public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-            if (!string.IsNullOrEmpty(req.SelectedMembers))
+            if (!string.IsNullOrEmpty(req.Columns))
             {
-                _repository.SetSelectedMembers(req.SelectedMembers.Split(','));
+                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, _cacheService);
-            if (!string.IsNullOrEmpty(req.SelectedMembers))
+            if (!string.IsNullOrEmpty(req.Columns))
             {
                 List<object> objects = new List<object>();
                 foreach (var item in result.Items)

@@ -38,63 +38,51 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public virtual async Task<ActionResult<TPrimaryKey>> Create([FromBody] TView data)
+        public async Task<ActionResult<TPrimaryKey>> Create([FromBody] TView data)
         {
             if (data == null)
             {
                 return BadRequest("Null Object");
             }
-            data.SetDbContext(_context);
-            data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-            var id = await data.SaveAsync(_uow);
-            _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
-            return Ok(id);
+            data.SetUowInfo(_uow);
+            return await CreateHandlerAsync(data);
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Update(string id, [FromBody] TView data)
+        public async Task<IActionResult> Update(string id, [FromBody] TView data)
         {
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id != currentId)
             {
                 return BadRequest();
             }
-            data.SetDbContext(_context);
-            var result = await data.SaveAsync(_uow);
-            await _cacheService.RemoveCacheAsync(id, typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
-            return Ok(result);
+            data.SetUowInfo(_uow);
+            return await UpdateHandler(id, data);
         }
 
         [HttpDelete("{id}")]
-        public virtual async Task<ActionResult> Delete(TPrimaryKey id)
+        public async Task<ActionResult> Delete(TPrimaryKey id)
         {
             var data = await _repository.GetSingleAsync(id);
-            await _repository.DeleteAsync(id);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
-            return Ok();
+            data.SetUowInfo(_uow);
+            return await DeleteHandler(data);
         }
 
         [HttpPatch("{id}")]
-        public virtual async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
+        public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
-            var result = await _repository.GetSingleAsync(id);
-            result.SetDbContext(_context);
-            await result.SaveFieldsAsync(properties);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
-            _queueService.PushMessage(result, MixRestAction.Patch, MixRestStatus.Success);
-            return Ok();
+            var data = await _repository.GetSingleAsync(id);
+            data.SetUowInfo(_uow);
+            return await PatchHandler(id, data, properties);
         }
 
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-many")]
-        public virtual async Task<ActionResult<bool>> SaveMany([FromBody] List<TView> data)
+        public async Task<ActionResult<bool>> SaveMany([FromBody] List<TView> data)
         {
             if (data == null)
             {
@@ -102,11 +90,59 @@ namespace Mix.Lib.Base
             }
             foreach (var item in data)
             {
-                await item.SaveAsync(_uow);
+                item.SetUowInfo(_uow);
             }
-            return Ok(true);
+            return await SaveManyHandler(data);
         }
 
+        
         #endregion Routes
+
+        #region Handlers
+
+        protected virtual async Task<ActionResult<TPrimaryKey>> CreateHandlerAsync(TView data)
+        {
+            data.CreatedDateTime = DateTime.UtcNow;
+            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+            var id = await data.SaveAsync();
+            _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
+            return Ok(id);
+        }
+
+        protected virtual async Task<IActionResult> UpdateHandler(string id, TView data)
+        {
+            var result = await data.SaveAsync();
+            await _cacheService.RemoveCacheAsync(id, typeof(TView));
+            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
+            return Ok(result);
+        }
+
+        protected virtual async Task<ActionResult> DeleteHandler(TView data)
+        {
+            await data.DeleteAsync();
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
+            _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
+            return Ok();
+        }
+
+
+        protected virtual async Task<IActionResult> PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
+        {
+            await data.SaveFieldsAsync(properties);
+            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            _queueService.PushMessage(data, MixRestAction.Patch, MixRestStatus.Success);
+            return Ok();
+        }
+
+        protected virtual async Task<ActionResult<bool>> SaveManyHandler(List<TView> data)
+        {
+            foreach (var item in data)
+            {
+                await item.SaveAsync();
+            }
+            return Ok();
+        }
+
+        #endregion
     }
 }

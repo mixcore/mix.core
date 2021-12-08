@@ -36,8 +36,9 @@ namespace Mix.Portal.Controllers
         [Route("save")]
         public async Task<ActionResult<MixThemeViewModel>> Save(MixThemeViewModel data)
         {
+            data.SetUowInfo(_uow);
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-            await data.SaveAsync(_uow);
+            await data.SaveAsync();
             return Ok(data);
         }
 

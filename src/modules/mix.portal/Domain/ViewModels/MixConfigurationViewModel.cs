@@ -49,8 +49,9 @@
             {
                 foreach (var item in Contents)
                 {
+                    item.SetUowInfo(UowInfo);
                     item.ParentId = parentEntity.Id;
-                    await item.SaveAsync(UowInfo);
+                    await item.SaveAsync();
                 }
             }
         }

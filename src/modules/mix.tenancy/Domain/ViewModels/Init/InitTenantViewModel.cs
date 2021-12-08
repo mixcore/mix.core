@@ -72,7 +72,8 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             // Save and subscribe result for current consumer
             // Or can use this instead of _consumer to listen result in this viewmodel 
             // Then override ConsumeAsync to handle result
-            await Culture.SaveAsync(UowInfo, _consumer);
+            Culture.SetUowInfo(UowInfo);
+            await Culture.SaveAsync();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

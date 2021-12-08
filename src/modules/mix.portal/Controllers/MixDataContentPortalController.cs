@@ -64,7 +64,8 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult> CreateData([FromRoute] string databaseName, [FromBody] JObject data)
         {
             var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, data);
-            var result = await mixData.SaveAsync(_uow);
+            mixData.SetUowInfo(_uow);
+            var result = await mixData.SaveAsync();
             return Ok(result);
         }
 
@@ -91,7 +92,8 @@ namespace Mix.Portal.Controllers
             if (mixData != null)
             {
                 mixData.Data = data;
-                var result = await mixData.SaveAsync(_uow);
+                mixData.SetUowInfo(_uow);
+                var result = await mixData.SaveAsync();
                 return Ok(result);
             }
             return NotFound(id);
