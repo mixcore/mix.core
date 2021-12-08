@@ -54,8 +54,8 @@
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
+            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
 
             if (Data == null)
             {
@@ -85,8 +85,8 @@
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService, UowInfo);
-            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService, UowInfo);
+            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
 
             await ParseObjectToValues(cacheService);
 
@@ -139,7 +139,7 @@
                     item.Specificulture = Specificulture;
                     item.ParentId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.MixDatabaseName;
-                    await item.SaveAsync(UowInfo);
+                    await item.SaveAsync();
                 }
             }
         }
@@ -151,7 +151,7 @@
                 var dataRepo = MixDataViewModel.GetRepository(UowInfo);
 
                 await Repository.DeleteAsync(Id);
-                await dataRepo.DeleteAsync(m => m.Id == ParentId);
+                await dataRepo.DeleteAsync(ParentId);
             }
             else
             {

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Mix.Heart.Repository;
 using Mix.Lib.Services;
-using Mix.Queue.Interfaces;
-using Mix.Queue.Models;
 
 namespace Mix.Lib.Base
 {

@@ -52,7 +52,7 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 var postRepo = MixPostViewModel.GetRepository(UowInfo);
                 await Repository.DeleteAsync(Id);
-                await postRepo.DeleteAsync(m => m.Id == ParentId);
+                await postRepo.DeleteAsync(ParentId);
             }
             else
             {
