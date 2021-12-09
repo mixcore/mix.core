@@ -37,9 +37,9 @@
 
         #endregion
 
-        public async Task LoadData(IPagingModel pagingModel, MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null)
+        public async Task LoadData(IPagingModel pagingModel, MixCacheService cacheService = null)
         {
-            SimpleDatas = await ModuleDataViewModel.GetRepository(uowInfo).GetPagingAsync(
+            SimpleDatas = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
                 m => m.ModuleContentId == Id, 
                 pagingModel,
                 cacheService);

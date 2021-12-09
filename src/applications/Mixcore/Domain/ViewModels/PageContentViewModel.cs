@@ -1,7 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -32,10 +29,35 @@ namespace Mixcore.Domain.ViewModels
 
         public string DetailUrl => $"/Page/{Id}/{SeoName}";
 
+        public List<ModuleContentViewModel> Modules { get; set; }
         #endregion
 
         #region Overrides
+        public override async Task ExpandView(MixCacheService cacheService = null)
+        {
+            Modules ??= await LoadModulesAsync(cacheService);
+        }
 
+        #endregion
+
+        #region Private Methods
+
+        private async Task<List<ModuleContentViewModel>> LoadModulesAsync(MixCacheService cacheService)
+        {
+            var moduleIds = Context.MixPageModuleAssociation
+                    .AsNoTracking()
+                    .Where(p => p.LeftId == Id)
+                    .OrderBy(m => m.Priority)
+                    .Select(m => m.RightId);
+            var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo);
+            var modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id), cacheService);
+            var paging = new PagingModel();
+            foreach (var item in modules)
+            {
+                await item.LoadData(paging, cacheService);
+            }
+            return modules;
+        }
         #endregion
     }
 }
