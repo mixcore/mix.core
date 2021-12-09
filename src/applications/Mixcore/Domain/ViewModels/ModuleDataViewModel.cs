@@ -45,7 +45,8 @@
         #region Helper
         public string Property(string name)
         {
-            return Data.Property(name)?.Value<string>();
+            var prop = Data.Property(name)?.Value;
+            return prop?.Value<string>("value");
         }
         #endregion
     }
