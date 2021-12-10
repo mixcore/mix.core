@@ -11,7 +11,7 @@ namespace Mixcore
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return MixCmsHelper.CreateHostBuilder<Startup>(args);
+            return MixHelper.CreateHostBuilder<Startup>(args);
         }
     }
 }

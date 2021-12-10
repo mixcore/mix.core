@@ -5,6 +5,7 @@ using Mixcore.Domain.Subscribers;
 using System.Text.Unicode;
 using System.Text.Encodings.Web;
 using Mix.Database.Entities.Account;
+using Mixcore.Domain.Services;
 
 namespace Mixcore
 {
@@ -36,7 +37,7 @@ namespace Mixcore
             });
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
-
+            services.AddScoped<MixNavigationService>();
             // Queue Subscribers
             services.AddHostedService<ThemeSubscriberService>();
             services.AddHostedService<TemplateSubscriberService>();

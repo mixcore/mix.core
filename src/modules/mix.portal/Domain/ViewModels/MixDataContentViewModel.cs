@@ -102,7 +102,7 @@
 
             var assoRepo = MixDataContentAssociationViewModel.GetRepository(UowInfo);
 
-            if (!MixCmsHelper.IsDefaultId(GuidParentId) || !MixCmsHelper.IsDefaultId(IntParentId))
+            if (!MixHelper.IsDefaultId(GuidParentId) || !MixHelper.IsDefaultId(IntParentId))
             {
                 var getNav = await assoRepo.CheckIsExistsAsync(
                     m => m.DataContentId == Id

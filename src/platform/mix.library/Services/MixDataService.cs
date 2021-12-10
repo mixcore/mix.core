@@ -13,26 +13,30 @@ namespace Mix.Lib.Services
     public class MixDataService: IDisposable
     {
         private readonly MixCmsContext _dbContext;
-
-        public MixDataService(
-            MixCmsContext dbContext,
-            QueryRepository<MixCmsContext, MixDatabaseColumn, int> colRepo,
-            QueryRepository<MixCmsContext, MixDataContent, Guid> contentRepo, 
-            QueryRepository<MixCmsContext, MixDataContentAssociation, Guid> assoRepo)
+        private UnitOfWorkInfo _uow;
+        public MixDataService(MixCmsContext dbContext)
         {
             _dbContext = dbContext;
+            _uow = new(_dbContext);
+        }
+
+        public void SetUnitOfWork(UnitOfWorkInfo uow)
+        {
+            if (uow != null)
+            {
+                _uow = uow;
+            }
         }
 
         public async Task<PagingResponseModel<TView>> FilterByKeywordAsync<TView>(
             SearchMixDataDto request,
-            string culture = null,
-            UnitOfWorkInfo uowInfo = null)
+            string culture = null)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
             try
             {
-                var _colRepo = MixDatabaseColumnViewModel.GetRepository(uowInfo);
-                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(uowInfo);
+                var _colRepo = MixDatabaseColumnViewModel.GetRepository(_uow);
+                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
                 
                 var tasks = new List<Task<TView>>();
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
@@ -112,18 +116,17 @@ namespace Mix.Lib.Services
             JObject obj,
             Guid dataContentId,
             string mixDatabaseName,
-            UnitOfWorkInfo uowInfo,
             List<MixDatabaseColumn> refColumns = null)
              where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
-            var context = (MixCmsContext)uowInfo.ActiveDbContext;
+            var context = (MixCmsContext)_uow.ActiveDbContext;
             refColumns ??= context.MixDatabaseColumn.Where(
                    m => m.MixDatabaseName == mixDatabaseName
                     && m.DataType == MixDataType.Reference).ToList();
 
             foreach (var item in refColumns.Where(p => p.DataType == MixDataType.Reference))
             {
-                var arr = await GetRelatedDataContentAsync<TView>(item.ReferenceId.Value, dataContentId, uowInfo);
+                var arr = await GetRelatedDataContentAsync<TView>(item.ReferenceId.Value, dataContentId);
 
                 if (obj.ContainsKey(item.SystemName))
                 {
@@ -138,11 +141,10 @@ namespace Mix.Lib.Services
 
         public async Task<JArray> GetRelatedDataContentAsync<TView>(
             int referenceId, 
-            Guid dataContentId, 
-            UnitOfWorkInfo uowInfo = null)
+            Guid dataContentId)
             where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
-            var _assoRepo = MixDataContentAssociationViewModel.GetRepository(uowInfo);
+            var _assoRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
 
             Expression<Func<MixDataContentAssociation, bool>> predicate = 
                     model => (model.MixDatabaseId == referenceId)

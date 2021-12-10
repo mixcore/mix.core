@@ -12,6 +12,6 @@ namespace Mix.Tenancy
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            MixCmsHelper.CreateHostBuilder<Startup>(args);
+            MixHelper.CreateHostBuilder<Startup>(args);
     }
 }
