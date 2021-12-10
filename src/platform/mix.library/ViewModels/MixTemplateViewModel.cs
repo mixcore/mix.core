@@ -93,13 +93,6 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        protected override async Task<MixTemplate> SaveHandlerAsync()
-        {
-            var result = await base.SaveHandlerAsync();
-            return result;
-        }
-
-
         #endregion
 
         #region Expands

@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Model;
-using Mix.Heart.Repository;
-using Mix.Lib.Dtos;
-using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
 
 namespace Mix.Portal.Controllers
 {
@@ -28,13 +24,14 @@ namespace Mix.Portal.Controllers
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
             _mixDataService = mixDataService;
+            _mixDataService.SetUnitOfWork(_uow);
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
 
         public override async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Get([FromQuery] SearchRequestDto req)
         {
             SearchMixDataDto searchReq = new SearchMixDataDto(req, Request);
-            var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(searchReq, _lang, _uow);
+            var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(searchReq, _lang);
             return Ok(result);
         }
 
