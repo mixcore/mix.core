@@ -43,15 +43,17 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpGet("additional-data")]
-        public async Task<ActionResult<MixDataContentViewModel>> GetAdditionalData([FromQuery] string databaseName)
+        public async Task<ActionResult<MixDataContentViewModel>> GetAdditionalData([FromQuery] GetAdditionalDataDto dto)
         {
-            Guid guidParentId = Guid.Empty;
-            bool isParent = int.TryParse(Request.Query["parentId"].ToString(), out int intParentId);
-            isParent = isParent || Guid.TryParse(Request.Query["parentId"].ToString(), out guidParentId);
-            if (Enum.TryParse(Request.Query["parentType"].ToString(), out MixDatabaseParentType parentType)
-                && isParent)
+            if (dto.IsValid())
             {
-                var getData = await MixDataHelper.GetAdditionalDataAsync(_context, parentType, databaseName, guidParentId, intParentId, _lang);
+                var getData = await MixDataHelper.GetAdditionalDataAsync(
+                    _context, 
+                    dto.ParentType.Value, 
+                    dto.DatabaseName, 
+                    dto.GuidParentId,
+                    dto.IntParentId, 
+                    _lang);
                 return Ok(getData);
             }
             return BadRequest();

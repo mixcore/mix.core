@@ -1,12 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Newtonsoft.Json.Linq;
-using System;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataViewModel 
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
@@ -45,6 +37,12 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Overrides
+
+        public override Task ExpandView(MixCacheService cacheService = null)
+        {
+            MixDatabaseName ??= MixDatabaseNames.MODULE_COLUMN;
+            return base.ExpandView(cacheService);
+        }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {

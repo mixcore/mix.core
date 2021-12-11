@@ -36,6 +36,7 @@ namespace Mixcore.Domain.ViewModels
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
             Modules ??= await LoadModulesAsync(cacheService);
+            await base.ExpandView(cacheService);
         }
 
         #endregion
@@ -44,6 +45,7 @@ namespace Mixcore.Domain.ViewModels
 
         private async Task<List<ModuleContentViewModel>> LoadModulesAsync(MixCacheService cacheService)
         {
+            var tasks = new List<Task>();
             var moduleIds = Context.MixPageModuleAssociation
                     .AsNoTracking()
                     .Where(p => p.LeftId == Id)
@@ -54,8 +56,9 @@ namespace Mixcore.Domain.ViewModels
             var paging = new PagingModel();
             foreach (var item in modules)
             {
-                await item.LoadData(paging, cacheService);
+                tasks.Add(item.LoadData(paging, cacheService));
             }
+            await Task.WhenAll(tasks);
             return modules;
         }
         #endregion

@@ -1,13 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixPostContentViewModel
@@ -36,6 +27,15 @@ namespace Mix.Portal.Domain.ViewModels
 
         #endregion
 
+        #region Overrides
+
+        public override Task ExpandView(MixCacheService cacheService = null)
+        {
+            MixDatabaseName ??= MixDatabaseNames.POST_COLUMN;
+            return base.ExpandView(cacheService);
+        }
+
+
         public override async Task<int> CreateParentAsync()
         {
             MixPostViewModel parent = new(UowInfo)
@@ -59,5 +59,6 @@ namespace Mix.Portal.Domain.ViewModels
                 await base.DeleteHandlerAsync();
             }
         }
+        #endregion
     }
 }
