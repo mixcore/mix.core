@@ -20,6 +20,7 @@ using Mix.Queue.Services;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Heart.Repository;
 using Mix.Heart.Entities.Cache;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -274,6 +275,27 @@ namespace Microsoft.Extensions.DependencyInjection
                 c.SwaggerDoc(version, new OpenApiInfo { Title = title, Version = version });
                 c.OperationFilter<SwaggerFileOperationFilter>();
                 c.CustomSchemaIds(x => x.FullName);
+
+                // add JWT Authentication
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter JWT Bearer token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // must be lower case
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {securityScheme, new string[] { }}
+    });
             });
             return services;
         }

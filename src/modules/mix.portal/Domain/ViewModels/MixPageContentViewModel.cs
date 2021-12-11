@@ -35,6 +35,7 @@ namespace Mix.Portal.Domain.ViewModels
         #region Overrides
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
+            MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
             await LoadAliasAsync(cacheService);
         }
 

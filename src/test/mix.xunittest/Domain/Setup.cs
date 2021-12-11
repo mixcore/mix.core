@@ -15,7 +15,7 @@ namespace Mix.XUnittest
         {
             if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
-                MixCmsHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
+                MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
             }
             ConfigureAppConfiguration((hostingContext, config) =>
             {

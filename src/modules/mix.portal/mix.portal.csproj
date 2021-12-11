@@ -31,6 +31,7 @@
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Portal.Domain.Models" />
 		<Using Include="Mix.Portal.Domain.ViewModels" />
+		<Using Include="Mix.Portal.Domain.Dtos" />
 	</ItemGroup>
 
 	<ItemGroup>

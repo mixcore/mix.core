@@ -63,11 +63,11 @@ namespace Mix.Lib.Base
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
             var templateRepo = TemplateViewModel.GetRepository(UowInfo);
-            if (Template == null)
+            if (Template == null && TemplateId.HasValue)
             {
                 Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId);
             }
-            if (Layout == null)
+            if (Layout == null && LayoutId.HasValue)
             {
                 Layout = await templateRepo.GetSingleAsync(m => m.Id == LayoutId);
             }

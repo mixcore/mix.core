@@ -29,7 +29,7 @@
             Specificulture = culture;
             Title = obj["title"].Value<string>();
             Name = obj["name"].Value<string>();
-            var arr = obj["menu_items"].ToObject<JArray>();
+            var arr = obj["menuItems"].ToObject<JArray>();
             foreach (JObject item in arr)
             {
                 var menuItem = item.ToObject<MenuItem>();

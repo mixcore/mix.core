@@ -40,7 +40,7 @@ namespace Mix.Xunittest.Domain.Tests
         {
             try
             {
-                MixCmsHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
+                MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
                 DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
                 DbFixture.Context.Database.EnsureDeleted();
                 await _initCmsService.InitTenantAsync(model);

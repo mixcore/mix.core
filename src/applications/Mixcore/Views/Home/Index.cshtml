@@ -1,6 +1,6 @@
 ﻿@model PageContentViewModel
 @{
-    Layout = Model.Layout.FilePath;
+    Layout = Model.Layout?.FilePath;
     ViewData["Title"] = "Home Page";
     Context.Request.Headers.TryGetValue("Authorization", out  var token);
 }
