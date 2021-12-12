@@ -53,8 +53,15 @@ namespace Mix.Tenancy.Controllers
             if (model != null
                 && GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.Blank)
             {
-                await _initCmsService.InitTenantAsync(model);
-                return NoContent();
+                try
+                {
+                    await _initCmsService.InitTenantAsync(model);
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
             return BadRequest();
         }
