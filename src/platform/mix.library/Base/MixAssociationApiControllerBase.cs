@@ -32,10 +32,9 @@ namespace Mix.Lib.Base
         {
             var request = new SearchAssociationDto(req, Request);
             var searchRequest = base.BuildSearchRequest(request);
-
-            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                request.LeftId.HasValue,
-                m => m.LeftId == request.LeftId.Value);
+            int leftId = request.LeftId.HasValue ? request.LeftId.Value : 0;
+            searchRequest.Predicate = searchRequest.Predicate.AndAlso(
+                m => m.LeftId == leftId);
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 request.RightId.HasValue,
