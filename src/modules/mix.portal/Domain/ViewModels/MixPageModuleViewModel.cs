@@ -30,6 +30,24 @@
 
         #region Overrides
 
+        public override async Task Validate()
+        {
+            await base.Validate();
+            if (IsValid)
+            {
+                IsValid = IsValid && !MixHelper.IsDefaultId(LeftId);
+                if (!IsValid)
+                {
+                    Errors.Add(new ("Parent Id cannot be null"));
+                }
+                IsValid = IsValid && !MixHelper.IsDefaultId(RightId);
+                if (!IsValid)
+                {
+                    Errors.Add(new ("Child Id cannot be null"));
+                }
+            }
+        }
+
         #endregion
 
         #region Expands
