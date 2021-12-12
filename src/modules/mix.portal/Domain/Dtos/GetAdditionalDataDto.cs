@@ -3,23 +3,24 @@
     public class GetAdditionalDataDto
     {
         public string ParentId { get; set; }
-        
+
         public MixDatabaseParentType? ParentType { get; set; }
         public string DatabaseName { get; set; }
         public Guid? GuidParentId
         {
             get
             {
-                Guid.TryParse(ParentId, out var guidId);
-                return guidId;
+                return Guid.TryParse(ParentId, out var guidId)
+                ? guidId
+                : null;
             }
         }
         public int? IntParentId
         {
             get
             {
-                int.TryParse(ParentId, out var intId);
-                return intId;
+                return int.TryParse(ParentId, out var intId)
+                ? intId : null;
             }
         }
 
