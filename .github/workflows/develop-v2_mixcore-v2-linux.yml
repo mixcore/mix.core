@@ -15,14 +15,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
-      - name: get mix.heart
-        run: git clone --branch develop-v2 --recursive https://github.com/mixcore/mix.core.git
         
       - name: Build with dotnet
         run: dotnet build src/applications/Mixcore/mixcore.csproj --configuration Release
