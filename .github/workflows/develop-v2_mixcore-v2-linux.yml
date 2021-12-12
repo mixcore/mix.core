@@ -22,7 +22,7 @@ jobs:
           dotnet-version: '6.0.x'
           include-prerelease: true
       - name: get mix.heart
-        run: git clone --recursive https://github.com/mixcore/mix.core.git
+        run: git clone --branch develop-v2 --recursive https://github.com/mixcore/mix.core.git
         
       - name: Build with dotnet
         run: dotnet build src/applications/Mixcore/mixcore.csproj --configuration Release
