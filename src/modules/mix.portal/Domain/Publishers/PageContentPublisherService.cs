@@ -1,8 +1,4 @@
-﻿using Mix.Lib.Base;
-using Mix.Portal.Domain.ViewModels;
-using Mix.Queue.Engines.MixQueue;
-
-namespace Mix.Portal.Publishers
+﻿namespace Mix.Portal.Publishers
 {
     public class PageContentPublisherService : MixPublisherServiceBase
     {

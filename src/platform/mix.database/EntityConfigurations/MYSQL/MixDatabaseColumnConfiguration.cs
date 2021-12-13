@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.MYSQL.Base;
 using Mix.Shared.Enums;
-using Mix.Shared.Models;
-using Mix.Database.Extenstions;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {

@@ -1,15 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Entities;
-using System;
-using System.Linq;
-using System.Reflection;
 using Mix.Heart.Extensions;
 
-namespace Mix.Database.Extenstions
+namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static partial class ServiceCollectionExtensions
     {
         public static IServiceCollection AddEntityRepositories(this IServiceCollection services)
         {
