@@ -18,7 +18,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<MixEndpointService>();
             services.AddScoped<IPSecurityConfigService>();
             services.AddScoped<MixDataService>();
-            services.AddSingleton<MixFileService>();
             services.AddSingleton<HttpService>();
 
             services.AddScoped<MixService>();

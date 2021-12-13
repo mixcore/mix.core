@@ -78,7 +78,7 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Login failed");
             }
-            await _uow?.CompleteAsync();
+            
         }
 
         public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)

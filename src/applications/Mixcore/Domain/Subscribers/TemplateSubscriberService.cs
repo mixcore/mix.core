@@ -42,13 +42,13 @@ namespace Mixcore.Domain.Subscribers
 
         private void DeleteTemplate(MixTemplateViewModel template)
         {
-            MixFileService.Instance.DeleteFile($"{template.FileFolder}/{template.FileName}{template.Extension}");
+            MixFileHelper.DeleteFile($"{template.FileFolder}/{template.FileName}{template.Extension}");
             logger.LogWarning("Removed Template File {0}/{1}{2}", template.FileFolder, template.FileName, template.Extension);
         }
 
         private void SaveTemplate(MixTemplateViewModel template)
         {
-            MixFileService.Instance.SaveFile(new Mix.Heart.Models.FileModel()
+            MixFileHelper.SaveFile(new Mix.Heart.Models.FileModel()
             {
                 Content = template.Content,
                 Filename = template.FileName,

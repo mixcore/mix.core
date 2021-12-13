@@ -35,7 +35,7 @@ namespace Mix.Portal.Controllers
             // Request: Key => folder, Keyword => filename
             if (!string.IsNullOrEmpty(folder))
             {
-                var result = MixFileService.Instance.GetFile(filename, folder);
+                var result = MixFileHelper.GetFile(filename, folder);
                 if (result != null)
                 {
                     return Ok(result);
@@ -50,7 +50,7 @@ namespace Mix.Portal.Controllers
         public ActionResult<bool> Delete()
         {
             string fullPath = Request.Query["fullPath"].ToString();
-            var result = MixFileService.Instance.DeleteFile(fullPath);
+            var result = MixFileHelper.DeleteFile(fullPath);
             return result ? Ok() : BadRequest();
         }
 
@@ -67,7 +67,7 @@ namespace Mix.Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = MixFileService.Instance.SaveFile(file, $"{folder}");
+                var result = MixFileHelper.SaveFile(file, $"{folder}");
                 return Ok(result);
             }
             return BadRequest();
@@ -80,7 +80,7 @@ namespace Mix.Portal.Controllers
         {
             if (model != null)
             {
-                var result = MixFileService.Instance.SaveFile(model);
+                var result = MixFileHelper.SaveFile(model);
                 return Ok(result);
             }
             return BadRequest(model);
@@ -95,8 +95,8 @@ namespace Mix.Portal.Controllers
             {
                 return BadRequest(request.Folder);
             }
-            var files = MixFileService.Instance.GetTopFiles(request.Folder);
-            var directories = MixFileService.Instance.GetTopDirectories(request.Folder);
+            var files = MixFileHelper.GetTopFiles(request.Folder);
+            var directories = MixFileHelper.GetTopDirectories(request.Folder);
             var result = new MixFileResponseModel()
             {
                 Files = files,

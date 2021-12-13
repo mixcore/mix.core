@@ -129,7 +129,7 @@ namespace Mix.Lib.Base
 
         protected virtual async Task<TView> GetById(TPrimaryKey id)
         {
-            return await _repository.GetSingleAsync(id, _cacheService);
+            return await _repository.GetSingleAsync(id);
         }
 
         #endregion

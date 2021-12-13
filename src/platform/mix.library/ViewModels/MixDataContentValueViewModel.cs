@@ -62,7 +62,7 @@ namespace Mix.Lib.ViewModels
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId, cacheService);
+            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);
             if (MixDatabaseColumnId > 0)
             {
                 Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId);

@@ -32,32 +32,27 @@ namespace Mix.Common.Controllers
     {
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
-        private readonly MixFileService _fileService;
         protected readonly CultureService _cultureService;
         private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
-        private readonly IQueueService<MessageQueueModel> _queueService;
         public SharedApiController(
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
-            MixFileService fileService,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
-            _fileService = fileService;
             _authConfigurations = authConfigService.AppSettings;
             _configRepo = MixConfigurationContentViewModel.GetRootRepository(context);
             _langRepo = MixLanguageContentViewModel.GetRootRepository(context);
             _routeProvider = routeProvider;
             _authConfigService = authConfigService;
             _cultureService = cultureService;
-            _queueService = queueService;
         }
 
         #region Routes
@@ -165,7 +160,7 @@ namespace Mix.Common.Controllers
         {
             try
             {
-                var data = _fileService.GetFile(
+                var data = MixFileHelper.GetFile(
                     name, MixFileExtensions.Json, MixFolders.JsonDataFolder, false);
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);

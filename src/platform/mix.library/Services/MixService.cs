@@ -1,10 +1,4 @@
-﻿using Mix.Heart.Services;
-using Mix.Shared.Constants;
-using Mix.Shared.Services;
-using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 
 namespace Mix.Lib.Services
@@ -13,15 +7,12 @@ namespace Mix.Lib.Services
     {
         public readonly SmtpConfigService _smtpConfigService;
         public readonly MixConfigurationService _configService;
-        public readonly MixFileService _fileService;
 
         public MixService(
             MixConfigurationService configService,
-            MixFileService fileService, 
             SmtpConfigService smtpConfigService)
         {
             _configService = configService;
-            _fileService = fileService;
             _smtpConfigService = smtpConfigService;
         }
 

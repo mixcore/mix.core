@@ -17,16 +17,13 @@ namespace Mix.Shared.Services
     public class HttpService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly MixFileService _fileService;
         private readonly JsonSerializerOptions _sharedJsonSerializerOptions;
-        public HttpService(IHttpClientFactory httpClientFactory, MixFileService fileService)
+        public HttpService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _fileService = fileService;
             _sharedJsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                IgnoreNullValues = true
             };
 
         }
@@ -41,7 +38,7 @@ namespace Mix.Shared.Services
                 response.EnsureSuccessStatusCode();
                 string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
-                _fileService.CreateFolderIfNotExist(folder);
+                MixFileHelper.CreateFolderIfNotExist(folder);
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {

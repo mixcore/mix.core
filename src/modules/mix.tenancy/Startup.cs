@@ -13,8 +13,7 @@ namespace Mix.Tenancy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            MixFileService _fileService = new();
-            _fileService.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.ConfiguratoinFolder);
+            MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.ConfiguratoinFolder);
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 

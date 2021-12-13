@@ -82,7 +82,7 @@ namespace Mix.Lib.Repositories
 
             if (File.Exists(fullPath))
             {
-                MixFileService.Instance.DeleteFile(fullPath);
+                MixFileHelper.DeleteFile(fullPath);
             }
 
             return true;

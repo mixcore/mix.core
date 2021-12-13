@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Services;
-using Mix.Shared.Constants;
 using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
 
 namespace Mix.Shared.Services
 {
@@ -29,11 +26,11 @@ namespace Mix.Shared.Services
 
         public bool SaveSettings()
         {
-            var settings = MixFileService.Instance.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileHelper.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
             if (settings != null)
             {
                 settings.Content = new JObject(new JProperty(_sectionName, JObject.FromObject(AppSettings))).ToString();
-                return MixFileService.Instance.SaveFile(settings);
+                return MixFileHelper.SaveFile(settings);
             }
             else
             {

@@ -1,16 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Mix.Lib.Interfaces;
 using System.Reflection;
-using Mix.Lib.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Http;
-using Mix.Database.Services;
 using Microsoft.Extensions.Configuration;
-using Mix.Database.Entities.Account;
-using Mix.Queue.Services;
-using Mix.Queue.Engines.MixQueue;
-using Mix.Heart.Repository;
-using Mix.Heart.Entities.Cache;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
