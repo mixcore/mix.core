@@ -44,23 +44,23 @@ namespace Mix.Lib.Services
 
         public SiteDataViewModel LoadSchema()
         {
-            var strSchema = MixFileService.Instance.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
+            var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
             var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
             return siteStructures;
         }
 
         public void ExtractTheme(IFormFile themeFile)
         {
-            MixFileService.Instance.EmptyFolder(MixFolders.ThemePackage);
+            MixFileHelper.EmptyFolder(MixFolders.ThemePackage);
             if (themeFile != null)
             {
                 var templateAsset = MixHelper.GetFileModel(themeFile, MixFolders.ThemePackage);
-                MixFileService.Instance.SaveFile(themeFile, MixFolders.ThemePackage);
-                MixFileService.Instance.UnZipFile(templateAsset.FullPath, MixFolders.ThemePackage);
+                MixFileHelper.SaveFile(themeFile, MixFolders.ThemePackage);
+                MixFileHelper.UnZipFile(templateAsset.FullPath, MixFolders.ThemePackage);
             }
             else
             {
-                MixFileService.Instance.UnZipFile(MixThemePackageConstants.DefaultThemeFilePath, MixFolders.ThemePackage);
+                MixFileHelper.UnZipFile(MixThemePackageConstants.DefaultThemeFilePath, MixFolders.ThemePackage);
             }
         }
 
@@ -99,8 +99,8 @@ namespace Mix.Lib.Services
             string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
             string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
             string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}/{_siteData.ThemeSystemName}";
-            MixFileService.Instance.CopyFolder(srcAssets, destAssets);
-            MixFileService.Instance.CopyFolder(srcUpload, destUpload);
+            MixFileHelper.CopyFolder(srcAssets, destAssets);
+            MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
         private async Task CreateTheme()
@@ -180,7 +180,7 @@ namespace Mix.Lib.Services
                     x.MixThemeName = _siteData.ThemeSystemName;
                     x.Content = ReplaceContent(x.Content);
                     x.FileFolder = ReplaceContent(x.FileFolder);
-                    MixFileService.Instance.SaveFile(new FileModel()
+                    MixFileHelper.SaveFile(new FileModel()
                     {
                         Content = x.Content,
                         Extension = x.Extension,

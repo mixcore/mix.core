@@ -28,10 +28,8 @@ namespace Mix.Lib.Base
             IQueueService<MessageQueueModel> queueService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
         {
-            _repository = new(_uow);
         }
 
-        protected Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
 
         #region Routes
 

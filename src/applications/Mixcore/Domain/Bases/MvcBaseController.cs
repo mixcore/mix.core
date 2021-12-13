@@ -52,7 +52,7 @@ namespace Mixcore.Domain.Bases
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetSingleAsync(pageId, _cacheService);
+            var page = await pageRepo.GetSingleAsync(pageId);
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;

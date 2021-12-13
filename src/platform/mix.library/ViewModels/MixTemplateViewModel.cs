@@ -44,7 +44,7 @@ namespace Mix.Lib.ViewModels
         {
             if (!string.IsNullOrEmpty(FileName))
             {
-                var file = MixFileService.Instance.GetFile(FileName, Extension, FileFolder);
+                var file = MixFileHelper.GetFile(FileName, Extension, FileFolder);
                 if (!string.IsNullOrWhiteSpace(file?.Content))
                 {
                     Content = file.Content;

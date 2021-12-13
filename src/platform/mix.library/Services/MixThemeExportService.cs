@@ -58,12 +58,12 @@ namespace Mix.Lib.Services
         private string ZipTheme()
         {
             // Zip to [theme_name].zip ( wwwroot for web path)
-            string filePath = MixFileService.Instance.ZipFolder(tempPath, outputPath, fileName);
+            string filePath = MixFileHelper.ZipFolder(tempPath, outputPath, fileName);
 
             // Delete temp folder
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.AssetFolder}");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.UploadFolder}");
-            MixFileService.Instance.DeleteFolder($"{outputPath}/{MixThemePackageConstants.SchemaFolder}");
+            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.AssetFolder}");
+            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.UploadFolder}");
+            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.SchemaFolder}");
             return $"{webPath}/{fileName}.zip";
         }
 
@@ -72,10 +72,10 @@ namespace Mix.Lib.Services
             if (_dto.IsIncludeAssets)
             {
                 // Copy current assets files
-                MixFileService.Instance.CopyFolder(
+                MixFileHelper.CopyFolder(
                     $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
-                MixFileService.Instance.CopyFolder(
+                MixFileHelper.CopyFolder(
                     $"{MixFolders.WebRootPath}/{_exporTheme.UploadsFolder}",
                     $"{tempPath}/Uploads");
             }
@@ -102,7 +102,7 @@ namespace Mix.Lib.Services
             };
 
             // Save Site Structures
-            MixFileService.Instance.SaveFile(schema);
+            MixFileHelper.SaveFile(schema);
         }
 
         public async Task<SiteDataViewModel> ExportSelectedItemsAsync()
