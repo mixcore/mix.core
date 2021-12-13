@@ -1,6 +1,4 @@
 ﻿using Mix.Lib.Interfaces;
-using Mix.Lib.Services;
-using Mix.Portal.Domain.Subscribers;
 using Mix.Portal.Publishers;
 
 namespace Mix.Portal

@@ -2,6 +2,7 @@
 
 namespace Mixcore.Domain.ViewModels
 {
+    [GenerateRestApiController(QueryOnly = true)]
     public class PageContentViewModel
         : ExtraColumnMultilanguageSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, PageContentViewModel>
@@ -35,13 +36,17 @@ namespace Mixcore.Domain.ViewModels
         #region Overrides
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            Modules ??= await LoadModulesAsync(cacheService);
+            Modules = await LoadModulesAsync(cacheService);
             await base.ExpandView(cacheService);
         }
 
         #endregion
 
         #region Private Methods
+        public ModuleContentViewModel GetModule(string moduleName)
+        {
+            return Modules.FirstOrDefault(m => m.SystemName == moduleName);
+        }
 
         private async Task<List<ModuleContentViewModel>> LoadModulesAsync(MixCacheService cacheService)
         {
