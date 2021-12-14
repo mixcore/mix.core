@@ -1,6 +1,4 @@
 ﻿using Mix.Lib.Interfaces;
-using Mix.Lib.Publishers;
-using Mix.Lib.ViewModels;
 
 namespace Mix.Portal
 {
@@ -8,11 +6,6 @@ namespace Mix.Portal
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            // Queue publisher
-            //services.AddHostedService<MixPublisher<MixThemeViewModel>>();
-            //services.AddHostedService<MixPublisher<MixTemplateViewModel>>();
-            //services.AddHostedService<MixPublisher<MixPageContentViewModel>>();
-
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
         }

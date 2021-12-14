@@ -3,6 +3,7 @@
     public enum MixQueueMessageStatus
     {
         Ack,
-        Nack
+        Nack,
+        Expired
     }
 }

@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Message Queue
             services.AddSingleton<IQueueService<MessageQueueModel>, QueueService>();
+            // Need singleton instance to store all message from mix publishers (inherit from MixPublisher)
             services.AddSingleton<MixMemoryMessageQueue<MessageQueueModel>>();
             return services;
         }
