@@ -21,6 +21,7 @@
 		<Using Include="Mix.Heart.Constants" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Newtonsoft.Json.Linq" />
@@ -81,7 +82,6 @@
 
 	<ItemGroup>
 		<Folder Include="Abstracts\" />
-		<Folder Include="Publishers\" />
 	</ItemGroup>
 
 </Project>

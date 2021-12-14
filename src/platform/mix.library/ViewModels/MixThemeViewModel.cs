@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Heart.Models;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
+    [GeneratePublisher]
     public class MixThemeViewModel
         : SiteDataViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
     {

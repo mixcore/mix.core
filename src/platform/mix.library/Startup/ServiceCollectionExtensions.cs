@@ -29,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
             services.AddEntityRepositories();
+            services.AddGeneratedPublisher();
 
            
             services.AddMixModuleServices(configuration);
@@ -145,6 +146,19 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         #endregion
+
+
+        private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
+        {
+            List<Type> types = new();
+            assemblies.ForEach(
+                a => types.AddRange(a.GetExportedTypes()
+                        .Where(
+                            x => x.GetCustomAttributes(attributeType).Any()
+                            )
+                        ));
+            return types;
+        }
 
         private static bool IsStartupService(Type type)
         {

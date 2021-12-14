@@ -1,6 +1,4 @@
-﻿using Mix.Lib.Base;
-using Mix.Lib.ViewModels;
-using Mix.Queue.Engines.MixQueue;
+﻿using Mix.Lib.ViewModels;
 
 namespace Mix.Portal.Publishers
 {
