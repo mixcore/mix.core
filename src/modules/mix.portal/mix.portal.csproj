@@ -29,6 +29,7 @@
 		<Using Include="Mix.Identity.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
+		<Using Include="Mix.Queue.Attributes" />
 		<Using Include="Mix.Queue.Engines.MixQueue" />
 		<Using Include="Mix.Portal.Domain.Models" />
 		<Using Include="Mix.Portal.Domain.ViewModels" />
