@@ -1,6 +1,5 @@
 ﻿using Mix.Lib.Conventions;
 using Mix.Lib.Providers;
-using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -28,19 +27,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter()));
             return services;
-        }
-
-
-        private static List<Type> GetCandidatesByAttributeType(List<Assembly> assemblies, Type attributeType)
-        {
-            List<Type> types = new();
-            assemblies.ForEach(
-                a => types.AddRange(a.GetExportedTypes()
-                        .Where(
-                            x => x.GetCustomAttributes(attributeType).Any()
-                            )
-                        ));
-            return types;
         }
     }
 }
