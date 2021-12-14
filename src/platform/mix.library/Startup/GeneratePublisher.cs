@@ -1,5 +1,4 @@
 ﻿using Mix.Lib.Publishers;
-using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,7 +18,5 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             return services;
         }
-
-
     }
 }

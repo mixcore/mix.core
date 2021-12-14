@@ -31,9 +31,10 @@ namespace Mix.Queue.Engines.MixQueue
             }
         }
 
-        public async Task SendMessage(T message)
+        public Task SendMessage(T message)
         {
             _topic.PushQueue(message);
+            return Task.CompletedTask;
         }
 
         public async Task SendMessages(IList<T> messages)

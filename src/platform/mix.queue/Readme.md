@@ -7,7 +7,7 @@
 - https://console.cloud.google.com/cloudpubsub/topic/list?projec={projectId}
 - Each Subscription have 1 subscriber only => to have multiple subscriber => create multi subscription
 # Publish Mix Queue
-- Create Publisher for viewmodel to create topic on google if not exist
+- Create Publisher for model to create topic on google if not exist
 ```
  public class ThemePublisherService : GooglePublisherService<MixThemeViewModel>
 {
@@ -37,6 +37,8 @@ var msg = new QueueMessageModel();
 msg.Package(post);
 _queueService.PushQueue(msg);
 ```
+- Use [GeneratePublisher] for ViewModel that need to generate Publisher
+
 # Subscribe Queue
 - Create Subscriber for each module
 ```
