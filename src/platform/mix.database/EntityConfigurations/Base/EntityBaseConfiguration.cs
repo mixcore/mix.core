@@ -35,7 +35,7 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.ModifiedBy)
-                .HasColumnType(Config.Guid);
+                .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.Priority)
                 .HasColumnType(Config.Integer);

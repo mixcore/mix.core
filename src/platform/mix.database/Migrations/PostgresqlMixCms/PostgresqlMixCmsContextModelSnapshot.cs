@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.v2;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace Mix.Database.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
@@ -15,20 +17,22 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasPostgresExtension("uuid-ossp")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.7")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -47,11 +51,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -70,7 +74,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixConfiguration");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixConfiguration");
                 });
@@ -79,16 +83,17 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -119,8 +124,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("integer");
@@ -159,16 +164,17 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -196,11 +202,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -218,7 +224,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixCulture");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixCulture");
                 });
@@ -230,8 +236,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -247,8 +253,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -266,6 +272,142 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.ToTable("MixData");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabase");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixDatabase");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Configurations")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DataType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DefaultValue")
+                        .HasColumnType("text")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MixDatabaseId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MixDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReferenceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabaseColumn");
+
+                    b.HasIndex("MixDatabaseId");
+
+                    b.ToTable("MixDatabaseColumn");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
                 {
                     b.Property<Guid>("Id")
@@ -278,11 +420,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
@@ -292,19 +439,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Layout")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
-
-                    b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("MixDataContentId1")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("MixDataId")
                         .HasColumnType("uuid");
@@ -313,12 +452,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("text");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uuid");
@@ -340,7 +477,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -363,13 +500,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Template")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -378,8 +512,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasName("PK_MixDataContent");
 
                     b.HasIndex("MixCultureId");
-
-                    b.HasIndex("MixDataContentId1");
 
                     b.HasIndex("MixDataId");
 
@@ -393,8 +525,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -402,10 +534,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<Guid>("DataContentId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GuidParentId")
+                    b.Property<Guid?>("GuidParentId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("IntParentId")
+                    b.Property<int?>("IntParentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastModified")
@@ -420,8 +552,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uuid");
@@ -460,8 +592,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -502,7 +634,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("MixDataContentId")
+                    b.Property<Guid?>("MixDataContentId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("MixDatabaseColumnId")
@@ -513,13 +645,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixDatabaseId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("uuid");
@@ -552,149 +687,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.ToTable("MixDataContentValue");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MixSiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixDatabase");
-
-                    b.HasIndex("MixSiteId");
-
-                    b.ToTable("MixDatabase");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Configurations")
-                        .HasColumnType("text")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("DataType")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DefaultValue")
-                        .HasColumnType("text")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MixDatabaseId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MixDatabaseName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ReferenceId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixDatabaseColumn");
-
-                    b.HasIndex("MixDatabaseId");
-
-                    b.ToTable("MixDatabaseColumn");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -713,11 +715,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -730,7 +732,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixDomain");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixDomain");
                 });
@@ -739,11 +741,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -762,11 +765,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -785,7 +788,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixLanguage");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixLanguage");
                 });
@@ -794,16 +797,17 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -834,8 +838,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixLanguageId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("integer");
@@ -874,11 +878,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -897,11 +902,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -925,7 +930,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixModule");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixModule");
                 });
@@ -934,8 +939,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -946,11 +952,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
@@ -960,10 +971,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Layout")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -972,15 +981,13 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("uuid");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("text");
 
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("integer");
@@ -1005,11 +1012,14 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SimpleDataColumns")
                         .HasColumnType("text");
 
                     b.Property<string>("Source")
@@ -1032,13 +1042,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Template")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -1060,15 +1067,150 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.ToTable("MixModuleContent");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MixCultureId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ModuleContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("PublishedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SeoDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SeoKeywords")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SeoName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SeoTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SimpleDataColumns")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Source")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Specificulture")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixCultureId");
+
+                    b.HasIndex("MixModuleContentId");
+
+                    b.ToTable("MixModuleData");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModulePostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LeftId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RightId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixModuleContentId");
+
+                    b.ToTable("MixModulePostAssociation");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -1090,11 +1232,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixPostContentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1109,7 +1251,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.HasIndex("MixPostContentId");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixPage");
                 });
@@ -1118,8 +1260,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1130,11 +1273,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
@@ -1144,10 +1292,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Layout")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1156,15 +1302,13 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("uuid");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .HasColumnType("text");
 
                     b.Property<int?>("MixPageId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("integer");
@@ -1189,7 +1333,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1212,13 +1356,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Template")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -1240,15 +1381,100 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.ToTable("MixPageContent");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageModuleAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LeftId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MixPageContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RightId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixPageContentId");
+
+                    b.ToTable("MixPageModuleAssociation");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPagePostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("LeftId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MixPageContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RightId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixPageContentId");
+
+                    b.ToTable("MixPagePostAssociation");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -1262,11 +1488,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("MixSiteId")
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1279,7 +1505,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixPost");
 
-                    b.HasIndex("MixSiteId");
+                    b.HasIndex("MixTenantId");
 
                     b.ToTable("MixPost");
                 });
@@ -1288,8 +1514,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1300,11 +1527,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Excerpt")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
@@ -1314,10 +1546,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Layout")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("LayoutId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
@@ -1326,15 +1556,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("uuid");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int?>("MixModuleContentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MixPageContentId")
-                        .HasColumnType("integer");
+                        .HasColumnType("text");
 
                     b.Property<int?>("MixPostContentId")
                         .HasColumnType("integer");
@@ -1342,8 +1564,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixPostId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("integer");
@@ -1365,7 +1587,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("varchar(4000)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1388,13 +1610,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("Template")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -1406,10 +1625,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.HasIndex("MixDataContentId");
 
-                    b.HasIndex("MixModuleContentId");
-
-                    b.HasIndex("MixPageContentId");
-
                     b.HasIndex("MixPostContentId");
 
                     b.HasIndex("MixPostId");
@@ -1417,260 +1632,21 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.ToTable("MixPostContent");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixSite", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixSite");
-
-                    b.ToTable("MixSite");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("MixDataContentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("MixDatabaseName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("MixSiteId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("PreviewUrl")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixTheme");
-
-                    b.HasIndex("MixDataContentId");
-
-                    b.HasIndex("MixSiteId");
-
-                    b.ToTable("MixTheme");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(4000)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MixSiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixUrlAlias");
-
-                    b.HasIndex("MixSiteId");
-
-                    b.ToTable("MixUrlAlias");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAliasContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MixCultureId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MixUrlAliasId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ParentId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SourceId")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SystemName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.HasKey("Id")
-                        .HasName("PK_MixUrlAliasContent");
-
-                    b.HasIndex("MixCultureId");
-
-                    b.HasIndex("MixUrlAliasId");
-
-                    b.ToTable("MixUrlAliasContent");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
@@ -1711,25 +1687,13 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("MobileContent")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Scripts")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("SpaContent")
                         .IsRequired()
                         .HasColumnType("text")
                         .UseCollation("und-x-icu")
@@ -1747,22 +1711,201 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
-                        .HasName("PK_MixViewTemplate");
+                        .HasName("PK_MixTemplate");
 
                     b.HasIndex("MixThemeId");
 
                     b.ToTable("MixViewTemplate");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTenant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixTenant");
+
+                    b.ToTable("MixTenant");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("MixDataContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MixDatabaseName")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<string>("PreviewUrl")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixTheme");
+
+                    b.HasIndex("MixDataContentId");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixTheme");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("SourceContentGuidId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("SourceContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixUrlAlias");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixUrlAlias");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfigurationContent", b =>
@@ -1784,19 +1927,41 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixCulture", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixData", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
                         .WithMany()
+                        .HasForeignKey("MixDatabaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDatabase");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany("MixDatabases")
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixTenant");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
+                        .WithMany("MixDatabaseColumns")
                         .HasForeignKey("MixDatabaseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1812,10 +1977,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
-                        .WithMany()
-                        .HasForeignKey("MixDataContentId1");
-
                     b.HasOne("Mix.Database.Entities.Cms.MixData", "MixData")
                         .WithMany("MixDataContents")
                         .HasForeignKey("MixDataId");
@@ -1823,8 +1984,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixCulture");
 
                     b.Navigation("MixData");
-
-                    b.Navigation("MixDataContent");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContentAssociation", b =>
@@ -1848,9 +2007,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany("MixDataContentValues")
-                        .HasForeignKey("MixDataContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MixDataContentId");
 
                     b.HasOne("Mix.Database.Entities.Cms.MixDatabaseColumn", "MixDatabaseColumn")
                         .WithMany()
@@ -1860,53 +2017,31 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Navigation("MixCulture");
 
-                    b.Navigation("MixDatabaseColumn");
-
                     b.Navigation("MixDataContent");
-                });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
-                        .WithMany("MixDatabases")
-                        .HasForeignKey("MixSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixSite");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "MixDatabase")
-                        .WithMany("MixDatabaseColumns")
-                        .HasForeignKey("MixDatabaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixDatabase");
+                    b.Navigation("MixDatabaseColumn");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany()
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguageContent", b =>
@@ -1928,13 +2063,13 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixModule", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany("MixModules")
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleContent", b =>
@@ -1960,19 +2095,43 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixModule");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModuleData", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
+                        .WithMany()
+                        .HasForeignKey("MixCultureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", "MixModuleContent")
+                        .WithMany()
+                        .HasForeignKey("MixModuleContentId");
+
+                    b.Navigation("MixCulture");
+
+                    b.Navigation("MixModuleContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixModulePostAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", null)
+                        .WithMany("MixPostContents")
+                        .HasForeignKey("MixModuleContentId");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPage", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
                         .WithMany("MixPages")
                         .HasForeignKey("MixPostContentId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany("MixPages")
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
@@ -1998,15 +2157,29 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixPage");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageModuleAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
+                        .WithMany("MixModuleContents")
+                        .HasForeignKey("MixPageContentId");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPagePostAssociation", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
+                        .WithMany("MixPostContents")
+                        .HasForeignKey("MixPageContentId");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPost", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany("MixPosts")
-                        .HasForeignKey("MixSiteId")
+                        .HasForeignKey("MixTenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MixSite");
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostContent", b =>
@@ -2020,14 +2193,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
                         .WithMany()
                         .HasForeignKey("MixDataContentId");
-
-                    b.HasOne("Mix.Database.Entities.Cms.MixModuleContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixModuleContentId");
-
-                    b.HasOne("Mix.Database.Entities.Cms.MixPageContent", null)
-                        .WithMany("MixPostContents")
-                        .HasForeignKey("MixPageContentId");
 
                     b.HasOne("Mix.Database.Entities.Cms.MixPostContent", null)
                         .WithMany("MixPostContents")
@@ -2044,54 +2209,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixPost");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
-                        .WithMany()
-                        .HasForeignKey("MixDataContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
-                        .WithMany()
-                        .HasForeignKey("MixSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixDataContent");
-
-                    b.Navigation("MixSite");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixSite", "MixSite")
-                        .WithMany()
-                        .HasForeignKey("MixSiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixSite");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAliasContent", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
-                        .WithMany()
-                        .HasForeignKey("MixCultureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Database.Entities.Cms.MixUrlAlias", "MixUrlAlias")
-                        .WithMany()
-                        .HasForeignKey("MixUrlAliasId");
-
-                    b.Navigation("MixCulture");
-
-                    b.Navigation("MixUrlAlias");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixViewTemplate", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixTheme", "MixTheme")
                         .WithMany("MixViewTemplates")
@@ -2100,6 +2218,34 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .IsRequired();
 
                     b.Navigation("MixTheme");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTheme", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
+                        .WithMany()
+                        .HasForeignKey("MixDataContentId");
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDataContent");
+
+                    b.Navigation("MixTenant");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixUrlAlias", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
@@ -2112,14 +2258,14 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixDataContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
-                {
-                    b.Navigation("MixDataContentValues");
-                });
-
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
                     b.Navigation("MixDatabaseColumns");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
+                {
+                    b.Navigation("MixDataContentValues");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixLanguage", b =>
@@ -2144,6 +2290,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixPageContent", b =>
                 {
+                    b.Navigation("MixModuleContents");
+
                     b.Navigation("MixPostContents");
                 });
 
@@ -2159,7 +2307,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Navigation("MixPostContents");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Cms.MixSite", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixTenant", b =>
                 {
                     b.Navigation("MixDatabases");
 

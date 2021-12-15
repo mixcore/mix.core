@@ -18,7 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\MySqlMixCms\" />
+    <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />
+    <Folder Include="Migrations\SqlServerMixCms\" />
   </ItemGroup>
 
 </Project>
