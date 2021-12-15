@@ -1,4 +1,6 @@
-﻿namespace Mixcore.Domain.ViewModels
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Mixcore.Domain.ViewModels
 {
     public class ModuleContentViewModel
         : ExtraColumnMultilanguageSEOContentViewModelBase
@@ -30,19 +32,55 @@
 
         public string DetailUrl => $"/Module/{Id}/{SeoName}";
 
+        public Guid? AdditionalDataId { get; set; }
+        public AdditionalDataViewModel AdditionalData { get; set; }
         public PagingResponseModel<ModuleDataViewModel> SimpleDatas { get; set; }
         #endregion
 
         #region Overrides
+        public override async Task ExpandView(MixCacheService cacheService = null)
+        {
+            await LoadAdditionalDataAsync(cacheService);
+            await base.ExpandView(cacheService);
+        }
+
+        #region Private Methods
+
+        private async Task LoadAdditionalDataAsync(MixCacheService cacheService)
+        {
+            if (AdditionalDataId == default)
+            {
+                var nav = await Context.MixDataContentAssociation
+                    .FirstOrDefaultAsync(
+                        m => m.ParentType == MixDatabaseParentType.Module
+                        && m.IntParentId == Id);
+                AdditionalDataId = nav?.DataContentId;
+            }
+            if (AdditionalDataId.HasValue)
+            {
+                var repo = AdditionalDataViewModel.GetRepository(UowInfo);
+                AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
+            }
+        }
 
         #endregion
+        #endregion
+        #region Public Methods
+
+        public T Property<T>(string fieldName)
+        {
+            return AdditionalData != null
+                ? AdditionalData.Property<T>(fieldName)
+                : default;
+        }
 
         public async Task LoadData(IPagingModel pagingModel, MixCacheService cacheService = null)
         {
             SimpleDatas = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
-                m => m.ModuleContentId == Id, 
+                m => m.ModuleContentId == Id,
                 pagingModel,
                 cacheService);
         }
+        #endregion
     }
 }

@@ -30,41 +30,71 @@ namespace Mixcore.Domain.ViewModels
 
         public string DetailUrl => $"/Page/{Id}/{SeoName}";
 
+        public Guid? AdditionalDataId { get; set; }
+
         public List<ModuleContentViewModel> Modules { get; set; }
+        public AdditionalDataViewModel AdditionalData { get; set; }
         #endregion
 
         #region Overrides
         public override async Task ExpandView(MixCacheService cacheService = null)
         {
-            Modules = await LoadModulesAsync(cacheService);
+            await LoadModulesAsync(cacheService);
+            await LoadAdditionalDataAsync(cacheService);
             await base.ExpandView(cacheService);
         }
 
+
+
         #endregion
 
-        #region Private Methods
+        #region Public Method
         public ModuleContentViewModel GetModule(string moduleName)
         {
             return Modules.FirstOrDefault(m => m.SystemName == moduleName);
         }
+        public T Property<T>(string fieldName)
+        {
+            return AdditionalData != null 
+                ? AdditionalData.Property<T>(fieldName)
+                : default;
+        }
 
-        private async Task<List<ModuleContentViewModel>> LoadModulesAsync(MixCacheService cacheService)
+        #endregion
+        #region Private Methods
+        private async Task LoadAdditionalDataAsync(MixCacheService cacheService)
+        {
+            if (AdditionalDataId == default)
+            {
+                var nav = await Context.MixDataContentAssociation
+                    .FirstOrDefaultAsync(m => m.ParentType == MixDatabaseParentType.Page
+                        && m.IntParentId == Id);
+                AdditionalDataId = nav?.DataContentId;
+            }
+            if (AdditionalDataId.HasValue)
+            {
+                var repo = AdditionalDataViewModel.GetRepository(UowInfo);
+                AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
+            }
+        }
+
+        private async Task LoadModulesAsync(MixCacheService cacheService)
         {
             var tasks = new List<Task>();
-            var moduleIds = Context.MixPageModuleAssociation
+            var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
                     .Where(p => p.LeftId == Id)
                     .OrderBy(m => m.Priority)
-                    .Select(m => m.RightId);
+                    .Select(m => m.RightId)
+                    .ToListAsync();
             var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo);
-            var modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id), cacheService);
+            Modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id), cacheService);
             var paging = new PagingModel();
-            foreach (var item in modules)
+            foreach (var item in Modules)
             {
                 tasks.Add(item.LoadData(paging, cacheService));
             }
             await Task.WhenAll(tasks);
-            return modules;
         }
         #endregion
     }

@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataContentViewModel 
+    public class MixDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
     {
         #region Contructors
@@ -54,13 +54,10 @@
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
-            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
 
-            if (Data == null)
-            {
-                Data = MixDataHelper.ParseData(Id, UowInfo);
-            }
+            Data ??= MixDataHelper.ParseData(Id, UowInfo);
 
             await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
@@ -85,7 +82,7 @@
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
             Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
 
             await ParseObjectToValues(cacheService);
@@ -294,7 +291,7 @@
         }
 
         private async Task<MixDataContentValueViewModel> GetFieldValue(
-            MixDatabaseColumnViewModel field, 
+            MixDatabaseColumnViewModel field,
             MixCacheService cacheService = null)
         {
             var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);

@@ -13,15 +13,15 @@ namespace Mixcore.Controllers
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            TranslatorService translator, 
+            TranslatorService translator,
             MixDatabaseService databaseService,
             MixCmsContext context,
-            MixCacheService cacheService) 
+            MixCacheService cacheService)
             : base(ipSecurityConfigService, mixService, translator, databaseService, context, cacheService)
         {
             _logger = logger;
         }
-        
+
         protected override void ValidateRequest()
         {
             base.ValidateRequest();
@@ -56,7 +56,7 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetFirstAsync(p=>p.Type == MixPageType.Home);
+            var page = await pageRepo.GetFirstAsync(p => p.Type == MixPageType.Home);
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;

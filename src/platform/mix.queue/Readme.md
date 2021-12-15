@@ -19,6 +19,22 @@
     }
 }
 ```
+
+```
+public class PageContentPublisherService : MixPublisherServiceBase
+{
+    static string topicId = typeof(MixPageContentViewModel).FullName;
+    public PageContentPublisherService(
+        IQueueService<MessageQueueModel> queueService, 
+        IConfiguration configuration, IWebHostEnvironment environment,
+        MixMemoryMessageQueue<MessageQueueModel> queueMessage) 
+        : base(topicId, queueService, configuration, environment, queueMessage)
+    {
+    }
+}
+
+```
+
 - Add Publisher Host Service
 ```
 services.AddHostedService<ThemePublisherService>();
