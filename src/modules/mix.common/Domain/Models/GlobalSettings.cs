@@ -1,16 +1,9 @@
-﻿using Mix.Database.Entities.Cms;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-
-namespace Mix.Common.Models
+﻿namespace Mix.Common.Models
 {
     public class GlobalSettings
 
     {
         public string Domain { get; set; }
-
-        public string Lang { get; set; }
 
         public string LangIcon { get; set; }
 
@@ -21,8 +14,6 @@ namespace Mix.Common.Models
         public Dictionary<string, string> RSAKeys { get; set; }
 
         public bool IsEncryptApi { get; set; }
-
-        public List<MixCulture> Cultures { get; set; }
 
         public string[] PageTypes { get; set; }
 

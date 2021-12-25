@@ -122,8 +122,16 @@ namespace Mix.Common.Controllers
         }
 
         [HttpGet]
-        [Route("get-shared-settings")]
-        public async Task<ActionResult<AllSettingModel>> GetSharedSettingsAsync()
+        [Route("get-global-settings")]
+        public async Task<ActionResult<GlobalSettings>> GetSharedSettingsAsync()
+        {
+            var settings = CommonHelper.GetAppSettings(_authConfigurations);
+            return Ok(settings);
+        }
+        
+        [HttpGet]
+        [Route("get-all-settings")]
+        public async Task<ActionResult<AllSettingModel>> GetAllSettingsAsync()
         {
             var settings = await GetAllSettingsAsync();
             return Ok(settings);
@@ -178,7 +186,7 @@ namespace Mix.Common.Controllers
         {
             return new AllSettingModel()
             {
-                GlobalSettings = CommonHelper.GetAppSettings(lang, _authConfigurations, _cultureService),
+                GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };

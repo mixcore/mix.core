@@ -1,34 +1,25 @@
 ﻿using Mix.Common.Models;
-using Mix.Heart.Enums;
 using Mix.Heart.Helpers;
 using Mix.Lib.Services;
-using Mix.Shared.Constants;
-using Mix.Shared.Enums;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
-using Newtonsoft.Json.Linq;
-using System;
 
 namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static GlobalSettings GetAppSettings(string lang,
-            MixAuthenticationConfigurations _authConfigurations,
-            CultureService _cultureService)
+        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations)
         {
-            lang ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
-            var cultures = _cultureService.Cultures;
-            var culture = _cultureService.LoadCulture(lang);
+            //var cultures = _cultureService.Cultures;
+            //var culture = _cultureService.LoadCulture(lang);
             // Get Settings
             return new()
             {
                 Domain = GlobalConfigService.Instance.AppSettings.Domain,
-                Lang = lang,
                 PortalThemeSettings = PortalConfigService.Instance.AppSettings,
                 ApiEncryptKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey,
                 IsEncryptApi = GlobalConfigService.Instance.AppSettings.IsEncryptApi,
-                Cultures = cultures,
+                //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
                 MixDatabaseTypes = Enum.GetNames(typeof(MixDatabaseType)),
