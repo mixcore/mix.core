@@ -23,8 +23,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixConfigurationContentViewModel(MixConfigurationContent entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
     }

@@ -14,7 +14,6 @@ namespace Mix.Lib.Base
         protected bool forbidden = false;
         protected bool isValid = true;
         protected string _redirectUrl;
-        protected readonly MixCacheService _cacheService;
         protected readonly IPSecurityConfigService _ipSecurityConfigService;
         protected readonly MixService _mixService;
         protected bool ForbiddenPortal
@@ -35,8 +34,7 @@ namespace Mix.Lib.Base
 
         public MixControllerBase(
             MixService mixService,
-            IPSecurityConfigService ipSecurityConfigService, 
-            MixCacheService cacheService)
+            IPSecurityConfigService ipSecurityConfigService)
         {
             _mixService = mixService;
 
@@ -45,7 +43,6 @@ namespace Mix.Lib.Base
                 LoadCulture();
             }
             _ipSecurityConfigService = ipSecurityConfigService;
-            _cacheService = cacheService;
         }
 
         private void LoadCulture()

@@ -17,7 +17,7 @@ namespace Mixcore.Controllers
             MixService mixService,
             MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
             MixCacheService cacheService)
-            : base(mixService, ipSecurityConfigService, cacheService)
+            : base(mixService, ipSecurityConfigService)
         {
             _databaseService = databaseService;
         }

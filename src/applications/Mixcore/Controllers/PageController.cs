@@ -21,7 +21,7 @@ namespace Mixcore.Controllers
             MixDatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService)
-            : base(mixService, ipSecurityConfigService, cacheService)
+            : base(mixService, ipSecurityConfigService)
         {
             _context = context;
             _uow = new(_context);

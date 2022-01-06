@@ -20,7 +20,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public MixPageViewModel(MixPage entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -33,10 +33,10 @@ namespace Mix.Portal.Domain.ViewModels
         #region Overrides
 
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             var repo = MixPageContentViewModel.GetRepository(UowInfo);
-            Contents = await repo.GetListAsync(m => m.ParentId == Id, cacheService);
+            Contents = await repo.GetListAsync(m => m.ParentId == Id);
         }
 
         #endregion

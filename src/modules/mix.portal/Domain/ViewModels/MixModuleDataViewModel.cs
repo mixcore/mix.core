@@ -12,7 +12,7 @@
 
         public MixModuleDataViewModel(MixModuleData entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -31,15 +31,15 @@
 
         #region Overrides
 
-        public override Task<MixModuleData> ParseEntity(MixCacheService cacheService = null)
+        public override Task<MixModuleData> ParseEntity()
         {
             Value = JsonConvert.SerializeObject(Data);
             SimpleDataColumns = JsonConvert.SerializeObject(Columns);
             LastModified = DateTime.Now;
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {            
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
@@ -54,7 +54,7 @@
             {
                 Data = JObject.Parse(Value);
             }
-            return base.ExpandView(cacheService);
+            return base.ExpandView();
         }
 
         #endregion

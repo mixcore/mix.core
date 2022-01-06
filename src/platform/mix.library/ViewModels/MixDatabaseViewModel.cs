@@ -1,5 +1,4 @@
-﻿using Mix.Shared.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.ViewModels
 {
@@ -27,10 +26,8 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
@@ -38,10 +35,10 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cacheService);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)

@@ -12,7 +12,7 @@
 
         public MixPostContentViewModel(MixPostContent entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -29,10 +29,10 @@
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {
             MixDatabaseName ??= MixDatabaseNames.POST_COLUMN;
-            return base.ExpandView(cacheService);
+            return base.ExpandView();
         }
 
 

@@ -26,7 +26,7 @@
         public TemplateViewModel(MixTemplate entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
@@ -38,10 +38,10 @@
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {
             FilePath = $"/{FileFolder}/{FileName}{Extension}";
-            return base.ExpandView(cacheService);
+            return base.ExpandView();
         }
 
         #endregion

@@ -29,7 +29,7 @@ namespace Mix.Lib.ViewModels
         public MixTemplateViewModel(MixTemplate entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
@@ -41,7 +41,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {
             if (!string.IsNullOrEmpty(FileName))
             {
@@ -56,7 +56,7 @@ namespace Mix.Lib.ViewModels
             return Task.CompletedTask;
         }
 
-        public override async Task<MixTemplate> ParseEntity(MixCacheService cacheService = null)
+        public override async Task<MixTemplate> ParseEntity()
         {
             if (Id == 0)
             {
@@ -68,7 +68,7 @@ namespace Mix.Lib.ViewModels
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
-            return await base.ParseEntity(cacheService);
+            return await base.ParseEntity();
         }
 
         public override async Task Validate()

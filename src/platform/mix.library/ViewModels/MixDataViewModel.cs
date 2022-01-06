@@ -38,8 +38,7 @@ namespace Mix.Lib.ViewModels
         }
 
         public MixDataViewModel(MixData entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

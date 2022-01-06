@@ -14,7 +14,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public MixModuleViewModel(MixModule entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -28,6 +28,8 @@ namespace Mix.Portal.Domain.ViewModels
 
         [Required]
         public string SystemName { get; set; }
+
+        public virtual MixModuleType Type { get; set; }
 
         #endregion
 

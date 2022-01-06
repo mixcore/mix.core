@@ -44,7 +44,7 @@
         public MixThemeViewModel(MixTheme entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
@@ -56,13 +56,13 @@
 
         #region Overrides
 
-        public override Task<MixTheme> ParseEntity(MixCacheService cacheService = null)
+        public override Task<MixTheme> ParseEntity()
         {
             if (string.IsNullOrEmpty(SystemName))
             {
                 SystemName = SeoHelper.GetSEOString(DisplayName);
             }
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
         protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity)

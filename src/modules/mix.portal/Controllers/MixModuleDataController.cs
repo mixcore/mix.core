@@ -16,7 +16,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context,
             MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
 
         }
@@ -49,7 +49,7 @@ namespace Mix.Portal.Controllers
                     ModuleContentId = getModule.Id,
                     SimpleDataColumns =  getModule.SimpleDataColumns
                 };
-                await moduleData.ExpandView(_cacheService);
+                await moduleData.ExpandView();
                 return Ok(moduleData);
             }
             else

@@ -21,7 +21,7 @@
 
         public MixConfigurationViewModel(MixConfiguration entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -35,7 +35,7 @@
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             _contentQueryRepository = MixConfigurationContentViewModel.GetRepository(UowInfo);
 

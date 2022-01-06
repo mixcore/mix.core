@@ -21,9 +21,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected MultilanguageSEOContentViewModelBase(TEntity entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+        protected MultilanguageSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -55,12 +53,12 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-        public override Task<TEntity> ParseEntity(MixCacheService cacheService = null)
+        public override Task<TEntity> ParseEntity()
         {
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             var templateRepo = TemplateViewModel.GetRepository(UowInfo);
             if (Template == null && TemplateId.HasValue)

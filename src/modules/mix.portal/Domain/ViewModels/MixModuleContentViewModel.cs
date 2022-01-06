@@ -13,8 +13,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixModuleContentViewModel(MixModuleContent entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -35,16 +34,16 @@ namespace Mix.Portal.Domain.ViewModels
 
         #endregion
 
-        public override Task<MixModuleContent> ParseEntity(MixCacheService cacheService = null)
+        public override Task<MixModuleContent> ParseEntity()
         {
             var arrField = Columns != null ? JArray.Parse(
                JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
                    c => !string.IsNullOrEmpty(c.SystemName)))) : new JArray();
             SimpleDataColumns = arrField.ToString(Formatting.None);
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
@@ -56,7 +55,7 @@ namespace Mix.Portal.Domain.ViewModels
                 Columns = new List<ModuleColumnModel>();
             }
 
-            return base.ExpandView(cacheService);
+            return base.ExpandView();
         }
 
         public override async Task<int> CreateParentAsync()

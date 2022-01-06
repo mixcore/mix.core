@@ -20,11 +20,8 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected SiteDataViewModelBase(
-            TEntity entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+        protected SiteDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 

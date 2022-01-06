@@ -16,7 +16,7 @@
         public MixDataContentAssociationViewModel(
             MixDataContentAssociation entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion

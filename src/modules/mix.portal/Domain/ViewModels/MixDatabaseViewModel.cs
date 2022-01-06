@@ -1,17 +1,7 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    [GenerateRestApiController]
     public class MixDatabaseViewModel
         : SiteDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
@@ -38,7 +28,7 @@ namespace Mix.Portal.Domain.ViewModels
         public MixDatabaseViewModel(MixDatabase entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
@@ -46,10 +36,10 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cacheService);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)

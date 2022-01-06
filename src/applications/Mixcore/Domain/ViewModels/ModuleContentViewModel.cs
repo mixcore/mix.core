@@ -13,8 +13,7 @@ namespace Mixcore.Domain.ViewModels
         }
 
         public ModuleContentViewModel(MixModuleContent entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -38,15 +37,15 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
-            await LoadAdditionalDataAsync(cacheService);
-            await base.ExpandView(cacheService);
+            await LoadAdditionalDataAsync();
+            await base.ExpandView();
         }
 
         #region Private Methods
 
-        private async Task LoadAdditionalDataAsync(MixCacheService cacheService)
+        private async Task LoadAdditionalDataAsync()
         {
             if (AdditionalDataId == default)
             {

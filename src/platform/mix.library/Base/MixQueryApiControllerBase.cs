@@ -22,7 +22,6 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
-        protected readonly MixCacheService _cacheService;
         protected readonly TDbContext _context;
         protected bool _forbidden;
         protected UnitOfWorkInfo _uow;
@@ -35,14 +34,12 @@ namespace Mix.Lib.Base
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _uow = new(_context);
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
-            _cacheService = cacheService;
         }
 
         #region Overrides
@@ -67,7 +64,7 @@ namespace Mix.Lib.Base
             {
                 _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
-            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, _cacheService);
+            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 List<object> objects = new List<object>();
@@ -100,7 +97,7 @@ namespace Mix.Lib.Base
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
             result.InitDefaultValues(_lang, _culture.Id);
-            result.ExpandView(_cacheService);
+            result.ExpandView();
             return Ok(result);
         }
 

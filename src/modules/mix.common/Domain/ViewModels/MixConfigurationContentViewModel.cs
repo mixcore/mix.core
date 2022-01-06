@@ -33,7 +33,7 @@ namespace Mix.Common.Domain.ViewModels
         public MixConfigurationContentViewModel(MixConfigurationContent entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
