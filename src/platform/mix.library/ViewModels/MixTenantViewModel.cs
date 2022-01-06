@@ -24,7 +24,7 @@
         {
         }
 
-        public MixTenantViewModel(MixTenant entity, MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+        public MixTenantViewModel(MixTenant entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

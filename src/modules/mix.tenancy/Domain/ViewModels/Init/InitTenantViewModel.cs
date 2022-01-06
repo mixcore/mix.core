@@ -25,7 +25,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         public InitTenantViewModel(MixTenant entity,
             MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 

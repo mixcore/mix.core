@@ -1,13 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Mix.Heart.Entities;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.Base
 {
@@ -32,9 +25,8 @@ namespace Mix.Lib.Base
 
         protected SiteDataWithContentViewModelBase(
             TEntity entity,
-            MixCacheService cacheService = null,
             UnitOfWorkInfo uowInfo = null)
-            : base(entity, cacheService, uowInfo)
+            : base(entity, uowInfo)
         {
         }
 
@@ -55,12 +47,12 @@ namespace Mix.Lib.Base
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             using var _contentRepository = 
                 ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
 
-            Contents = await _contentRepository.GetListAsync(m => m.ParentId.Equals(Id), cacheService);
+            Contents = await _contentRepository.GetListAsync(m => m.ParentId.Equals(Id));
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

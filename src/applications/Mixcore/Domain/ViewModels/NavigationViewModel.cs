@@ -19,7 +19,7 @@ namespace Mixcore.Domain.ViewModels
         {
         }
 
-        public NavigationViewModel(MixDataContent entity, MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+        public NavigationViewModel(MixDataContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

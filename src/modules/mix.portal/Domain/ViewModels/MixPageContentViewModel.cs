@@ -15,7 +15,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public MixPageContentViewModel(MixPageContent entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -34,18 +34,17 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
-            await LoadAliasAsync(cacheService);
+            await LoadAliasAsync();
         }
 
-        private async Task LoadAliasAsync(MixCacheService cacheService)
+        private async Task LoadAliasAsync()
         {
             var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
             UrlAliases = await aliasRepo.GetListAsync(
-                m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id,
-                cacheService);
+                m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id);
             DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
                 : $"/page/{Id}";
         }

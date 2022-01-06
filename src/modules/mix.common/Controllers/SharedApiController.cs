@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Shared.Constants;
 using Mix.Lib.Services;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Linq;
 using Mix.Shared.Services;
 using Mix.Heart.Helpers;
 using Mix.Shared.Models;
 using Mix.Heart.Repository;
-using Mix.Database.Entities.Cms;
 using Mix.Common.Models;
 using Mix.Common.Domain.ViewModels;
-using System.Threading.Tasks;
-using Mix.Lib.Base;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Mix.Common.Domain.Models;
@@ -21,8 +14,6 @@ using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Helpers;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Heart.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace Mix.Common.Controllers
 {
@@ -123,12 +114,12 @@ namespace Mix.Common.Controllers
 
         [HttpGet]
         [Route("get-global-settings")]
-        public async Task<ActionResult<GlobalSettings>> GetSharedSettingsAsync()
+        public ActionResult<GlobalSettings> GetSharedSettings()
         {
             var settings = CommonHelper.GetAppSettings(_authConfigurations);
             return Ok(settings);
         }
-        
+
         [HttpGet]
         [Route("get-all-settings")]
         public async Task<ActionResult<AllSettingModel>> GetAllSettingsAsync()

@@ -24,6 +24,7 @@
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Heart.Extensions" />
 		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Exceptions" />
 		<Using Include="Mix.Shared.Enums" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Identity.Constants" />

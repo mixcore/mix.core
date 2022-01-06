@@ -27,7 +27,7 @@
 
         public MixDataContentViewModel(MixDataContent entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
@@ -49,20 +49,20 @@
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
-            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id);
 
             Data ??= MixDataHelper.ParseData(Id, UowInfo);
 
             await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
 
-        public override async Task<MixDataContent> ParseEntity(MixCacheService cacheService = null)
+        public override async Task<MixDataContent> ParseEntity()
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
@@ -82,10 +82,10 @@
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cacheService);
-            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id);
 
-            await ParseObjectToValues(cacheService);
+            await ParseObjectToValues();
 
             Title = Id.ToString();
             Data = MixDataHelper.ParseData(Id, UowInfo);
@@ -246,7 +246,7 @@
             Data ??= new JObject();
             foreach (var col in Columns.OrderBy(f => f.Priority))
             {
-                var val = await GetFieldValue(col, cacheService);
+                var val = await GetFieldValue(col);
                 val.DataType = col.DataType;
                 val.MixDatabaseColumnId = col.Id;
                 val.MixDatabaseName = col.MixDatabaseName;
@@ -308,7 +308,7 @@
                     CreatedDateTime = DateTime.UtcNow,
                     CreatedBy = CreatedBy
                 };
-                await val.ExpandView(cacheService);
+                await val.ExpandView();
                 Values.Add(val);
             }
             val.Status = Status;

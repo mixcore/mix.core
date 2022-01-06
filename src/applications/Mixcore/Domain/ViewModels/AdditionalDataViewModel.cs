@@ -19,7 +19,7 @@ namespace Mixcore.Domain.ViewModels
         {
         }
 
-        public AdditionalDataViewModel(MixDataContent entity, MixCacheService cacheService = null, UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+        public AdditionalDataViewModel(MixDataContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -44,12 +44,12 @@ namespace Mixcore.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cacheService);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id);
 
             if (Data == null)
             {

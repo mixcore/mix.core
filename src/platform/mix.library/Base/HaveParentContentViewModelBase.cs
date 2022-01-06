@@ -23,8 +23,7 @@ namespace Mix.Lib.Base
         }
 
         protected HaveParentContentViewModelBase(TEntity entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

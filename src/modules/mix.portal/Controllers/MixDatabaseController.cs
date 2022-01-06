@@ -2,18 +2,19 @@
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-page-module")]
+    [Route("api/v2/rest/mix-portal/mix-database")]
     [ApiController]
-    public class MixPageModuleController
-        : MixAssociationApiControllerBase<MixPageModuleViewModel, MixCmsContext, MixPageModuleAssociation>
+    public class MixDatabaseController
+        : MixRestApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
-        public MixPageModuleController(
+        public MixDatabaseController(
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
+            MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
@@ -22,7 +23,14 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-
+        protected override Task<ActionResult> DeleteHandler(MixDatabaseViewModel data)
+        {
+            if (data.Type == MixDatabaseType.System)
+            {
+                throw new MixException($"Cannot Delete System Database: {data.SystemName}");
+            }
+            return base.DeleteHandler(data);
+        }
         #endregion
 
 

@@ -32,19 +32,19 @@ namespace Mix.Portal.Domain.ViewModels
         public MixDatabaseColumnViewModel(
             MixDatabaseColumn entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
 
         #region Overrides
 
-        public override Task<MixDatabaseColumn> ParseEntity(MixCacheService cacheService = null)
+        public override Task<MixDatabaseColumn> ParseEntity()
         {
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
                     ColumnConfigurations, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
         public override void ParseView<TSource>(TSource sourceObject)

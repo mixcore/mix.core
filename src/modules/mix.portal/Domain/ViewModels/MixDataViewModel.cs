@@ -30,7 +30,7 @@
 
         public MixDataViewModel(MixData entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -38,10 +38,10 @@
 
         #region Overrides
 
-        public override Task ExpandView(MixCacheService cacheService = null)
+        public override Task ExpandView()
         {
             MixDatabaseName ??= MixDatabaseNames.MODULE_COLUMN;
-            return base.ExpandView(cacheService);
+            return base.ExpandView();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

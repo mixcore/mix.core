@@ -17,7 +17,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context,
             MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
 
         }

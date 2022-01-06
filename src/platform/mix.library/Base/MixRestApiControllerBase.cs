@@ -24,9 +24,8 @@ namespace Mix.Lib.Base
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
-            MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
         }
 
@@ -110,7 +109,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<IActionResult> UpdateHandler(string id, TView data)
         {
             var result = await data.SaveAsync();
-            await _cacheService.RemoveCacheAsync(id, typeof(TView));
+            await MixCacheService.Instance.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
             return Ok(result);
         }
@@ -118,7 +117,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<ActionResult> DeleteHandler(TView data)
         {
             await data.DeleteAsync();
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
+            await MixCacheService.Instance.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
             return Ok();
         }
@@ -127,7 +126,7 @@ namespace Mix.Lib.Base
         protected virtual async Task<IActionResult> PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
             await data.SaveFieldsAsync(properties);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            await MixCacheService.Instance.RemoveCacheAsync(id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Patch, MixRestStatus.Success);
             return Ok();
         }

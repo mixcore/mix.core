@@ -24,7 +24,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context, MixThemeImportService importService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
 
             _exportService = exportService;

@@ -22,8 +22,7 @@ namespace Mix.Lib.Base
         }
 
         protected MultilanguageContentViewModelBase(TEntity entity,
-            MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -39,10 +38,10 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-        public override Task<TEntity> ParseEntity(MixCacheService cacheService = null)
+        public override Task<TEntity> ParseEntity()
         {
             MixCultureId = MixCultureId == 0 ? 1: MixCultureId;
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

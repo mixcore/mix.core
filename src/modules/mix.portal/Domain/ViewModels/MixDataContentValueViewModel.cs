@@ -37,7 +37,7 @@
 
         public MixDataContentValueViewModel(MixDataContentValue entity,
             MixCacheService cacheService = null,
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -45,17 +45,17 @@
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity(MixCacheService cacheService = null)
+        public override Task<MixDataContentValue> ParseEntity()
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
             
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
-        public override async Task ExpandView(MixCacheService cacheService = null)
+        public override async Task ExpandView()
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);

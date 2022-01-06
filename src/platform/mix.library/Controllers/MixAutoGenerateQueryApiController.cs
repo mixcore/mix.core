@@ -22,7 +22,7 @@ namespace Mix.Lib.Controllers
             TDbContext context,
             MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, cacheService, queueService)
+            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
         }
     }

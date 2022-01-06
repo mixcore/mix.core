@@ -19,7 +19,7 @@ namespace Mix.Identity.ViewModels
         public RoleViewModel(
             AspNetRoles entity, 
             MixCacheService cacheService = null, 
-            UnitOfWorkInfo uowInfo = null) : base(entity, cacheService, uowInfo)
+            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -45,13 +45,13 @@ namespace Mix.Identity.ViewModels
         #endregion Properties
 
         #region Overrides
-        public override Task<AspNetRoles> ParseEntity(MixCacheService cacheService = null)
+        public override Task<AspNetRoles> ParseEntity()
         {
             if (Id == Guid.Empty)
             {
                 Id = Guid.NewGuid();
             }
-            return base.ParseEntity(cacheService);
+            return base.ParseEntity();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
