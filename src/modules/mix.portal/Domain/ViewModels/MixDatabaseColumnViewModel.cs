@@ -31,7 +31,7 @@ namespace Mix.Portal.Domain.ViewModels
 
         public MixDatabaseColumnViewModel(
             MixDatabaseColumn entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

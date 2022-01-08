@@ -127,7 +127,7 @@ namespace Mix.Lib.Services
                                     ClientId = _authConfigService.AppSettings.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
-                                }, _cacheService);
+                                });
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
                     refreshTokenId = saveRefreshTokenResult;

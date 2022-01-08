@@ -13,7 +13,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixModuleViewModel(MixModule entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

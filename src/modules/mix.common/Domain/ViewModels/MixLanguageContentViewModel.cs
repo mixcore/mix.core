@@ -31,7 +31,7 @@ namespace Mix.Common.Domain.ViewModels
         }
 
         public MixLanguageContentViewModel(MixLanguageContent entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

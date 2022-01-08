@@ -22,7 +22,7 @@ namespace Mix.Identity.ViewModels
 
         public RefreshTokenViewModel(
             RefreshTokens entity, 
-            MixCacheService cacheService = null, 
+             
             UnitOfWorkInfo uowInfo = null) 
             : base(entity, uowInfo)
         {

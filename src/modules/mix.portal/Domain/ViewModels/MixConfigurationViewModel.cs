@@ -20,7 +20,7 @@
         }
 
         public MixConfigurationViewModel(MixConfiguration entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

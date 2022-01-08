@@ -18,7 +18,7 @@ namespace Mix.Identity.ViewModels
 
         public RoleViewModel(
             AspNetRoles entity, 
-            MixCacheService cacheService = null, 
+             
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
