@@ -39,7 +39,7 @@ namespace Mix.Lib.ViewModels
 
         public MixDatabaseColumnViewModel(
             MixDatabaseColumn entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

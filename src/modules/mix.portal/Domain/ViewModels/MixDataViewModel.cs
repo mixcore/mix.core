@@ -29,7 +29,7 @@
         }
 
         public MixDataViewModel(MixData entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

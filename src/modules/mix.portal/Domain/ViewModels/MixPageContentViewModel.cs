@@ -14,7 +14,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixPageContentViewModel(MixPageContent entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

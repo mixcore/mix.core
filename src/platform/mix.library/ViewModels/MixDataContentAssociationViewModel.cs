@@ -22,7 +22,7 @@ namespace Mix.Lib.ViewModels
         }
 
         public MixDataContentAssociationViewModel(MixDataContentAssociation entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

@@ -27,7 +27,7 @@ namespace Mix.Lib.ViewModels
         }
 
         public MixTemplateViewModel(MixTemplate entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

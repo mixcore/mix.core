@@ -18,7 +18,7 @@
         }
 
         public MixCultureViewModel(MixCulture entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

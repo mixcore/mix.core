@@ -26,7 +26,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixDatabaseViewModel(MixDatabase entity,
-            MixCacheService cacheService = null,
+            
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
