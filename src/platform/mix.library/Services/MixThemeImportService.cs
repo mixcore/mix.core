@@ -45,7 +45,8 @@ namespace Mix.Lib.Services
         public SiteDataViewModel LoadSchema()
         {
             var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
-            var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+            string content = ReplaceContent(strSchema.Content);
+            var siteStructures = JObject.Parse(content).ToObject<SiteDataViewModel>();
             return siteStructures;
         }
 
@@ -194,9 +195,7 @@ namespace Mix.Lib.Services
 
         private string ReplaceContent(string content)
         {
-            string accessFolder = $"/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
-            return content.Replace("[ACCESS_FOLDER]", accessFolder)
-                        .Replace("[THEME_NAME]", _siteData.ThemeName);
+            return content.Replace("[THEME_NAME]", _siteData.ThemeName);
         }
 
         #endregion

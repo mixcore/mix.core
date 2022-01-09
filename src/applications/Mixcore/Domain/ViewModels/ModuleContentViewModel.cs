@@ -33,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
 
         public Guid? AdditionalDataId { get; set; }
         public AdditionalDataViewModel AdditionalData { get; set; }
-        public PagingResponseModel<ModuleDataViewModel> SimpleDatas { get; set; }
+        public PagingResponseModel<ModuleDataViewModel> Data { get; set; }
         #endregion
 
         #region Overrides
@@ -63,7 +63,9 @@ namespace Mixcore.Domain.ViewModels
         }
 
         #endregion
+
         #endregion
+
         #region Public Methods
 
         public T Property<T>(string fieldName)
@@ -73,12 +75,11 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadData(IPagingModel pagingModel, MixCacheService cacheService = null)
+        public async Task LoadData(IPagingModel pagingModel)
         {
-            SimpleDatas = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
+            Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
                 m => m.ModuleContentId == Id,
-                pagingModel,
-                cacheService);
+                pagingModel);
         }
         #endregion
     }
