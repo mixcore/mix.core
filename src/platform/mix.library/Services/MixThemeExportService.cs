@@ -84,10 +84,8 @@ namespace Mix.Lib.Services
         private void ExportSchema(SiteDataViewModel siteData)
         {
             string filename = MixThemePackageConstants.SchemaFilename;
-            string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{_exporTheme.SystemName}";
             string content = MixHelper.SerializeObject(siteData);
             content = content
-                .Replace(accessFolder, "[ACCESS_FOLDER]")
                 .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]");
             if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
             {
@@ -306,6 +304,7 @@ namespace Mix.Lib.Services
                 .Where(m => m.MixThemeId == _dto.ThemeId)
                 .AsNoTracking()
                 .ToListAsync();
+            _siteData.Templates.ForEach(m => m.Content = m.Content.Replace($"/{_siteData.ThemeName}", "/[THEME_NAME]"));
         }
 
         private async Task ExportPages()
