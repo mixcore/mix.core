@@ -11,27 +11,31 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+        
+      - name: Build with dotnet
+        run: dotnet build src/applications/Mixcore/mixcore.csproj --configuration Release
 
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
+      - name: dotnet publish
+        run: dotnet publish src/applications/Mixcore/mixcore.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-    - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v2
-      with:
-        name: .net-app
-        path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: windows-latest
