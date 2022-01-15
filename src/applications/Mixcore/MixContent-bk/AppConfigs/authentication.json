@@ -1,0 +1,33 @@
+{
+  "Authentication": {
+    "AccessTokenExpiration": 20,
+    "RefreshTokenExpiration": 120,
+    "ValidateIssuer": false,
+    "ValidateAudience": false,
+    "ValidateLifetime": true,
+    "ValidateIssuerSigningKey": true,
+    "TokenType": "Bearer",
+    "Audience": "mix-core",
+    "ClientId": "00000000-0000-0000-0000-000000000000",
+    "SecretKey": "913aa1ba93c445fca27ba11f23c0d3b8",
+    "Issuer": "mix-core",
+    "Issuers": "mix-core",
+    "Audiences": "mix-core",
+    "Facebook": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Google": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Microsoft": {
+      "AppId": "",
+      "AppSecret": ""
+    },
+    "Twitter": {
+      "AppId": "",
+      "AppSecret": ""
+    }
+  }
+}

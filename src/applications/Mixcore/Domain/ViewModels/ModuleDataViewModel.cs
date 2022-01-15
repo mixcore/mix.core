@@ -24,8 +24,6 @@
         #region Properties
         public string Value { get; set; }
 
-        public int ModuleContentId { get; set; }
-
         public JObject Data { get; set; } = new JObject();
         #endregion
 

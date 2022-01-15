@@ -180,7 +180,7 @@ namespace Mix.Lib.Services
         private async Task ExportModuleSimpleDatas()
         {
             var data = await _context.MixModuleData.Where(
-                    m => _dto.Associations.ModuleIds.Any(p => p == m.ParentId)).ToListAsync();
+                    m => _dto.Associations.ModuleContentIds.Any(p => p == m.ParentId)).ToListAsync();
             _siteData.ModuleDatas.AddRange(data);
         }
 

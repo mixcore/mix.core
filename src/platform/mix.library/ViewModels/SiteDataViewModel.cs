@@ -9,8 +9,8 @@ namespace Mix.Lib.ViewModels
 
         public string Specificulture { get; set; }
 
-        [Required]
         public string ThemeName { get; set; }
+
         public string ThemeSystemName { get; set; }
 
         public int ThemeId { get; set; }

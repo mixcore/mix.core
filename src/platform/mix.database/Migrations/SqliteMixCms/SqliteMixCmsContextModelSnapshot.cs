@@ -47,7 +47,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -115,7 +115,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
@@ -194,7 +194,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -242,7 +242,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -290,7 +290,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -365,7 +365,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -439,7 +439,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("TEXT");
@@ -537,7 +537,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("TEXT");
@@ -638,7 +638,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
                         .HasColumnType("TEXT");
@@ -701,7 +701,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -749,7 +749,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -817,7 +817,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
@@ -882,7 +882,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -961,7 +961,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("INTEGER");
@@ -1077,9 +1077,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ModuleContentId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
 
@@ -1161,9 +1158,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("RightId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -1207,7 +1201,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1277,7 +1271,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
                         .HasColumnType("INTEGER");
@@ -1380,9 +1374,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("RightId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -1423,9 +1414,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("RightId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Specificulture")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
@@ -1461,7 +1449,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1532,7 +1520,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
@@ -1653,7 +1641,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1710,7 +1698,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1768,7 +1756,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("PreviewUrl")
                         .HasColumnType("varchar(250)")
@@ -1829,7 +1817,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
