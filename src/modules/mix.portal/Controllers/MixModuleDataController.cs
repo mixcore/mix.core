@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 request.ModuleContentId.HasValue,
-                m => m.ModuleContentId == request.ModuleContentId);
+                m => m.ParentId == request.ModuleContentId);
 
             return searchRequest;
         }
@@ -41,12 +41,13 @@ namespace Mix.Portal.Controllers
         [Route("init-form/{moduleId}")]
         public async Task<ActionResult<MixModuleDataViewModel>> InitByIdAsync(int moduleId)
         {
-            var getModule = await MixModuleContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == moduleId).ConfigureAwait(false);
+            var getModule = await MixModuleContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == moduleId)
+                .ConfigureAwait(false);
             if (getModule != null)
             {
                 var moduleData = new MixModuleDataViewModel()
                 {
-                    ModuleContentId = getModule.Id,
+                    ParentId= getModule.Id,
                     SimpleDataColumns =  getModule.SimpleDataColumns
                 };
                 await moduleData.ExpandView();

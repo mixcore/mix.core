@@ -28,7 +28,7 @@ namespace Mixcore.Domain.ViewModels
 
         public string ClassName { get; set; }
 
-        public string DetailUrl => $"/Page/{Id}/{SeoName}";
+        public string DetailUrl => $"/page/{Id}/{SeoName}";
 
         public Guid? AdditionalDataId { get; set; }
 

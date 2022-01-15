@@ -1,0 +1,21 @@
+{
+  "Cultures": [
+    {
+      "Alias": null,
+      "Icon": "flag-icon-us",
+      "Lcid": null,
+      "Specificulture": "en-us",
+      "DisplayName": "United States - English",
+      "Description": "Default",
+      "MixTenantId": 1,
+      "MixTenant": null,
+      "Id": 1,
+      "CreatedDateTime": "2021-12-26T04:33:28.65008",
+      "LastModified": null,
+      "CreatedBy": null,
+      "ModifiedBy": null,
+      "Priority": 0,
+      "Status": 2
+    }
+  ]
+}

@@ -22,7 +22,6 @@
         #endregion
 
         #region Properties
-        public int ModuleContentId { get; set; }
         public string SimpleDataColumns { get; set; }
         public string Value { get; set; }
         public JObject Data { get; set; } = new JObject();

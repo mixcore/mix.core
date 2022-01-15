@@ -78,7 +78,7 @@ namespace Mixcore.Domain.ViewModels
         public async Task LoadData(IPagingModel pagingModel)
         {
             Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
-                m => m.ModuleContentId == Id,
+                m => m.ParentId == Id,
                 pagingModel);
         }
         #endregion

@@ -45,8 +45,7 @@ namespace Mix.Lib.Services
         public SiteDataViewModel LoadSchema()
         {
             var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
-            string content = ReplaceContent(strSchema.Content);
-            var siteStructures = JObject.Parse(content).ToObject<SiteDataViewModel>();
+            var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
             return siteStructures;
         }
 
@@ -75,7 +74,7 @@ namespace Mix.Lib.Services
             try
             {
                 _uow.Begin();
-                _siteData = siteData;
+                _siteData = ParseSiteData(siteData);
                 if (_siteData.ThemeId == 0)
                 {
                     await CreateTheme();
@@ -179,8 +178,8 @@ namespace Mix.Lib.Services
                 {
                     x.MixThemeId = _siteData.ThemeId;
                     x.MixThemeName = _siteData.ThemeSystemName;
-                    x.Content = ReplaceContent(x.Content);
-                    x.FileFolder = ReplaceContent(x.FileFolder);
+                    x.Content = ReplaceContent(x.Content, _siteData.ThemeSystemName);
+                    x.FileFolder = ReplaceContent(x.FileFolder, _siteData.ThemeSystemName);
                     MixFileHelper.SaveFile(new FileModel()
                     {
                         Content = x.Content,
@@ -193,9 +192,16 @@ namespace Mix.Lib.Services
             }
         }
 
-        private string ReplaceContent(string content)
+        private SiteDataViewModel ParseSiteData(SiteDataViewModel siteData)
         {
-            return content.Replace("[THEME_NAME]", _siteData.ThemeName);
+            string strContent = JObject.FromObject(siteData).ToString();
+            var obj = JObject.Parse(ReplaceContent(strContent, siteData.ThemeSystemName));
+            return obj.ToObject<SiteDataViewModel>();
+        }
+
+        private string ReplaceContent(string content, string themeName)
+        {
+            return content.Replace("[THEME_NAME]", themeName);
         }
 
         #endregion
