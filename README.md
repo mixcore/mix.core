@@ -147,6 +147,10 @@ Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/bl
 
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmixcore%2Fmix.core?ref=badge_large)
+
+## Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/4ec425735bae424c69c063f2bac106c3107b6db4.svg "Repobeats analytics image")
 =======
 
 ## How to contribute
