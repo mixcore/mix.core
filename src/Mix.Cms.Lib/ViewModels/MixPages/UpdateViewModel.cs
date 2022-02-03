@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
@@ -60,6 +61,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         [JsonProperty("content")]
         public string Content { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -92,13 +99,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         [JsonProperty("pageSize")]
         public int? PageSize { get; set; }
-        
+
         [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
         [JsonProperty("lastModified")]
         public DateTime? LastModified { get; set; }
-        
+
         [JsonProperty("createdBy")]
         public string CreatedBy { get; set; }
 
@@ -115,8 +122,11 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/page/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("moduleNavs")]
         public List<MixPageModules.ReadMvcViewModel> ModuleNavs { get; set; } // Parent to Modules
@@ -128,14 +138,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public FileStreamViewModel ImageFileStream { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
-                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
+        public string ImageUrl
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1))
                 {
-                    return $"{Domain}/{Image}";
+                    return $"{Domain.TrimEnd('/')}/{Image.TrimStart('/')}";
                 }
                 else
                 {
@@ -145,11 +157,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
-                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+        public string ThumbnailUrl
+        {
+            get
+            {
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1)
                 {
-                    return $"{Domain}/{Thumbnail}";
+                    return $"{Domain.TrimEnd('/')}/{Thumbnail.TrimStart('/')}";
                 }
                 else
                 {
@@ -173,22 +187,28 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public List<MixTemplates.UpdateViewModel> Masters { get; set; }
 
         [JsonIgnore]
-        public int ActivedTheme {
-            get {
+        public int ActivedTheme
+        {
+            get
+            {
                 return MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, Specificulture);
             }
         }
 
         [JsonIgnore]
-        public string TemplateFolderType {
-            get {
+        public string TemplateFolderType
+        {
+            get
+            {
                 return MixTemplateFolders.Pages.ToString();
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/" +
                   $"{MixService.GetConfig<string>(MixAppSettingKeywords.ThemeName, Specificulture)}/" +
                   $"{MixTemplateFolders.Pages}";
@@ -227,7 +247,8 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         public override MixPage ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             GenerateSEO(_context, _transaction);
-
+            EditorValue ??= Content;
+            EditorType ??= MixEditorType.Html;
             Template = View != null ? $"{View.FolderType}/{View.FileName}{View.Extension}" : Template;
             Layout = Master != null ? $"{Master.FolderType}/{Master.FileName}{Master.Extension}" : null;
             if (Id == 0)
@@ -258,7 +279,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             {
                 this.View = Templates.FirstOrDefault(t => MixConstants.DefaultTemplate.Module.Equals($"{t.FileName}{t.Extension}"));
             }
-            this.View.SetMediator(this);
+            this.View?.SetMediator(this);
             this.Template = $"{View?.FileFolder}/{View?.FileName}{View.Extension}";
             // Load Attributes
             // Load master views
@@ -274,6 +295,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
 
             this.ModuleNavs = GetModuleNavs(_context, _transaction);
             this.UrlAliases = GetAliases(_context, _transaction);
+
+            DetailsUrl = Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PageController", Specificulture, "page")}/{Id}/{SeoName}")
+                   : null;
         }
 
         #region Sync
@@ -333,6 +358,38 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
         #endregion Sync
 
         #region Async
+
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixPage parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            string parentId = Id.ToString();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                    m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Page && m.Specificulture == Specificulture,
+                    _context, _transaction);
+            if (getAdditionalData.IsSucceed)
+            {
+                getAdditionalData.Data.Cultures = Cultures;
+                var model = getAdditionalData.Data.ParseModel();
+                var cloneData = await getAdditionalData.Data.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneData, ref result);
+            }
+            return result;
+        }
+
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            string parentId = Id.ToString();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
+                    true,
+                    m => m.ParentId == parentId
+                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_PAGE
+                        && m.ParentType == MixDatabaseParentType.Page
+                        && m.Specificulture == Specificulture,
+                    _context, _transaction);
+            ViewModelHelper.HandleResult(removeAdditionalData, ref result);
+            return result;
+        }
 
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixPage parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
@@ -446,14 +503,20 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load Actived Modules
             var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture
             , context, transaction).Data;
-            result.ForEach(nav =>
-            {
-                nav.IsActived = true;
-            });
-            var moduleids = result.Select(m => m.ModuleId);
+            
+            result.ForEach(m => m.IsActived = true);
+
             // Load inactived modules
+            LoadInActivedModules(result, context, transaction);
+
+            return result.OrderByDescending(m => m.IsActived).ThenBy(m => m.Priority).ToList();
+        }
+
+        private void LoadInActivedModules(List<MixPageModules.ReadMvcViewModel> result, MixCmsContext context, IDbContextTransaction transaction)
+        {
+            var activedModuleIds = result.Select(m => m.ModuleId).ToList();
             var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => m.Specificulture == Specificulture && !moduleids.Any(r => r == m.Id)
+                m => m.Specificulture == Specificulture && !activedModuleIds.Any(o => o == m.Id)
                 , context, transaction).Data;
             foreach (var item in otherModules)
             {
@@ -463,10 +526,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
                     PageId = Id,
                     ModuleId = item.Id,
                     Image = item.ImageUrl,
-                    Description = item.Title
+                    Description = item.Title,
+                    IsActived = false
                 });
             }
-            return result.OrderBy(m => m.Priority).ToList();
         }
 
         #endregion Expands

@@ -16,7 +16,7 @@ namespace Mix.Cms.Web.Controllers
             base.ValidateRequest();
 
             // If this site has not been inited yet
-            if (MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 isValid = false;
                 if (string.IsNullOrEmpty(MixService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
@@ -25,7 +25,7 @@ namespace Mix.Cms.Web.Controllers
                 }
                 else
                 {
-                    var status = MixService.GetConfig<string>("InitStatus");
+                    var status = MixService.GetAppSetting<string>("InitStatus");
                     _redirectUrl = $"/init/step{status}";
                 }
             }
@@ -35,15 +35,11 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
-        [Route("page/{seoName}")]
-        [Route("page/{seoName}/{keyword}")]
-        [Route("{culture}/page/{seoName}")]
-        [Route("{culture}/page/{seoName}/{keyword}")]
-        public async Task<IActionResult> Index(string culture, string seoName, string keyword)
+        public async Task<IActionResult> Index(int id, string keyword)
         {
             if (isValid)
             {
-                return await Page(seoName, keyword);
+                return await Page(id, keyword);
             }
             else
             {

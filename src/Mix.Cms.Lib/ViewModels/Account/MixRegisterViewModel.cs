@@ -11,6 +11,7 @@ using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
 using Mix.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         public List<NavUserRoleViewModel> UserRoles { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public string Domain => MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
         public string AvatarUrl {
@@ -103,6 +104,9 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         [JsonProperty("mediaFile")]
         public FileViewModel MediaFile { get; set; } = new FileViewModel();
+
+        [JsonProperty("userData")]
+        public JObject UserData { get; set; }
 
         #endregion Views
 

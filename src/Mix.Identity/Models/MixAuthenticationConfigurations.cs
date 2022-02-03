@@ -2,8 +2,8 @@
 {
     public class MixAuthenticationConfigurations
     {
-        public int AccessTokenExpiration { get; set; }
-        public int RefreshTokenExpiration { get; set; }
+        public int AccessTokenExpiration { get; set; } = 20;
+        public int RefreshTokenExpiration { get; set; } = 20;
         public bool ValidateIssuer { get; set; }
         public bool ValidateAudience { get; set; }
         public bool ValidateLifetime { get; set; }

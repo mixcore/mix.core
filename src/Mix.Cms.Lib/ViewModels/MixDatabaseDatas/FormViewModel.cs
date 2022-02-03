@@ -58,6 +58,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("detailsUrl")]
         public string DetailsUrl
         {
@@ -97,6 +100,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         {
         }
 
+        public void UpdateValues(JObject values)
+        {
+            foreach (var item in values.Properties())
+            {
+                if (Obj.ContainsKey(item.Name))
+                {
+                    Obj[item.Name] = item.Value;
+                }
+            }
+        }
+
         public FormViewModel(MixDatabaseData model, MixCmsContext _context = null, IDbContextTransaction _transaction = null) : base(model, _context, _transaction)
         {
         }
@@ -107,7 +121,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Columns ??= MixDatabases.UpdateViewModel.Repository.GetSingleModel(f => f.Id == MixDatabaseId
+            Columns ??= MixDatabases.UpdateViewModel.Repository.GetSingleModel(f => f.Name == MixDatabaseName
            , _context, _transaction).Data.Columns;
 
             if (Obj == null)
@@ -116,11 +130,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
             if (Columns.Any(c => c.DataType == MixDataType.Reference))
             {
-                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, 
+                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture,
                     Columns
-                    .Where(c=>c.DataType == MixDataType.Reference)
-                    .Select(c => new MixDatabaseColumn() 
-                    { 
+                    .Where(c => c.DataType == MixDataType.Reference)
+                    .Select(c => new MixDatabaseColumn()
+                    {
                         Name = c.Name,
                         ReferenceId = c.ReferenceId,
                         DataType = c.DataType
@@ -137,7 +151,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Priority = Repository.Count(m => m.MixDatabaseName == MixDatabaseName && m.Specificulture == Specificulture, _context, _transaction).Data + 1;
+                Status = MixContentStatus.Published;
+                Priority = Repository.Count(
+                            m => m.MixDatabaseName == MixDatabaseName && m.Specificulture == Specificulture,
+                            _context, _transaction).Data + 1;
             }
 
             if (string.IsNullOrEmpty(MixDatabaseName))
@@ -149,28 +166,36 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 MixDatabaseId = _context.MixDatabase.First(m => m.Name == MixDatabaseName)?.Id ?? 0;
             }
             Values ??= MixDatabaseDataValues.UpdateViewModel
-                .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture
-                , _context, _transaction)
+                .Repository.GetModelListBy(
+                    a => a.DataId == Id && a.MixDatabaseName == MixDatabaseName && a.Specificulture == Specificulture,
+                    _context, _transaction)
                 .Data.OrderBy(a => a.Priority).ToList();
-            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(f => f.MixDatabaseId == MixDatabaseId
-            , _context, _transaction).Data;
-
+            Columns ??= MixDatabaseColumns.UpdateViewModel.Repository.GetModelListBy(
+                f => f.MixDatabaseId == MixDatabaseId,
+                _context, _transaction).Data;
+            Columns.AddRange(
+                Values
+                .Where(v => v.Column != null && !Columns.Any(f => f.Name == v.Column?.Name))
+                .Select(v => v.Column)
+                .ToList());
             Obj ??= new JObject();
-            foreach (var field in Columns.OrderBy(f => f.Priority))
+            foreach (var col in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == col.Name);
                 if (val == null)
                 {
                     val = new MixDatabaseDataValues.UpdateViewModel()
                     {
-                        MixDatabaseColumnId = field.Id,
-                        MixDatabaseColumnName = field.Name,
-                        StringValue = field.DefaultValue,
-                        Priority = field.Priority,
-                        Column = field,
+                        MixDatabaseColumnId = col.Id,
+                        MixDatabaseColumnName = col.Name,
+                        MixDatabaseName = col.MixDatabaseName,
+                        StringValue = col.DefaultValue,
+                        Priority = col.Priority,
+                        Column = col,
                         DataId = Id
                     };
                     val.ExpandView(_context, _transaction);
+                    val.Column = col;
                     Values.Add(val);
                 }
                 else
@@ -179,11 +204,11 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
                 val.Status = Status;
                 val.Specificulture = Specificulture;
-                val.Priority = field.Priority;
+                val.Priority = col.Priority;
                 val.MixDatabaseName = MixDatabaseName;
                 if (Obj[val.MixDatabaseColumnName] != null)
                 {
-                    if (val.Column.DataType == MixDataType.Reference)
+                    if (val.Column?.DataType == MixDataType.Reference)
                     {
                         var arr = Obj[val.MixDatabaseColumnName].Value<JArray>();
                         val.IntegerValue = val.Column.ReferenceId;
@@ -208,8 +233,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                                     RefData.Add(new FormViewModel()
                                     {
                                         Specificulture = Specificulture,
-                                        MixDatabaseId = field.ReferenceId.Value,
-                                        Obj = objData["obj"].Value<JObject>()
+                                        MixDatabaseId = col.ReferenceId.Value,
+                                        Status = MixContentStatus.Published,
+                                        Obj = objData
                                     });
                                 }
                             }
@@ -221,32 +247,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     }
                 }
             }
-
-            // Save Edm html
-            //var getAttrSet = Mix.Cms.Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModel(m => m.Name == MixDatabaseName, _context, _transaction);
-            //var getEdm = Lib.ViewModels.MixTemplates.UpdateViewModel.GetTemplateByPath(getAttrSet.Data.EdmTemplate, Specificulture, _context, _transaction);
-            //var edmField = Values.FirstOrDefault(f => f.MixDatabaseColumnName == "edm");
-            //if (edmField != null && getEdm.IsSucceed && !string.IsNullOrEmpty(getEdm.Data.Content))
-            //{
-            //    string body = getEdm.Data.Content;
-            //    foreach (var prop in Obj.Properties())
-            //    {
-            //        body = body.Replace($"[[{prop.Name}]]", Obj[prop.Name].Value<string>());
-            //    }
-            //    var edmFile = new FileViewModel()
-            //    {
-            //        Content = body,
-            //        Extension = MixFileExtensions.Html,
-            //        FileFolder = MixTemplateFolders.Edms,
-            //        Filename = $"{getAttrSet.Data.EdmSubject}-{Id}"
-            //    };
-            //    if (MixFileRepository.Instance.SaveWebFile(edmFile))
-            //    {
-            //        Obj["edm"] = edmFile.WebPath;
-            //        edmField.StringValue = edmFile.WebPath;
-            //    }
-            //}
-            //End save edm
 
             return base.ParseModel(_context, _transaction); ;
         }
@@ -263,12 +263,14 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 var result = await base.SaveModelAsync(isSaveSubModels, context, transaction);
                 if (result.IsSucceed && !string.IsNullOrEmpty(ParentId) && ParentId != "0")
                 {
-                    var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.CheckIsExists(
+
+
+                    var getNav = MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModel(
                         m => m.DataId == Id && m.ParentId == ParentId && m.ParentType == ParentType && m.Specificulture == Specificulture
                         , context, transaction);
-                    if (!getNav)
+                    if (!getNav.IsSucceed)
                     {
-                        var nav = new MixDatabaseDataAssociations.UpdateViewModel()
+                        getNav.Data = new MixDatabaseDataAssociations.UpdateViewModel()
                         {
                             DataId = Id,
                             Specificulture = Specificulture,
@@ -276,21 +278,37 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             MixDatabaseName = MixDatabaseName,
                             ParentType = ParentType,
                             ParentId = ParentId,
-                            Status = MixContentStatus.Published
+                            Status = MixContentStatus.Published,
                         };
-                        var saveResult = await nav.SaveModelAsync(false, context, transaction);
+                        var saveResult = await getNav.Data.SaveModelAsync(false, context, transaction);
+
                         if (!saveResult.IsSucceed)
                         {
                             result.IsSucceed = false;
                             result.Exception = saveResult.Exception;
-                            result.Errors = saveResult.Errors;
+                            result.Errors.Add("Cannot save navigation");
+                            result.Errors.AddRange(saveResult.Errors);
+                        }
+                    }
+                    if (IsClone)
+                    {
+                        var cloneData = await CloneAsync(ParseModel(), Cultures, context, transaction);
+                        var cloneNav = await getNav.Data.CloneAsync(getNav.Data.ParseModel(), Cultures, context, transaction);
+                        if (!cloneNav.IsSucceed)
+                        {
+                            result.IsSucceed = false;
+                            result.Exception = cloneNav.Exception;
+                            result.Errors.Add("Cannot clone navigation");
+                            result.Errors.AddRange(cloneNav.Errors);
                         }
                     }
                 }
                 if (result.IsSucceed)
                 {
                     Model.CleanCache(context);
-                    Obj = Helper.ParseData(Id, Specificulture, context, transaction);
+                    // Set null to refresh all data
+                    Obj = null;
+                    ExpandView(context, transaction);
                 }
 
                 UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
@@ -308,6 +326,24 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     context.Dispose();
                 }
             }
+        }
+
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseData parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Values.Count > 0)
+            {
+                foreach (var item in Values)
+                {
+                    if (result.IsSucceed)
+                    {
+                        item.Cultures = Cultures;
+                        var cloneValue = await item.CloneAsync(item.ParseModel(), Cultures, _context, _transaction);
+                        ViewModelHelper.HandleResult(cloneValue, ref result);
+                    }
+                }
+            }
+            return result;
         }
 
         public override RepositoryResponse<FormViewModel> SaveModel(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -337,43 +373,77 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
 
             //// Save Related Data
-            //if (result.IsSucceed)
-            //{
-            //    RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
-            //    ViewModelHelper.HandleResult(saveRelated, ref result);
-            //}
+            if (result.IsSucceed)
+            {
+                RepositoryResponse<bool> saveRelated = await SaveRelatedDataAsync(parent, _context, _transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
 
             return result;
         }
 
-        private async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
+        private async Task<RepositoryResponse<bool>> SaveRelatedDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            foreach (var item in Values)
+            foreach (var item in RelatedData)
             {
-                if (result.IsSucceed)
+                item.ParentId = parent.Id;
+                item.ParentType = MixDatabaseParentType.Set;
+                item.Specificulture = Specificulture;
+                var saveRelated = await item.SaveModelAsync(false, context, transaction);
+                ViewModelHelper.HandleResult(saveRelated, ref result);
+            }
+            return result;
+        }
+
+        public async Task<RepositoryResponse<bool>> SaveValues(MixDatabaseData parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            try
+            {
+                foreach (var item in Values.Where(v => v.Column.DataType != MixDataType.Reference))
                 {
-                    if (Columns.Any(f => f.Id == item.MixDatabaseColumnId))
+                    if (result.IsSucceed)
                     {
-                        item.DataId = parent.Id;
-                        item.Specificulture = parent.Specificulture;
-                        item.Priority = item.Column.Priority;
-                        item.Status = MixContentStatus.Published;
-                        var saveResult = await item.SaveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(saveResult, ref result);
+                        if (Columns.Any(f => f.Name == item.MixDatabaseColumnName))
+                        {
+                            item.DataId = parent.Id;
+                            item.Specificulture = parent.Specificulture;
+                            item.Priority = item.Column.Priority;
+                            item.Status = MixContentStatus.Published;
+                            var saveResult = await item.SaveModelAsync(false, context, transaction);
+                            ViewModelHelper.HandleResult(saveResult, ref result);
+                        }
+                        else
+                        {
+                            var delResult = await item.RemoveModelAsync(false, context, transaction);
+                            ViewModelHelper.HandleResult(delResult, ref result);
+                        }
                     }
                     else
                     {
-                        var delResult = await item.RemoveModelAsync(false, context, transaction);
-                        ViewModelHelper.HandleResult(delResult, ref result);
+                        break;
                     }
                 }
-                else
+                UnitOfWorkHelper<MixCmsContext>.HandleTransaction(result.IsSucceed, isRoot, transaction);
+                result.Data = true;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.Errors.Add(ex.Message);
+                result.Exception = ex;
+                return result;
+            }
+            finally
+            {
+                if (isRoot)
                 {
-                    break;
+                    transaction.Dispose();
+                    context.Dispose();
                 }
             }
-            return result;
         }
 
         private async Task<RepositoryResponse<bool>> SaveRefDataAsync(MixDatabaseData parent, MixCmsContext context, IDbContextTransaction transaction)
@@ -383,25 +453,52 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (result.IsSucceed)
                 {
-                    item.Specificulture = Specificulture;
-                    item.ParentId = parent.Id;
-                    item.ParentType = MixDatabaseParentType.Set;
-                    item.Status = MixContentStatus.Published;
-                    var saveRef = await item.SaveModelAsync(true, context, transaction);
-                    if (saveRef.IsSucceed)
+                    if (string.IsNullOrEmpty(item.Id))
                     {
-                        RelatedData.Add(new MixDatabaseDataAssociations.UpdateViewModel()
+                        item.Specificulture = Specificulture;
+                        item.Status = MixContentStatus.Published;
+                        var saveRef = await item.SaveModelAsync(true, context, transaction);
+                        if (saveRef.IsSucceed)
                         {
-                            DataId = saveRef.Data.Id,
-                            ParentId = Id,
-                            ParentType = MixDatabaseParentType.Set,
-                            MixDatabaseId = saveRef.Data.MixDatabaseId,
-                            MixDatabaseName = saveRef.Data.MixDatabaseName,
-                            CreatedDateTime = DateTime.UtcNow,
-                            Specificulture = Specificulture
-                        });
+                            RelatedData.Add(new MixDatabaseDataAssociations.UpdateViewModel(new()
+                            {
+                                DataId = saveRef.Data.Id,
+                                ParentId = Id,
+                                ParentType = MixDatabaseParentType.Set,
+                                MixDatabaseId = saveRef.Data.MixDatabaseId,
+                                MixDatabaseName = saveRef.Data.MixDatabaseName,
+                                CreatedDateTime = DateTime.UtcNow,
+                                Specificulture = Specificulture
+                            }, context, transaction));
+                        }
+                        ViewModelHelper.HandleResult(saveRef, ref result);
                     }
-                    ViewModelHelper.HandleResult(saveRef, ref result);
+                    else
+                    {
+                        var getRelated = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetSingleModelAsync(
+                                m => 
+                                    m.DataId == item.Id 
+                                    && m.ParentId == Id 
+                                    && m.Specificulture == item.Specificulture,
+                                    context, transaction);
+                        if (getRelated.IsSucceed)
+                        {
+                            RelatedData.Add(getRelated.Data);
+                        }
+                        else
+                        {
+                            RelatedData.Add(new MixDatabaseDataAssociations.UpdateViewModel(new()
+                            {
+                                DataId = item.Id,
+                                ParentId = Id,
+                                ParentType = MixDatabaseParentType.Set,
+                                MixDatabaseId = item.MixDatabaseId,
+                                MixDatabaseName = item.MixDatabaseName,
+                                CreatedDateTime = DateTime.UtcNow,
+                                Specificulture = Specificulture
+                            }, context, transaction));
+                        }
+                    }
                 }
                 else
                 {

@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             var result = data.ExportSelectedItemsAsync();
             if (result.IsSucceed)
             {
-                string domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+                string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
                 string accessFolder = $"{MixFolders.SiteContentAssetsFolder}/{getTheme.Data.Name}/assets";
                 string content = JObject.FromObject(data).ToString()
                     .Replace(accessFolder, "[ACCESS_FOLDER]")
@@ -53,12 +53,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
                 // Delete Existing folder
                 MixFileRepository.Instance.DeleteWebFolder(outputPath);
-                // Copy current templates file
-                MixFileRepository.Instance.CopyDirectory($"{getTheme.Data.TemplateFolder}", $"{tempPath}/Templates");
-                // Copy current assets files
-                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
-                // Copy current uploads files
-                MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+
+                if (data.IsIncludeAssets)
+                {
+                    // Copy current assets files
+                    MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.AssetFolder}", $"{tempPath}/Assets");
+                    // Copy current uploads files
+                    MixFileRepository.Instance.CopyDirectory($"{MixFolders.WebRootPath}/{getTheme.Data.UploadsFolder}", $"{tempPath}/Uploads");
+                }
+
                 // Save Site Structures
                 MixFileRepository.Instance.SaveFile(file);
 
@@ -68,7 +71,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 // Delete temp folder
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Assets");
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Uploads");
-                MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Templates");
                 MixFileRepository.Instance.DeleteWebFolder($"{outputPath}/Data");
 
                 return new RepositoryResponse<string>()
@@ -83,41 +85,28 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
             }
         }
 
-        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string userName, string culture, IFormFile assets, IFormFile theme)
+        public static async Task<RepositoryResponse<InitViewModel>> InitTheme(string model, string username, string culture, IFormFile assets, IFormFile theme)
         {
             var json = JObject.Parse(model);
             var data = json.ToObject<InitViewModel>();
             if (data != null)
             {
-                data.CreatedBy = userName;
+                data.CreatedBy = username;
                 data.Status = MixContentStatus.Published;
-                string importFolder = $"{MixFolders.ImportFolder}/" +
-                    $"{DateTime.UtcNow.ToString("dd-MM-yyyy")}";
+                string importFolder = MixFolders.ThemePackage;
                 if (theme != null)
                 {
-                    MixFileRepository.Instance.SaveWebFile(theme, $"{importFolder}");
+                    MixFileRepository.Instance.SaveFile(theme, $"{importFolder}");
                     data.TemplateAsset = new FileViewModel(theme, importFolder);
                 }
                 else
                 {
-                    if (data.IsCreateDefault)
+                    data.TemplateAsset = new FileViewModel()
                     {
-                        data.TemplateAsset = new FileViewModel()
-                        {
-                            Filename = "default",
-                            Extension = MixFileExtensions.Zip,
-                            FileFolder = MixFolders.ImportFolder
-                        };
-                    }
-                    else
-                    {
-                        data.TemplateAsset = new FileViewModel()
-                        {
-                            Filename = "default_blank",
-                            Extension = MixFileExtensions.Zip,
-                            FileFolder = MixFolders.ImportFolder
-                        };
-                    }
+                        Filename = "_blank",
+                        Extension = MixFileExtensions.Zip,
+                        FileFolder = MixFolders.DataFolder
+                    };
                 }
 
                 data.Title = MixService.GetConfig<string>(MixAppSettingKeywords.SiteName, culture);
@@ -141,7 +130,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
 
         public static async Task<RepositoryResponse<UpdateViewModel>> InstallThemeAsync(JObject theme, string createdBy, string culture, IProgress<int> progress, HttpService httpService)
         {
-            string name = theme.Value<string>("title");
+            string name = theme.Value<string>("name");
             var newtheme = new UpdateViewModel()
             {
                 Title = name,
@@ -152,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     Filename = name,
                     Extension = MixFileExtensions.Zip,
-                    FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{name}"
+                    FileFolder = MixFolders.ThemePackage
                 }
             };
 

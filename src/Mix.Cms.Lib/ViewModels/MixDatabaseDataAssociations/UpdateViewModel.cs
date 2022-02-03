@@ -3,12 +3,14 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
+using Mix.Common.Helper;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 {
@@ -38,6 +40,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 
         [JsonProperty("dataId")]
         public string DataId { get; set; }
+
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
 
         [JsonProperty("cultures")]
         public List<SupportedCulture> Cultures { get; set; }
@@ -93,6 +98,29 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
 
         #region overrides
 
+        public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
+        {
+            base.Validate(_context, _transaction);
+            if (IsValid)
+            {
+                IsValid = ParentId != default;
+                if (!IsValid)
+                {
+                    Errors.Add("Ivalid Parent");
+                }
+                IsValid = IsValid && !_context.MixDatabaseDataAssociation.Any(m =>
+                            m.Id != Id
+                            && m.Specificulture == Specificulture
+                            && m.DataId == DataId
+                            && m.ParentType == ParentType
+                            && m.ParentId == ParentId);
+                if (!IsValid)
+                {
+                    Errors.Add("This Association Existed");
+                }
+            }
+        }
+
         public override MixDatabaseDataAssociation ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             if (string.IsNullOrEmpty(Id))
@@ -107,7 +135,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
         {
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>(
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>(
                     MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
 
@@ -121,16 +149,50 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             MixDatabaseName = _context.MixDatabase.FirstOrDefault(m => m.Id == MixDatabaseId)?.Name;
         }
 
-        //public override List<Task> GenerateRelatedData(MixCmsContext context, IDbContextTransaction transaction)
-        //{
-        //    var tasks = new List<Task>();
-        //    tasks.Add(Task.Factory.StartNew(() =>
-        //    {
-        //        Data.GenerateCache(Data.Model, Data);
-        //    }));
-        //    return tasks;
-        //}
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseDataAssociation parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Data != null)
+            {
+                Data.Cultures = Cultures;
+                if (result.IsSucceed)
+                {
+                    var model = Data.ParseModel();
+                    var cloneValue = await Data.CloneAsync(model, Cultures, _context, _transaction);
+                    ViewModelHelper.HandleResult(cloneValue, ref result);
+                }
+            }
+            return result;
+        }
 
         #endregion overrides
+
+        #region Expand
+
+        public async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                Id = null;
+                var data = await Data.DuplicateAsync(context, transaction);
+                DataId = data.Data.Id;
+                return await SaveModelAsync(false, context, transaction);
+            }
+            catch (Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    await transaction.CommitAsync();
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
+        #endregion
     }
 }

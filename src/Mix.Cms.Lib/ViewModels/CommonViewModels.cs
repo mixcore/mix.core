@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.ViewModels.MixDatabaseColumns;
 using Mix.Heart.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -44,19 +45,19 @@ namespace Mix.Cms.Lib.ViewModels
         public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("pageTypes")]
-        public List<object> PageTypes { get; set; }
+        public string[] PageTypes { get; set; }
 
         [JsonProperty("moduleTypes")]
-        public List<object> ModuleTypes { get; set; }
+        public string[] ModuleTypes { get; set; }
 
         [JsonProperty("mixDatabaseTypes")]
-        public List<object> MixDatabaseTypes { get; set; }
+        public string[] MixDatabaseTypes { get; set; }
 
         [JsonProperty("dataTypes")]
-        public List<object> DataTypes { get; set; }
+        public string[] DataTypes { get; set; }
 
         [JsonProperty("statuses")]
-        public List<object> Statuses { get; set; }
+        public string[] Statuses { get; set; }
 
         [JsonProperty("externalLoginProviders")]
         public JObject ExternalLoginProviders { get; set; }
@@ -180,6 +181,9 @@ namespace Mix.Cms.Lib.ViewModels
 
         [JsonProperty("width")]
         public int Width { get; set; }
+
+        [JsonProperty("columnConfigurations")]
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new ColumnConfigurations();
     }
 
     public class ApiModuleDataValueViewModel
@@ -214,10 +218,13 @@ namespace Mix.Cms.Lib.ViewModels
         [JsonProperty("options")]
         public JArray Options { get; set; } = new JArray();
 
+        [JsonProperty("columnConfigurations")]
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new ColumnConfigurations();
+
         public RepositoryResponse<bool> Validate<T>(IConvertible id, string specificulture, JObject jItem, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
             where T : class
         {
-            string val = jItem[Name]["value"].Value<string>();
+            string val = jItem[Name]["value"]?.Value<string>();
             var jVal = new JProperty(Name, jItem[Name]);
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (IsUnique)

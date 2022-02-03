@@ -35,7 +35,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/mix-database-column/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixDatabaseColumn>> DeleteAsync(int id)
         {
@@ -44,7 +44,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/mix-database-columns/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, int? id)
@@ -95,7 +95,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // GET api/module-data/create/id
         [AllowAnonymous]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("init-form/{setId}")]
         public async Task<RepositoryResponse<List<UpdateViewModel>>> InitByName(int setId)
         {
@@ -109,7 +109,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/mix-database-column
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [RequestFormSizeLimit(valueCountLimit: 214748364)] // 200Mb
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save(UpdateViewModel data)
@@ -129,7 +129,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/mix-database-column
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)

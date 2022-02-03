@@ -83,7 +83,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
         #endregion Model
 
         #region Views
-
+        [JsonProperty("isActived")]
+        public bool IsActived { get; set; }
         [JsonProperty("attributeData")]
         public MixDatabaseDatas.FormViewModel AttributeData { get; set; }
 
@@ -97,7 +98,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             {
                 Id = Guid.NewGuid().ToString();
                 CreatedDateTime = DateTime.UtcNow;
-                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>(
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>(
                     MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
             return base.ParseModel(_context, _transaction);
@@ -120,9 +121,14 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                IsValid = MixDatabaseId > 0 && !string.IsNullOrEmpty(MixDatabaseName);
-                if (!IsValid)
+                if (string.IsNullOrEmpty(ParentId) || ParentId == "0")
                 {
+                    IsValid = false;
+                    Errors.Add("Invalid Parent Id");
+                }
+                if (MixDatabaseId <= 0 || string.IsNullOrEmpty(MixDatabaseName))
+                {
+                    IsValid = false;
                     Errors.Add("Invalid Mix Database");
                 }
             }
@@ -168,6 +174,18 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataAssociations
             }
         }
 
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseDataAssociation parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (AttributeData != null)
+            {
+                AttributeData.Cultures = Cultures;
+                var model = AttributeData.ParseModel(_context, _transaction);
+                var cloneValue = await AttributeData.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneValue, ref result);
+            }
+            return result;
+        }
         #endregion overrides
     }
 }

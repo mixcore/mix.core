@@ -21,7 +21,7 @@ using Mix.Heart.Extensions;
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
     [Produces("application/json")]
-    [Route("api/v1/rest/{culture}/post/mvc")]
+    [Route("api/v1/rest/{culture}/mix-post/mvc")]
     public class ApiPostMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, ReadMvcViewModel>
     {
@@ -33,20 +33,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
         {
-            bool isStatus = Enum.TryParse(Request.Query[MixRequestQueryKeywords.Status], out MixContentStatus status);
-            bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
-            bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
-            string type = Request.Query["type"];
-            string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
-            Expression<Func<MixPost, bool>> predicate = model => model.Specificulture == _lang;
-            predicate = predicate.AndAlsoIf(isStatus, model => model.Status == status);
-            predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
-            predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime <= toDate);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(type), model => model.Type == type);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model => (EF.Functions.Like(model.Title, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
-                 || (EF.Functions.Like(model.Content, $"%{keyword}%")));
-            var getData = await base.GetListAsync(predicate);
+            var searchPostData = new SearchPostQueryModel(Request, _lang);
+            var getData = await Helper.SearchPosts<ReadMvcViewModel>(searchPostData);
             if (getData.IsSucceed)
             {
                 return getData.Data;
@@ -62,7 +50,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         {
             var pagingData = new PagingRequest(Request);
             var result = await Helper.GetModelistByMeta<ReadMvcViewModel>(
-                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], MixDatabaseNames.ADDITIONAL_FIELD_POST, pagingData, _lang);
+                Request.Query[MixRequestQueryKeywords.DatabaseName], Request.Query["value"], MixDatabaseNames.ADDITIONAL_COLUMN_POST, pagingData, _lang);
             if (result.IsSucceed)
             {
                 return result.Data;

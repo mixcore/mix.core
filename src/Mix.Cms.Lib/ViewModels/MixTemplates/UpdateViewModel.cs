@@ -137,6 +137,8 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
                     Content = file.Content;
                 }
             }
+            Scripts ??= "<script>\r\n\r\n</script>";
+            Styles ??= "<style>\r\n\r\n</style>";
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -286,7 +288,7 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             , MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             string activedTheme = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture)
-                    ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTheme);
+                    ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultTheme);
             string folder = $"{MixFolders.TemplatesFolder}/{activedTheme}/{folderType}";
             var defaulTemplate = MixTemplates.UpdateViewModel.Repository.GetModelListBy(
                 t => t.Theme.Name == activedTheme && t.FolderType == folderType.ToString()
@@ -296,9 +298,9 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
             {
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
                 ThemeName = MixService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, specificulture),
-                FileName = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplate),
-                Extension = MixService.GetConfig<string>(MixAppSettingKeywords.TemplateExtension),
-                Content = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplateContent),
+                FileName = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultTemplate),
+                Extension = MixService.GetAppSetting<string>(MixAppSettingKeywords.TemplateExtension),
+                Content = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultTemplateContent),
                 FolderType = folderType.ToString(),
                 FileFolder = folder.ToString()
             });

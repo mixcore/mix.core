@@ -90,7 +90,7 @@ namespace Mix.Rest.Api.Client.ViewModels
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
@@ -179,7 +179,7 @@ namespace Mix.Rest.Api.Client.ViewModels
             var dataId = _context.MixDatabaseDataAssociation.Where(
                 a => a.ParentId == Id.ToString()
                     && a.Specificulture == Specificulture
-                    && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_FIELD_MODULE)
+                    && a.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE)
                 .Select(m => m.DataId)
                 .FirstOrDefault();
             AdditionalData = Cms.Lib.ViewModels.MixDatabaseDatas.ReadMvcViewModel.Repository.GetFirstModel(
@@ -236,7 +236,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                     var getDataResult = Cms.Lib.ViewModels.MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
                         dataExp
-                        , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy
+                        , MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy
                         ), 0
                         , pageSize, pageIndex
                         , _context: context, _transaction: transaction);
@@ -251,7 +251,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                 {
                     var getPosts = Cms.Lib.ViewModels.MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
+                    , MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy), 0
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)

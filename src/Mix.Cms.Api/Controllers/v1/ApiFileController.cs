@@ -2,18 +2,25 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using Mix.Cms.Lib.Attributes;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
 using Mix.Services;
+using System.Net;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
     [Produces("application/json")]
     [Route("api/v1/file")]
     public class ApiFileController : BaseApiController<MixCmsContext>
@@ -25,7 +32,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // Post api/files/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details")]
         public RepositoryResponse<FileViewModel> Details(string folder, string filename)
         {
@@ -47,7 +54,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete")]
         public RepositoryResponse<bool> Delete()
         {
@@ -68,7 +75,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// <param name="file"></param> Ex: { "base64": "", "fileFolder":"" }
         /// <returns></returns>
         [Route("upload-file")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         public IActionResult Upload([FromForm] string folder, [FromForm] IFormFile file)
         {
             if (ModelState.IsValid)
@@ -80,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/files
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public RepositoryResponse<FileViewModel> Save([FromBody] FileViewModel model)
         {
@@ -97,11 +104,15 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/files
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public RepositoryResponse<FilePageViewModel> GetList([FromBody] RequestPaging request)
         {
             ParseRequestPagingDate(request);
+            if (!request.Key.StartsWith(MixFolders.WebRootPath))
+            {
+                return new();
+            }
             var files = MixFileRepository.Instance.GetTopFiles(request.Key);
             var directories = MixFileRepository.Instance.GetTopDirectories(request.Key);
             return new RepositoryResponse<FilePageViewModel>()

@@ -269,12 +269,12 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         {
             return new ReadViewModel(new MixTemplate()
             {
-                Extension = MixService.GetConfig<string>("TemplateExtension"),
+                Extension = MixService.GetAppSetting<string>("TemplateExtension"),
                 ThemeId = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, specificulture),
                 ThemeName = activedTemplate,
                 FolderType = folderType,
                 FileFolder = folder,
-                FileName = MixService.GetConfig<string>("DefaultTemplate"),
+                FileName = MixService.GetAppSetting<string>("DefaultTemplate"),
                 Content = "<div></div>"
             });
         }

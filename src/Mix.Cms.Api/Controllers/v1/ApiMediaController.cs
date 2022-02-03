@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/media/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixMedia>> DeleteAsync(int id)
         {
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/medias/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, int? id)
@@ -78,7 +78,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Post
 
         // POST api/media
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromForm] string model, [FromForm] IFormFile file)
         {
@@ -116,7 +116,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/media
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
@@ -146,7 +146,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/update-infos
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("update-infos")]
         public async Task<RepositoryResponse<List<UpdateViewModel>>> UpdateInfos([FromBody] List<UpdateViewModel> models)
         {

@@ -7,6 +7,7 @@ using Mix.Cms.Lib.Services;
 using Mix.Heart.Helpers;
 using System;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace Mix.Cms.Web
 {
@@ -33,6 +34,11 @@ namespace Mix.Cms.Web
             .AddJsonFile(MixConstants.CONST_FILE_APPSETTING, optional: true, reloadOnChange: true)
             .Build();
             return Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

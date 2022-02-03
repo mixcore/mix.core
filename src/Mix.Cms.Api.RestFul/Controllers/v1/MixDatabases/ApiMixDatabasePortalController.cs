@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixDatabases;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -21,6 +22,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/rest/mix-database/portal")]
+    [Route("api/v1/rest/{culture}/mix-database/portal")]
     public class ApiMixDatabasePortalController :
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabase, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
@@ -28,8 +30,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, 
             DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : 
-            base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo) :
+            base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
 
@@ -74,7 +77,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         [HttpPost("migrate/{id}")]
         public async Task<ActionResult> Migrate([FromBody] UpdateViewModel database)
         {
-            var result = await Helper.MigrateDatabase(database);
+            var result = await Helper.MigrateDatabase(database, _lang);
             return result ? Ok() : BadRequest();
         }
 

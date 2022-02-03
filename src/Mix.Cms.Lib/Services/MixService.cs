@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -8,7 +7,6 @@ using Mix.Heart.Enums;
 using Mix.Heart.Models;
 using Mix.Identity.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +24,7 @@ namespace Mix.Cms.Lib.Services
         /// <summary>
         /// The synchronize root
         /// </summary>
-        private static readonly object syncRoot = new Object();
+        private static readonly object syncRoot = new();
 
         /// <summary>
         /// The instance
@@ -36,6 +34,8 @@ namespace Mix.Cms.Lib.Services
         private static volatile MixService defaultInstance;
 
         private List<string> Cultures { get; set; }
+        public string DefaultCulture { get; set; }
+        public List<ViewModels.MixUrlAliases.UpdateViewModel> Aliases { get; set; }
         private JObject MixConfigurations { get; set; }
         private JObject GlobalSettings { get; set; }
         private JObject ConnectionStrings { get; set; }
@@ -54,8 +54,10 @@ namespace Mix.Cms.Lib.Services
             watcher.EnableRaisingEvents = true;
         }
 
-        public static MixService Instance {
-            get {
+        public static MixService Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)
@@ -72,8 +74,10 @@ namespace Mix.Cms.Lib.Services
             }
         }
 
-        public static MixService DefaultInstance {
-            get {
+        public static MixService DefaultInstance
+        {
+            get
+            {
                 if (defaultInstance == null)
                 {
                     lock (syncRoot)
@@ -111,7 +115,8 @@ namespace Mix.Cms.Lib.Services
             instance.Translator = JObject.FromObject(jsonSettings["Translator"]);
             instance.GlobalSettings = JObject.FromObject(jsonSettings["GlobalSettings"]);
             instance.LocalSettings = JObject.FromObject(jsonSettings["LocalSettings"]);
-            instance.Smtp = JObject.FromObject(instance.GlobalSettings["Smtp"] ?? new JObject());
+            instance.Smtp = JObject.FromObject(jsonSettings["Smtp"] ?? new JObject());
+            instance.DefaultCulture = instance.GlobalSettings[MixAppSettingKeywords.DefaultCulture].Value<string>();
             MixCommonHelper.WebConfigInstance = jsonSettings;
         }
 
@@ -162,9 +167,18 @@ namespace Mix.Cms.Lib.Services
             return Instance.Cultures.Any(c => c == specificulture);
         }
 
+        public bool CheckValidAlias(string culture, string path)
+        {
+            if (Instance.Aliases == null)
+            {
+                Instance.Aliases = ViewModels.MixUrlAliases.UpdateViewModel.Repository.GetModelList().Data;
+            }
+            return Instance.Aliases.Any(c => c.Specificulture == culture && c.Alias == path);
+        }
+
         public static T GetAuthConfig<T>(string name, T defaultValue = default)
         {
-            var result = Instance.Authentication[name];
+            var result = GetJToken(name, Instance.Authentication);
             if (result == null)
             {
                 result = DefaultInstance.Authentication[name];
@@ -176,10 +190,25 @@ namespace Mix.Cms.Lib.Services
         {
             Instance.Authentication[name] = value.ToString();
         }
+        
+        public static T GetSmtpConfig<T>(string name, T defaultValue = default)
+        {
+            var result = GetJToken(name, Instance.Smtp);
+            if (result == null)
+            {
+                result = DefaultInstance.Authentication[name];
+            }
+            return result != null ? result.Value<T>() : defaultValue;
+        }
+
+        public static void SetSmtpConfig<T>(string name, T value)
+        {
+            Instance.Smtp[name] = value.ToString();
+        }
 
         public static T GetIpConfig<T>(string name)
         {
-            var result = Instance.IpSecuritySettings[name];
+            var result = GetJToken(name, Instance.IpSecuritySettings);
             if (result == null)
             {
                 result = DefaultInstance.IpSecuritySettings[name];
@@ -194,7 +223,7 @@ namespace Mix.Cms.Lib.Services
 
         public static T GetMixConfig<T>(string name)
         {
-            var result = Instance.MixConfigurations[name];
+            var result = GetJToken(name, Instance.MixConfigurations);
             if (result == null)
             {
                 result = DefaultInstance.MixConfigurations[name];
@@ -207,9 +236,9 @@ namespace Mix.Cms.Lib.Services
             Instance.MixConfigurations[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public static T GetConfig<T>(string name)
+        public static T GetAppSetting<T>(string name)
         {
-            var result = Instance.GlobalSettings[name];
+            var result = GetJToken(name, Instance.GlobalSettings);
             if (result == null)
             {
                 result = DefaultInstance.GlobalSettings[name];
@@ -228,14 +257,15 @@ namespace Mix.Cms.Lib.Services
             Instance.GlobalSettings[name] = value != null ? JToken.FromObject(value) : null;
         }
 
-        public static T GetConfig<T>(string name, string culture)
+        public static T GetConfig<T>(string name, string culture = null, T defaultValue = default)
         {
             JToken result = null;
-            if (!string.IsNullOrEmpty(culture) && Instance.LocalSettings[culture] != null)
+            culture ??= GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
+            if (Instance.LocalSettings[culture] != null)
             {
-                result = Instance.LocalSettings[culture][name];
+                result = GetJToken(name, Instance.LocalSettings[culture].Value<JObject>());
             }
-            return result != null ? result.Value<T>() : default;
+            return result != null ? result.Value<T>() : defaultValue;
         }
 
         public static void SetConfig<T>(string name, string culture, T value)
@@ -246,10 +276,6 @@ namespace Mix.Cms.Lib.Services
         public static T Translate<T>(string name, string culture, T defaultVaule = default)
         {
             var result = Instance.Translator[culture][name];
-            //if (result == null)
-            //{
-            //    result = DefaultInstance.Translator[culture][name];
-            //}
             return result != null ? result.Value<T>() : defaultVaule;
         }
 
@@ -412,28 +438,18 @@ namespace Mix.Cms.Lib.Services
                 SmtpClient client = new SmtpClient(instance.Smtp.Value<string>("Server"))
                 {
                     UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password")),
+                    Credentials = new NetworkCredential(
+                        instance.Smtp.Value<string>("User"), instance.Smtp.Value<string>("Password")
+                        ),
                     Port = instance.Smtp.Value<int>("Port"),
                     EnableSsl = instance.Smtp.Value<bool>("SSL")
                 };
 
                 client.Send(mailMessage);
             }
-            catch
+            catch (Exception e)
             {
-                try
-                {
-                    SmtpClient smtpClient = new SmtpClient
-                    {
-                        UseDefaultCredentials = true
-                    };
-                    smtpClient.Send(mailMessage);
-                }
-                catch (Exception ex)
-                {
-                    MixService.LogException(ex);
-                    // ToDo: cannot send mail
-                }
+                MixService.LogException(e);
             }
         }
 
@@ -531,6 +547,21 @@ namespace Mix.Cms.Lib.Services
                 default:
                     return null;
             }
+        }
+
+        private static JToken GetJToken(string path, JObject data)
+        {
+            JToken result = data;
+            string[] names = path.Split('.');
+            foreach (var name in names)
+            {
+                result = result[name];
+                if (result is null)
+                {
+                    break;
+                }
+            }
+            return result;
         }
     }
 }

@@ -29,6 +29,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mix.Heart.Models;
 using Mix.Heart.Infrastructure.Repositories;
+using Mix.Cms.Lib.Attributes;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -49,17 +51,19 @@ namespace Mix.Cms.Lib.Controllers
         protected DefaultRepository<TDbContext, TModel, TUpdate> _updRepo;
         protected DefaultRepository<TDbContext, TModel, TDelete> _delRepo;
         protected MixIdentityHelper _mixIdentityHelper;
-
+        protected AuditLogRepository _auditlogRepo;
         public BaseAuthorizedRestApiController(
             DefaultRepository<TDbContext, TModel, TRead> repo,
             DefaultRepository<TDbContext, TModel, TUpdate> updRepo,
-            DefaultRepository<TDbContext, TModel, TDelete> delRepo, 
-            MixIdentityHelper mixIdentityHelper)
+            DefaultRepository<TDbContext, TModel, TDelete> delRepo,
+            MixIdentityHelper mixIdentityHelper, 
+            AuditLogRepository auditlogRepo)
         {
             _repo = repo;
             _updRepo = updRepo;
             _delRepo = delRepo;
             _mixIdentityHelper = mixIdentityHelper;
+            _auditlogRepo = auditlogRepo;
         }
 
         /// <summary>
@@ -69,6 +73,7 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Routes
 
+        [MixAuthorize]
         [HttpGet]
         public virtual async Task<ActionResult<PaginationModel<TRead>>> Get()
         {
@@ -89,30 +94,38 @@ namespace Mix.Cms.Lib.Controllers
             RepositoryResponse<PaginationModel<TRead>> getData = await _repo.GetModelListAsync(
                 request.OrderBy, request.Direction, request.PageSize, request.PageIndex, null, null).ConfigureAwait(false);
 
-            if (getData.IsSucceed)
-            {
-                return Ok(getData.Data);
-            }
-            else
-            {
-                return BadRequest(getData.Errors);
-            }
+            return GetResponse(getData);
         }
 
+        [MixAuthorize]
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<TUpdate>> Get(string id)
         {
             var getData = await GetSingleAsync(id);
-            if (getData.IsSucceed)
+            return GetResponse(getData, MixErrorStatus.NotFound);
+        }
+
+        [MixAuthorize]
+        [HttpGet("clone/{id}/{cloneCulture}")]
+        public virtual async Task<ActionResult<TUpdate>> Clone(string id, string cloneCulture)
+        {
+            var getData = await GetSingleAsync(id);
+            var cultures = new List<SupportedCulture>() { new SupportedCulture()
             {
-                return getData.Data;
+                Specificulture = cloneCulture
+            } };
+            var result = await getData.Data.CloneAsync(getData.Data.Model, cultures);
+            if (result.IsSucceed)
+            {
+                return Ok(result.Data.FirstOrDefault());
             }
             else
             {
-                return NoContent();
+                return BadRequest(result.Errors);
             }
         }
 
+        [MixAuthorize]
         [HttpGet("duplicate/{id}")]
         public virtual async Task<ActionResult<TUpdate>> Duplicate(string id)
         {
@@ -133,17 +146,7 @@ namespace Mix.Cms.Lib.Controllers
                 }
 
                 var saveResult = await data.SaveModelAsync(true);
-                if (saveResult.IsSucceed)
-                {
-                    string key = $"_{id}";
-                    key += !string.IsNullOrEmpty(_lang) ? $"_{_lang}" : string.Empty;
-                    await MixCacheService.RemoveCacheAsync(typeof(TModel), key);
-                    return Ok(saveResult.Data);
-                }
-                else
-                {
-                    return BadRequest(saveResult.Errors);
-                }
+                return GetResponse(saveResult);
             }
             else
             {
@@ -159,7 +162,7 @@ namespace Mix.Cms.Lib.Controllers
                 var transaction = context.Database.BeginTransaction();
                 TUpdate data = ReflectionHelper.InitModel<TUpdate>();
                 ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }
@@ -181,26 +184,20 @@ namespace Mix.Cms.Lib.Controllers
             return NoContent();
         }
 
+        [MixAuthorize]
         [HttpPost]
-        public virtual async Task<ActionResult<TModel>> Create([FromBody] TUpdate data)
+        public virtual async Task<ActionResult<TUpdate>> Create([FromBody] TUpdate data)
         {
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(
                     c => c.Type == "Username")?.Value));
             ReflectionHelper.SetPropertyValue(data, new JProperty("Specificulture", _lang));
-            ReflectionHelper.SetPropertyValue(data, new JProperty("Status", MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus)));
             var result = await SaveAsync(data, true);
-            if (result.IsSucceed)
-            {
-                return Ok(result.Data);
-            }
-            else
-            {
-                return BadRequest(result.Errors);
-            }
+            return GetResponse(result);
         }
 
+        [MixAuthorize]
         [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Update(string id, [FromBody] TUpdate data)
+        public virtual async Task<ActionResult<TUpdate>> Update(string id, [FromBody] TUpdate data)
         {
             if (data != null)
             {
@@ -212,22 +209,7 @@ namespace Mix.Cms.Lib.Controllers
                     return BadRequest();
                 }
                 var result = await SaveAsync(data, true);
-                if (result.IsSucceed)
-                {
-                    return Ok(result.Data);
-                }
-                else
-                {
-                    var current = await GetSingleAsync(currentId);
-                    if (!current.IsSucceed)
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        return BadRequest(result.Errors);
-                    }
-                }
+                return GetResponse(result);
             }
             else
             {
@@ -235,8 +217,9 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpPatch("{id}")]
-        public virtual async Task<IActionResult> Patch(string id, [FromBody] JObject fields)
+        public virtual async Task<ActionResult<bool>> Patch(string id, [FromBody] JObject fields)
         {
             var result = await GetSingleAsync(id);
             if (result.IsSucceed)
@@ -245,14 +228,7 @@ namespace Mix.Cms.Lib.Controllers
                     c => c.Type == "Username")?.Value));
                 ReflectionHelper.SetPropertyValue(result.Data, new JProperty("LastModified", DateTime.UtcNow));
                 var saveResult = await result.Data.UpdateFieldsAsync(fields);
-                if (saveResult.IsSucceed)
-                {
-                    return NoContent();
-                }
-                else
-                {
-                    return BadRequest(saveResult.Errors);
-                }
+                return GetResponse(saveResult);
             }
             else
             {
@@ -260,21 +236,30 @@ namespace Mix.Cms.Lib.Controllers
             }
         }
 
+        [MixAuthorize]
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult<TModel>> Delete(string id)
         {
             var result = await DeleteAsync(id, true);
-            if (result.IsSucceed)
+            return GetResponse(result);
+        }
+
+        // POST api/update-infos
+        [HttpPost]
+        [Route("save-many")]
+        public async Task<RepositoryResponse<List<TUpdate>>> UpdateInfos([FromBody] List<TUpdate> models)
+        {
+            if (models != null)
             {
-                return Ok(result.Data);
+                return await SaveManyAsync(models, false);
             }
             else
             {
-                return BadRequest(result.Errors);
+                return new RepositoryResponse<List<TUpdate>>();
             }
         }
 
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list-action")]
         public async Task<ActionResult<JObject>> ListActionAsync([FromBody] ListAction<string> data)
         {
@@ -285,7 +270,7 @@ namespace Mix.Cms.Lib.Controllers
                 var temp = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
 
                 idPre = idPre != null
-                    ? idPre.AndAlso(temp)
+                    ? idPre.Or(temp)
                     : temp;
             }
             if (idPre != null)
@@ -352,15 +337,29 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Helpers
 
-        protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result)
+        protected ActionResult<T> GetResponse<T>(RepositoryResponse<T> result, MixErrorStatus status = MixErrorStatus.Badrequest)
         {
+            _auditlogRepo.Log(_mixIdentityHelper.GetClaim(User, MixClaims.Username), Request, result.IsSucceed, result.Exception);
             if (result.IsSucceed)
             {
                 return Ok(result.Data);
             }
             else
             {
-                return BadRequest(result.Errors);
+                switch (status)
+                {
+                    case MixErrorStatus.NotFound:
+                        return NotFound();
+                    case MixErrorStatus.UnAuthorized:
+                        return Unauthorized();
+                    case MixErrorStatus.Forbidden:
+                        return Forbid();
+                    case MixErrorStatus.Badrequest:
+                    case MixErrorStatus.ServerError:
+                    default:
+                        return BadRequest(result.Errors);
+                }
+                
             }
         }
 
@@ -371,7 +370,7 @@ namespace Mix.Cms.Lib.Controllers
             {
                 ReflectionHelper.SetPropertyValue(item, new JProperty("Status", MixContentStatus.Published));
             }
-            return await SaveListAsync(data.Data.Items, false);
+            return await SaveManyAsync(data.Data.Items, false);
         }
 
         protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
@@ -532,7 +531,12 @@ namespace Mix.Cms.Lib.Controllers
             return data;
         }
 
-        protected async Task<RepositoryResponse<T>> SaveAsync<T>(T vm, bool isSaveSubModel)
+        protected virtual Task<RepositoryResponse<TUpdate>> SaveAsync(TUpdate vm, bool isSaveSubModel)
+        {
+            return SaveGenericAsync(vm, isSaveSubModel);
+        }
+        
+        protected async Task<RepositoryResponse<T>> SaveGenericAsync<T>(T vm, bool isSaveSubModel)
             where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             if (vm != null)
@@ -573,7 +577,7 @@ namespace Mix.Cms.Lib.Controllers
             return new RepositoryResponse<TModel>();
         }
 
-        protected async Task<RepositoryResponse<List<TUpdate>>> SaveListAsync(List<TUpdate> lstVm, bool isSaveSubModel)
+        protected async Task<RepositoryResponse<List<TUpdate>>> SaveManyAsync(List<TUpdate> lstVm, bool isSaveSubModel)
         {
             var result = await DefaultRepository<TDbContext, TModel, TUpdate>.Instance.SaveListModelAsync(lstVm, isSaveSubModel);
 

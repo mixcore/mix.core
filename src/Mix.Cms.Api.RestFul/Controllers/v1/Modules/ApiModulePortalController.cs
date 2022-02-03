@@ -8,12 +8,14 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixModules;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -28,7 +30,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixModule, ReadListItemViewModel> repo, 
             DefaultRepository<MixCmsContext, MixModule, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixModule, UpdateViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo)
+            : base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
 
@@ -60,6 +64,22 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
         }
 
+        protected override async Task<RepositoryResponse<UpdateViewModel>> SaveAsync(UpdateViewModel vm, bool isSaveSubModel)
+        {
+            var result = await base.SaveAsync(vm, isSaveSubModel);
+            if (result.IsSucceed && vm.IsClone)
+            {
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m=>m.Specificulture != _lang).ToList());
+                if (!cloneResult.IsSucceed)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Cannot clone");
+                    result.Errors.AddRange(cloneResult.Errors);
+                }
+            }
+            return result;
+        }
+
         public override async Task<ActionResult<UpdateViewModel>> Duplicate(string id)
         {
             var getData = await GetSingleAsync(id);
@@ -71,6 +91,20 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 data.Name = $"Copy_{data.Name}";
                 var result = await data.SaveModelAsync(true);
+
+                if (result.IsSucceed)
+                {
+                    var getAdditionaData = await Lib.ViewModels.MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                            m => m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_MODULE
+                                && m.ParentType == MixDatabaseParentType.Module
+                                && m.ParentId == id
+                                && m.Specificulture == _lang);
+                    if (getAdditionaData.IsSucceed)
+                    {
+                        getAdditionaData.Data.ParentId = result.Data.Id.ToString();
+                        await getAdditionaData.Data.DuplicateAsync();
+                    }
+                }
                 return GetResponse(result);
             }
             return NotFound();

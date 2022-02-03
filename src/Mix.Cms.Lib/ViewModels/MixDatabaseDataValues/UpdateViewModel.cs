@@ -5,8 +5,10 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -58,6 +60,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
         [JsonProperty("stringValue")]
         public string StringValue { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("encryptValue")]
         public string EncryptValue { get; set; }
 
@@ -88,6 +96,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
         #endregion Models
 
         #region Views
+
+        [JsonProperty("cultures")]
+        public List<SupportedCulture> Cultures { get; set; }
 
         [JsonProperty("column")]
         public MixDatabaseColumns.UpdateViewModel Column { get; set; }
@@ -164,15 +175,21 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            if (DataType == MixDataType.Html)
+            {
+                EditorValue ??= StringValue;
+                EditorType ??= MixEditorType.Html;
+            }
+            
             if (string.IsNullOrEmpty(Id))
             {
-                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetConfig<string>
+                Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>
                     (MixAppSettingKeywords.DefaultContentStatus)) : Status;
             }
 
             if (MixDatabaseColumnId > 0)
             {
-                Column ??= MixDatabaseColumns.UpdateViewModel.Repository.GetSingleModel(
+                Column = MixDatabaseColumns.UpdateViewModel.Repository.GetSingleModel(
                     f => f.Id == MixDatabaseColumnId
                     , _context, _transaction).Data;
                 if (Column != null && DataType == MixDataType.Reference)
@@ -214,7 +231,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (exist)
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} = {StringValue} is existed");
+                        Errors.Add($"{StringValue} is existed");
                     }
                 }
                 if (Column.IsRequire)
@@ -222,7 +239,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (string.IsNullOrEmpty(StringValue))
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} is required");
+                        Errors.Add($"{DataId}: {Column.Title} is required");
                     }
                 }
                 if (!string.IsNullOrEmpty(Column.Regex))
@@ -232,7 +249,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                     if (!m.Success)
                     {
                         IsValid = false;
-                        Errors.Add($"{Column.Title} is invalid");
+                        Errors.Add($"{DataId}: {Column.Title} is invalid");
                     }
                 }
             }

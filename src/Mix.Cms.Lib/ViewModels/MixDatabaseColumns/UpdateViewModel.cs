@@ -46,7 +46,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
         public string Title { get; set; }
 
         [JsonProperty("dataType")]
-        public MixDataType DataType { get; set; }
+        public MixDataType DataType { get; set; } = MixDataType.Text;
 
         [JsonProperty("defaultValue")]
         public string DefaultValue { get; set; }
@@ -123,7 +123,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
             base.Validate(_context, _transaction);
             if (IsValid)
             {
-                if (MixDatabaseName != "sys_additional_field")
+                if (MixDatabaseName != "sys_additional_column")
                 {
                     // Check if there is field name in the same attribute set
                     IsValid = !_context.MixDatabaseColumn.Any(
@@ -161,12 +161,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseColumns
 
         public override Task RemoveCache(MixDatabaseColumn model, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            using (_context ??= new MixCmsContext())
-            {
-                var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
-                MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
-                return base.RemoveCache(model, _context, _transaction);
-            }
+            _context ??= new MixCmsContext();
+            var relatedDatabaseId = _context.MixDatabase.Where(m => m.Id == MixDatabaseId).Select(m => m.Id);
+            MixCacheService.RemoveCacheAsync(typeof(MixDatabase), relatedDatabaseId.ToString());
+            return base.RemoveCache(model, _context, _transaction);
         }
         #endregion Overrides
     }

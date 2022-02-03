@@ -2,6 +2,7 @@
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,14 +10,19 @@ namespace Mix.Cms.Lib.ViewModels.Account
 {
     public class MixUserViewModel
     {
-        [JsonProperty("user")]
-        public ApplicationUser User { get; set; }
-
-        [JsonProperty("mediaFile")]
-        public FileViewModel MediaFile { get; set; } = new FileViewModel();
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [JsonProperty("username")]
+        public string Username { get; set; }
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
 
         [JsonProperty("userData")]
-        public MixDatabaseDatas.AdditionalViewModel UserData { get; set; }
+        public JObject UserData { get; set; }
 
         [JsonProperty("userRoles")]
         public List<NavUserRoleViewModel> UserRoles { get; set; }
@@ -36,15 +42,26 @@ namespace Mix.Cms.Lib.ViewModels.Account
 
         public MixUserViewModel(ApplicationUser user)
         {
-            User = user;
+            if (user != null)
+            {
+                Id = user.Id;
+                Username = user.UserName;
+                Email = user.Email;
+                FirstName = user.FirstName;
+                LastName = user.LastName;
+            }
         }
 
         public async Task LoadUserDataAsync()
         {
-            if (User != null)
+            if (!string.IsNullOrEmpty(Username))
             {
-                UserData ??= await MixAccountHelper.LoadUserInfoAsync(User.UserName);
-                UserRoles = MixAccountHelper.GetRoleNavs(User.Id);
+                if(UserData == null)
+                {
+                    var data = await MixAccountHelper.LoadUserInfoAsync(Username);
+                    UserData = data?.Obj;
+                }
+                UserRoles = MixAccountHelper.GetRoleNavs(Id);
             }
         }
     }

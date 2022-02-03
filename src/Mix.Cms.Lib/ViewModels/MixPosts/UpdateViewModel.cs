@@ -65,6 +65,12 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         [JsonProperty("content")]
         public string Content { get; set; }
 
+        [JsonProperty("editorValue")]
+        public string EditorValue { get; set; }
+
+        [JsonProperty("editorType")]
+        public MixEditorType? EditorType { get; set; }
+
         [JsonProperty("seoName")]
         public string SeoName { get; set; }
 
@@ -113,13 +119,16 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("templatePath")]
         public string TemplatePath { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain => MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+        public string Domain => MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
 
-        [JsonProperty("categories")]
+        [JsonProperty("pages")]
         public List<MixPagePosts.ReadViewModel> Pages { get; set; }
 
         [JsonProperty("modules")]
@@ -193,9 +202,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
+                if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1))
                 {
-                    return $"{Domain}/{Image}";
+                    return $"{Domain.TrimEnd('/')}/{Image.TrimStart('/')}";
                 }
                 else
                 {
@@ -209,9 +218,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         {
             get
             {
-                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
+                if (Thumbnail != null && Thumbnail.IndexOf("http") == -1)
                 {
-                    return $"{Domain}/{Thumbnail}";
+                    return $"{Domain.TrimEnd('/')}/{Thumbnail.TrimStart('/')}";
                 }
                 else
                 {
@@ -224,7 +233,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
         public List<ExtraProperty> Properties { get; set; }
 
         [JsonProperty("detailsUrl")]
-        public string DetailsUrl { get => Id > 0 ? $"/{Specificulture}/post/{Id}/{SeoName}" : null; }
+        public string DetailsUrl { get; set; }
 
         [JsonProperty("urlAliases")]
         public List<MixUrlAliases.UpdateViewModel> UrlAliases { get; set; }
@@ -252,8 +261,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_FIELD_POST : Type;
-
+            Type = string.IsNullOrEmpty(Type) ? MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_POST : Type;
+            EditorValue ??= Content;
+            EditorType ??= MixEditorType.Html;
             Cultures = LoadCultures(Specificulture, _context, _transaction);
             UrlAliases = GetAliases(_context, _transaction);
             if (!string.IsNullOrEmpty(this.Tags))
@@ -277,6 +287,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             // Related Posts
             LoadRelatedPost(_context, _transaction);
+
+            DetailsUrl = Id > 0
+                   ? MixCmsHelper.GetDetailsUrl(Specificulture, $"/{MixService.GetConfig("PostController", Specificulture, "post")}/{Id}/{SeoName}")
+                   : null;
         }
 
         public override MixPost ParseModel(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -287,8 +301,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 CreatedDateTime = DateTime.UtcNow;
             }
             LastModified = DateTime.UtcNow;
-            PublishedDateTime = PublishedDateTime?.ToUniversalTime();
-
             //  Parsing Extra Fields to json string
             var arrField = Columns != null ? JArray.Parse(
                 Newtonsoft.Json.JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
@@ -471,7 +483,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         }
                     }
                 }
-                else
+                else if (item.Id > 0)
                 {
                     var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -511,7 +523,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         }
                     }
                 }
-                else
+                else if (item.Id > 0)
                 {
                     var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -551,7 +563,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         }
                     }
                 }
-                else
+                else if (item.Id > 0)
                 {
                     var saveResult = await item.RemoveModelAsync(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -564,28 +576,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             return result;
         }
-
-        //private async Task<RepositoryResponse<bool>> SaveSubModulesAsync(int id, MixCmsContext _context, IDbContextTransaction _transaction)
-        //{
-        //    var result = new RepositoryResponse<bool>() { IsSucceed = true };
-        //    foreach (var navModule in ModuleNavs)
-        //    {
-        //        navModule.PostId = id;
-        //        navModule.Specificulture = Specificulture;
-        //        navModule.Status = MixContentStatus.Published;
-        //        if (navModule.IsActived)
-        //        {
-        //            var saveResult = await navModule.SaveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //        else
-        //        {
-        //            var saveResult = await navModule.RemoveModelAsync(false, _context, _transaction);
-        //            ViewModelHelper.HandleResult(saveResult, ref result);
-        //        }
-        //    }
-        //    return result;
-        //}
 
         private async Task<RepositoryResponse<bool>> SaveMediasAsync(int newPostid, MixCmsContext _context, IDbContextTransaction _transaction)
         {
@@ -608,7 +598,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                         ViewModelHelper.HandleResult(saveResult, ref result);
                     }
                 }
-                else
+                else if (navMedia.Id > 0)
                 {
                     var saveResult = await navMedia.RemoveModelAsync(false, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -644,10 +634,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
         public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            string parentId = Id.ToString();
             RepositoryResponse<bool> result = new RepositoryResponse<bool>()
             {
                 IsSucceed = true
             };
+
+            if (result.IsSucceed)
+            {
+                var removeAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.RemoveListModelAsync(
+                    true,
+                    m => m.ParentId == parentId
+                        && m.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN_POST
+                        && m.ParentType == MixDatabaseParentType.Post
+                        && m.Specificulture == Specificulture,
+                    _context, _transaction);
+                ViewModelHelper.HandleResult(removeAdditionalData, ref result);
+            }
 
             if (result.IsSucceed)
             {
@@ -705,9 +708,21 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             return result;
         }
 
-        public override Task<RepositoryResponse<List<UpdateViewModel>>> CloneAsync(MixPost model, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixPost parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            return base.CloneAsync(model, cloneCultures, _context, _transaction);
+            string parentId = Id.ToString();
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            var getAdditionalData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetFirstModelAsync(
+                    m => m.ParentId == parentId && m.ParentType == MixDatabaseParentType.Post && m.Specificulture == Specificulture,
+                    _context, _transaction);
+            if (getAdditionalData.IsSucceed)
+            {
+                getAdditionalData.Data.Cultures = Cultures;
+                var model = getAdditionalData.Data.ParseModel();
+                var cloneData = await getAdditionalData.Data.CloneAsync(model, Cultures, _context, _transaction);
+                ViewModelHelper.HandleResult(cloneData, ref result);
+            }
+            return result;
         }
 
         #endregion Async Methods
@@ -829,10 +844,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
+                        MixModules.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Module.Model, _context, _transaction).GetAwaiter().GetResult();
                     }
                 }
-                else
+                else if (item.Id > 0)
                 {
                     var saveResult = item.RemoveModel(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -843,7 +858,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixModules.ReadListItemViewModel.Repository.RemoveCache(item.Module.Model, _context, _transaction);
+                        MixModules.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Module.Model, _context, _transaction).GetAwaiter().GetResult();
                     }
                 }
             }
@@ -870,10 +885,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
+                        MixPages.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Page.Model, _context, _transaction).GetAwaiter().GetResult();
                     }
                 }
-                else
+                else if (item.Id > 0)
                 {
                     var saveResult = item.RemoveModel(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -884,7 +899,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPages.ReadListItemViewModel.Repository.RemoveCache(item.Page.Model, _context, _transaction);
+                        MixPages.ReadListItemViewModel.Repository.RemoveCacheAsync(item.Page.Model, _context, _transaction).GetAwaiter().GetResult();
                     }
                 }
             }
@@ -910,10 +925,10 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
+                        MixPosts.ReadViewModel.Repository.RemoveCacheAsync(navPost.RelatedPost.Model).GetAwaiter().GetResult();
                     }
                 }
-                else
+                else if (navPost.Id > 0)
                 {
                     var saveResult = navPost.RemoveModel(false, _context, _transaction);
                     result.IsSucceed = saveResult.IsSucceed;
@@ -924,7 +939,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     }
                     else
                     {
-                        MixPosts.ReadViewModel.Repository.RemoveCache(navPost.RelatedPost.Model);
+                        MixPosts.ReadViewModel.Repository.RemoveCacheAsync(navPost.RelatedPost.Model).GetAwaiter().GetResult();
                     }
                 }
             }
@@ -944,7 +959,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     var saveResult = navMedia.SaveModel(false, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
                 }
-                else
+                else if (navMedia.Id > 0)
                 {
                     var saveResult = navMedia.RemoveModel(false, _context, _transaction);
                     ViewModelHelper.HandleResult(saveResult, ref result);
@@ -1063,38 +1078,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             var getModulePost = MixModulePosts.ReadViewModel.GetModulePostNavAsync(Id, Specificulture, _context, _transaction);
             if (getModulePost.IsSucceed)
             {
-                foreach (var item in getModulePost.Data)
+                Modules = getModulePost.Data;
+                Modules.ForEach(c =>
                 {
-                    item.Description = item.Module?.Title ?? item.Description;
-                    item.Specificulture = Specificulture;
-                    item.Image = item.Module?.ImageUrl ?? item.Image;
-                }
-                this.Modules = getModulePost.Data;
-                this.Modules.ForEach(c =>
-                {
+                    c.Specificulture = Specificulture;
+                    c.Description = c.Module?.Title ?? c.Description;
                     c.IsActived = MixModulePosts.ReadViewModel.Repository.CheckIsExists(n => n.ModuleId == c.ModuleId && n.PostId == Id, _context, _transaction);
                 });
-            }
-            var otherModules = MixModules.ReadListItemViewModel.Repository.GetModelListBy(
-                m => (m.Type == (int)MixModuleType.Content || m.Type == (int)MixModuleType.ListPost)
-                && m.Specificulture == Specificulture
-                //&& !Modules.Any(n => n.ModuleId == m.Id && n.Specificulture == m.Specificulture)
-                , "CreatedDateTime", Heart.Enums.DisplayDirection.Desc, null, 0, _context, _transaction);
-            if (otherModules.Data != null)
-            {
-                foreach (var item in otherModules.Data.Items)
-                {
-                    if (!Modules.Any(m => m.ModuleId == Id && m.Specificulture == Specificulture))
-                    {
-                        Modules.Add(new MixModulePosts.ReadViewModel()
-                        {
-                            ModuleId = item.Id,
-                            Image = item.Image,
-                            PostId = Id,
-                            Description = item.Title
-                        });
-                    }
-                }
             }
         }
 
@@ -1153,6 +1143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_CATEGORY, _context, _transaction);
             if (getCategories.IsSucceed)
             {
+                getCategories.Data.ForEach(t => t.IsActived = true);
                 SysCategories = getCategories.Data;
             }
 
@@ -1161,6 +1152,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                 && m.MixDatabaseName == MixConstants.MixDatabaseName.SYSTEM_TAG, _context, _transaction);
             if (getTags.IsSucceed)
             {
+                getTags.Data.ForEach(t => t.IsActived = true);
                 SysTags = getTags.Data;
             }
         }

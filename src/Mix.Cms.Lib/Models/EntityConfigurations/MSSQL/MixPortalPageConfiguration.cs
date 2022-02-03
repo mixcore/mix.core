@@ -18,48 +18,48 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.MSSQL
             entity.Property(e => e.CreatedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.CreatedDateTime).HasColumnType("datetime");
 
             entity.Property(e => e.Description)
                 .HasColumnType("nvarchar(400)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Icon)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.LastModified).HasColumnType("datetime");
 
             entity.Property(e => e.ModifiedBy)
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Status)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixContentStatus>())
                 .HasColumnType("varchar(50)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.TextDefault)
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.TextKeyword)
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
 
             entity.Property(e => e.Url)
                 .HasColumnType("nvarchar(250)")
                 .HasCharSet("utf8")
-                .HasCollation("Vietnamese_CI_AS");
+                .UseCollation("Vietnamese_CI_AS");
         }
     }
 }

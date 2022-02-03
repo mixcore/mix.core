@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
             entity.Property(e => e.Specificulture)
             .HasColumnType("varchar(10)")
             .HasCharSet("utf8")
-            .HasCollation("NOCASE");
+            .UseCollation("NOCASE");
 
             entity.Property(e => e.Alias).HasMaxLength(250);
 

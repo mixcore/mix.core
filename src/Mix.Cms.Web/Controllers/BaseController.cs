@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Web.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BaseController : Controller
     {
         protected string domain;
@@ -42,10 +43,7 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
-            {
-                LoadCulture();
-            }
+            
         }
 
         private void LoadCulture()
@@ -56,7 +54,7 @@ namespace Mix.Cms.Web.Controllers
             }
             if (!MixService.Instance.CheckValidCulture(culture))
             {
-                culture = MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture = MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             }
 
             // Set CultureInfo
@@ -110,6 +108,11 @@ namespace Mix.Cms.Web.Controllers
 
         protected virtual void ValidateRequest()
         {
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
+            {
+                LoadCulture();
+            }
+
             // If IP retricted in appsettings
             if (forbidden)
             {
@@ -118,7 +121,10 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If mode Maintenance enabled in appsettings
-            if (MixService.GetConfig<bool>("IsMaintenance") && Request.RouteValues["seoName"].ToString() != "maintenance")
+            if (MixService.GetAppSetting<bool>("IsMaintenance") 
+                && Request.RouteValues["seoName"]?.ToString() != "maintenance"
+                && Request.RouteValues["controller"]?.ToString().ToLower() != "portal"
+                && Request.RouteValues["controller"]?.ToString().ToLower() != "security")
             {
                 isValid = false;
                 _redirectUrl = $"/maintenance";
@@ -173,9 +179,9 @@ namespace Mix.Cms.Web.Controllers
         protected async System.Threading.Tasks.Task<IActionResult> Page(string seoName, string keyword = null)
         {
             // Home Page
-            int maxPageSize = MixService.GetConfig<int>("MaxPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
-            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int maxPageSize = MixService.GetAppSetting<int>("MaxPageSize");
+            string orderBy = MixService.GetAppSetting<string>("OrderBy");
+            int orderDirection = MixService.GetAppSetting<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             int.TryParse(Request.Query["pageSize"], out int pageSize);
             ViewData["keyword"] = keyword;
@@ -218,7 +224,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["BodyClass"] = getPage.Data.CssClass;
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
                 ViewData["Keyword"] = keyword;
-                getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                getPage.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
             else
@@ -237,9 +243,9 @@ namespace Mix.Cms.Web.Controllers
         protected async System.Threading.Tasks.Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
-            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int? pageSize = MixService.GetAppSetting<int?>("TagPageSize");
+            string orderBy = MixService.GetAppSetting<string>("OrderBy");
+            int orderDirection = MixService.GetAppSetting<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             RepositoryResponse<Lib.ViewModels.MixPages.ReadMvcViewModel> getPage = null;
 
@@ -268,7 +274,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Keyword"] = keyword;
 
                 ViewBag.viewMode = MixMvcViewMode.Page;
-                getPage.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                getPage.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
                 return View(getPage.Data);
             }
             else
@@ -298,7 +304,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["ViewMode"] = MixMvcViewMode.Post;
 
                 ViewBag.viewMode = MixMvcViewMode.Post;
-                getPost.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                getPost.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
                 return View(getPost.Data);
             }
             else
@@ -314,7 +320,7 @@ namespace Mix.Cms.Web.Controllers
 
             if (getData.IsSucceed && getData.Data.Count > 0)
             {
-                getData.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                getData.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
                 return View(getData.Data.FirstOrDefault());
             }
             else
@@ -326,9 +332,9 @@ namespace Mix.Cms.Web.Controllers
         protected async System.Threading.Tasks.Task<IActionResult> Module(int id)
         {
             // Home Page
-            int? pageSize = MixService.GetConfig<int?>("TagPageSize");
-            string orderBy = MixService.GetConfig<string>("OrderBy");
-            int orderDirection = MixService.GetConfig<int>("OrderDirection");
+            int? pageSize = MixService.GetAppSetting<int?>("TagPageSize");
+            string orderBy = MixService.GetAppSetting<string>("OrderBy");
+            int orderDirection = MixService.GetAppSetting<int>("OrderDirection");
             int.TryParse(Request.Query["page"], out int page);
             RepositoryResponse<Lib.ViewModels.MixModules.ReadMvcViewModel> getData = null;
 
@@ -355,7 +361,7 @@ namespace Mix.Cms.Web.Controllers
                 ViewData["Description"] = getData.Data.Description;
                 ViewData["Keywords"] = getData.Data.Title;
                 ViewData["Image"] = getData.Data.ImageUrl;
-                getData.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+                getData.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
                 return View(getData.Data);
             }
             else

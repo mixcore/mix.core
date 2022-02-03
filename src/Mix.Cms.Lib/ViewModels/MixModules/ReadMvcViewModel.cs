@@ -5,6 +5,7 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
+using Mix.Heart.Enums;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Heart.NetCore.Attributes;
@@ -88,7 +89,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("detailsUrl")]
         public string DetailsUrl { get; set; }
@@ -177,8 +178,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             }
         }
 
-        [JsonProperty("attributeData")]
-        public MixDatabaseDataAssociations.ReadMvcViewModel AttributeData { get; set; }
+        [JsonProperty("additionalData")]
+        public MixDatabaseDataAssociations.ReadMvcViewModel AdditionalData { get; set; }
 
         #endregion Views
 
@@ -205,8 +206,6 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         {
             //Load Template + Style +  Scripts for views
             this.View = MixTemplates.ReadListItemViewModel.GetTemplateByPath(Template, Specificulture, _context, _transaction).Data;
-            this.FormView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(FormTemplate, Specificulture, _context, _transaction).Data;
-            this.EdmView = MixTemplates.ReadListItemViewModel.GetTemplateByPath(EdmTemplate, Specificulture, _context, _transaction).Data;
             // call load data from controller for padding parameter (postId, productId, ...)
             LoadAttributes(_context, _transaction);
         }
@@ -217,10 +216,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         private void LoadAttributes(MixCmsContext _context, IDbContextTransaction _transaction)
         {
-            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_FIELD_MODULE, _context, _transaction);
+            var getAttrs = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Name == MixConstants.MixDatabaseName.ADDITIONAL_COLUMN_MODULE, _context, _transaction);
             if (getAttrs.IsSucceed)
             {
-                AttributeData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
+                AdditionalData = MixDatabaseDataAssociations.ReadMvcViewModel.Repository.GetFirstModel(
                 a => a.ParentId == Id.ToString() && a.Specificulture == Specificulture && a.MixDatabaseId == getAttrs.Data.Id
                     , _context, _transaction).Data;
             }
@@ -247,6 +246,11 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
+                string sortBy = Property<string>("sortBy") ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy);
+                Enum.TryParse(typeof(DisplayDirection), Property<string>("sortDirection"), out object direction);
+                DisplayDirection sortDirection = direction != null 
+                    ? (DisplayDirection)direction 
+                    : MixService.GetEnumConfig<DisplayDirection>(MixAppSettingKeywords.SortBy); ;
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex > 0 ? pageIndex : 0;
                 Expression<Func<MixModuleData, bool>> dataExp = null;
@@ -274,10 +278,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
-                        dataExp
-                        , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy
-                        ), 0
-                        , pageSize, pageIndex
+                        dataExp, 
+                        sortBy, 
+                        sortDirection,
+                        pageSize, pageIndex
                         , _context: context, _transaction: transaction);
                     if (getDataResult.IsSucceed)
                     {
@@ -290,7 +294,7 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getPosts = MixModulePosts.ReadViewModel.Repository
                     .GetModelListBy(postExp
-                    , MixService.GetConfig<string>(MixAppSettingKeywords.OrderBy), 0
+                    , sortBy, sortDirection
                     , pageSize, pageIndex
                     , _context: context, _transaction: transaction);
                     if (getPosts.IsSucceed)
@@ -315,12 +319,12 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
 
         public bool HasValue(string fieldName)
         {
-            return AttributeData != null && AttributeData.Data.Obj.GetValue(fieldName) != null;
+            return AdditionalData != null && AdditionalData.Data.Obj.GetValue(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
         {
-            return MixCmsHelper.Property<T>(AttributeData?.Data?.Obj, fieldName);
+            return MixCmsHelper.Property<T>(AdditionalData?.Data?.Obj, fieldName);
         }
 
         #endregion Expand

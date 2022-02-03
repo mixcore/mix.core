@@ -64,7 +64,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetAppSetting<string>("Language");
             ViewBag.culture = _lang;
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }

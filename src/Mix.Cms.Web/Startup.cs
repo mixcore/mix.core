@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +14,7 @@ using Mix.Cms.Api.RestFul;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.MixDatabase.Extensions;
+using Mix.Cms.Lib.Models;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
@@ -22,8 +25,10 @@ using Mix.Rest.Api.Client;
 using Mix.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Unicode;
 
 namespace Mix.Cms.Web
 {
@@ -40,8 +45,14 @@ namespace Mix.Cms.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string[] allowedHosts = MixService.GetConfig<JArray>(MixAppSettingKeywords.AllowedHosts)
+            string[] allowedHosts = MixService.GetAppSetting<JArray>(MixAppSettingKeywords.AllowedHosts)
                                         .Select(m => m.Value<string>("text")).ToArray();
+
+            services.AddWebEncoders(options =>
+            {
+                options.TextEncoderSettings = new System.Text.Encodings.Web.TextEncoderSettings(UnicodeRanges.All);
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MixcoreAllowSpecificOrigins,
@@ -53,7 +64,7 @@ namespace Mix.Cms.Web
                                   });
             });
 
-            services.AddResponseCompression();
+
 
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
@@ -63,6 +74,7 @@ namespace Mix.Cms.Web
                 });
 
             #region Additionals Config for Mixcore Cms
+            services.AddSingleton<TranslationTransformer>();
             services.AddHttpClient();
             services.Configure<FormOptions>(x =>
             {
@@ -77,6 +89,7 @@ namespace Mix.Cms.Web
 
             /* Mix: Add db contexts */
             services.AddDbContext<MixCmsContext>();
+            services.AddDbContext<AuditContext>();
             services.AddDbContext<MixDbContext>();
             services.AddDbContext<MixChatServiceContext>();
             /* Mix: End Add db contexts */
@@ -92,6 +105,7 @@ namespace Mix.Cms.Web
             //services.AddMixGprc();
             services.AddMixScheduler(Configuration);
 
+            services.AddScoped<InitCmsService>();
             services.AddSingleton<MixCacheService>();
             services.AddMixAuthorize<MixDbContext>(MixService.Instance.MixAuthentications);
             services.AddScoped<MixIdentityService>();
@@ -99,6 +113,7 @@ namespace Mix.Cms.Web
             VerifyInitData(services);
             /* End Additional Config for Mixcore Cms  */
 
+            services.AddResponseCaching();
             #endregion Additionals Config for Mixcore Cms
         }
 
@@ -114,7 +129,7 @@ namespace Mix.Cms.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 var context = MixService.GetDbContext();
                 var pendingMigration = context.Database.GetPendingMigrations();
@@ -126,7 +141,29 @@ namespace Mix.Cms.Web
 
             app.UseResponseCompression();
 
+
             app.UseCors(MixcoreAllowSpecificOrigins);
+
+            int responseCache = MixService.GetAppSetting<int>(MixAppSettingKeywords.ResponseCache);
+            if (responseCache > 0)
+            {
+                app.UseResponseCaching();
+                app.Use(async (context, next) =>
+                {
+                    context.Response.GetTypedHeaders().CacheControl =
+                        new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                        {
+                            Public = true,
+                            NoCache = false,
+                            SharedMaxAge = TimeSpan.FromSeconds(responseCache),
+                            MaxAge = TimeSpan.FromSeconds(responseCache),
+
+                        };
+                    context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                        new string[] { "Accept-Encoding" };
+                    await next();
+                });
+            }
 
             var provider = new FileExtensionContentTypeProvider();
             // Add new mappings
@@ -137,8 +174,9 @@ namespace Mix.Cms.Web
                 ContentTypeProvider = provider
             });
 
-            //app.UseStaticFiles();
             //app.UseGraphiQl("/api/graphql");
+
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseAuthentication();
@@ -146,7 +184,7 @@ namespace Mix.Cms.Web
 
             #region Additionals Config for Mixcore Cms
 
-            if (MixService.GetConfig<bool>("IsHttps"))
+            if (MixService.GetAppSetting<bool>("IsHttps"))
             {
                 app.UseHttpsRedirection();
             }
@@ -166,18 +204,19 @@ namespace Mix.Cms.Web
         {
             // Mix: Migrate db if already inited
 
-            if (!MixService.GetConfig<bool>(MixAppSettingKeywords.IsInit))
+            if (!MixService.GetAppSetting<bool>(MixAppSettingKeywords.IsInit))
             {
                 using (var ctx = MixService.GetDbContext())
                 {
                     ctx.Database.Migrate();
                     var transaction = ctx.Database.BeginTransaction();
-                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
+                    var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.DataFolder}");
                     var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<Lib.ViewModels.MixDatabases.ImportViewModel>>();
                     foreach (var db in sysDatabases)
                     {
                         if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
                         {
+                            db.Id = 0;
                             db.SaveModel(true, ctx, transaction);
                         }
                     }
@@ -188,10 +227,13 @@ namespace Mix.Cms.Web
                 {
                     cacheCtx.Database.Migrate();
                 }
+                var serviceProvider = services.BuildServiceProvider();
+                var _roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+                InitCmsService.InitRolesAsync(_roleManager).GetAwaiter();
             }
 
             // Mix: Check if require ssl
-            if (MixService.GetConfig<bool>("IsHttps"))
+            if (MixService.GetAppSetting<bool>("IsHttps"))
             {
                 services.AddHttpsRedirection(options =>
                 {

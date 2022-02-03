@@ -59,6 +59,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         #region Views
 
+        [JsonProperty("isClone")]
+        public bool IsClone { get; set; }
+
         [JsonProperty("relatedData")]
         public List<MixDatabaseDataAssociations.UpdateViewModel> RelatedData { get; set; } = new List<MixDatabaseDataAssociations.UpdateViewModel>();
 
@@ -156,6 +159,81 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             return base.ParseModel(_context, _transaction);
         }
 
+        public override async Task<RepositoryResponse<bool>> RemoveRelatedModelsAsync(UpdateViewModel view, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            // Remove values
+            var removeValues = await MixDatabaseDataValues.DeleteViewModel.Repository.RemoveListModelAsync(false, f => f.DataId == Id && f.Specificulture == Specificulture, _context, _transaction);
+            ViewModelHelper.HandleResult(removeValues, ref result);
+
+            // remove related navs
+            if (result.IsSucceed)
+            {
+                var removeRelated = await MixDatabaseDataAssociations.DeleteViewModel.Repository.RemoveListModelAsync
+                    (true, d => (d.DataId == Id || d.ParentId == Id) && d.Specificulture == Specificulture
+                    , _context, _transaction);
+                ViewModelHelper.HandleResult(removeRelated, ref result);
+            }
+
+            if (result.IsSucceed)
+            {
+                var removeChildFields = await MixDatabaseDataValues.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.DataId == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                ViewModelHelper.HandleResult(removeChildFields, ref result);
+                var removeChilds = await MixDatabaseDatas.DeleteViewModel.Repository.RemoveListModelAsync(
+                    false, f => (f.Id == Id) && f.Specificulture == Specificulture, _context, _transaction);
+                ViewModelHelper.HandleResult(removeChilds, ref result);
+            }
+            return result;
+        }
+
+        internal async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(
+            MixCmsContext _context = null, 
+            IDbContextTransaction _transaction = null)
+        {
+            UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
+            try
+            {
+                var newId = Guid.NewGuid().ToString();
+                foreach (var item in Values)
+                {
+                    if (item.Column.DataType == MixDataType.Reference)
+                    {
+                        var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
+                                m => m.ParentId == Id 
+                                    && m.MixDatabaseId == item.Column.ReferenceId
+                                    && m.ParentType == MixDatabaseParentType.Set 
+                                    && m.Specificulture == Specificulture
+                                    , context, transaction);
+                        foreach (var subNav in getSubData.Data)
+                        {
+                            subNav.ParentId = newId;
+                            await subNav.DuplicateAsync(context, transaction);
+                        }
+                    }
+                    else
+                    {
+                        item.Id = null;
+                        item.DataId = newId;
+                    }
+                }
+                Id = newId;
+                return await SaveModelAsync(true, context, transaction);
+            }
+            catch(Exception ex)
+            {
+                return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
+            }
+            finally
+            {
+                if (isRoot)
+                {
+                    await transaction.CommitAsync();
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
+
         public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -172,9 +250,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         MixDatabaseId = result.Data.MixDatabaseId,
                         MixDatabaseName = result.Data.MixDatabaseName,
                         ParentId = ParentId,
-                        ParentType = ParentType
+                        ParentType = ParentType,
+                        IsClone = IsClone,
+                        Cultures = Cultures
                     };
                     var saveNav = await nav.SaveModelAsync(true, context, transaction);
+                    if (IsClone)
+                    {
+
+                    }
                     result.IsSucceed = result.IsSucceed && saveNav.IsSucceed;
                     result.Errors = saveNav.Errors;
                     result.Exception = saveNav.Exception;
@@ -201,7 +285,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             if (result.IsSucceed)
             {
                 // TODO: Double check logic code
-                var additionalSet = _context.MixDatabase.FirstOrDefault(m => m.Name == "sys_additional_field");
+                var additionalSet = _context.MixDatabase.FirstOrDefault(m => m.Name == MixDatabaseNames.ADDITIONAL_COLUMN);
                 foreach (var item in Values)
                 {
                     if (item.DataId != parent.Id)
@@ -236,6 +320,41 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 }
             }
 
+            return result;
+        }
+
+        public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseData parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            
+            var result = new RepositoryResponse<bool>() { IsSucceed = true };
+            if (Values.Count > 0)
+            {
+                foreach (var item in Values)
+                {
+                    if (result.IsSucceed)
+                    {
+                        if (item.Column.DataType == MixDataType.Reference)
+                        {
+                            var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
+                                m => m.ParentId == Id
+                                    && m.ParentType == MixDatabaseParentType.Set
+                                    && m.Specificulture == Specificulture
+                                    , _context, _transaction);
+                            foreach (var subNav in getSubData.Data)
+                            {
+                                await subNav.CloneAsync(subNav.ParseModel(), Cultures, _context, _transaction);
+                            }
+                        }
+                        else
+                        {
+                            item.Cultures = Cultures;
+                            var model = item.ParseModel();
+                            var cloneValue = await item.CloneAsync(model, Cultures, _context, _transaction);
+                            ViewModelHelper.HandleResult(cloneValue, ref result);
+                        }
+                    }
+                }
+            }
             return result;
         }
 

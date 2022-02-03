@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
+using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
@@ -42,26 +41,57 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // GET: api/v1/rest/{culture}/mix-database-data
-        [HttpGet("init/{mixDatabaseName}")]
-        public async Task<ActionResult<UpdateViewModel>> Init(string mixDatabaseName)
+        [HttpGet("init/{mixDatabase}")]
+        public async Task<ActionResult<FormViewModel>> Init(string mixDatabase)
         {
-            var getAttrSet = await Lib.ViewModels.MixDatabases.ReadViewModel.Repository.GetSingleModelAsync(m => m.Name == mixDatabaseName);
-            if (getAttrSet.IsSucceed)
+            var formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
+            return formData != null
+                ? Ok(formData)
+                : BadRequest(mixDatabase);
+        }
+
+        [HttpPost("save-data/{mixDatabase}")]
+        [HttpPost("save-data/{mixDatabase}/{sendMail}")]
+        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, bool? sendMail, bool? sendSms, [FromBody] JObject data)
+        {
+            FormViewModel formData;
+            string id = data.Value<string>("id");
+            if (!string.IsNullOrEmpty(id))
             {
-                FormViewModel result = new FormViewModel()
-                {
-                    Specificulture = _lang,
-                    MixDatabaseId = getAttrSet.Data.Id,
-                    MixDatabaseName = getAttrSet.Data.Name,
-                    Status = MixService.GetEnumConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
-                };
-                result.ExpandView();
-                return Ok(result);
+                var getData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == id && m.Specificulture == _lang);
+                formData = getData.Data;
             }
             else
             {
-                return BadRequest(getAttrSet.Errors);
+                formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
             }
+            if (formData != null)
+            {
+                formData.Obj = data;
+                var result = await SaveAsync(formData, true);
+                var isSendMail = result.IsSucceed && sendMail.HasValue && sendMail.Value;
+                
+                if (isSendMail)
+                {
+                    await Helper.SendMail(mixDatabase, _lang, data);
+                }
+                return GetResponse(result);
+            }
+            return BadRequest(mixDatabase);
+        }
+        
+        [HttpPost("save-values/{dataId}")]
+        public async Task<ActionResult<bool>> SaveValue([FromRoute] string dataId, [FromBody] JObject values)
+        {
+            var getFormData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == dataId && m.Specificulture == _lang);
+            if (getFormData.IsSucceed)
+            {
+                var formData = getFormData.Data;
+                formData.UpdateValues(values);
+                var result = await formData.SaveValues(formData.ParseModel());
+                return GetResponse(result);
+            }
+            return NotFound(dataId);
         }
     }
 }

@@ -23,6 +23,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using Mix.Cms.Lib.Helpers;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 {
@@ -67,6 +69,41 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
+        public static async Task SendMail(string mixDatabase, string culture, JObject data)
+        {
+            var getEdmInfo = await GetSingleDataAsync<FormViewModel>(mixDatabase, "databaseName", MixDatabaseNames.EDM, culture);
+            if (getEdmInfo.IsSucceed)
+            {
+                var edm = getEdmInfo.Data;
+                bool sendToSender = edm.Property<bool>("sendToSender");
+                string senderColumnName = edm.Property<string>("senderColumnName");
+                var recipients = edm.Property<JArray>("recipients")?.Select(m => m.Value<string>("text"));
+                string senderEmail = EdmHelper.GetJToken(senderColumnName, data)?.Value<string>();
+
+                if (sendToSender && !string.IsNullOrEmpty(senderEmail))
+                {
+                    string senderBody = EdmHelper.GetEdmBody(edm.Property<string>("senderTemplate"), data);
+                    EdmHelper.Send(
+                        edm.Property<string>("title"),
+                        senderBody,
+                        senderEmail,
+                        edm.Property<string>("from")
+                        );
+                }
+
+                if (recipients.Count() > 0)
+                {
+                    string senderBody = EdmHelper.GetEdmBody(edm.Property<string>("adminTemplate"), data);
+                    EdmHelper.Send(
+                        edm.Property<string>("title"),
+                        senderBody,
+                        string.Join(',', recipients),
+                        edm.Property<string>("from")
+                        );
+                }
+            }
+        }
+
         public static async Task<RepositoryResponse<AdditionalViewModel>> GetAdditionalData(
             MixDatabaseParentType parentType, string parentId,
             HttpRequest request, string culture = null,
@@ -76,7 +113,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             try
             {
                 // Additional Data is sub data of page / post / module only
-                culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var databaseName = request.Query["databaseName"].ToString();
 
                 var result = await LoadAdditionalDataAsync(parentType, parentId, databaseName, culture, context, transaction);
@@ -104,7 +141,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -112,9 +149,15 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     m => m.MixDatabaseName == databaseName && m.ParentType == parentType && m.ParentId == parentId && m.Specificulture == culture))?.DataId;
                 if (!string.IsNullOrEmpty(dataId))
                 {
-                    return await AdditionalViewModel.Repository.GetFirstModelAsync(
+                    var result = await AdditionalViewModel.Repository.GetFirstModelAsync(
                         m => m.Id == dataId && m.Specificulture == culture
                         , context, transaction);
+                    if (result.IsSucceed)
+                    {
+                        result.Data.ParentId = parentId;
+                        result.Data.ParentType = parentType;
+                    }
+                    return result;
                 }
                 else
                 {
@@ -133,7 +176,8 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             Status = MixContentStatus.Published,
                             Columns = getAttrSet.Data.Columns,
                             ParentType = parentType,
-                            ParentId = parentId
+                            ParentId = parentId,
+                            CreatedDateTime = DateTime.UtcNow
                         };
                         await result.SaveModelAsync(false, context, transaction);
                         result.ExpandView(context, transaction);
@@ -160,6 +204,68 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
+        public static async Task<RepositoryResponse<FormViewModel>> SaveObjAsync(string databaseName, JObject obj, string parentId = null, MixDatabaseParentType? parentType = null, string culture = null)
+        {
+            culture ??= MixService.GetAppSetting<string>("DefaultCulture");
+            string id = obj.Value<string>("id");
+            FormViewModel formData;
+
+            if (id == null)
+            {
+                formData = await GetBlankFormDataAsync(databaseName, culture);
+            }
+            else
+            {
+                var getFormData = await FormViewModel.Repository.GetSingleModelAsync(m => m.Id == id && m.Specificulture == culture);
+                formData = getFormData.Data;
+            }
+
+            if (formData != null)
+            {
+                formData.ParentId = parentId;
+                if (parentType.HasValue)
+                {
+                    formData.ParentType = parentType.Value;
+                }
+                formData.Obj = obj;
+                return await formData.SaveModelAsync(true);
+            }
+            return new();
+        }
+
+        public static async Task<FormViewModel> GetBlankFormDataAsync(string mixDatabase, string culture)
+        {
+            _ = int.TryParse(mixDatabase, out int mixDatabaseId);
+            var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(
+                m => m.Name == mixDatabase || m.Id == mixDatabaseId);
+            if (getDatabase.IsSucceed)
+            {
+                FormViewModel result = new FormViewModel()
+                {
+                    Specificulture = culture,
+                    MixDatabaseId = getDatabase.Data.Id,
+                    MixDatabaseName = getDatabase.Data.Name,
+                    Status = MixContentStatus.Published,
+                    Columns = getDatabase.Data.Columns,
+                    Obj = new()
+                };
+                foreach (var item in result.Columns)
+                {
+                    if (item.DataType != MixDataType.Reference)
+                    {
+                        result.Obj.Add(new JProperty(item.Name, item.DefaultValue ?? string.Empty));
+                    }
+                    else
+                    {
+                        result.Obj.Add(new JProperty(item.Name, new JArray()));
+                    }
+
+                }
+                return result;
+            }
+            return null;
+        }
+
         public static RepositoryResponse<AdditionalViewModel> LoadAdditionalData(
             MixDatabaseParentType parentType,
             string parentId,
@@ -167,7 +273,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             string culture = null,
             MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+            culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
@@ -353,11 +459,12 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture = culture ?? MixService.GetConfig<string>("DefaultCulture");
+                culture = culture ?? MixService.GetAppSetting<string>("DefaultCulture");
                 var queryDictionary = request.Query.ToList();
                 mixDatabaseName = mixDatabaseName ?? request.Query["mixDatabaseName"].ToString().Trim();
                 var keyword = request.Query["keyword"].ToString();
                 var filterType = request.Query["filterType"].ToString();
+                var compareType = request.Query["compareType"].ToString();
                 var orderBy = request.Query["orderBy"].ToString();
                 int.TryParse(request.Query["mixDatabaseId"], out int mixDatabaseId);
                 bool isDirection = Enum.TryParse(request.Query["direction"], out Heart.Enums.DisplayDirection direction);
@@ -413,8 +520,17 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
-                    var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate).Select(m => m.DataId).Distinct();
-                    predicate = predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Any(id => m.Id == id));
+                    var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate)
+                            .Select(m => m.DataId);
+
+                    if (compareType== "and")
+                    {
+                        valDataIds = valDataIds.GroupBy(m => m)
+                            .Select(g => new { count = g.Count(), id = g.Key })
+                            .Where(g => g.count == fieldQueries.Count)
+                            .Select(g => g.id);
+                    }
+                    predicate = predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Distinct().Any(id => m.Id == id));
                 }
                 else
                 {
@@ -525,7 +641,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 RepositoryResponse<TView> result = new RepositoryResponse<TView>()
@@ -578,7 +694,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var dataId = _context.MixDatabaseDataAssociation.FirstOrDefault(
                         m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
                 if (dataId is not null)
@@ -612,7 +728,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 var dataId = context.MixDatabaseDataAssociation.FirstOrDefault(
                         m => m.ParentId == parentId && m.ParentType == parentType)?.DataId;
                 if (dataId is not null)
@@ -647,7 +763,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-                culture ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
                 Expression<Func<MixDatabaseDataValue, bool>> attrPredicate = m => m.Specificulture == culture && m.MixDatabaseName == mixDatabaseName;
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 RepositoryResponse<TView> result = new RepositoryResponse<TView>()
@@ -808,7 +924,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             }
         }
 
-        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetAttributeDataByParent<TView>(
+        public static async Task<RepositoryResponse<PaginationModel<TView>>> GetMixDataByParent<TView>(
             string culture, string mixDatabaseName,
             string parentId, MixDatabaseParentType parentType,
             string orderBy, Heart.Enums.DisplayDirection direction,
@@ -975,28 +1091,28 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             Task.WhenAll(tasks);
         }
 
-        public static async Task<bool> MigrateData(int databaseId)
+        public static async Task<bool> MigrateData(int databaseId, string culture)
         {
             using (var ctx = new MixCmsContext())
             {
                 var getDatabase = await MixDatabases.UpdateViewModel.Repository.GetSingleModelAsync(m => m.Id == databaseId, ctx, null);
                 if (getDatabase.IsSucceed)
                 {
-                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}";
+                    string databaseName = $"{MixConstants.CONST_MIXDB_PREFIX}{getDatabase.Data.Name}_{culture.Replace("-", "_")}";
 
 
                     int page = 0;
                     int pageSize = 10;
                     string truncateSql = $"DELETE FROM {databaseName};";
                     await ctx.Database.ExecuteSqlRawAsync(truncateSql);
-                    while (true)
-                    {
-                        List<string> datas = new List<string>();
-                        var getData = await FormViewModel.Repository.GetModelListByAsync(
-                        m => m.MixDatabaseName == getDatabase.Data.Name
+                    var getData = await FormViewModel.Repository.GetModelListByAsync(
+                        m => m.MixDatabaseName == getDatabase.Data.Name && m.Specificulture == culture
                         , "Id", Heart.Enums.DisplayDirection.Asc
                         , pageSize, page, null, null
                         , ctx, null);
+                    while (page < getData.Data.TotalPage)
+                    {
+                        List<string> datas = new List<string>();
                         page++;
                         foreach (var item in getData.Data.Items)
                         {
@@ -1013,10 +1129,6 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                             await ctx.Database.ExecuteSqlRawAsync(commandText);
 
                             await ctx.SaveChangesAsync();
-                        }
-                        if (getData.Data.Page == getData.Data.TotalPage)
-                        {
-                            break;
                         }
                     }
                     return true;

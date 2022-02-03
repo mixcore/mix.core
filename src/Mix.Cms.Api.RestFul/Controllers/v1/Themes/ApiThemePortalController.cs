@@ -28,6 +28,7 @@ using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Mix.Infrastructure.Repositories;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -45,7 +46,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixTheme, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixTheme, DeleteViewModel> delRepo,
              MixIdentityHelper idHelper,
-            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo, idHelper)
+             AuditLogRepository auditlogRepo,
+            IHubContext<PortalHub> hubContext) : base(repo, updRepo, delRepo, idHelper, auditlogRepo)
         {
             _httpService = httpService;
             _hubContext = hubContext;
@@ -88,6 +90,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // POST api/theme
+        /// Swagger cannot generate multi-form value api
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [HttpPost, HttpOptions]
         [DisableRequestSizeLimit]
@@ -104,9 +108,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
             if (theme != null)
             {
-                string importFolder = $"Imports/Themes/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
+                string importFolder = $"{MixFolders.ThemePackage}/{DateTime.UtcNow.ToString("dd-MM-yyyy")}/{data.Name}";
                 data.TemplateAsset = new FileViewModel(theme, importFolder);
-                MixFileRepository.Instance.SaveFile(theme, $"wwwroot/{importFolder}");
+                MixFileRepository.Instance.SaveFile(theme, importFolder);
             }
 
             // Load default blank if created new without upload theme
@@ -123,9 +127,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     data.TemplateAsset = new FileViewModel()
                     {
-                        Filename = "default_blank",
+                        Filename = "_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ImportFolder
+                        FileFolder = MixFolders.DataFolder
                     };
                 }
             }
@@ -134,7 +138,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             {
                 data.CreatedBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
                 data.Specificulture = _lang;
-                var result = await base.SaveAsync<UpdateViewModel>(data, true);
+                var result = await base.SaveGenericAsync<UpdateViewModel>(data, true);
                 if (result.IsSucceed)
                 {
                     MixService.LoadFromDatabase();
@@ -151,8 +155,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
 
+        [AllowAnonymous]
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
         [Route("install")]
         public async Task<ActionResult<RepositoryResponse<UpdateViewModel>>> InstallTheme([FromBody] JObject theme)
         {
@@ -169,7 +173,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             };
 
             string createdBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
-            _lang ??= MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            _lang ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             var result = await Helper.InstallThemeAsync(theme, createdBy, _lang, progress, _httpService);
             if (result.IsSucceed)
             {

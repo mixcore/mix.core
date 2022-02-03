@@ -10,7 +10,7 @@ namespace Mix.Cms.Api.RestFul
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mixcore API", Version = "v3" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mixcore API", Version = "v1" });
                 c.CustomSchemaIds(x => x.FullName);
             });
             return services;

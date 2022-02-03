@@ -17,9 +17,9 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             Expression<Func<MixDatabaseDataValue, bool>> valExp,
             MixCmsContext context,
             string culture = null,
-            string postType = MixDatabaseNames.ADDITIONAL_FIELD_POST)
+            string postType = MixDatabaseNames.ADDITIONAL_COLUMN_POST)
         {
-            culture = culture ?? MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+            culture = culture ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
 
             var dataIds = context.MixDatabaseDataValue.Where(valExp).Select(m => m.DataId);
 
@@ -29,7 +29,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                             && m.ParentType == MixDatabaseParentType.Post;
 
             var associations = context.MixDatabaseDataAssociation.Where(relatedExp);
-            var parentIds = associations.Select(m => m.ParentId);
+            var parentIds = associations.Select(m => m.ParentId).Distinct();
 
 
             return parentIds;
@@ -42,11 +42,6 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             string culture,
             string postType)
         {
-            if (!pagingData.OrderBy.StartsWith("additionalData."))
-            {
-                return parentIds;
-            }
-
             string orderCol = pagingData.OrderBy.Split('.')[1];
             var sortQuery = context.MixDatabaseDataValue
                 .Where(

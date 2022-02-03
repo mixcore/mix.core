@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
 using Mix.Cms.Lib.Models.Cms;
@@ -113,9 +114,10 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                    .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
             Columns.AddRange(
                 getValues.Data
-                .Where(v => !Columns.Any(f => f.Id == v.Column?.Id))
+                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
                 .Select(v => v.Column)
                 .ToList());
+            Columns = Columns.OrderBy(c => c.Priority).ToList();
             var properties = getValues.Data.Select(m => m.ToJProperty(_context, _transaction));
             Obj = new JObject(
                 new JProperty("id", Id),
@@ -305,7 +307,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
             {
                 if (result.IsSucceed)
                 {
-                    if (field.MixDatabaseName == "sys_additional_field")
+                    if (field.MixDatabaseName == MixDatabaseNames.ADDITIONAL_COLUMN)
                     {
                         // Add field to additional_field set
                         var saveField = await field.SaveModelAsync(false, context, transaction);

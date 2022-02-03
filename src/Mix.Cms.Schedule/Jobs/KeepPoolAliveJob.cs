@@ -16,7 +16,7 @@ namespace Mix.Cms.Schedule.Jobs
         }
         public override async Task Execute(IJobExecutionContext context)
         {
-            var domain = MixService.GetConfig<string>(MixAppSettingKeywords.Domain);
+            var domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;

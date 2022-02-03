@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Heart.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,22 +17,24 @@ namespace Mix.Theme.Blog
     {
         public static async Task<dynamic> GetPosts(string culture = null, int? pageSize = 15, int? pageIndex = 0)
         {
+            culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
-                m => m.Status == MixContentStatus.Published,
+                m => m.Specificulture == culture && m.Status == MixContentStatus.Published,
                 "CreatedDateTime",
                 DisplayDirection.Desc, pageSize, pageIndex);
         }
         public static async Task<dynamic> GetPostsByAuthor(string username, string culture, int? pageSize = 15, int? pageIndex = 0)
         {
             return await MixPosts.ReadMvcViewModel.Repository.GetModelListByAsync(
-                m => m.Status == MixContentStatus.Published
+                m => m.Specificulture == culture && m.Status == MixContentStatus.Published
                 && m.CreatedBy == username,
                 "CreatedDateTime",
                 DisplayDirection.Desc, pageSize, pageIndex);
         }
         public static async Task<dynamic> GetTagInfo(string keyword, string culture)
         {
-            return (await MixDatas.Helper.GetSingleDataAsync<MixDatas.ReadMvcViewModel>(keyword, "slug", "sys_tag", culture)).Data.Obj as dynamic;
+            var result = (await MixDatas.Helper.GetSingleDataAsync<MixDatas.ReadMvcViewModel>(keyword, "slug", "sys_tag", culture))?.Data?.Obj;
+            return  result as dynamic;
         }
 
         public static async Task<dynamic> GetAuthorInfo(string keyword, string culture)
@@ -54,8 +58,8 @@ namespace Mix.Theme.Blog
                         .ToListAsync();
                     var prevId = postIdsByMeta.OrderBy(p => p).Where(p => p < currentPost.Id).FirstOrDefault();
                     var nextId = postIdsByMeta.OrderBy(p => p).Where(p => p > currentPost.Id).FirstOrDefault();
-                    result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId)) : null;
-                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId)) : null;                     
+                    result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId && m.Specificulture == culture)) : null;
+                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId && m.Specificulture == culture)) : null;                     
                 }
                 else
                 {

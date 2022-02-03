@@ -8,6 +8,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixModuleDatas;
 using Mix.Common.Helper;
@@ -31,7 +32,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> repo,
             DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo) :
+            base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
 
@@ -114,7 +117,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // GET api/module-data/create/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("init-form/{moduleId}")]
         public async Task<ActionResult<UpdateViewModel>> InitByIdAsync(int moduleId)
         {
@@ -139,7 +142,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         // GET api/module-data/create/id
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save/{moduleName}")]
         public async Task<RepositoryResponse<UpdateViewModel>> SaveByName(string moduleName, [FromBody] JObject data)
         {

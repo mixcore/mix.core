@@ -7,6 +7,7 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixConfigurations;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -26,10 +27,19 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixConfiguration, ReadMvcViewModel> repo, 
             DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : 
-            base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo) : 
+            base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
+        
+        [HttpGet("by-keyword/{keyword}")]
+        public async Task<ActionResult<ReadMvcViewModel>> GetByKeyword(string keyword)
+        {
+            var config = await ReadMvcViewModel.Repository.GetSingleModelAsync(c => c.Keyword == keyword && c.Specificulture == _lang);
+            return GetResponse(config);
+        }
+
 
         [HttpGet]
         public override async Task<ActionResult<PaginationModel<ReadMvcViewModel>>> Get()
@@ -52,14 +62,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                  || model.Category == category
                  );
             var getData = await base.GetListAsync<ReadMvcViewModel>(predicate);
-            if (getData.IsSucceed)
-            {
-                return getData.Data;
-            }
-            else
-            {
-                return BadRequest(getData.Errors);
-            }
+            return GetResponse(getData);
         }
     }
 }

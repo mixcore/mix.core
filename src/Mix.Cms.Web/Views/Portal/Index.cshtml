@@ -3,7 +3,7 @@
     ViewData["Description"] = "Your powerful dashboard is here";
     Layout = "~/Views/Shared/_LayoutPortal_Angular.cshtml";
 
-    var menus = MixCmsHelper.LoadDataFile(MixFolders.JsonDataFolder, "portal-menus.json");
+    var menus = MixCmsHelper.LoadDataFile(MixFolders.DataFolder, "portal-menus.json");
 }
 
 <div class="">
@@ -16,7 +16,7 @@
         <main-side-bar ng-if="isInRole('SuperAdmin')" class="bd-sidebar main-sidebar"></main-side-bar>
         <main-side-bar-dynamic ng-if="!isInRole('SuperAdmin')" roles="roles" actived-role="roles[0]" class="bd-sidebar main-sidebar"></main-side-bar-dynamic>
         <!-- Page Content  -->
-        <form id="form-portal" class="col d-flex flex-row-reverse {{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()" style="background-color: var(--bg-color,hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1));">
+        <form id="form-portal" class="container {{pageClass}}" ng-view ng-class="{'submitted': submitted}" ng-submit="save()" style="background-color: var(--bg-color,hsla(var(--primary-color-hue,211),var(--primary-color-saturation,100%),100%,1));">
         </form>
         <portal-theme-settings></portal-theme-settings>
         <medias></medias>

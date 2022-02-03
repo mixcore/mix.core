@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Cms.Lib.Controllers;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Heart.NetCore;
 using System.Reflection;
@@ -11,6 +12,7 @@ namespace Mix.Cms.Lib.Extensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped<AuditLogRepository>();
             services.AddRepositories(Assembly.GetExecutingAssembly());
             return services;
         }
@@ -27,8 +29,7 @@ namespace Mix.Cms.Lib.Extensions
                    .AddJsonProtocol(options =>
                    {
                        options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                   })
-                   .AddMessagePackProtocol();
+                   });
             return services;
         }
 
@@ -38,7 +39,7 @@ namespace Mix.Cms.Lib.Extensions
             {
                 endpoints.MapHub<PortalHub>("/portalHub");
                 //endpoints.MapHub<ServiceHub>("/serviceHub");
-                endpoints.MapHub<VideoChatHub>("/videoChatHub");
+                endpoints.MapHub<EditFileHub>("/editFileHub");
             });
             return app;
         }

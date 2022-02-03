@@ -65,14 +65,14 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-1")]
         public async Task<RepositoryResponse<bool>> Step1([FromBody] InitCmsViewModel model)
         {
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>() { IsSucceed = true };
-                if (MixService.GetConfig<int>("InitStatus") == 0)
+                if (MixService.GetAppSetting<int>("InitStatus") == 0)
                 {
                     result = await InitStep1Async(model).ConfigureAwait(false);
                 }
@@ -87,7 +87,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-2")]
         public async Task<RepositoryResponse<AccessTokenViewModel>> InitSuperAdmin([FromBody] MixRegisterViewModel model)
         {
@@ -102,17 +102,17 @@ namespace Mix.Cms.Api.Controllers.v1
                         Email = model.Email,
                         FirstName = model.FirstName,
                         LastName = model.LastName,
-                        Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
+                        Avatar = model.Avatar ?? MixService.GetAppSetting<string>("DefaultAvatar"),
                         JoinDate = DateTime.UtcNow
                     };
                     var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                     if (createResult.Succeeded)
                     {
                         user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                        await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                        await _userManager.AddToRoleAsync(user, MixDefaultRoles.SuperAdmin);
                         await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-                        var aesKey = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+                        var aesKey = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
                         
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
@@ -151,7 +151,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // /// </summary>
         // /// <param name="model"></param>
         // /// <returns></returns>
-        // [HttpPost, HttpOptions]
+        // [HttpPost]
         // [Route("init-cms/step-5")]
         // public async Task<RepositoryResponse<bool>> InitConfigurations([FromBody]List<MixConfiguration> model)
         // {
@@ -182,16 +182,16 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-4")]
         public async Task<RepositoryResponse<bool>> InitLanguages([FromBody] List<MixLanguage> model)
         {
             if (model != null)
             {
                 var result = new RepositoryResponse<bool>();
-                if (MixService.GetConfig<int>("InitStatus") == 3)
+                if (MixService.GetAppSetting<int>("InitStatus") == 3)
                 {
-                    string culture = MixService.GetConfig<string>("DefaultCulture");
+                    string culture = MixService.GetAppSetting<string>("DefaultCulture");
                     InitCmsService sv = new InitCmsService();
                     result = await sv.InitLanguagesAsync(culture, model);
                     if (result.IsSucceed)
@@ -215,12 +215,15 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        /// 
+        /// Swagger cannot generate multi-form value api
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost]
         [Route("init-cms/step-3")]
         [DisableRequestSizeLimit]
         public async Task<RepositoryResponse<Cms.Lib.ViewModels.MixThemes.InitViewModel>> Save([FromForm] string model, [FromForm] IFormFile assets, [FromForm] IFormFile theme)
         {
-            string user = _idHelper._helper.GetClaim(User, MixClaims.Username);
+            string user = _idHelper._idHelper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
         
@@ -230,7 +233,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("init-cms/step-3/active")]
         [DisableRequestSizeLimit]
         public async Task<ActionResult<bool>> Active([FromBody] Lib.ViewModels.MixThemes.UpdateViewModel model)
@@ -269,7 +272,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (result.IsSucceed)
             {
-                await InitRolesAsync();
+                await InitCmsService.InitRolesAsync(_roleManager);
                 result.IsSucceed = true;
                 MixService.LoadFromDatabase();
                 MixService.SetConfig<string>("DefaultCulture", model.Culture.Specificulture);
@@ -286,22 +289,6 @@ namespace Mix.Cms.Api.Controllers.v1
                 MixService.SaveSettings();
             }
             return result;
-        }
-
-        private async Task<bool> InitRolesAsync()
-        {
-            bool isSucceed = true;
-            var getRoles = await RoleViewModel.Repository.GetModelListAsync();
-            if (getRoles.IsSucceed && getRoles.Data.Count == 0)
-            {
-                var saveResult = await _roleManager.CreateAsync(new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = MixRoles.SuperAdmin
-                });
-                isSucceed = saveResult.Succeeded;
-            }
-            return isSucceed;
         }
 
         #endregion Helpers

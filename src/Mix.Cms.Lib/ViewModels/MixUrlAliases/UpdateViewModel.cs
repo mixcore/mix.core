@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.MixCultures;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
 {
@@ -93,6 +95,7 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             Cultures = LoadCultures(Specificulture, _context, _transaction);
+            Alias = Alias?.TrimStart('/');
         }
 
         public override void Validate(MixCmsContext _context, IDbContextTransaction _transaction)
@@ -107,6 +110,26 @@ namespace Mix.Cms.Lib.ViewModels.MixUrlAliases
                     IsValid = false;
                 }
             }
+        }
+
+        public override async Task<RepositoryResponse<UpdateViewModel>> SaveModelAsync(bool isSaveSubModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.SaveModelAsync(isSaveSubModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                MixService.Instance.Aliases = null;
+            }
+            return result;
+        }
+
+        public override async Task<RepositoryResponse<MixUrlAlias>> RemoveModelAsync(bool isRemoveRelatedModels = false, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        {
+            var result = await base.RemoveModelAsync(isRemoveRelatedModels, _context, _transaction);
+            if (result.IsSucceed)
+            {
+                MixService.Instance.Aliases = null;
+            }
+            return result;
         }
 
         #endregion Overrides

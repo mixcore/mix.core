@@ -107,7 +107,7 @@ namespace Mix.Cms.Lib.Controllers
                 var transaction = context.Database.BeginTransaction();
                 TView data = ReflectionHelper.InitModel<TView>();
                 ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Specificulture, _lang));
-                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetConfig<string>(MixAppSettingKeywords.DefaultContentStatus)));
+                ReflectionHelper.SetPropertyValue(data, new JProperty(MixQueryColumnName.Status, MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultContentStatus)));
                 data.ExpandView(context, transaction);
                 return Ok(data);
             }
@@ -168,7 +168,7 @@ namespace Mix.Cms.Lib.Controllers
 
         #region Helpers
 
-        protected async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
+        protected virtual async Task<RepositoryResponse<T>> GetSingleAsync<T>(string id)
             where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
@@ -181,7 +181,7 @@ namespace Mix.Cms.Lib.Controllers
             return await GetSingleAsync<T>(predicate);
         }
 
-        protected async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
+        protected virtual async Task<RepositoryResponse<TView>> GetSingleAsync(string id)
         {
             Expression<Func<TModel, bool>> predicate = ReflectionHelper.GetExpression<TModel>(MixQueryColumnName.Id, id, Heart.Enums.ExpressionMethod.Eq);
             if (!string.IsNullOrEmpty(_lang))

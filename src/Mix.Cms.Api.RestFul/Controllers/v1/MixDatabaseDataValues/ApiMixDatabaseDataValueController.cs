@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDataValues;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -26,7 +27,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsContext, MixDatabaseDataValue, ReadViewModel> repo, 
             DefaultRepository<MixCmsContext, MixDatabaseDataValue, UpdateViewModel> updRepo, 
             DefaultRepository<MixCmsContext, MixDatabaseDataValue, DeleteViewModel> delRepo,
-            MixIdentityHelper mixIdentityHelper) : base(repo, updRepo, delRepo, mixIdentityHelper)
+            MixIdentityHelper mixIdentityHelper,
+            AuditLogRepository auditlogRepo)
+            : base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
 

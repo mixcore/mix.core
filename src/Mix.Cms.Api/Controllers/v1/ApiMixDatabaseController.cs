@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/mix-database/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{id}")]
         public async Task<RepositoryResponse<MixDatabase>> DeleteAsync(int id)
         {
@@ -42,7 +42,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/mix-databases/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{id}/{viewType}")]
         [Route("details/{name}/{viewType}")]
         [Route("details/{viewType}")]
@@ -98,7 +98,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/mix-database
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody] UpdateViewModel data)
         {
@@ -117,7 +117,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/mix-database
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)

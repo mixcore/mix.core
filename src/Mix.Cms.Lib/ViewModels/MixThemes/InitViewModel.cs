@@ -68,7 +68,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public bool IsCreateDefault { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
         public string ImageUrl {
@@ -147,7 +147,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.InitViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel() { FileFolder = MixFolders.ThemePackage };
             Asset = new FileViewModel() { FileFolder = $"{MixFolders.WebRootPath}/{AssetFolder}" };
         }
 
@@ -156,16 +156,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public override async Task<RepositoryResponse<bool>> SaveSubModelsAsync(MixTheme parent, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             RepositoryResponse<bool> result = new RepositoryResponse<bool>() { IsSucceed = true };
-
-            if (string.IsNullOrEmpty(TemplateAsset.Filename))
-            {
-                TemplateAsset = new FileViewModel()
-                {
-                    Filename = "default_blank",
-                    Extension = MixFileExtensions.Zip,
-                    FileFolder = MixFolders.ImportFolder
-                };
-            }
 
             result = await ImportThemeAsync(parent, _context, _transaction);
 
@@ -181,17 +171,15 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
-                string outputFolder = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/Extract";
+                string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 MixFileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 MixFileRepository.Instance.UnZipFile(filePath, outputFolder);
                 //Move Unzip Asset folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
-                //Move Unzip Templates folder
-                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
@@ -202,42 +190,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
+                MixFileRepository.Instance.DeleteFolder(MixFolders.ThemePackage);
                 //MixFileRepository.Instance.DeleteFile(filePath);
                 //Import Site Structures
-                result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
-                if (result.IsSucceed)
-                {
-                    // Save template files to db
-                    var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
-                    //TODO: Create default asset
-                    foreach (var file in files)
-                    {
-                        MixTemplates.UpdateViewModel template = new MixTemplates.UpdateViewModel(
-                            new MixTemplate()
-                            {
-                                CreatedBy = CreatedBy,
-                                FileFolder = file.FileFolder,
-                                FileName = file.Filename,
-                                Content = file.Content,
-                                Extension = file.Extension,
-                                CreatedDateTime = DateTime.UtcNow,
-                                LastModified = DateTime.UtcNow,
-                                ThemeId = parent.Id,
-                                ThemeName = parent.Name,
-                                FolderType = file.FolderName,
-                                ModifiedBy = CreatedBy
-                            }, _context, _transaction);
-                        var saveResult = await template.SaveModelAsync(true, _context, _transaction);
-                        result.IsSucceed = result.IsSucceed && saveResult.IsSucceed;
-                        if (!saveResult.IsSucceed)
-                        {
-                            result.IsSucceed = false;
-                            result.Exception = saveResult.Exception;
-                            result.Errors.AddRange(saveResult.Errors);
-                            break;
-                        }
-                    }
-                }
+                result = await siteStructures.ImportAsync(parent.Id, parent.Name, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -306,7 +262,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string defaultFolder = $"{MixService.GetConfig<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
+            string defaultFolder = $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
 
             bool copyResult = MixFileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
 

@@ -71,11 +71,13 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public bool IsCloneFromCurrentTheme { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -88,8 +90,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -111,21 +115,27 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
-        public string UploadsFolder {
-            get {
+        public string UploadsFolder
+        {
+            get
+            {
                 return $"{MixFolders.SiteContentAssetsFolder}/{Name}/uploads";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }
@@ -165,9 +175,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 {
                     TemplateAsset = new FileViewModel()
                     {
-                        Filename = "default_blank",
+                        Filename = "_blank",
                         Extension = MixFileExtensions.Zip,
-                        FileFolder = MixFolders.ImportFolder
+                        FileFolder = MixFolders.DataFolder
                     };
                 }
             }
@@ -178,8 +188,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         {
             Templates = MixTemplates.UpdateViewModel.Repository.GetModelListBy(t => t.ThemeId == Id,
                 _context: _context, _transaction: _transaction).Data;
-            TemplateAsset = new FileViewModel() { 
-                FileFolder = $"{MixFolders.ImportFolder}/{DateTime.UtcNow.ToShortDateString()}/{Name}" };
+            TemplateAsset = new FileViewModel()
+            {
+                FileFolder = MixFolders.ThemePackage
+            };
             Asset = new FileViewModel() { FileFolder = AssetFolder };
         }
 
@@ -208,12 +220,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 result = await ImportThemeAsync(parent, _context, _transaction);
             }
 
-            //// New themes without import existing theme => create from default folder
-            //if (result.IsSucceed && !Directory.Exists(TemplateFolder) && string.IsNullOrEmpty(TemplateAsset.Filename))
-            //{
-            //    result = await CreateDefaultThemeTemplatesAsync(_context, _transaction);
-            //}
-
             // Actived Theme
             if (IsActived)
             {
@@ -231,17 +237,16 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         private async Task<RepositoryResponse<bool>> ImportThemeAsync(MixTheme parent, MixCmsContext _context, IDbContextTransaction _transaction)
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string filePath = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
+            string filePath = $"{TemplateAsset.FileFolder}/{TemplateAsset.Filename}{TemplateAsset.Extension}";
             if (File.Exists(filePath))
             {
-                string outputFolder = $"{MixFolders.WebRootPath}/{TemplateAsset.FileFolder}/Extract";
+                string outputFolder = $"{TemplateAsset.FileFolder}/Extract";
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
                 MixFileRepository.Instance.CreateDirectoryIfNotExist(outputFolder);
                 MixFileRepository.Instance.UnZipFile(filePath, outputFolder);
+
                 //Move Unzip Asset folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Assets", $"{MixFolders.WebRootPath}/{AssetFolder}");
-                //Move Unzip Templates folder
-                MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Templates", TemplateFolder);
                 //Move Unzip Uploads folder
                 MixFileRepository.Instance.CopyDirectory($"{outputFolder}/Uploads", $"{MixFolders.WebRootPath}/{UploadsFolder}");
                 // Get SiteStructure
@@ -252,14 +257,9 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                 var siteStructures = JObject.Parse(parseContent).ToObject<SiteStructureViewModel>();
                 siteStructures.CreatedBy = CreatedBy;
                 MixFileRepository.Instance.DeleteFolder(outputFolder);
-                //MixFileRepository.Instance.DeleteFile(filePath);
+                MixFileRepository.Instance.DeleteFolder(MixFolders.ThemePackage);
                 //Import Site Structures
-                result = await siteStructures.ImportAsync(Specificulture, _context, _transaction);
-                if (result.IsSucceed)
-                {
-                    RepositoryResponse<bool> saveTemplate = await SaveTemplatesAsync(parent, TemplateFolder, _context, _transaction);
-                    ViewModelHelper.HandleResult(saveTemplate, ref result);
-                }
+                result = await siteStructures.ImportAsync(parent.Id, parent.Name, Specificulture, _context, _transaction);
             }
             return result;
         }
@@ -279,7 +279,7 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     {
                         FileFolder = file.FileFolder,
                         FileName = file.Filename,
-                        Content = file.Content,
+                        Content = content,
                         Extension = file.Extension,
                         CreatedDateTime = DateTime.UtcNow,
                         LastModified = DateTime.UtcNow,
@@ -296,51 +296,6 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
                     result.Exception = saveResult.Exception;
                     result.Errors.AddRange(saveResult.Errors);
                     break;
-                }
-            }
-            return result;
-        }
-
-       
-        private async Task<RepositoryResponse<bool>> CreateDefaultThemeTemplatesAsync(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
-        {
-            var result = new RepositoryResponse<bool>() { IsSucceed = true };
-            string defaultFolder = $"{MixService.GetConfig<string>(MixAppSettingKeywords.DefaultBlankTemplateFolder) }";
-
-            //CommonHelper.GetFullPath(new string[] {
-            //    MixFolders.TemplatesFolder,
-            //    MixService.GetConfig<string>(MixAppSettingKeywords.DefaultTemplateFolder) });
-            bool copyResult = MixFileRepository.Instance.CopyDirectory(defaultFolder, TemplateFolder);
-
-            var files = MixFileRepository.Instance.GetFilesWithContent(TemplateFolder);
-            var id = _context.MixTemplate.Count() + 1;
-            //TODO: Create default asset
-            foreach (var file in files)
-            {
-                MixTemplates.InitViewModel template = new MixTemplates.InitViewModel(
-                    new MixTemplate()
-                    {
-                        Id = id,
-                        FileFolder = file.FileFolder,
-                        FileName = file.Filename,
-                        Content = file.Content,
-                        Extension = file.Extension,
-                        CreatedDateTime = DateTime.UtcNow,
-                        LastModified = DateTime.UtcNow,
-                        ThemeId = Model.Id,
-                        ThemeName = Model.Name,
-                        FolderType = file.FolderName,
-                        ModifiedBy = CreatedBy
-                    }, _context, _transaction);
-                var saveResult = await template.SaveModelAsync(true, _context, _transaction);
-                ViewModelHelper.HandleResult(saveResult, ref result);
-                if (!result.IsSucceed)
-                {
-                    break;
-                }
-                else
-                {
-                    id += 1;
                 }
             }
             return result;

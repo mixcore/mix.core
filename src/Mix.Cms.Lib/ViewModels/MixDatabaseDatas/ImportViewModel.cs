@@ -99,6 +99,16 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
+            var database = MixDatabases.UpdateViewModel.Repository.GetSingleModel(m => m.Id == MixDatabaseId, _context, _transaction);
+            Columns = database.Data.Columns;
+            var getValues = MixDatabaseDataValues.UpdateViewModel
+                   .Repository.GetModelListBy(a => a.DataId == Id && a.Specificulture == Specificulture, _context, _transaction);
+            Columns.AddRange(
+                getValues.Data
+                .Where(v => v.Column != null && !Columns.Any(f => f.Id == v.Column?.Id))
+                .Select(v => v.Column)
+                .ToList());
+            Columns = Columns.OrderBy(c => c.Priority).ToList();
             if (Obj == null)
             {
                 Obj = Helper.ParseData(Id, Specificulture, _context, _transaction);
@@ -133,7 +143,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
             foreach (var field in Columns.OrderBy(f => f.Priority))
             {
-                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
+                var val = Values.FirstOrDefault(v => v.MixDatabaseColumnName == field.Name);
                 if (val == null)
                 {
                     val = new MixDatabaseDataValues.UpdateViewModel(

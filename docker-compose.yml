@@ -1,46 +1,10 @@
 version: "3"
 services:
     mixcore:
-        # image: "mixcore/mix.core:develop"
+        image: "mixcore/mix.core:latest"
         build: .
         ports:
             - "5000:80"
             - "5001:443"
-        depends_on:
-            - sqlserver
-            - mysql
-    sqlserver:
-        image: "mcr.microsoft.com/mssql/server"
-        environment:
-            SA_PASSWORD: "P@ssw0rd"
-            ACCEPT_EULA: "Y"
-        ports:
-            - "1433:1433"
-        restart: always
-    # redis:
-    #     image: redis
-    mysql:
-        image: mysql:8.0
-        volumes:
-          - db_data:/var/lib/mysql
-        restart: always
-        environment:
-          MYSQL_ROOT_PASSWORD: P@ssw0rd
-          MYSQL_DATABASE: mixcore
-          MYSQL_USER: mixcore
-          MYSQL_PASSWORD: P@ssw0rd
-        ports:
-            - 3306:3306
-    # phpmyadmin
-    phpmyadmin:
-        depends_on:
-            - mysql
-        image: phpmyadmin/phpmyadmin
-        restart: always
-        ports:
-            - '8080:80'
-        environment:
-            PMA_HOST: mysql
-            MYSQL_ROOT_PASSWORD: P@ssw0rd
 volumes:
     db_data: {}

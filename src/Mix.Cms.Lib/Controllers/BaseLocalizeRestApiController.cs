@@ -52,7 +52,7 @@ namespace Mix.Cms.Lib.Controllers
         override protected void GetLanguage()
         {
             _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString()
-                    : MixService.GetConfig<string>(MixAppSettingKeywords.DefaultCulture);
+                    : MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
         }
 

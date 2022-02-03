@@ -18,6 +18,8 @@ namespace Mix.Cms.Lib.Models.Cms
         public int Id { get; set; }
         public string Specificulture { get; set; }
         public string Description { get; set; }
+        public string EditorValue { get; set; }
+        public MixEditorType? EditorType { get; set; }
         public string Fields { get; set; }
         public string Thumbnail { get; set; }
         public string Image { get; set; }

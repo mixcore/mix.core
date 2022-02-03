@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Infrastructure.ViewModels;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+
     public class BaseApiController<TDbContext> : Controller
         where TDbContext : DbContext
     {
@@ -104,7 +106,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 }
                 AlertAsync("Add Cache", 200, cacheKey);
             }
-            data.LastUpdateConfiguration = MixService.GetConfig<DateTime?>("LastUpdateConfiguration");
+            data.LastUpdateConfiguration = MixService.GetAppSetting<DateTime?>("LastUpdateConfiguration");
             return data;
         }
 
@@ -120,7 +122,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     new JProperty("status", status),
                     new JProperty("message", message)
                 };
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", logMsg);
+            _hubContext.Clients.All.SendAsync(HubMethods.ReceiveMethod, logMsg);
         }
 
         protected void ParseRequestPagingDate(RequestPaging request)
@@ -141,7 +143,7 @@ namespace Mix.Cms.Api.Controllers.v1
         /// </summary>
         protected void GetLanguage()
         {
-            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetConfig<string>("Language");
+            _lang = RouteData?.Values["culture"] != null ? RouteData.Values["culture"].ToString() : MixService.GetAppSetting<string>("Language");
             ViewBag.culture = _lang;
 
             _domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);

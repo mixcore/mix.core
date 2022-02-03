@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Produces("application/json")]
     [Route("api/v1/role")]
     public class ApiRoleController : BaseApiController<MixCmsContext>
@@ -65,8 +66,8 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme
-            , Roles = MixRoles.SuperAdmin)]
-        [HttpGet, HttpOptions]
+            , Roles = MixDefaultRoles.SuperAdmin)]
+        [HttpGet]
         [Route("details/{id}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<JObject> GetDetails(string id, string viewType)
@@ -88,7 +89,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("permissions")]
         public async Task<JObject> GetPermissions()
         {
@@ -98,7 +99,7 @@ namespace Mix.Cms.Api.Controllers.v1
                 Data = new List<ReadViewModel>()
             };
             var roles = User.Claims.Where(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").ToList();
-            if (!roles.Any(role => role.Value.ToUpper() == MixRoles.SuperAdmin))
+            if (!roles.Any(role => role.Value.ToUpper() == MixDefaultRoles.SuperAdmin))
             {
                 foreach (var item in roles)
                 {
@@ -106,9 +107,7 @@ namespace Mix.Cms.Api.Controllers.v1
                     var temp = await ReadViewModel.Repository.GetSingleModelAsync(r => r.Id == role.Id);
                     if (temp.IsSucceed)
                     {
-                        temp.Data.Permissions = Lib.ViewModels.MixPortalPages.ReadRolePermissionViewModel.Repository.GetModelListBy(p => p.Level == 0
-                        && (p.MixPortalPageRole.Any(r => r.RoleId == temp.Data.Id))
-                        ).Data;
+                        await temp.Data.LoadPermissions();
                         permissions.Data.Add(temp.Data);
                     }
                 }
@@ -116,16 +115,16 @@ namespace Mix.Cms.Api.Controllers.v1
             return JObject.FromObject(permissions);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
-        [HttpGet, HttpPost, HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
+        [HttpGet, HttpPost]
         [Route("list")]
         public async Task<RepositoryResponse<List<RoleViewModel>>> GetList()
         {
             return await RoleViewModel.Repository.GetModelListAsync();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
-        [HttpPost, HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
+        [HttpPost]
         [Route("create")]
         public async Task<RepositoryResponse<IdentityRole>> Save([FromBody] string name)
         {
@@ -146,7 +145,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/role
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save(
             [FromBody] UpdateViewModel model)
@@ -164,8 +163,8 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // POST api/role
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
-        [HttpPost, HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
+        [HttpPost]
         [Route("update-permission")]
         public async Task<RepositoryResponse<Lib.ViewModels.MixPortalPageRoles.ReadViewModel>> Update(
             [FromBody] Lib.ViewModels.MixPortalPageRoles.ReadViewModel model)
@@ -199,11 +198,11 @@ namespace Mix.Cms.Api.Controllers.v1
             return new RepositoryResponse<Lib.ViewModels.MixPortalPageRoles.ReadViewModel>();
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixDefaultRoles.SuperAdmin)]
         [Route("delete/{name}")]
         public async Task<RepositoryResponse<AspNetRoles>> Delete(string name)
         {
-            if (name != MixRoles.SuperAdmin)
+            if (name != MixDefaultRoles.SuperAdmin)
             {
                 var result = await RoleViewModel.Repository.RemoveModelAsync(r => r.Name == name);
                 return result;

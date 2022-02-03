@@ -28,6 +28,7 @@ using Mix.Identity.Helpers;
 using Mix.Cms.Lib.Dtos;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
+using Mix.Cms.Lib.Attributes;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
@@ -61,7 +62,7 @@ namespace Mix.Cms.Api.Controllers.v1
         // POST: /Account/Logout
 
         [Route("Logout")]
-        [HttpGet, HttpPost, HttpOptions]
+        [HttpGet, HttpPost]
         public async Task<RepositoryResponse<bool>> Logout()
         {
             var result = new RepositoryResponse<bool>() { IsSucceed = true, Data = true };
@@ -71,14 +72,32 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Route("login")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Login([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
-            var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+            if (!string.IsNullOrEmpty(decryptMsg))
+            {
+                var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
+                RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
+                loginResult = await _idService.Login(model);
+                if (loginResult.IsSucceed)
+                {
+                    return Ok(loginResult.Data);
+                }
+                return BadRequest(loginResult.Errors);
+            }
+            return BadRequest();
+        }
+
+        [Route("user-login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> UserLogin([FromBody] LoginViewModel model)
+        {
             RepositoryResponse<JObject> loginResult = new RepositoryResponse<JObject>();
             loginResult = await _idService.Login(model);
             if (loginResult.IsSucceed)
@@ -94,7 +113,7 @@ namespace Mix.Cms.Api.Controllers.v1
         public async Task<ActionResult<JObject>> ExternalLogin([FromBody] JObject data)
         {
             string message = data.Value<string>("message");
-            string key = MixService.GetConfig<string>(MixAppSettingKeywords.ApiEncryptKey);
+            string key = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
             string decryptMsg = AesEncryptionHelper.DecryptString(message, key);
             var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
             RepositoryResponse<JObject> loginResult = await _idService.ExternalLogin(model);
@@ -113,7 +132,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Route("Register")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult<RepositoryResponse<AccessTokenViewModel>>> Register([FromBody] MixRegisterViewModel model)
         {
@@ -126,13 +145,20 @@ namespace Mix.Cms.Api.Controllers.v1
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Avatar = model.Avatar ?? MixService.GetConfig<string>("DefaultAvatar"),
+                    Avatar = model.Avatar ?? MixService.GetAppSetting<string>("DefaultAvatar"),
                     JoinDate = DateTime.UtcNow
                 };
 
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, MixDefaultRoles.Guest);
+                    var saveData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.SaveObjAsync(
+                        MixDatabaseNames.SYSTEM_USER_DATA, model.UserData, user.UserName, MixDatabaseParentType.User);
+                    result.IsSucceed = saveData.IsSucceed;
+                    result.Errors = saveData.Errors;
+                    result.Exception = saveData.Exception;
+
                     _logger.LogInformation("User created a new account with password.");
                     user = await _userManager.FindByNameAsync(model.Username).ConfigureAwait(false);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
@@ -163,10 +189,10 @@ namespace Mix.Cms.Api.Controllers.v1
             return BadRequest(result);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [Route("user-in-role")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
@@ -218,7 +244,8 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
+        [MixAuthorize]
         [Route("details/{viewType}/{id}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult> Details(string viewType, string id = null)
@@ -230,9 +257,9 @@ namespace Mix.Cms.Api.Controllers.v1
 
             if (user != null)
             {
-                var mixUser = new MixUserViewModel(user);
+                var mixUser = new MixPortalUserViewModel(user);
                 await mixUser.LoadUserDataAsync();
-                return Ok(new RepositoryResponse<MixUserViewModel>()
+                return Ok(new RepositoryResponse<MixPortalUserViewModel>()
                 {
                     IsSucceed = true,
                     Data = mixUser
@@ -242,18 +269,18 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("my-profile")]
-        public async Task<ActionResult<MixUserViewModel>> MyProfile()
+        public async Task<ActionResult<MixPortalUserViewModel>> MyProfile()
         {
             string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
             ApplicationUser user = await _userManager.FindByIdAsync(id); ;
 
             if (user != null)
             {
-                var mixUser = new MixUserViewModel(user);
+                var mixUser = new MixPortalUserViewModel(user);
                 await mixUser.LoadUserDataAsync();
-                return Ok(new RepositoryResponse<MixUserViewModel>()
+                return Ok(new RepositoryResponse<MixPortalUserViewModel>()
                 {
                     IsSucceed = true,
                     Data = mixUser
@@ -262,14 +289,15 @@ namespace Mix.Cms.Api.Controllers.v1
             return BadRequest();
         }
 
-        // POST api/template
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost, HttpOptions]
+        [MixAuthorize]
+        [HttpPost]
         [Route("save")]
-        public async Task<RepositoryResponse<MixUserViewModel>> Save(
-            [FromBody] MixUserViewModel model)
+        public async Task<RepositoryResponse<MixPortalUserViewModel>> Save(
+            [FromBody] MixPortalUserViewModel model)
         {
-            var result = new RepositoryResponse<MixUserViewModel>() { IsSucceed = true };
+            var result = new RepositoryResponse<MixPortalUserViewModel>() { IsSucceed = true };
             if (model != null && model.User != null)
             {
                 var user = await _userManager.FindByIdAsync(model.User.Id);
@@ -309,9 +337,66 @@ namespace Mix.Cms.Api.Controllers.v1
             return result;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("save-my-profile")]
+        public async Task<RepositoryResponse<MixUserViewModel>> SaveMyProfile(
+            [FromBody] MixUserViewModel model)
+        {
+            var result = new RepositoryResponse<MixUserViewModel>() { IsSucceed = true };
+            string id = User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value;
+
+
+            if (model != null)
+            {
+                if (id != model.Id)
+                {
+                    result.IsSucceed = false;
+                    result.Errors.Add("Invalid request");
+                    return result;
+                }
+
+                var user = await _userManager.FindByIdAsync(model.Id);
+                user.Email = model.Email;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                var updInfo = await _userManager.UpdateAsync(user);
+                result.IsSucceed = updInfo.Succeeded;
+                if (result.IsSucceed)
+                {
+                    var saveData = await Mix.Cms.Lib.ViewModels.MixDatabaseDatas.Helper.SaveObjAsync(
+                        MixDatabaseNames.SYSTEM_USER_DATA, model.UserData, user.UserName, MixDatabaseParentType.User);
+                    result.IsSucceed = saveData.IsSucceed;
+                    result.Errors = saveData.Errors;
+                    result.Exception = saveData.Exception;
+                }
+                if (result.IsSucceed && model.IsChangePassword)
+                {
+                    var changePwd = await _userManager.ChangePasswordAsync(user, model.ChangePassword.CurrentPassword, model.ChangePassword.NewPassword);
+                    if (!changePwd.Succeeded)
+                    {
+                        foreach (var err in changePwd.Errors)
+                        {
+                            result.Errors.Add(err.Description);
+                        }
+                    }
+                    else
+                    {
+                        // Remove other token if change password success
+                        var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
+                        await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                    }
+                }
+                MixFileRepository.Instance.EmptyFolder($"{MixFolders.MixCacheFolder}/Mix/Cms/Lib/ViewModels/Account/MixUsers/_{model.Id}");
+                return result;
+            }
+            return result;
+        }
+
         // POST api/account/list
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
-        [HttpPost, HttpOptions]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
+        [HttpPost]
         [Route("list")]
         public async Task<RepositoryResponse<PaginationModel<UserInfoViewModel>>> GetList(RequestPaging request)
         {
@@ -345,7 +430,7 @@ namespace Mix.Cms.Api.Controllers.v1
             return data;
         }
 
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("forgot-password")]
         public async Task<RepositoryResponse<string>> ForgotPassword([FromBody] Mix.Identity.Models.AccountViewModels.ForgotPasswordViewModel model)
         {
@@ -414,13 +499,14 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = MixRoles.SuperAdmin)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [Route("remove-user/{id}")]
         public async Task<RepositoryResponse<string>> RemoveUser(string id)
         {
             var result = new RepositoryResponse<string>() { IsSucceed = true };
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
+            if (user == null || _userManager.IsInRoleAsync(user, MixDefaultRoles.SuperAdmin).GetAwaiter().GetResult())
             {
                 result.IsSucceed = false;
                 result.Data = "Invalid User";

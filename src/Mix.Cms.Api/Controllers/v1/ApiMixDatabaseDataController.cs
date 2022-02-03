@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Cms.Api.Controllers.v1
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Produces("application/json")]
     [Route("api/v1/{culture}/mix-database-data")]
     public class ApiMixDatabaseDataController :
@@ -23,7 +24,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/attribute-datas/id
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{type}/{setId}/{id}/{viewType}")]
         [Route("details/{type}/{setId}/{viewType}")]
         public async Task<ActionResult<JObject>> Details(int setId, string type, string viewType, string id)

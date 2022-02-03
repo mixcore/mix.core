@@ -80,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
         #region Views
 
         [JsonProperty("domain")]
-        public string Domain { get { return MixService.GetConfig<string>(MixAppSettingKeywords.Domain); } }
+        public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("fullPath")]
         public string FullPath
@@ -157,13 +157,10 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
 
         public override void Validate(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            if (!FileFolder.StartsWith(MixFolders.UploadsFolder))
-            {
-                FileFolder = $"{MixFolders.UploadsFolder}/{FileFolder}";
-            }
+            base.Validate(_context, _transaction);
+            FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
             if (MediaFile?.FileStream != null)
             {
-                FileFolder = $"{MixService.GetTemplateUploadFolder(Specificulture)}";
                 MediaFile.Filename = $"{SeoHelper.GetSEOString(MediaFile.Filename).ToLower()}-{ DateTime.UtcNow.Ticks}";
                 MediaFile.FileFolder = FileFolder;
                 var isSaved = MixFileRepository.Instance.SaveWebFile(MediaFile);
@@ -186,6 +183,9 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             {
                 if (File != null)
                 {
+                    FileName = $"{SeoHelper.GetSEOString(File.FileName[..File.FileName.LastIndexOf('.')]).ToLower()}-{ DateTime.UtcNow.Ticks}";
+                    Extension = File.FileName[File.FileName.LastIndexOf('.')..].ToLower();
+                    MixFileRepository.Instance.CreateDirectoryIfNotExist($"{MixFolders.WebRootPath}/{FileFolder}");
                     var saveFile = MixFileRepository.Instance.SaveWebFile(File, FileFolder);
                     if (saveFile == null)
                     {
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
             FileType = FileType ?? "image";
-            base.Validate(_context, _transaction);
+            
         }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
@@ -228,6 +228,12 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
             if (FileFolder.IndexOf("http") < 0)
             {
                 MixFileRepository.Instance.DeleteWebFile(FileName, Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_XL", Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_L", Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_M", Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_S", Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_XS", Extension, FileFolder);
+                MixFileRepository.Instance.DeleteWebFile($"{FileName}_XXS", Extension, FileFolder);
             }
             await Repository.RemoveListModelAsync(false, m => m.Id == Id && m.Specificulture != Specificulture, _context, _transaction);
             return await base.RemoveRelatedModelsAsync(view, _context, _transaction);

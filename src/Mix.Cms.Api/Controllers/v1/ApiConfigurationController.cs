@@ -33,7 +33,7 @@ namespace Mix.Cms.Api.Controllers.v1
         #region Get
 
         // GET api/configuration/keyword
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("delete/{keyword}")]
         public async Task<RepositoryResponse<MixConfiguration>> DeleteAsync(string keyword)
         {
@@ -47,7 +47,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/configurations/keyword
-        [HttpGet, HttpOptions]
+        [HttpGet]
         [Route("details/{keyword}/{viewType}")]
         [Route("details/{viewType}")]
         public async Task<ActionResult<JObject>> Details(string viewType, string keyword)
@@ -68,7 +68,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         {
                             Specificulture = _lang,
                             Category = "Site",
-                            Status = MixService.GetConfig<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
+                            Status = MixService.GetAppSetting<MixContentStatus>(MixAppSettingKeywords.DefaultContentStatus),
                             Priority = UpdateViewModel.Repository.Max(a => a.Priority).Data + 1
                         };
 
@@ -104,7 +104,7 @@ namespace Mix.Cms.Api.Controllers.v1
 
         // POST api/configuration
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Admin")]
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("save")]
         public async Task<RepositoryResponse<UpdateViewModel>> Save([FromBody] UpdateViewModel model)
         {
@@ -119,7 +119,7 @@ namespace Mix.Cms.Api.Controllers.v1
         }
 
         // GET api/configuration
-        [HttpPost, HttpOptions]
+        [HttpPost]
         [Route("list")]
         public async Task<ActionResult<JObject>> GetList(
             [FromBody] RequestPaging request)
