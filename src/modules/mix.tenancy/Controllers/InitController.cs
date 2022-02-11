@@ -141,7 +141,26 @@ namespace Mix.Tenancy.Controllers
             return Ok(initStatus);
         }
 
+        [HttpPost]
+        [Route("init-full-tenant")]
+        public async Task<ActionResult> InitFullTenant([FromBody] InitFullSiteDto dto)
+        {
+            if (dto == null || GlobalConfigService.Instance.AppSettings.InitStatus != InitStep.Blank)
+            {
+                return BadRequest();
+            }
 
+            try
+            {
+                await _initCmsService.InitTenantAsync(dto.TenantData);
+                await _initCmsService.InitAccountAsync(dto.AccountData);
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion Helpers
     }
 }

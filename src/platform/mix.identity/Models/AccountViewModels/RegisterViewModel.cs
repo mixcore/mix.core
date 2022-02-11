@@ -16,7 +16,7 @@ namespace Mix.Identity.Models.AccountViewModels
         public string UserName { get; set; }
 
         /// <summary>
-        /// Gets or sets the email.
+        /// Gets or sets the email.      
         /// </summary>
         /// <value>
         /// The email.
