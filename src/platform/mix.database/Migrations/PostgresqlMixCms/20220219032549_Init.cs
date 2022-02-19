@@ -686,7 +686,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SimpleDataColumns = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<string>(type: "text", nullable: true),
-                    ModuleContentId = table.Column<int>(type: "integer", nullable: false),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

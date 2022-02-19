@@ -1163,9 +1163,6 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("ModuleContentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 

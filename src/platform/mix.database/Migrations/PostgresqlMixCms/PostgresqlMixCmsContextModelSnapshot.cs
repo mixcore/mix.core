@@ -1105,9 +1105,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("ModuleContentId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
