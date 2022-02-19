@@ -1104,9 +1104,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ModuleContentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 

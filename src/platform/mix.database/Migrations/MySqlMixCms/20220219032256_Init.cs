@@ -867,7 +867,6 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Value = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ModuleContentId = table.Column<int>(type: "int", nullable: false),
                     MixModuleContentId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
