@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Repository;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -21,7 +20,7 @@ namespace Mix.Lib.Base
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
-            MixIdentityService mixIdentityService, 
+            MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService) : base()
         {
             _configuration = configuration;

@@ -11,7 +11,7 @@
         }
 
         public MixModuleDataViewModel(MixModuleData entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -39,7 +39,7 @@
         }
 
         public override Task ExpandView()
-        {            
+        {
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
                 JArray arrField = JArray.Parse(SimpleDataColumns);

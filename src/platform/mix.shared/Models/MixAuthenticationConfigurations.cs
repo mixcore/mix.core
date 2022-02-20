@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mix.Shared.Models
+﻿namespace Mix.Shared.Models
 {
     public class MixAuthenticationConfigurations
     {

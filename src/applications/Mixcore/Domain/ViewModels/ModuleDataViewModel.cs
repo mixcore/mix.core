@@ -11,7 +11,7 @@
         }
 
         public ModuleDataViewModel(MixModuleData entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

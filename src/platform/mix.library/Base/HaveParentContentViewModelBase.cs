@@ -1,8 +1,4 @@
-﻿using Mix.Heart.Entities;
-using Mix.Heart.Exceptions;
-using Mix.Lib.ViewModels.ReadOnly;
-
-namespace Mix.Lib.Base
+﻿namespace Mix.Lib.Base
 {
     public abstract class HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>

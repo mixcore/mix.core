@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Mixcore.Domain.Services;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json.Converters;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 

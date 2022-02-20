@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using System.Reflection;
-using Mix.Lib.Services;
+﻿using Microsoft.Extensions.Configuration;
 using Mix.Database.Services;
-using Microsoft.Extensions.Configuration;
+using Mix.Lib.Services;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

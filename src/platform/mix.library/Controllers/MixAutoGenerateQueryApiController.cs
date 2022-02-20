@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
-using Mix.Heart.Repository;
-using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Controllers
 {
@@ -11,13 +9,13 @@ namespace Mix.Lib.Controllers
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
-        where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixAutoGenerateQueryApiController(
             IConfiguration configuration,
-            MixService mixService, 
-            TranslatorService translator, 
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
+            MixService mixService,
+            TranslatorService translator,
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
             MixCacheService cacheService,

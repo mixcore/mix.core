@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
-using Mix.Heart.Entities;
 
 namespace Mix.Lib.Base
 {
@@ -49,7 +48,7 @@ namespace Mix.Lib.Base
 
         public override async Task ExpandView()
         {
-            using var _contentRepository = 
+            using var _contentRepository =
                 ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo);
 
             Contents = await _contentRepository.GetListAsync(m => m.ParentId.Equals(Id));

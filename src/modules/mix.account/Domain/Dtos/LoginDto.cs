@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Mix.Account.Domain.Dtos
+﻿namespace Mix.Account.Domain.Dtos
 {
     public class LoginDto
     {

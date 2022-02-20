@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataViewModel 
+    public class MixDataViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
     {
         #region Properties
@@ -29,7 +29,7 @@
         }
 
         public MixDataViewModel(MixData entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -51,7 +51,7 @@
 
         private void ParseData(JObject data)
         {
-            
+
         }
 
         #endregion

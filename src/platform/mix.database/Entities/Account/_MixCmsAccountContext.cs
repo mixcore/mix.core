@@ -4,14 +4,11 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Enums;
-using Mix.Shared.Constants;
-using Mix.Shared.Services;
-using MySqlConnector;
 using Mix.Database.Extensions;
 using Mix.Database.Services;
+using Mix.Shared.Constants;
+using MySqlConnector;
 using System;
-using Mix.Shared.Enums;
 
 namespace Mix.Database.Entities.Account
 {

@@ -1,10 +1,6 @@
-﻿using Mix.Lib.ViewModels;
-using Mix.Heart.Exceptions;
-using Mix.Heart.Entities;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
-using Microsoft.AspNetCore.Http;
-using Mix.Heart.Models;
 
 namespace Mix.Lib.Services
 {
@@ -98,7 +94,7 @@ namespace Mix.Lib.Services
             string srcAssets = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.AssetFolder}";
             string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
             string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
-            string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}/{_siteData.ThemeSystemName}";
+            string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}";
             MixFileHelper.CopyFolder(srcAssets, destAssets);
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }

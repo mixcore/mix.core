@@ -13,6 +13,11 @@
     </PackageReference>
   </ItemGroup>
 
+	<ItemGroup>
+		<Using Include="Mix.Heart.Entities" />
+		<Using Include="Mix.Heart.Enums" />
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>

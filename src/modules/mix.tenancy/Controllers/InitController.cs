@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Lib.Services;
-using Mix.Tenancy.Domain.Dtos;
-using Mix.Tenancy.Domain.Services;
-using Mix.Identity.Models.AccountViewModels;
 using Mix.Heart.Repository;
-using Mix.Shared.Enums;
+using Mix.Identity.Constants;
+using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Services;
+using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Lib.ViewModels;
-using Mix.Identity.Constants;
+using Mix.Shared.Enums;
+using Mix.Tenancy.Domain.Dtos;
+using Mix.Tenancy.Domain.Services;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -27,7 +27,7 @@ namespace Mix.Tenancy.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService, 
+            IQueueService<MessageQueueModel> queueService,
             MixThemeImportService importService)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
@@ -85,7 +85,7 @@ namespace Mix.Tenancy.Controllers
             }
             return BadRequest();
         }
-        
+
         /// <summary>
         /// When status = InitAcccount
         ///     - Upload or load default theme zip file
@@ -101,7 +101,7 @@ namespace Mix.Tenancy.Controllers
             GlobalConfigService.Instance.SaveSettings();
             return Ok();
         }
-        
+
         /// <summary>
         /// When status = SelectTheme
         ///     - Load selected theme and show items will be installed

@@ -23,7 +23,7 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasColumnType($"{Config.NString}{Config.MaxLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Content)
                 .HasColumnType($"{Config.Text}")
                 .HasCharSet(Config.CharSet)

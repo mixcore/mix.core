@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Mix.Heart.Extensions;
-using System.Linq;
 
 namespace Mix.Lib.Conventions
 {

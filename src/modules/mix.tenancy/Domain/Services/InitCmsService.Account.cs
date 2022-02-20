@@ -1,14 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading.Tasks;
-using Mix.Identity.Models.AccountViewModels;
-using System.Linq;
-using Mix.Shared.Constants;
-using Mix.Heart.Helpers;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Microsoft.AspNetCore.Identity;
 using Mix.Identity.Constants;
-using Mix.Shared.Services;
+using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Models;
 using Mix.Shared.Enums;
 

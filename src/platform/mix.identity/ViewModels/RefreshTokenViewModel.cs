@@ -1,9 +1,4 @@
 using Mix.Database.Entities.Account;
-using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
 using System;
 
 namespace Mix.Identity.ViewModels
@@ -21,9 +16,9 @@ namespace Mix.Identity.ViewModels
         }
 
         public RefreshTokenViewModel(
-            RefreshTokens entity, 
-             
-            UnitOfWorkInfo uowInfo = null) 
+            RefreshTokens entity,
+
+            UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }

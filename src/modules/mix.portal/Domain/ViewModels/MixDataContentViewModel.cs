@@ -26,7 +26,7 @@
         }
 
         public MixDataContentViewModel(MixDataContent entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

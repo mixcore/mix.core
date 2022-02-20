@@ -2,14 +2,14 @@
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.v2
 {
     public class PostgresqlMixCmsContext : MixCmsContext
     {
-        public PostgresqlMixCmsContext(MixDatabaseService databaseService) 
-            : base(databaseService){
+        public PostgresqlMixCmsContext(MixDatabaseService databaseService)
+            : base(databaseService)
+        {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

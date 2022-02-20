@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.SQLITE.Base;
 using Mix.Shared.Enums;
-using System;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
@@ -17,7 +16,7 @@ namespace Mix.Database.EntityConfigurations.SQLITE
             builder.Property(e => e.ClassName)
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixPageType>())

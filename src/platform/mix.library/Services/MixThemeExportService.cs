@@ -1,12 +1,6 @@
-﻿using Mix.Lib.ViewModels;
-using Mix.Heart.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
-using Mix.Shared.Enums;
 using System.Linq.Expressions;
-using Mix.Heart.Extensions;
-using Mix.Heart.Repository;
-using Mix.Heart.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Lib.Services
 {

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Heart.Entities;
-using Mix.Heart.Enums;
 using System;
 
 namespace Mix.Database.EntityConfigurations.Base
@@ -10,7 +8,7 @@ namespace Mix.Database.EntityConfigurations.Base
     public abstract class EntityBaseConfiguration<T, TPrimaryKey, TConfig> : IEntityTypeConfiguration<T>
         where TPrimaryKey : IComparable
         where T : EntityBase<TPrimaryKey>
-        where TConfig: IDatabaseConstants
+        where TConfig : IDatabaseConstants
     {
         protected virtual IDatabaseConstants Config { get; set; }
 

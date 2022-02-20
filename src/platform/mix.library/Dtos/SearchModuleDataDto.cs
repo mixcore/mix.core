@@ -16,10 +16,10 @@ namespace Mix.Lib.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;  
+            OrderBy = req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
-            
+
             if (int.TryParse(request.Query[MixRequestQueryKeywords.ModuleContentId], out int themeId))
             {
                 ModuleContentId = themeId;

@@ -16,11 +16,11 @@ namespace Mix.Lib.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;  
+            OrderBy = req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
             MixDatabaseName = request.Query[MixRequestQueryKeywords.DatabaseName];
-            
+
             if (int.TryParse(request.Query[MixRequestQueryKeywords.DatabaseId], out int mixDbId))
             {
                 MixDatabaseId = mixDbId;
@@ -31,7 +31,7 @@ namespace Mix.Lib.Dtos
             }
             if (Enum.TryParse(request.Query["compareKind"], out MixCompareOperatorKind compareKind))
             {
-                 CompareKind = compareKind;
+                CompareKind = compareKind;
             }
             if (!string.IsNullOrEmpty(request.Query["fields"]))
             {

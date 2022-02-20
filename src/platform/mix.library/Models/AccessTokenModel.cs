@@ -1,6 +1,4 @@
-﻿using Mix.Lib.ViewModels;
-
-namespace Mix.Lib.Models
+﻿namespace Mix.Lib.Models
 {
     public class AccessTokenViewModel
     {

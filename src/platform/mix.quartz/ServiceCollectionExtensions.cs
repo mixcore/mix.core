@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.MixQuartz.Extensions;
+using Mix.MixQuartz.Helpers;
 using Mix.MixQuartz.Jobs;
 using Mix.MixQuartz.Models;
+using Mix.Shared.Services;
 using Quartz;
 using Quartz.Impl;
 using System;
@@ -10,9 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.MixQuartz.Extensions;
-using Mix.MixQuartz.Helpers;
-using Mix.Shared.Services;
 
 namespace Mix.MixQuartz
 {
@@ -79,7 +79,7 @@ namespace Mix.MixQuartz
 
                 var applyGenericMethod = typeof(Quartz.ServiceCollectionExtensions)
                    .GetMethods(BindingFlags.Static | BindingFlags.Public)
-                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) &&  m.GetParameters()[1].ParameterType == typeof(JobKey));
+                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) && m.GetParameters()[1].ParameterType == typeof(JobKey));
                 var parameters = applyGenericMethod.GetParameters();
                 var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(jobConfig.JobType);
                 applyConcreteMethod.Invoke(quartzConfiguration, new object[] { quartzConfiguration, jobKey, jobConfigurator });

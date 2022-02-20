@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Services;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

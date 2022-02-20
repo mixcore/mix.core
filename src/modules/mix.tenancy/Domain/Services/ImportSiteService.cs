@@ -1,10 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Tenancy.Domain.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using Mix.Tenancy.Domain.ViewModels;
 
 namespace Mix.Tenancy.Domain.Services
 {
@@ -54,7 +48,7 @@ namespace Mix.Tenancy.Domain.Services
             {
                 await ImportConfigurationsAsync(data.Configurations, destCulture);
             }
-            
+
             if (data.Languages != null && data.Languages.Count > 0)
             {
                 await ImportLanguagesAsync(data.Languages, destCulture);

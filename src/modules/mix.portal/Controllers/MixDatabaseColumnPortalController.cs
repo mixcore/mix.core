@@ -1,20 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Lib.Base;
-using Mix.Lib.Dtos;
-using Mix.Lib.Models.Common;
-using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Shared.Services;
-using System;
 using System.Linq.Expressions;
-using Mix.Heart.Extensions;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using Mix.Heart.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -32,7 +18,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
-            MixIdentityService mixIdentityService, 
+            MixIdentityService mixIdentityService,
             MixEndpointService endpointService,
             MixCmsContext context,
             MixCacheService cacheService,

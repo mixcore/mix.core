@@ -1,10 +1,8 @@
-﻿using Mix.Heart.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class AspNetRoles: Entity
+    public partial class AspNetRoles : Entity
     {
         public AspNetRoles()
         {

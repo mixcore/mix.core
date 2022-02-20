@@ -4,7 +4,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.SQLITE.Base
 {
-    public abstract class SqliteTenantEntityUniqueNameBaseConfiguration<T, TPrimaryKey> 
+    public abstract class SqliteTenantEntityUniqueNameBaseConfiguration<T, TPrimaryKey>
         : TenantEntityUniqueNameBaseConfiguration<T, TPrimaryKey, SqliteDatabaseConstants>
         where TPrimaryKey : IComparable
         where T : TenantEntityUniqueNameBase<TPrimaryKey>

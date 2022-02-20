@@ -1,6 +1,4 @@
-﻿using Mix.Portal.Domain.Models;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
     public class MixModuleContentViewModel

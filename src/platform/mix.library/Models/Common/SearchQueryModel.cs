@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Shared.Constants;
 using Mix.Lib.Dtos;
-using System;
-using Mix.Heart.Enums;
-using Mix.Heart.Entities;
 using System.Linq.Expressions;
-using Mix.Heart.Extensions;
 
 namespace Mix.Lib.Models.Common
 {
@@ -20,7 +15,7 @@ namespace Mix.Lib.Models.Common
         public string Keyword { get; set; }
         public PagingRequestModel PagingData { get; set; }
         public Expression<Func<TEntity, bool>> Predicate { get; set; }
-        
+
         protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
         protected Expression<Func<TEntity, bool>> OrPredicate { get; set; }
 
@@ -30,8 +25,8 @@ namespace Mix.Lib.Models.Common
         }
 
         public SearchQueryModel(
-            HttpRequest request, 
-            Expression<Func<TEntity, bool>> andPredicate = null, 
+            HttpRequest request,
+            Expression<Func<TEntity, bool>> andPredicate = null,
             Expression<Func<TEntity, bool>> orPredicate = null)
         {
             AndPredicate = andPredicate;

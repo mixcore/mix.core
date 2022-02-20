@@ -1,5 +1,3 @@
-using System;
-
 namespace Mixcore.Models
 {
     public class ErrorViewModel

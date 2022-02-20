@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class SqliteDatabaseConstants: IDatabaseConstants
+    public class SqliteDatabaseConstants : IDatabaseConstants
     {
         string IDatabaseConstants.DatabaseCollation => "NOCASE";
 

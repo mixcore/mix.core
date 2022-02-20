@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Repository;
-using Mix.Lib.Dtos;
-using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 
 namespace Mix.Portal.Controllers

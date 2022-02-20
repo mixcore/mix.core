@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Mix.Database.Entities.Account;
-using Mix.Heart.Entities;
-using Mix.Heart.Extensions;
+﻿using Mix.Database.Entities.Account;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

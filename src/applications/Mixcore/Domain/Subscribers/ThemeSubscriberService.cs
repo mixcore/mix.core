@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Mix.Lib.Subscribers;
+﻿using Mix.Lib.Subscribers;
 using Mix.Lib.ViewModels;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Queue.Models;
-using Mix.Shared.Constants;
-using System;
-using System.Threading.Tasks;
 
 namespace Mixcore.Domain.Subscribers
 {

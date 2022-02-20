@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Shared.Constants;
-using Mix.Lib.Base;
-using Mix.Shared.Services;
-using Mix.Lib.Services;
 using Mix.Database.Services;
-using Newtonsoft.Json.Linq;
-using System.Linq;
+using Mix.Lib.Services;
+using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {
     public class PortalController : MixControllerBase
     {
         private readonly MixDatabaseService _databaseService;
-       
+
         public PortalController(
             MixService mixService,
             MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,

@@ -42,7 +42,7 @@
         }
 
         public MixThemeViewModel(MixTheme entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XUnit.Project.Attributes
+﻿namespace XUnit.Project.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class TestPriorityAttribute : Attribute

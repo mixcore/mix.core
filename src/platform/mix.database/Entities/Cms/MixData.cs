@@ -1,10 +1,9 @@
-﻿using Mix.Heart.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixData: EntityBase<Guid>
+    public class MixData : EntityBase<Guid>
     {
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }

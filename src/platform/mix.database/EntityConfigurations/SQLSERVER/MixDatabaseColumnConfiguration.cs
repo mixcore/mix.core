@@ -30,12 +30,12 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Configurations)
                 .HasColumnType(Config.Text)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.DefaultValue)
                 .HasColumnType(Config.Text)
                 .HasCharSet(Config.CharSet)

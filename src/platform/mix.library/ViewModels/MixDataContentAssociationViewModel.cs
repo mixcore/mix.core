@@ -1,12 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Mix.Shared.Enums;
-using System;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public class MixDataContentAssociationViewModel
         : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
@@ -22,7 +14,7 @@ namespace Mix.Lib.ViewModels
         }
 
         public MixDataContentAssociationViewModel(MixDataContentAssociation entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

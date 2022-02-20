@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.POSTGRES.Base;
-using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {

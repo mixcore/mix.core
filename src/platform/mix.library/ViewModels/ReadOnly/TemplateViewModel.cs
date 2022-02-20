@@ -24,7 +24,7 @@
         }
 
         public TemplateViewModel(MixTemplate entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

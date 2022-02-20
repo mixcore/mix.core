@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Shared.Constants;
-using System;
-using Mix.Heart.Extensions;
-using Mix.Heart.Enums;
-using Mix.Heart.Model;
 
 namespace Mix.Lib.Models.Common
 {
@@ -16,7 +11,7 @@ namespace Mix.Lib.Models.Common
         public int Page { get; set; }
         public int Total { get; set; }
         public int TotalPage { get; set; }
-        
+
 
         protected readonly int _defaultPageSize;
 
@@ -38,7 +33,7 @@ namespace Mix.Lib.Models.Common
                 ? Enum.Parse<SortDirection>(direction) : SortDirection.Desc;
             Page = request.Query.TryGetValue(MixRequestQueryKeywords.Page, out var page)
                 ? int.Parse(page) : 0;
-            
+
             if (Page > 0)
             {
                 PageIndex = Page - 1;
@@ -49,9 +44,9 @@ namespace Mix.Lib.Models.Common
                 ? int.Parse(pageIndex) : 0;
                 Page = PageIndex + 1;
             }
-            
+
             PageSize = pageSize > 0
-                        ? pageSize 
+                        ? pageSize
                         : defaultPageSize;
         }
     }

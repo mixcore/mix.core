@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Enums;
-using System;
 using System.Reflection;
 
 namespace Mix.Xunittest.Domain.Base
 {
     // Ref: https://docs.microsoft.com/en-us/ef/core/testing/sharing-databases
-    public abstract class SharedDatabaseFixture<TDbContext> 
+    public abstract class SharedDatabaseFixture<TDbContext>
         where TDbContext : DbContext
     {
         private static readonly object _lock = new();
@@ -30,7 +28,7 @@ namespace Mix.Xunittest.Domain.Base
 
         public void Seed()
         {
-            
+
             lock (_lock)
             {
                 if (!_databaseInitialized)

@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Shared.Enums;
 
 namespace Mix.Lib.Subscribers
 {
@@ -59,7 +57,7 @@ namespace Mix.Lib.Subscribers
                         var googleSetting = new GoogleQueueSetting();
                         settingPath.Bind(googleSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting,topicId, subscriptionId, MesageHandler, _queueService);
+                            provider, googleSetting, topicId, subscriptionId, MesageHandler, _queueService);
                     case MixQueueProvider.MIX:
                         var mixSetting = new MixQueueSetting();
                         settingPath.Bind(mixSetting);

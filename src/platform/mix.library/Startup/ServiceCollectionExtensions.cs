@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Configuration;
 using Mix.Lib.Interfaces;
 using System.Reflection;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -31,7 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddEntityRepositories();
             services.AddGeneratedPublisher();
 
-           
+
             services.AddMixModuleServices(configuration);
 
             services.AddGeneratedRestApi();
@@ -107,7 +107,7 @@ namespace Microsoft.Extensions.DependencyInjection
         #region Helpers
 
         #region App
-        
+
         private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app)
         {
             var provider = new FileExtensionContentTypeProvider();
@@ -120,7 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return app;
         }
-       
+
         #endregion
 
         #region Services

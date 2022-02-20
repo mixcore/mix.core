@@ -78,7 +78,7 @@ namespace Mix.SignalR.Hubs
             foreach (var roomName in Rooms.Keys)
             {
                 Rooms[roomName].RemoveAll(m => m.ConnectionId == Context.ConnectionId);
-                await SendMessageToGroup(new { type = "MemberList", data = Rooms[roomName]}, roomName);
+                await SendMessageToGroup(new { type = "MemberList", data = Rooms[roomName] }, roomName);
             }
         }
     }

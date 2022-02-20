@@ -2,7 +2,7 @@
 
 namespace Mixcore.Domain.ViewModels
 {
-    public class NavigationViewModel 
+    public class NavigationViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, NavigationViewModel>
     {
         #region Contructors

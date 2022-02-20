@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Mix.Identity.Extensions;
 using Mix.Database.Entities.Account;
-using Mix.Shared.Services;
+using Mix.Identity.Extensions;
 using Mix.Lib.Services;
+using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {
     //Ref: https://www.blinkingcaret.com/2017/09/06/secure-web-api-in-asp-net-core/
@@ -21,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
             where TDbContext : DbContext
         {
             AuthConfigService authConfigService = services.GetService<AuthConfigService>();
-            
+
             var authConfigurations = authConfigService.AppSettings;
             PasswordOptions pOpt = new()
             {

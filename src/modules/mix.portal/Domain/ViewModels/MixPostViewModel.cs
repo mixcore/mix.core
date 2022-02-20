@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixPostViewModel 
+    public class MixPostViewModel
         : SiteDataWithContentViewModelBase
         <MixCmsContext, MixPost, int, MixPostViewModel, MixPostContent, MixPostContentViewModel>
     {
@@ -12,7 +12,7 @@
         }
 
         public MixPostViewModel(MixPost entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

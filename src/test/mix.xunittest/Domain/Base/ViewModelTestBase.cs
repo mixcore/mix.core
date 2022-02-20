@@ -1,12 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
-using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-
-
 
 namespace Mix.Xunittest.Domain.Base
 {
@@ -20,7 +13,7 @@ namespace Mix.Xunittest.Domain.Base
         where TEntity : class, IEntity<TPrimaryKey>
     {
         protected Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository { get; set; }
-        
+
         public ViewModelTestBase(TFixture fixture) : base(fixture)
         {
             DbFixture = fixture;

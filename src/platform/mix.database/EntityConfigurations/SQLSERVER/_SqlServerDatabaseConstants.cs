@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class SqlServerDatabaseConstants: IDatabaseConstants
+    public class SqlServerDatabaseConstants : IDatabaseConstants
     {
         string IDatabaseConstants.DatabaseCollation => "Vietnamese_CI_AS";
 

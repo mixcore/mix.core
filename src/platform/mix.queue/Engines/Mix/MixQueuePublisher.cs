@@ -1,7 +1,6 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 namespace Mix.Queue.Engines.MixQueue
 {
     internal class MixQueuePublisher<T> : IQueuePublisher<T>
-        where T: MessageQueueModel
+        where T : MessageQueueModel
     {
         private MixMemoryMessageQueue<T> _queue;
         private MixTopicModel _topic;

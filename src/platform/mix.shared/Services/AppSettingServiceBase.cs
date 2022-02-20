@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Heart.Exceptions;
-using Mix.Heart.Services;
 using Mix.Shared.Enums;
 using Newtonsoft.Json.Linq;
 
@@ -46,7 +44,7 @@ namespace Mix.Shared.Services
                 AppSettings = (T)Activator.CreateInstance(typeof(T));
                 settings.Bind(AppSettings);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException($"Cannot load config section {_sectionName}: {ex.Message}");
             }

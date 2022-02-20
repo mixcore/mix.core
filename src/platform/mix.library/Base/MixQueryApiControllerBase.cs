@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Repository;
-using Mix.Heart.Entities;
+using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
-using System.Reflection;
-using Mix.Heart.Model;
-using Mix.Heart.Helpers;
-using System.Linq.Expressions;
 using Mix.Lib.Services;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Configuration;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Mix.Lib.Base
 {

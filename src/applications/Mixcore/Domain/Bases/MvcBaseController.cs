@@ -2,7 +2,6 @@
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
-using Mixcore.Domain.ViewModels;
 
 namespace Mixcore.Domain.Bases
 {

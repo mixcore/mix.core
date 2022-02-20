@@ -1,16 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Model;
-using Mix.Heart.Repository;
+using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
-using Mix.Heart.Extensions;
-using Mix.Heart.Exceptions;
-using Mix.Lib.Dtos;
-using Mix.Lib.ViewModels;
 
 namespace Mix.Lib.Services
 {
-    public class MixDataService: IDisposable
+    public class MixDataService : IDisposable
     {
         private readonly MixCmsContext _dbContext;
         private UnitOfWorkInfo _uow;
@@ -37,13 +32,13 @@ namespace Mix.Lib.Services
             {
                 var _colRepo = MixDatabaseColumnViewModel.GetRepository(_uow);
                 var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
-                
+
                 var tasks = new List<Task<TView>>();
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
 
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == request.MixDatabaseId).ToListAsync();
-                
+
                 // Data predicate
                 Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
                    && (m.MixDatabaseId == request.MixDatabaseId);
@@ -69,10 +64,10 @@ namespace Mix.Lib.Services
                             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                                 m => m.MixDatabaseColumnName == field.SystemName;
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Equal, 
+                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Equal,
                                                             m => m.StringValue == searchRequest.Keyword);
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Contain, 
+                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Contain,
                                                             m => EF.Functions.Like(m.StringValue, $"%{searchRequest.Keyword}%"));
 
                             pre = pre == null
@@ -140,13 +135,13 @@ namespace Mix.Lib.Services
         }
 
         public async Task<JArray> GetRelatedDataContentAsync<TView>(
-            int referenceId, 
+            int referenceId,
             Guid dataContentId)
             where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
             var _assoRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
 
-            Expression<Func<MixDataContentAssociation, bool>> predicate = 
+            Expression<Func<MixDataContentAssociation, bool>> predicate =
                     model => (model.MixDatabaseId == referenceId)
                     && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
             var relatedContents = await _assoRepo.GetListAsync(predicate);

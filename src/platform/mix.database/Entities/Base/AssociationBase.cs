@@ -1,9 +1,8 @@
-﻿using Mix.Heart.Entities;
-using System;
+﻿using System;
 
 namespace Mix.Database.Entities.Base
 {
-    public abstract class AssociationBase<TPrimaryKey>: EntityBase<TPrimaryKey>
+    public abstract class AssociationBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
         public TPrimaryKey LeftId { get; set; }

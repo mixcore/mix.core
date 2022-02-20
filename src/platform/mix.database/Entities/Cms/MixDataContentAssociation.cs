@@ -10,7 +10,7 @@ namespace Mix.Database.Entities.Cms
         public string MixDatabaseName { get; set; }
         public MixDatabaseParentType ParentType { get; set; }
         public Guid DataContentId { get; set; }
-        public Guid? GuidParentId{ get; set; }
+        public Guid? GuidParentId { get; set; }
         public int? IntParentId { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace Mix.Queue.Engines
                 case MixQueueProvider.GOOGLE:
                     publisher = new GoogleQueuePublisher<T>(queueSetting, topicId);
                     break;
-                    
+
                 case MixQueueProvider.MIX:
                     publisher = new MixQueuePublisher<T>(queueSetting, topicId, queue);
                     break;

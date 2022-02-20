@@ -1,9 +1,6 @@
 ﻿using Mix.Database.Entities.Account;
-using Mix.Heart.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
-using Mix.Lib.Helpers;
-using Mix.Shared.Enums;
 
 namespace Mix.Lib.ViewModels
 {

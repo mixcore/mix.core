@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mix.Lib.Entities.Base
+﻿namespace Mix.Lib.Entities.Base
 {
     public interface IExternalDataEntity
     {

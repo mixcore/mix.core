@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Mix.Lib.Interfaces;
+﻿using Mix.Lib.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
 namespace Mix.Tenancy.Domain

@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class PostgresDatabaseConstants: IDatabaseConstants
+    public class PostgresDatabaseConstants : IDatabaseConstants
     {
         string IDatabaseConstants.DatabaseCollation => "und-x-icu";
 

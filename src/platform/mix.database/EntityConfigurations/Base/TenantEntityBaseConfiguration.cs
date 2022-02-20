@@ -8,7 +8,7 @@ namespace Mix.Database.EntityConfigurations.Base
     public abstract class TenantEntityBaseConfiguration<T, TPrimaryKey, TConfig> : EntityBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
         where T : TenantEntityBase<TPrimaryKey>
-        where TConfig: IDatabaseConstants
+        where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)
         {

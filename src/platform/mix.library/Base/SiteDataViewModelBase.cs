@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base

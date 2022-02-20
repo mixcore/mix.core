@@ -1,6 +1,4 @@
-﻿using Mix.Shared.Enums;
-
-namespace Mix.Lib.Models.Common
+﻿namespace Mix.Lib.Models.Common
 {
     public class FunctionModel
     {

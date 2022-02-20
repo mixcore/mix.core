@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    public class MixDataContentViewModel 
+    public class MixDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
     {
         #region Contructors
@@ -26,14 +26,14 @@
         }
 
         public MixDataContentViewModel(MixDataContent entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
 
         #region Properties
-        
+
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }

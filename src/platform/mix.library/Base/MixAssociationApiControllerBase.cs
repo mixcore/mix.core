@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Repository;
-using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Base;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
-using Mix.Heart.Extensions;
-using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {

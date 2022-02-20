@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
-using Mix.Heart.Exceptions;
-using Mix.Heart.Helpers;
-using Mix.Heart.Repository;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -110,8 +107,8 @@ namespace Mix.Account.Controllers
                 if (model.IsChangePassword)
                 {
                     var changePwd = await _userManager.ChangePasswordAsync(
-                        model.User, 
-                        model.ChangePassword.OldPassword, 
+                        model.User,
+                        model.ChangePassword.OldPassword,
                         model.ChangePassword.NewPassword);
                     if (!changePwd.Succeeded)
                     {

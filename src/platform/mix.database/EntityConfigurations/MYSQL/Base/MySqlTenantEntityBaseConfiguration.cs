@@ -4,7 +4,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.MYSQL.Base
 {
-    public abstract class MySqlTenantEntityBaseConfiguration<T, TPrimaryKey> 
+    public abstract class MySqlTenantEntityBaseConfiguration<T, TPrimaryKey>
         : TenantEntityBaseConfiguration<T, TPrimaryKey, MySqlDatabaseConstants>
         where TPrimaryKey : IComparable
         where T : TenantEntityBase<TPrimaryKey>

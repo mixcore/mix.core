@@ -1,5 +1,4 @@
-﻿using Mix.Heart.Repository;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Lib.Services;
@@ -20,7 +19,7 @@ namespace Mix.Tenancy.Domain.Services
             MixIdentityService identityService,
             MixDatabaseService databaseService,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration, 
+            IConfiguration configuration,
             MixCmsContext context)
         {
             _configuration = configuration;

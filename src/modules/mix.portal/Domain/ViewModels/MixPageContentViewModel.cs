@@ -3,7 +3,7 @@ namespace Mix.Portal.Domain.ViewModels
 {
     [GeneratePublisher]
     [GenerateRestApiController]
-    public class MixPageContentViewModel 
+    public class MixPageContentViewModel
         : ExtraColumnMultilanguageSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
@@ -14,7 +14,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixPageContentViewModel(MixPageContent entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

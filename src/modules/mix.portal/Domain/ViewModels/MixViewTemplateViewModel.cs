@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixViewTemplateViewModel 
+    public class MixViewTemplateViewModel
         : ViewModelBase<MixCmsContext, MixTemplate, int, MixViewTemplateViewModel>
     {
         #region Properties
@@ -25,7 +25,7 @@
         }
 
         public MixViewTemplateViewModel(MixTemplate entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

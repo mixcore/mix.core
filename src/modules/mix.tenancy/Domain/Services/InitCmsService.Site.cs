@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Shared.Enums;
+﻿using Mix.Shared.Enums;
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.ViewModels.Init;
-using System.Threading.Tasks;
 
 namespace Mix.Tenancy.Domain.Services
 {
@@ -16,7 +14,7 @@ namespace Mix.Tenancy.Domain.Services
                 model.Culture.Specificulture);
 
             _databaseService.InitMixCmsContext();
-            
+
             InitTenantViewModel vm = new(_context);
             vm.InitSiteData(model);
             await vm.SaveAsync();

@@ -1,8 +1,4 @@
-﻿using Mix.Heart.Enums;
-using Mix.Shared.Enums;
-using System;
-
-namespace Mix.Lib.Entities.Base
+﻿namespace Mix.Lib.Entities.Base
 {
     public abstract class EntityBase<TPrimaryKey>
     {

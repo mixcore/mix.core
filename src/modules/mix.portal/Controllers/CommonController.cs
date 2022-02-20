@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Repository;
-using Mix.Lib.Services;
-using Mix.Portal.Domain.Models;
 
 namespace Mix.Portal.Controllers
 {
@@ -12,9 +9,9 @@ namespace Mix.Portal.Controllers
         private readonly MixCmsContext _context;
         public CommonController(
             IConfiguration configuration,
-            MixCmsContext context, 
-            MixService mixService, 
-            TranslatorService translator, 
+            MixCmsContext context,
+            MixService mixService,
+            TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService)

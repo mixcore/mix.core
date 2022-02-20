@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
 
 namespace Mix.Lib.Filters
 {

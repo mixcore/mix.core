@@ -14,7 +14,7 @@ namespace Mixcore.Domain.ViewModels
         }
 
         public PostContentViewModel(MixPostContent entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -50,7 +50,7 @@ namespace Mixcore.Domain.ViewModels
 
         public T Property<T>(string fieldName)
         {
-            return AdditionalData != null 
+            return AdditionalData != null
                 ? AdditionalData.Property<T>(fieldName)
                 : default;
         }

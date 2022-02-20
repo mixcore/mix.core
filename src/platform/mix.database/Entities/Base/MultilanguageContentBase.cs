@@ -1,10 +1,9 @@
 ﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Entities;
 using System;
 
 namespace Mix.Database.Entities.Base
 {
-    public abstract class MultilanguageContentBase<TPrimaryKey>: EntityBase<TPrimaryKey>
+    public abstract class MultilanguageContentBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
         public string Specificulture { get; set; }

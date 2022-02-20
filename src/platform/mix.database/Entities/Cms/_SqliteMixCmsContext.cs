@@ -2,13 +2,12 @@
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.v2
 {
     public class SqliteMixCmsContext : MixCmsContext
     {
-        public SqliteMixCmsContext(MixDatabaseService databaseService) 
+        public SqliteMixCmsContext(MixDatabaseService databaseService)
             : base(databaseService)
         {
         }
@@ -17,8 +16,8 @@ namespace Mix.Database.Entities.v2
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
-                this.GetType().Assembly, 
-                m=> m.Namespace == typeof(SqliteDatabaseConstants).Namespace);
+                this.GetType().Assembly,
+                m => m.Namespace == typeof(SqliteDatabaseConstants).Namespace);
         }
     }
 }

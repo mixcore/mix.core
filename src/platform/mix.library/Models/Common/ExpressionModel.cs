@@ -1,7 +1,4 @@
-﻿using Mix.Shared.Enums;
-using System.Collections.Generic;
-
-namespace Mix.Lib.Models.Common
+﻿namespace Mix.Lib.Models.Common
 {
     public class ExpressionModel
     {
