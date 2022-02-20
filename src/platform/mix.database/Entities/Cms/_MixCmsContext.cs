@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
 using MySqlConnector;
@@ -51,6 +52,28 @@ namespace Mix.Database.Entities.Cms
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            string ns = _databaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER
+                     => typeof(MySqlDatabaseConstants).Namespace,
+
+                MixDatabaseProvider.MySQL
+                    => typeof(MySqlDatabaseConstants).Namespace,
+
+                MixDatabaseProvider.SQLITE
+                    => typeof(MySqlDatabaseConstants).Namespace,
+
+                MixDatabaseProvider.PostgreSQL
+                    => typeof(MySqlDatabaseConstants).Namespace,
+                _ => string.Empty
+            };
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                this.GetType().Assembly,
+                m => m.Namespace == ns);
+        }
         public override void Dispose()
         {
             switch (_databaseProvider)

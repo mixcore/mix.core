@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
 
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<MixCmsContext>();
+            services.AddDbContext<MixCmsContext>(ServiceLifetime.Transient);
             services.AddDbContext<MixCmsAccountContext>();
             return services;
         }
