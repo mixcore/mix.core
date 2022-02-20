@@ -24,15 +24,18 @@
         #region Properties
 
         public string ClassName { get; set; }
+        public string DetailUrl { get; set; }
 
+        public List<MixUrlAliasViewModel> UrlAliases { get; set; }
         #endregion
 
         #region Overrides
 
-        public override Task ExpandView()
+        public override async Task ExpandView()
         {
             MixDatabaseName ??= MixDatabaseNames.POST_COLUMN;
-            return base.ExpandView();
+            await LoadAliasAsync();
+            await base.ExpandView();
         }
 
 
@@ -58,6 +61,15 @@
             {
                 await base.DeleteHandlerAsync();
             }
+        }
+
+        private async Task LoadAliasAsync()
+        {
+            var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
+            UrlAliases = await aliasRepo.GetListAsync(
+                m => m.Type == MixUrlAliasType.Post && m.SourceContentId == Id);
+            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
+                : $"/post/{Id}/{SeoName}";
         }
         #endregion
     }
