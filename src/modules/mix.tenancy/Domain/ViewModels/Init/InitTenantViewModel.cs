@@ -1,4 +1,3 @@
-using Mix.Heart.Extensions;
 using Mix.Tenancy.Domain.Dtos;
 
 namespace Mix.Tenancy.Domain.ViewModels.Init
