@@ -9,11 +9,11 @@ using Mix.Shared.Models;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService: ConfigurationServiceBase<DatabaseConfigurations>
+    public class MixDatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
 
-        public MixDatabaseService() 
+        public MixDatabaseService()
             : base(MixAppConfigFilePaths.Database)
         {
         }
@@ -103,4 +103,3 @@ namespace Mix.Database.Services
         }
     }
 }
- 

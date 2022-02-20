@@ -2,21 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
-using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
-using Mix.Heart.Helpers;
-using Mix.Heart.Repository;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
-using Mix.Lib.Helpers;
 using Mix.Lib.Models;
-using Mix.Shared.Enums;
 using Mix.Shared.Models;
-using Mix.Shared.Services;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -42,7 +34,7 @@ namespace Mix.Lib.Services
             RoleManager<IdentityRole> roleManager,
             AuthConfigService authConfigService,
             MixCmsContext context,
-            MixCmsAccountContext accountContext, 
+            MixCmsAccountContext accountContext,
             MixCacheService cacheService)
         {
             _context = context;
@@ -78,7 +70,7 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Login failed");
             }
-            
+
         }
 
         public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)
@@ -91,7 +83,7 @@ namespace Mix.Lib.Services
                 token.Info = new(context, user);
                 await token.Info.LoadUserDataAsync();
                 var plainText = JsonConvert.SerializeObject(
-                    token, 
+                    token,
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
 

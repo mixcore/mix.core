@@ -1,5 +1,4 @@
 using Mix.Database.Entities.Account;
-using Mix.Shared.Services;
 using System.Reflection;
 
 namespace Mix.Portal
@@ -25,7 +24,7 @@ namespace Mix.Portal
                     builder.AllowAnyMethod();
                 });
             });
-            
+
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
             // Must app Auth config after Add mixservice to init App config 

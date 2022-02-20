@@ -16,17 +16,17 @@ namespace Mix.Lib.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;  
+            OrderBy = req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
-            
+
             if (int.TryParse(request.Query[MixRequestQueryKeywords.ThemeId], out int themeId))
             {
                 ThemeId = themeId;
             }
             if (Enum.TryParse(request.Query["folderType"], out MixTemplateFolderType folder))
             {
-                 Folder = folder;
+                Folder = folder;
             }
         }
 

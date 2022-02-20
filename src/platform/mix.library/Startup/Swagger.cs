@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using Mix.Heart.Extensions;
 using Mix.Lib.Filters;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
-    {private static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
+    {
+        private static IServiceCollection AddMixSwaggerServices(this IServiceCollection services, Assembly assembly)
         {
             string title = assembly.ManifestModule.Name.Replace(".dll", string.Empty).ToHypenCase(' ');
             string version = "v2";

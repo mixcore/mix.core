@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
-using Mix.Heart.Enums;
 using Mix.Shared.Constants;
 using MySqlConnector;
 using System;

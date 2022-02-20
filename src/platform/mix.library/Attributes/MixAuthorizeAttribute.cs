@@ -16,7 +16,7 @@ namespace Mix.Lib.Attributes
     public class AuthorizeActionFilter : IAuthorizationFilter
     {
         protected readonly MixIdentityService _idService;
-        
+
         public AuthorizeActionFilter(
             MixIdentityService idService)
         {

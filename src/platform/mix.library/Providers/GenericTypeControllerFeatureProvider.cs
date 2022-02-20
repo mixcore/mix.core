@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Mix.Lib.Attributes;
 using Mix.Lib.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Mix.Lib.Providers
@@ -26,7 +22,7 @@ namespace Mix.Lib.Providers
                 if (candidate.BaseType.IsGenericType)
                 {
                     var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
-                    
+
                     var baseType = attr.QueryOnly
                             ? typeof(MixAutoGenerateQueryApiController<,,,>)
                             : typeof(MixAutoGenerateRestApiController<,,,>);

@@ -1,7 +1,7 @@
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 1 - Configuration")]
-    public class c1_ConfigurationTest 
+    public class c1_ConfigurationTest
         : ViewModelTestBase<SharedMixCmsDbFixture, MixConfigurationViewModel, MixCmsContext, MixConfiguration, int>
         , IClassFixture<SharedMixCmsDbFixture>
     {

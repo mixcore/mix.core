@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView> 
+    public abstract class MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : DbContext
          where TPrimaryKey : IComparable
@@ -40,7 +39,7 @@ namespace Mix.Lib.Base
         #region Overrides
         public override Task<TEntity> ParseEntity()
         {
-            MixCultureId = MixCultureId == 0 ? 1: MixCultureId;
+            MixCultureId = MixCultureId == 0 ? 1 : MixCultureId;
             return base.ParseEntity();
         }
 

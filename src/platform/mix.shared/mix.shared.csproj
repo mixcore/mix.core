@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<Using Include="Mix.Heart.Constants" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Exceptions" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
@@ -20,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
+	  <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
 	</ItemGroup>
 
 </Project>

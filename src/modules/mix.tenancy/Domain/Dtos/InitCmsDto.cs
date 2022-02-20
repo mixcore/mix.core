@@ -1,5 +1,4 @@
-﻿using Mix.Heart.Enums;
-using Mix.Tenancy.Domain.Models;
+﻿using Mix.Tenancy.Domain.Models;
 
 namespace Mix.Tenancy.Domain.Dtos
 {

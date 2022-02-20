@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Heart.Exceptions;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models.QueueSetting;
@@ -21,7 +20,7 @@ namespace Mix.Lib.Base
         public MixPublisherServiceBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
-            IConfiguration configuration, IWebHostEnvironment environment, 
+            IConfiguration configuration, IWebHostEnvironment environment,
             MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             _queueService = queueService;
@@ -31,7 +30,7 @@ namespace Mix.Lib.Base
             _topicId = topicId;
         }
 
-       
+
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName,
             MixMemoryMessageQueue<MessageQueueModel> queue, CancellationToken cancellationToken)
         {
@@ -61,7 +60,7 @@ namespace Mix.Lib.Base
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
                                provider, mixSetting, topicName, queue));
-                        
+
                         break;
                 }
 

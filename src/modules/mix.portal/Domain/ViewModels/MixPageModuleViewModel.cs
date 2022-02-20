@@ -16,7 +16,7 @@
         }
 
         public MixPageModuleViewModel(MixPageModuleAssociation entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
@@ -38,12 +38,12 @@
                 IsValid = IsValid && !MixHelper.IsDefaultId(LeftId);
                 if (!IsValid)
                 {
-                    Errors.Add(new ("Parent Id cannot be null"));
+                    Errors.Add(new("Parent Id cannot be null"));
                 }
                 IsValid = IsValid && !MixHelper.IsDefaultId(RightId);
                 if (!IsValid)
                 {
-                    Errors.Add(new ("Child Id cannot be null"));
+                    Errors.Add(new("Child Id cannot be null"));
                 }
             }
         }

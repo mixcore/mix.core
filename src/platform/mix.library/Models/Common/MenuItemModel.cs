@@ -1,10 +1,4 @@
-﻿using Mix.Shared.Constants;
-using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
-using Mix.Shared.Services;
-
-namespace Mix.Lib.Models.Common
+﻿namespace Mix.Lib.Models.Common
 {
     public class MenuItemModel
     {

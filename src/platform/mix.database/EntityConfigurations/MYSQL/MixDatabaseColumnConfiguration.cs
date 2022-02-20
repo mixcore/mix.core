@@ -30,7 +30,7 @@ namespace Mix.Database.EntityConfigurations.MYSQL
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Configurations)
                 .HasColumnType(Config.Text)
                 .HasCharSet(Config.CharSet)

@@ -1,9 +1,8 @@
-﻿using Mix.Heart.Entities;
-using System;
+﻿using System;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class RefreshTokens: Entity
+    public partial class RefreshTokens : Entity
     {
         public Guid ClientId { get; set; }
         public string Email { get; set; }

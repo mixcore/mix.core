@@ -1,7 +1,4 @@
-﻿using Mix.Lib.Dtos;
-using System.ComponentModel.DataAnnotations;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public class SiteDataViewModel
     {

@@ -36,7 +36,7 @@
         }
 
         public MixDataContentValueViewModel(MixDataContentValue entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -49,7 +49,7 @@
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
-            
+
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
             return base.ParseEntity();
@@ -66,7 +66,7 @@
             }
             else // additional field for page / post / module => id = 0
             {
-                Column = new ()
+                Column = new()
                 {
                     DataType = DataType,
                     DisplayName = MixDatabaseColumnName,

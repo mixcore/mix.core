@@ -5,7 +5,8 @@ namespace Mix.Database.EntityConfigurations
 {
     public static class PropertuBuilderExtensions
     {
-        public static PropertyBuilder<TPrimaryKey> HasDefaultValueIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition, string method){
+        public static PropertyBuilder<TPrimaryKey> HasDefaultValueIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition, string method)
+        {
             if (condition)
             {
                 builder.HasDefaultValueSql(method);

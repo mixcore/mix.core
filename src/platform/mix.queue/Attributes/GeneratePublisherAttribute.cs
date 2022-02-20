@@ -3,7 +3,7 @@
 namespace Mix.Queue.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class GeneratePublisherAttribute: Attribute
+    public class GeneratePublisherAttribute : Attribute
     {
 
     }

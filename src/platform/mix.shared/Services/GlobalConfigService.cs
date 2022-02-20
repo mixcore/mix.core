@@ -43,7 +43,7 @@ namespace Mix.Shared.Services
             : base(MixAppConfigFilePaths.Global)
         {
         }
-        
+
         public bool IsInit => AppSettings.IsInit;
         public string DefaultCulture => AppSettings.DefaultCulture;
         public string Domain => AppSettings.Domain;

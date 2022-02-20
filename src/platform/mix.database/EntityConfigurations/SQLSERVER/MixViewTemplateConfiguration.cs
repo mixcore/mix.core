@@ -24,17 +24,17 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
 
-             builder.Property(e => e.FileFolder)
-                .IsRequired()
-                .HasColumnType($"{Config.NString}{Config.MediumLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
+            builder.Property(e => e.FileFolder)
+               .IsRequired()
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
-             builder.Property(e => e.FileName)
-                .IsRequired()
-                .HasColumnType($"{Config.NString}{Config.SmallLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
+            builder.Property(e => e.FileName)
+               .IsRequired()
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
 
             builder.Property(e => e.FolderType)
               .HasConversion(new EnumToStringConverter<MixTemplateFolderType>())
@@ -53,12 +53,12 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
                 .HasColumnType(Config.Text)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-            
-             builder.Property(e => e.MixThemeName)
-                .IsRequired()
-                .HasColumnType($"{Config.NString}{Config.SmallLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
+
+            builder.Property(e => e.MixThemeName)
+               .IsRequired()
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
         }
     }
 }

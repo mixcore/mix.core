@@ -1,9 +1,7 @@
-﻿using Mix.Heart.Entities;
-
-namespace Mix.Lib.Base
+﻿namespace Mix.Lib.Base
 {
     public abstract class ExtraColumnMultilanguageSEOContentViewModelBase
-        <TDbContext, TEntity, TPrimaryKey, TView> 
+        <TDbContext, TEntity, TPrimaryKey, TView>
         : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable

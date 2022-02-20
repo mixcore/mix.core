@@ -2,13 +2,12 @@
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.v2
 {
     public class SqlServerMixCmsContext : MixCmsContext
     {
-        public SqlServerMixCmsContext(MixDatabaseService databaseService) 
+        public SqlServerMixCmsContext(MixDatabaseService databaseService)
             : base(databaseService)
         {
         }

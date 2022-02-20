@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Mix.Lib.Conventions;
-using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Conventions;
 using Mix.Lib.Filters;
-using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

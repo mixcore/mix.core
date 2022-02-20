@@ -19,6 +19,14 @@
 		<Using Include="Xunit" />
 		<Using Include="XUnit.Project.Attributes" />
 		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Entities" />
+		<Using Include="Mix.Heart.Models" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Extensions" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Exceptions" />
 		<Using Include="Mix.Xunittest.Domain.Base" />
 		<Using Include="Mix.Portal.Domain.ViewModels" />
 		<Using Include="Mix.Database.Entities.Cms" />

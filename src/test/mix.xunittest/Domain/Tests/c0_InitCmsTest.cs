@@ -11,7 +11,7 @@ namespace Mix.Xunittest.Domain.Tests
     {
         private readonly InitCmsService _initCmsService;
         public c0_InitCmsTest(
-            SharedMixCmsDbFixture fixture, 
+            SharedMixCmsDbFixture fixture,
             InitCmsService initCmsService) : base(fixture)
         {
             _initCmsService = initCmsService;
@@ -45,7 +45,7 @@ namespace Mix.Xunittest.Domain.Tests
                 DbFixture.Context.Database.EnsureDeleted();
                 await _initCmsService.InitTenantAsync(model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }

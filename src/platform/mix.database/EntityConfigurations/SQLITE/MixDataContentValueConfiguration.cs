@@ -18,7 +18,7 @@ namespace Mix.Database.EntityConfigurations.SQLITE
               .HasColumnType($"{Config.NString}{Config.MediumLength}")
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.MixDatabaseName)
               .HasColumnType($"{Config.NString}{Config.MediumLength}")
               .HasCharSet(Config.CharSet)
@@ -37,17 +37,17 @@ namespace Mix.Database.EntityConfigurations.SQLITE
               .HasColumnType(Config.Text)
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.EncryptValue)
               .HasColumnType(Config.Text)
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.EncryptKey)
               .HasColumnType($"{Config.NString}{Config.MaxLength}")
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.EncryptType)
               .HasConversion(new EnumToStringConverter<MixEncryptType>())
               .HasColumnType($"{Config.NString}{Config.SmallLength}")

@@ -1,9 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Database.Services;
-using Mix.Shared.Services;
-using System.Linq;
-
-namespace Mix.Portal.Domain.Models
+﻿namespace Mix.Portal.Domain.Models
 {
     public class DashboardModel
     {

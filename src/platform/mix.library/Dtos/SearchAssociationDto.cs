@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.Dtos
 {
-    public class SearchAssociationDto: SearchRequestDto
+    public class SearchAssociationDto : SearchRequestDto
     {
         public SearchAssociationDto()
         {
@@ -16,10 +16,10 @@ namespace Mix.Lib.Dtos
             ToDate = req.ToDate;
             PageIndex = req.PageIndex;
             PageSize = req.PageSize;
-            OrderBy = req.OrderBy;  
+            OrderBy = req.OrderBy;
             Direction = req.Direction;
             Status = req.Status;
-            
+
             if (int.TryParse(request.Query[MixRequestQueryKeywords.LeftId], out int leftId))
             {
                 LeftId = leftId;

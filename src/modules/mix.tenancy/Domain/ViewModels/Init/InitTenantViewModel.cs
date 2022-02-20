@@ -1,12 +1,5 @@
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Enums;
-using Mix.Heart.ViewModel;
-using Mix.Tenancy.Domain.Dtos;
-using System;
-using System.Threading.Tasks;
 using Mix.Heart.Extensions;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.Services;
+using Mix.Tenancy.Domain.Dtos;
 
 namespace Mix.Tenancy.Domain.ViewModels.Init
 {
@@ -23,7 +16,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         }
 
         public InitTenantViewModel(MixTenant entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

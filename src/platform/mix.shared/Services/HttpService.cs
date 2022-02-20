@@ -1,16 +1,8 @@
-﻿using Mix.Heart.Services;
-using Mix.Shared.Constants;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using Mix.Shared.Constants;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Mix.Shared.Services
 {
@@ -39,7 +31,7 @@ namespace Mix.Shared.Services
                 string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
                 MixFileHelper.CreateFolderIfNotExist(folder);
-                using (Stream contentStream = await response.Content.ReadAsStreamAsync(), 
+                using (Stream contentStream = await response.Content.ReadAsStreamAsync(),
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {
                     var totalRead = 0L;

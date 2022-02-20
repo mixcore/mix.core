@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Mix.Lib.Entities.Base
+﻿namespace Mix.Lib.Entities.Base
 {
-    public abstract class MultilanguageEntityBase<TPrimaryKey>: EntityBase<TPrimaryKey>, IExternalDataEntity
+    public abstract class MultilanguageEntityBase<TPrimaryKey> : EntityBase<TPrimaryKey>, IExternalDataEntity
     {
         public string Specificulture { get; set; }
         public string Image { get; set; }

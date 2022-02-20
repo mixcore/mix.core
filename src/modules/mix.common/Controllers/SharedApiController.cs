@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Mix.Lib.Services;
-using Mix.Shared.Services;
-using Mix.Heart.Helpers;
-using Mix.Shared.Models;
-using Mix.Heart.Repository;
-using Mix.Common.Models;
-using Mix.Common.Domain.ViewModels;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Mix.Common.Domain.Models;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Mix.Common.Domain.Dtos;
 using Mix.Common.Domain.Helpers;
+using Mix.Common.Domain.Models;
+using Mix.Common.Domain.ViewModels;
+using Mix.Common.Models;
+using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Shared.Models;
+using Mix.Shared.Services;
 
 namespace Mix.Common.Controllers
 {
@@ -49,10 +47,10 @@ namespace Mix.Common.Controllers
         #region Routes
 
         [HttpPost]
-        [Route("encrypt-message")] 
+        [Route("encrypt-message")]
         public ActionResult<string> EncryptMessage(CryptoMessageDto encryptMessage)
         {
-            string key = encryptMessage.Key 
+            string key = encryptMessage.Key
                         ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = encryptMessage.ObjectData != null
                     ? encryptMessage.ObjectData.ToString(Newtonsoft.Json.Formatting.None)
@@ -60,9 +58,9 @@ namespace Mix.Common.Controllers
             var result = AesEncryptionHelper.EncryptString(msg, key);
             return Ok(result);
         }
-        
+
         [HttpPost]
-        [Route("decrypt-message")] 
+        [Route("decrypt-message")]
         public ActionResult<string> DecryptMessage(CryptoMessageDto encryptMessage)
         {
             string key = encryptMessage.Key ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
@@ -164,7 +162,7 @@ namespace Mix.Common.Controllers
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return NotFound();

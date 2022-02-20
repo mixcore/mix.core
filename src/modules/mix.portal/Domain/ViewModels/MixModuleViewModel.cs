@@ -3,7 +3,7 @@
 namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixModuleViewModel 
+    public class MixModuleViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixModule, int, MixModuleViewModel, MixModuleContent, MixModuleContentViewModel>
     {
         #region Contructors
@@ -13,7 +13,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixModuleViewModel(MixModule entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

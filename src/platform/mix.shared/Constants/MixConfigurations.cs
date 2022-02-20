@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Mix.Shared.Constants
+﻿namespace Mix.Shared.Constants
 {
     public static class MixConfigurations
     {

@@ -1,11 +1,10 @@
-using Mix.Shared.Services;
-using System.Reflection;
-using Ocelot.DependencyInjection;
-using Mixcore.Domain.Subscribers;
-using System.Text.Unicode;
-using System.Text.Encodings.Web;
 using Mix.Database.Entities.Account;
-using Mixcore.Domain.Services;
+using Mix.Shared.Services;
+using Mixcore.Domain.Subscribers;
+using Ocelot.DependencyInjection;
+using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace Mixcore
 {
@@ -71,7 +70,7 @@ namespace Mixcore
                 builder.AllowAnyHeader();
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
-            
+
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
 
             app.UseHttpsRedirection();
@@ -86,7 +85,7 @@ namespace Mixcore
                 app.UseHttpsRedirection();
             }
 
-            
+
             app.UseMixRoutes();
         }
     }

@@ -1,6 +1,4 @@
-﻿using Mix.Heart.Repository;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public class AdditionalDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>

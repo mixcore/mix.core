@@ -2,13 +2,12 @@
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Database.Entities.v2
 {
     public class MySqlMixCmsContext : MixCmsContext
     {
-        public MySqlMixCmsContext(MixDatabaseService databaseService) 
+        public MySqlMixCmsContext(MixDatabaseService databaseService)
             : base(databaseService)
         {
         }

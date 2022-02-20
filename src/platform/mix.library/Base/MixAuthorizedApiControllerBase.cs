@@ -3,13 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Attributes;
 using Mix.Lib.Services;
-using Mix.Shared.Constants;
-using Mix.Shared.Services;
 
 namespace Mix.Lib.Base
 {
@@ -29,7 +23,7 @@ namespace Mix.Lib.Base
             ILogger<MixApiControllerBase> logger,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository, 
+            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context
             ) : base()

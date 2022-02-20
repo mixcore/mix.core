@@ -1,14 +1,6 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
-using Newtonsoft.Json.Linq;
-using System;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
-    public class MixDataViewModel 
+    public class MixDataViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel
             , MixDataContent, MixDataContentViewModel>
     {
@@ -53,7 +45,7 @@ namespace Mix.Lib.ViewModels
 
         private void ParseData(JObject data)
         {
-            
+
         }
 
         #endregion

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Model;
 
 namespace Mix.Portal.Controllers
 {
@@ -48,11 +47,11 @@ namespace Mix.Portal.Controllers
             if (dto.IsValid())
             {
                 var getData = await MixDataHelper.GetAdditionalDataAsync(
-                    _context, 
-                    dto.ParentType.Value, 
-                    dto.DatabaseName, 
+                    _context,
+                    dto.ParentType.Value,
+                    dto.DatabaseName,
                     dto.GuidParentId,
-                    dto.IntParentId, 
+                    dto.IntParentId,
                     _lang);
                 return Ok(getData);
             }

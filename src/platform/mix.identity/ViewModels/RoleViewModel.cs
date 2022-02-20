@@ -1,9 +1,4 @@
 using Mix.Database.Entities.Account;
-using Mix.Heart.Enums;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
 using System;
 using System.Threading.Tasks;
 
@@ -17,8 +12,8 @@ namespace Mix.Identity.ViewModels
         }
 
         public RoleViewModel(
-            AspNetRoles entity, 
-             
+            AspNetRoles entity,
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

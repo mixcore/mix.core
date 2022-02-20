@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
-using Mix.Shared.Services;
 using System.Reflection;
 
 namespace Mix.Scheduler

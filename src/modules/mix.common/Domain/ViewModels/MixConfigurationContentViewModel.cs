@@ -1,11 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using Mix.Lib.Attributes;
-
-namespace Mix.Common.Domain.ViewModels
+﻿namespace Mix.Common.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
     public class MixConfigurationContentViewModel
@@ -31,7 +24,7 @@ namespace Mix.Common.Domain.ViewModels
         }
 
         public MixConfigurationContentViewModel(MixConfigurationContent entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {

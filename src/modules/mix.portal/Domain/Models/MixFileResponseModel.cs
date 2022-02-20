@@ -1,6 +1,4 @@
-﻿using Mix.Heart.Models;
-
-namespace Mix.Portal.Domain.Models
+﻿namespace Mix.Portal.Domain.Models
 {
     public class MixFileResponseModel
     {

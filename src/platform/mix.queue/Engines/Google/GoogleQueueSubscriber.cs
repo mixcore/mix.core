@@ -21,7 +21,7 @@ namespace Mix.Queue.Engines.GooglePubSub
         private readonly Func<MessageQueueModel, Task> _messageHandler;
 
         public GoogleQueueSubscriber(
-            QueueSetting queueSetting, 
+            QueueSetting queueSetting,
             string topicId,
             string subscriptionId,
             Func<MessageQueueModel, Task> messageHandler)
@@ -46,7 +46,7 @@ namespace Mix.Queue.Engines.GooglePubSub
         }
 
 
-        private Subscription CreateSubscription( string topicId, string subscriptionId)
+        private Subscription CreateSubscription(string topicId, string subscriptionId)
         {
             SubscriberServiceApiClientBuilder builder = new();
             builder.CredentialsPath = _queueSetting.CredentialFile;

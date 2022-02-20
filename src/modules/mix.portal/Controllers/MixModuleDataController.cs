@@ -47,8 +47,8 @@ namespace Mix.Portal.Controllers
             {
                 var moduleData = new MixModuleDataViewModel()
                 {
-                    ParentId= getModule.Id,
-                    SimpleDataColumns =  getModule.SimpleDataColumns
+                    ParentId = getModule.Id,
+                    SimpleDataColumns = getModule.SimpleDataColumns
                 };
                 await moduleData.ExpandView();
                 return Ok(moduleData);

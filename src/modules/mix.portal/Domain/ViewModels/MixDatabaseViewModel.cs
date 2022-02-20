@@ -26,7 +26,7 @@ namespace Mix.Portal.Domain.ViewModels
         }
 
         public MixDatabaseViewModel(MixDatabase entity,
-            
+
             UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
@@ -48,7 +48,7 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 foreach (var item in Columns)
                 {
-                    item.SetUowInfo(UowInfo); 
+                    item.SetUowInfo(UowInfo);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync();

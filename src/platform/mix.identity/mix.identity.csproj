@@ -1,30 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Mix.Identity</RootNamespace>
-    <AssemblyName>mix.identity</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Mix.Identity</RootNamespace>
+		<AssemblyName>mix.identity</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters\" />
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Filters\" />
+		<Folder Include="Helpers\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\mix.database\mix.database.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
+	</ItemGroup>
 
+	<ItemGroup>
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Enums" />
+	</ItemGroup>
 </Project>

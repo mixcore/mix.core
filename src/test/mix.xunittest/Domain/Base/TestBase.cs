@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.UnitOfWork;
 
 // Ref: https://docs.microsoft.com/en-us/dotnet/core/testing/order-unit-tests
 // Need to turn off test parallelization so we can validate the run order
@@ -22,11 +21,11 @@ namespace Mix.Xunittest.Domain.Base
         public TestBase(TFixture fixture)
         {
             DbFixture = fixture;
-            
+
             //TODO: Update db connection string here to test other db provider
             //Fixture._connectionString = "";
             //Fixture._dbProvider = MixDatabaseProvider.SQLSERVER;
-            
+
             UowInfo = new UnitOfWorkInfo(fixture.Context);
         }
     }

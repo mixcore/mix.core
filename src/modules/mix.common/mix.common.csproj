@@ -19,6 +19,8 @@
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Heart.Constants" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Helpers" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Base" />
 		<Using Include="Mix.Lib.Helpers" />

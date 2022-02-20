@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MySqlDatabaseConstants: IDatabaseConstants
+    public class MySqlDatabaseConstants : IDatabaseConstants
     {
         string IDatabaseConstants.DatabaseCollation => "utf8_unicode_ci";
 

@@ -1,7 +1,4 @@
-﻿using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-
-namespace Mix.Lib.Models.Common
+﻿namespace Mix.Lib.Models.Common
 {
     public class ModuleFieldModel
     {
@@ -29,5 +26,5 @@ namespace Mix.Lib.Models.Common
 
         public int Width { get; set; }
     }
-    
+
 }

@@ -9,6 +9,6 @@ namespace Mix.Database.Entities.Cms
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public MixData MixData { get; set; }
-        public virtual ICollection<MixDataContentValue> MixDataContentValues{ get; set; }
+        public virtual ICollection<MixDataContentValue> MixDataContentValues { get; set; }
     }
 }

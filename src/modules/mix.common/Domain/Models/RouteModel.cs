@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Mix.Common.Domain.Models
+﻿namespace Mix.Common.Domain.Models
 {
     internal class RouteModel
     {

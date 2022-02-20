@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Repository;
-using Mix.Heart.Helpers;
-using Mix.Heart.Entities;
-using Mix.Heart.Model;
-using Mix.Lib.Services;
-using Mix.Identity.Constants;
 using Microsoft.Extensions.Configuration;
+using Mix.Identity.Constants;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
-    public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey> 
+    public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
@@ -19,7 +15,7 @@ namespace Mix.Lib.Base
     {
         public MixRestApiControllerBase(
             IConfiguration configuration,
-            MixService mixService, 
+            MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
@@ -92,7 +88,7 @@ namespace Mix.Lib.Base
             return await SaveManyHandler(data);
         }
 
-        
+
         #endregion Routes
 
         #region Handlers

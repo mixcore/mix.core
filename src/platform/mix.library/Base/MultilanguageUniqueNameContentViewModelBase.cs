@@ -1,19 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Entities;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using System;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView> 
+    public abstract class MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
-        where TView: ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 

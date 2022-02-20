@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace Mix.Common.Domain.Dtos
+﻿namespace Mix.Common.Domain.Dtos
 {
     public class CryptoMessageDto
     {

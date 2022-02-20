@@ -18,7 +18,7 @@
 		<Using Include="Mix.Shared.Constants" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />
-		<Using Include="Mix.Heart.Model" />
+		<Using Include="Mix.Heart.Models" />
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />

@@ -5,7 +5,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class MultilanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig> 
+    public abstract class MultilanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig>
         : MultilanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
         where T : MultilanguageUniqueNameContentBase<TPrimaryKey>

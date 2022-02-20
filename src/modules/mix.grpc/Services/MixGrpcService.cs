@@ -42,8 +42,8 @@ namespace Mix.Grpc
         }
 
         public override async Task GetStream(
-            MixGrpcRequest request, 
-            IServerStreamWriter<MixGrpcReply> responseStream, 
+            MixGrpcRequest request,
+            IServerStreamWriter<MixGrpcReply> responseStream,
             ServerCallContext context)
         {
             var i = 0;

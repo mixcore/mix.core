@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Lib.Interfaces;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 

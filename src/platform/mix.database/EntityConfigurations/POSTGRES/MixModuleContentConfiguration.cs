@@ -20,7 +20,7 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
             builder.Property(e => e.ClassName)
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixModuleType>())

@@ -1,7 +1,6 @@
 ﻿using Mix.Lib.Subscribers;
 using Mix.Portal.Domain.ViewModels;
 using Mix.Queue.Engines.MixQueue;
-using Mixcore.Domain.ViewModels;
 
 namespace Mixcore.Domain.Subscribers
 {
@@ -15,7 +14,7 @@ namespace Mixcore.Domain.Subscribers
             ILogger<PageContentSubscriberService> logger,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
-            MixCacheService cacheService) 
+            MixCacheService cacheService)
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
             this.logger = logger;

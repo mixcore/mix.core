@@ -1,5 +1,4 @@
-﻿using Mix.Heart.Entities;
-using Mix.Lib.ViewModels.ReadOnly;
+﻿using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.Base
 {

@@ -1,6 +1,4 @@
-﻿using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Mix.Lib.ViewModels
 {
@@ -40,7 +38,7 @@ namespace Mix.Lib.ViewModels
         }
 
         public MixDataContentValueViewModel(MixDataContentValue entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

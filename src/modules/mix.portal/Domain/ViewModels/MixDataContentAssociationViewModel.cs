@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDataContentAssociationViewModel 
+    public class MixDataContentAssociationViewModel
         : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
         #region Contructors
@@ -15,7 +15,7 @@
 
         public MixDataContentAssociationViewModel(
             MixDataContentAssociation entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

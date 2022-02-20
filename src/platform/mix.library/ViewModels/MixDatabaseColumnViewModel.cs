@@ -1,12 +1,5 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.Repository;
-using Mix.Heart.Services;
-using Mix.Heart.UnitOfWork;
-using Mix.Heart.ViewModel;
-using Mix.Shared.Enums;
-using Mix.Shared.Models;
+﻿using Mix.Shared.Models;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.ViewModels
 {
@@ -39,7 +32,7 @@ namespace Mix.Lib.ViewModels
 
         public MixDatabaseColumnViewModel(
             MixDatabaseColumn entity,
-            
+
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -51,9 +44,9 @@ namespace Mix.Lib.ViewModels
         {
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
-                    ColumnConfigurations, new JsonSerializerSettings 
-                    { 
-                        NullValueHandling = NullValueHandling.Ignore 
+                    ColumnConfigurations, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
                     });
             return base.ParseEntity();
         }

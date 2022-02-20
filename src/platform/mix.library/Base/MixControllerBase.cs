@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Globalization;
-using Mix.Lib.Services;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Services;
+using System.Globalization;
 
 namespace Mix.Lib.Base
 {
@@ -124,6 +124,6 @@ namespace Mix.Lib.Base
             }
         }
 
-        
+
     }
 }

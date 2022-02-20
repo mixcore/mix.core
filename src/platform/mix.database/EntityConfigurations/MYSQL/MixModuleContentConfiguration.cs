@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.MYSQL.Base;
 using Mix.Shared.Enums;
-using System;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
@@ -17,11 +16,11 @@ namespace Mix.Database.EntityConfigurations.MYSQL
             builder.Property(e => e.SystemName)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.ClassName)
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.Type)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<MixModuleType>())

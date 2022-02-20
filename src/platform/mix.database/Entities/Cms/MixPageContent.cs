@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixPageContent: ExtraColumnMultilanguageSEOContentBase<int>
+    public class MixPageContent : ExtraColumnMultilanguageSEOContentBase<int>
     {
         public string ClassName { get; set; }
         public int? PageSize { get; set; }

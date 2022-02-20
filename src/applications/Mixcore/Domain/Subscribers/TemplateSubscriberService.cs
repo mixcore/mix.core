@@ -36,7 +36,7 @@ namespace Mixcore.Domain.Subscribers
                 default:
                     break;
             }
-            
+
             return Task.CompletedTask;
         }
 
