@@ -45,7 +45,7 @@ docker-compose up
 mkdir mixcore
 cd mixcore
 
-git clone --branch develop-v2 --recursive https://github.com/mixcore/mix.core.git
+git clone --branch develop --recursive https://github.com/mixcore/mix.core.git
 ```
 
 Optional:
