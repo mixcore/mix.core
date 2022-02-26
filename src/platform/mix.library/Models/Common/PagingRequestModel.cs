@@ -2,17 +2,9 @@
 
 namespace Mix.Lib.Models.Common
 {
-    public class PagingRequestModel : IPagingModel
+    public class PagingRequestModel : PagingModel
     {
-        public string SortBy { get; set; }
-        public SortDirection SortDirection { get; set; }
-        public int PageIndex { get; set; }
-        public int? PageSize { get; set; }
         public int Page { get; set; }
-        public int Total { get; set; }
-        public int TotalPage { get; set; }
-
-
         protected readonly int _defaultPageSize;
 
         public PagingRequestModel(int defaultPageSize = 1000)
