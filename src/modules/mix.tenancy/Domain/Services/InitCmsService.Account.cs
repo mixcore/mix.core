@@ -47,13 +47,18 @@ namespace Mix.Tenancy.Domain.Services
                     if (token != null)
                     {
                         GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;
-                        GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
-                        GlobalConfigService.Instance.SaveSettings();
-                        authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
-                        authConfigService.SaveSettings();
                     }
                     return token;
                 }
+            }
+
+            if (GlobalConfigService.Instance.AppSettings.InitStatus == InitStep.InitTenant)
+            {
+
+                GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
+                GlobalConfigService.Instance.SaveSettings();
+                authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
+                authConfigService.SaveSettings();
             }
 
             return null;
