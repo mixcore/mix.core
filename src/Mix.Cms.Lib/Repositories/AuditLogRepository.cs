@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Repositories
                 _dbContext.Database.Migrate();
             }
         }
-        internal void Log(string createdBy, HttpRequest request, bool isSucceed, Exception exception)
+        public void Log(string createdBy, HttpRequest request, bool isSucceed, Exception exception)
         {
             Guid.TryParse(request.Headers["RequestId"], out Guid id);
             var msg = _dbContext.AuditLog.Find(id);
@@ -35,7 +35,7 @@ namespace Mix.Cms.Lib.Repositories
                     Id = id,
                     Body = body,
                     CreatedDateTime = DateTime.UtcNow,
-                    RequestIp = request.HttpContext.Connection.Id.ToString(),
+                    RequestIp = $"{request.Headers.Referer} - {request.HttpContext.Connection.RemoteIpAddress}",
                     Endpoint = request.Path,
                     Method = request.Method,
                     CreatedBy = createdBy

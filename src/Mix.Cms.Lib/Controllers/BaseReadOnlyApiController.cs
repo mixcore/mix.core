@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -34,10 +35,9 @@ namespace Mix.Cms.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
-
         public BaseReadOnlyApiController(DefaultRepository<TDbContext, TModel, TView> repo)
         {
-            _repo = repo;   
+            _repo = repo;
         }
 
         #region Routes
