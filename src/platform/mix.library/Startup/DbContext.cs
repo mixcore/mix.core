@@ -8,9 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static IServiceCollection AddMixDbContexts(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
-
             services.AddDbContext<ApplicationDbContext>();
-            services.AddDbContext<MixCmsContext>(ServiceLifetime.Transient);
+            services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
             return services;
         }
