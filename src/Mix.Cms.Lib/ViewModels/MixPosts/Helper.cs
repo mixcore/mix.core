@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -30,12 +31,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 Expression<Func<MixDatabaseDataValue, bool>> catePredicate = GetCategoryPredicate(searchPostData);
                 Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = GetTagPredicate(searchPostData);
+                Expression<Func<MixDatabaseDataValue, bool>> queryPredicate = GetQueryPredicate(searchPostData);
 
                 valPredicate = valPredicate
+                                .AndAlsoIf(queryPredicate != null, queryPredicate)
                                 .AndAlsoIf(catePredicate != null, catePredicate)
                                 .AndAlsoIf(tagPredicate != null, tagPredicate);
 
@@ -141,6 +143,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             };
         }
 
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetQueryPredicate(SearchPostQueryModel searchPostData)
+        {
+            Expression<Func<MixDatabaseDataValue, bool>> queryPredicate = null;
+            if (searchPostData.Query != null)
+            {
+                foreach (JProperty prop in searchPostData.Query.Properties())
+                {
+                    string val = searchPostData.Query.Value<string>(prop.Name);
+                    string name = prop.Name;
+                    queryPredicate = queryPredicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(val),
+                     Expressions.GetMetaExpression(searchPostData.PostType, val, searchPostData.Specificulture, name));
+                }
+            }
+            return queryPredicate;
+        }
+        
         private static Expression<Func<MixDatabaseDataValue, bool>> GetTagPredicate(SearchPostQueryModel searchPostData)
         {
             Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = null;
