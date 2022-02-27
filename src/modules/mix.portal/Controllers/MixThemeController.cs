@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.ViewModels;
+using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -60,6 +61,7 @@ namespace Mix.Portal.Controllers
             if (ModelState.IsValid)
             {
                 siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                siteData.Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 return Ok(result);
             }

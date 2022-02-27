@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System;
 
 #nullable disable
 
@@ -687,27 +687,27 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     SimpleDataColumns = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<string>(type: "text", nullable: true),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "text", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: true),
-                    Excerpt = table.Column<string>(type: "text", nullable: true),
-                    Content = table.Column<string>(type: "text", nullable: true),
-                    LayoutId = table.Column<int>(type: "integer", nullable: true),
-                    TemplateId = table.Column<int>(type: "integer", nullable: true),
-                    Image = table.Column<string>(type: "text", nullable: true),
-                    Source = table.Column<string>(type: "text", nullable: true),
-                    SeoDescription = table.Column<string>(type: "text", nullable: true),
-                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
-                    SeoName = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Excerpt = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    Content = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    LayoutId = table.Column<int>(type: "int", nullable: true),
+                    TemplateId = table.Column<int>(type: "int", nullable: true),
+                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    SeoDescription = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    SeoKeywords = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    SeoName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     SeoTitle = table.Column<string>(type: "text", nullable: true),
-                    PublishedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    PublishedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -732,12 +732,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -879,12 +879,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -905,12 +905,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },

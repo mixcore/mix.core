@@ -74,7 +74,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("([NormalizedName] IS NOT NULL)");
+                        .HasFilter("(NormalizedName IS NOT NULL)");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -301,7 +301,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
-                        .HasFilter("([NormalizedUserName] IS NOT NULL)");
+                        .HasFilter("(NormalizedUserName IS NOT NULL)");
 
                     b.ToTable("AspNetUsers");
                 });
