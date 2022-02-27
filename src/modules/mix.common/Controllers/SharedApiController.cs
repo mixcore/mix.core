@@ -19,6 +19,8 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
+        protected UnitOfWorkInfo _uow;
+        protected readonly MixCmsContext _context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         protected readonly CultureService _cultureService;
@@ -37,8 +39,10 @@ namespace Mix.Common.Controllers
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _authConfigurations = authConfigService.AppSettings;
-            _configRepo = MixConfigurationContentViewModel.GetRootRepository(context);
-            _langRepo = MixLanguageContentViewModel.GetRootRepository(context);
+            _context = context;
+            _uow = new(_context);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(_uow);
+            _langRepo = MixLanguageContentViewModel.GetRepository(_uow);
             _routeProvider = routeProvider;
             _authConfigService = authConfigService;
             _cultureService = cultureService;
@@ -122,7 +126,7 @@ namespace Mix.Common.Controllers
         [Route("get-all-settings")]
         public async Task<ActionResult<AllSettingModel>> GetAllSettingsAsync()
         {
-            var settings = await GetAllSettingsAsync();
+            var settings = await GetSettingsAsync();
             return Ok(settings);
         }
 
@@ -130,7 +134,7 @@ namespace Mix.Common.Controllers
         [Route("get-shared-settings/{culture}")]
         public async Task<ActionResult<AllSettingModel>> GetSharedSettingsAsync(string culture)
         {
-            var settings = await GetAllSettingsAsync(culture);
+            var settings = await GetSettingsAsync(culture);
             return Ok(settings);
         }
 
@@ -171,7 +175,7 @@ namespace Mix.Common.Controllers
 
         #endregion
 
-        private async Task<AllSettingModel> GetAllSettingsAsync(string lang = null)
+        private async Task<AllSettingModel> GetSettingsAsync(string lang = null)
         {
             return new AllSettingModel()
             {
