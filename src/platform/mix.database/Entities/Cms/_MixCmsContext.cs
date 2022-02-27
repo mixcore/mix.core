@@ -1,6 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.EntityConfigurations.MYSQL;
+using Mix.Database.EntityConfigurations.POSTGRES;
+using Mix.Database.EntityConfigurations.SQLITE;
+using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
 using MySqlConnector;
@@ -15,6 +18,13 @@ namespace Mix.Database.Entities.Cms
         {
             _connectionString = connectionString;
             _databaseProvider = databaseProvider;
+        }
+
+        public MixCmsContext()
+        {
+            _databaseService = new MixDatabaseService();
+            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseProvider = _databaseService.DatabaseProvider;
         }
 
         public MixCmsContext(MixDatabaseService databaseService)
@@ -44,6 +54,8 @@ namespace Mix.Database.Entities.Cms
 
                     case MixDatabaseProvider.PostgreSQL:
                         optionsBuilder.UseNpgsql(_connectionString);
+                        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
                         break;
 
                     default:
@@ -57,16 +69,16 @@ namespace Mix.Database.Entities.Cms
             string ns = _databaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER
-                     => typeof(MySqlDatabaseConstants).Namespace,
+                     => typeof(SqlServerDatabaseConstants).Namespace,
 
                 MixDatabaseProvider.MySQL
                     => typeof(MySqlDatabaseConstants).Namespace,
 
                 MixDatabaseProvider.SQLITE
-                    => typeof(MySqlDatabaseConstants).Namespace,
+                    => typeof(SqliteDatabaseConstants).Namespace,
 
                 MixDatabaseProvider.PostgreSQL
-                    => typeof(MySqlDatabaseConstants).Namespace,
+                    => typeof(PostgresDatabaseConstants).Namespace,
                 _ => string.Empty
             };
             base.OnModelCreating(modelBuilder);

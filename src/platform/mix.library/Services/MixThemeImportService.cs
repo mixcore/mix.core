@@ -364,6 +364,7 @@ namespace Mix.Lib.Services
                     dic.Add(item.Id, startId);
                     item.Id = startId;
                     item.ParentId = parentDic[item.ParentId];
+                    item.Specificulture ??= _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);

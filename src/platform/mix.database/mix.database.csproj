@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\Account\PostgresSQLAccount\" />
     <Folder Include="Migrations\MySqlMixCms\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />

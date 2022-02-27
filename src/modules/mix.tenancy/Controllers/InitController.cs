@@ -121,6 +121,7 @@ namespace Mix.Tenancy.Controllers
             if (ModelState.IsValid)
             {
                 siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                siteData.Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
                 GlobalConfigService.Instance.AppSettings.IsInit = false;

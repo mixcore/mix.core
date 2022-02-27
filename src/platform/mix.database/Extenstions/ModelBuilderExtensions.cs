@@ -31,7 +31,7 @@ namespace Mix.Database.Extensions
                 entity.HasIndex(e => e.NormalizedName)
                     .HasDatabaseName("RoleNameIndex")
                     .IsUnique()
-                    .HasFilter("([NormalizedName] IS NOT NULL)");
+                    .HasFilter("(NormalizedName IS NOT NULL)");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("varchar(50)")
@@ -161,7 +161,7 @@ namespace Mix.Database.Extensions
                 entity.HasIndex(e => e.NormalizedUserName)
                     .HasDatabaseName("UserNameIndex")
                     .IsUnique()
-                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
+                    .HasFilter("(NormalizedUserName IS NOT NULL)");
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
@@ -268,7 +268,7 @@ namespace Mix.Database.Extensions
                 entity.HasIndex(e => e.NormalizedName)
                     .HasDatabaseName("RoleNameIndex")
                     .IsUnique()
-                    .HasFilter("([NormalizedName] IS NOT NULL)");
+                    .HasFilter("(NormalizedName IS NOT NULL)");
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
@@ -388,7 +388,7 @@ namespace Mix.Database.Extensions
                 entity.HasIndex(e => e.NormalizedUserName)
                     .HasDatabaseName("UserNameIndex")
                     .IsUnique()
-                    .HasFilter("([NormalizedUserName] IS NOT NULL)");
+                    .HasFilter("(NormalizedUserName IS NOT NULL)");
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
