@@ -37,6 +37,20 @@ namespace Mix.Lib.Services
 
         #region Import
 
+        public async Task DownloadThemeAsync(
+            JObject theme, IProgress<int> progress, HttpService httpService)
+        {
+            string name = theme.Value<string>("name");
+            MixFileHelper.EmptyFolder(MixFolders.ThemePackage);
+            var cancellationToken = new CancellationToken();
+
+            await httpService.DownloadAsync(
+                theme.Value<string>("source"),
+                MixFolders.ThemePackage,
+                name, MixFileExtensions.Zip,
+                progress, cancellationToken);
+        }
+
 
         public SiteDataViewModel LoadSchema()
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -6,8 +7,12 @@ using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Enums;
+using Mix.SignalR.Constants;
+using Mix.SignalR.Hubs;
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Tenancy.Controllers
 {
@@ -17,7 +22,8 @@ namespace Mix.Tenancy.Controllers
     {
         private readonly InitCmsService _initCmsService;
         private readonly MixThemeImportService _importService;
-
+        private readonly HttpService _httpService;
+        protected readonly IHubContext<InitCmsHub> _hubContext;
         public InitController(
             IConfiguration configuration,
 
@@ -27,15 +33,18 @@ namespace Mix.Tenancy.Controllers
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            MixThemeImportService importService)
+            MixThemeImportService importService,
+            HttpService httpService, IHubContext<InitCmsHub> hubContext)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _initCmsService = initCmsService;
             _importService = importService;
+            _httpService = httpService;
+            _hubContext = hubContext;
         }
 
 
-        #region Post
+        #region Routes
 
         /// <summary>
         /// When status = Blank
@@ -84,6 +93,30 @@ namespace Mix.Tenancy.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("install")]
+        public async Task<ActionResult<bool>> InstallTheme([FromBody] JObject theme)
+        {
+            var progress = new Progress<int>();
+            var percent = 0;
+            progress.ProgressChanged += (sender, value) =>
+            {
+                if (value > percent)
+                {
+                    percent = value;
+                    _ = AlertAsync(_hubContext.Clients.Group("Theme"), "Downloading", 200, value);
+
+                }
+            };
+
+            await _importService.DownloadThemeAsync(theme, progress, _httpService);
+            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SaveSettings();
+            return Ok();
+        }
+
+
 
         /// <summary>
         /// When status = InitAcccount
@@ -162,5 +195,33 @@ namespace Mix.Tenancy.Controllers
             }
         }
         #endregion Helpers
+
+        #region Helpers
+        public virtual async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
+        {
+            var address = Request.Headers["X-Forwarded-For"];
+            if (string.IsNullOrEmpty(address))
+            {
+                address = Request.Host.Value;
+            }
+            var logMsg = new JObject()
+                {
+                    new JProperty("created_at", DateTime.UtcNow),
+                    new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("address", address),
+                    new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    new JProperty("user", _mixIdentityService.GetClaim(User, MixClaims.Username)),
+                    new JProperty("request_url", Request.Path.Value),
+                    new JProperty("action", action),
+                    new JProperty("status", status),
+                    new JProperty("message", message)
+                };
+
+            //It's not possible to configure JSON serialization in the JavaScript client at this time (March 25th 2020).
+            //https://docs.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-3.1&tabs=dotnet
+            await clients.SendAsync(
+                HubMethods.ReceiveMethod, logMsg.ToString(Formatting.None));
+        }
+        #endregion
     }
 }
