@@ -62,12 +62,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.RoutePrefix = routePrefix;
                 });
             }
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
