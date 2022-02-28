@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Identity.Extensions;
+using Mix.Identity.Helpers;
 using Mix.Identity.Models;
 using System;
 using System.Text;
-using Mix.Identity.Extensions;
-using Mix.Identity.Helpers;
 
 namespace Mix.Cms.Web
 {

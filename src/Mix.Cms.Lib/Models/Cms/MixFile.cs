@@ -1,10 +1,9 @@
 ﻿using Mix.Cms.Lib.Enums;
 using Mix.Heart.Infrastructure.Entities;
-using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixFile: AuditedEntity
+    public partial class MixFile : AuditedEntity
     {
         public int Id { get; set; }
         public string StringContent { get; set; }

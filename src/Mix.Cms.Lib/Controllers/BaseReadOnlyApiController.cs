@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Models;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Models;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -34,10 +34,9 @@ namespace Mix.Cms.Lib.Controllers
         /// The domain
         /// </summary>
         protected string _domain;
-
         public BaseReadOnlyApiController(DefaultRepository<TDbContext, TModel, TView> repo)
         {
-            _repo = repo;   
+            _repo = repo;
         }
 
         #region Routes

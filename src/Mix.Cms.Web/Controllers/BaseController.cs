@@ -43,7 +43,7 @@ namespace Mix.Cms.Web.Controllers
 
         public BaseController()
         {
-            
+
         }
 
         private void LoadCulture()
@@ -121,7 +121,7 @@ namespace Mix.Cms.Web.Controllers
             }
 
             // If mode Maintenance enabled in appsettings
-            if (MixService.GetAppSetting<bool>("IsMaintenance") 
+            if (MixService.GetAppSetting<bool>("IsMaintenance")
                 && Request.RouteValues["seoName"]?.ToString() != "maintenance"
                 && Request.RouteValues["controller"]?.ToString().ToLower() != "portal"
                 && Request.RouteValues["controller"]?.ToString().ToLower() != "security")

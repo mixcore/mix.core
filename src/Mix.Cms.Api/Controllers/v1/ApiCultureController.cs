@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Hubs;
@@ -19,7 +18,6 @@ using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -33,8 +31,8 @@ namespace Mix.Cms.Api.Controllers.v1
     {
         private readonly MixIdentityHelper _idHelper;
         public ApiCultureController(
-            MixCmsContext context, 
-            IMemoryCache memoryCache, 
+            MixCmsContext context,
+            IMemoryCache memoryCache,
             IHubContext<PortalHub> hubContext,
             MixIdentityHelper idHelper) : base(context, memoryCache, hubContext)
         {

@@ -2,8 +2,6 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +16,6 @@ using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels.Account;
 using Mix.Cms.Lib.ViewModels.MixInit;
 using Mix.Heart.Constants;
-using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Models;
@@ -44,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
            SignInManager<ApplicationUser> signInManager,
            RoleManager<IdentityRole> roleManager,
             IHubContext<PortalHub> hubContext,
-            IMemoryCache memoryCache, 
+            IMemoryCache memoryCache,
             MixIdentityService idHelper)
             : base(null, memoryCache, hubContext)
         {
@@ -113,7 +110,7 @@ namespace Mix.Cms.Api.Controllers.v1
                         await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                         var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                         var aesKey = MixService.GetAppSetting<string>(MixAppSettingKeywords.ApiEncryptKey);
-                        
+
                         var token = await _idHelper.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                         if (token != null)
                         {
@@ -226,7 +223,7 @@ namespace Mix.Cms.Api.Controllers.v1
             string user = _idHelper._idHelper.GetClaim(User, MixClaims.Username);
             return await Mix.Cms.Lib.ViewModels.MixThemes.Helper.InitTheme(model, user, _lang, assets, theme);
         }
-        
+
         /// <summary>
         /// Step 3 when status = 3 (Finished)
         ///     - Init default theme

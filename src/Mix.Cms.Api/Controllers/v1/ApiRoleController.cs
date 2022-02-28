@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Mix.Cms.Lib.Constants;
-using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.SignalR.Hubs;
@@ -42,7 +41,7 @@ namespace Mix.Cms.Api.Controllers.v1
             //IEmailSender emailSender,
             ILogger<ApiRoleController> logger,
             IMemoryCache memoryCache,
-            IHubContext<PortalHub> hubContext, 
+            IHubContext<PortalHub> hubContext,
             MixIdentityHelper mixIdentityHelper) : base(null, memoryCache, hubContext)
         {
             _userManager = userManager;

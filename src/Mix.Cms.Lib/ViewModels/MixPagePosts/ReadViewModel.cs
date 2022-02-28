@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Common.Helper;
@@ -168,7 +167,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPagePosts
                         IsActived = p.MixPagePost.Any(cp => cp.PostId == postId && cp.Specificulture == specificulture),
                         Description = p.Title
                     });
-                
+
                 result.AddRange(inactiveNavs.ToList());
 
                 return new RepositoryResponse<List<ReadViewModel>>()

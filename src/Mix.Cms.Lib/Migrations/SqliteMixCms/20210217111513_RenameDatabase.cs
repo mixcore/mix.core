@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
+using System;
 
 namespace Mix.Cms.Lib.Migrations.SqliteMixCms
 {

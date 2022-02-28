@@ -34,7 +34,7 @@ namespace Mix.Theme.Blog
         public static async Task<dynamic> GetTagInfo(string keyword, string culture)
         {
             var result = (await MixDatas.Helper.GetSingleDataAsync<MixDatas.ReadMvcViewModel>(keyword, "slug", "sys_tag", culture))?.Data?.Obj;
-            return  result as dynamic;
+            return result as dynamic;
         }
 
         public static async Task<dynamic> GetAuthorInfo(string keyword, string culture)
@@ -59,7 +59,7 @@ namespace Mix.Theme.Blog
                     var prevId = postIdsByMeta.OrderBy(p => p).Where(p => p < currentPost.Id).FirstOrDefault();
                     var nextId = postIdsByMeta.OrderBy(p => p).Where(p => p > currentPost.Id).FirstOrDefault();
                     result["PreviousPost"] = prevId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == prevId && m.Specificulture == culture)) : null;
-                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId && m.Specificulture == culture)) : null;                     
+                    result["NextPost"] = nextId > 0 ? new MixPosts.ReadMvcViewModel(ctx.MixPost.Single(m => m.Id == nextId && m.Specificulture == culture)) : null;
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace Mix.Theme.Blog
             string rtn = "";
             for (int i = 0; i < tmp.Length; i++)
             {
-                rtn += tmp[i] + (i < tmp.Length-2?".":"");
+                rtn += tmp[i] + (i < tmp.Length - 2 ? "." : "");
                 if (i == tmp.Length - 2)
                 {
                     rtn += "_" + size + ".";

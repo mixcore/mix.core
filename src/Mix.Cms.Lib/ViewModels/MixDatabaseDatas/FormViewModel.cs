@@ -476,9 +476,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     else
                     {
                         var getRelated = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetSingleModelAsync(
-                                m => 
-                                    m.DataId == item.Id 
-                                    && m.ParentId == Id 
+                                m =>
+                                    m.DataId == item.Id
+                                    && m.ParentId == Id
                                     && m.Specificulture == item.Specificulture,
                                     context, transaction);
                         if (getRelated.IsSucceed)

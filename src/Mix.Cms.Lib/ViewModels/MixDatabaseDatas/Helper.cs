@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Extensions;
+using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -23,8 +24,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using Mix.Cms.Lib.Helpers;
 
 namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 {
@@ -523,7 +522,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     var valDataIds = context.MixDatabaseDataValue.Where(attrPredicate)
                             .Select(m => m.DataId);
 
-                    if (compareType== "and")
+                    if (compareType == "and")
                     {
                         valDataIds = valDataIds.GroupBy(m => m)
                             .Select(g => new { count = g.Count(), id = g.Key })

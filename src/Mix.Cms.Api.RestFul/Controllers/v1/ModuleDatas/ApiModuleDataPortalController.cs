@@ -30,7 +30,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     {
         public ApiModuleDataDataController(
             DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> repo,
-            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixModuleData, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo) :

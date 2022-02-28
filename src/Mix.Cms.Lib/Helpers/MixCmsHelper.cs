@@ -7,26 +7,26 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Mix.Infrastructure.Repositories;
 using System.Web;
 using MixDatas = Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using MixPagePosts = Mix.Cms.Lib.ViewModels.MixPagePosts;
 using MixPosts = Mix.Cms.Lib.ViewModels.MixPosts;
-using System.Collections.Specialized;
 
 namespace Mix.Cms.Lib.Helpers
 {
@@ -261,7 +261,7 @@ namespace Mix.Cms.Lib.Helpers
                         string path = item.Uri.IndexOf('?') > 0 ?
                             item.Uri[..item.Uri.IndexOf('?')]
                             : item.Uri;
-                        
+
                         item.IsActive = path == activePath;
                         if (item.IsActive)
                         {
@@ -612,8 +612,8 @@ namespace Mix.Cms.Lib.Helpers
             if (currentAlias != null)
             {
                 var alias = context.MixUrlAlias.FirstOrDefault(
-                        m => m.Type == currentAlias.Type 
-                            && m.SourceId == currentAlias.SourceId 
+                        m => m.Type == currentAlias.Type
+                            && m.SourceId == currentAlias.SourceId
                             && m.Specificulture == destCulture)?.Alias;
                 if (string.IsNullOrEmpty(alias))
                 {

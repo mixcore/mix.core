@@ -10,14 +10,14 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
     public class Expressions
     {
-        public static Expression<Func<MixDatabaseDataValue, bool>> GetMetaExpression(string databaseName, string slug, string culture = null)
+        public static Expression<Func<MixDatabaseDataValue, bool>> GetMetaExpression(string databaseName, string slug, string culture = null, string colName = "slug")
         {
             culture ??= MixService.GetAppSetting<string>(MixAppSettingKeywords.DefaultCulture);
             Expression<Func<MixDatabaseDataValue, bool>> valExp =
                 m => m.Specificulture == culture
                     && m.Status == MixContentStatus.Published
                     && m.MixDatabaseName == databaseName
-                    && m.MixDatabaseColumnName == "slug" && EF.Functions.Like(m.StringValue, slug);
+                    && m.MixDatabaseColumnName == colName && EF.Functions.Like(m.StringValue, slug);
             return valExp;
         }
     }

@@ -1,5 +1,4 @@
-﻿using Mix.Cms.Lib.Enums;
-using Mix.Heart.Enums;
+﻿using Mix.Heart.Enums;
 using Newtonsoft.Json;
 
 namespace Mix.Cms.Lib.ViewModels.MixInit
@@ -9,8 +8,10 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
         #region Properties
 
         [JsonProperty("connectionString")]
-        public string ConnectionString {
-            get {
+        public string ConnectionString
+        {
+            get
+            {
                 switch (DatabaseProvider)
                 {
                     case MixDatabaseProvider.MSSQL:

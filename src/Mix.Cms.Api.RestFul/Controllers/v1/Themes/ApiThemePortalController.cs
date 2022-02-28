@@ -2,33 +2,33 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
+using Mix.Cms.Lib.Repositories;
+using Mix.Cms.Lib.Services;
+using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Cms.Lib.ViewModels.MixThemes;
+using Mix.Heart.Extensions;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
+using Mix.Identity.Constants;
+using Mix.Identity.Helpers;
+using Mix.Infrastructure.Repositories;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
-using Mix.Cms.Lib.Services;
-using Newtonsoft.Json.Linq;
-using Mix.Cms.Lib.Constants;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Cms.Lib.SignalR.Hubs;
-using Mix.Identity.Constants;
-using Mix.Identity.Helpers;
-using Mix.Infrastructure.Repositories;
-using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -76,7 +76,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
 
         protected override async Task<RepositoryResponse<UpdateViewModel>> GetSingleAsync(string id)
         {
-            var result =  await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
+            var result = await _updRepo.GetSingleModelAsync(m => m.Id == int.Parse(id));
             if (result.IsSucceed)
             {
                 result.Data.IsActived = MixService.GetConfig<int>(MixAppSettingKeywords.ThemeId, _lang) == result.Data.Id;
@@ -149,7 +149,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 {
                     return BadRequest(result.Errors);
                 }
-                
+
             }
             return NotFound();
         }

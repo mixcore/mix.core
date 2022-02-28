@@ -75,7 +75,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
 
         [JsonProperty("columns")]
         public List<Lib.ViewModels.MixDatabaseColumns.UpdateViewModel> Columns { get; set; }
-        
+
         [Obsolete]
         [JsonProperty("fields")]
         public List<Lib.ViewModels.MixDatabaseColumns.UpdateViewModel> Fields { get; set; }

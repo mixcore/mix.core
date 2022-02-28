@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Cms.Lib.Models.Messenger;
-using Mix.Heart.Infrastructure.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +78,7 @@ namespace Mix.Cms.Lib.SignalR.Hubs
             foreach (var roomName in Rooms.Keys)
             {
                 Rooms[roomName].RemoveAll(m => m.ConnectionId == Context.ConnectionId);
-                await SendMessageToGroup(new { type = "MemberList", data = Rooms[roomName]}, roomName);
+                await SendMessageToGroup(new { type = "MemberList", data = Rooms[roomName] }, roomName);
             }
         }
     }

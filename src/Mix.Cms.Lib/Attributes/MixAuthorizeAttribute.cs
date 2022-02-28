@@ -23,7 +23,7 @@ namespace Mix.Cms.Lib.Attributes
         protected readonly MixIdentityService _idService;
         protected AuditLogRepository _auditlogRepo;
         protected MixIdentityHelper _mixIdentityHelper;
-        
+
         public AuthorizeActionFilter(
             MixIdentityService idService,
             AuditLogRepository auditlogRepo,
@@ -43,7 +43,7 @@ namespace Mix.Cms.Lib.Attributes
             {
                 context.Result = new UnauthorizedResult();
             }
-            
+
             context.HttpContext.Request.EnableBuffering();
             context.HttpContext.Request.Headers.Add("RequestId", Guid.NewGuid().ToString());
             _auditlogRepo.Log(

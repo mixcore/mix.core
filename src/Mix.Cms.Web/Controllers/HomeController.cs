@@ -40,7 +40,7 @@ namespace Mix.Cms.Web.Controllers
 
         #region Routes
 
-        
+
         [HttpGet]
         public async Task<IActionResult> Index(string seoName, string keyword)
         {

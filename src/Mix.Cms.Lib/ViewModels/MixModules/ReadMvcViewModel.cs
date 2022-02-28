@@ -248,8 +248,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
             {
                 string sortBy = Property<string>("sortBy") ?? MixService.GetAppSetting<string>(MixAppSettingKeywords.SortBy);
                 Enum.TryParse(typeof(DisplayDirection), Property<string>("sortDirection"), out object direction);
-                DisplayDirection sortDirection = direction != null 
-                    ? (DisplayDirection)direction 
+                DisplayDirection sortDirection = direction != null
+                    ? (DisplayDirection)direction
                     : MixService.GetEnumConfig<DisplayDirection>(MixAppSettingKeywords.SortBy); ;
                 pageSize = pageSize > 0 ? pageSize : PageSize;
                 pageIndex = pageIndex > 0 ? pageIndex : 0;
@@ -278,8 +278,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
                 {
                     var getDataResult = MixModuleDatas.ReadViewModel.Repository
                     .GetModelListBy(
-                        dataExp, 
-                        sortBy, 
+                        dataExp,
+                        sortBy,
                         sortDirection,
                         pageSize, pageIndex
                         , _context: context, _transaction: transaction);

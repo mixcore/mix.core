@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Extensions;
+using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
@@ -20,6 +21,8 @@ namespace Mix.Cms.Lib.Models.Cms
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
             modelBuilder.ApplyAllConfigurationsFromNamespace(
                 this.GetType().Assembly,
                 "Mix.Cms.Lib.Models.EntityConfigurations.POSTGRESQL");

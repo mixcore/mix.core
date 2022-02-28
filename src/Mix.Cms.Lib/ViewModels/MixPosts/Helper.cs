@@ -6,11 +6,12 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,13 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             try
             {
-
                 Expression<Func<MixDatabaseDataValue, bool>> valPredicate = null;
                 Expression<Func<MixDatabaseDataValue, bool>> catePredicate = GetCategoryPredicate(searchPostData);
                 Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = GetTagPredicate(searchPostData);
+                Expression<Func<MixDatabaseDataValue, bool>> queryPredicate = GetQueryPredicate(searchPostData);
 
                 valPredicate = valPredicate
+                                .AndAlsoIf(queryPredicate != null, queryPredicate)
                                 .AndAlsoIf(catePredicate != null, catePredicate)
                                 .AndAlsoIf(tagPredicate != null, tagPredicate);
 
@@ -141,6 +143,23 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             };
         }
 
+        private static Expression<Func<MixDatabaseDataValue, bool>> GetQueryPredicate(SearchPostQueryModel searchPostData)
+        {
+            Expression<Func<MixDatabaseDataValue, bool>> queryPredicate = null;
+            if (searchPostData.Query != null)
+            {
+                foreach (JProperty prop in searchPostData.Query.Properties())
+                {
+                    string val = searchPostData.Query.Value<string>(prop.Name);
+                    string name = prop.Name;
+                    queryPredicate = queryPredicate.AndAlsoIf(
+                    !string.IsNullOrEmpty(val),
+                     Expressions.GetMetaExpression(searchPostData.PostType, val, searchPostData.Specificulture, name));
+                }
+            }
+            return queryPredicate;
+        }
+
         private static Expression<Func<MixDatabaseDataValue, bool>> GetTagPredicate(SearchPostQueryModel searchPostData)
         {
             Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = null;
@@ -185,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             var resultIds = searchPostData.PagingData.OrderBy.StartsWith("additionalData.")
                 ? GetSortedIdsByValue(allPostIds, context, searchPostData.PagingData, searchPostData.Specificulture, searchPostData.PostType)
-                : searchPostData.PageId.HasValue 
+                : searchPostData.PageId.HasValue
                     ? GetSortedIdsByPage(allPostIds, searchPostData, context, transaction)
                     : allPostIds.Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
                                 .Take(searchPostData.PagingData.PageSize)
@@ -224,7 +243,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     .OrderBy(p => p.Priority)
                     .Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
                     .Take(searchPostData.PagingData.PageSize)
-                    .Select(p=>p.PostId)
+                    .Select(p => p.PostId)
                     .ToList();
         }
 

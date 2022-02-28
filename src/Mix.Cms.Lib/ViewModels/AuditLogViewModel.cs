@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace Mix.Cms.Lib.ViewModels
 {
     [GeneratedController("api/v1/rest/audit-log")]
-    public class AuditLogViewModel:ViewModelBase<AuditContext, AuditLog, AuditLogViewModel>
+    public class AuditLogViewModel : ViewModelBase<AuditContext, AuditLog, AuditLogViewModel>
     {
         public AuditLogViewModel()
         {

@@ -15,9 +15,9 @@ namespace Mix.Cms.Lib.Controllers
         where TDbContext : DbContext
         where TModel : class
         where TView : ViewModelBase<TDbContext, TModel, TView>
-    { 
+    {
 
-        public BaseLocalizeRestApiController(DefaultRepository<TDbContext, TModel, TView> repo): base(repo)
+        public BaseLocalizeRestApiController(DefaultRepository<TDbContext, TModel, TView> repo) : base(repo)
         {
             _repo = repo;
         }
