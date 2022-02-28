@@ -7,7 +7,7 @@ namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 0 - Init")]
     public class c0_InitCmsTest
-        : TestBase<SharedMixCmsDbFixture, MixCmsContext>, IClassFixture<SharedMixCmsDbFixture>
+        : TestBase<SharedMixCmsDbFixture, MixCmsContext>
     {
         private readonly InitCmsService _initCmsService;
         public c0_InitCmsTest(
