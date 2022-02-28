@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
+using Mix.Cms.Schedule.Extensions;
+using Mix.Cms.Schedule.Helpers;
 using Mix.Cms.Schedule.Jobs;
 using Mix.Cms.Schedule.Models;
 using Quartz;
@@ -11,9 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Cms.Schedule.Extensions;
-using Mix.Cms.Lib.Constants;
-using Mix.Cms.Schedule.Helpers;
 
 namespace Mix.Cms.Schedule
 {
@@ -86,7 +86,7 @@ namespace Mix.Cms.Schedule
 
                 var applyGenericMethod = typeof(Quartz.ServiceCollectionExtensions)
                    .GetMethods(BindingFlags.Static | BindingFlags.Public)
-                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) &&  m.GetParameters()[1].ParameterType == typeof(JobKey));
+                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) && m.GetParameters()[1].ParameterType == typeof(JobKey));
                 var parameters = applyGenericMethod.GetParameters();
                 var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(jobConfig.JobType);
                 applyConcreteMethod.Invoke(quartzConfiguration, new object[] { quartzConfiguration, jobKey, jobConfigurator });

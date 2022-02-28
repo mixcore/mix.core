@@ -25,7 +25,7 @@ namespace Mix.Cms.Lib.Migrations.SqliteMixCms
             migrationBuilder.Sql(@"UPDATE mix_database_column SET MixDatabaseName='sys_additional_column_post' WHERE MixDatabaseName='sys_additional_field_post'");
             migrationBuilder.Sql(@"UPDATE mix_database_column SET MixDatabaseName='sys_additional_column_module' WHERE MixDatabaseName='sys_additional_field_module'");
             migrationBuilder.Sql(@"UPDATE mix_database_column SET MixDatabaseName='sys_additional_column' WHERE MixDatabaseName='sys_additional_field'");
-            
+
             migrationBuilder.Sql(@"UPDATE mix_database_column SET Name='databaseName' WHERE MixDatabaseName='post_type' AND Name='mix_database_name'");
 
             migrationBuilder.Sql(@"UPDATE mix_database_data_value SET MixDatabaseName='sys_additional_column_page' WHERE MixDatabaseName='sys_additional_field_page'");

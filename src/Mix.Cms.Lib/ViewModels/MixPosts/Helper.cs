@@ -6,17 +6,17 @@ using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.Services;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Cms.Lib.ViewModels.MixPosts
 {
@@ -159,7 +159,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
             }
             return queryPredicate;
         }
-        
+
         private static Expression<Func<MixDatabaseDataValue, bool>> GetTagPredicate(SearchPostQueryModel searchPostData)
         {
             Expression<Func<MixDatabaseDataValue, bool>> tagPredicate = null;
@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
 
             var resultIds = searchPostData.PagingData.OrderBy.StartsWith("additionalData.")
                 ? GetSortedIdsByValue(allPostIds, context, searchPostData.PagingData, searchPostData.Specificulture, searchPostData.PostType)
-                : searchPostData.PageId.HasValue 
+                : searchPostData.PageId.HasValue
                     ? GetSortedIdsByPage(allPostIds, searchPostData, context, transaction)
                     : allPostIds.Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
                                 .Take(searchPostData.PagingData.PageSize)
@@ -243,7 +243,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPosts
                     .OrderBy(p => p.Priority)
                     .Skip(searchPostData.PagingData.PageIndex * searchPostData.PagingData.PageSize)
                     .Take(searchPostData.PagingData.PageSize)
-                    .Select(p=>p.PostId)
+                    .Select(p => p.PostId)
                     .ToList();
         }
 

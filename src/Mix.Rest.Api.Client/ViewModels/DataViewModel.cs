@@ -114,11 +114,11 @@ namespace Mix.Rest.Api.Client.ViewModels
             }
             if (Columns.Any(c => c.DataType == MixDataType.Reference))
             {
-                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture, 
+                Obj.LoadAllReferenceData(Id, MixDatabaseId, Specificulture,
                     Columns
-                    .Where(c=>c.DataType == MixDataType.Reference)
-                    .Select(c => new MixDatabaseColumn() 
-                    { 
+                    .Where(c => c.DataType == MixDataType.Reference)
+                    .Select(c => new MixDatabaseColumn()
+                    {
                         Name = c.Name,
                         ReferenceId = c.ReferenceId,
                         DataType = c.DataType
@@ -128,7 +128,7 @@ namespace Mix.Rest.Api.Client.ViewModels
             }
         }
 
-       
+
         #endregion Overrides
 
         #region Expands

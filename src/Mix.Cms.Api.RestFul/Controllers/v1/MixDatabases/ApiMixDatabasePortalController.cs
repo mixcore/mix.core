@@ -27,8 +27,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabase, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
         public ApiMixDatabasePortalController(
-            DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabase, ReadViewModel> repo,
+            DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixDatabase, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo) :
@@ -73,7 +73,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                     m => (m.Id == dbId || m.Name == id));
             return Ok(result.Data);
         }
-        
+
         [HttpPost("migrate/{id}")]
         public async Task<ActionResult> Migrate([FromBody] UpdateViewModel database)
         {

@@ -1,5 +1,4 @@
-﻿using Quartz;
-using System;
+﻿using System;
 
 namespace Mix.Cms.Schedule.Models
 {

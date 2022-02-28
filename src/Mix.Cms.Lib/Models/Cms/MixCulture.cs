@@ -1,11 +1,10 @@
 ﻿using Mix.Cms.Lib.Enums;
 using Mix.Heart.Infrastructure.Entities;
-using System;
 using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixCulture: AuditedEntity
+    public partial class MixCulture : AuditedEntity
     {
         public MixCulture()
         {

@@ -69,7 +69,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
                 Role = RoleViewModel.Repository.GetSingleModel(r => r.Id == RoleId, _context, _transaction).Data;
                 Description = Role?.Name;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

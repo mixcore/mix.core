@@ -23,8 +23,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseDataAssociation, FormViewModel, FormViewModel, DeleteViewModel>
     {
         public ApiMixDatabaseDataAssociationPortalController(
-            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo,
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, DeleteViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo)

@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleMvcController :
         BaseRestApiController<MixCmsContext, MixModule, ReadMvcViewModel>
     {
-        public ApiModuleMvcController(DefaultRepository<MixCmsContext, MixModule, ReadMvcViewModel> repo) 
+        public ApiModuleMvcController(DefaultRepository<MixCmsContext, MixModule, ReadMvcViewModel> repo)
             : base(repo)
         {
         }

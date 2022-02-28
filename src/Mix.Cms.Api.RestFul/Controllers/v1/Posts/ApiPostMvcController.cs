@@ -3,20 +3,15 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -25,7 +20,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPostMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, ReadMvcViewModel>
     {
-        public ApiPostMvcController(DefaultRepository<MixCmsContext, MixPost, ReadMvcViewModel> repo) 
+        public ApiPostMvcController(DefaultRepository<MixCmsContext, MixPost, ReadMvcViewModel> repo)
             : base(repo)
         {
         }

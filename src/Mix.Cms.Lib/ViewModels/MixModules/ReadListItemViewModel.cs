@@ -83,8 +83,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         #endregion Models
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrWhiteSpace(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/{Image}";
@@ -97,8 +99,10 @@ namespace Mix.Cms.Lib.ViewModels.MixModules
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}/{Thumbnail}";

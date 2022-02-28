@@ -32,7 +32,7 @@ namespace Mix.Cms.Lib.Models.Cms
         public virtual DbSet<MixPost> MixPost { get; set; }
         public virtual DbSet<MixPostMedia> MixPostMedia { get; set; }
         public virtual DbSet<MixPostModule> MixPostModule { get; set; }
-        
+
         public virtual DbSet<MixPostAssociation> MixRelatedPost { get; set; }
         public virtual DbSet<MixTemplate> MixTemplate { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }

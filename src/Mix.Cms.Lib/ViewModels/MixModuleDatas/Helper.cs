@@ -23,8 +23,8 @@ namespace Mix.Cms.Lib.ViewModels.MixModuleDatas
                     case MixDataType.Upload:
                         string fullUrl = val["value"].ToString().TrimStart('/');
 
-                        fullUrl = string.IsNullOrEmpty(fullUrl) || fullUrl.IndexOf("http") >= 0 
-                            ? fullUrl 
+                        fullUrl = string.IsNullOrEmpty(fullUrl) || fullUrl.IndexOf("http") >= 0
+                            ? fullUrl
                             : $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{fullUrl.TrimStart('/')}";
                         val["value"] = fullUrl;
                         break;

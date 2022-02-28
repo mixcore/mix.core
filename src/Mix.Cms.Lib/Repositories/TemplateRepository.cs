@@ -28,8 +28,10 @@ namespace Mix.Cms.Lib.Repositories
         /// Gets the instance.
         /// </summary>
         /// <returns></returns>
-        public static TemplateRepository Instance {
-            get {
+        public static TemplateRepository Instance
+        {
+            get
+            {
                 if (instance == null)
                 {
                     lock (syncRoot)

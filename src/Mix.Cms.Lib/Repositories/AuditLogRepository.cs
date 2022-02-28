@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 
 namespace Mix.Cms.Lib.Repositories
 {
@@ -42,7 +41,7 @@ namespace Mix.Cms.Lib.Repositories
                 };
                 _dbContext.AuditLog.Add(msg);
             }
-            if (exception!=null)
+            if (exception != null)
             {
                 msg.Exception = JObject.FromObject(exception).ToString(Newtonsoft.Json.Formatting.None);
             }

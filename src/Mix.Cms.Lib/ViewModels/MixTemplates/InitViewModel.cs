@@ -3,8 +3,8 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
-using Mix.Heart.Models;
 using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -82,21 +82,27 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         public string Layout { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }

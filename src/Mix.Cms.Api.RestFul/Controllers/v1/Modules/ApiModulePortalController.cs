@@ -27,8 +27,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixModule, UpdateViewModel, ReadListItemViewModel, UpdateViewModel>
     {
         public ApiModuleController(
-            DefaultRepository<MixCmsContext, MixModule, ReadListItemViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixModule, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixModule, ReadListItemViewModel> repo,
+            DefaultRepository<MixCmsContext, MixModule, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixModule, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo)
@@ -69,7 +69,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             var result = await base.SaveAsync(vm, isSaveSubModel);
             if (result.IsSucceed && vm.IsClone)
             {
-                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m=>m.Specificulture != _lang).ToList());
+                var cloneResult = await vm.CloneAsync(result.Data.Model, vm.Cultures.Where(m => m.Specificulture != _lang).ToList());
                 if (!cloneResult.IsSucceed)
                 {
                     result.IsSucceed = false;

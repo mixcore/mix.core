@@ -22,7 +22,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseLocalizeRestApiController<MixCmsContext, MixDatabaseDataAssociation, FormViewModel>
     {
         public ApiMixDatabaseDataAssociationFormController(
-            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo, 
+            DefaultRepository<MixCmsContext, MixDatabaseDataAssociation, FormViewModel> repo,
             MixIdentityHelper mixIdentityHelper) : base(repo)
         {
         }

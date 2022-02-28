@@ -11,7 +11,6 @@ using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Repositories;
-using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels.Account.MixRoles;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -34,7 +33,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             DefaultRepository<MixCmsAccountContext, AspNetRoles, ReadViewModel> repo,
             DefaultRepository<MixCmsAccountContext, AspNetRoles, UpdateViewModel> updRepo,
             MixIdentityHelper mixIdentityHelper, RoleManager<IdentityRole> roleManager,
-            AuditLogRepository auditlogRepo) 
+            AuditLogRepository auditlogRepo)
             : base(repo, updRepo, updRepo, mixIdentityHelper, auditlogRepo)
         {
             _roleManager = roleManager;

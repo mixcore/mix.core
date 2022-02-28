@@ -180,7 +180,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDataValues
                 EditorValue ??= StringValue;
                 EditorType ??= MixEditorType.Html;
             }
-            
+
             if (string.IsNullOrEmpty(Id))
             {
                 Status = Status == default ? Enum.Parse<MixContentStatus>(MixService.GetAppSetting<string>

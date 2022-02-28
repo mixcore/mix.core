@@ -60,8 +60,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public string Domain { get { return MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain); } }
 
         [JsonProperty("imageUrl")]
-        public string ImageUrl {
-            get {
+        public string ImageUrl
+        {
+            get
+            {
                 if (!string.IsNullOrEmpty(Image) && (Image.IndexOf("http") == -1) && Image[0] != '/')
                 {
                     return $"{Domain}/{Image}";
@@ -74,8 +76,10 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         }
 
         [JsonProperty("thumbnailUrl")]
-        public string ThumbnailUrl {
-            get {
+        public string ThumbnailUrl
+        {
+            get
+            {
                 if (Thumbnail != null && Thumbnail.IndexOf("http") == -1 && Thumbnail[0] != '/')
                 {
                     return $"{Domain}/{Thumbnail}";
@@ -97,21 +101,27 @@ namespace Mix.Cms.Lib.ViewModels.MixThemes
         public FileViewModel Asset { get; set; }
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{Name}/assets";
             }
         }
 
-        public string UploadsFolder {
-            get {
+        public string UploadsFolder
+        {
+            get
+            {
                 return $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/{Name}";
             }
         }

@@ -25,7 +25,7 @@ namespace Mix.Rest.Api.Client.v1
     {
         private AuditLogRepository _auditlogRepo;
 
-        public ApiPostClientController(DefaultRepository<MixCmsContext, MixPost, PostViewModel> repo, AuditLogRepository auditlogRepo) 
+        public ApiPostClientController(DefaultRepository<MixCmsContext, MixPost, PostViewModel> repo, AuditLogRepository auditlogRepo)
             : base(repo)
         {
             _auditlogRepo = auditlogRepo;
@@ -57,9 +57,9 @@ namespace Mix.Rest.Api.Client.v1
         {
             var pagingData = new PagingRequest(Request);
             var result = await Helper.GetModelistByMeta<PostViewModel>(
-                Request.Query[MixRequestQueryKeywords.DatabaseName], 
-                Request.Query["value"], 
-                Request.Query["postType"], 
+                Request.Query[MixRequestQueryKeywords.DatabaseName],
+                Request.Query["value"],
+                Request.Query["postType"],
                 pagingData,
                 _lang);
             if (result.IsSucceed)

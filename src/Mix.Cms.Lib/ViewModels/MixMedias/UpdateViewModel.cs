@@ -204,7 +204,7 @@ namespace Mix.Cms.Lib.ViewModels.MixMedias
                 }
             }
             FileType = FileType ?? "image";
-            
+
         }
 
         public override void ExpandView(MixCmsContext _context = null, IDbContextTransaction _transaction = null)

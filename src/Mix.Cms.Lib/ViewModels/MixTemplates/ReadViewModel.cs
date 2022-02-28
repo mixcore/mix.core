@@ -4,13 +4,12 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
-using Mix.Heart.Models;
 using Mix.Heart.Infrastructure.ViewModels;
-using Mix.Services;
+using Mix.Heart.Models;
+using Mix.Infrastructure.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
-using Mix.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.ViewModels.MixTemplates
 {
@@ -80,22 +79,28 @@ namespace Mix.Cms.Lib.ViewModels.MixTemplates
         #region Views
 
         [JsonProperty("assetFolder")]
-        public string AssetFolder {
-            get {
+        public string AssetFolder
+        {
+            get
+            {
                 return $"{MixFolders.SiteContentAssetsFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templateFolder")]
-        public string TemplateFolder {
-            get {
+        public string TemplateFolder
+        {
+            get
+            {
                 return $"{MixFolders.TemplatesFolder}/{ThemeName}";
             }
         }
 
         [JsonProperty("templatePath")]
-        public string TemplatePath {
-            get {
+        public string TemplatePath
+        {
+            get
+            {
                 return $"/{FileFolder}/{FileName}{Extension}";
             }
         }

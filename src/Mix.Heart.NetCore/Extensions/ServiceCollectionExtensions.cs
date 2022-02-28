@@ -22,7 +22,7 @@ namespace Mix.Heart.NetCore
                 ));
             return services;
         }
-        
+
         public static IServiceCollection AddRepositories(this IServiceCollection services, Assembly assembly)
         {
             var candidates = assembly

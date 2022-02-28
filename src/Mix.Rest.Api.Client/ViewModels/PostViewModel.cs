@@ -204,7 +204,7 @@ namespace Mix.Rest.Api.Client.ViewModels
                 // Related Posts
                 PostNavs = MixLibViewModels.MixPostPosts.ReadViewModel.Repository.GetModelListBy(
                     n => n.SourceId == Id && n.Specificulture == Specificulture, _context, _transaction)
-                    .Data.Select(m=>m.RelatedPost).ToList();
+                    .Data.Select(m => m.RelatedPost).ToList();
             }
         }
 
@@ -254,7 +254,7 @@ namespace Mix.Rest.Api.Client.ViewModels
             var pageIds = _context.MixPagePost.Where(m => m.Specificulture == Specificulture
                 && m.PostId == Id).Select(m => m.PageId);
             Pages = PageViewModel.Repository.GetModelListBy(m =>
-                m.Specificulture == Specificulture 
+                m.Specificulture == Specificulture
                 && pageIds.Any(n => n == m.Id)
                 , _context, _transaction
                 ).Data;

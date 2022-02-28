@@ -503,7 +503,7 @@ namespace Mix.Cms.Lib.ViewModels.MixPages
             // Load Actived Modules
             var result = MixPageModules.ReadMvcViewModel.Repository.GetModelListBy(m => m.PageId == Id && m.Specificulture == Specificulture
             , context, transaction).Data;
-            
+
             result.ForEach(m => m.IsActived = true);
 
             // Load inactived modules

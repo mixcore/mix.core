@@ -4,7 +4,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib.Controllers;
-using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.ViewModels.MixDatabaseDatas;
 using Mix.Heart.Infrastructure.Repositories;
@@ -20,7 +19,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiMixDatabaseDataController :
         BaseLocalizeRestApiController<MixCmsContext, MixDatabaseData, FormViewModel>
     {
-        public ApiMixDatabaseDataController(DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo) 
+        public ApiMixDatabaseDataController(DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo)
             : base(repo)
         {
         }
@@ -70,7 +69,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 formData.Obj = data;
                 var result = await SaveAsync(formData, true);
                 var isSendMail = result.IsSucceed && sendMail.HasValue && sendMail.Value;
-                
+
                 if (isSendMail)
                 {
                     await Helper.SendMail(mixDatabase, _lang, data);
@@ -79,7 +78,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             }
             return BadRequest(mixDatabase);
         }
-        
+
         [HttpPost("save-values/{dataId}")]
         public async Task<ActionResult<bool>> SaveValue([FromRoute] string dataId, [FromBody] JObject values)
         {

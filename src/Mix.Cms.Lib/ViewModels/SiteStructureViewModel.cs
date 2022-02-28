@@ -545,7 +545,7 @@ namespace Mix.Cms.Lib.ViewModels
                             set.CreatedDateTime = DateTime.UtcNow;
 
                             // Fields used in old version and will removed in latest
-                            var cols = set.Columns ?? set.Fields; 
+                            var cols = set.Columns ?? set.Fields;
 
                             mixDatabaseColumns.AddRange(cols
                                     .Where(m => !mixDatabaseColumns.Any(n => n.Id == m.Id))

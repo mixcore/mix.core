@@ -97,7 +97,7 @@ namespace Mix.Cms.Lib.Models.EntityConfigurations.SQLITE
                 .HasColumnType("text")
                 .HasCharSet("utf8")
                 .UseCollation("NOCASE");
-            
+
             entity.Property(e => e.EditorValue)
                 .HasColumnType("text")
                 .HasCharSet("utf8")

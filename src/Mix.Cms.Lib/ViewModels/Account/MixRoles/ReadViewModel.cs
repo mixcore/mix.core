@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Cms.Lib.Constants;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
@@ -82,7 +80,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
 
         public override void ExpandView(MixCmsAccountContext _context = null, IDbContextTransaction _transaction = null)
         {
-           
+
         }
 
         #endregion Overrides
@@ -106,7 +104,7 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixRoles
                         item.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(
                             n => n.PageId == item.Id && n.RoleId == Id, _context, _transaction)
                             .Data;
-                       
+
                         foreach (var child in item.ChildPages)
                         {
                             child.PortalPage.NavPermission = MixPortalPageRoles.ReadViewModel.Repository.GetSingleModel(

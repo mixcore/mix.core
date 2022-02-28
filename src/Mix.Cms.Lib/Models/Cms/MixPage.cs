@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixPage: AuditedEntity
+    public partial class MixPage : AuditedEntity
     {
         public MixPage()
         {
