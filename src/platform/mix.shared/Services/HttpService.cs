@@ -21,14 +21,14 @@ namespace Mix.Shared.Services
         }
 
         public async Task<string> DownloadAsync(
-            string downloadUrl, string downloadPath, string fileName, string extension,
+            string downloadUrl, string folder, string fileName, string extension,
             IProgress<int> progress, CancellationToken token)
         {
             using (var client = _httpClientFactory.CreateClient())
             using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).Result)
             {
                 response.EnsureSuccessStatusCode();
-                string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
+                //string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
                 MixFileHelper.CreateFolderIfNotExist(folder);
                 using (Stream contentStream = await response.Content.ReadAsStreamAsync(),

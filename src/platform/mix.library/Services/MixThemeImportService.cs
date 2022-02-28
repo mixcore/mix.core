@@ -43,12 +43,13 @@ namespace Mix.Lib.Services
             string name = theme.Value<string>("name");
             MixFileHelper.EmptyFolder(MixFolders.ThemePackage);
             var cancellationToken = new CancellationToken();
-
+            string filePath = $"{MixFolders.ThemePackage}/{name}{MixFileExtensions.Zip}";
             await httpService.DownloadAsync(
                 theme.Value<string>("source"),
                 MixFolders.ThemePackage,
                 name, MixFileExtensions.Zip,
                 progress, cancellationToken);
+            MixFileHelper.UnZipFile(filePath, MixFolders.ThemePackage);
         }
 
 
