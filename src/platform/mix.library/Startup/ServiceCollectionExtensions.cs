@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
 
-            
+
 
             services.AddResponseCompression();
             services.AddResponseCaching();
