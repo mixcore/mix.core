@@ -7,7 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.2" />
   </ItemGroup>
 
 </Project>

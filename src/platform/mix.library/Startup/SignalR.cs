@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Mix.SignalR.Hubs;
-using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -10,10 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixSignalR(this IServiceCollection services)
         {
             services.AddSignalR()
-                   .AddJsonProtocol(options =>
-                   {
-                       options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                   });
+                   .AddMessagePackProtocol();
             return services;
         }
         public static IApplicationBuilder UseMixSignalR(this IApplicationBuilder app)
@@ -21,7 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<PortalHub>("/portalHub");
-                //endpoints.MapHub<ServiceHub>("/serviceHub");
                 endpoints.MapHub<EditFileHub>("/editFileHub");
             });
             return app;
