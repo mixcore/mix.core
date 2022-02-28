@@ -92,12 +92,6 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
-            if (GlobalConfigService.Instance.AppSettings.IsHttps)
-            {
-                app.UseHttpsRedirection();
-            }
-
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.UseMixSignalR();

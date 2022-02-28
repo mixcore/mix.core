@@ -73,7 +73,6 @@ namespace Mixcore
 
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)

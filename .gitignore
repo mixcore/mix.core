@@ -290,3 +290,5 @@ src/applications/Mixcore/Views/Shared/Templates/
 src/applications/Mixcore/wwwroot/mix-content/exports/
 
 src/applications/Mixcore/wwwroot/mix-content/
+
+src/shared/__pycache__/
