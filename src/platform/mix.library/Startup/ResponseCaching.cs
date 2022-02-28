@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         // Must call after use cors
         private static void UseMixResponseCaching(this IApplicationBuilder app)
         {
+            int responseCache = 20;
             app.UseResponseCaching();
             app.Use(async (context, next) =>
             {
@@ -15,11 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
                     new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
                     {
                         Public = true,
-                        MaxAge = TimeSpan.FromSeconds(10)
+                        NoCache = false,
+                        SharedMaxAge = TimeSpan.FromSeconds(responseCache),
+                        MaxAge = TimeSpan.FromSeconds(responseCache),
+
                     };
                 context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
                     new string[] { "Accept-Encoding" };
-
                 await next();
             });
         }

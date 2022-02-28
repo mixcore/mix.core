@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Interfaces;
@@ -41,7 +42,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
 
-            services.AddResponseCompression();
+            services.Configure<GzipCompressionProviderOptions>(
+                options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
+            services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
             return services;
         }
@@ -87,6 +90,8 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration configuration,
             bool isDevelop)
         {
+            app.UseResponseCompression();
+            app.UseMixResponseCaching();
 
             app.UseMixStaticFiles();
             app.UseRouting();
@@ -96,8 +101,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.UseMixSignalR();
 
-            app.UseResponseCompression();
-            app.UseMixResponseCaching();
+           
             return app;
         }
 
