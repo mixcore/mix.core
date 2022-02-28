@@ -23,7 +23,7 @@
 		<Using Include="Mix.Heart.Exceptions" />
 		<Using Include="Mix.Heart.Models" />
 		<Using Include="Mix.Heart.Helpers" />
-		<Using Include="Mix.Lib.Attributes"/>
+		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Attributes" />
 	</ItemGroup>
 

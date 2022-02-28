@@ -20,13 +20,6 @@ namespace Mix.Database.Entities.Cms
             _databaseProvider = databaseProvider;
         }
 
-        public MixCmsContext()
-        {
-            _databaseService = new MixDatabaseService();
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
-        }
-
         public MixCmsContext(MixDatabaseService databaseService)
         {
             _databaseService = databaseService;

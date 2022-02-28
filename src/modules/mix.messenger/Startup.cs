@@ -18,16 +18,11 @@ namespace Mix.Messenger
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
-
-            // Must app Auth config after Add mixservice to init App config 
-            services.AddMixAuthorize<ApplicationDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
         }
     }
 }
