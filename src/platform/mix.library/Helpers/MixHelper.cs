@@ -16,6 +16,7 @@ namespace Mix.Lib.Helpers
         {
             if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
+                // Clone Settings from shared folder
                 CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
             }
             return Host.CreateDefaultBuilder(args)
