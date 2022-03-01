@@ -24,8 +24,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixLanguage, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
         public ApiLanguageController(
-            DefaultRepository<MixCmsContext, MixLanguage, ReadMvcViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixLanguage, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixLanguage, ReadMvcViewModel> repo,
+            DefaultRepository<MixCmsContext, MixLanguage, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixLanguage, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo)

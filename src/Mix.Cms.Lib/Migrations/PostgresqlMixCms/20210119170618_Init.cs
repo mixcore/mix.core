@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using System;
 
 namespace Mix.Cms.Lib.Migrations.PostgresqlMixCms
 {

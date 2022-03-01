@@ -24,7 +24,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiModuleDataMvcController :
         BaseRestApiController<MixCmsContext, MixModuleData, ReadMvcViewModel>
     {
-        public ApiModuleDataMvcController(DefaultRepository<MixCmsContext, MixModuleData, ReadMvcViewModel> repo) 
+        public ApiModuleDataMvcController(DefaultRepository<MixCmsContext, MixModuleData, ReadMvcViewModel> repo)
             : base(repo)
         {
         }

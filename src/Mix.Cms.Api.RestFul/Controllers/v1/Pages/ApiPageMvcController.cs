@@ -8,14 +8,13 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
-using Mix.Cms.Lib.Models.Common;
 using Mix.Cms.Lib.ViewModels.MixPages;
+using Mix.Heart.Extensions;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Mix.Heart.Extensions;
 
 namespace Mix.Cms.Api.RestFul.Controllers.v1
 {
@@ -24,7 +23,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
     public class ApiPageMvcController :
         BaseReadOnlyApiController<MixCmsContext, MixPage, ReadMvcViewModel>
     {
-        public ApiPageMvcController(DefaultRepository<MixCmsContext, MixPage, ReadMvcViewModel> repo) 
+        public ApiPageMvcController(DefaultRepository<MixCmsContext, MixPage, ReadMvcViewModel> repo)
             : base(repo)
         {
         }

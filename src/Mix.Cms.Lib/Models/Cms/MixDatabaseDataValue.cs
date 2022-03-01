@@ -4,7 +4,7 @@ using System;
 
 namespace Mix.Cms.Lib.Models.Cms
 {
-    public partial class MixDatabaseDataValue: AuditedEntity
+    public partial class MixDatabaseDataValue : AuditedEntity
     {
         public string Id { get; set; }
         public string Specificulture { get; set; }

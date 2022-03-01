@@ -3,10 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Models.Common;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.ViewModels.MixPosts;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
@@ -21,9 +23,18 @@ namespace Mix.Rest.Api.Client.v1
     public class ApiPostClientController :
         BaseReadOnlyApiController<MixCmsContext, MixPost, PostViewModel>
     {
-        public ApiPostClientController(DefaultRepository<MixCmsContext, MixPost, PostViewModel> repo) 
+        private AuditLogRepository _auditlogRepo;
+
+        public ApiPostClientController(DefaultRepository<MixCmsContext, MixPost, PostViewModel> repo, AuditLogRepository auditlogRepo)
             : base(repo)
         {
+            _auditlogRepo = auditlogRepo;
+        }
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            _auditlogRepo.Log(User.Identity?.Name, Request, true, null);
+            base.OnActionExecuted(context);
         }
 
         [HttpGet]
@@ -46,9 +57,9 @@ namespace Mix.Rest.Api.Client.v1
         {
             var pagingData = new PagingRequest(Request);
             var result = await Helper.GetModelistByMeta<PostViewModel>(
-                Request.Query[MixRequestQueryKeywords.DatabaseName], 
-                Request.Query["value"], 
-                Request.Query["postType"], 
+                Request.Query[MixRequestQueryKeywords.DatabaseName],
+                Request.Query["value"],
+                Request.Query["postType"],
                 pagingData,
                 _lang);
             if (result.IsSucceed)

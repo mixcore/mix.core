@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Cms.Lib;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Services;
@@ -65,7 +64,7 @@ namespace Mix.Cms.Web.Controllers
                 return Redirect(_redirectUrl);
             }
         }
-        
+
         #endregion Routes
     }
 }

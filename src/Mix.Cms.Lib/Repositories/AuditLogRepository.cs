@@ -6,7 +6,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 
 namespace Mix.Cms.Lib.Repositories
 {
@@ -23,7 +22,7 @@ namespace Mix.Cms.Lib.Repositories
                 _dbContext.Database.Migrate();
             }
         }
-        internal void Log(string createdBy, HttpRequest request, bool isSucceed, Exception exception)
+        public void Log(string createdBy, HttpRequest request, bool isSucceed, Exception exception)
         {
             Guid.TryParse(request.Headers["RequestId"], out Guid id);
             var msg = _dbContext.AuditLog.Find(id);
@@ -35,14 +34,14 @@ namespace Mix.Cms.Lib.Repositories
                     Id = id,
                     Body = body,
                     CreatedDateTime = DateTime.UtcNow,
-                    RequestIp = request.HttpContext.Connection.Id.ToString(),
+                    RequestIp = $"{request.Headers.Referer} - {request.HttpContext.Connection.RemoteIpAddress}",
                     Endpoint = request.Path,
                     Method = request.Method,
                     CreatedBy = createdBy
                 };
                 _dbContext.AuditLog.Add(msg);
             }
-            if (exception!=null)
+            if (exception != null)
             {
                 msg.Exception = JObject.FromObject(exception).ToString(Newtonsoft.Json.Formatting.None);
             }

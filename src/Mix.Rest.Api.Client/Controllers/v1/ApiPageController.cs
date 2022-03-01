@@ -8,9 +8,9 @@ using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Controllers;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Cms;
+using Mix.Heart.Extensions;
 using Mix.Heart.Infrastructure.Repositories;
 using Mix.Heart.Models;
-using Mix.Heart.Extensions;
 using Mix.Rest.Api.Client.ViewModels;
 using System;
 using System.Linq.Expressions;
@@ -23,7 +23,7 @@ namespace Mix.Rest.Api.Client.v1
     public class ApiPageController :
         BaseReadOnlyApiController<MixCmsContext, MixPage, PageViewModel>
     {
-        public ApiPageController(DefaultRepository<MixCmsContext, MixPage, PageViewModel> repo) 
+        public ApiPageController(DefaultRepository<MixCmsContext, MixPage, PageViewModel> repo)
             : base(repo)
         {
         }
@@ -41,7 +41,7 @@ namespace Mix.Rest.Api.Client.v1
             predicate = predicate.AndAlsoIf(!isStatus, model => model.Status == MixContentStatus.Published);
             predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
             predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime >= toDate);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model => 
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model =>
                 (EF.Functions.Like(model.Title, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Excerpt, $"%{keyword}%"))
                  || (EF.Functions.Like(model.Content, $"%{keyword}%")));

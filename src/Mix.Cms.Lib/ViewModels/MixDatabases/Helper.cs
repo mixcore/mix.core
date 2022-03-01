@@ -86,7 +86,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabases
                 case MixDataType.Boolean:
                 case MixDataType.Icon:
                 case MixDataType.VideoYoutube:
-                case MixDataType.TuiEditor:                
+                case MixDataType.TuiEditor:
                 case MixDataType.QRCode:
                 default:
                     return $"varchar({maxLength ?? 250})";

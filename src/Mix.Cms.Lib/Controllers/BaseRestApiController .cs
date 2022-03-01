@@ -7,10 +7,12 @@ using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Mix.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -19,8 +21,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -161,7 +161,7 @@ namespace Mix.Cms.Lib.Controllers
             return NoContent();
         }
 
-       [HttpPost]
+        [HttpPost]
         public virtual async Task<ActionResult<TModel>> Create([FromBody] TView data)
         {
             ReflectionHelper.SetPropertyValue(data, new JProperty("CreatedBy", User.Claims.FirstOrDefault(

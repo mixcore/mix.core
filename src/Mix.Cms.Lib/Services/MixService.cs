@@ -190,7 +190,7 @@ namespace Mix.Cms.Lib.Services
         {
             Instance.Authentication[name] = value.ToString();
         }
-        
+
         public static T GetSmtpConfig<T>(string name, T defaultValue = default)
         {
             var result = GetJToken(name, Instance.Smtp);

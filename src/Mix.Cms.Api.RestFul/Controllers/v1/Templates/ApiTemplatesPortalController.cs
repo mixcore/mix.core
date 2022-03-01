@@ -44,14 +44,14 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
             bool isTheme = int.TryParse(Request.Query["themeId"], out int themeId);
             string folderType = Request.Query["folderType"];
-            
+
             Expression<Func<MixTemplate, bool>> predicate = model => true;
             predicate = predicate.AndAlsoIf(isStatus, model => model.Status == status);
             predicate = predicate.AndAlsoIf(isTheme, model => model.ThemeId == themeId);
             predicate = predicate.AndAlsoIf(isFromDate, model => model.CreatedDateTime >= fromDate);
             predicate = predicate.AndAlsoIf(isToDate, model => model.CreatedDateTime <= toDate);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(folderType),model => model.FolderType == folderType);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword),model => EF.Functions.Like(model.FileName, $"%{keyword}%"));
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(folderType), model => model.FolderType == folderType);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(keyword), model => EF.Functions.Like(model.FileName, $"%{keyword}%"));
 
             var getData = await base.GetListAsync<ReadViewModel>(predicate);
             if (getData.IsSucceed)

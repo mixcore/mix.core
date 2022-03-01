@@ -27,8 +27,8 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixPortalPage, UpdateViewModel, ReadViewModel, UpdateViewModel>
     {
         public ApiPortalPageController(
-            DefaultRepository<MixCmsContext, MixPortalPage, ReadViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixPortalPage, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPortalPage, ReadViewModel> repo,
+            DefaultRepository<MixCmsContext, MixPortalPage, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixPortalPage, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo)

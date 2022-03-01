@@ -5,17 +5,21 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Cms.Lib.Attributes;
 using Mix.Cms.Lib.Constants;
 using Mix.Cms.Lib.Enums;
 using Mix.Cms.Lib.Models.Common;
+using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.SignalR.Constants;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Common.Helper;
-using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Repositories;
+using Mix.Heart.Infrastructure.ViewModels;
+using Mix.Heart.Models;
 using Mix.Identity.Constants;
 using Mix.Identity.Helpers;
 using Mix.Services;
@@ -27,10 +31,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using Mix.Heart.Models;
-using Mix.Heart.Infrastructure.Repositories;
-using Mix.Cms.Lib.Attributes;
-using Mix.Cms.Lib.Repositories;
 
 namespace Mix.Cms.Lib.Controllers
 {
@@ -56,7 +56,7 @@ namespace Mix.Cms.Lib.Controllers
             DefaultRepository<TDbContext, TModel, TRead> repo,
             DefaultRepository<TDbContext, TModel, TUpdate> updRepo,
             DefaultRepository<TDbContext, TModel, TDelete> delRepo,
-            MixIdentityHelper mixIdentityHelper, 
+            MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo)
         {
             _repo = repo;
@@ -359,7 +359,7 @@ namespace Mix.Cms.Lib.Controllers
                     default:
                         return BadRequest(result.Errors);
                 }
-                
+
             }
         }
 
@@ -535,7 +535,7 @@ namespace Mix.Cms.Lib.Controllers
         {
             return SaveGenericAsync(vm, isSaveSubModel);
         }
-        
+
         protected async Task<RepositoryResponse<T>> SaveGenericAsync<T>(T vm, bool isSaveSubModel)
             where T : Mix.Heart.Infrastructure.ViewModels.ViewModelBase<TDbContext, TModel, T>
         {

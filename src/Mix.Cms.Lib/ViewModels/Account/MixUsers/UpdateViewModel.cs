@@ -7,7 +7,6 @@ using Mix.Cms.Lib.Services;
 using Mix.Heart.Infrastructure.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -90,8 +89,10 @@ namespace Mix.Cms.Lib.ViewModels.Account.MixUsers
         public string Domain => MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
 
         [JsonProperty("avatarUrl")]
-        public string AvatarUrl {
-            get {
+        public string AvatarUrl
+        {
+            get
+            {
                 if (Avatar != null && (Avatar.IndexOf("http") == -1 && Avatar[0] != '/'))
                 {
                     return $"{Domain}/{Avatar}";

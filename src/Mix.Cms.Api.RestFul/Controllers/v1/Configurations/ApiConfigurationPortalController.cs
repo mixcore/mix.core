@@ -24,15 +24,15 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixConfiguration, UpdateViewModel, ReadMvcViewModel, UpdateViewModel>
     {
         public ApiConfigurationPortalController(
-            DefaultRepository<MixCmsContext, MixConfiguration, ReadMvcViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixConfiguration, ReadMvcViewModel> repo,
+            DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixConfiguration, UpdateViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
-            AuditLogRepository auditlogRepo) : 
+            AuditLogRepository auditlogRepo) :
             base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }
-        
+
         [HttpGet("by-keyword/{keyword}")]
         public async Task<ActionResult<ReadMvcViewModel>> GetByKeyword(string keyword)
         {

@@ -27,11 +27,11 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixPage, UpdateViewModel, ReadViewModel, DeleteViewModel>
     {
         public ApiPageController(
-            DefaultRepository<MixCmsContext, MixPage, ReadViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixPage, UpdateViewModel> updRepo, 
+            DefaultRepository<MixCmsContext, MixPage, ReadViewModel> repo,
+            DefaultRepository<MixCmsContext, MixPage, UpdateViewModel> updRepo,
             DefaultRepository<MixCmsContext, MixPage, DeleteViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
-            AuditLogRepository auditlogRepo) 
+            AuditLogRepository auditlogRepo)
             : base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
         {
         }

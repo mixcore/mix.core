@@ -3,7 +3,7 @@ using System;
 
 namespace Mix.Cms.Lib.Models
 {
-    public class AuditContext: DbContext
+    public class AuditContext : DbContext
     {
         public DbSet<AuditLog> AuditLog { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,6 +23,6 @@ namespace Mix.Cms.Lib.Models
         public bool Success { get; set; }
         public string Exception { get; set; }
         public string CreatedBy { get; set; }
-        public DateTime CreatedDateTime{ get; set; }
+        public DateTime CreatedDateTime { get; set; }
     }
 }

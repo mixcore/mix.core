@@ -188,7 +188,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
         }
 
         internal async Task<RepositoryResponse<UpdateViewModel>> DuplicateAsync(
-            MixCmsContext _context = null, 
+            MixCmsContext _context = null,
             IDbContextTransaction _transaction = null)
         {
             UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction, out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
@@ -200,9 +200,9 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                     if (item.Column.DataType == MixDataType.Reference)
                     {
                         var getSubData = await MixDatabaseDataAssociations.UpdateViewModel.Repository.GetModelListByAsync(
-                                m => m.ParentId == Id 
+                                m => m.ParentId == Id
                                     && m.MixDatabaseId == item.Column.ReferenceId
-                                    && m.ParentType == MixDatabaseParentType.Set 
+                                    && m.ParentType == MixDatabaseParentType.Set
                                     && m.Specificulture == Specificulture
                                     , context, transaction);
                         foreach (var subNav in getSubData.Data)
@@ -220,7 +220,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
                 Id = newId;
                 return await SaveModelAsync(true, context, transaction);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return UnitOfWorkHelper<MixCmsContext>.HandleException<UpdateViewModel>(ex, isRoot, transaction);
             }
@@ -325,7 +325,7 @@ namespace Mix.Cms.Lib.ViewModels.MixDatabaseDatas
 
         public override async Task<RepositoryResponse<bool>> CloneSubModelsAsync(MixDatabaseData parent, List<SupportedCulture> cloneCultures, MixCmsContext _context = null, IDbContextTransaction _transaction = null)
         {
-            
+
             var result = new RepositoryResponse<bool>() { IsSucceed = true };
             if (Values.Count > 0)
             {

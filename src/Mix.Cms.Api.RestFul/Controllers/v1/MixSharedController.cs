@@ -8,7 +8,6 @@ using Mix.Cms.Lib.Helpers;
 using Mix.Cms.Lib.Repositories;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Lib.ViewModels;
-using Mix.Common.Helper;
 using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Identity.Constants;

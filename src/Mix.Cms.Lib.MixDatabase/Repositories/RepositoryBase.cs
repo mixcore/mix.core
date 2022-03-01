@@ -19,7 +19,7 @@ namespace Mix.Cms.Lib.MixDatabase.Repositories
     {
         private AppSetting _settings;
 
-        public RepositoryBase([FromServices]IOptions<AppSetting> settings,
+        public RepositoryBase([FromServices] IOptions<AppSetting> settings,
             [FromServices] ICache cache,
             [FromServices] ITrace trace)
         {

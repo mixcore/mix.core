@@ -29,9 +29,9 @@
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
         public const string CONST_UPLOAD_FOLDER_DATE_FORMAT = "yyyy-MM";
-        public const string CONST_MIXDB_PREFIX  = "mixdb_";
-        public const string CONST_RSA_PUBLIC_KEY  = "PublicKey";
-        public const string CONST_RSA_PRIVATE_KEY  = "PrivateKey";
+        public const string CONST_MIXDB_PREFIX = "mixdb_";
+        public const string CONST_RSA_PUBLIC_KEY = "PublicKey";
+        public const string CONST_RSA_PRIVATE_KEY = "PrivateKey";
 
 
         public static class MixDatabaseName

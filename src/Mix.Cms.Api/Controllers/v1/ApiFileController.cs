@@ -14,8 +14,6 @@ using Mix.Cms.Lib.SignalR.Hubs;
 using Mix.Cms.Lib.ViewModels;
 using Mix.Heart.Models;
 using Mix.Infrastructure.Repositories;
-using Mix.Services;
-using System.Net;
 
 namespace Mix.Cms.Api.Controllers.v1
 {

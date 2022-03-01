@@ -1,5 +1,4 @@
-﻿using Mix.Heart.Models;
-using Mix.Identity.Models;
+﻿using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -56,7 +55,7 @@ namespace Mix.Cms.Lib.ViewModels.Account
         {
             if (!string.IsNullOrEmpty(Username))
             {
-                if(UserData == null)
+                if (UserData == null)
                 {
                     var data = await MixAccountHelper.LoadUserInfoAsync(Username);
                     UserData = data?.Obj;

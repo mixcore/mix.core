@@ -26,9 +26,9 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         BaseAuthorizedRestApiController<MixCmsContext, MixDatabaseData, FormViewModel, FormViewModel, DeleteViewModel>
     {
         public MixDatabaseDataPortalController(
-            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo, 
-            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo, 
-            DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo, 
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> repo,
+            DefaultRepository<MixCmsContext, MixDatabaseData, FormViewModel> updRepo,
+            DefaultRepository<MixCmsContext, MixDatabaseData, DeleteViewModel> delRepo,
             MixIdentityHelper mixIdentityHelper,
             AuditLogRepository auditlogRepo) :
             base(repo, updRepo, delRepo, mixIdentityHelper, auditlogRepo)
@@ -131,7 +131,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
         }
 
         [HttpPost("save-data/{mixDatabase}")]
-        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute]string mixDatabase, [FromBody] JObject data)
+        public async Task<ActionResult<FormViewModel>> SaveData([FromRoute] string mixDatabase, [FromBody] JObject data)
         {
             FormViewModel formData;
             string id = data.Value<string>("id");
@@ -145,7 +145,7 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
                 formData = await Helper.GetBlankFormDataAsync(mixDatabase, _lang);
             }
 
-            if (formData!=null)
+            if (formData != null)
             {
                 formData.Obj = data;
                 var result = await SaveAsync(formData, true);
