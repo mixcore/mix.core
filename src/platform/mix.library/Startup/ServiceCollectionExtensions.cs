@@ -16,7 +16,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
-            // Clone Settings from shared folder
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts(executingAssembly, configuration);
             services.AddMixCache(executingAssembly, configuration);

@@ -1,11 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Controllers
 {
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    //[MixAuthorize]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
     public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
         : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
