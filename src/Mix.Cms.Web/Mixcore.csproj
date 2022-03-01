@@ -50,7 +50,6 @@
 		<ProjectReference Include="..\Mix.Cms.Api.RestFul\Mix.Cms.Api.RestFul.csproj" />
 		<ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
 		<ProjectReference Include="..\Mix.Cms.Api\Mix.Cms.Api.csproj" />
-		<ProjectReference Include="..\Mix.Cms.Schedule\Mix.Cms.Schedule.csproj" />
 		<ProjectReference Include="..\Mix.Cms.Lib.SignalR\Mix.Cms.Lib.SignalR.csproj" />
 		<ProjectReference Include="..\Mix.Rest.Api.Client\Mix.Rest.Api.Client.csproj" />
 		<ProjectReference Include="..\Mix.Theme.Blog\Mix.Theme.Blog.csproj" />
