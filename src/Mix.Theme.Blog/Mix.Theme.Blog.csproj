@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mix.Cms.Lib\Mix.Cms.Lib.csproj" />
-    <ProjectReference Include="..\Mix.Cms.Schedule\Mix.Cms.Schedule.csproj" />
     <ProjectReference Include="..\Mix.Cms.Lib.SignalR\Mix.Cms.Lib.SignalR.csproj" />
     <ProjectReference Include="..\Mix.Heart.NetCore\Mix.Heart.NetCore.csproj" />
     <ProjectReference Include="..\Mix.Identity\Mix.Identity.csproj" />
