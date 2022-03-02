@@ -20,7 +20,7 @@ namespace Mix.Cms.Lib.ViewModels.MixInit
                             return IsUseLocal
                                 ? LocalDbConnectionString
                                 : $"Server={dbServer};Database={DatabaseName}" +
-                                $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;";
+                                $";UID={DatabaseUser};Pwd={DatabasePassword};MultipleActiveResultSets=true;TrustServerCertificate=True";
                         }
                     case MixDatabaseProvider.MySQL:
                         return $"Server={DatabaseServer};port={DatabasePort};Database={DatabaseName}" +
