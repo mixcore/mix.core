@@ -13,5 +13,13 @@ namespace Mix.Database.EntityConfigurations
             }
             return builder;
         }
+        public static PropertyBuilder<TPrimaryKey> UseIncreaseValueIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition)
+        {
+            if (condition)
+            {
+                builder.UseIdentityByDefaultColumn();
+            }
+            return builder;
+        }
     }
 }

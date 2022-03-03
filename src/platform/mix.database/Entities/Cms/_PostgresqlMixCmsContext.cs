@@ -14,6 +14,8 @@ namespace Mix.Database.Entities.v2
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.UseSerialColumns();
+
             modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,

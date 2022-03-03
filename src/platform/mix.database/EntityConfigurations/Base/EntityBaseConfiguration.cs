@@ -21,6 +21,7 @@ namespace Mix.Database.EntityConfigurations.Base
 
             builder.Property(e => e.Id)
                 .HasDefaultValueIf(typeof(TPrimaryKey) == typeof(Guid), Config.GenerateUUID)
+                .UseIncreaseValueIf(typeof(TPrimaryKey) == typeof(int))
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.CreatedDateTime)
