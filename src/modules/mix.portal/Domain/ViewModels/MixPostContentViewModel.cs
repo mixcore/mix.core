@@ -41,11 +41,12 @@
 
         public override async Task<int> CreateParentAsync()
         {
-            MixPostViewModel parent = new(UowInfo)
+            MixPostViewModel parent = new()
             {
                 DisplayName = Title,
                 Description = Excerpt
             };
+            parent.SetUowInfo(UowInfo);
             return await parent.SaveAsync();
         }
 

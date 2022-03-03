@@ -73,6 +73,9 @@ namespace Mixcore.Controllers
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
             var page = await pageRepo.GetSingleAsync(pageId);
+            if (page == null)
+                return NotFound();
+
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;

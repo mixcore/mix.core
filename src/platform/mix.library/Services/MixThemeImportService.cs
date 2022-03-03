@@ -234,23 +234,20 @@ namespace Mix.Lib.Services
 
         private async Task ImportPageContentsAsync()
         {
-            var table = _context.MixPageContent.AsNoTracking();
-            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.PageContents)
             {
-                startId++;
-                dicPageContentIds.Add(item.Id, startId);
-
+                var oldId = item.Id;
                 while (_context.MixPageContent.Any(m => m.SeoName == item.SeoName))
                 {
                     item.SeoName = $"{item.SeoName}-1";
                 }
 
-                item.Id = startId;
                 item.ParentId = dicPageIds[item.ParentId];
-                _context.MixPageContent.Add(item);
+                _context.Entry(item).State = EntityState.Added;
+                await _context.SaveChangesAsync(_cts.Token);
+                dicPageContentIds.Add(oldId, item.Id);
             }
-            await _context.SaveChangesAsync(_cts.Token);
+
         }
         #endregion Import Page
 
@@ -258,20 +255,18 @@ namespace Mix.Lib.Services
 
         private async Task ImportModuleContentsAsync()
         {
-            var table = _context.MixModuleContent.AsNoTracking();
-            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.ModuleContents)
             {
                 if (!_context.MixModuleContent.Any(m => m.SystemName == item.SystemName))
                 {
-                    startId++;
-                    dicModuleContentIds.Add(item.Id, startId);
-                    item.Id = startId;
+                    var oldId = item.Id;
+                    item.Id = 0;
                     item.ParentId = dicModuleIds[item.ParentId];
-                    _context.MixModuleContent.Add(item);
+                    _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                    dicModuleContentIds.Add(oldId, item.Id);
                 }
             }
-            await _context.SaveChangesAsync(_cts.Token);
         }
 
 
@@ -281,42 +276,39 @@ namespace Mix.Lib.Services
 
         private async Task ImportDatabasesAsync()
         {
-            var table = _context.MixDatabase.AsNoTracking();
-            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.MixDatabases)
             {
-                startId++;
-                dicMixDatabaseIds.Add(item.Id, startId);
+                var oldId = item.Id;
 
                 while (_context.MixDatabase.Any(m => m.SystemName == item.SystemName))
                 {
                     item.SystemName = $"{item.SystemName}_1";
                 }
 
-                item.Id = startId;
-                _context.MixDatabase.Add(item);
+                item.Id = 0;
+                _context.Entry(item).State = EntityState.Added;
+                await _context.SaveChangesAsync(_cts.Token);
+                dicMixDatabaseIds.Add(oldId, item.Id);
             }
-            await _context.SaveChangesAsync(_cts.Token);
         }
 
         private async Task ImportDatabaseColumnsAsync()
         {
-            var table = _context.MixDatabaseColumn.AsNoTracking();
-            var startId = table.Any() ? table.Max(m => m.Id) : 0;
             foreach (var item in _siteData.MixDatabaseColumns)
             {
+                var table = _context.MixDatabaseColumn.AsNoTracking();
                 if (table.Any(m => m.MixDatabaseId == item.MixDatabaseId && m.SystemName == item.SystemName))
                 {
                     continue;
                 }
-                startId++;
-                dicColumnIds.Add(item.Id, startId);
-                item.Id = startId;
+                var oldId = item.Id;
+                item.Id = 0;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);
+                await _context.SaveChangesAsync(_cts.Token);
+                dicColumnIds.Add(oldId, item.Id);
             }
-            await _context.SaveChangesAsync(_cts.Token);
         }
 
         private async Task ImportDatabaseDataAsync()
@@ -353,16 +345,14 @@ namespace Mix.Lib.Services
         {
             if (data.Count > 0)
             {
-                var table = _context.Set<T>().AsNoTracking();
-                var startId = table.Any() ? table.Max(m => m.Id) : 0;
                 foreach (var item in data)
                 {
-                    startId += 1;
-                    dic.Add(item.Id, startId);
-                    item.Id = startId;
+                    var oldId = item.Id;
+                    item.Id = 0;
                     _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                    dic.Add(oldId, item.Id);
                 }
-                await _context.SaveChangesAsync(_cts.Token);
             }
         }
 
@@ -371,18 +361,16 @@ namespace Mix.Lib.Services
         {
             if (data.Count > 0)
             {
-                var table = _context.Set<T>().AsNoTracking();
-                var startId = table.Any() ? table.Max(m => m.Id) : 0;
                 foreach (var item in data)
                 {
-                    startId += 1;
-                    dic.Add(item.Id, startId);
-                    item.Id = startId;
+                    var oldId = item.Id;
+                    item.Id = 0;
                     item.ParentId = parentDic[item.ParentId];
                     item.Specificulture ??= _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                    dic.Add(oldId, item.Id);
                 }
-                await _context.SaveChangesAsync(_cts.Token);
             }
         }
 
@@ -394,12 +382,9 @@ namespace Mix.Lib.Services
         {
             if (data.Count > 0)
             {
-                var table = _context.Set<T>().AsNoTracking();
-                var startId = table.Any() ? table.Max(m => m.Id) : 0;
                 foreach (var item in data)
                 {
-                    startId += 1;
-                    item.Id = startId;
+                    item.Id = 0;
                     item.LeftId = leftDic[item.LeftId];
                     item.RightId = rightDic[item.RightId];
                     _context.Entry(item).State = EntityState.Added;
