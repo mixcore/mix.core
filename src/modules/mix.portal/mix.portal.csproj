@@ -36,8 +36,6 @@
 		<Using Include="Mix.Portal.Domain.Models" />
 		<Using Include="Mix.Portal.Domain.ViewModels" />
 		<Using Include="Mix.Portal.Domain.Dtos" />
-		<Using Include="Mix.Portal.Domain.Subscribers" />
-		<Using Include="Mix.Portal.Domain.Publishers" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,6 +46,7 @@
 
 	<ItemGroup>
 		<Folder Include="Domain\Helpers\" />
+		<Folder Include="Domain\Subscribers\" />
 	</ItemGroup>
 
 	<ItemGroup>
