@@ -6,7 +6,9 @@
 - Edit Service Account => create json key => save to MixContent/AppConfigs/google_credential.json
 - https://console.cloud.google.com/cloudpubsub/topic/list?projec={projectId}
 - Each Subscription have 1 subscriber only => to have multiple subscriber => create multi subscription
+
 # Publish Mix Queue
+## Solution 1:
 - Create Publisher for model to create topic on google if not exist
 ```
  public class ThemePublisherService : GooglePublisherService<MixThemeViewModel>
@@ -53,22 +55,43 @@ var msg = new QueueMessageModel();
 msg.Package(post);
 _queueService.PushQueue(msg);
 ```
-- Use [GeneratePublisher] for ViewModel that need to generate Publisher
+## Solution 2:
+- Use [GeneratePublisher] Attribute for ViewModel that need to generate Publisher
 
 # Subscribe Queue
 - Create Subscriber for each module
 ```
-public class ThemeSubscriberService : GoogleSubscriberService<MixThemeViewModel>
+public class PageContentSubscriberService : SubscriberService
 {
-    public ThemeSubscriberService(
-        IConfiguration configuration) : base("portal", configuration)
+    protected UnitOfWorkInfo _uow;
+    protected Repository<MixCmsContext, MixPageContent, int, MixPageContentViewModel> _repo;
+    static string topicId = typeof(MixPageContentViewModel).FullName;
+    public PageContentSubscriberService(
+        IConfiguration configuration,
+        MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Portal, configuration, queueService)
     {
+        _uow = new UnitOfWorkInfo(new MixCmsContext());
+        _repo = MixPageContentViewModel.GetRepository(_uow);
     }
 
-    public override Task Handler(QueueMessageModel data)
+    public override Task Handler(MessageQueueModel data)
     {
-        var post = data.Model.ToObject<MixThemeViewModel>();
-        Console.WriteLine(post);
+        var post = data.Model.ToObject<MixPageContentViewModel>();
+        switch (data.Action)
+        {
+            case MixRestAction.Get:
+                break;
+            case MixRestAction.Post:
+                break;
+            case MixRestAction.Put:
+                break;
+            case MixRestAction.Patch:
+                break;
+            case MixRestAction.Delete:
+                break;
+            default:
+                break;
+        }
         return Task.CompletedTask;
     }
 }
