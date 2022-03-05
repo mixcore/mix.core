@@ -77,7 +77,7 @@ namespace Mix.Tenancy.Controllers
         /// <summary>
         /// When status = InitTenant
         ///     - Init Account Database
-        ///     - Init Superadmin Account
+        ///     - Init Owner Account
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>

@@ -222,7 +222,7 @@ namespace Mix.Lib.Services
 
             // TODO: 
             //var roles = _idHelper.GetClaims(user, MixClaims.Role);
-            //if (roles.Any(r => r == MixDefaultRoles.SuperAdmin || r == MixDefaultRoles.Admin))
+            //if (roles.Any(r => r == MixRoles.Owner|| r == MixDefaultRoles.Admin))
             //{
             //    return true;
             //}

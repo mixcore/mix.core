@@ -104,6 +104,17 @@ namespace Mix.Lib.Helpers
             return result;
         }
 
+        public static List<object> LoadEnumValues(Type enumType)
+        {
+            List<object> result = new();
+            var values = Enum.GetValues(enumType);
+            foreach (var item in values)
+            {
+                result.Add(Enum.ToObject(enumType, item));
+            }
+            return result;
+        }
+
         public static void HandleException<TResult>(TResult result, Exception ex)
         {
             LogException(ex);
