@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Account
 {
-    public class MixUser : IdentityUser
+    public class MixUser : IdentityUser, IEntity<string>
     {
         public DateTime JoinDate { get; set; }
 

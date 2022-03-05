@@ -2,35 +2,41 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
+using Mix.Heart.Models;
 using Mix.Identity.Dtos;
+using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
+using Mix.Shared.Dtos;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
 
 namespace Mix.Account.Controllers
 {
-    [Route("api/v2/rest/mix-account")]
+    [Route("api/v2/rest/mix-account/user")]
     [ApiController]
-    public class MixAccountController : ControllerBase
+    public class MixUserController : ControllerBase
     {
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly ILogger<MixAccountController> _logger;
+        private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
-        private readonly MixCmsContext _context;
+        private readonly EntityRepository<ApplicationDbContext, MixUser, string> _repository;
         protected readonly MixIdentityService _mixIdentityService;
+        protected UnitOfWorkInfo _uow;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
-        public MixAccountController(
+        public MixUserController(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            ILogger<MixAccountController> logger,
+            ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsContext context, MixIdentityService mixIdentityService)
+            ApplicationDbContext context, MixIdentityService mixIdentityService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,8 +44,9 @@ namespace Mix.Account.Controllers
             _logger = logger;
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
-            _context = context;
             _mixIdentityService = mixIdentityService;
+            _uow = new(context);
+            _repository = new(_uow);
         }
 
         [Route("Logout")]
@@ -71,20 +78,27 @@ namespace Mix.Account.Controllers
             return Ok(token);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet]
-        [Route("my-profile")]
-        public async Task<ActionResult<MixUserViewModel>> MyProfile()
+        [HttpGet("list")]
+        public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
         {
-            string id = _mixIdentityService.GetClaim(User, MixClaims.Id);
-            MixUser user = await _userManager.FindByIdAsync(id); ;
-
-            if (user != null)
-            {
-                var mixUser = new MixUserViewModel(_context, user);
-                return Ok(mixUser);
-            }
-            return BadRequest();
+            Expression<Func<MixUser, bool>> predicate = model =>
+                (string.IsNullOrWhiteSpace(request.Keyword)
+                || (
+                    (EF.Functions.Like(model.UserName, $"%{request.Keyword}%"))
+                   || (EF.Functions.Like(model.FirstName, $"%{request.Keyword}%"))
+                   || (EF.Functions.Like(model.LastName, $"%{request.Keyword}%"))
+                   )
+                )
+                && (!request.FromDate.HasValue
+                    || (model.JoinDate >= request.FromDate.Value.ToUniversalTime())
+                )
+                && (!request.ToDate.HasValue
+                    || (model.JoinDate <= request.ToDate.Value.ToUniversalTime())
+                );
+            var searchQuery = new SearchAccountQueryModel(request);
+            var data = await _repository.GetPagingEntitiesAsync(predicate, searchQuery.PagingData)
+               .ConfigureAwait(false);
+            return data;
         }
 
         // POST api/template
@@ -125,5 +139,11 @@ namespace Mix.Account.Controllers
             }
             return BadRequest();
         }
+
+        #region Helpers
+
+
+
+        #endregion
     }
 }

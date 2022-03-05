@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Heart.Enums;
+using Mix.Heart.Extensions;
+using Mix.Heart.Models;
+using Mix.Shared.Constants;
 
-namespace Mix.Lib.Models.Common
+namespace Mix.Shared.Models
 {
     public class PagingRequestModel : PagingModel
     {
