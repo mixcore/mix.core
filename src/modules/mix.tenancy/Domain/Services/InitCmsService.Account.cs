@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Constants;
+using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Models;
 using Mix.Shared.Enums;
@@ -17,11 +18,15 @@ namespace Mix.Tenancy.Domain.Services
             AuthConfigService authConfigService = new(_configuration);
             if (!_roleManager.Roles.Any())
             {
-                await _roleManager.CreateAsync(new IdentityRole()
+                var roles = MixHelper.LoadEnumValues(typeof(MixRoles));
+                foreach (var role in roles)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = MixDefaultRoles.SuperAdmin
-                });
+                    await _roleManager.CreateAsync(new IdentityRole()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = role.ToString()
+                    });
+                }
             }
 
             if (_userManager.Users.Count() == 0)
@@ -38,7 +43,7 @@ namespace Mix.Tenancy.Domain.Services
                 if (createResult.Succeeded)
                 {
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                    await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin);
+                    await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString());
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
