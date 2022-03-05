@@ -1,48 +1,49 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.Entities.Account;
+using Mix.Heart.Extensions;
+using Mix.Shared.Constants;
+using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using System;
 using System.Linq.Expressions;
 
-namespace Mix.Lib.Models.Common
+namespace Mix.Identity.Models
 {
-    public class SearchQueryModel<TEntity, TPrimaryKey>
-         where TPrimaryKey : IComparable
-        where TEntity : EntityBase<TPrimaryKey>
+    public class SearchAccountQueryModel
     {
-        public string Specificulture { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public MixContentStatus? Status { get; set; }
         public string Keyword { get; set; }
         public PagingRequestModel PagingData { get; set; }
-        public Expression<Func<TEntity, bool>> Predicate { get; set; }
+        public Expression<Func<MixUser, bool>> Predicate { get; set; }
 
-        protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
-        protected Expression<Func<TEntity, bool>> OrPredicate { get; set; }
+        protected Expression<Func<MixUser, bool>> AndPredicate { get; set; }
+        protected Expression<Func<MixUser, bool>> OrPredicate { get; set; }
 
-        public SearchQueryModel()
+        public SearchAccountQueryModel()
         {
 
         }
 
-        public SearchQueryModel(
+        public SearchAccountQueryModel(
             HttpRequest request,
-            Expression<Func<TEntity, bool>> andPredicate = null,
-            Expression<Func<TEntity, bool>> orPredicate = null)
+            Expression<Func<MixUser, bool>> andPredicate = null,
+            Expression<Func<MixUser, bool>> orPredicate = null)
         {
             AndPredicate = andPredicate;
             OrPredicate = orPredicate;
             Init(request, default);
         }
 
-        public SearchQueryModel(
+        public SearchAccountQueryModel(
             SearchRequestDto request,
-            Expression<Func<TEntity, bool>> andPredicate = null,
-            Expression<Func<TEntity, bool>> orPredicate = null)
+            Expression<Func<MixUser, bool>> andPredicate = null,
+            Expression<Func<MixUser, bool>> orPredicate = null)
         {
             AndPredicate = andPredicate;
             OrPredicate = orPredicate;
 
-            Specificulture = request.Culture;
             FromDate = request.FromDate;
             ToDate = request.ToDate;
             Status = request.Status;
@@ -60,7 +61,6 @@ namespace Mix.Lib.Models.Common
 
         private void Init(HttpRequest request, int defaultPageSize = 1000)
         {
-            Specificulture = request.Query[MixRequestQueryKeywords.Specificulture];
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate : null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)
@@ -77,12 +77,10 @@ namespace Mix.Lib.Models.Common
         private void BuildPredicate()
         {
             Predicate = m => true;
-            Predicate = Predicate.AndAlsoIf(Status != null, model => model.Status == Status);
-            Predicate = Predicate.AndAlsoIf(FromDate != null, model => model.CreatedDateTime >= FromDate);
-            Predicate = Predicate.AndAlsoIf(ToDate != null, model => model.CreatedDateTime <= ToDate);
+            Predicate = Predicate.AndAlsoIf(FromDate != null, model => model.JoinDate >= FromDate);
+            Predicate = Predicate.AndAlsoIf(ToDate != null, model => model.JoinDate <= ToDate);
             Predicate = Predicate.AndAlsoIf(AndPredicate != null, AndPredicate);
             Predicate = Predicate.OrIf(OrPredicate != null, OrPredicate);
-
         }
     }
 }

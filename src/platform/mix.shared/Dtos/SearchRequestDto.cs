@@ -1,4 +1,6 @@
-﻿namespace Mix.Lib.Dtos
+﻿using Mix.Heart.Enums;
+
+namespace Mix.Shared.Dtos
 {
     public class SearchRequestDto
     {
