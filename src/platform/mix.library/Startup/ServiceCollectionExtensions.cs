@@ -100,7 +100,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.UseMixSignalR();
 
-           
+
             return app;
         }
 
