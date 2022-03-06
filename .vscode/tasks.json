@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/Mix.Cms.Web/Mix.Cms.Web.csproj",
+                "${workspaceFolder}/src/applications/Mixcore/mixcore.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Mix.Cms.Web/Mix.Cms.Web.csproj",
+                "${workspaceFolder}/src/applications/Mixcore/mixcore.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/Mix.Cms.Web/Mix.Cms.Web.csproj",
+                "${workspaceFolder}/src/applications/Mixcore/mixcore.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
