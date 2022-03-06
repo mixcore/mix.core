@@ -1,5 +1,3 @@
-using Mix.Lib.Helpers;
-
 namespace Mix.Tenancy
 {
     public class Program
