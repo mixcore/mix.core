@@ -5,6 +5,7 @@
   "EnableOcelot": false,
   "IsHttps": false,
   "MaxPageSize": 100,
+  "ResponseCache": 5,
   "DefaultCulture": "en-us",
   "ThemeId": "1",
   "Domain": "",

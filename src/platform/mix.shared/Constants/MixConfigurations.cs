@@ -26,5 +26,6 @@
         public const string CONST_DEFAULT_EXTENSION_FILE_NAME = "extensions.json";
         public const string CONST_DEFAULT_STRING_ID = "default";
         public const string CONST_UPLOAD_FOLDER_FORMAT = "MMM-yyyy";
+        public const string REPONSE_CACHE = "20";
     }
 }
