@@ -11,7 +11,7 @@
     "IsRewrite": true,
     "IsHttps": false,
     "IsCache": true,
-    "ResponseCache": 20,
+    "ResponseCache": 5,
     "IsRegistration": true,
     "MaxPageSize": 100,
     "ImageSize": 2000,
