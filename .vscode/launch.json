@@ -10,9 +10,9 @@
              "request": "launch",
              "preLaunchTask": "build",
              // If you have changed target frameworks, make sure to update the program path.
-             "program": "${workspaceFolder}/src/Mix.Cms.Web/bin/Debug/net5.0/Mixcore.dll",
+             "program": "${workspaceFolder}/src/applications/Mixcore/bin/Debug/net6.0/Mixcore.dll",
              "args": [],
-             "cwd": "${workspaceFolder}/src/Mix.Cms.Web",
+             "cwd": "${workspaceFolder}/src/applications/Mixcore",
              "stopAtEntry": false,
              // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
              "serverReadyAction": {
