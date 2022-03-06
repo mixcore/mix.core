@@ -2,7 +2,6 @@
 using Mix.SignalR.Constants;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mix.SignalR.Hubs

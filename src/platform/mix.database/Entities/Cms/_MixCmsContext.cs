@@ -19,7 +19,7 @@ namespace Mix.Database.Entities.Cms
             _connectionString = connectionString;
             _databaseProvider = databaseProvider;
         }
-        
+
         // For Unit Test
         public MixCmsContext()
         {
