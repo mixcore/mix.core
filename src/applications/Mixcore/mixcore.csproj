@@ -8,6 +8,7 @@
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>mixcore.ico</ApplicationIcon>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	</PropertyGroup>
 
 	<ItemGroup>
