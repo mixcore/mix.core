@@ -7,6 +7,8 @@
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -34,12 +36,12 @@
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <Optimize>False</Optimize>
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<Optimize>False</Optimize>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -54,16 +56,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
-	  <ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
-	  <ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
-	  <ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
-	  <ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
-	  <ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
+		<ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
+		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
+		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
+		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
+		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
+		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
-	  <Folder Include="Views\Shared\Templates\" />
+		<EmbeddedResource Include="Views\_ViewImports.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Views\_ViewStart.cshtml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\..\shared\**">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
+	<Target Name="CreateAppDataFolder" AfterTargets="AfterPublish">
 
+	</Target>
 </Project>
