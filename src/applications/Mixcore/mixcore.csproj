@@ -7,8 +7,8 @@
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<ApplicationIcon>mixcore.ico</ApplicationIcon>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
