@@ -83,6 +83,7 @@ namespace Mix.Database.Entities.Cms
                 _ => string.Empty
             };
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<MixDataContentValue>().HasOne(m=>m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
                 m => m.Namespace == ns);
