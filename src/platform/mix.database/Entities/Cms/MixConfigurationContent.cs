@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixConfigurationContent : MultilanguageUniqueNameContentBase<int>
+    public class MixConfigurationContent : MultiLanguageUniqueNameContentBase<int>
     {
         public string DefaultContent { get; set; }
 

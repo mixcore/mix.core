@@ -5,9 +5,9 @@ using System;
 namespace Mix.Database.EntityConfigurations.POSTGRES.Base
 {
     public abstract class PostgresMultilanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey>
-        : MultilanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, PostgresDatabaseConstants>
+        : MultiLanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, PostgresDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : MultilanguageUniqueNameContentBase<TPrimaryKey>
+        where T : MultiLanguageUniqueNameContentBase<TPrimaryKey>
     {
     }
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 #nullable disable
 
@@ -382,7 +382,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContentAssociation",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -421,7 +421,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixData",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -541,7 +541,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContent",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
                     MixDatabaseId = table.Column<int>(type: "int", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -602,7 +602,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 name: "MixDataContentValue",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "uuid()", collation: "ascii_general_ci"),
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
                     MixDatabaseColumnName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")

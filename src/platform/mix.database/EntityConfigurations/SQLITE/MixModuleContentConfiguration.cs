@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixModuleContentConfiguration : SqliteMultilanguageSEOContentBaseConfiguration<MixModuleContent, int>
+    public class MixModuleContentConfiguration : SqliteMultiLanguageSEOContentBaseConfiguration<MixModuleContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixModuleContent> builder)
         {
