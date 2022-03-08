@@ -71,10 +71,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="..\..\shared\**">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
-	<Target Name="CreateAppDataFolder" AfterTargets="AfterPublish">
-
-	</Target>
+	<ItemGroup>
+	  <EmbeddedResource Remove="..\..\shared\MixContent\**" />
+	</ItemGroup>
 </Project>

@@ -514,7 +514,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         column: x => x.MixDatabaseColumnId,
                         principalTable: "MixDatabaseColumn",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MixDataContentValue_MixDataContent_MixDataContentId",
                         column: x => x.MixDataContentId,
