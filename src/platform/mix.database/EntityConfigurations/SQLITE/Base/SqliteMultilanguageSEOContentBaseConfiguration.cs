@@ -4,10 +4,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.SQLITE.Base
 {
-    public abstract class SqliteMultilanguageSEOContentBaseConfiguration<T, TPrimaryKey>
-        : MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey, SqliteDatabaseConstants>
+    public abstract class SqliteMultiLanguageSEOContentBaseConfiguration<T, TPrimaryKey>
+        : MultiLanguageSEOContentBaseConfiguration<T, TPrimaryKey, SqliteDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : MultilanguageSEOContentBase<TPrimaryKey>
+        where T : MultiLanguageSEOContentBase<TPrimaryKey>
     {
     }
 }

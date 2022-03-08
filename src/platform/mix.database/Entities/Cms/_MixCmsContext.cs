@@ -37,6 +37,11 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+#if DEBUG
+            // TODO: will be removed
+            optionsBuilder.LogTo(Console.WriteLine);
+#endif
+
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)

@@ -4,10 +4,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.MYSQL.Base
 {
-    public abstract class MySqlMultilanguageContentBaseConfiguration<T, TPrimaryKey>
-        : MultilanguageContentBaseConfiguration<T, TPrimaryKey, MySqlDatabaseConstants>
+    public abstract class MySqlMultiLanguageContentBaseConfiguration<T, TPrimaryKey>
+        : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, MySqlDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : MultilanguageContentBase<TPrimaryKey>
+        where T : MultiLanguageContentBase<TPrimaryKey>
     {
     }
 }

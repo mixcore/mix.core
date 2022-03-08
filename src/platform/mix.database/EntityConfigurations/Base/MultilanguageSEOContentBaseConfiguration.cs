@@ -5,9 +5,9 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig> : MultilanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
+    public abstract class MultiLanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig> : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
        where TPrimaryKey : IComparable
-       where T : MultilanguageSEOContentBase<TPrimaryKey>
+       where T : MultiLanguageSEOContentBase<TPrimaryKey>
          where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)
@@ -62,8 +62,6 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasColumnType($"{Config.NString}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
-
-
         }
 
     }

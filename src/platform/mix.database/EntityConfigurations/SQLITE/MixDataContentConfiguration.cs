@@ -6,7 +6,7 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixDataContentConfiguration : SqliteMultilanguageSEOContentBaseConfiguration<MixDataContent, Guid>
+    public class MixDataContentConfiguration : SqliteMultiLanguageSEOContentBaseConfiguration<MixDataContent, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContent> builder)
         {

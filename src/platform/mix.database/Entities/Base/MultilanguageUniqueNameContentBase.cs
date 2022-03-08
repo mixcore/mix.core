@@ -2,7 +2,7 @@
 
 namespace Mix.Database.Entities.Base
 {
-    public abstract class MultilanguageUniqueNameContentBase<TPrimaryKey> : MultilanguageContentBase<TPrimaryKey>
+    public abstract class MultiLanguageUniqueNameContentBase<TPrimaryKey> : MultiLanguageContentBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
         public string DisplayName { get; set; }

@@ -5,9 +5,9 @@ using System;
 namespace Mix.Database.EntityConfigurations.SQLSERVER.Base
 {
     public abstract class SqlServerMultilanguageContentBaseConfiguration<T, TPrimaryKey>
-        : MultilanguageContentBaseConfiguration<T, TPrimaryKey, SqlServerDatabaseConstants>
+        : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, SqlServerDatabaseConstants>
         where TPrimaryKey : IComparable
-        where T : MultilanguageContentBase<TPrimaryKey>
+        where T : MultiLanguageContentBase<TPrimaryKey>
     {
     }
 }

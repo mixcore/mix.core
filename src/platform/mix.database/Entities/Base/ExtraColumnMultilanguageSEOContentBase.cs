@@ -3,7 +3,7 @@ using System;
 
 namespace Mix.Database.Entities.Base
 {
-    public abstract class ExtraColumnMultilanguageSEOContentBase<TPrimaryKey> : MultilanguageSEOContentBase<TPrimaryKey>
+    public abstract class ExtraColumnMultilanguageSEOContentBase<TPrimaryKey> : MultiLanguageSEOContentBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
         public string MixDatabaseName { get; set; }
