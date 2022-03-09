@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Mix.Database.EntityConfigurations
 {
-    public static class PropertuBuilderExtensions
+    public static class PropertyBuilderExtensions
     {
         public static PropertyBuilder<TPrimaryKey> HasDefaultValueIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition, string method)
         {

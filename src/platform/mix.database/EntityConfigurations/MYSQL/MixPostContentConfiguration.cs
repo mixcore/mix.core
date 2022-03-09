@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MixPostContentConfiguration : MySqlMultilanguageSEOContentBaseConfiguration<MixPostContent, int>
+    public class MixPostContentConfiguration : MySqlMultiLanguageSEOContentBaseConfiguration<MixPostContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPostContent> builder)
         {

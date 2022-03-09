@@ -4,7 +4,7 @@ using System;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixDataContentValue : MultilanguageContentBase<Guid>
+    public class MixDataContentValue : MultiLanguageContentBase<Guid>
     {
         public string MixDatabaseColumnName { get; set; }
         public string MixDatabaseName { get; set; }

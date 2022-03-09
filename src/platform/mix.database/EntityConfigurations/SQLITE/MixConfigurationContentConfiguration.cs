@@ -5,7 +5,7 @@ using Mix.Database.EntityConfigurations.SQLITE.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixConfigurationContentConfiguration : SqliteMultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixConfigurationContentConfiguration : SqliteMultiLanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
         {

@@ -5,10 +5,10 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class MultilanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig>
-        : MultilanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
+    public abstract class MultiLanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig>
+        : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
-        where T : MultilanguageUniqueNameContentBase<TPrimaryKey>
+        where T : MultiLanguageUniqueNameContentBase<TPrimaryKey>
         where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)

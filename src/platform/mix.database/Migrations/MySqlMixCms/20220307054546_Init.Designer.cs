@@ -4,21 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.Entities.v2;
+using Mix.Database.Entities;
 
 #nullable disable
 
 namespace Mix.Database.Migrations.MySqlMixCms
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    [Migration("20220219032256_Init")]
+    [Migration("20220307054546_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
@@ -244,7 +244,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("'uuid()'");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -433,7 +433,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("'uuid()'");
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
@@ -553,7 +553,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("'uuid()'");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -619,7 +619,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("'uuid()'");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("tinyint(1)");
