@@ -3,7 +3,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 
-namespace Mix.Database.Entities.v2
+namespace Mix.Database.Entities
 {
     public class SqlServerMixCmsContext : MixCmsContext
     {

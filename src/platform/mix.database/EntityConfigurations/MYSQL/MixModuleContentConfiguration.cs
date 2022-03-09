@@ -7,7 +7,7 @@ using Mix.Shared.Enums;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MixModuleContentConfiguration : MySqlMultilanguageSEOContentBaseConfiguration<MixModuleContent, int>
+    public class MixModuleContentConfiguration : MySqlMultiLanguageSEOContentBaseConfiguration<MixModuleContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixModuleContent> builder)
         {

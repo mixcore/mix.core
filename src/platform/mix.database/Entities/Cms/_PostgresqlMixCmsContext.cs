@@ -3,7 +3,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.Services;
 
-namespace Mix.Database.Entities.v2
+namespace Mix.Database.Entities
 {
     public class PostgresqlMixCmsContext : MixCmsContext
     {

@@ -6,7 +6,7 @@ using System;
 namespace Mix.Database.EntityConfigurations.Base
 {
     public abstract class ExtraColumnMultilanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig>
-        : MultilanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig>
+        : MultiLanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
         where T : ExtraColumnMultilanguageSEOContentBase<TPrimaryKey>
         where TConfig : IDatabaseConstants
