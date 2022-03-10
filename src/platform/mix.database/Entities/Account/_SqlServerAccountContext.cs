@@ -3,19 +3,17 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.Extensions;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class PostgresSQLAccountContext : MixCmsAccountContext
+    public partial class SqlServerAccountContext : MixCmsAccountContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public PostgresSQLAccountContext(MixDatabaseService databaseService)
+        public SqlServerAccountContext(MixDatabaseService databaseService)
                     : base(databaseService)
         {
         }
@@ -25,7 +23,7 @@ namespace Mix.Database.Entities.Account
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
-                m => m.Namespace == $"Mix.Database.EntityConfigurations.Account.POSTGRES");
+                m => m.Namespace == $"Mix.Database.EntityConfigurations.Account.SQLSERVER");
             OnModelCreatingPartial(modelBuilder);
         }
 

@@ -2,20 +2,27 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Account;
 
+#nullable disable
+
 namespace Mix.Database.Migrations
 {
-    [DbContext(typeof(SQLAccountContext))]
-    partial class SQLAccountContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SqlServerAccountContext))]
+    [Migration("20220310111720_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
@@ -30,9 +37,10 @@ namespace Mix.Database.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<string>("RoleId")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("char(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
 
@@ -43,22 +51,28 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("char(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(400)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
                         .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id");
 
@@ -75,10 +89,6 @@ namespace Mix.Database.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<string>("ClaimType")
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
@@ -86,6 +96,10 @@ namespace Mix.Database.Migrations
                     b.Property<string>("ClaimValue")
                         .HasMaxLength(400)
                         .HasColumnType("varchar(400)");
+
+                    b.Property<string>("MixUserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -140,9 +154,9 @@ namespace Mix.Database.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<Guid>("RoleId")
+                    b.Property<string>("RoleId")
                         .HasMaxLength(50)
-                        .HasColumnType("char(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("MixUserId")
                         .HasMaxLength(50)
@@ -155,29 +169,6 @@ namespace Mix.Database.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Value")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
@@ -213,7 +204,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(250)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
@@ -224,12 +215,12 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActived")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
@@ -237,7 +228,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime");
@@ -267,7 +258,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("RegisterType")
                         .HasMaxLength(50)
@@ -278,7 +269,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(250)
@@ -297,6 +288,29 @@ namespace Mix.Database.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(400)
+                        .HasColumnType("varchar(400)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
                 {
                     b.Property<string>("Id")
@@ -304,7 +318,7 @@ namespace Mix.Database.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Active")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("bit");
 
                     b.Property<string>("AllowedOrigin")
                         .HasMaxLength(100)
@@ -336,11 +350,12 @@ namespace Mix.Database.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("char(50)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClientId")
+                    b.Property<string>("ClientId")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("char(50)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -376,7 +391,7 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
-                        .WithMany("AspNetUserClaimsMixUser")
+                        .WithMany("AspNetUserClaimsApplicationUser")
                         .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
@@ -393,7 +408,7 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
-                        .WithMany("AspNetUserLoginsMixUser")
+                        .WithMany("AspNetUserLoginsApplicationUser")
                         .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
@@ -410,7 +425,7 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
-                        .WithMany("AspNetUserRolesMixUser")
+                        .WithMany("AspNetUserRolesApplicationUser")
                         .HasForeignKey("MixUserId");
 
                     b.HasOne("Mix.Database.Entities.Account.AspNetRoles", "Role")
@@ -452,15 +467,15 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
                 {
-                    b.Navigation("AspNetUserClaimsMixUser");
+                    b.Navigation("AspNetUserClaimsApplicationUser");
 
                     b.Navigation("AspNetUserClaimsUser");
 
-                    b.Navigation("AspNetUserLoginsMixUser");
+                    b.Navigation("AspNetUserLoginsApplicationUser");
 
                     b.Navigation("AspNetUserLoginsUser");
 
-                    b.Navigation("AspNetUserRolesMixUser");
+                    b.Navigation("AspNetUserRolesApplicationUser");
 
                     b.Navigation("AspNetUserRolesUser");
 
