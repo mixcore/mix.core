@@ -14,7 +14,6 @@ namespace Mix.Tenancy.Domain.Services
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();
-            AuthConfigService authConfigService = new(_configuration);
             if (!_roleManager.Roles.Any())
             {
                 var roles = MixHelper.LoadEnumValues(typeof(MixRoles));
@@ -53,8 +52,6 @@ namespace Mix.Tenancy.Domain.Services
                         GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;
                         GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitAccount;
                         GlobalConfigService.Instance.SaveSettings();
-                        authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
-                        authConfigService.SaveSettings();
                     }
                     return token;
                 }

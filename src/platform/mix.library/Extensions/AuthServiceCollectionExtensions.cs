@@ -20,6 +20,12 @@ namespace Microsoft.Extensions.DependencyInjection
             where TDbContext : DbContext
         {
             AuthConfigService authConfigService = services.GetService<AuthConfigService>();
+            
+            if (GlobalConfigService.Instance.IsInit)
+            {
+                authConfigService.AppSettings.SecretKey = Guid.NewGuid().ToString("N");
+                authConfigService.SaveSettings();
+            }
 
             var authConfigurations = authConfigService.AppSettings;
             PasswordOptions pOpt = new()
