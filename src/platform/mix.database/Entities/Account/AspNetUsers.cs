@@ -29,7 +29,7 @@ namespace Mix.Database.Entities.Account
         public string Gender { get; set; }
         public bool IsActived { get; set; }
         public DateTime JoinDate { get; set; }
-        public DateTime LastModified { get; set; }
+        public DateTime? LastModified { get; set; }
         public string LastName { get; set; }
         public bool LockoutEnabled { get; set; }
         public DateTime? LockoutEnd { get; set; }

@@ -3,25 +3,27 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Extensions;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class SQLAccountContext : MixCmsAccountContext
+    public partial class SqliteAccountContext : MixCmsAccountContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public SQLAccountContext(MixDatabaseService databaseService)
+        public SqliteAccountContext(MixDatabaseService databaseService)
                     : base(databaseService)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyIddentityConfigurations();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                this.GetType().Assembly,
+                m => m.Namespace == $"Mix.Database.EntityConfigurations.Account.SQLITE");
             OnModelCreatingPartial(modelBuilder);
         }
 
