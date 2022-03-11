@@ -23,7 +23,7 @@ namespace Mix.Database.Entities.Account
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
-                m => m.Namespace == $"Mix.Database.EntityConfigurations.Account.MYSQL");
+                m => m.Namespace == $"Mix.Database.EntityConfigurations.MYSQL.Account");
             OnModelCreatingPartial(modelBuilder);
         }
 

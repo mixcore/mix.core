@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.Extensions;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
@@ -25,7 +23,7 @@ namespace Mix.Database.Entities.Account
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
-                m => m.Namespace == $"Mix.Database.EntityConfigurations.Account.POSTGRES");
+                m => m.Namespace == $"Mix.Database.EntityConfigurations.POSTGRES.Account");
             OnModelCreatingPartial(modelBuilder);
         }
 
