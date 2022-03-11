@@ -3,7 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Database.EntityConfigurations.Base.Account;
 using Mix.Database.EntityConfigurations.POSTGRES;
 
-namespace Mix.Database.EntityConfigurations.Account.POSTGRES
+namespace Mix.Database.EntityConfigurations.POSTGRES.Account
 {
     internal class AspNetUserClaimsConfiguration : AspNetUserClaimsConfiguration<PostgresDatabaseConstants>
     {

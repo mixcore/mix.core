@@ -4,7 +4,10 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Extensions;
+using Mix.Database.EntityConfigurations.MYSQL;
+using Mix.Database.EntityConfigurations.POSTGRES;
+using Mix.Database.EntityConfigurations.SQLITE;
+using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
 using MySqlConnector;
@@ -93,19 +96,25 @@ namespace Mix.Database.Entities.Account
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            switch (_databaseService.DatabaseProvider)
+            string ns = _databaseService.DatabaseProvider switch
             {
-                case MixDatabaseProvider.PostgreSQL:
-                    modelBuilder.ApplyPostgresIddentityConfigurations();
-                    break;
+                MixDatabaseProvider.SQLSERVER
+                     => typeof(SqlServerDatabaseConstants).Namespace,
 
-                case MixDatabaseProvider.SQLSERVER:
-                case MixDatabaseProvider.MySQL:
-                case MixDatabaseProvider.SQLITE:
-                default:
-                    modelBuilder.ApplyIddentityConfigurations();
-                    break;
-            }
+                MixDatabaseProvider.MySQL
+                    => typeof(MySqlDatabaseConstants).Namespace,
+
+                MixDatabaseProvider.SQLITE
+                    => typeof(SqliteDatabaseConstants).Namespace,
+
+                MixDatabaseProvider.PostgreSQL
+                    => typeof(PostgresDatabaseConstants).Namespace,
+                _ => string.Empty
+            };
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                this.GetType().Assembly,
+                m => m.Namespace == $"{ns}.Account");
             OnModelCreatingPartial(modelBuilder);
         }
 

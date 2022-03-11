@@ -3,7 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Database.EntityConfigurations.Base.Account;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 
-namespace Mix.Database.EntityConfigurations.Account.SQLSERVER
+namespace Mix.Database.EntityConfigurations.SQLSERVER.Account
 {
     internal class RefreshTokensConfiguration : RefreshTokensConfiguration<SqlServerDatabaseConstants>
     {
