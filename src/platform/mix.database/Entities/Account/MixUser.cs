@@ -22,6 +22,8 @@ namespace Mix.Database.Entities.Account
         public string Culture { get; set; }
         public DateTime? DOB { get; set; }
 
+        public int MixTenantId { get; set; }
+
         /// <summary>
         /// Navigation property for the roles this user belongs to.
         /// </summary>

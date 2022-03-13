@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mix.Database.Entities.Account
 {
@@ -44,6 +45,8 @@ namespace Mix.Database.Entities.Account
         public string SecurityStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public string UserName { get; set; }
+        [NotMapped]
+        public int MixTenantId { get; set; }
 
         public virtual ICollection<AspNetUserClaims> AspNetUserClaimsApplicationUser { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }

@@ -19,6 +19,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PrimaryDomain = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
@@ -33,7 +35,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,6 +59,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -99,6 +103,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -134,6 +139,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -169,6 +175,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -202,6 +209,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -239,6 +247,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -274,6 +283,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: true)
@@ -312,6 +322,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -348,6 +359,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -400,6 +412,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ParentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -433,7 +446,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -475,7 +489,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -507,6 +522,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -555,6 +571,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -633,6 +650,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ParentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -651,8 +669,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         name: "FK_MixDataContentValue_MixDatabaseColumn_MixDatabaseColumnId",
                         column: x => x.MixDatabaseColumnId,
                         principalTable: "MixDatabaseColumn",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MixDataContentValue_MixDataContent_MixDataContentId",
                         column: x => x.MixDataContentId,
@@ -686,6 +703,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -756,6 +774,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -832,6 +851,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -876,6 +896,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -934,6 +955,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -964,6 +986,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
@@ -1018,7 +1041,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1053,6 +1077,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
@@ -1119,6 +1144,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -1148,6 +1174,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },

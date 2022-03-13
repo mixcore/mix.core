@@ -16,13 +16,13 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true, collation: "utf8_unicode_ci")
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8_unicode_ci")
+                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "utf8_unicode_ci")
+                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8")
                 },
                 constraints: table =>
@@ -35,51 +35,52 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false),
-                    Avatar = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CountryId = table.Column<int>(type: "int", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Culture = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DOB = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Email = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Gender = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Gender = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IsActived = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NickName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    NickName = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NormalizedEmail = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    NormalizedEmail = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    NormalizedUserName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PasswordHash = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    PasswordHash = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    RegisterType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    RegisterType = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SecurityStamp = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    SecurityStamp = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    UserName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    UserName = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MixTenantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,16 +92,16 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Active = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ApplicationType = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RefreshTokenLifeTime = table.Column<int>(type: "int", nullable: false),
-                    Secret = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Secret = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -114,11 +115,11 @@ namespace Mix.Database.Migrations.MySqlAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(50)", maxLength: 50, nullable: false, collation: "ascii_general_ci"),
-                    ClientId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    ClientId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false)
+                    Email = table.Column<string>(type: "varchar(250)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Username = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    Username = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
                     IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
@@ -134,11 +135,11 @@ namespace Mix.Database.Migrations.MySqlAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClaimValue = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoleId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -158,13 +159,13 @@ namespace Mix.Database.Migrations.MySqlAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClaimType = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ClaimValue = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -188,15 +189,15 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderKey = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    ProviderKey = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderDisplayName = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    ProviderDisplayName = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -220,11 +221,11 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RoleId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -254,13 +255,13 @@ namespace Mix.Database.Migrations.MySqlAccount
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LoginProvider = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Value = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true)
+                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>

@@ -23,6 +23,9 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.Property(e => e.Id)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
+            builder.Property(e => e.MixTenantId)
+                .IsRequired();
+
             builder.Property(e => e.Avatar)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 

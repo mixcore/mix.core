@@ -37,6 +37,7 @@ namespace Mix.Tenancy.Controllers
             HttpService httpService, IHubContext<MixThemeHub> hubContext)
             : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
+            
             _initCmsService = initCmsService;
             _importService = importService;
             _httpService = httpService;
@@ -63,6 +64,7 @@ namespace Mix.Tenancy.Controllers
             {
                 try
                 {
+                    model.PrimaryDomain ??= Request.Headers.Host;
                     await _initCmsService.InitTenantAsync(model);
                     return NoContent();
                 }
@@ -185,6 +187,7 @@ namespace Mix.Tenancy.Controllers
 
             try
             {
+                dto.TenantData.PrimaryDomain ??= Request.Headers.Host;
                 await _initCmsService.InitTenantAsync(dto.TenantData);
                 await _initCmsService.InitAccountAsync(dto.AccountData);
                 return Ok(true);

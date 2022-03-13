@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -23,7 +24,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -43,6 +45,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -81,7 +86,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
@@ -114,6 +120,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -167,7 +176,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
@@ -198,6 +208,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("varchar(4000)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -250,6 +263,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -286,7 +302,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -306,6 +323,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -350,7 +370,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
                         .HasColumnType("text")
@@ -382,6 +403,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -456,6 +480,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -568,6 +595,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("IntParentId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -662,6 +692,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -729,7 +762,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -749,6 +783,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -780,7 +817,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -800,6 +838,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -838,7 +879,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
@@ -871,6 +913,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -924,7 +969,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -944,6 +990,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -988,7 +1037,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)");
@@ -1018,6 +1068,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1148,6 +1201,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -1226,6 +1282,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -1258,7 +1317,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1278,6 +1338,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1314,7 +1377,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)");
@@ -1344,6 +1408,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1457,6 +1524,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -1497,6 +1567,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
@@ -1529,7 +1602,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1542,6 +1616,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1573,7 +1650,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)");
@@ -1603,6 +1681,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1704,7 +1785,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("text")
@@ -1745,6 +1827,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FolderType"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1797,7 +1882,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1818,11 +1904,21 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("PrimaryDomain")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("PrimaryDomain"), "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1850,7 +1946,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1870,6 +1967,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1918,7 +2018,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Alias")
                         .HasColumnType("longtext");
@@ -1941,6 +2042,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2092,7 +2196,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.HasOne("Mix.Database.Entities.Cms.MixDatabaseColumn", "MixDatabaseColumn")
                         .WithMany()
                         .HasForeignKey("MixDatabaseColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MixCulture");

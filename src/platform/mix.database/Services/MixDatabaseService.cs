@@ -5,6 +5,7 @@ using Mix.Database.Entities;
 using Mix.Heart.Services;
 using Mix.Shared.Constants;
 using Mix.Shared.Models;
+using Mix.Shared.Services;
 
 namespace Mix.Database.Services
 {
@@ -13,8 +14,15 @@ namespace Mix.Database.Services
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
 
         public MixDatabaseService()
-            : base(MixAppConfigFilePaths.Database)
+            : base(MixAppConfigFilePaths.Database, true)
         {
+            AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+        }
+
+        protected override void LoadAppSettings()
+        {
+            AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            base.LoadAppSettings();
         }
 
         public string GetConnectionString(string name)

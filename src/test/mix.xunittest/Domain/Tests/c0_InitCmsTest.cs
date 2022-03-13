@@ -43,6 +43,7 @@ namespace Mix.Xunittest.Domain.Tests
                 MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
                 DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
                 DbFixture.Context.Database.EnsureDeleted();
+                model.PrimaryDomain = "localhost";
                 await _initCmsService.InitTenantAsync(model);
             }
             catch (Exception ex)

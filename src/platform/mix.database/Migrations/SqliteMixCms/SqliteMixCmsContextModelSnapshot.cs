@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,13 +16,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -39,6 +41,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -75,7 +80,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
@@ -104,6 +110,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -154,7 +163,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Alias")
                         .HasColumnType("varchar(250)")
@@ -181,6 +191,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Icon")
                         .HasColumnType("varchar(4000)")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -230,6 +243,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -264,7 +280,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -282,6 +299,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -323,7 +343,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
                         .HasColumnType("ntext")
@@ -351,6 +372,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -419,6 +443,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -524,6 +551,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("IntParentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -612,6 +642,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -675,7 +708,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -693,6 +727,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -723,7 +760,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -741,6 +779,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -777,7 +818,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
@@ -806,6 +848,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -856,7 +901,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -874,6 +920,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -915,7 +964,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -941,6 +991,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1062,6 +1115,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -1140,6 +1196,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -1172,7 +1231,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1190,6 +1250,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1225,7 +1288,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1251,6 +1315,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1356,6 +1423,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -1396,6 +1466,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
@@ -1428,7 +1501,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1441,6 +1515,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1471,7 +1548,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1497,6 +1575,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1591,7 +1672,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
@@ -1627,6 +1709,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1675,7 +1760,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1694,11 +1780,20 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
+
+                    b.Property<string>("PrimaryDomain")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1724,7 +1819,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1742,6 +1838,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1788,7 +1887,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Alias")
                         .HasColumnType("TEXT");
@@ -1809,6 +1909,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1959,7 +2062,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasOne("Mix.Database.Entities.Cms.MixDatabaseColumn", "MixDatabaseColumn")
                         .WithMany()
                         .HasForeignKey("MixDatabaseColumnId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MixCulture");

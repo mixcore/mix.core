@@ -4,6 +4,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 {
     public class InitTenantViewModel : ViewModelBase<MixCmsContext, MixTenant, int, InitTenantViewModel>
     {
+        public string PrimaryDomain { get; set; }
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
@@ -31,6 +32,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         public void InitSiteData(InitCmsDto model)
         {
+            PrimaryDomain = model.PrimaryDomain;
             DisplayName = model.SiteName;
             SystemName = model.SiteName.ToSEOString('_');
             Description = model.SiteName;

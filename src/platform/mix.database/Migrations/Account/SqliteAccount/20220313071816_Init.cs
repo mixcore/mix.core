@@ -13,10 +13,10 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true, collation: "NOCASE"),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "NOCASE"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true, collation: "NOCASE")
+                    Id = table.Column<Guid>(type: "varchar(50)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
+                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
                 },
                 constraints: table =>
                 {
@@ -27,34 +27,35 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false),
-                    Avatar = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
+                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true),
                     CountryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    Culture = table.Column<string>(type: "varchar(50)", nullable: true),
                     DOB = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Email = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    FirstName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Gender = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Gender = table.Column<string>(type: "varchar(50)", nullable: true),
                     IsActived = table.Column<bool>(type: "INTEGER", nullable: false),
                     JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
-                    LastName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
                     LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
-                    NickName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
-                    PasswordHash = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
-                    PhoneNumber = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    NickName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "varchar(250)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "varchar(250)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    RegisterType = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    SecurityStamp = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    RegisterType = table.Column<string>(type: "varchar(50)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "varchar(50)", nullable: true),
                     TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    UserName = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true)
+                    UserName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -65,13 +66,13 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
                     Active = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "varchar(250)", maxLength: 100, nullable: true),
+                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true),
                     ApplicationType = table.Column<int>(type: "INTEGER", nullable: false),
-                    Name = table.Column<string>(type: "varchar(250)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false),
                     RefreshTokenLifeTime = table.Column<int>(type: "INTEGER", nullable: false),
-                    Secret = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Secret = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,9 +84,9 @@ namespace Mix.Database.Migrations.SqliteAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", maxLength: 50, nullable: false),
-                    ClientId = table.Column<Guid>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
-                    Username = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: true),
+                    ClientId = table.Column<Guid>(type: "varchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: false),
+                    Username = table.Column<string>(type: "varchar(250)", nullable: true),
                     ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
                     IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -99,9 +100,9 @@ namespace Mix.Database.Migrations.SqliteAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true),
-                    ClaimValue = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true),
-                    RoleId = table.Column<Guid>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true),
+                    RoleId = table.Column<Guid>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,10 +120,10 @@ namespace Mix.Database.Migrations.SqliteAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    ClaimType = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true),
-                    ClaimValue = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true),
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -144,11 +145,11 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    ProviderKey = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    ProviderDisplayName = table.Column<string>(type: "varchar(250)", maxLength: 400, nullable: true),
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "varchar(50)", nullable: false),
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    ProviderDisplayName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -170,9 +171,9 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    RoleId = table.Column<Guid>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    MixUserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "varchar(50)", nullable: false),
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -200,10 +201,10 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    Value = table.Column<string>(type: "varchar(4000)", maxLength: 400, nullable: true)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
                 },
                 constraints: table =>
                 {

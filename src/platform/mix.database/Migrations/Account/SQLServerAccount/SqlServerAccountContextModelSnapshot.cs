@@ -8,7 +8,7 @@ using Mix.Database.Entities.Account;
 
 #nullable disable
 
-namespace Mix.Database.Migrations
+namespace Mix.Database.Migrations.SqlServerAccount
 {
     [DbContext(typeof(SqlServerAccountContext))]
     partial class SqlServerAccountContextModelSnapshot : ModelSnapshot
@@ -28,16 +28,13 @@ namespace Mix.Database.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -51,23 +48,19 @@ namespace Mix.Database.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)")
+                        .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -88,20 +81,16 @@ namespace Mix.Database.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -116,24 +105,19 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("LoginProvider", "ProviderKey")
@@ -149,15 +133,12 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("RoleId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("UserId", "RoleId");
@@ -172,25 +153,21 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Avatar")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Culture")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("Dob")
@@ -198,18 +175,15 @@ namespace Mix.Database.Migrations
                         .HasColumnName("DOB");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Gender")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActived")
@@ -222,7 +196,6 @@ namespace Mix.Database.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -231,46 +204,40 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("NickName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("PasswordHash")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("RegisterType")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
@@ -289,20 +256,16 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Value")
-                        .HasMaxLength(400)
-                        .HasColumnType("varchar(400)");
+                        .HasColumnType("varchar(4000)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -312,30 +275,26 @@ namespace Mix.Database.Migrations
             modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("AllowedOrigin")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ApplicationType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("RefreshTokenLifeTime")
                         .HasColumnType("int");
 
                     b.Property<string>("Secret")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -352,12 +311,10 @@ namespace Mix.Database.Migrations
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("ExpiresUtc")
@@ -367,7 +324,6 @@ namespace Mix.Database.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Username")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");

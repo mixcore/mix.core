@@ -4,6 +4,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixTenant : EntityBase<int>
     {
+        public string PrimaryDomain { get; set; }
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.SqlServerMixCms
+namespace Mix.Database.Migrations
 {
     public partial class Init : Migration
     {
@@ -15,6 +15,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PrimaryDomain = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -23,7 +24,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,6 +44,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
@@ -74,6 +77,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
@@ -102,6 +106,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
@@ -130,6 +135,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
@@ -157,6 +163,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
@@ -186,6 +193,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
@@ -214,6 +222,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
@@ -245,6 +254,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
@@ -274,6 +284,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -315,6 +326,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false)
@@ -342,7 +354,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -374,7 +387,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -401,6 +415,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -439,6 +454,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -496,6 +512,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false)
@@ -539,6 +556,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -593,6 +611,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -652,6 +671,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
@@ -688,6 +708,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -733,6 +754,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -759,6 +781,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "Vietnamese_CI_AS"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
@@ -799,7 +822,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -828,6 +852,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),
                     ParentId = table.Column<int>(type: "int", nullable: false),
                     MixCultureId = table.Column<int>(type: "int", nullable: false),
@@ -880,6 +905,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -906,6 +932,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     LeftId = table.Column<int>(type: "int", nullable: false),
                     RightId = table.Column<int>(type: "int", nullable: false)
                 },

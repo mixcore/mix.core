@@ -6,6 +6,7 @@ namespace Mix.Tenancy.Domain.Dtos
     {
         #region Properties
 
+        public string PrimaryDomain { get; set; }
         public string ConnectionString
         {
             get
