@@ -8,6 +8,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
 {
+    public class ExternalLoginResultModel
+    {
+        public string Token { get; set; }
+        public string ReturnUrl { get; set; }
+    }
     public class ExternalLoginViewModel
     {
         public string Name { get; set; }
@@ -22,18 +27,13 @@ namespace Mix.Identity.Models.AccountViewModels
     public class RegisterExternalBindingModel
     {
         [Required]
-        [JsonProperty("username")]
         public string UserName { get; set; }
 
-        [JsonProperty("email")]
         public string Email { get; set; }
 
         [Required]
-        [JsonProperty("provider")]
         public MixExternalLoginProviders Provider { get; set; }
 
-        [Required]
-        [JsonProperty("externalAccessToken")]
         public string ExternalAccessToken { get; set; }
 
     }

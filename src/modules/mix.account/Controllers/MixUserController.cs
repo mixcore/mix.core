@@ -13,6 +13,7 @@ using Mix.Lib.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 
 namespace Mix.Account.Controllers
@@ -29,6 +30,7 @@ namespace Mix.Account.Controllers
         private readonly EntityRepository<ApplicationDbContext, MixUser, string> _repository;
         protected readonly MixIdentityService _mixIdentityService;
         protected UnitOfWorkInfo _uow;
+        private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixUserController(
             UserManager<MixUser> userManager,
@@ -36,7 +38,7 @@ namespace Mix.Account.Controllers
             RoleManager<IdentityRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            ApplicationDbContext context, MixIdentityService mixIdentityService)
+            ApplicationDbContext context, MixIdentityService mixIdentityService, MixCmsContext cmdContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,6 +49,7 @@ namespace Mix.Account.Controllers
             _mixIdentityService = mixIdentityService;
             _uow = new(context);
             _repository = new(_uow);
+            _cmsContext = cmdContext;
         }
 
         [Route("Logout")]
@@ -68,6 +71,15 @@ namespace Mix.Account.Controllers
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.Login(model);
             return Ok(loginResult);
+        }
+
+
+        [Route("get-external-login-providers")]
+        [HttpGet]
+        public async Task<ActionResult> GetExternalLoginProviders()
+        {
+            var providers = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            return Ok(providers);
         }
 
         [Route("renew-token")]

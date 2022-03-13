@@ -1,4 +1,6 @@
-﻿@inject MixConfigurationService configService
+﻿@using Microsoft.AspNetCore.Authentication
+@inject MixConfigurationService configService
+@model IEnumerable<AuthenticationScheme>
 @{
     Layout = null;
 }
@@ -39,8 +41,7 @@
     <mix-loader ng-show="isBusy"></mix-loader>
 
     <div class="container" ng-if="isInit">
-        <div class="card form-signin">
-
+        <div class="card form-signin">           
             <section class="content">
                 <div class="{{pageClass}}" ng-view>
                 </div>
