@@ -25,9 +25,9 @@ namespace Mix.Tenancy.Domain.Services
             _configuration = configuration;
             _userManager = userManager;
             _identityService = identityService;
-            _databaseService = databaseService;
             _roleManager = roleManager;
             _context = context;
+            _databaseService = databaseService;
         }
 
     }

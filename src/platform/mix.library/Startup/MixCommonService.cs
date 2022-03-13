@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static IServiceCollection AddMixCommonServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             services.AddScoped<MixHeartConfigService>();
-            services.AddScoped<MixDatabaseService>();
+            services.AddSingleton<MixDatabaseService>();
             services.AddScoped<CultureService>();
             services.AddScoped<AuthConfigService>();
             services.AddScoped<SmtpConfigService>();

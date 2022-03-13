@@ -9,6 +9,11 @@ namespace Mix.Tenancy.Domain
         {
             services.AddScoped<InitCmsService>();
             services.AddScoped<ImportSiteService>();
+            if (GlobalConfigService.Instance.InitStatus == Shared.Enums.InitStep.Blank)
+            {
+                GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
+                GlobalConfigService.Instance.SaveSettings();
+            }
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

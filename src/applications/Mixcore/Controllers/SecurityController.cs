@@ -23,7 +23,7 @@ namespace Mixcore.Controllers
             MixCacheService cacheService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
-            MixIdentityService idService, UserManager<MixUser> userManager, 
+            MixIdentityService idService, UserManager<MixUser> userManager,
             MixCmsContext cmsContext)
             : base(mixService, ipSecurityConfigService)
         {
@@ -36,12 +36,11 @@ namespace Mixcore.Controllers
 
         [HttpGet]
         [Route("security/{page}")]
-        public async Task<IActionResult> IndexAsync(string page)
+        public IActionResult Index(string page)
         {
             if (isValid)
             {
-                var ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                return View(ExternalLogins);
+                return View();
             }
             else
             {
@@ -76,7 +75,7 @@ namespace Mixcore.Controllers
             {
                 return RedirectToPage("./Security/Login", new { ReturnUrl = returnUrl });
             }
-            
+
             // Sign in the user with this external login provider if the user already has a login.
             var siginResult = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (siginResult.Succeeded)
@@ -110,7 +109,8 @@ namespace Mixcore.Controllers
                         ReturnUrl = returnUrl
                     });
                 }
-                else {
+                else
+                {
                     user = new MixUser()
                     {
                         Email = email,
@@ -135,7 +135,7 @@ namespace Mixcore.Controllers
                     }
                 }
 
-               
+
                 return BadRequest();
             }
         }

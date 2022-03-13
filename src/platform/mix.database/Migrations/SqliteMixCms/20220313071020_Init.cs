@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,6 +15,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    PrimaryDomain = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
@@ -23,7 +24,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,6 +44,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -74,6 +77,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -102,6 +106,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -130,6 +135,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -157,6 +163,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -186,6 +193,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -214,6 +222,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -245,6 +254,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -274,6 +284,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -315,6 +326,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -342,7 +354,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -374,7 +387,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -401,6 +415,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -439,6 +454,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -496,6 +512,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -513,8 +530,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         name: "FK_MixDataContentValue_MixDatabaseColumn_MixDatabaseColumnId",
                         column: x => x.MixDatabaseColumnId,
                         principalTable: "MixDatabaseColumn",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_MixDataContentValue_MixDataContent_MixDataContentId",
                         column: x => x.MixDataContentId,
@@ -540,6 +556,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -594,6 +611,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -653,6 +671,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -689,6 +708,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -734,6 +754,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -760,6 +781,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "NOCASE"),
                     MixTenantId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -800,7 +822,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -829,6 +852,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -881,6 +905,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -907,6 +932,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

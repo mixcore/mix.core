@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Mix.Database.Migrations.PostgresSQLAccount
+#nullable disable
+
+namespace Mix.Database.Migrations.SqlServerAccount
 {
     public partial class Init : Migration
     {
@@ -11,10 +13,10 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(400)", nullable: true, collation: "und-x-icu"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu")
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
+                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS")
                 },
                 constraints: table =>
                 {
@@ -25,34 +27,35 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false),
-                    Avatar = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    CountryId = table.Column<int>(type: "integer", nullable: false),
-                    Culture = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    DOB = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    Email = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    Gender = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    IsActived = table.Column<bool>(type: "boolean", nullable: false),
-                    JoinDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    NickName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    PasswordHash = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    PhoneNumber = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    RegisterType = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    SecurityStamp = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true)
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    Culture = table.Column<string>(type: "varchar(50)", nullable: true),
+                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Gender = table.Column<string>(type: "varchar(50)", nullable: true),
+                    IsActived = table.Column<bool>(type: "bit", nullable: false),
+                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    LastName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    NickName = table.Column<string>(type: "varchar(50)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "varchar(250)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "varchar(250)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    RegisterType = table.Column<string>(type: "varchar(50)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "varchar(50)", nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    UserName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    MixTenantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,13 +66,13 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    ApplicationType = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    RefreshTokenLifeTime = table.Column<int>(type: "integer", nullable: false),
-                    Secret = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ApplicationType = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "varchar(250)", nullable: false),
+                    RefreshTokenLifeTime = table.Column<int>(type: "int", nullable: false),
+                    Secret = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -80,12 +83,12 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", maxLength: 50, nullable: false),
-                    ClientId = table.Column<Guid>(type: "uuid", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    Username = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: true),
-                    ExpiresUtc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    IssuedUtc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", maxLength: 50, nullable: false),
+                    ClientId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "varchar(250)", nullable: false),
+                    Username = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ExpiresUtc = table.Column<DateTime>(type: "datetime", nullable: false),
+                    IssuedUtc = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,10 +99,10 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    ClaimType = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    ClaimValue = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    RoleId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true),
+                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,11 +119,11 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    ClaimType = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    ClaimValue = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    ClaimType = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -129,8 +132,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         name: "FK_AspNetUserClaims_AspNetUsers_MixUserId",
                         column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -143,11 +145,11 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    ProviderKey = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
-                    ProviderDisplayName = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true),
-                    UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "varchar(50)", nullable: false),
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true),
+                    ProviderDisplayName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,8 +158,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         name: "FK_AspNetUserLogins_AspNetUsers_MixUserId",
                         column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -170,9 +171,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    RoleId = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false),
-                    MixUserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    RoleId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    MixUserId = table.Column<string>(type: "varchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -187,8 +188,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         name: "FK_AspNetUserRoles_AspNetUsers_MixUserId",
                         column: x => x.MixUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -201,10 +201,10 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    LoginProvider = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Value = table.Column<string>(type: "character varying(400)", maxLength: 400, nullable: true)
+                    UserId = table.Column<string>(type: "varchar(50)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Value = table.Column<string>(type: "varchar(4000)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,7 +226,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "(NormalizedName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_MixUserId",
@@ -267,7 +268,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "(NormalizedUserName IS NOT NULL)");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

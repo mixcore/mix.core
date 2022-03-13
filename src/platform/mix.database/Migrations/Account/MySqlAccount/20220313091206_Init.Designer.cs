@@ -8,32 +8,32 @@ using Mix.Database.Entities.Account;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.SqliteAccount
+namespace Mix.Database.Migrations.MySqlAccount
 {
-    [DbContext(typeof(SqliteAccountContext))]
-    [Migration("20220310112450_Init")]
+    [DbContext(typeof(MySqlAccountContext))]
+    [Migration("20220313091206_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasMaxLength(50)
+                    b.Property<string>("RoleId")
+                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -45,28 +45,27 @@ namespace Mix.Database.Migrations.SqliteAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NormalizedName"), "utf8");
 
                     b.HasKey("Id");
 
@@ -81,23 +80,19 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("ClaimType")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("ClaimValue")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -112,24 +107,19 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("LoginProvider", "ProviderKey")
@@ -145,15 +135,12 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasMaxLength(50)
+                    b.Property<string>("RoleId")
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("MixUserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("UserId", "RoleId");
@@ -168,25 +155,21 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Avatar")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("CountryId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Culture")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("Dob")
@@ -194,22 +177,19 @@ namespace Mix.Database.Migrations.SqliteAccount
                         .HasColumnName("DOB");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("FirstName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Gender")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsActived")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime");
@@ -218,55 +198,48 @@ namespace Mix.Database.Migrations.SqliteAccount
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("NickName")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("PasswordHash")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("RegisterType")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");
@@ -285,19 +258,15 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Value")
-                        .HasMaxLength(400)
                         .HasColumnType("varchar(4000)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
@@ -308,30 +277,26 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("AllowedOrigin")
-                        .HasMaxLength(100)
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("ApplicationType")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("RefreshTokenLifeTime")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.Property<string>("Secret")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
@@ -344,15 +309,14 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                        .HasColumnType("char(50)");
 
-                    b.Property<Guid>("ClientId")
-                        .HasMaxLength(50)
+                    b.Property<string>("ClientId")
+                        .IsRequired()
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("ExpiresUtc")
@@ -362,7 +326,6 @@ namespace Mix.Database.Migrations.SqliteAccount
                         .HasColumnType("datetime");
 
                     b.Property<string>("Username")
-                        .HasMaxLength(250)
                         .HasColumnType("varchar(250)");
 
                     b.HasKey("Id");

@@ -6,6 +6,7 @@ using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
+using Mix.Shared.Services;
 using MySqlConnector;
 using System;
 
