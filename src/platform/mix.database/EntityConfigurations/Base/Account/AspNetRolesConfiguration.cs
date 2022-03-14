@@ -18,7 +18,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                     .HasFilter("(NormalizedName IS NOT NULL)");
 
             builder.Property(e => e.Id)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.Property(e => e.ConcurrencyStamp)
             .HasColumnType($"{Config.String}{Config.MediumLength}")

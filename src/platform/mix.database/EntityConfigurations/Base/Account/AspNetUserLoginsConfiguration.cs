@@ -26,14 +26,14 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.MixUserId)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.Property(e => e.ProviderDisplayName)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.UserId)
                 .IsRequired()
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.HasOne(d => d.MixUser)
                 .WithMany(p => p.AspNetUserLoginsApplicationUser)

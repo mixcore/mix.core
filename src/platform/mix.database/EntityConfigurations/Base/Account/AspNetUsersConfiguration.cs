@@ -21,7 +21,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasFilter("(NormalizedUserName IS NOT NULL)");
 
             builder.Property(e => e.Id)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.Property(e => e.Avatar)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
