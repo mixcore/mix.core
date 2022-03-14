@@ -39,6 +39,7 @@ namespace Mix.Tenancy.Domain.Services
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     JoinDate = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow
                     
                 };
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);

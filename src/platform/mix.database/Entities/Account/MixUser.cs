@@ -19,7 +19,7 @@ namespace Mix.Database.Entities.Account
         public DateTime JoinDate { get; set; }
 
         public bool IsActived { get; set; }
-        public System.DateTime LastModified { get; set; }
+        public System.DateTime? LastModified { get; set; }
         public string ModifiedBy { get; set; }
 
         public string RegisterType { get; set; }
@@ -31,6 +31,7 @@ namespace Mix.Database.Entities.Account
         public int CountryId { get; set; }
         public string Culture { get; set; }
         public DateTime? DOB { get; set; }
+        public new DateTime? LockoutEnd { get; set; }
 
         public virtual ICollection<AspNetUserClaims> Claims { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }

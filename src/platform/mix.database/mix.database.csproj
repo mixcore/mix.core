@@ -25,9 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\Account\MySqlAccount\" />
-    <Folder Include="Migrations\Account\PostgresSQLAccount\" />
-    <Folder Include="Migrations\Account\SqlServerAccount\" />
     <Folder Include="Migrations\MySqlMixCms\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />
