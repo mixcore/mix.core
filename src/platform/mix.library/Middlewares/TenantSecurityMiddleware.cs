@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Repositories;
-using System.Text;
 
 namespace Mix.Lib.Middlewares
 {
@@ -21,7 +19,7 @@ namespace Mix.Lib.Middlewares
             IHttpContextAccessor httpContextAccessor,
             EntityRepository<MixCmsContext, MixTenant, int> repository)
         {
-            if (GlobalConfigService.Instance.IsInit)
+            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
                 await next.Invoke(context);
             }
