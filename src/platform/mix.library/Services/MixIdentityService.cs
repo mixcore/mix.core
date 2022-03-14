@@ -22,7 +22,7 @@ namespace Mix.Lib.Services
         private readonly MixCacheService _cacheService;
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<MixRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
         private readonly MixCmsContext _context;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
@@ -31,7 +31,7 @@ namespace Mix.Lib.Services
         public MixIdentityService(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<MixRole> roleManager,
             AuthConfigService authConfigService,
             MixCmsContext context,
             MixCmsAccountContext accountContext,

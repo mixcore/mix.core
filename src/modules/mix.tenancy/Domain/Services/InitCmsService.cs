@@ -9,7 +9,7 @@ namespace Mix.Tenancy.Domain.Services
     {
         private readonly MixIdentityService _identityService;
         private readonly UserManager<MixUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<MixRole> _roleManager;
         private readonly MixDatabaseService _databaseService;
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
@@ -18,7 +18,7 @@ namespace Mix.Tenancy.Domain.Services
             UserManager<MixUser> userManager,
             MixIdentityService identityService,
             MixDatabaseService databaseService,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<MixRole> roleManager,
             IConfiguration configuration,
             MixCmsContext context)
         {

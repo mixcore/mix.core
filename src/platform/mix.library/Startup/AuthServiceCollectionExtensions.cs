@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             const string accessDeniedPath = "/security/login";
 
-            services.AddIdentity<MixUser, IdentityRole>(options =>
+            services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
                 options.User = new UserOptions() { RequireUniqueEmail = true };

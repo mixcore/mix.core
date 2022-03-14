@@ -9,7 +9,7 @@ using Mix.Shared.Constants;
 
 namespace Mix.Database.Entities.Account
 {
-    public class ApplicationDbContext : IdentityDbContext<MixUser>
+    public class ApplicationDbContext : IdentityDbContext<MixUser, MixRole, Guid>
     {
         private static MixDatabaseService _databaseService;
         /// <summary>

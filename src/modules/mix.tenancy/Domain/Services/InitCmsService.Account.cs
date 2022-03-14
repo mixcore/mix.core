@@ -19,9 +19,9 @@ namespace Mix.Tenancy.Domain.Services
                 var roles = MixHelper.LoadEnumValues(typeof(MixRoles));
                 foreach (var role in roles)
                 {
-                    await _roleManager.CreateAsync(new IdentityRole()
+                    await _roleManager.CreateAsync(new MixRole()
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = Guid.NewGuid(),
                         Name = role.ToString()
                     });
                 }
