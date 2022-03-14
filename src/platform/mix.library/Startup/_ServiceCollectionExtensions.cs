@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
+            services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts(executingAssembly, configuration);
             services.AddMixCache(executingAssembly, configuration);
@@ -29,6 +30,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
             services.AddEntityRepositories();
+            services.AddMixTenant();
             services.AddGeneratedPublisher();
 
 
@@ -89,9 +91,10 @@ namespace Microsoft.Extensions.DependencyInjection
             IConfiguration configuration,
             bool isDevelop)
         {
+            app.UseSession();
             app.UseResponseCompression();
             app.UseMixResponseCaching();
-
+            app.UseMixTenant();
             app.UseMixStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

@@ -121,7 +121,7 @@ namespace Mix.Lib.Services
             var theme = new MixTheme()
             {
                 Id = _siteData.ThemeId,
-                MixTenantId = 1,
+                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
                 CreatedBy = _siteData.CreatedBy,
