@@ -7,6 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Repositories\AuthRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.2" />
@@ -21,6 +25,7 @@
 	<ItemGroup>
 		<Folder Include="Filters\" />
 		<Folder Include="Helpers\" />
+		<Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>

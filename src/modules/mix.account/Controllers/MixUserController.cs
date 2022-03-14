@@ -24,10 +24,10 @@ namespace Mix.Account.Controllers
     {
         private readonly UserManager<MixUser> _userManager;
         private readonly SignInManager<MixUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<MixRole> _roleManager;
         private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
-        private readonly EntityRepository<ApplicationDbContext, MixUser, string> _repository;
+        private readonly EntityRepository<ApplicationDbContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
         protected UnitOfWorkInfo _uow;
         private readonly MixCmsContext _cmsContext;
@@ -35,7 +35,7 @@ namespace Mix.Account.Controllers
         public MixUserController(
             UserManager<MixUser> userManager,
             SignInManager<MixUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
+            RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             ApplicationDbContext context, MixIdentityService mixIdentityService, MixCmsContext cmdContext)
@@ -123,7 +123,7 @@ namespace Mix.Account.Controllers
         {
             if (model != null && model.User != null)
             {
-                var user = await _userManager.FindByIdAsync(model.User.Id);
+                var user = await _userManager.FindByIdAsync(model.User.Id.ToString());
                 user.Email = model.User.Email;
                 user.FirstName = model.User.FirstName;
                 user.LastName = model.User.LastName;
