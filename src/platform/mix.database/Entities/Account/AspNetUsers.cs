@@ -17,7 +17,7 @@ namespace Mix.Database.Entities.Account
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
         }
 
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public int AccessFailedCount { get; set; }
         public string Avatar { get; set; }
         public string ConcurrencyStamp { get; set; }
@@ -45,9 +45,7 @@ namespace Mix.Database.Entities.Account
         public string SecurityStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public string UserName { get; set; }
-        [NotMapped]
-        public int MixTenantId { get; set; }
-
+       
         public virtual ICollection<AspNetUserClaims> AspNetUserClaimsApplicationUser { get; set; }
         public virtual ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLoginsApplicationUser { get; set; }

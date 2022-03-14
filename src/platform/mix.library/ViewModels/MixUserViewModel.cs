@@ -40,7 +40,7 @@ namespace Mix.Lib.ViewModels
                     _context,
                     MixDatabaseParentType.User,
                     MixDatabaseNames.SYSTEM_USER_DATA,
-                    Guid.Parse(User.Id));
+                    User.Id);
                 using var context = new MixCmsAccountContext();
                 Roles = context.AspNetUserRoles.Where(m => m.UserId == User.Id).ToList();
             }

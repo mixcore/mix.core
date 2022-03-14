@@ -16,6 +16,7 @@
 	<ItemGroup>
 		<Using Include="Mix.Heart.Entities" />
 		<Using Include="Mix.Heart.Enums" />
+		<Using Include="System" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\Account\SqliteAccount\" />
     <Folder Include="Migrations\MySqlMixCms\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />

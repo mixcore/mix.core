@@ -6,6 +6,7 @@ namespace Mix.Database.Entities.Account
 {
     public partial class MixRole : IdentityRole<Guid>
     {
+        public int MixTenantId { get; set; }
         public MixRole() : base()
         {
         }
