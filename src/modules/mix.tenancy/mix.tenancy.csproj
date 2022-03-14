@@ -25,6 +25,7 @@
 		<Using Include="Mix.Heart.Helpers" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.Repositories" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -122,7 +122,7 @@
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
-                MixTenantId = 1,
+                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
                 MixDatabaseId = MixDatabaseId,
                 MixDatabaseName = MixDatabaseName,
                 CreatedBy = CreatedBy,

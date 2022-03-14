@@ -1,4 +1,6 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿using Mix.Lib.Repositories;
+
+namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
@@ -334,7 +336,7 @@
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
-                MixTenantId = 1,
+                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
                 MixDatabaseId = MixDatabaseId,
                 MixDatabaseName = MixDatabaseName,
                 CreatedBy = CreatedBy,

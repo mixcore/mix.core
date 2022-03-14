@@ -29,6 +29,7 @@
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Lib.Repositories" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Queue.Attributes" />

@@ -31,7 +31,7 @@ namespace Mix.Tenancy.Domain.Services
             {
                 var user = new MixUser
                 {
-                    MixTenantId = 1,
+                    MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
                     UserName = model.UserName,
                     Email = model.Email,
                     FirstName = model.FirstName,
