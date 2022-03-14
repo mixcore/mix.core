@@ -19,8 +19,9 @@ namespace Mix.Database.EntityConfigurations.Base.Account
 
             builder.HasIndex(e => e.TenantId);
 
+
             builder.Property(e => e.MixUserId)
-               .HasColumnType($"{Config.Guid}");
+                 .HasDefaultValueSql(Config.GenerateUUID);
         }
     }
 }

@@ -15,33 +15,27 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.HasKey(e => new { e.LoginProvider, e.ProviderKey })
                     .HasName("PK_AspNetUserLogins_1");
 
-            builder.HasIndex(e => e.MixUserId);
-
             builder.HasIndex(e => e.UserId);
 
             builder.Property(e => e.LoginProvider)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.ProviderKey)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
-            builder.Property(e => e.MixUserId)
-                .HasColumnType($"{Config.Guid}");
-
             builder.Property(e => e.ProviderDisplayName)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.UserId)
                 .IsRequired()
-                .HasColumnType($"{Config.Guid}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
-            builder.HasOne(d => d.MixUser)
-                .WithMany(p => p.AspNetUserLoginsApplicationUser)
-                .HasForeignKey(d => d.MixUserId);
-
-            builder.HasOne(d => d.User)
-                .WithMany(p => p.AspNetUserLoginsUser)
-                .HasForeignKey(d => d.UserId);
         }
     }
 }

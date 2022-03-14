@@ -6,6 +6,16 @@ namespace Mix.Database.Entities.Account
 {
     public class MixUser : IdentityUser<Guid>, IEntity<Guid>
     {
+        public MixUser()
+        {
+            Claims = new HashSet<AspNetUserClaims>();
+            AspNetUserClaimsUser = new HashSet<AspNetUserClaims>();
+            AspNetUserLoginsApplicationUser = new HashSet<AspNetUserLogins>();
+            AspNetUserLoginsUser = new HashSet<AspNetUserLogins>();
+            AspNetUserRolesApplicationUser = new HashSet<AspNetUserRoles>();
+            AspNetUserRolesUser = new HashSet<AspNetUserRoles>();
+            AspNetUserTokens = new HashSet<AspNetUserTokens>();
+        }
         public DateTime JoinDate { get; set; }
 
         public bool IsActived { get; set; }
@@ -22,21 +32,12 @@ namespace Mix.Database.Entities.Account
         public string Culture { get; set; }
         public DateTime? DOB { get; set; }
 
-        public int MixTenantId { get; set; }
-
-        /// <summary>
-        /// Navigation property for the roles this user belongs to.
-        /// </summary>
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; } = new List<IdentityUserRole<string>>();
-
-        /// <summary>
-        /// Navigation property for the claims this user possesses.
-        /// </summary>
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; } = new List<IdentityUserClaim<string>>();
-
-        /// <summary>
-        /// Navigation property for this users login accounts.
-        /// </summary>
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; } = new List<IdentityUserLogin<string>>();
+        public virtual ICollection<AspNetUserClaims> Claims { get; set; }
+        public virtual ICollection<AspNetUserClaims> AspNetUserClaimsUser { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLoginsApplicationUser { get; set; }
+        public virtual ICollection<AspNetUserLogins> AspNetUserLoginsUser { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRolesApplicationUser { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRolesUser { get; set; }
+        public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
     }
 }

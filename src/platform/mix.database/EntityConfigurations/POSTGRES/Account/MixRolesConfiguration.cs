@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Account;
 using Mix.Database.EntityConfigurations.Base.Account;
-using Mix.Database.EntityConfigurations.POSTGRES;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES.Account
 {
-    internal class AspNetUsersConfiguration : MixUsersConfiguration<PostgresDatabaseConstants>
+    internal class MixRolesConfiguration : MixRolesConfiguration<PostgresDatabaseConstants>
     {
-        public override void Configure(EntityTypeBuilder<MixUser> builder)
+        public override void Configure(EntityTypeBuilder<MixRole> builder)
         {
             base.Configure(builder);
         }

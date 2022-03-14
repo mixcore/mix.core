@@ -19,15 +19,16 @@ namespace Mix.Database.Entities.Account
     public partial class MixCmsAccountContext : DbContext
     {
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        //public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<MixUser> MixUsers { get; set; }
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
         public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
+        public virtual DbSet<MixRole> MixRoles { get; set; }
 
         private static MixDatabaseService _databaseService;
 

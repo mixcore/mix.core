@@ -8,14 +8,14 @@ namespace Mix.Tenancy.Domain.Services
     public partial class InitCmsService
     {
         private readonly MixIdentityService _identityService;
-        private readonly UserManager<MixUser> _userManager;
+        private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixDatabaseService _databaseService;
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
         public InitCmsService(
 
-            UserManager<MixUser> userManager,
+            TenantUserManager userManager,
             MixIdentityService identityService,
             MixDatabaseService databaseService,
             RoleManager<MixRole> roleManager,

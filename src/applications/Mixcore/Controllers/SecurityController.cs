@@ -13,7 +13,7 @@ namespace Mixcore.Controllers
     public class SecurityController : MixControllerBase
     {
         private readonly SignInManager<MixUser> _signInManager;
-        private readonly UserManager<MixUser> _userManager;
+        private readonly TenantUserManager _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly MixIdentityService _idService;
         private readonly MixCmsContext _cmsContext;
@@ -23,7 +23,8 @@ namespace Mixcore.Controllers
             MixCacheService cacheService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
-            MixIdentityService idService, UserManager<MixUser> userManager,
+            MixIdentityService idService, 
+            TenantUserManager userManager,
             MixCmsContext cmsContext)
             : base(mixService, ipSecurityConfigService)
         {

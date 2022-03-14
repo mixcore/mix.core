@@ -5,15 +5,15 @@ using System;
 
 namespace Mix.Database.EntityConfigurations.Base.Account
 {
-    internal class AspNetRolesConfiguration<TConfig> : IEntityTypeConfiguration<AspNetRoles>
+    internal class MixRolesConfiguration<TConfig> : IEntityTypeConfiguration<MixRole>
          where TConfig : IDatabaseConstants
     {
         protected virtual IDatabaseConstants Config { get; set; }
-        public virtual void Configure(EntityTypeBuilder<AspNetRoles> builder)
+        public virtual void Configure(EntityTypeBuilder<MixRole> builder)
         {
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
             builder.HasIndex(e => e.NormalizedName)
-                    .HasDatabaseName("RoleNameIndex")
+                    .HasDatabaseName("MixRoleNameIndex")
                     .IsUnique()
                     .HasFilter("(NormalizedName IS NOT NULL)");
 

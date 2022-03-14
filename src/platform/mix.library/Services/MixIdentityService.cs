@@ -20,7 +20,7 @@ namespace Mix.Lib.Services
     {
         private readonly UnitOfWorkInfo _uow;
         private readonly MixCacheService _cacheService;
-        private readonly UserManager<MixUser> _userManager;
+        private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
@@ -29,7 +29,7 @@ namespace Mix.Lib.Services
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
         public MixIdentityService(
-            UserManager<MixUser> userManager,
+            TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             AuthConfigService authConfigService,

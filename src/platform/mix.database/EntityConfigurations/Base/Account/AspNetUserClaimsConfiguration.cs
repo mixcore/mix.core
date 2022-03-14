@@ -12,32 +12,25 @@ namespace Mix.Database.EntityConfigurations.Base.Account
         public virtual void Configure(EntityTypeBuilder<AspNetUserClaims> builder)
         {
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
-            builder.HasIndex(e => e.MixUserId);
 
             builder.HasIndex(e => e.UserId);
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
-
-            builder.Property(e => e.MixUserId)
-                .HasColumnType($"{Config.Guid}");
+            builder.Property(e => e.Id);
 
             builder.Property(e => e.ClaimType)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.ClaimValue)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.UserId)
                 .IsRequired()
-                .HasColumnType($"{Config.Guid}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
-            builder.HasOne(d => d.MixUser)
-                .WithMany(p => p.AspNetUserClaimsApplicationUser)
-                .HasForeignKey(d => d.MixUserId);
-
-            builder.HasOne(d => d.User)
-                .WithMany(p => p.AspNetUserClaimsUser)
-                .HasForeignKey(d => d.UserId);
         }
     }
 }

@@ -44,9 +44,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Password = pOpt;
                 options.User = new UserOptions() { RequireUniqueEmail = true };
             })
+            .AddUserStore<TenantUserStore>()
+            .AddRoleStore<TenantRoleStore>()
+            .AddUserManager<TenantUserManager>()
             .AddEntityFrameworkStores<TDbContext>()
-            .AddDefaultTokenProviders()
-            .AddUserManager<UserManager<MixUser>>();
+            .AddDefaultTokenProviders();
 
             services.AddAuthorization();
 
