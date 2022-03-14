@@ -27,6 +27,7 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
         public virtual DbSet<Clients> Clients { get; set; }
         public virtual DbSet<RefreshTokens> RefreshTokens { get; set; }
+        public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
 
         private static MixDatabaseService _databaseService;
 

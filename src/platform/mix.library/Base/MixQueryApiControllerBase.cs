@@ -116,6 +116,13 @@ namespace Mix.Lib.Base
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
                         MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq);
             }
+
+            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
+            {
+                andPredicate = ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.MixTenantId, MixTenantRepository.Instance.CurrentTenant.Id, ExpressionMethod.Eq);
+            }
+
             return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
         }
 
