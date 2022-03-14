@@ -15,7 +15,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
 
             builder.Property(e => e.UserId)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.Property(e => e.LoginProvider)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");

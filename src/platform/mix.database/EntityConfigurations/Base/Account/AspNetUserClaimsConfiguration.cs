@@ -19,7 +19,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.Property(e => e.Id).ValueGeneratedNever();
 
             builder.Property(e => e.MixUserId)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.Property(e => e.ClaimType)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
@@ -29,7 +29,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
 
             builder.Property(e => e.UserId)
                 .IsRequired()
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasColumnType($"{Config.Guid}");
 
             builder.HasOne(d => d.MixUser)
                 .WithMany(p => p.AspNetUserClaimsApplicationUser)
