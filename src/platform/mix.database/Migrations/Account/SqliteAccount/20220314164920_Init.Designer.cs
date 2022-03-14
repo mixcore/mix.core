@@ -11,7 +11,7 @@ using Mix.Database.Entities.Account;
 namespace Mix.Database.Migrations.SqliteAccount
 {
     [DbContext(typeof(SqliteAccountContext))]
-    [Migration("20220314144715_Init")]
+    [Migration("20220314164920_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,16 +24,26 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<int>("Id")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("AspNetRolesId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<Guid?>("MixRoleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("RoleId")
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AspNetRolesId");
+
+                    b.HasIndex("MixRoleId");
 
                     b.HasIndex("RoleId");
 
@@ -44,7 +54,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
@@ -82,15 +92,20 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<string>("ClaimValue")
                         .HasColumnType("varchar(250)");
 
-                    b.Property<Guid>("MixUserId")
-                        .HasColumnType("varchar(50)");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MixUserId");
+
+                    b.HasIndex("MixUserId1");
 
                     b.HasIndex("UserId");
 
@@ -105,19 +120,24 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<string>("ProviderKey")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<Guid>("MixUserId")
-                        .HasColumnType("varchar(50)");
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
 
                     b.HasIndex("MixUserId");
+
+                    b.HasIndex("MixUserId1");
 
                     b.HasIndex("UserId");
 
@@ -127,31 +147,131 @@ namespace Mix.Database.Migrations.SqliteAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("AspNetRolesId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MixUserId")
-                        .HasColumnType("varchar(50)");
+                    b.Property<Guid?>("MixRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("MixUserId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
+                    b.HasIndex("AspNetRolesId");
+
+                    b.HasIndex("MixRoleId");
+
                     b.HasIndex("MixUserId");
+
+                    b.HasIndex("MixUserId1");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid?>("MixUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("varchar(4000)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.HasIndex("MixUserId");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AllowedOrigin")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("RefreshTokenLifeTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("MixRoleNameIndex")
+                        .HasFilter("(NormalizedName IS NOT NULL)");
+
+                    b.ToTable("MixRoles");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
@@ -168,7 +288,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<string>("Culture")
                         .HasColumnType("varchar(50)");
 
-                    b.Property<DateTime?>("Dob")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime")
                         .HasColumnName("DOB");
 
@@ -190,7 +310,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("LastModified")
+                    b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
@@ -199,7 +319,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("LockoutEnd")
+                    b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")
@@ -245,56 +365,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("(NormalizedUserName IS NOT NULL)");
 
-                    b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("varchar(4000)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Account.Clients", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AllowedOrigin")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<int>("ApplicationType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<int>("RefreshTokenLifeTime")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Secret")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Clients");
+                    b.ToTable("MixUsers");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUserTenant", b =>
@@ -344,89 +415,61 @@ namespace Mix.Database.Migrations.SqliteAccount
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoleClaims", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", "Role")
+                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
                         .WithMany("AspNetRoleClaims")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AspNetRolesId");
 
-                    b.Navigation("Role");
+                    b.HasOne("Mix.Database.Entities.Account.MixRole", null)
+                        .WithMany("AspNetRoleClaims")
+                        .HasForeignKey("MixRoleId");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
-                        .WithMany("AspNetUserClaimsApplicationUser")
-                        .HasForeignKey("MixUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserClaimsUser")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MixUserId");
 
-                    b.Navigation("MixUser");
-
-                    b.Navigation("User");
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("Claims")
+                        .HasForeignKey("MixUserId1");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserLoginsApplicationUser")
-                        .HasForeignKey("MixUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MixUserId");
 
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserLoginsUser")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixUser");
-
-                    b.Navigation("User");
+                        .HasForeignKey("MixUserId1");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "MixUser")
-                        .WithMany("AspNetUserRolesApplicationUser")
-                        .HasForeignKey("MixUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", "Role")
+                    b.HasOne("Mix.Database.Entities.Account.AspNetRoles", null)
                         .WithMany("AspNetUserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AspNetRolesId");
 
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
+                    b.HasOne("Mix.Database.Entities.Account.MixRole", null)
+                        .WithMany("AspNetUserRoles")
+                        .HasForeignKey("MixRoleId");
+
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                        .WithMany("AspNetUserRolesApplicationUser")
+                        .HasForeignKey("MixUserId");
+
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserRolesUser")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixUser");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
+                        .HasForeignKey("MixUserId1");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Account.AspNetUsers", "User")
+                    b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("MixUserId");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
@@ -436,10 +479,15 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Navigation("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUsers", b =>
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
                 {
-                    b.Navigation("AspNetUserClaimsApplicationUser");
+                    b.Navigation("AspNetRoleClaims");
 
+                    b.Navigation("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Account.MixUser", b =>
+                {
                     b.Navigation("AspNetUserClaimsUser");
 
                     b.Navigation("AspNetUserLoginsApplicationUser");
@@ -451,6 +499,8 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Navigation("AspNetUserRolesUser");
 
                     b.Navigation("AspNetUserTokens");
+
+                    b.Navigation("Claims");
                 });
 #pragma warning restore 612, 618
         }

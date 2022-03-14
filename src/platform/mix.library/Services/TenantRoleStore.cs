@@ -4,7 +4,7 @@ using Mix.Database.Entities.Account;
 
 namespace Mix.Lib.Services
 {
-    public class TenantRoleStore : RoleStore<MixRole, MixCmsAccountContext, Guid>
+    public class TenantRoleStore : RoleStore<MixRole, MixCmsAccountContext, Guid, AspNetUserRoles, AspNetRoleClaims>
     {
         public TenantRoleStore(
             MixCmsAccountContext context,

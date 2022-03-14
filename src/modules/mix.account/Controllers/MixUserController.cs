@@ -22,7 +22,7 @@ namespace Mix.Account.Controllers
     [ApiController]
     public class MixUserController : ControllerBase
     {
-        private readonly UserManager<MixUser> _userManager;
+        private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly ILogger<MixUserController> _logger;
@@ -33,7 +33,7 @@ namespace Mix.Account.Controllers
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixUserController(
-            UserManager<MixUser> userManager,
+            TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,

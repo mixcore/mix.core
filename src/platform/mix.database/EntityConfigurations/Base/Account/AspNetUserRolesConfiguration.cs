@@ -12,32 +12,16 @@ namespace Mix.Database.EntityConfigurations.Base.Account
         public virtual void Configure(EntityTypeBuilder<AspNetUserRoles> builder)
         {
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
-            builder.HasKey(e => new { e.UserId, e.RoleId, e.MixTenantId });
-
-            builder.HasIndex(e => e.MixUserId);
+            builder.HasKey(e => new { e.UserId, e.RoleId });
 
             builder.HasIndex(e => e.RoleId);
 
             builder.Property(e => e.UserId)
-                .HasColumnType($"{Config.Guid}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
             builder.Property(e => e.RoleId)
-                .HasColumnType($"{Config.Guid}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
-            builder.Property(e => e.MixUserId)
-               .HasColumnType($"{Config.Guid}");
-
-            builder.HasOne(d => d.MixUser)
-                .WithMany(p => p.AspNetUserRolesApplicationUser)
-                .HasForeignKey(d => d.MixUserId);
-
-            builder.HasOne(d => d.Role)
-                .WithMany(p => p.AspNetUserRoles)
-                .HasForeignKey(d => d.RoleId);
-
-            builder.HasOne(d => d.User)
-                .WithMany(p => p.AspNetUserRolesUser)
-                .HasForeignKey(d => d.UserId);
         }
     }
 }

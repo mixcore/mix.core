@@ -17,6 +17,7 @@
 		<Using Include="Mix.Heart.Entities" />
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="System" />
+		<Using Include="Microsoft.AspNetCore.Identity" />
 	</ItemGroup>
 
   <ItemGroup>
@@ -24,7 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\Account\SqliteAccount\" />
+    <Folder Include="Migrations\Account\MySqlAccount\" />
+    <Folder Include="Migrations\Account\PostgresSQLAccount\" />
+    <Folder Include="Migrations\Account\SqlServerAccount\" />
     <Folder Include="Migrations\MySqlMixCms\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />

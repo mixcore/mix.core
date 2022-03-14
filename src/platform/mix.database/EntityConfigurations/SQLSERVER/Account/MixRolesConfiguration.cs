@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Account;
 using Mix.Database.EntityConfigurations.Base.Account;
-using Mix.Database.EntityConfigurations.SQLSERVER;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER.Account
 {
-    internal class AspNetUsersConfiguration : MixUsersConfiguration<SqlServerDatabaseConstants>
+    internal class MixRolesConfiguration : MixRolesConfiguration<SqlServerDatabaseConstants>
     {
-        public override void Configure(EntityTypeBuilder<MixUser> builder)
+        public override void Configure(EntityTypeBuilder<MixRole> builder)
         {
             base.Configure(builder);
         }

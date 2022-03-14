@@ -15,20 +15,23 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
 
             builder.Property(e => e.UserId)
-                .HasColumnType($"{Config.Guid}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
             builder.Property(e => e.LoginProvider)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.Name)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.Value)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MaxLength}");
 
-            builder.HasOne(d => d.User)
-                .WithMany(p => p.AspNetUserTokens)
-                .HasForeignKey(d => d.UserId);
         }
     }
 }

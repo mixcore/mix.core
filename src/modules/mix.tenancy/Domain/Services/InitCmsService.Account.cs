@@ -22,8 +22,10 @@ namespace Mix.Tenancy.Domain.Services
                     await _roleManager.CreateAsync(new MixRole()
                     {
                         Id = Guid.NewGuid(),
-                        Name = role.ToString()
-                    });
+                        Name = role.ToString(),
+                        MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id
+                    }
+                    );
                 }
             }
 
@@ -31,7 +33,7 @@ namespace Mix.Tenancy.Domain.Services
             {
                 var user = new MixUser
                 {
-                    MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
+                    Id = Guid.NewGuid(),
                     UserName = model.UserName,
                     Email = model.Email,
                     FirstName = model.FirstName,

@@ -14,21 +14,26 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
             builder.HasIndex(e => e.RoleId);
 
-            builder.Property(e => e.Id).ValueGeneratedNever();
+            builder.Property(e => e.RoleId)
+                .HasDefaultValueSql(Config.GenerateUUID);
+
+            builder.Property(e => e.Id)
+                .ValueGeneratedNever();
 
             builder.Property(e => e.ClaimType)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.ClaimValue)
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
             builder.Property(e => e.RoleId)
                 .IsRequired()
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
+                .HasDefaultValueSql(Config.GenerateUUID);
 
-            builder.HasOne(d => d.Role)
-                .WithMany(p => p.AspNetRoleClaims)
-                .HasForeignKey(d => d.RoleId);
         }
     }
 }
