@@ -4,6 +4,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixData : EntityBase<Guid>
     {
+        public int MixTenantId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
 

@@ -3,6 +3,7 @@
     public abstract class AssociationBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
+        public int MixTenantId { get; set; }
         public TPrimaryKey LeftId { get; set; }
         public TPrimaryKey RightId { get; set; }
     }

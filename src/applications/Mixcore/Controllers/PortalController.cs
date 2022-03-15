@@ -10,10 +10,11 @@ namespace Mixcore.Controllers
         private readonly MixDatabaseService _databaseService;
 
         public PortalController(
+            IHttpContextAccessor httpContextAccessor,
             MixService mixService,
             MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
             MixCacheService cacheService)
-            : base(mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _databaseService = databaseService;
         }

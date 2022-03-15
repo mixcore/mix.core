@@ -92,7 +92,7 @@ namespace Mix.Lib.Services
                 _siteData = ParseSiteData(siteData);
                 if (_siteData.ThemeId == 0)
                 {
-                    await CreateTheme(tenantId);
+                    await CreateTheme();
                 }
                 ImportAssets();
                 await ImportContent();
@@ -118,7 +118,7 @@ namespace Mix.Lib.Services
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
-        private async Task CreateTheme(int tenantId)
+        private async Task CreateTheme()
         {
             var table = _context.MixModuleContent.AsNoTracking();
             _siteData.ThemeId = table.Any() ? table.Max(m => m.Id) + 1 : 1;
@@ -191,6 +191,7 @@ namespace Mix.Lib.Services
             {
                 _siteData.Templates.ForEach(x =>
                 {
+                    x.MixTenantId = tenantId;
                     x.MixThemeId = _siteData.ThemeId;
                     x.MixThemeName = _siteData.ThemeSystemName;
                     x.Content = ReplaceContent(x.Content, _siteData.ThemeSystemName);
@@ -245,7 +246,7 @@ namespace Mix.Lib.Services
                 {
                     item.SeoName = $"{item.SeoName}-1";
                 }
-
+                item.MixTenantId = tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
                 _context.Entry(item).State = EntityState.Added;
                 await _context.SaveChangesAsync(_cts.Token);
@@ -265,6 +266,7 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
                     item.Id = 0;
+                    item.MixTenantId = tenantId;
                     item.ParentId = dicModuleIds[item.ParentId];
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
@@ -288,7 +290,7 @@ namespace Mix.Lib.Services
                 {
                     item.SystemName = $"{item.SystemName}_1";
                 }
-
+                item.MixTenantId = tenantId;
                 item.Id = 0;
                 _context.Entry(item).State = EntityState.Added;
                 await _context.SaveChangesAsync(_cts.Token);
@@ -307,6 +309,7 @@ namespace Mix.Lib.Services
                 }
                 var oldId = item.Id;
                 item.Id = 0;
+                item.MixTenantId = tenantId;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);
@@ -338,6 +341,14 @@ namespace Mix.Lib.Services
             {
                 foreach (var item in data)
                 {
+                    if (ReflectionHelper.HasProperty(typeof(T), MixRequestQueryKeywords.MixTenantId))
+                    {
+                        ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
+                        {
+                            PropertyName = MixRequestQueryKeywords.MixTenantId,
+                            PropertyValue = tenantId
+                        });
+                    }
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);
@@ -352,6 +363,16 @@ namespace Mix.Lib.Services
                 foreach (var item in data)
                 {
                     var oldId = item.Id;
+
+                    if (ReflectionHelper.HasProperty(typeof(T), MixRequestQueryKeywords.MixTenantId))
+                    {
+                        ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
+                        {
+                            PropertyName = MixRequestQueryKeywords.MixTenantId,
+                            PropertyValue = tenantId
+                        });
+                    }
+
                     item.Id = 0;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
@@ -369,6 +390,7 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
                     item.Id = 0;
+                    item.MixTenantId = tenantId;
                     item.ParentId = parentDic[item.ParentId];
                     item.Specificulture ??= _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
@@ -389,6 +411,7 @@ namespace Mix.Lib.Services
                 foreach (var item in data)
                 {
                     item.Id = 0;
+                    item.MixTenantId = tenantId;
                     item.LeftId = leftDic[item.LeftId];
                     item.RightId = rightDic[item.RightId];
                     _context.Entry(item).State = EntityState.Added;

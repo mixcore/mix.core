@@ -349,6 +349,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDatabaseId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -376,6 +377,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
@@ -763,6 +765,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -816,6 +819,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "ntext", nullable: true, collation: "NOCASE"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
@@ -915,6 +919,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -942,6 +947,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     LeftId = table.Column<int>(type: "INTEGER", nullable: false),
                     RightId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

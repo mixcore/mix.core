@@ -14,6 +14,7 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         private readonly MixDatabaseService _databaseService;
         public PageController(
+            IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
@@ -21,7 +22,7 @@ namespace Mixcore.Controllers
             MixDatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService)
-            : base(mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
             _uow = new(_context);
@@ -72,7 +73,7 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetSingleAsync(pageId);
+            var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == MixTenantId);
             if (page == null)
                 return NotFound();
 

@@ -8,15 +8,17 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
+        
         private readonly ILogger<HomeController> _logger;
         public HomeController(
+            IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator,
             MixDatabaseService databaseService,
             MixCmsContext context)
-            : base(ipSecurityConfigService, mixService, translator, databaseService, context)
+            : base(httpContextAccessor, ipSecurityConfigService, mixService, translator, databaseService, context)
         {
             _logger = logger;
         }
@@ -55,7 +57,13 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetFirstAsync(p => p.Type == MixPageType.Home);
+            var page = await pageRepo.GetFirstAsync(p => p.MixTenantId == MixTenantId && p.Type == MixPageType.Home);
+            
+            if (page == null)
+            {
+                return NotFound();
+            }
+
             await page.ExpandView();
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
