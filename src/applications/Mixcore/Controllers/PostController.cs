@@ -14,6 +14,7 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         private readonly MixDatabaseService _databaseService;
         public PostController(
+            IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
@@ -21,7 +22,7 @@ namespace Mixcore.Controllers
             MixDatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService)
-            : base(mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
             _uow = new(_context);
@@ -73,7 +74,7 @@ namespace Mixcore.Controllers
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(_uow);
-            var post = await postRepo.GetSingleAsync(postId);
+            var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == MixTenantId);
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

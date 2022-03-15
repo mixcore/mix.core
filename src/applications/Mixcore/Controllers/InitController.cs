@@ -8,9 +8,10 @@ namespace Mixcore.Controllers
     public class InitController : MixControllerBase
     {
         public InitController(
+            IHttpContextAccessor httpContextAccessor,
             MixService mixService,
             IPSecurityConfigService ipSecurityConfigService)
-            : base(mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
         }
 

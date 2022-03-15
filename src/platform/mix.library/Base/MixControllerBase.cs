@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ namespace Mix.Lib.Base
     [ApiExplorerSettings(IgnoreApi = true)]
     public abstract class MixControllerBase : Controller
     {
+        protected int MixTenantId { get; set; }
         protected string domain;
         protected bool forbidden = false;
         protected bool isValid = true;
@@ -33,6 +35,7 @@ namespace Mix.Lib.Base
         protected IConfiguration _configuration;
 
         public MixControllerBase(
+             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
             IPSecurityConfigService ipSecurityConfigService)
         {
@@ -43,6 +46,11 @@ namespace Mix.Lib.Base
                 LoadCulture();
             }
             _ipSecurityConfigService = ipSecurityConfigService;
+
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
         }
 
         private void LoadCulture()

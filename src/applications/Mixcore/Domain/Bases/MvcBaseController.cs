@@ -12,11 +12,12 @@ namespace Mixcore.Domain.Bases
         protected readonly TranslatorService _translator;
         protected readonly MixDatabaseService _databaseService;
         public MvcBaseController(
+            IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator,
             MixDatabaseService databaseService,
-            MixCmsContext context) : base(mixService, ipSecurityConfigService)
+            MixCmsContext context) : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
             _uow = new(_context);

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
-    [Migration("20220315174723_Init")]
+    [Migration("20220315175411_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,6 +262,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -392,6 +395,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -1231,6 +1237,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -1461,6 +1470,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
@@ -1502,6 +1514,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixPageContentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
@@ -1744,6 +1759,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixThemeId")
                         .HasColumnType("INTEGER");
