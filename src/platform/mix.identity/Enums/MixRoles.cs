@@ -2,6 +2,7 @@
 {
     public enum MixRoles
     {
+        SuperAdmin,
         Owner,
         Administrators,
         Editors,

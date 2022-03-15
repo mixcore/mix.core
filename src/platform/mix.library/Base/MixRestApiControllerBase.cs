@@ -49,7 +49,8 @@ namespace Mix.Lib.Base
                 });
             }
             data.SetUowInfo(_uow);
-            return await CreateHandlerAsync(data);
+            var result = await CreateHandlerAsync(data);
+            return Ok(result);
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -63,7 +64,8 @@ namespace Mix.Lib.Base
                 return BadRequest();
             }
             data.SetUowInfo(_uow);
-            return await UpdateHandler(id, data);
+            await UpdateHandler(id, data);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
@@ -71,7 +73,8 @@ namespace Mix.Lib.Base
         {
             var data = await _repository.GetSingleAsync(id);
             data.SetUowInfo(_uow);
-            return await DeleteHandler(data);
+            await DeleteHandler(data);
+            return Ok();
         }
 
         [HttpPatch("{id}")]
@@ -79,14 +82,15 @@ namespace Mix.Lib.Base
         {
             var data = await _repository.GetSingleAsync(id);
             data.SetUowInfo(_uow);
-            return await PatchHandler(id, data, properties);
+            await PatchHandler(id, data, properties);
+            return Ok();
         }
 
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost("save-many")]
-        public async Task<ActionResult<bool>> SaveMany([FromBody] List<TView> data)
+        public async Task<ActionResult> SaveMany([FromBody] List<TView> data)
         {
             if (data == null)
             {
@@ -96,7 +100,8 @@ namespace Mix.Lib.Base
             {
                 item.SetUowInfo(_uow);
             }
-            return await SaveManyHandler(data);
+            await SaveManyHandler(data);
+            return Ok();
         }
 
 
@@ -104,47 +109,43 @@ namespace Mix.Lib.Base
 
         #region Handlers
 
-        protected virtual async Task<ActionResult<TPrimaryKey>> CreateHandlerAsync(TView data)
+        protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync();
             _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
-            return Ok(id);
+            return id;
         }
 
-        protected virtual async Task<IActionResult> UpdateHandler(string id, TView data)
+        protected virtual async Task UpdateHandler(string id, TView data)
         {
             var result = await data.SaveAsync();
             await MixCacheService.Instance.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
-            return Ok(result);
         }
 
-        protected virtual async Task<ActionResult> DeleteHandler(TView data)
+        protected virtual async Task DeleteHandler(TView data)
         {
             await data.DeleteAsync();
             await MixCacheService.Instance.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
-            return Ok();
         }
 
 
-        protected virtual async Task<IActionResult> PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
+        protected virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
             await data.SaveFieldsAsync(properties);
             await MixCacheService.Instance.RemoveCacheAsync(id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Patch, MixRestStatus.Success);
-            return Ok();
         }
 
-        protected virtual async Task<ActionResult<bool>> SaveManyHandler(List<TView> data)
+        protected virtual async Task SaveManyHandler(List<TView> data)
         {
             foreach (var item in data)
             {
                 await item.SaveAsync();
             }
-            return Ok();
         }
 
         #endregion
