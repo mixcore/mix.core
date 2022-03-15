@@ -22,7 +22,6 @@
         #endregion
 
         #region Properties
-
         public string ClassName { get; set; }
         public string DetailUrl { get; set; }
 
@@ -44,7 +43,8 @@
             MixPostViewModel parent = new()
             {
                 DisplayName = Title,
-                Description = Excerpt
+                Description = Excerpt,
+                MixTenantId = MixTenantId
             };
             parent.SetUowInfo(UowInfo);
             return await parent.SaveAsync();

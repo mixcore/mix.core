@@ -42,7 +42,6 @@ namespace Mix.Lib.Base
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
-            MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id;
         }
 
         #endregion

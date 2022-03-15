@@ -28,6 +28,7 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Properties
+        public int MixTenantId { get; set; }
 
         public string Specificulture { get; set; }
 

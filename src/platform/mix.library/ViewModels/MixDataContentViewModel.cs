@@ -33,7 +33,7 @@
         #endregion
 
         #region Properties
-
+        public int MixTenantId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }
@@ -204,7 +204,7 @@
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
-                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
+                MixTenantId = MixTenantId,
                 MixDatabaseId = MixDatabaseId,
                 MixDatabaseName = MixDatabaseName,
                 CreatedBy = CreatedBy,

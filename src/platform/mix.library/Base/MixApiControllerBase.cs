@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Services;
@@ -7,6 +8,7 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
+        protected int MixTenantId { get; set; }
         protected string _lang;
         protected MixCulture _culture;
         protected readonly IQueueService<MessageQueueModel> _queueService;
@@ -16,6 +18,7 @@ namespace Mix.Lib.Base
         protected readonly TranslatorService _translator;
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
         public MixApiControllerBase(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -29,6 +32,10 @@ namespace Mix.Lib.Base
             _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
             _queueService = queueService;
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

@@ -25,8 +25,8 @@ namespace Mix.Tenancy.Controllers
         private readonly HttpService _httpService;
         protected readonly IHubContext<MixThemeHub> _hubContext;
         public InitController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-
             MixService mixService,
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
@@ -35,7 +35,7 @@ namespace Mix.Tenancy.Controllers
             IQueueService<MessageQueueModel> queueService,
             MixThemeImportService importService,
             HttpService httpService, IHubContext<MixThemeHub> hubContext)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             
             _initCmsService = initCmsService;

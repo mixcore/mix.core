@@ -13,6 +13,7 @@ namespace Mix.Portal.Controllers
         private readonly MixThemeImportService _importService;
 
         public MixThemeController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -22,7 +23,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context, MixThemeImportService importService,
             IQueueService<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
 
             _exportService = exportService;

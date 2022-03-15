@@ -54,7 +54,8 @@ namespace Mix.Portal.Domain.ViewModels
             MixPageViewModel parent = new(UowInfo)
             {
                 DisplayName = Title,
-                Description = Excerpt
+                Description = Excerpt,
+                MixTenantId = MixTenantId
             };
             return await parent.SaveAsync();
         }
