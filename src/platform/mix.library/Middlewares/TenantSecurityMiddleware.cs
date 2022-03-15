@@ -32,7 +32,7 @@ namespace Mix.Lib.Middlewares
                 if (!context.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
                 {
                     context.Session.SetInt32(
-                        MixRequestQueryKeywords.MixTenantId, 
+                        MixRequestQueryKeywords.MixTenantId,
                         MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host).Id);
                 }
                 await next.Invoke(context);

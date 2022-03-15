@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Mix.Lib.Middlewares;
-using Mix.Lib.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

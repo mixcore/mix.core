@@ -1,5 +1,4 @@
 ﻿using Mix.Database.EntityConfigurations.Base;
-using System;
 
 namespace Mix.Database.EntityConfigurations.MYSQL.Base
 {

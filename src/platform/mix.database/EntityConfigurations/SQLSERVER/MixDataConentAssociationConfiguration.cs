@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 using Mix.Shared.Enums;
-using System;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {

@@ -6,9 +6,7 @@ using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
-using Mix.Shared.Services;
 using MySqlConnector;
-using System;
 
 namespace Mix.Database.Entities.Cms
 {
@@ -38,10 +36,10 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-//#if DEBUG
-//            // TODO: will be removed
-//            optionsBuilder.LogTo(Console.WriteLine);
-//#endif
+            //#if DEBUG
+            //            // TODO: will be removed
+            //            optionsBuilder.LogTo(Console.WriteLine);
+            //#endif
 
             if (!string.IsNullOrEmpty(_connectionString))
             {
@@ -89,7 +87,7 @@ namespace Mix.Database.Entities.Cms
                 _ => string.Empty
             };
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<MixDataContentValue>().HasOne(m=>m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MixDataContentValue>().HasOne(m => m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
                 m => m.Namespace == ns);
