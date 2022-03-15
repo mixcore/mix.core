@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.Entities.Base;
-using System;
 
 namespace Mix.Database.EntityConfigurations.Base
 {

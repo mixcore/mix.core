@@ -12,7 +12,7 @@ namespace Mix.Lib.Services
             IHttpContextAccessor httpContext,
             MixCmsAccountContext accContext,
             IdentityErrorDescriber describer = null)
-            
+
             : base(accContext, describer)
         {
             if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)

@@ -14,7 +14,7 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        
+
         public MixRestApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,

@@ -1,6 +1,4 @@
-﻿using Mix.Lib.Repositories;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
@@ -344,7 +342,7 @@ namespace Mix.Portal.Domain.ViewModels
                 CreatedBy = CreatedBy,
                 DisplayName = Title,
                 Description = Excerpt,
-                
+
             };
             return await parent.SaveAsync();
         }

@@ -23,7 +23,7 @@ namespace Mixcore.Controllers
             MixCacheService cacheService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
-            MixIdentityService idService, 
+            MixIdentityService idService,
             TenantUserManager userManager,
             MixCmsContext cmsContext)
             : base(mixService, ipSecurityConfigService)

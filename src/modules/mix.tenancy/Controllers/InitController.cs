@@ -37,7 +37,7 @@ namespace Mix.Tenancy.Controllers
             HttpService httpService, IHubContext<MixThemeHub> hubContext)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
-            
+
             _initCmsService = initCmsService;
             _importService = importService;
             _httpService = httpService;

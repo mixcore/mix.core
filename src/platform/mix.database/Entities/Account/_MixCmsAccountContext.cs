@@ -4,7 +4,6 @@
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.EntityConfigurations.SQLITE;
@@ -12,7 +11,6 @@ using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Shared.Constants;
 using MySqlConnector;
-using System;
 
 namespace Mix.Database.Entities.Account
 {

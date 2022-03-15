@@ -2,7 +2,7 @@
 {
     public partial class MixUserTenant
     {
-        public int TenantId{ get; set; }
+        public int TenantId { get; set; }
         public Guid MixUserId { get; set; }
     }
 }

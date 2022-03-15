@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
@@ -40,7 +39,7 @@ namespace Mix.Tenancy.Domain.Services
                     LastName = model.LastName,
                     JoinDate = DateTime.UtcNow,
                     LastModified = DateTime.UtcNow
-                    
+
                 };
                 var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
                 if (createResult.Succeeded)

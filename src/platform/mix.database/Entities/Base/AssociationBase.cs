@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mix.Database.Entities.Base
+﻿namespace Mix.Database.Entities.Base
 {
     public abstract class AssociationBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable
