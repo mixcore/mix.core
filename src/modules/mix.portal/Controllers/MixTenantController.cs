@@ -12,6 +12,7 @@ namespace Mix.Portal.Controllers
     public class MixTenantController
         : MixRestApiControllerBase<MixTenantViewModel, MixCmsContext, MixTenant, int>
     {
+        private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
         public MixTenantController(
             IHttpContextAccessor httpContextAccessor,
@@ -21,11 +22,12 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
-            IQueueService<MessageQueueModel> queueService, 
-            RoleManager<MixRole> roleManager)
+            IQueueService<MessageQueueModel> queueService,
+            RoleManager<MixRole> roleManager, TenantUserManager userManager)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         #region Overrides
@@ -44,6 +46,9 @@ namespace Mix.Portal.Controllers
                 }
                 );
             }
+            var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
+            await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString(), tenantId);
+            await _userManager.AddToTenant(user, tenantId);
             return tenantId;
         }
         #endregion

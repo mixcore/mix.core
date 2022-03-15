@@ -38,7 +38,6 @@ namespace Microsoft.Extensions.DependencyInjection
             };
 
             const string accessDeniedPath = "/security/login";
-
             services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
@@ -47,9 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
             .AddUserStore<TenantUserStore>()
             .AddRoleStore<TenantRoleStore>()
             .AddUserManager<TenantUserManager>()
+            .AddRoleManager<TenantRoleManager>()
             .AddEntityFrameworkStores<TDbContext>()
             .AddDefaultTokenProviders();
-
             services.AddAuthorization();
 
             services.AddAuthentication(

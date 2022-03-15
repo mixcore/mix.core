@@ -13,7 +13,6 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
             builder.HasIndex(e => e.NormalizedName)
                     .HasDatabaseName("MixRoleNameIndex")
-                    .IsUnique()
                     .HasFilter("(NormalizedName IS NOT NULL)");
 
             builder.Property(e => e.Id)
