@@ -11,6 +11,7 @@ namespace Mix.Portal.Controllers
         private readonly MixDataService _mixDataService;
 
         public MixDataContentPortalController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -20,7 +21,7 @@ namespace Mix.Portal.Controllers
             MixCmsContext context,
             MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(_uow);

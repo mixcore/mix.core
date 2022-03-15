@@ -33,13 +33,11 @@
         }
 
         #endregion
-        public string Host { get; set; }
-        public MixTenant CurrentTenant { get => GetCurrentTenant(); }
         public List<MixTenant> AllTenants { get; set; }
 
-        public MixTenant GetCurrentTenant()
+        public MixTenant GetCurrentTenant(string host)
         {
-            return AllTenants.FirstOrDefault(m => m.PrimaryDomain == Host);
+            return AllTenants.FirstOrDefault(m => m.PrimaryDomain == host);
         }
     }
 }

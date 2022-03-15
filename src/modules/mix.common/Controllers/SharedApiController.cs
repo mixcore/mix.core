@@ -28,6 +28,7 @@ namespace Mix.Common.Controllers
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
         public SharedApiController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -36,7 +37,7 @@ namespace Mix.Common.Controllers
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _authConfigurations = authConfigService.AppSettings;
             _context = context;

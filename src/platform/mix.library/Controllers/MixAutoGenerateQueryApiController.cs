@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Services;
 
@@ -12,6 +13,7 @@ namespace Mix.Lib.Controllers
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixAutoGenerateQueryApiController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -20,7 +22,7 @@ namespace Mix.Lib.Controllers
             TDbContext context,
             MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
         }
     }

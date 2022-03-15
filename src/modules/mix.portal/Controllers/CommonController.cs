@@ -8,6 +8,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly MixCmsContext _context;
         public CommonController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixCmsContext context,
             MixService mixService,
@@ -15,7 +16,7 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
         }

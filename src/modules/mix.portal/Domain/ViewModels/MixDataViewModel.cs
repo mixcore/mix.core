@@ -4,7 +4,6 @@
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
     {
         #region Properties
-
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
 

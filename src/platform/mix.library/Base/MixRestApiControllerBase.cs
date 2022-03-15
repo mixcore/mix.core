@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
@@ -13,7 +14,9 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
+        
         public MixRestApiControllerBase(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -21,7 +24,7 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
         }
 
@@ -36,6 +39,14 @@ namespace Mix.Lib.Base
             if (data == null)
             {
                 return BadRequest("Null Object");
+            }
+            if (ReflectionHelper.HasProperty(typeof(TView), MixRequestQueryKeywords.MixTenantId))
+            {
+                ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
+                {
+                    PropertyName = MixRequestQueryKeywords.MixTenantId,
+                    PropertyValue = MixTenantId
+                });
             }
             data.SetUowInfo(_uow);
             return await CreateHandlerAsync(data);

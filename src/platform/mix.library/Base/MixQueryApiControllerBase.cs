@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace Mix.Lib.Base
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -30,7 +32,7 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _uow = new(_context);
@@ -120,7 +122,7 @@ namespace Mix.Lib.Base
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
             {
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantRepository.Instance.CurrentTenant.Id, ExpressionMethod.Eq);
+                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
             }
 
             return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);

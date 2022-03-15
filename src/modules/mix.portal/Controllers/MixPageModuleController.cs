@@ -8,6 +8,7 @@ namespace Mix.Portal.Controllers
         : MixAssociationApiControllerBase<MixPageModuleViewModel, MixCmsContext, MixPageModuleAssociation>
     {
         public MixPageModuleController(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -15,7 +16,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
 
         }

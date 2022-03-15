@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Base;
 using Mix.Lib.Dtos;
@@ -14,6 +15,7 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, int, TView>
     {
         public MixAssociationApiControllerBase(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
@@ -21,7 +23,7 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
         }
         protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)

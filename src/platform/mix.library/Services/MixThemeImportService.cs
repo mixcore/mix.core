@@ -10,7 +10,7 @@ namespace Mix.Lib.Services
         private CancellationTokenSource _cts;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
-
+        public readonly int tenantId;
         #region Dictionaries
 
         private Dictionary<int, int> dicAliasIds = new Dictionary<int, int>();
@@ -28,11 +28,15 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicPageContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(MixCmsContext context)
+        public MixThemeImportService(MixCmsContext cmsContext, IHttpContextAccessor httpContext)
         {
-            _context = context;
+            _context = cmsContext;
             _uow = new UnitOfWorkInfo(_context);
             _cts = new CancellationTokenSource();
+            if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
         }
 
         #region Import
@@ -88,7 +92,7 @@ namespace Mix.Lib.Services
                 _siteData = ParseSiteData(siteData);
                 if (_siteData.ThemeId == 0)
                 {
-                    await CreateTheme();
+                    await CreateTheme(tenantId);
                 }
                 ImportAssets();
                 await ImportContent();
@@ -114,14 +118,14 @@ namespace Mix.Lib.Services
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
-        private async Task CreateTheme()
+        private async Task CreateTheme(int tenantId)
         {
             var table = _context.MixModuleContent.AsNoTracking();
             _siteData.ThemeId = table.Any() ? table.Max(m => m.Id) + 1 : 1;
             var theme = new MixTheme()
             {
                 Id = _siteData.ThemeId,
-                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
+                MixTenantId = tenantId,
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
                 CreatedBy = _siteData.CreatedBy,

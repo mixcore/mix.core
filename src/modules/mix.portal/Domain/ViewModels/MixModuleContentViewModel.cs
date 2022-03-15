@@ -62,7 +62,8 @@
             {
                 DisplayName = Title,
                 SystemName = SystemName,
-                Description = Excerpt
+                Description = Excerpt,
+                MixTenantId = MixTenantId
             };
             return await parent.SaveAsync();
         }

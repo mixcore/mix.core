@@ -35,6 +35,8 @@ namespace Mix.Portal.Domain.ViewModels
         #endregion
 
         #region Properties
+
+        public int MixTenantId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }
@@ -336,12 +338,13 @@ namespace Mix.Portal.Domain.ViewModels
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,
-                MixTenantId = MixTenantRepository.Instance.CurrentTenant.Id,
+                MixTenantId = MixTenantId,
                 MixDatabaseId = MixDatabaseId,
                 MixDatabaseName = MixDatabaseName,
                 CreatedBy = CreatedBy,
                 DisplayName = Title,
-                Description = Excerpt
+                Description = Excerpt,
+                
             };
             return await parent.SaveAsync();
         }
