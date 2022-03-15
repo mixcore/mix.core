@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -284,6 +285,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -326,6 +328,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -415,6 +418,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -454,6 +458,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -512,6 +517,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<Guid>(type: "TEXT", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -556,6 +562,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -611,6 +618,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -708,6 +716,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "TEXT", nullable: true),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -852,6 +861,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     ParentId = table.Column<int>(type: "INTEGER", nullable: false),
                     MixCultureId = table.Column<int>(type: "INTEGER", nullable: false),
