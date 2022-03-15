@@ -29,7 +29,7 @@ namespace Mix.Lib.Middlewares
                 {
                     MixTenantRepository.Instance.AllTenants = await repository.GetAllQuery().ToListAsync();
                 }
-                MixTenantRepository.Instance.LoadCurrentTenant(context.Request.Headers.Host);
+                MixTenantRepository.Instance.Host = context.Request.Headers.Host;
                 await next.Invoke(context);
             }
         }

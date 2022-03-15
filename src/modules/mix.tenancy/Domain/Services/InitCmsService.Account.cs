@@ -47,6 +47,7 @@ namespace Mix.Tenancy.Domain.Services
                 {
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
                     await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString());
+                    await _userManager.AddToTenant(user, MixTenantRepository.Instance.CurrentTenant.Id);
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;

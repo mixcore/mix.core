@@ -13,7 +13,6 @@ using Mix.Lib.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Linq.Expressions;
 
 namespace Mix.Account.Controllers
@@ -29,7 +28,9 @@ namespace Mix.Account.Controllers
         private readonly MixIdentityService _idService;
         private readonly EntityRepository<ApplicationDbContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
-        protected UnitOfWorkInfo _uow;
+        protected UnitOfWorkInfo _accUOW;
+        protected UnitOfWorkInfo _cmsUOW;
+        private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
         public MixUserController(
@@ -38,7 +39,7 @@ namespace Mix.Account.Controllers
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            ApplicationDbContext context, MixIdentityService mixIdentityService, MixCmsContext cmdContext)
+            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,9 +48,23 @@ namespace Mix.Account.Controllers
             _idService = idService;
             _refreshTokenRepo = refreshTokenRepo;
             _mixIdentityService = mixIdentityService;
-            _uow = new(context);
-            _repository = new(_uow);
-            _cmsContext = cmdContext;
+            _accUOW = new(accContext);
+            _cmsUOW = new(cmsContext);
+            _repository = new(_accUOW);
+            _cmsContext = cmsContext;
+            _accContext = accContext;
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
+        [Route("my-tenants")]
+        [HttpGet]
+        public async Task<ActionResult> MyProfile()
+        {
+            var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
+            var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
+            var tenants = await MixTenantViewModel.GetRepository(_cmsUOW).GetListAsync(m => tenantIds.Contains(m.Id));
+            return Ok(tenants);
         }
 
         [Route("Logout")]
