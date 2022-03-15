@@ -8,6 +8,24 @@
       "subMenus": []
     },
     {
+      "title": "Tenants",
+      "path": "#",
+      "icon": "mi mi-ReadingList",
+      "svg": "tabler-icon-notebook.svg",
+      "subMenus": [
+        {
+          "title": "Create Tenant",
+          "icon": "mi mi-Add",
+          "path": "/portal/tenant/create"
+        },
+        {
+          "path": "/portal/tenant/list",
+          "title": "List Tenant",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
       "title": "Posts",
       "path": "#",
       "icon": "mi mi-ReadingList",
@@ -391,6 +409,26 @@
           "path": "/portal/json-data/create",
           "templatePath": "/mix-app/views/app-portal/pages/json-data/details.html",
           "controller": "JsonDataController"
+        }
+      ]
+    },
+    {
+      "cate": "tenant",
+      "items": [
+        {
+          "path": "/portal/tenant/create",
+          "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
+          "controller": "TenantController"
+        },
+        {
+          "path": "/portal/tenant/list",
+          "templatePath": "/mix-app/views/app-portal/pages/tenant/list.html",
+          "controller": "TenantController"
+        },
+        {
+          "path": "/portal/tenant/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
+          "controller": "TenantController"
         }
       ]
     },

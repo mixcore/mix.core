@@ -24,7 +24,7 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task<ActionResult> DeleteHandler(MixDatabaseViewModel data)
+        protected override Task DeleteHandler(MixDatabaseViewModel data)
         {
             if (data.Type == MixDatabaseType.System)
             {

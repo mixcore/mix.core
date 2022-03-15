@@ -11,6 +11,8 @@
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Newtonsoft.Json.Linq" />
 		<Using Include="Newtonsoft.Json" />
+		<Using Include="Microsoft.AspNetCore.Authorization" />
+		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<Using Include="Mix.Lib.Base" />
 		<Using Include="Mix.Lib.Services" />
 		<Using Include="Mix.Lib.Models.Common" />
