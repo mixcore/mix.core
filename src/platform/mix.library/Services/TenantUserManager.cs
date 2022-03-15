@@ -22,6 +22,20 @@ namespace Mix.Lib.Services
 
         public MixCmsAccountContext Context { get; }
 
+        public async Task AddToRoleAsync(MixUser user, string roleName, int tenantId)
+        {
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName && x.MixTenantId == tenantId);
+            if (!Context.AspNetUserRoles.Any(m=>m.UserId == user.Id && m.RoleId == role.Id))
+            {
+                Context.AspNetUserRoles.Add(new AspNetUserRoles()
+                {
+                    UserId = user.Id,
+                    RoleId = role.Id
+                });
+                await Context.SaveChangesAsync();
+            }
+        }
+
         public async Task AddToTenant(MixUser user, int tenantId)
         {
             if (!Context.MixUserTenants.Any(m => m.TenantId == tenantId && m.MixUserId == user.Id))
