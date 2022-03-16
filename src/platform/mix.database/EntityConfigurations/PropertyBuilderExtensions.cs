@@ -5,7 +5,7 @@ namespace Mix.Database.EntityConfigurations
 {
     public static class PropertyBuilderExtensions
     {
-        public static PropertyBuilder<TPrimaryKey> HasDefaultValueIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition, string method)
+        public static PropertyBuilder<TPrimaryKey> UseDefaultGUIDIf<TPrimaryKey>(this PropertyBuilder<TPrimaryKey> builder, bool condition, string method)
         {
             if (condition)
             {
@@ -17,7 +17,8 @@ namespace Mix.Database.EntityConfigurations
         {
             if (condition)
             {
-                builder.UseIdentityByDefaultColumn();
+                builder.UseIdentityByDefaultColumn()
+                    .ValueGeneratedOnAdd();
             }
             return builder;
         }

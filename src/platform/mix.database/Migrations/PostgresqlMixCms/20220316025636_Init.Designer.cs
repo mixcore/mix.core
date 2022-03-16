@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
-    [Migration("20220316015740_Init")]
+    [Migration("20220316025636_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
