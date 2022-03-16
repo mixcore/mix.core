@@ -308,7 +308,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasDatabaseName("MixRoleNameIndex")
                         .HasFilter("(NormalizedName IS NOT NULL)");
 

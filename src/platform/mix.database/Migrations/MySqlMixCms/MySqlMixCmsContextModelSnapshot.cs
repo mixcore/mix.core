@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.MySqlMixCms
+namespace Mix.Database.Migrations
 {
     [DbContext(typeof(MySqlMixCmsContext))]
     partial class MySqlMixCmsContextModelSnapshot : ModelSnapshot
@@ -131,6 +131,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -278,6 +281,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDatabaseName"), "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -420,6 +426,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDatabaseName"), "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -501,6 +510,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -609,6 +621,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -721,6 +736,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDatabaseName"), "utf8");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -926,6 +944,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixLanguageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1090,6 +1111,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1216,6 +1240,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
@@ -1292,6 +1319,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -1430,6 +1460,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixPageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1536,6 +1569,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
@@ -1577,6 +1613,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int");
 
                     b.Property<int?>("MixPageContentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -1706,6 +1745,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<int?>("MixPostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1833,6 +1875,9 @@ namespace Mix.Database.Migrations.MySqlMixCms
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixThemeId")
                         .HasColumnType("int");

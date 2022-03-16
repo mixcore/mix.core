@@ -7,7 +7,7 @@ using Mix.Database.Entities.Account;
 
 #nullable disable
 
-namespace Mix.Database.Migrations
+namespace Mix.Database.Migrations.MySqlAccount
 {
     [DbContext(typeof(MySqlAccountContext))]
     partial class MySqlAccountContextModelSnapshot : ModelSnapshot
@@ -323,7 +323,6 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasDatabaseName("MixRoleNameIndex")
                         .HasFilter("(NormalizedName IS NOT NULL)");
 
@@ -404,7 +403,7 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
+                    b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")

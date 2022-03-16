@@ -12,7 +12,7 @@ using Mix.Database.Entities.Account;
 namespace Mix.Database.Migrations.SqlServerAccount
 {
     [DbContext(typeof(SqlServerAccountContext))]
-    [Migration("20220314181437_Init")]
+    [Migration("20220316090036_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasDatabaseName("MixRoleNameIndex")
                         .HasFilter("(NormalizedName IS NOT NULL)");
 

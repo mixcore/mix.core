@@ -8,10 +8,10 @@ using Mix.Database.Entities.Account;
 
 #nullable disable
 
-namespace Mix.Database.Migrations
+namespace Mix.Database.Migrations.MySqlAccount
 {
     [DbContext(typeof(MySqlAccountContext))]
-    [Migration("20220314173523_Init")]
+    [Migration("20220316085907_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -325,7 +325,6 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasDatabaseName("MixRoleNameIndex")
                         .HasFilter("(NormalizedName IS NOT NULL)");
 
@@ -394,7 +393,7 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("LastName")
@@ -406,7 +405,7 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
+                    b.Property<DateTime?>("LockoutEnd")
                         .HasColumnType("datetime");
 
                     b.Property<string>("ModifiedBy")

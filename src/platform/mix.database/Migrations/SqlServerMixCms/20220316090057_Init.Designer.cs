@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.SqlServerMixCms
 {
     [DbContext(typeof(SqlServerMixCmsContext))]
-    [Migration("20220314181105_Init")]
+    [Migration("20220316090057_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,6 +132,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -270,6 +273,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -405,6 +411,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -481,6 +490,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -582,6 +594,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -686,6 +701,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -884,6 +902,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixLanguageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1040,6 +1061,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1159,6 +1183,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1237,6 +1264,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -1372,6 +1402,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixPageId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1472,6 +1505,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1515,6 +1551,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int?>("MixPageContentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -1643,6 +1682,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("MixPostId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1760,6 +1802,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.Property<int>("MixThemeId")
                         .HasColumnType("int");
