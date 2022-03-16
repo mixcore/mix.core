@@ -8,7 +8,7 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
-        
+
         private readonly ILogger<HomeController> _logger;
         public HomeController(
             IHttpContextAccessor httpContextAccessor,
@@ -58,7 +58,7 @@ namespace Mixcore.Controllers
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
             var page = await pageRepo.GetFirstAsync(p => p.MixTenantId == MixTenantId && p.Type == MixPageType.Home);
-            
+
             if (page == null)
             {
                 return NotFound();

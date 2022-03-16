@@ -20,7 +20,7 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
-            
+
         }
 
 
