@@ -34,7 +34,6 @@
 
         #region Properties
 
-        public int MixTenantId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }

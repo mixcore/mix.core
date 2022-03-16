@@ -8,6 +8,6 @@
         Editors,
         Developers,
         Authors,
-        Contributors
+        Guest
     }
 }

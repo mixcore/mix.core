@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mix.Database.Entities.Account;
+using Mix.Identity.Enums;
 
 namespace Mix.Lib.Services
 {
@@ -22,9 +23,9 @@ namespace Mix.Lib.Services
 
         public MixCmsAccountContext Context { get; }
 
-        public async Task AddToRoleAsync(MixUser user, string roleName, int tenantId)
+        public async Task AddToRoleAsync(MixUser user, MixRoles roleName, int tenantId)
         {
-            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName && x.MixTenantId == tenantId);
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString() && x.MixTenantId == tenantId);
             if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id))
             {
                 Context.AspNetUserRoles.Add(new AspNetUserRoles()

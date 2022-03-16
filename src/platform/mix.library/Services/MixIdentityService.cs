@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Constants;
 using Mix.Identity.Dtos;
+using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Models;
@@ -96,6 +97,30 @@ namespace Mix.Lib.Services
                 return resp;
             }
             return default;
+        }
+
+        public async Task<JObject> Register(RegisterViewModel model, int tenantId)
+        {
+            var user = new MixUser
+            {
+                Id = Guid.NewGuid(),
+                UserName = model.UserName,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                JoinDate = DateTime.UtcNow
+            };
+
+            var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
+            if (createResult.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, MixRoles.Guest, tenantId);
+                await _userManager.AddToTenant(user, tenantId);
+
+                user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                return await GetAuthData(_context, user, true);
+            }
+            throw new MixException(createResult.Errors.First().Description);
         }
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, string aesKey, string rsaPublicKey)
