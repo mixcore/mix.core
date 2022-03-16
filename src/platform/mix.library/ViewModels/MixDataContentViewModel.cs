@@ -33,7 +33,6 @@
         #endregion
 
         #region Properties
-        public int MixTenantId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public List<MixDatabaseColumnViewModel> Columns { get; set; }
@@ -116,7 +115,7 @@
 
         #region Helper
 
-        private async Task ParseObjectToValues(MixCacheService cacheService = null)
+        private async Task ParseObjectToValues()
         {
             Data ??= new JObject();
             foreach (var field in Columns.OrderBy(f => f.Priority))
@@ -162,7 +161,7 @@
             }
         }
 
-        private async Task<MixDataContentValueViewModel> GetFieldValue(MixDatabaseColumnViewModel field, MixCacheService cacheService = null)
+        private async Task<MixDataContentValueViewModel> GetFieldValue(MixDatabaseColumnViewModel field)
         {
             var val = Values.FirstOrDefault(v => v.MixDatabaseColumnId == field.Id);
             if (val == null)
@@ -190,7 +189,7 @@
 
         public bool HasValue(string fieldName)
         {
-            return Data != null ? Data.Value<string>(fieldName) != null : false;
+            return Data != null && Data.Value<string>(fieldName) != null;
         }
 
         public T Property<T>(string fieldName)
@@ -200,7 +199,7 @@
 
         public override async Task<Guid> CreateParentAsync()
         {
-            MixDataViewModel parent = new MixDataViewModel(UowInfo)
+            MixDataViewModel parent = new (UowInfo)
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,

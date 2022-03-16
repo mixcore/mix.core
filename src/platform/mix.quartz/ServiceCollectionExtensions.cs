@@ -32,7 +32,7 @@ namespace Mix.MixQuartz
                 q.UseMicrosoftDependencyInjectionJobFactory();
 
                 // or for scoped service support like EF Core DbContext
-                q.UseMicrosoftDependencyInjectionScopedJobFactory();
+                //q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
                 // these are the defaults
                 q.UseSimpleTypeLoader();

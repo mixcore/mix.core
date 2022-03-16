@@ -7,6 +7,7 @@ using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Dtos;
+using Mix.Identity.Enums;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -26,14 +27,17 @@ namespace Mix.Account.Controllers
         private readonly RoleManager<MixRole> _roleManager;
         private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
-        private readonly EntityRepository<ApplicationDbContext, MixUser, Guid> _repository;
+        private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
         protected UnitOfWorkInfo _accUOW;
         protected UnitOfWorkInfo _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
+
+        protected int MixTenantId { get; set; }
         public MixUserController(
+            IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
@@ -53,9 +57,14 @@ namespace Mix.Account.Controllers
             _repository = new(_accUOW);
             _cmsContext = cmsContext;
             _accContext = accContext;
+
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [MixAuthorize]
         [Route("my-tenants")]
         [HttpGet]
@@ -65,6 +74,22 @@ namespace Mix.Account.Controllers
             var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
             var tenants = await MixTenantViewModel.GetRepository(_cmsUOW).GetListAsync(m => tenantIds.Contains(m.Id));
             return Ok(tenants);
+        }
+
+        [Route("register")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
+        {
+            var result = await _idService.Register(model, MixTenantId);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [Route("Logout")]
@@ -105,6 +130,7 @@ namespace Mix.Account.Controllers
             return Ok(token);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [HttpGet("list")]
         public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
         {
