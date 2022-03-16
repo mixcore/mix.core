@@ -246,6 +246,7 @@ namespace Mix.Lib.Services
                 {
                     item.SeoName = $"{item.SeoName}-1";
                 }
+                item.Id = 0;
                 item.MixTenantId = tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
                 _context.Entry(item).State = EntityState.Added;
