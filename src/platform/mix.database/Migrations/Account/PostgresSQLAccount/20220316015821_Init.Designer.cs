@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     [DbContext(typeof(PostgresSQLAccountContext))]
-    [Migration("20220314175743_Init")]
+    [Migration("20220316015821_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -310,7 +310,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasDatabaseName("MixRoleNameIndex")
                         .HasFilter("(NormalizedName IS NOT NULL)");
 
@@ -373,7 +372,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("LastModified")
+                    b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastName")

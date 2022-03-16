@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.SqliteMixCms
 {
     [DbContext(typeof(SqliteMixCmsContext))]
-    [Migration("20220315175411_Init")]
+    [Migration("20220316015404_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,7 +240,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -432,7 +432,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
@@ -548,7 +548,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -618,7 +618,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("INTEGER");

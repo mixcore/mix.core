@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -275,7 +276,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "(NormalizedName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_MixUserId",
@@ -341,7 +343,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "MixRoleNameIndex",
                 table: "MixRoles",
                 column: "NormalizedName",
-                unique: true);
+                filter: "(NormalizedName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -352,7 +354,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 name: "UserNameIndex",
                 table: "MixUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "(NormalizedUserName IS NOT NULL)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixUserTenants_MixUserId",

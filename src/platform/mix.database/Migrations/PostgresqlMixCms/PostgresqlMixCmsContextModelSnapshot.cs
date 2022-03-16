@@ -130,6 +130,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int>("MixCultureId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -265,6 +268,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -398,6 +404,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -474,6 +483,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("text");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -575,6 +587,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("MixDatabaseName")
                         .HasColumnType("text");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -679,6 +694,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -874,6 +892,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixLanguageId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1028,6 +1049,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixModuleId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1153,6 +1177,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1249,6 +1276,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int?>("MixModuleContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
@@ -1385,6 +1415,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixPageId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1485,6 +1518,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1531,6 +1567,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("integer");
 
                     b.Property<int?>("MixPageContentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
@@ -1660,6 +1699,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixPostId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -1776,6 +1818,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("MixThemeId")
                         .HasColumnType("integer");

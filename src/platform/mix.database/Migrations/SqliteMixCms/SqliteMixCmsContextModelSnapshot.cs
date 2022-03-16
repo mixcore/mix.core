@@ -238,7 +238,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -430,7 +430,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
@@ -546,7 +546,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -616,7 +616,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("INTEGER");

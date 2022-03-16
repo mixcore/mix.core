@@ -6,7 +6,7 @@
 
 <input type="hidden" id="view-type" value="Page" />
 <input type="hidden" id="view-id" value="@Model.Id" />
-@if (!string.IsNullOrEmpty(Model.Template.FilePath))
+@if (!string.IsNullOrEmpty(Model.Template?.FilePath))
 {
     try
     {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -288,6 +289,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -330,6 +332,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "text", nullable: true),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false)
@@ -350,6 +353,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     MixDatabaseId = table.Column<int>(type: "integer", nullable: false),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -377,6 +381,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
@@ -419,6 +424,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -458,6 +464,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -516,6 +523,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "text", nullable: true),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false)
@@ -560,6 +568,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -615,6 +624,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -712,6 +722,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -758,6 +769,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -811,6 +823,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Content = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     Extension = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     FileFolder = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
@@ -856,6 +869,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
@@ -909,6 +923,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -936,6 +951,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Priority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     LeftId = table.Column<int>(type: "integer", nullable: false),
                     RightId = table.Column<int>(type: "integer", nullable: false)
                 },
