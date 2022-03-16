@@ -25,7 +25,7 @@ namespace Mix.Lib.Services
         public async Task AddToRoleAsync(MixUser user, string roleName, int tenantId)
         {
             var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName && x.MixTenantId == tenantId);
-            if (!Context.AspNetUserRoles.Any(m=>m.UserId == user.Id && m.RoleId == role.Id))
+            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id))
             {
                 Context.AspNetUserRoles.Add(new AspNetUserRoles()
                 {
