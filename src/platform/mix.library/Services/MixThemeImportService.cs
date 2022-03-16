@@ -92,7 +92,7 @@ namespace Mix.Lib.Services
                 _siteData = ParseSiteData(siteData);
                 if (_siteData.ThemeId == 0)
                 {
-                    await CreateTheme();
+                    _siteData.ThemeId = await CreateTheme();
                 }
                 ImportAssets();
                 await ImportContent();
@@ -118,13 +118,12 @@ namespace Mix.Lib.Services
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
-        private async Task CreateTheme()
+        private async Task<int> CreateTheme()
         {
             var table = _context.MixModuleContent.AsNoTracking();
             _siteData.ThemeId = table.Any() ? table.Max(m => m.Id) + 1 : 1;
             var theme = new MixTheme()
             {
-                Id = _siteData.ThemeId,
                 MixTenantId = tenantId,
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
@@ -133,6 +132,7 @@ namespace Mix.Lib.Services
             };
             _context.MixTheme.Add(theme);
             await _context.SaveChangesAsync(_cts.Token);
+            return theme.Id;
         }
         #region Import Contents
 

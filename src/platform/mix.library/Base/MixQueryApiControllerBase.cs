@@ -106,17 +106,24 @@ namespace Mix.Lib.Base
 
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
-            Expression<Func<TEntity, bool>> andPredicate = null;
-
             if (!req.PageSize.HasValue)
             {
                 req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
             }
 
+            Expression<Func<TEntity, bool>> andPredicate = BuildAndPredicate(req);
+
+            return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
+        }
+
+        protected virtual Expression<Func<TEntity, bool>> BuildAndPredicate(SearchRequestDto req)
+        {
+            Expression<Func<TEntity, bool>> andPredicate = m => true;
+
             if (req.Culture != null)
             {
-                andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq);
+                andPredicate = andPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq));
             }
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
@@ -125,7 +132,7 @@ namespace Mix.Lib.Base
                         MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
             }
 
-            return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
+            return andPredicate;
         }
 
         protected virtual async Task<TView> GetById(TPrimaryKey id)

@@ -37,7 +37,7 @@
 
         public MixTenant GetCurrentTenant(string host)
         {
-            return AllTenants.FirstOrDefault(m => m.PrimaryDomain == host);
+            return AllTenants.FirstOrDefault(m => m.PrimaryDomain == host) ?? AllTenants.First();
         }
     }
 }
