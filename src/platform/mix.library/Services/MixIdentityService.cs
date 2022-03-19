@@ -12,6 +12,7 @@ using Mix.Shared.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -120,7 +121,7 @@ namespace Mix.Lib.Services
             var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
             if (createResult.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, MixRoles.Guest, tenantId);
+                await _userManager.AddToRoleAsync(user, MixRoles.Guest.ToString(), tenantId);
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
@@ -391,7 +392,7 @@ namespace Mix.Lib.Services
 
         public string GetClaim(ClaimsPrincipal User, string claimType)
         {
-            return User.Claims.FirstOrDefault(c => c.Type == claimType)?.Value;
+            return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
 
         public static IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)

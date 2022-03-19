@@ -8,7 +8,6 @@ using Mix.Lib.Services;
 namespace Mix.Lib.Base
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [MixAuthorize]
     public abstract class MixAuthorizedApiControllerBase : Controller
     {
         protected string _lang;

@@ -7,6 +7,7 @@ using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Dtos;
+using Mix.Identity.Enums;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -64,7 +65,6 @@ namespace Mix.Account.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
-        [MixAuthorize]
         [Route("my-tenants")]
         [HttpGet]
         public async Task<ActionResult> MyProfile()
@@ -130,10 +130,9 @@ namespace Mix.Account.Controllers
         }
 
         [HttpGet]
-        [MixAuthorize]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
         [Route("details/{id}")]
-        public async Task<ActionResult> Details(string viewType, string id = null)
+        public async Task<ActionResult> Details(string id = null)
         {
             MixUser user = await _userManager.FindByIdAsync(id); ;
 
@@ -145,11 +144,54 @@ namespace Mix.Account.Controllers
             }
             return BadRequest();
         }
-
+        
+        [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [Route("user-in-role")]
+        public async Task<ActionResult> Details(UserRoleModel model)
+        {
+            var role = await _roleManager.FindByIdAsync(model.RoleId);
+            List<string> errors = new List<string>();
+
+            if (role == null)
+            {
+                errors.Add($"Role: {model.RoleId} does not exists");
+            }
+            else if (model.IsUserInRole)
+            {
+                var appUser = await _userManager.FindByIdAsync(model.UserId);
+
+                if (appUser == null)
+                {
+                    errors.Add($"User: {model.UserId} does not exists");
+                }
+                else if (!(_userManager.IsInRoleAsync(appUser, role.Name, MixTenantId)))
+                {
+                    await _userManager.AddToRoleAsync(appUser, role.Name, MixTenantId);
+                    return Ok();
+                }
+            }
+            else
+            {
+                var appUser = await _userManager.FindByIdAsync(model.UserId);
+
+                if (appUser == null)
+                {
+                    errors.Add($"User: {model.UserId} does not exists");
+                }
+
+                var removeResult = _userManager.RemoveFromRoleAsync(appUser, role.Name, MixTenantId);
+                return Ok();
+            }
+            return BadRequest(errors);
+        }
+
+        [MixAuthorize(roles: "SuperAdmin, Owner")]
         [HttpGet("list")]
         public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
         {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var roles = await _userManager.GetRolesAsync(user);
             Expression<Func<MixUser, bool>> predicate = model =>
                 (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
@@ -172,7 +214,6 @@ namespace Mix.Account.Controllers
 
         // POST api/template
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [MixAuthorize]
         [HttpPost]
         [Route("save")]
         public async Task<ActionResult<MixUserViewModel>> Save(
