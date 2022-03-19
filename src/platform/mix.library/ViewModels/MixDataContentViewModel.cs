@@ -199,7 +199,7 @@
 
         public override async Task<Guid> CreateParentAsync()
         {
-            MixDataViewModel parent = new (UowInfo)
+            MixDataViewModel parent = new(UowInfo)
             {
                 Id = Guid.NewGuid(),
                 CreatedDateTime = DateTime.UtcNow,

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Mix.Lib.ViewModels;
 using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers

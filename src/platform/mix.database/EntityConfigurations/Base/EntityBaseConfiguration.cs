@@ -21,7 +21,7 @@ namespace Mix.Database.EntityConfigurations.Base
             builder.Property(e => e.Id)
                 .UseDefaultGUIDIf(typeof(TPrimaryKey) == typeof(Guid), Config.GenerateUUID)
                 .UseIncreaseValueIf(typeof(TPrimaryKey) == typeof(int));
-                
+
 
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(Config.DateTime);
