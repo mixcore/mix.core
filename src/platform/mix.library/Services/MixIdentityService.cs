@@ -29,7 +29,9 @@ namespace Mix.Lib.Services
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
+        protected int MixTenantId { get; set; }
         public MixIdentityService(
+            IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
@@ -47,6 +49,10 @@ namespace Mix.Lib.Services
             _authConfigService = authConfigService;
             _roleRepo = RoleViewModel.GetRootRepository(accountContext);
             _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
             LoadRoles();
         }
 
@@ -65,7 +71,7 @@ namespace Mix.Lib.Services
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                return await GetAuthData(_context, user, model.RememberMe);
+                return await GetAuthData(_context, user, model.RememberMe, MixTenantId);
             }
             else
             {
@@ -74,15 +80,15 @@ namespace Mix.Lib.Services
 
         }
 
-        public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe)
+        public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe, int tenantId)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = AesEncryptionHelper.GenerateCombinedKeys();
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
-                token.Info = new(context, user);
-                await token.Info.LoadUserDataAsync();
+                token.Info = new(user, context);
+                await token.Info.LoadUserDataAsync(tenantId);
                 var plainText = JsonConvert.SerializeObject(
                     token,
                     new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
@@ -118,7 +124,7 @@ namespace Mix.Lib.Services
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                return await GetAuthData(_context, user, true);
+                return await GetAuthData(_context, user, true, tenantId);
             }
             throw new MixException(createResult.Errors.First().Description);
         }
@@ -180,7 +186,7 @@ namespace Mix.Lib.Services
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(_context, user, true);
+                    return await GetAuthData(_context, user, true, MixTenantId);
                 }
                 else if (!string.IsNullOrEmpty(model.Email))// register new account
                 {
@@ -190,7 +196,7 @@ namespace Mix.Lib.Services
                         UserName = model.Email
                     };
                     await _userManager.CreateAsync(user);
-                    return await GetAuthData(_context, user, true);
+                    return await GetAuthData(_context, user, true, MixTenantId);
                 }
                 else
                 {
@@ -215,7 +221,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(_context, user, true);
+                        var token = await GetAuthData(_context, user, true, MixTenantId);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();

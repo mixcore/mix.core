@@ -1,4 +1,4 @@
-/* Sat Mar 05 2022 11:07:57 GMT+0700 (Indochina Time) */fb-login {
+/* Sat Mar 19 2022 10:02:46 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -106,6 +106,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 main-side-bar-dynamic .sw-sidebar .sw-toc-item {
   position: relative; }
   main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
@@ -137,10 +141,6 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;

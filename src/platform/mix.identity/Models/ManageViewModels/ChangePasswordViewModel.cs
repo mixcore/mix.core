@@ -17,7 +17,7 @@ namespace Mix.Identity.Models.ManageViewModels
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]
-        public string OldPassword { get; set; }
+        public string CurrentPassword { get; set; }
 
         /// <summary>
         /// Gets or sets the new password.

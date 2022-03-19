@@ -7,7 +7,6 @@ using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Dtos;
-using Mix.Identity.Enums;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -130,7 +129,24 @@ namespace Mix.Account.Controllers
             return Ok(token);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
+        [HttpGet]
+        [MixAuthorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [Route("details/{id}")]
+        public async Task<ActionResult> Details(string viewType, string id = null)
+        {
+            MixUser user = await _userManager.FindByIdAsync(id); ;
+
+            if (user != null)
+            {
+                var result = new MixUserViewModel(user, _cmsContext);
+                await result.LoadUserDataAsync(MixTenantId);
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
         [HttpGet("list")]
         public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
         {
@@ -162,20 +178,17 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult<MixUserViewModel>> Save(
             [FromBody] MixUserViewModel model)
         {
-            if (model != null && model.User != null)
+            if (model != null)
             {
-                var user = await _userManager.FindByIdAsync(model.User.Id.ToString());
-                user.Email = model.User.Email;
-                user.FirstName = model.User.FirstName;
-                user.LastName = model.User.LastName;
-                user.Avatar = model.User.Avatar;
+                var user = await _userManager.FindByIdAsync(model.Id.ToString());
+                user.Email = model.Email;
                 var updInfo = await _userManager.UpdateAsync(user);
                 //var saveData = await model.UserData.SaveAsync();
                 if (model.IsChangePassword)
                 {
                     var changePwd = await _userManager.ChangePasswordAsync(
-                        model.User,
-                        model.ChangePassword.OldPassword,
+                        user,
+                        model.ChangePassword.CurrentPassword,
                         model.ChangePassword.NewPassword);
                     if (!changePwd.Succeeded)
                     {
