@@ -18,17 +18,5 @@ namespace Mix.Lib.Services
         }
 
         public MixCmsAccountContext Context { get; }
-
-        public override async Task<IdentityResult> CreateAsync(MixRole role)
-        {
-            CancellationTokenSource token = new CancellationTokenSource();
-            if (Context.MixRoles.Any(m => m.Name == role.Name && m.MixTenantId == role.MixTenantId))
-            {
-                return IdentityResult.Failed();
-            }
-            role.NormalizedName = role.Name.ToUpper();
-            role.ConcurrencyStamp = Guid.NewGuid().ToString();
-            return await Store.CreateAsync(role, token.Token);
-        }
     }
 }

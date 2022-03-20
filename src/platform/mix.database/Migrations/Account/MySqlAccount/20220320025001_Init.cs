@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -57,7 +58,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
@@ -76,27 +76,13 @@ namespace Mix.Database.Migrations.MySqlAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
-                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActived = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     RegisterType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    NickName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Gender = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", nullable: true, collation: "utf8_unicode_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
                     LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
                     UserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
@@ -254,6 +240,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 {
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
                     RoleId = table.Column<Guid>(type: "char(36)", nullable: false, defaultValueSql: "'uuid()'", collation: "ascii_general_ci"),
+                    MixTenantId = table.Column<int>(type: "int", nullable: false),
                     AspNetRolesId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixRoleId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     MixUserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
@@ -261,7 +248,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
                         column: x => x.AspNetRolesId,

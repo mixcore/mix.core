@@ -32,15 +32,33 @@ namespace Mix.Lib.Services
         public MixCmsAccountContext Context { get; }
 
 
-        public async Task AddToRoleAsync(MixUser user, string roleName, int tenantId)
+        public override async Task<IdentityResult> AddToRoleAsync(MixUser user, string roleName)
         {
-            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString() && x.MixTenantId == tenantId);
-            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id))
+            var result = new IdentityResult();
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString());
+            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == MixTenantId))
             {
                 Context.AspNetUserRoles.Add(new AspNetUserRoles()
                 {
                     UserId = user.Id,
-                    RoleId = role.Id
+                    RoleId = role.Id,
+                    MixTenantId = MixTenantId
+                });
+                await Context.SaveChangesAsync();
+            }
+            return await base.UpdateAsync(user);
+        }
+
+        public async Task AddToRoleAsync(MixUser user, string roleName, int tenantId)
+        {
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString());
+            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == tenantId))
+            {
+                Context.AspNetUserRoles.Add(new AspNetUserRoles()
+                {
+                    UserId = user.Id,
+                    RoleId = role.Id,
+                    MixTenantId = tenantId
                 });
                 await Context.SaveChangesAsync();
             }
@@ -48,8 +66,8 @@ namespace Mix.Lib.Services
 
         public async Task RemoveFromRoleAsync(MixUser user, string roleName, int tenantId)
         {
-            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString() && x.MixTenantId == tenantId);
-            var userRole = Context.AspNetUserRoles.SingleOrDefault(m => m.UserId == user.Id && m.RoleId == role.Id);
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString());
+            var userRole = Context.AspNetUserRoles.SingleOrDefault(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == tenantId);
             if (userRole != null)
             {
                 Context.AspNetUserRoles.Remove(userRole);
@@ -70,18 +88,18 @@ namespace Mix.Lib.Services
             }
         }
 
-        public bool IsInRoleAsync(MixUser appUser, string name, int tenantId)
+        public override Task<bool> IsInRoleAsync(MixUser user, string roleName)
         {
-            var role = Context.MixRoles.SingleOrDefault(x => x.Name == name && x.MixTenantId == tenantId);
-            return Context.AspNetUserRoles.Any(m => m.UserId == appUser.Id && m.RoleId == role.Id);
+            var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName);
+            return Context.AspNetUserRoles.AnyAsync(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == MixTenantId);
         }
 
         public override async Task<IList<string>> GetRolesAsync(MixUser user)
         {
             var roles = from ur in Context.AspNetUserRoles
-                        join r in Context.MixRoles.Where(m => m.MixTenantId == MixTenantId)
+                        join r in Context.MixRoles
                         on ur.RoleId equals r.Id
-                        where ur.UserId == user.Id
+                        where ur.UserId == user.Id && ur.MixTenantId == MixTenantId
                         select r.Name;
             return await roles.ToListAsync();
         }

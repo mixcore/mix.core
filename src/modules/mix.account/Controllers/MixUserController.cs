@@ -165,7 +165,7 @@ namespace Mix.Account.Controllers
                 {
                     errors.Add($"User: {model.UserId} does not exists");
                 }
-                else if (!(_userManager.IsInRoleAsync(appUser, role.Name, MixTenantId)))
+                else if (! await(_userManager.IsInRoleAsync(appUser, role.Name)))
                 {
                     await _userManager.AddToRoleAsync(appUser, role.Name, MixTenantId);
                     return Ok();
@@ -196,15 +196,14 @@ namespace Mix.Account.Controllers
                 (string.IsNullOrWhiteSpace(request.Keyword)
                 || (
                     (EF.Functions.Like(model.UserName, $"%{request.Keyword}%"))
-                   || (EF.Functions.Like(model.FirstName, $"%{request.Keyword}%"))
-                   || (EF.Functions.Like(model.LastName, $"%{request.Keyword}%"))
+                   || (EF.Functions.Like(model.Email, $"%{request.Keyword}%"))
                    )
                 )
                 && (!request.FromDate.HasValue
-                    || (model.JoinDate >= request.FromDate.Value.ToUniversalTime())
+                    || (model.CreatedDateTime >= request.FromDate.Value.ToUniversalTime())
                 )
                 && (!request.ToDate.HasValue
-                    || (model.JoinDate <= request.ToDate.Value.ToUniversalTime())
+                    || (model.CreatedDateTime <= request.ToDate.Value.ToUniversalTime())
                 );
             var searchQuery = new SearchAccountQueryModel(request);
             var data = await _repository.GetPagingEntitiesAsync(predicate, searchQuery.PagingData)

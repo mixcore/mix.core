@@ -22,50 +22,21 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.Property(e => e.Id)
                  .HasDefaultValueSql(Config.GenerateUUID);
 
-            builder.Property(e => e.Avatar)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.MediumLength}");
-
             builder.Property(e => e.ConcurrencyStamp)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-
-            builder.Property(e => e.Culture)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.DOB)
-                .HasColumnName("DOB")
-                .HasColumnType(Config.DateTime);
-
+            
             builder.Property(e => e.Email)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
-            builder.Property(e => e.FirstName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.Gender)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.JoinDate)
+            builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.LastModified)
                 .HasColumnType(Config.DateTime);
-
-            builder.Property(e => e.LastName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.LockoutEnd)
                 .HasColumnType(Config.DateTime);
@@ -74,11 +45,6 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-
-            builder.Property(e => e.NickName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.NormalizedEmail)
                 .HasCharSet(Config.CharSet)

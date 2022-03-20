@@ -117,7 +117,7 @@ namespace Mixcore.Controllers
                     {
                         Email = email,
                         UserName = email,
-                        JoinDate = DateTime.UtcNow
+                        CreatedDateTime = DateTime.UtcNow
                     };
                     var result = await _userManager.CreateAsync(user);
                     if (result.Succeeded)

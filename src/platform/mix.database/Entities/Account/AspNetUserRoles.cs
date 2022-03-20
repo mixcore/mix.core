@@ -2,5 +2,8 @@
 {
     public partial class AspNetUserRoles : IdentityUserRole<Guid>
     {
+        public new Guid UserId { get; set; }
+        public new Guid RoleId { get; set; }
+        public int MixTenantId { get; set; }
     }
 }

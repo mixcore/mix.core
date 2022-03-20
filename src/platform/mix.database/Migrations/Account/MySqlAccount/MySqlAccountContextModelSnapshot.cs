@@ -194,13 +194,16 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid?>("MixRoleId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("MixUserId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("MixUserId1")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
                     b.HasIndex("AspNetRolesId");
 
@@ -305,9 +308,6 @@ namespace Mix.Database.Migrations.MySqlAccount
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
                         .UseCollation("utf8_unicode_ci");
@@ -339,30 +339,14 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Avatar"), "utf8");
-
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ConcurrencyStamp"), "utf8");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Culture")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Culture"), "utf8");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime")
-                        .HasColumnName("DOB");
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
@@ -373,32 +357,11 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FirstName"), "utf8");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Gender"), "utf8");
-
                     b.Property<bool>("IsActived")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LastName"), "utf8");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -411,12 +374,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ModifiedBy"), "utf8");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NickName"), "utf8");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("varchar(250)")

@@ -21,8 +21,7 @@ namespace Mix.Tenancy.Domain.Services
                     await _roleManager.CreateAsync(new MixRole()
                     {
                         Id = Guid.NewGuid(),
-                        Name = role.ToString(),
-                        MixTenantId = tenantId
+                        Name = role.ToString()
                     }
                     );
                 }
@@ -35,9 +34,7 @@ namespace Mix.Tenancy.Domain.Services
                     Id = Guid.NewGuid(),
                     UserName = model.UserName,
                     Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    JoinDate = DateTime.UtcNow,
+                    CreatedDateTime = DateTime.UtcNow,
                     LastModified = DateTime.UtcNow
 
                 };
