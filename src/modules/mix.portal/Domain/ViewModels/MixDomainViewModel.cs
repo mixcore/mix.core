@@ -1,7 +1,7 @@
 
-namespace Mix.Tenancy.Domain.ViewModels.Init
+namespace Mix.Portal.Domain.ViewModels
 {
-    public class InitDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, InitDomainViewModel>
+    public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
         public string Host { get; set; }
         public override void InitDefaultValues(string language = null, int? DomainId = null)

@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
+		<Using Include="System.ComponentModel.DataAnnotations" />
 		<Using Include="Newtonsoft.Json.Linq" />
 		<Using Include="Newtonsoft.Json" />
 		<Using Include="Microsoft.AspNetCore.Authorization" />
@@ -45,12 +46,12 @@
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
-		<ProjectReference Include="..\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Domain\Helpers\" />
 		<Folder Include="Domain\Subscribers\" />
+		<Folder Include="MixContent\" />
 	</ItemGroup>
 
 	<ItemGroup>
