@@ -20,6 +20,5 @@ namespace Mix.Lib.Services
                 tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
         }
-        public override IQueryable<MixRole> Roles => base.Roles.Where(r => r.MixTenantId == tenantId);
     }
 }

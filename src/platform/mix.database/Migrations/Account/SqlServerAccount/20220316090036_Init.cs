@@ -44,7 +44,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
-                    MixTenantId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS")
@@ -59,19 +58,11 @@ namespace Mix.Database.Migrations.SqlServerAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
-                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatedDatetime = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActived = table.Column<bool>(type: "bit", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     RegisterType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    NickName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    Gender = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    CountryId = table.Column<int>(type: "int", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", nullable: true, collation: "Vietnamese_CI_AS"),
-                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
                     LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
                     UserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
                     NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),
@@ -205,6 +196,7 @@ namespace Mix.Database.Migrations.SqlServerAccount
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
                     RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    MixTenantId = table.Column<int>(type: "int", nullable: false),
                     AspNetRolesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     MixUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -212,7 +204,7 @@ namespace Mix.Database.Migrations.SqlServerAccount
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
                         column: x => x.AspNetRolesId,

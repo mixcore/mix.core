@@ -195,7 +195,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.Property<Guid?>("MixUserId1")
                         .HasColumnType("uuid");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
                     b.HasIndex("AspNetRolesId");
 
@@ -292,9 +292,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
@@ -324,27 +321,10 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Culture")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("DOB");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
@@ -354,29 +334,14 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.Property<bool>("IsActived")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("JoinDate")
+                    b.Property<DateTime>("CreatedDatetime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -386,11 +351,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -544,6 +504,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasOne("Mix.Database.Entities.Account.MixRole", null)
                         .WithMany("AspNetUserRoles")
                         .HasForeignKey("MixRoleId");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
 
                     b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                         .WithMany("AspNetUserRolesApplicationUser")

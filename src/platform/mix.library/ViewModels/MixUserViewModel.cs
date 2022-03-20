@@ -50,9 +50,9 @@ namespace Mix.Lib.ViewModels
                 Id);
             using var context = new MixCmsAccountContext();
             var roles = from ur in context.AspNetUserRoles
-                        join r in context.MixRoles.Where(m=>m.MixTenantId == tenantId)
+                        join r in context.MixRoles
                         on ur.RoleId equals r.Id
-                        where ur.UserId == Id
+                        where ur.UserId == Id && ur.MixTenantId == tenantId
                         select ur;
             Roles = await roles.ToListAsync();
 

@@ -41,7 +41,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("Id");
 
@@ -59,7 +59,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
@@ -111,7 +111,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("Id");
 
@@ -150,7 +150,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
@@ -169,12 +169,15 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("AspNetRolesId")
                         .HasColumnType("TEXT");
@@ -188,7 +191,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid?>("MixUserId1")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
                     b.HasIndex("AspNetRolesId");
 
@@ -208,7 +211,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
@@ -278,15 +281,12 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
@@ -312,32 +312,18 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Culture")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime")
-                        .HasColumnName("DOB");
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
@@ -347,29 +333,11 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.Property<bool>("IsActived")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -379,11 +347,6 @@ namespace Mix.Database.Migrations.SqliteAccount
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -446,7 +409,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("MixUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("INTEGER");
@@ -465,7 +428,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValueSql("newid()");
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("varchar(50)")

@@ -39,17 +39,6 @@ namespace Mix.Portal.Controllers
             var tenantId = await base.CreateHandlerAsync(data);
             MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
             await _uow.CompleteAsync();
-            var roles = MixHelper.LoadEnumValues(typeof(MixRoles));
-            foreach (var role in roles)
-            {
-                await _roleManager.CreateAsync(new MixRole()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = role.ToString(),
-                    MixTenantId = tenantId
-                }
-                );
-            }
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
@@ -67,7 +56,7 @@ namespace Mix.Portal.Controllers
             await base.DeleteHandler(data);
             MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
             await _uow.CompleteAsync();
-            foreach (var item in _accContext.MixRoles.Where(m => m.MixTenantId == data.Id))
+            foreach (var item in _accContext.AspNetUserRoles.Where(m => m.MixTenantId == data.Id))
             {
                 _accContext.Entry(item).State = EntityState.Deleted;
             }

@@ -45,7 +45,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu")
@@ -60,19 +59,11 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    JoinDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsActived = table.Column<bool>(type: "boolean", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     RegisterType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    NickName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    Gender = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    CountryId = table.Column<int>(type: "integer", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    DOB = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     LockoutEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     UserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -206,6 +197,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    MixTenantId = table.Column<int>(type: "int", nullable: false),
                     AspNetRolesId = table.Column<Guid>(type: "uuid", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "uuid", nullable: true),
                     MixUserId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -213,7 +205,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
                         column: x => x.AspNetRolesId,

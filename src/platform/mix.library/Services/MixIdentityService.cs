@@ -113,9 +113,7 @@ namespace Mix.Lib.Services
                 Id = Guid.NewGuid(),
                 UserName = model.UserName,
                 Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                JoinDate = DateTime.UtcNow
+                CreatedDateTime = DateTime.UtcNow
             };
 
             var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);

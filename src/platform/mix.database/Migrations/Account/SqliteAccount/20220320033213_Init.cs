@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -12,7 +13,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
@@ -43,8 +44,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "MixRoles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
-                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
@@ -58,20 +58,12 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "MixUsers",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
-                    JoinDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActived = table.Column<bool>(type: "INTEGER", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     RegisterType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
-                    NickName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    Gender = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    CountryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Culture = table.Column<string>(type: "varchar(50)", nullable: true, collation: "NOCASE"),
-                    DOB = table.Column<DateTime>(type: "datetime", nullable: true),
                     LockoutEnd = table.Column<DateTime>(type: "datetime", nullable: true),
                     UserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
@@ -97,7 +89,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 columns: table => new
                 {
                     TenantId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MixUserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()")
+                    MixUserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())")
                 },
                 constraints: table =>
                 {
@@ -108,7 +100,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "RefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ClientId = table.Column<Guid>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     Email = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
@@ -127,7 +119,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
                     AspNetRolesId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
                 },
@@ -154,7 +146,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                         .Annotation("Sqlite:Autoincrement", true),
                     MixUserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixUserId1 = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
                     ClaimValue = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE")
                 },
@@ -182,7 +174,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                     MixUserId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixUserId1 = table.Column<Guid>(type: "TEXT", nullable: true),
                     ProviderDisplayName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "NOCASE"),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()")
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())")
                 },
                 constraints: table =>
                 {
@@ -203,8 +195,9 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
-                    RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
+                    RoleId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
+                    MixTenantId = table.Column<int>(type: "INTEGER", nullable: false),
                     AspNetRolesId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "TEXT", nullable: true),
                     MixUserId = table.Column<Guid>(type: "TEXT", nullable: true),
@@ -212,7 +205,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
                         column: x => x.AspNetRolesId,
@@ -239,7 +232,7 @@ namespace Mix.Database.Migrations.SqliteAccount
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "newid()"),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false, defaultValueSql: "(newid())"),
                     LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "NOCASE"),
                     MixUserId = table.Column<Guid>(type: "TEXT", nullable: true),

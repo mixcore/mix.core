@@ -77,8 +77,8 @@ namespace Mix.Identity.Models
         private void BuildPredicate()
         {
             Predicate = m => true;
-            Predicate = Predicate.AndAlsoIf(FromDate != null, model => model.JoinDate >= FromDate);
-            Predicate = Predicate.AndAlsoIf(ToDate != null, model => model.JoinDate <= ToDate);
+            Predicate = Predicate.AndAlsoIf(FromDate != null, model => model.CreatedDateTime >= FromDate);
+            Predicate = Predicate.AndAlsoIf(ToDate != null, model => model.CreatedDateTime <= ToDate);
             Predicate = Predicate.AndAlsoIf(AndPredicate != null, AndPredicate);
             Predicate = Predicate.OrIf(OrPredicate != null, OrPredicate);
         }
