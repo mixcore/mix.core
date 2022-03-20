@@ -102,7 +102,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.UseMixSignalR();
-
+            app.ConfigureExceptionHandler(isDevelop);
 
             return app;
         }

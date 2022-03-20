@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Constants;
+using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
@@ -83,7 +84,7 @@ namespace Mix.Lib.Services
         public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe, int tenantId)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
-            var aesKey = AesEncryptionHelper.GenerateCombinedKeys();
+            var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
@@ -96,11 +97,30 @@ namespace Mix.Lib.Services
 
                 var resp = new JObject()
                         {
-                            new JProperty(MixEncryptKeywords.AESKey, aesKey),
-                            new JProperty(MixEncryptKeywords.RSAKey, rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
+                            //new JProperty(MixEncryptKeywords.AESKey, aesKey),
+                            //new JProperty(MixEncryptKeywords.RSAKey, rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
                             new JProperty(MixEncryptKeywords.Message, encryptedInfo)
                         };
                 return resp;
+            }
+            return default;
+        }
+
+        public async Task<JObject> GetToken(GetTokenModel model)
+        {
+            MixUser user = null;
+            if (!string.IsNullOrEmpty(model.Email))
+            {
+                user = await _userManager.FindByEmailAsync(model.Email);
+            }
+            else if (!string.IsNullOrEmpty(model.PhoneNumber))
+            {
+                user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+            }
+
+            if (user != null)
+            {
+                return await GetAuthData(_context, user, true, MixTenantId);
             }
             return default;
         }

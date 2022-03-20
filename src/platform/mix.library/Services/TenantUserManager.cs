@@ -30,6 +30,10 @@ namespace Mix.Lib.Services
 
         public MixCmsAccountContext Context { get; }
 
+        public async Task<MixUser> FindByPhoneNumberAsync(string phoneNumber)
+        {
+            return await Context.MixUsers.SingleOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+        }
 
         public override async Task<IdentityResult> AddToRoleAsync(MixUser user, string roleName)
         {

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
+using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
@@ -99,6 +100,22 @@ namespace Mix.Account.Controllers
             return Ok();
         }
 
+        [Route("token")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetToken([FromBody] LoginDto requestDto)
+        {
+            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
+            var model = JsonConvert.DeserializeObject<GetTokenModel>(decryptMsg);
+            var loginResult = await _idService.GetToken(model);
+            if (loginResult != null)
+            {
+                return Ok(loginResult);
+            }
+            return Unauthorized();
+        }
+        
         [Route("login")]
         [HttpPost]
         [AllowAnonymous]

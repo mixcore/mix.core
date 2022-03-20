@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Account;
 
@@ -11,10 +10,9 @@ using Mix.Database.Entities.Account;
 namespace Mix.Database.Migrations.MySqlAccount
 {
     [DbContext(typeof(MySqlAccountContext))]
-    [Migration("20220320025001_Init")]
-    partial class Init
+    partial class MySqlAccountContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,14 +188,14 @@ namespace Mix.Database.Migrations.MySqlAccount
                         .HasColumnType("char(36)")
                         .HasDefaultValueSql("'uuid()'");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("AspNetRolesId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("MixRoleId")
                         .HasColumnType("char(36)");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
 
                     b.Property<Guid?>("MixUserId")
                         .HasColumnType("char(36)");
@@ -205,7 +203,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid?>("MixUserId1")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
                     b.HasIndex("AspNetRolesId");
 
