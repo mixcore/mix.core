@@ -4,7 +4,7 @@ namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public class MixDatabaseViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]

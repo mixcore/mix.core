@@ -746,6 +746,12 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 

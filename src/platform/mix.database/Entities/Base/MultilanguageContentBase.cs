@@ -1,6 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-
-namespace Mix.Database.Entities.Base
+﻿namespace Mix.Database.Entities.Base
 {
     public abstract class MultiLanguageContentBase<TPrimaryKey> : EntityBase<TPrimaryKey>
         where TPrimaryKey : IComparable

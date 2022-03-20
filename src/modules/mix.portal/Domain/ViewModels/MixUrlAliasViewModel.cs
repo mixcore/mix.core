@@ -2,7 +2,7 @@
 {
     [GenerateRestApiController]
     public class MixUrlAliasViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixUrlAlias, int, MixUrlAliasViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixUrlAlias, int, MixUrlAliasViewModel>
     {
         #region Properties
         public int? SourceContentId { get; set; }

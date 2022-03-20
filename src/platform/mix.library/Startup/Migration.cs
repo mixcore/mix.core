@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 var mixDatabaseService = services.GetService<MixDatabaseService>();
-                mixDatabaseService.InitMixCmsContext();
+                mixDatabaseService.InitMixCmsContextAsync();
 
                 // TODO: Update cache service
                 //MixCacheService.InitMixCacheContext();

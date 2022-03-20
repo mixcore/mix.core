@@ -801,6 +801,13 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+                    
+                    b.Property<string>("Host")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Host"), "utf8");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");

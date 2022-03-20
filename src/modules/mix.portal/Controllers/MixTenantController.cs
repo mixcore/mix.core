@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
 using Mix.Lib.Repositories;
+using Mix.Tenancy.Domain.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -13,6 +14,8 @@ namespace Mix.Portal.Controllers
     public class MixTenantController
         : MixRestApiControllerBase<MixTenantViewModel, MixCmsContext, MixTenant, int>
     {
+        private readonly InitCmsService _initCmsService;
+        private readonly MixThemeImportService _importService;
         private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixCmsAccountContext _accContext;
@@ -25,12 +28,14 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService,
-            RoleManager<MixRole> roleManager, TenantUserManager userManager, MixCmsAccountContext accContext)
+            RoleManager<MixRole> roleManager, TenantUserManager userManager, MixCmsAccountContext accContext, MixThemeImportService importService, InitCmsService initCmsService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _accContext = accContext;
+            _importService = importService;
+            _initCmsService = initCmsService;
         }
 
         #region Overrides

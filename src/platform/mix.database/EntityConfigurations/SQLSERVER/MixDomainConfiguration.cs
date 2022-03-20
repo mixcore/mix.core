@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Cms;
-using Mix.Database.EntityConfigurations.SQLSERVER.Base;
+﻿using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
@@ -9,6 +7,11 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
         public override void Configure(EntityTypeBuilder<MixDomain> builder)
         {
             base.Configure(builder);
+            builder.Property(e => e.Host)
+                .IsRequired()
+                .HasColumnType($"{Config.String}{Config.MediumLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
     }
 }

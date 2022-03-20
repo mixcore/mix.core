@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Mix.Identity.Models.AccountViewModels
+﻿namespace Mix.Identity.Models.AccountViewModels
 {
     public class UserRoleModel
     {

@@ -128,6 +128,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    Host = table.Column<string>(type: "varchar(250)", nullable: false, collation: "NOCASE"),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),

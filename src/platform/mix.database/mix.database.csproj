@@ -18,6 +18,9 @@
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="System" />
 		<Using Include="Microsoft.AspNetCore.Identity" />
+		<Using Include="Microsoft.EntityFrameworkCore" />
+		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
+		<Using Include="Mix.Database.Entities.Cms" />
 	</ItemGroup>
 
   <ItemGroup>

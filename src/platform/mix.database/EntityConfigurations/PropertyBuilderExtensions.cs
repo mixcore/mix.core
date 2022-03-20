@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace Mix.Database.EntityConfigurations
+﻿namespace Mix.Database.EntityConfigurations
 {
     public static class PropertyBuilderExtensions
     {

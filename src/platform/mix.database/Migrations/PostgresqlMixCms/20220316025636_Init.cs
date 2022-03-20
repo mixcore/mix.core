@@ -132,6 +132,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Host = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),

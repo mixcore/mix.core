@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Account;
+﻿using Mix.Database.Entities.Account;
 
 namespace Mix.Database.EntityConfigurations.Base.Account
 {
@@ -26,7 +24,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-            
+
             builder.Property(e => e.Email)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)

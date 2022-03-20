@@ -7,7 +7,6 @@ using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Dtos;
-using Mix.Identity.Enums;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
@@ -144,7 +143,7 @@ namespace Mix.Account.Controllers
             }
             return BadRequest();
         }
-        
+
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
         [Route("user-in-role")]
@@ -165,7 +164,7 @@ namespace Mix.Account.Controllers
                 {
                     errors.Add($"User: {model.UserId} does not exists");
                 }
-                else if (! await(_userManager.IsInRoleAsync(appUser, role.Name)))
+                else if (!await (_userManager.IsInRoleAsync(appUser, role.Name)))
                 {
                     await _userManager.AddToRoleAsync(appUser, role.Name, MixTenantId);
                     return Ok();

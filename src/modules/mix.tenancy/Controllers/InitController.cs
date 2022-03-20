@@ -65,6 +65,7 @@ namespace Mix.Tenancy.Controllers
                 try
                 {
                     model.PrimaryDomain ??= Request.Headers.Host;
+                    await _initCmsService.InitDbContext(model);
                     await _initCmsService.InitTenantAsync(model);
                     return NoContent();
                 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Database.Entities.Account;
+﻿using Mix.Database.Entities.Account;
 
 namespace Mix.Database.EntityConfigurations.Base.Account
 {
