@@ -71,10 +71,13 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
 		<EmbeddedResource Include="..\..\shared\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Remove="wwwroot\mix-content\**" />
 	  <EmbeddedResource Remove="..\..\shared\MixContent\**" />
+	  <EmbeddedResource Remove="wwwroot\mix-content\**" />
+	  <None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
 </Project>

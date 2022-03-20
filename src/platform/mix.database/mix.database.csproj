@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -28,6 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\Account\MySqlAccount\" />
+    <Folder Include="Migrations\MySqlAccount\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />
     <Folder Include="Migrations\SqlServerMixCms\" />

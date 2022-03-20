@@ -43,6 +43,13 @@ namespace Mix.Shared.Services
         {
         }
 
+        public new string AesKey
+        {
+            get { return Instance.AppSettings.ApiEncryptKey; }
+            set { Instance.AppSettings.ApiEncryptKey = value; }
+        }
+
+
         public bool IsInit => AppSettings.IsInit;
         public string DefaultCulture => AppSettings.DefaultCulture;
         public string Domain => AppSettings.Domain;

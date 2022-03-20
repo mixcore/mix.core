@@ -54,7 +54,6 @@ namespace Microsoft.Extensions.DependencyInjection
             string endPoint = $"/{swaggerBasePath}/swagger/{version}/swagger.json";
             if (isDevelop)
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger(opt => opt.RouteTemplate = routeTemplate);
                 app.UseSwaggerUI(c =>
                 {
