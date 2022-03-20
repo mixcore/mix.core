@@ -28,8 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\Account\MySqlAccount\" />
-    <Folder Include="Migrations\MySqlAccount\" />
     <Folder Include="Migrations\PostgresqlMixCms\" />
     <Folder Include="Migrations\SqliteMixCms\" />
     <Folder Include="Migrations\SqlServerMixCms\" />

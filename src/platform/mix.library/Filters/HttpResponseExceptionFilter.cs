@@ -15,22 +15,22 @@ namespace Mix.Lib.Filters
             {
                 context.Result = exception.Status switch
                 {
-                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Message)
+                    MixErrorStatus.UnAuthorized => new UnauthorizedObjectResult(exception.Errors)
                     {
                         StatusCode = (int)exception.Status,
                     },
                     MixErrorStatus.Forbidden => new ForbidResult()
                     {
                     },
-                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Message)
+                    MixErrorStatus.Badrequest => new BadRequestObjectResult(exception.Errors)
                     {
                         StatusCode = (int)exception.Status,
                     },
-                    MixErrorStatus.ServerError => new ObjectResult(exception.Message)
+                    MixErrorStatus.ServerError => new ObjectResult(exception.Errors)
                     {
                         StatusCode = (int)exception.Status,
                     },
-                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Message)
+                    MixErrorStatus.NotFound => new NotFoundObjectResult(exception.Errors)
                     {
                         StatusCode = (int)exception.Status,
                     },
@@ -41,6 +41,11 @@ namespace Mix.Lib.Filters
                 };
                 context.ExceptionHandled = true;
             }
+            else if(context.Exception is Exception)
+            {
+                context.Result = new ObjectResult(context.Exception.Message?.Split('\n'));
+            }
+            context.ExceptionHandled = true;
         }
     }
 }

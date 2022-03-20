@@ -38,7 +38,7 @@ namespace Mix.Lib.Base
         {
             if (data == null)
             {
-                return BadRequest("Null Object");
+                throw new MixException(MixErrorStatus.Badrequest, "Null Object");
             }
             if (ReflectionHelper.HasProperty(typeof(TView), MixRequestQueryKeywords.MixTenantId))
             {
@@ -61,7 +61,7 @@ namespace Mix.Lib.Base
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id != currentId)
             {
-                return BadRequest();
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
             }
             data.SetUowInfo(_uow);
             await UpdateHandler(id, data);
@@ -94,7 +94,7 @@ namespace Mix.Lib.Base
         {
             if (data == null)
             {
-                return BadRequest("Null Object");
+                throw new MixException(MixErrorStatus.Badrequest, "Null Object");
             }
             foreach (var item in data)
             {

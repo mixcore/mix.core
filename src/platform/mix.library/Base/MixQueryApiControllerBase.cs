@@ -83,7 +83,7 @@ namespace Mix.Lib.Base
         public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
         {
             var data = await GetById(id);
-            return data != null ? Ok(data) : NotFound(id);
+            return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
         }
 
 
