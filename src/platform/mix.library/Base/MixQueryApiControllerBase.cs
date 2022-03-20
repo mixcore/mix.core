@@ -89,11 +89,11 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("default")]
-        [HttpGet("{lang}/default")]
+        [HttpGet($"default/{MixRequestQueryKeywords.Specificulture}")]
         public ActionResult<TView> GetDefault(string culture = null)
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
-            result.InitDefaultValues(_lang, _culture.Id);
+            result.InitDefaultValues(_culture?.Specificulture, _culture?.Id);
             result.ExpandView();
             return Ok(result);
         }

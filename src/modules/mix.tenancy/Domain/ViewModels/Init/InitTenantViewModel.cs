@@ -10,6 +10,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         public string Description { get; set; }
 
         public InitCultureViewModel Culture { get; set; }
+        public InitDomainViewModel Domain { get; set; }
 
         public InitTenantViewModel() : base()
         {
@@ -39,6 +40,23 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             Status = MixContentStatus.Published;
             CreatedDateTime = DateTime.UtcNow;
 
+            InitCulture(model);
+
+            InitDomain(model);
+        }
+
+        private void InitDomain(InitCmsDto model)
+        {
+            Domain = new()
+            {
+                DisplayName = model.PrimaryDomain,
+                Host = model.PrimaryDomain,
+                CreatedBy = CreatedBy
+            };
+        }
+
+        private void InitCulture(InitCmsDto model)
+        {
             Culture = new InitCultureViewModel()
             {
                 Title = model.Culture.FullName,
@@ -50,6 +68,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
                 Description = model.SiteName,
                 Status = MixContentStatus.Published,
                 CreatedDateTime = DateTime.UtcNow,
+                CreatedBy = CreatedBy
             };
         }
 
@@ -63,14 +82,27 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         {
             if (Culture != null)
             {
-                Culture.MixTenantId = parent.Id;
-
-                // Save and subscribe result for current consumer
-                // Or can use this instead of _consumer to listen result in this viewmodel 
-                // Then override ConsumeAsync to handle result
-                Culture.SetUowInfo(UowInfo);
-                await Culture.SaveAsync();
+                await SaveCultureAsync(parent);
             }
+            
+            if (Domain!= null)
+            {
+                await SaveDomainAsync(parent);
+            }
+        }
+
+        private async Task SaveCultureAsync(MixTenant parent)
+        {
+            Culture.MixTenantId = parent.Id;
+            Culture.SetUowInfo(UowInfo);
+            await Culture.SaveAsync();
+        }
+        
+        private async Task SaveDomainAsync(MixTenant parent)
+        {
+            Domain.MixTenantId = parent.Id;
+            Domain.SetUowInfo(UowInfo);
+            await Domain.SaveAsync();
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)
