@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Cms;
-using Mix.Database.EntityConfigurations.MYSQL;
+﻿using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base
 {
-    public abstract class SiteDataViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class TenantDataViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
@@ -11,15 +11,15 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
-        protected SiteDataViewModelBase()
+        protected TenantDataViewModelBase()
         {
         }
 
-        protected SiteDataViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected TenantDataViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected SiteDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected TenantDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }

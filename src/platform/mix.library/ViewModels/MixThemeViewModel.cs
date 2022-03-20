@@ -2,7 +2,7 @@
 {
     [GeneratePublisher]
     public class MixThemeViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixTheme, int, MixThemeViewModel>
     {
         #region Properties
         public string SystemName { get; set; }

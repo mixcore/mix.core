@@ -6,17 +6,19 @@ namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {
-        public async Task InitTenantAsync(InitCmsDto model)
+        public async Task InitDbContext(InitCmsDto model)
         {
             _databaseService.InitMixCmsContext(
                 model.ConnectionString,
                 model.DatabaseProvider,
                 model.Culture.Specificulture);
 
-            _databaseService.InitMixCmsContext();
+            await _databaseService.InitMixCmsContextAsync();
+        }
 
-            InitTenantViewModel vm = new(_context);
-            vm.InitSiteData(model);
+        public async Task InitTenantAsync(InitCmsDto model)
+        {
+            InitTenantViewModel vm = new(_context, model);
             await vm.SaveAsync();
             GlobalConfigService.Instance.AppSettings.DefaultCulture = model.Culture.Specificulture;
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;

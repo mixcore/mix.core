@@ -45,6 +45,7 @@
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
+		<ProjectReference Include="..\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

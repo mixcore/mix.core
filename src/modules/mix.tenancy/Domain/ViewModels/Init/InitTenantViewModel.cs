@@ -30,7 +30,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         {
         }
 
-        public void InitSiteData(InitCmsDto model)
+        public InitTenantViewModel(MixCmsContext context, InitCmsDto model) : base(context)
         {
             PrimaryDomain = model.PrimaryDomain;
             DisplayName = model.SiteName;
@@ -61,13 +61,16 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         protected override async Task SaveEntityRelationshipAsync(MixTenant parent)
         {
-            Culture.MixTenantId = parent.Id;
+            if (Culture != null)
+            {
+                Culture.MixTenantId = parent.Id;
 
-            // Save and subscribe result for current consumer
-            // Or can use this instead of _consumer to listen result in this viewmodel 
-            // Then override ConsumeAsync to handle result
-            Culture.SetUowInfo(UowInfo);
-            await Culture.SaveAsync();
+                // Save and subscribe result for current consumer
+                // Or can use this instead of _consumer to listen result in this viewmodel 
+                // Then override ConsumeAsync to handle result
+                Culture.SetUowInfo(UowInfo);
+                await Culture.SaveAsync();
+            }
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.EntityConfigurations.SQLITE;

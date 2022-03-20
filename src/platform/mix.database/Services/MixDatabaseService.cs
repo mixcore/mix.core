@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities;
+﻿using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Services;
 using Mix.Shared.Constants;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using System.Threading.Tasks;
 
 namespace Mix.Database.Services
 {
@@ -91,10 +90,10 @@ namespace Mix.Database.Services
             SaveSettings();
         }
 
-        public void InitMixCmsContext()
+        public async Task InitMixCmsContextAsync()
         {
             using var ctx = GetDbContext();
-            ctx.Database.Migrate();
+            await ctx.Database.MigrateAsync();
             //var transaction = ctx.Database.BeginTransaction();
             //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
             //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();

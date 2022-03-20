@@ -2,7 +2,7 @@
 {
     [GenerateRestApiController]
     public class MixCultureViewModel
-        : SiteDataViewModelBase<MixCmsContext, MixCulture, int, MixCultureViewModel>
+        : TenantDataViewModelBase<MixCmsContext, MixCulture, int, MixCultureViewModel>
     {
         #region Properties
         public string Alias { get; set; }
