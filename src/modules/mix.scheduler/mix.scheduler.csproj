@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\..\platform\mix.quartz\mix.quartz.csproj" />
+    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
   </ItemGroup>
 
 </Project>

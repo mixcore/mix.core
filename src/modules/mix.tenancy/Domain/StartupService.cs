@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Interfaces;
+﻿using Mix.Shared.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
 namespace Mix.Tenancy.Domain

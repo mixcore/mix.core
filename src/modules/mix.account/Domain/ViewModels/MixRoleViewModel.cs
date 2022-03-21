@@ -25,11 +25,9 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Properties
 
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string NormalizedName { get; set; }
         public string ConcurrencyStamp { get; set; }
-
         public int MixTenantId { get; set; }
 
         #endregion

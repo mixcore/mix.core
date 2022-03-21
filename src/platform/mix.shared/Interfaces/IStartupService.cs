@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Mix.Lib.Interfaces
+namespace Mix.Shared.Interfaces
 {
     public interface IStartupService
     {
