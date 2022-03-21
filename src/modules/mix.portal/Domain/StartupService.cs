@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Interfaces;
+﻿using Mix.Shared.Interfaces;
 
 namespace Mix.Portal
 {

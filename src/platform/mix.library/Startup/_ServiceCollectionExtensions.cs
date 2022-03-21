@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Interfaces;
+using Mix.Shared.Interfaces;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -39,6 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddGeneratedRestApi();
             services.AddMixSwaggerServices(executingAssembly);
+            services.AddMixQuartzServices(configuration);
             services.AddSSL();
 
 
