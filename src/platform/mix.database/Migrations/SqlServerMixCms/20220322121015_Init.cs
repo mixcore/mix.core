@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -505,7 +506,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     DateTimeValue = table.Column<DateTime>(type: "datetime", nullable: true),
                     DoubleValue = table.Column<double>(type: "float", nullable: true),
                     IntegerValue = table.Column<int>(type: "int", nullable: true),
-                    StringValue = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
+                    StringValue = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     EncryptValue = table.Column<string>(type: "ntext", nullable: true, collation: "Vietnamese_CI_AS"),
                     EncryptKey = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "Vietnamese_CI_AS"),
                     EncryptType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "Vietnamese_CI_AS"),

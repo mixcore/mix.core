@@ -128,6 +128,7 @@ namespace Mix.Lib.Services
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
                 CreatedBy = _siteData.CreatedBy,
+                CreatedDateTime = DateTime.UtcNow,
                 Status = MixContentStatus.Published
             };
             _context.MixTheme.Add(theme);

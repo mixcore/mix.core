@@ -329,6 +329,9 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -339,9 +342,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
 
                     b.Property<bool>("IsActived")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("CreatedDatetime")
-                        .HasColumnType("datetime");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");

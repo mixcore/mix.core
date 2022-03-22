@@ -30,7 +30,7 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER
               .HasColumnType(Config.DateTime);
 
             builder.Property(e => e.StringValue)
-              .HasColumnType(Config.Text)
+              .HasColumnType($"{Config.NString}{Config.MaxLength}")
               .HasCharSet(Config.CharSet)
               .UseCollation(Config.DatabaseCollation);
 
