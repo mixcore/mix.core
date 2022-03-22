@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -58,7 +59,7 @@ namespace Mix.Database.Migrations.SqlServerAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
-                    CreatedDatetime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
                     IsActived = table.Column<bool>(type: "bit", nullable: false),
                     LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "Vietnamese_CI_AS"),

@@ -12,7 +12,7 @@ using Mix.Database.Entities.Account;
 namespace Mix.Database.Migrations.SqlServerAccount
 {
     [DbContext(typeof(SqlServerAccountContext))]
-    [Migration("20220316090036_Init")]
+    [Migration("20220322115957_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,9 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("newid()");
 
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("AspNetRolesId")
                         .HasColumnType("uniqueidentifier");
 
@@ -197,7 +200,7 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.Property<Guid?>("MixUserId1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId", "MixTenantId");
 
                     b.HasIndex("AspNetRolesId");
 
@@ -294,9 +297,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -326,27 +326,13 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Culture")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("datetime")
-                        .HasColumnName("DOB");
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Email")
                         .HasColumnType("varchar(250)")
@@ -356,29 +342,11 @@ namespace Mix.Database.Migrations.SqlServerAccount
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
                     b.Property<bool>("IsActived")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("JoinDate")
-                        .HasColumnType("datetime");
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("varchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -388,11 +356,6 @@ namespace Mix.Database.Migrations.SqlServerAccount
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
-                        .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<string>("NickName")
-                        .HasColumnType("varchar(50)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
