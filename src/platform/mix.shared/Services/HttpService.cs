@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 
@@ -81,14 +82,36 @@ namespace Mix.Shared.Services
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
 
-        public Task<T> PostAsync<T, T1>(string requestUrl, T1 content, string bearerToken = null, List<KeyValuePair<string, string>> requestHeaders = null) =>
-            SendRequestAsync<T>(
-                client => client.PostAsync(requestUrl, CreateHttpContent(content)), bearerToken, requestHeaders);
+        public Task<T> PostAsync<T, T1>(string requestUrl, T1 body,
+                string bearerToken = null,
+                List<KeyValuePair<string, string>> requestHeaders = null,
+                string contentType = "application/json"
+            )
+        {
+            var content = CreateHttpContent(body, contentType);
+            return SendRequestAsync<T>(
+                client => client.PostAsync(requestUrl, content), bearerToken, requestHeaders);
+        }
 
-        private HttpContent CreateHttpContent<T>(T content) =>
-            new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, "application/json");
+        private HttpContent CreateHttpContent<T>(T content, string contentType)
+        {
+            switch (contentType)
+            {
+                case "application/x-www-form-urlencoded":
+                    var formData = content.GetType()
+     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+          .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
+                    return new FormUrlEncodedContent(formData);
+                default:
+                    return new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, contentType);
+            }
+            
 
-        private Task<T> SendRequestAsync<T>(Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, string token = null, List<KeyValuePair<string, string>> requestHeaders = null) =>
+        }
+        private Task<T> SendRequestAsync<T>(
+                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, 
+                string token = null, 
+                List<KeyValuePair<string, string>> requestHeaders = null) =>
             Task.Run(async () =>
             {
                 using (var client = _httpClientFactory.CreateClient())
