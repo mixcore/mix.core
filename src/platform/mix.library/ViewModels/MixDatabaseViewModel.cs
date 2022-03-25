@@ -34,7 +34,6 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-
         public override async Task ExpandView()
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
@@ -47,6 +46,7 @@ namespace Mix.Lib.ViewModels
             {
                 foreach (var item in Columns)
                 {
+                    item.SetUowInfo(UowInfo);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync();

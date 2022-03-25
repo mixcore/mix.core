@@ -1,4 +1,4 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public class MixCultureViewModel

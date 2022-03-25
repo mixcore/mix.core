@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
         : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties
-
+        public int MixDatabaseId { get; set; }
         public string MixDatabaseColumnName { get; set; }
         public string MixDatabaseName { get; set; }
         public MixDataType DataType { get; set; }
