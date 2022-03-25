@@ -1,4 +1,5 @@
-﻿using Mix.Shared.Interfaces;
+﻿using Mix.Lib.Services;
+using Mix.Shared.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
 namespace Mix.Tenancy.Domain
@@ -9,6 +10,8 @@ namespace Mix.Tenancy.Domain
         {
             services.AddScoped<InitCmsService>();
             services.AddScoped<ImportSiteService>();
+            services.AddScoped<MixThemeExportService>();
+            services.AddScoped<MixThemeImportService>();
             if (GlobalConfigService.Instance.InitStatus == Shared.Enums.InitStep.Blank)
             {
                 GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();

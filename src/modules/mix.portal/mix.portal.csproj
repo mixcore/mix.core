@@ -19,6 +19,7 @@
 		<Using Include="Mix.Lib.Models.Common" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Dtos" />
+		<Using Include="Mix.Lib.ViewModels" />
 		<Using Include="Mix.Shared.Constants" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />

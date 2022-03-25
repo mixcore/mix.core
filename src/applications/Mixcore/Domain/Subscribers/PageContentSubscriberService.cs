@@ -1,5 +1,4 @@
 ﻿using Mix.Lib.Subscribers;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers

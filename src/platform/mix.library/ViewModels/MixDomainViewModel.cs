@@ -1,5 +1,5 @@
 
-namespace Mix.Portal.Domain.ViewModels
+namespace Mix.Lib.ViewModels
 {
     public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
