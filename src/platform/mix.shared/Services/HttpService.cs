@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Newtonsoft.Json.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
@@ -124,9 +125,14 @@ namespace Mix.Shared.Services
                     requestHeaders?.ForEach(p => client.DefaultRequestHeaders.Add(p.Key, p.Value));
 
                     var response = await sendRequestFn(client);
-                    response.EnsureSuccessStatusCode();
                     var data = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<T>(data, _sharedJsonSerializerOptions);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new MixException(data);
+                    }
+                    response.EnsureSuccessStatusCode();
+                    var obj = JObject.Parse(data);
+                    return obj.ToObject<T>();
                 }
             });
     }
