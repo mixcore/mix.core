@@ -20,7 +20,7 @@
 
         string IDatabaseConstants.String => "varchar";
 
-        string IDatabaseConstants.NString => "varchar";
+        string IDatabaseConstants.NString => "nvarchar";
 
         string IDatabaseConstants.Text => "ntext";
 
