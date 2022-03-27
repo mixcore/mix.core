@@ -3,6 +3,7 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Mix.Messenger.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,12 +15,16 @@ namespace Mix.Messenger.Domain.Services
     {
         private IConfiguration _configuration;
         private IWebHostEnvironment _environment;
+        private FirebaseSettingModel _settings = new FirebaseSettingModel();
         public FirebaseService(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
             _environment = environment;
+            var session = _configuration.GetSection("GoogleFirebase");
+            session.Bind(_settings);
             var googleCredential = _environment.ContentRootPath;
-            var filePath = _configuration.GetSection("GoogleFirebase")["FileName"];
+            var filePath = _settings.Filename;
+
             googleCredential = Path.Combine(googleCredential, filePath);
             var credential = GoogleCredential.FromFile(googleCredential);
             FirebaseApp.Create(new AppOptions()
