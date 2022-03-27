@@ -25,5 +25,6 @@ namespace Mix.Messenger.Domain
                 endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
             });
         }
+
     }
 }
