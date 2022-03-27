@@ -25,7 +25,7 @@ namespace Mix.Queue.Services
         {
             var _queue = GetQueue(topicId);
             List<MessageQueueModel> result = new List<MessageQueueModel>();
-            if (!_queue.Any(m => m.FullName == topicId))
+            if (!_queue.Any(m => m.TopicId == topicId))
                 return result;
 
             int i = 1;
@@ -56,16 +56,16 @@ namespace Mix.Queue.Services
 
         public void PushQueue(MessageQueueModel model)
         {
-            var _queue = GetQueue(model.FullName);
+            var _queue = GetQueue(model.TopicId);
             _queue.Enqueue(model);
         }
 
-        public void PushMessage<T>(T data, MixRestAction action, MixRestStatus status)
+        public void PushMessage<T>(T data, string action, bool success)
         {
             var msg = new MessageQueueModel()
             {
                 Action = action,
-                Status = status,
+                Success = success,
             };
             msg.Package(data);
             PushQueue(msg);

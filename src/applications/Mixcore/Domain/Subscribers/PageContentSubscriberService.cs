@@ -3,7 +3,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class PageContentSubscriberService : SubscriberService
+    public class PageContentSubscriberService : SubscriberServiceBase
     {
         static string topicId = typeof(MixPageContentViewModel).FullName;
         private readonly ILogger<PageContentSubscriberService> logger;
@@ -25,12 +25,12 @@ namespace Mixcore.Domain.Subscribers
             var template = data.Model.ToObject<MixPageContentViewModel>();
             switch (data.Action)
             {
-                case MixRestAction.Get:
+                case "Get":
                     break;
-                case MixRestAction.Post:
-                case MixRestAction.Put:
-                case MixRestAction.Patch:
-                case MixRestAction.Delete:
+                case "Post":
+                case "Put":
+                case "Patch":
+                case "Delete":
                     await DeleteCacheAsync(template);
                     break;
                 default:

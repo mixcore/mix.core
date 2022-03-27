@@ -4,7 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class ThemeSubscriberService : SubscriberService
+    public class ThemeSubscriberService : SubscriberServiceBase
     {
         static string topicId = typeof(MixThemeViewModel).FullName;
         public ThemeSubscriberService(

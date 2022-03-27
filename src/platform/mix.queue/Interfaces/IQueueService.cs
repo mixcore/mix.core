@@ -11,6 +11,6 @@ namespace Mix.Queue.Interfaces
 
         bool Any(string topicId);
 
-        void PushMessage<TModel>(TModel data, MixRestAction action, MixRestStatus status);
+        void PushMessage<TModel>(TModel data, string action, bool status);
     }
 }

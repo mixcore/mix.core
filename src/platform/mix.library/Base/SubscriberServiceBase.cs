@@ -6,14 +6,14 @@ using Mix.Queue.Models.QueueSetting;
 
 namespace Mix.Lib.Subscribers
 {
-    public abstract class SubscriberService : IHostedService
+    public abstract class SubscriberServiceBase : IHostedService
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
-        public SubscriberService(
+        public SubscriberServiceBase(
             string topicId,
             string moduleName,
             IConfiguration configuration,
@@ -77,7 +77,7 @@ namespace Mix.Lib.Subscribers
         {
             try
             {
-                if (_topicId != data.FullName)
+                if (_topicId != data.TopicId)
                 {
                     return Task.CompletedTask;
                 }

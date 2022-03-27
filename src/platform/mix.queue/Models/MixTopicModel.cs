@@ -53,9 +53,9 @@ namespace Mix.Queue.Models
             int i = 1;
 
 
-            while (i <= lenght && Messages.Any(m => m.FullName == subscription.TopicId))
+            while (i <= lenght && Messages.Any(m => m.TopicId == subscription.TopicId))
             {
-                MessageQueueModel data = Messages.First(m => m.FullName == subscription.TopicId);
+                MessageQueueModel data = Messages.First(m => m.TopicId == subscription.TopicId);
                 data.Subscriptions.Add(subscription);
                 if (data.Subscriptions.Count == Subscriptions.Count)
                 {

@@ -14,7 +14,7 @@
  public class ThemePublisherService : GooglePublisherService<MixThemeViewModel>
 {
     public ThemePublisherService(
-        IQueueService<QueueMessageModel> queueService, 
+        IQueueService<MessageQueueModel> queueService, 
         IConfiguration configuration, IWebHostEnvironment environment) 
         : base(queueService, configuration, environment)
     {
@@ -23,7 +23,7 @@
 ```
 
 ```
-public class PageContentPublisherService : MixPublisherServiceBase
+public class PageContentPublisherService : PublisherServiceBase
 {
     static string topicId = typeof(MixPageContentViewModel).FullName;
     public PageContentPublisherService(
@@ -36,6 +36,7 @@ public class PageContentPublisherService : MixPublisherServiceBase
 }
 
 ```
+*** TopicId: "uniqueTopic" (default fullname)
 
 - Add Publisher Host Service
 ```
@@ -43,7 +44,7 @@ services.AddHostedService<ThemePublisherService>();
 ```
 - Inject Mix Queue Message to push message
 ```
-Inject IQueueService<QueueMessageModel> _queueService
+Inject IQueueService<MessageQueueModel> _queueService
 ```
 - Push queue Message:
 ```
@@ -51,9 +52,19 @@ var post = new MixThemeViewModel()
 {
     DisplayName = " test queue"
 };
-var msg = new QueueMessageModel();
+var msg = new MessageQueueModel();
 msg.Package(post);
 _queueService.PushQueue(msg);
+
+// Or push custom message
+
+_queueService.PushQueue(new MessageQueueModel()
+{
+    Action = Shared.Enums.MixRestAction.Get,
+    TopicId = "uniqueTopic",
+    Model = JObject.FromObject(products),
+    Status = Shared.Enums.MixRestStatus.Success
+});
 ```
 ## Solution 2:
 - Use [GeneratePublisher] Attribute for ViewModel that need to generate Publisher

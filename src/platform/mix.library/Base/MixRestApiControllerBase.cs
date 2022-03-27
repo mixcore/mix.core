@@ -114,7 +114,7 @@ namespace Mix.Lib.Base
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync();
-            _queueService.PushMessage(data, MixRestAction.Post, MixRestStatus.Success);
+            _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
             return id;
         }
 
@@ -122,14 +122,14 @@ namespace Mix.Lib.Base
         {
             var result = await data.SaveAsync();
             await MixCacheService.Instance.RemoveCacheAsync(id, typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Put, MixRestStatus.Success);
+            _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TView data)
         {
             await data.DeleteAsync();
             await MixCacheService.Instance.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Delete, MixRestStatus.Success);
+            _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
 
@@ -137,7 +137,7 @@ namespace Mix.Lib.Base
         {
             await data.SaveFieldsAsync(properties);
             await MixCacheService.Instance.RemoveCacheAsync(id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Patch, MixRestStatus.Success);
+            _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
         protected virtual async Task SaveManyHandler(List<TView> data)
