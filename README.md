@@ -39,6 +39,9 @@
 - [x] **Easy Backup** - Powerful 1 step export.
 - [x] **More Coffee time!** - You can relax and explore more ton of features are not listed here...
 
+### Architecture
+![image](https://user-images.githubusercontent.com/3785721/160266730-f02415a1-870b-45b2-ae4b-ed6c26ca5787.png)
+
 
 ### CMS and Dashboards built on top of ASP.Net Core / Dotnet Core, SignalR, Angular / Bootstrap / React / Vue / Svelte.
  
