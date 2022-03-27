@@ -2,7 +2,7 @@
   "MessageQueueSetting": {
     "Provider": "MIX",
     "GoogleQueueSetting": {
-      "CredentialFile": "MixContent/AppConfigs/google_credential.json",
+      "CredentialFile": "MixContent/Credentials/google_credential.json",
       "ProjectId": "mixcore-225013"
     }
   }

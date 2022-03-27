@@ -83,6 +83,21 @@ namespace Mix.Shared.Services
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
 
+        public Task DeleteAsync(
+            string requestUrl,
+            List<KeyValuePair<string, string>> queryParams = null,
+            string bearerToken = null,
+            List<KeyValuePair<string, string>> requestHeaders = null)
+        {
+            var urlQueryParamsPart = queryParams != null
+                ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
+                : string.Empty;
+            var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
+                ? (!requestUrl.Contains("?") ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
+                : requestUrl;
+            return SendRequestAsync(client => client.DeleteAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
+        }
+
         public Task<T> PostAsync<T, T1>(string requestUrl, T1 body,
                 string bearerToken = null,
                 List<KeyValuePair<string, string>> requestHeaders = null,
@@ -133,6 +148,32 @@ namespace Mix.Shared.Services
                     response.EnsureSuccessStatusCode();
                     var obj = JObject.Parse(data);
                     return obj.ToObject<T>();
+                }
+            });
+        
+        private Task SendRequestAsync(
+                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, 
+                string token = null, 
+                List<KeyValuePair<string, string>> requestHeaders = null) =>
+            Task.Run(async () =>
+            {
+                using (var client = _httpClientFactory.CreateClient())
+                {
+                    if (token != null)
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    }
+
+                    requestHeaders?.ForEach(p => client.DefaultRequestHeaders.Add(p.Key, p.Value));
+
+                    var response = await sendRequestFn(client);
+                    var data = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new MixException(data);
+                    }
+                    response.EnsureSuccessStatusCode();
+                    return Task.CompletedTask;
                 }
             });
     }
