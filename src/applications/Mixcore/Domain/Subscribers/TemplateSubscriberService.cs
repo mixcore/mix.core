@@ -4,7 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class TemplateSubscriberService : SubscriberService
+    public class TemplateSubscriberService : SubscriberServiceBase
     {
         static string topicId = typeof(MixTemplateViewModel).FullName;
         private readonly ILogger<TemplateSubscriberService> logger;
@@ -22,15 +22,14 @@ namespace Mixcore.Domain.Subscribers
             var template = data.Model.ToObject<MixTemplateViewModel>();
             switch (data.Action)
             {
-                case MixRestAction.Get:
+                case "Get":
+                case "Patch":
                     break;
-                case MixRestAction.Post:
-                case MixRestAction.Put:
+                case "Post":
+                case "Put":
                     SaveTemplate(template);
                     break;
-                case MixRestAction.Patch:
-                    break;
-                case MixRestAction.Delete:
+                case "Delete":
                     DeleteTemplate(template);
                     break;
                 default:

@@ -93,6 +93,7 @@
 
 	<ItemGroup>
 		<Folder Include="Abstracts\" />
+		<Folder Include="Subscribers\" />
 	</ItemGroup>
 
 </Project>

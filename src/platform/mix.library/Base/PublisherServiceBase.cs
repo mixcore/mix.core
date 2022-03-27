@@ -7,7 +7,7 @@ using Mix.Queue.Models.QueueSetting;
 
 namespace Mix.Lib.Base
 {
-    public class MixPublisherServiceBase : BackgroundService, IHostedService
+    public abstract class PublisherServiceBase : BackgroundService, IHostedService
     {
         private IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
@@ -17,7 +17,7 @@ namespace Mix.Lib.Base
         private const int MAX_CONSUME_LENGTH = 100;
         private string _topicId;
 
-        public MixPublisherServiceBase(
+        public PublisherServiceBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment,
