@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mix.Messenger.Domain.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 
@@ -15,6 +16,7 @@ namespace Mix.Messenger.Domain
                   {
                       options.PayloadSerializerOptions.PropertyNamingPolicy = null;
                   });
+            services.AddSingleton<FirebaseService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

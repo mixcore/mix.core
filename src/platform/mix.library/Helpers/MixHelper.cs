@@ -30,6 +30,7 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile("MixContent/AppConfigs/queue.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/mix_heart.json", true, true)
                        .AddJsonFile("MixContent/AppConfigs/authentication.json", true, true)
+                       .AddJsonFile("MixContent/AppConfigs/google_firebase.json", true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>
