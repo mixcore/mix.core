@@ -1,5 +1,4 @@
-﻿using Mix.Shared.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Mix.Queue.Interfaces
 {

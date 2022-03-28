@@ -1,6 +1,4 @@
-﻿using Mix.Lib.ViewModels;
-
-namespace Mixcore.Domain.ViewModels
+﻿namespace Mixcore.Domain.ViewModels
 {
     public class AdditionalDataViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataViewModel>

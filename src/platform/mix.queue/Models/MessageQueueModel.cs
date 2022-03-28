@@ -1,5 +1,4 @@
-﻿using Mix.Shared.Enums;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Mix.Queue.Models

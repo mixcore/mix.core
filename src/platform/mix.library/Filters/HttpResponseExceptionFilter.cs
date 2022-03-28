@@ -41,7 +41,7 @@ namespace Mix.Lib.Filters
                 };
                 context.ExceptionHandled = true;
             }
-            else if(context.Exception is Exception)
+            else if (context.Exception is Exception)
             {
                 context.Result = new ObjectResult(context.Exception.Message?.Split('\n'));
             }

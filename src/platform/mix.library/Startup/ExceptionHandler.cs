@@ -7,14 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void ConfigureExceptionHandler(this IApplicationBuilder app, bool isDevelop)
         {
-            if (isDevelop)
-            {
-                //app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                
-            }
+            //app.UseDeveloperExceptionPage();
             app.UseExceptionHandler(appError =>
             {
                 appError.Run(async context =>

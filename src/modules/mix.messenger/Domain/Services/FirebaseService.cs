@@ -65,7 +65,7 @@ namespace Mix.Messenger.Domain.Services
         {
             // Create a list containing up to 500 registration tokens.
             // These registration tokens come from the client FCM SDKs.
-           
+
             var message = new MulticastMessage()
             {
                 Tokens = registrationTokens,

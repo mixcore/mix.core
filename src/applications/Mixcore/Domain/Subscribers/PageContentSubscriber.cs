@@ -3,14 +3,14 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class PageContentSubscriberService : SubscriberServiceBase
+    public class PageContentSubscriber : SubscriberBase
     {
         static string topicId = typeof(MixPageContentViewModel).FullName;
-        private readonly ILogger<PageContentSubscriberService> logger;
+        private readonly ILogger<PageContentSubscriber> logger;
         private readonly MixCacheService cacheService;
 
-        public PageContentSubscriberService(
-            ILogger<PageContentSubscriberService> logger,
+        public PageContentSubscriber(
+            ILogger<PageContentSubscriber> logger,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             MixCacheService cacheService)

@@ -115,7 +115,7 @@ namespace Mix.Account.Controllers
             }
             return Unauthorized();
         }
-        
+
         [Route("login")]
         [HttpPost]
         [AllowAnonymous]

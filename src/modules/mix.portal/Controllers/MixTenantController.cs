@@ -24,7 +24,7 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService,
-            TenantUserManager userManager, 
+            TenantUserManager userManager,
             MixCmsAccountContext accContext)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
