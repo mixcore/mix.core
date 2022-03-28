@@ -16,6 +16,7 @@ namespace Mix.Queue.Engines.MixQueue
         private readonly MixQueueSetting _queueSetting;
         private readonly Func<MessageQueueModel, Task> _messageHandler;
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queue;
+        protected bool Processing { get; private set; }
         public MixQueueSubscriber(
             QueueSetting queueSetting,
             string topicId,
@@ -45,8 +46,9 @@ namespace Mix.Queue.Engines.MixQueue
         {
             Task.Run(async () =>
             {
-                while (!cancellationToken.IsCancellationRequested)
+                while (!cancellationToken.IsCancellationRequested && !Processing)
                 {
+                    Processing = true;
                     _topic = _queue.GetTopic(_topic.Id);
                     var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
 
@@ -54,6 +56,7 @@ namespace Mix.Queue.Engines.MixQueue
                     {
                         await _messageHandler.Invoke(inQueueItems[0]);
                     }
+                    Processing = false;
                     await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);
