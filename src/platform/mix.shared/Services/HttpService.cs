@@ -121,12 +121,12 @@ namespace Mix.Shared.Services
                 default:
                     return new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, contentType);
             }
-            
+
 
         }
         private Task<T> SendRequestAsync<T>(
-                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, 
-                string token = null, 
+                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
+                string token = null,
                 List<KeyValuePair<string, string>> requestHeaders = null) =>
             Task.Run(async () =>
             {
@@ -150,10 +150,10 @@ namespace Mix.Shared.Services
                     return obj.ToObject<T>();
                 }
             });
-        
+
         private Task SendRequestAsync(
-                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn, 
-                string token = null, 
+                Func<HttpClient, Task<HttpResponseMessage>> sendRequestFn,
+                string token = null,
                 List<KeyValuePair<string, string>> requestHeaders = null) =>
             Task.Run(async () =>
             {

@@ -4,7 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Publishers
 {
-    public class MixPublisher<T> : PublisherServiceBase
+    public class MixPublisher<T> : PublisherBase
     {
         static string topicId = typeof(T).FullName;
         public MixPublisher(

@@ -1,16 +1,15 @@
 ﻿using Mix.Lib.Subscribers;
-using Mix.Lib.ViewModels;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class TemplateSubscriberService : SubscriberServiceBase
+    public class TemplateSubscriber : SubscriberBase
     {
         static string topicId = typeof(MixTemplateViewModel).FullName;
-        private readonly ILogger<TemplateSubscriberService> logger;
+        private readonly ILogger<TemplateSubscriber> logger;
 
-        public TemplateSubscriberService(
-            ILogger<TemplateSubscriberService> logger,
+        public TemplateSubscriber(
+            ILogger<TemplateSubscriber> logger,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {

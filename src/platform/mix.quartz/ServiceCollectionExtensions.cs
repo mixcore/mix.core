@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Mix.MixQuartz.Extensions;
 using Mix.MixQuartz.Helpers;
 using Mix.MixQuartz.Jobs;

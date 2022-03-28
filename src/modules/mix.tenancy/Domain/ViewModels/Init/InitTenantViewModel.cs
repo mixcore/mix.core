@@ -84,8 +84,8 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             {
                 await SaveCultureAsync(parent);
             }
-            
-            if (Domain!= null)
+
+            if (Domain != null)
             {
                 await SaveDomainAsync(parent);
             }
@@ -97,7 +97,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             Culture.SetUowInfo(UowInfo);
             await Culture.SaveAsync();
         }
-        
+
         private async Task SaveDomainAsync(MixTenant parent)
         {
             Domain.MixTenantId = parent.Id;

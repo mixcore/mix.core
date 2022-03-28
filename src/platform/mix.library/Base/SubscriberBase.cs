@@ -6,14 +6,14 @@ using Mix.Queue.Models.QueueSetting;
 
 namespace Mix.Lib.Subscribers
 {
-    public abstract class SubscriberServiceBase : IHostedService
+    public abstract class SubscriberBase : IHostedService
     {
         private readonly IQueueSubscriber _subscriber;
         private readonly IConfiguration _configuration;
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
-        public SubscriberServiceBase(
+        public SubscriberBase(
             string topicId,
             string moduleName,
             IConfiguration configuration,

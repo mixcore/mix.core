@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Lib.ViewModels;
 
 namespace Mix.Portal.Controllers
 {

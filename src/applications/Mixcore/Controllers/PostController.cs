@@ -79,7 +79,7 @@ namespace Mixcore.Controllers
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;
             ViewData["Image"] = post.Image;
-            ViewData["Layout"] = post.Layout.FilePath;
+            ViewData["Layout"] = post.Layout?.FilePath;
             ViewData["BodyClass"] = post.ClassName;
             ViewData["ViewMode"] = MixMvcViewMode.Post;
             ViewData["Keyword"] = keyword;

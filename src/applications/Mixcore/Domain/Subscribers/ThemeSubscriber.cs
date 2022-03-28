@@ -1,13 +1,12 @@
 ﻿using Mix.Lib.Subscribers;
-using Mix.Lib.ViewModels;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class ThemeSubscriberService : SubscriberServiceBase
+    public class ThemeSubscriber : SubscriberBase
     {
         static string topicId = typeof(MixThemeViewModel).FullName;
-        public ThemeSubscriberService(
+        public ThemeSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
