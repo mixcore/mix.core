@@ -41,12 +41,13 @@ namespace Mix.Queue.Models
         {
             List<MessageQueueModel> result = new List<MessageQueueModel>();
             var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
-            subscription.Status = MixQueueMessageStatus.Ack;
 
             if (subscription == null)
             {
                 return result;
             }
+            subscription.Status = MixQueueMessageStatus.Ack;
+
             if (!Messages.Any())
                 return result;
 
