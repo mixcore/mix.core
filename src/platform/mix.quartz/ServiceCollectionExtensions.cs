@@ -95,7 +95,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return quartzConfiguration;
         }
 
-        
+
 
         private static MixJobModel GetDefaultJob(Type job)
         {

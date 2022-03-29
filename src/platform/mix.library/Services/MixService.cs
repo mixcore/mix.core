@@ -77,7 +77,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public static void LogException(Exception ex)
+        public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
         {
             string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
@@ -103,7 +103,9 @@ namespace Mix.Lib.Services
                 JObject jex = new()
                 {
                     new JProperty("CreatedDateTime", DateTime.UtcNow),
-                    new JProperty("Details", JObject.FromObject(ex))
+                    new JProperty("Status", status?.ToString()),
+                    new JProperty("Message", message),
+                    new JProperty("Details", ex == null ? null : JObject.FromObject(ex))
                 };
                 arrExceptions.Add(jex);
                 content = arrExceptions.ToString();

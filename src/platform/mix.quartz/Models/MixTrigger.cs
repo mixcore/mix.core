@@ -5,6 +5,7 @@ namespace Mix.MixQuartz.Models
 {
     public class MixTrigger
     {
+        public string Cron { get; set; }
         public string Name { get; set; }
         public string GroupName { get; set; }
         public string JobName { get; set; }
