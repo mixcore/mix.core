@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.Heart.Exceptions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 
@@ -75,6 +76,13 @@ namespace Mixcore.Controllers
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(_uow);
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == MixTenantId);
+            if (post == null)
+            {
+                string msg = $"PostController: {postId} - {keyword}";
+                MixService.LogException(status: MixErrorStatus.NotFound, message: msg);
+                return NotFound();
+            }
+
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

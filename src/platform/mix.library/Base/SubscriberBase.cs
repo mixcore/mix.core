@@ -12,7 +12,7 @@ namespace Mix.Lib.Subscribers
         private readonly IConfiguration _configuration;
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
-        
+
         public SubscriberBase(
             string topicId,
             string moduleName,

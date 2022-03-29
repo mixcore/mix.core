@@ -27,6 +27,7 @@ namespace Mix.Messenger.Domain.Services
 
             googleCredential = Path.Combine(googleCredential, filePath);
             var credential = GoogleCredential.FromFile(googleCredential);
+
             FirebaseApp.Create(new AppOptions()
             {
                 Credential = credential

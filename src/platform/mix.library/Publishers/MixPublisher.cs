@@ -4,6 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Publishers
 {
+    // Use for instance of ViewModelBase
     public class MixPublisher<T> : PublisherBase
     {
         static string topicId = typeof(T).FullName;
