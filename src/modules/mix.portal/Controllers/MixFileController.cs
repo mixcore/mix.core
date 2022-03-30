@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
             // Request: Key => folder, Keyword => filename
             if (!string.IsNullOrEmpty(folder))
             {
-                var result = MixFileHelper.GetFile(filename, folder);
+                var result = MixFileHelper.GetFileByFullName($"{folder}/{filename}");
                 if (result != null)
                 {
                     return Ok(result);
