@@ -2,12 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Messenger.Domain.Services;
+using Mix.Shared.Interfaces;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 
 namespace Mix.Messenger.Domain
 {
-    public class StartupService
+    public class StartupService: IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
@@ -17,6 +18,7 @@ namespace Mix.Messenger.Domain
                       options.PayloadSerializerOptions.PropertyNamingPolicy = null;
                   });
             services.AddSingleton<FirebaseService>();
+            services.AddScoped<EmailService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

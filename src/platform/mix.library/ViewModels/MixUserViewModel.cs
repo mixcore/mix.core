@@ -44,7 +44,7 @@ namespace Mix.Lib.ViewModels
         public async Task LoadUserDataAsync(int tenantId)
         {
             UserData ??= await MixDataHelper.GetAdditionalDataAsync(
-                _cmsContext,
+                new UnitOfWorkInfo(_cmsContext),
                 MixDatabaseParentType.User,
                 MixDatabaseNames.SYSTEM_USER_DATA,
                 Id);

@@ -35,17 +35,19 @@ namespace Mix.Lib.Services
 
                 var tasks = new List<Task<TView>>();
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
-
                 var fields = await _colRepo.GetListQuery(
-                    m => m.MixDatabaseId == request.MixDatabaseId).ToListAsync();
+                    m => m.MixDatabaseId == request.MixDatabaseId 
+                            || m.MixDatabaseName == request.MixDatabaseName).ToListAsync();
 
                 // Data predicate
                 Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
-                   && (m.MixDatabaseId == request.MixDatabaseId);
+                   && (m.MixDatabaseId == request.MixDatabaseId
+                        || m.MixDatabaseName == request.MixDatabaseName);
 
                 var searchRequest = new SearchQueryModel<MixDataContent, Guid>(request, andPredicate);
                 // val predicate
-                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == request.MixDatabaseId);
+                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == request.MixDatabaseId
+                || m.MixDatabaseName == request.MixDatabaseName);
 
                 PagingResponseModel<TView> result = new()
                 {
@@ -90,7 +92,7 @@ namespace Mix.Lib.Services
                 if (request.IsGroup)
                 {
                     var excludeIds = _dbContext.MixDataContentAssociation.Where(
-                        m => (m.MixDatabaseId == request.MixDatabaseId)
+                        m => (m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == request.MixDatabaseName)
                         && m.Specificulture == culture
                         && m.ParentType == MixDatabaseParentType.Set
                         && m.ParentId != Guid.Empty)

@@ -91,8 +91,7 @@ namespace Mix.Lib.ViewModels
             await ParseObjectToValues();
 
             Title = Id.ToString();
-            Data = MixDataHelper.ParseData(Id, UowInfo);
-            Content = Data.ToString(Newtonsoft.Json.Formatting.None);
+            Content = MixDataHelper.ParseData(Id, UowInfo).ToString(Newtonsoft.Json.Formatting.None);
             return await base.ParseEntity();
         }
 
@@ -113,6 +112,7 @@ namespace Mix.Lib.ViewModels
                 {
                     var nav = new MixDataContentAssociationViewModel(UowInfo)
                     {
+                        Id = Guid.NewGuid(),
                         DataContentId = Id,
                         Specificulture = Specificulture,
                         MixDatabaseId = MixDatabaseId,

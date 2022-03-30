@@ -4,6 +4,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Mix.Messenger.Domain.Models;
+using Mix.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +21,7 @@ namespace Mix.Messenger.Domain.Services
         {
             _configuration = configuration;
             _environment = environment;
-            var session = _configuration.GetSection("GoogleFirebase");
+            var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
             session.Bind(_settings);
             var googleCredential = _environment.ContentRootPath;
             var filePath = _settings.Filename;
