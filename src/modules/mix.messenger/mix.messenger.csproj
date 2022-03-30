@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
+    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
     <ProjectReference Include="..\..\platform\mix.signalr\mix.signalr.csproj" />
   </ItemGroup>
 

@@ -211,7 +211,7 @@ namespace Mix.Lib.Helpers
         }
 
         public static async Task<AdditionalDataContentViewModel> GetAdditionalDataAsync(
-            MixCmsContext context,
+            UnitOfWorkInfo uow,
             MixDatabaseParentType parentType,
             string databaseName,
             Guid? guidParentId = null,
@@ -219,9 +219,9 @@ namespace Mix.Lib.Helpers
             string specificulture = null)
         {
             AdditionalDataContentViewModel result = null;
-            UnitOfWorkInfo uow = new(context);
             var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
+            var context = (MixCmsContext)uow.ActiveDbContext;
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                 m => m.MixDatabaseName == databaseName
                     && m.ParentType == parentType;

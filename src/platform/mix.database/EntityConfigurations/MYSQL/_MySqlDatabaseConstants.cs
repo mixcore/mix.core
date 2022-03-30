@@ -24,6 +24,6 @@
 
         string IDatabaseConstants.Text => "text";
 
-        string IDatabaseConstants.GenerateUUID => "'uuid()'";
+        string IDatabaseConstants.GenerateUUID => "uuid()";
     }
 }

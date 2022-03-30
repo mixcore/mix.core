@@ -14,10 +14,10 @@ namespace Mix.Shared.Services
         protected readonly FileSystemWatcher watcher = new();
         protected readonly IConfiguration _configuration;
 
-        public AppSettingServiceBase(IConfiguration configuration, MixAppSettingsSection section, string filePath)
+        public AppSettingServiceBase(IConfiguration configuration, string section, string filePath)
         {
             _configuration = configuration;
-            _sectionName = section.ToString();
+            _sectionName = section;
             FilePath = filePath;
             LoadAppSettings();
         }

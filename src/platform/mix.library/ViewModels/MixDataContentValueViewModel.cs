@@ -49,6 +49,11 @@ namespace Mix.Lib.ViewModels
 
         public override Task<MixDataContentValue> ParseEntity()
         {
+            if (IsDefaultId(Id))
+            {
+                Id = Guid.NewGuid();
+                CreatedDateTime = DateTime.Now;
+            }
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
 

@@ -65,7 +65,7 @@ namespace Mix.Lib.Base
             }
             data.SetUowInfo(_uow);
             await UpdateHandler(id, data);
-            return Ok();
+            return Ok(id);
         }
 
         [HttpDelete("{id}")]
@@ -74,7 +74,7 @@ namespace Mix.Lib.Base
             var data = await _repository.GetSingleAsync(id);
             data.SetUowInfo(_uow);
             await DeleteHandler(data);
-            return Ok();
+            return Ok(id);
         }
 
         [HttpPatch("{id}")]
@@ -83,7 +83,7 @@ namespace Mix.Lib.Base
             var data = await _repository.GetSingleAsync(id);
             data.SetUowInfo(_uow);
             await PatchHandler(id, data, properties);
-            return Ok();
+            return Ok(id);
         }
 
 

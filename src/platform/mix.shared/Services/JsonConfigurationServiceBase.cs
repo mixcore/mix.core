@@ -81,7 +81,7 @@ namespace Mix.Shared.Services
 
         protected virtual void LoadAppSettings()
         {
-            var settings = MixFileHelper.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true);
+            var settings = MixFileHelper.GetFile(FilePath, string.Empty, true);
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             JObject jsonSettings = JObject.Parse(content);
             AppSettings = jsonSettings;
