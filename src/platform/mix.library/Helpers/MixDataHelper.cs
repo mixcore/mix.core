@@ -248,11 +248,11 @@ namespace Mix.Lib.Helpers
                     MixDatabaseName = mixDb.SystemName,
                     Status = MixContentStatus.Published,
                     Columns = mixDb.Columns,
-                    ParentType = parentType,
-                    GuidParentId = guidParentId,
-                    IntParentId = intParentId,
                     CreatedDateTime = DateTime.UtcNow
                 };
+                result.GuidParentId = guidParentId;
+                result.IntParentId = intParentId;
+                result.ParentType = parentType;
                 return result;
             }
             return default;
