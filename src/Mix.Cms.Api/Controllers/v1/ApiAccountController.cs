@@ -191,9 +191,9 @@ namespace Mix.Cms.Api.Controllers.v1
         [HttpPost]
         public async Task<RepositoryResponse<bool>> ManageUserInRole([FromBody] UserRoleModel model)
         {
-            var role = await _roleManager.FindByIdAsync(model.RoleId);
             var result = new RepositoryResponse<bool>();
 
+            var role = await _roleManager.FindByIdAsync(model.RoleId);
             List<string> errors = new List<string>();
 
             if (role == null)
