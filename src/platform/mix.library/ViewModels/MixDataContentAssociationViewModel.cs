@@ -35,7 +35,15 @@
 
         #region Overrides
 
-
+        public override Task<MixDataContentAssociation> ParseEntity()
+        {
+            if (IsDefaultId(Id))
+            {
+                Id = Guid.NewGuid();
+                CreatedDateTime = DateTime.UtcNow;
+            }
+            return base.ParseEntity();
+        }
         #endregion
 
     }

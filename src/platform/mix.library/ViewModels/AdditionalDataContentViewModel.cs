@@ -114,6 +114,23 @@
             return result;
         }
 
+        protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
+        {
+            if (Values != null)
+            {
+                foreach (var item in Values)
+                {
+                    item.SetUowInfo(UowInfo);
+                    item.ParentId = parentEntity.Id;
+                    item.MixDatabaseId = parentEntity.MixDatabaseId;
+                    item.MixDatabaseName = parentEntity.MixDatabaseName;
+                    item.Specificulture = Specificulture;
+                    item.ParentId = parentEntity.Id;
+                    item.MixDatabaseName = parentEntity.MixDatabaseName;
+                    await item.SaveAsync();
+                }
+            }
+        }
 
         public override async Task<Guid> CreateParentAsync()
         {
