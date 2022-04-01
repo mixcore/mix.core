@@ -48,15 +48,16 @@ namespace Mix.Queue.Engines.MixQueue
             {
                 while (!cancellationToken.IsCancellationRequested && !Processing)
                 {
-                    Processing = true;
+                    
                     _topic = _queue.GetTopic(_topic.Id);
                     var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
 
                     if (inQueueItems.Any())
                     {
+                        Processing = true;
                         await _messageHandler.Invoke(inQueueItems[0]);
+                        Processing = false;
                     }
-                    Processing = false;
                     await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);

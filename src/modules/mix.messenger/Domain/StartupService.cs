@@ -12,22 +12,22 @@ namespace Mix.Messenger.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSignalR()
-                  .AddJsonProtocol(options =>
-                  {
-                      options.PayloadSerializerOptions.PropertyNamingPolicy = null;
-                  });
+            //services.AddSignalR()
+            //      .AddJsonProtocol(options =>
+            //      {
+            //          options.PayloadSerializerOptions.PropertyNamingPolicy = null;
+            //      });
             services.AddSingleton<FirebaseService>();
             services.AddScoped<EmailService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
-                endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
+            //    endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
+            //});
         }
 
     }
