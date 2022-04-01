@@ -92,6 +92,8 @@
         Integer,
         Reference,
         QRCode,
-        Tag
+        Tag,
+        Json,
+        Array
     }
 }

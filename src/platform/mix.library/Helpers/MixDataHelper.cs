@@ -64,6 +64,12 @@ namespace Mix.Lib.Helpers
 
                 case MixDataType.Upload:
                     return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
+                
+                case MixDataType.Json:
+                    return (new JProperty(item.MixDatabaseColumnName, string.IsNullOrEmpty(item.StringValue) ? new JObject() : JObject.Parse(item.StringValue)));
+                
+                case MixDataType.Array:
+                    return (new JProperty(item.MixDatabaseColumnName, string.IsNullOrEmpty(item.StringValue) ? new JArray() : JArray.Parse(item.StringValue)));
 
                 case MixDataType.Custom:
                 case MixDataType.Duration:
@@ -169,6 +175,14 @@ namespace Mix.Lib.Helpers
                     case MixDataType.Upload:
                         string mediaData = property.Value<string>();
                         item.StringValue = mediaData;
+                        break;
+
+                    case MixDataType.Json:
+                        item.StringValue = property.Value<JObject>().ToString(Formatting.None);
+                        break;
+                    
+                    case MixDataType.Array:
+                        item.StringValue = property.Value<JArray>().ToString(Formatting.None);
                         break;
 
                     case MixDataType.Custom:

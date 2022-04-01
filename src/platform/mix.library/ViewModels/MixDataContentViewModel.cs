@@ -220,6 +220,14 @@ namespace Mix.Lib.ViewModels
                         item.StringValue = mediaData;
                         break;
 
+                    case MixDataType.Json:
+                        item.StringValue = property.Value<JObject>().ToString(Formatting.None);
+                        break;
+                    
+                    case MixDataType.Array:
+                        item.StringValue = property.Value<JArray>().ToString(Formatting.None);
+                        break;
+
                     case MixDataType.Custom:
                     case MixDataType.Duration:
                     case MixDataType.PhoneNumber:
