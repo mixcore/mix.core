@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Shared.Services;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -28,7 +29,7 @@ namespace Mixcore.Domain.ViewModels
 
         public string ClassName { get; set; }
 
-        public string DetailUrl => $"/post/{Id}/{SeoName}";
+        public string DetailUrl => $"{GlobalConfigService.Instance.Domain}/post/{Id}/{SeoName}";
 
         public Guid? AdditionalDataId { get; set; }
 
