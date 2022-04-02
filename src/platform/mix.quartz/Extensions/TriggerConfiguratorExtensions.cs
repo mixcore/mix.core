@@ -6,17 +6,22 @@ namespace Mix.MixQuartz.Extensions
 {
     public static class ITriggerConfiguratorExtensions
     {
-        public static ITriggerConfigurator StartNowIf(this ITriggerConfigurator trigger, bool condition)
+        public static TriggerBuilder StartNowIf(this TriggerBuilder trigger, bool condition)
         {
             return condition ? trigger.StartNow() : trigger;
         }
 
-        public static ITriggerConfigurator StartAtIf(this ITriggerConfigurator trigger, bool condition, DateTime startAt)
+        public static TriggerBuilder StartAtIf(this TriggerBuilder trigger, bool condition, DateTime startAt)
         {
             return condition ? trigger.StartAt(startAt) : trigger;
         }
+        
+        public static TriggerBuilder WithCronScheduleIf(this TriggerBuilder trigger, bool condition, string cron)
+        {
+            return condition ? trigger.WithCronSchedule(cron) : trigger;
+        }
 
-        public static ITriggerConfigurator WithMixSchedule(this ITriggerConfigurator trigger, int? internalValue, MixIntevalType? internalType, int? repeatCount)
+        public static TriggerBuilder WithMixSchedule(this TriggerBuilder trigger, int? internalValue, MixIntevalType? internalType, int? repeatCount)
         {
             if (!internalValue.HasValue)
             {

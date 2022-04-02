@@ -3,9 +3,13 @@ using System;
 
 namespace Mix.MixQuartz.Models
 {
-    public class MixTrigger
+    public class JobSchedule
     {
-        public string Cron { get; set; }
+        public JobSchedule()
+        {
+        }
+
+        public string CronExpression { get; }
         public string Name { get; set; }
         public string GroupName { get; set; }
         public string JobName { get; set; }
