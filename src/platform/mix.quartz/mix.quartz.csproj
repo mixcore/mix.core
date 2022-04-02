@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,6 +10,11 @@
     <PackageReference Include="Quartz.AspNetCore" Version="3.3.3" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.3.3" />
   </ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Quartz" />
+		<Using Include="Quartz.Spi" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
