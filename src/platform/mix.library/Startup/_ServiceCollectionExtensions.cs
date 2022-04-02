@@ -36,11 +36,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
             services.AddMixModuleServices(configuration);
-            services.AddMixSignalR();
 
             services.AddGeneratedRestApi();
             services.AddMixSwaggerServices(executingAssembly);
-            services.AddMixQuartzServices(configuration);
             services.AddSSL();
 
 
@@ -72,7 +70,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
 
             services.AddMixModuleServices(configuration);
-            services.AddMixSignalR();
 
             services.AddGeneratedRestApi();
             services.AddMixSwaggerServices(executingAssembly);
@@ -103,7 +100,6 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseAuthorization();
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
-            app.UseMixSignalR();
             app.ConfigureExceptionHandler(isDevelop);
 
             return app;
