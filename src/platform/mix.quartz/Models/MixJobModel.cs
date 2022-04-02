@@ -8,6 +8,6 @@ namespace Mix.MixQuartz.Models
         public string Group { get; set; }
         public string Description { get; set; }
         public Type JobType { get; set; }
-        public MixTrigger Trigger { get; set; } = new MixTrigger();
+        public JobSchedule Trigger { get; set; }
     }
 }

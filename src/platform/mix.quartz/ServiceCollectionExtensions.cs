@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Mix.MixQuartz.Extensions;
-using Mix.MixQuartz.Helpers;
+﻿using Microsoft.Extensions.Configuration;
 using Mix.MixQuartz.Jobs;
-using Mix.MixQuartz.Models;
-using Mix.Shared.Services;
-using Quartz;
+using Mix.Quartz.Models;
+using Mix.Quartz.Services;
 using Quartz.Impl;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,98 +12,32 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // base configuration from appsettings.json
-            services.Configure<QuartzOptions>(configuration.GetSection("Quartz"));
+            services.AddSchedulerJobs();
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton(StdSchedulerFactory.GetDefaultScheduler().GetAwaiter().GetResult());
 
-            services.AddQuartz(q =>
-            {
-                // we could leave DI configuration intact and then jobs need
-                // to have public no-arg constructor
-                // the MS DI is expected to produce transient job instances
-                // this WONT'T work with scoped services like EF Core's DbContext
-                q.UseMicrosoftDependencyInjectionJobFactory();
-
-                // or for scoped service support like EF Core DbContext
-                //q.UseMicrosoftDependencyInjectionScopedJobFactory();
-
-                // these are the defaults
-                q.UseSimpleTypeLoader();
-                q.UseInMemoryStore();
-                q.UseDefaultThreadPool(tp =>
-                {
-                    tp.MaxConcurrency = 10;
-                });
-
-                if (!GlobalConfigService.Instance.AppSettings.IsInit)
-                {
-                    q.AddMixQuartzJobsAsync().GetAwaiter().GetResult();
-                }
-            });
-            // ASP.NET Core hosting
-            services.AddQuartzServer(options =>
-            {
-                // when shutting down we want jobs to complete gracefully
-                options.WaitForJobsToComplete = true;
-            });
+            services.AddHostedService<QuartzHostedService>();
             return services;
         }
 
-
-        private static async Task<IServiceCollectionQuartzConfigurator> AddMixQuartzJobsAsync(this IServiceCollectionQuartzConfigurator quartzConfiguration)
+        private static void AddSchedulerJobs(this IServiceCollection services)
         {
-            List<MixJobModel> jobConfiguraions = MixQuartzHelper.LoadJobConfiguraions();
             var assembly = Assembly.GetExecutingAssembly();
             var mixJobs = assembly
                 .GetExportedTypes()
                 .Where(m => m.BaseType.Name == typeof(BaseJob).Name);
-            StdSchedulerFactory factory = new();
-            IScheduler scheduler = await factory.GetScheduler();
+            var applyGenericMethod = typeof(ServiceCollectionServiceExtensions)
+                .GetMethods()
+                .First(m => m.IsGenericMethodDefinition
+                    && m.Name == nameof(ServiceCollectionServiceExtensions.AddSingleton)
+                    && m.GetGenericArguments().Length == 2
+                    );
             foreach (var job in mixJobs)
             {
-                var jobConfig = jobConfiguraions.FirstOrDefault(j => j.JobType == job);
-                if (jobConfig == null)
-                {
-                    jobConfig = GetDefaultJob(job);
-                }
-
-                var jobKey = new JobKey(jobConfig.Key, jobConfig.Group);
-                Action<IJobConfigurator> jobConfigurator = j => j.WithDescription(jobConfig.Description);
-
-                var applyGenericMethod = typeof(Quartz.ServiceCollectionExtensions)
-                   .GetMethods(BindingFlags.Static | BindingFlags.Public)
-                   .FirstOrDefault(m => m.Name == nameof(Quartz.ServiceCollectionExtensions.AddJob) && m.GetParameters()[1].ParameterType == typeof(JobKey));
-                var parameters = applyGenericMethod.GetParameters();
-                var applyConcreteMethod = applyGenericMethod.MakeGenericMethod(jobConfig.JobType);
-                applyConcreteMethod.Invoke(quartzConfiguration, new object[] { quartzConfiguration, jobKey, jobConfigurator });
-
-                quartzConfiguration.AddTrigger(t => t
-                        .WithIdentity("trigger_" + jobConfig.Key, jobConfig.Group)
-                        .ForJob(jobKey)
-                        .StartNowIf(jobConfig.Trigger.IsStartNow)
-                        .StartAtIf(jobConfig.Trigger.StartAt.HasValue, jobConfig.Trigger.StartAt.Value)
-                        .WithMixSchedule(jobConfig.Trigger.Interval, jobConfig.Trigger.IntervalType, jobConfig.Trigger.RepeatCount)
-                        .WithDescription(jobConfig.Description));
+                MethodInfo generic = applyGenericMethod.MakeGenericMethod(typeof(BaseJob), job);
+                generic.Invoke(null, new object[] { services });
             }
-
-            return quartzConfiguration;
         }
 
-
-
-        private static MixJobModel GetDefaultJob(Type job)
-        {
-            return new MixJobModel()
-            {
-                Key = job.Name,
-                Group = null,
-                Description = null,
-                JobType = job
-            };
-        }
-
-        public static IApplicationBuilder UseMixScheduler(this IApplicationBuilder app)
-        {
-            return app;
-        }
     }
 }
