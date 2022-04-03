@@ -15,8 +15,8 @@ namespace Mix.MixQuartz.Jobs
             Schedule = new JobSchedule(GetType())
             {
                 StartAt = DateTime.Now,
-                Interval = 1,
-                IntervalType = Enums.MixIntevalType.Second
+                Interval = 5,
+                IntervalType = Enums.MixIntevalType.Minute
             };
         }
 
@@ -29,7 +29,6 @@ namespace Mix.MixQuartz.Jobs
                 var ping = await _httpService.GetAsync<DateTime>($"{domain}/api/v1/rest/shared/ping");
                 Console.WriteLine($"Ping at {now}: {(ping - now).TotalMilliseconds}");
             }
-            Console.WriteLine(DateTime.UtcNow);
         }
     }
 }
