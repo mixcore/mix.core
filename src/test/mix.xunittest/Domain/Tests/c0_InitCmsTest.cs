@@ -12,7 +12,8 @@ namespace Mix.Xunittest.Domain.Tests
         private readonly InitCmsService _initCmsService;
         public c0_InitCmsTest(
             SharedMixCmsDbFixture fixture,
-            InitCmsService initCmsService) : base(fixture)
+            InitCmsService initCmsService
+            ) : base(fixture)
         {
             _initCmsService = initCmsService;
             model = new()
@@ -38,19 +39,12 @@ namespace Mix.Xunittest.Domain.Tests
         [Fact, TestPriority(1)]
         public async Task Step_1_Init_Site()
         {
-            try
-            {
-                MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
-                DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
-                DbFixture.Context.Database.EnsureDeleted();
-                model.PrimaryDomain = "localhost";
-                await _initCmsService.InitTenantAsync(model);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
+            DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
+            DbFixture.Context.Database.EnsureDeleted();
+            model.PrimaryDomain = "localhost";
+            await _initCmsService.InitDbContext(model);
+            await _initCmsService.InitTenantAsync(model);
         }
-
     }
 }

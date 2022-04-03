@@ -7,7 +7,7 @@ namespace Mix.Lib.Services
 {
     public class TenantRoleStore : RoleStore<MixRole, MixCmsAccountContext, Guid, AspNetUserRoles, AspNetRoleClaims>
     {
-        public readonly int tenantId;
+        public readonly int tenantId = 1;
         public TenantRoleStore(
             IHttpContextAccessor httpContext,
             MixCmsAccountContext accContext,
@@ -15,7 +15,7 @@ namespace Mix.Lib.Services
 
             : base(accContext, describer)
         {
-            if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContext.HttpContext != null && httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
                 tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }

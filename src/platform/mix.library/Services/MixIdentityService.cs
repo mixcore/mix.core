@@ -30,7 +30,7 @@ namespace Mix.Lib.Services
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
-        protected int MixTenantId { get; set; }
+        protected int MixTenantId { get; set; } = 1;
         public MixIdentityService(
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
@@ -50,7 +50,7 @@ namespace Mix.Lib.Services
             _authConfigService = authConfigService;
             _roleRepo = RoleViewModel.GetRootRepository(accountContext);
             _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
-            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
