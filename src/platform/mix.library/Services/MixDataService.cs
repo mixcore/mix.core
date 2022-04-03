@@ -36,7 +36,7 @@ namespace Mix.Lib.Services
                 var tasks = new List<Task<TView>>();
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
                 var fields = await _colRepo.GetListQuery(
-                    m => m.MixDatabaseId == request.MixDatabaseId 
+                    m => m.MixDatabaseId == request.MixDatabaseId
                             || m.MixDatabaseName == request.MixDatabaseName).ToListAsync();
 
                 // Data predicate

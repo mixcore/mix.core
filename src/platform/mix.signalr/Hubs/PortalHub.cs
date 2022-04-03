@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.SignalR.Constants;
-using Mix.SignalR.Enums;
-using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;

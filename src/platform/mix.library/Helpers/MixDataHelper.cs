@@ -64,10 +64,10 @@ namespace Mix.Lib.Helpers
 
                 case MixDataType.Upload:
                     return (new JProperty(item.MixDatabaseColumnName, item.StringValue));
-                
+
                 case MixDataType.Json:
                     return (new JProperty(item.MixDatabaseColumnName, string.IsNullOrEmpty(item.StringValue) ? new JObject() : JObject.Parse(item.StringValue)));
-                
+
                 case MixDataType.Array:
                     return (new JProperty(item.MixDatabaseColumnName, string.IsNullOrEmpty(item.StringValue) ? new JArray() : JArray.Parse(item.StringValue)));
 
@@ -180,7 +180,7 @@ namespace Mix.Lib.Helpers
                     case MixDataType.Json:
                         item.StringValue = property.Value<JObject>().ToString(Formatting.None);
                         break;
-                    
+
                     case MixDataType.Array:
                         item.StringValue = property.Value<JArray>().ToString(Formatting.None);
                         break;

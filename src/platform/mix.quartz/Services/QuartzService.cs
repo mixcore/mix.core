@@ -1,11 +1,9 @@
-﻿using Mix.MixQuartz.Jobs;
-using Mix.MixQuartz.Extensions;
-using System.Threading.Tasks;
-using System.Threading;
+﻿using Mix.MixQuartz.Extensions;
 using Quartz.Impl.Matchers;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mix.Quartz.Services
 {
@@ -24,31 +22,31 @@ namespace Mix.Quartz.Services
             var key = new TriggerKey(id);
             return Scheduler.PauseTrigger(key, cancellationToken);
         }
-        
+
         public async Task<ITrigger> GetTrigger(string id, CancellationToken cancellationToken = default)
         {
             var key = new TriggerKey(id);
             return await Scheduler.GetTrigger(key, cancellationToken);
         }
-        
+
         public async Task<IJobDetail> GetJob(string id, CancellationToken cancellationToken = default)
         {
             var key = new JobKey(id);
             return await Scheduler.GetJobDetail(key, cancellationToken);
         }
-        
+
         public async Task<IJobDetail> GetJob<T>(CancellationToken cancellationToken = default)
         {
             var key = new JobKey(typeof(T).FullName);
             return await Scheduler.GetJobDetail(key, cancellationToken);
         }
-        
+
         public async Task<IEnumerable<TriggerKey>> GetJobTriggerKeys(CancellationToken cancellationToken = default)
         {
             return await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup(), cancellationToken);
 
         }
-        
+
         public IJobDetail CreateJob(Type jobType)
         {
             return JobBuilder
@@ -93,9 +91,9 @@ namespace Mix.Quartz.Services
             }
             return Task.CompletedTask;
         }
-        
+
         public Task ScheduleJob<T>(JobSchedule schedule, CancellationToken cancellationToken = default)
-            where T: MixJobBase
+            where T : MixJobBase
         {
             var job = CreateJob(typeof(T));
 

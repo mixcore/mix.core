@@ -1,6 +1,4 @@
-﻿using Mix.MixQuartz.Enums;
-using Quartz;
-using System;
+﻿using System;
 
 namespace Mix.MixQuartz.Extensions
 {
@@ -15,7 +13,7 @@ namespace Mix.MixQuartz.Extensions
         {
             return startAt.HasValue ? trigger.StartAt(startAt.Value) : trigger;
         }
-        
+
         public static TriggerBuilder WithCronScheduleIf(this TriggerBuilder trigger, bool condition, string cron)
         {
             return condition ? trigger.WithCronSchedule(cron) : trigger;
