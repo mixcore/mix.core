@@ -1,19 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Mix.MixQuartz.Models;
-using Quartz;
 using System;
 using System.Threading.Tasks;
 
 namespace Mix.MixQuartz.Jobs
 {
-    public abstract class BaseJob : IJob
+    public abstract class MixJobBase : IJob
     {
         private readonly IServiceProvider _provider;
         protected bool _singleton;
-        protected BaseJob(IServiceProvider provider, bool singleton = false)
+        protected MixJobBase(IServiceProvider provider, bool singleton = false)
         {
             _provider = provider;
             _singleton = singleton;
+            JobType = GetType();
+            Key = JobType.FullName;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -38,7 +38,7 @@ namespace Mix.MixQuartz.Jobs
         public string Key { get; set; }
         public string Group { get; set; }
         public Type JobType { get; set; }
-        public JobSchedule Trigger { get; set; }
+        public JobSchedule Schedule { get; set; }
 
         public abstract Task ExecuteHandler(IJobExecutionContext context);
     }

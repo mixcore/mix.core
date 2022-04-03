@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.MixQuartz.Enums;
 using Mix.MixQuartz.Jobs;
-using Quartz;
+using Mix.MixQuartz.Models;
+using Mix.Quartz.Services;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -10,38 +13,50 @@ namespace Mix.Scheduler.Controllers
     [ApiController]
     public class ApiQuartzController : ControllerBase
     {
-        private readonly IScheduler _scheduler;
-        public ApiQuartzController(IScheduler scheduler)
+        private readonly QuartzService _service;
+        public ApiQuartzController(QuartzService service)
         {
-            _scheduler = scheduler;
-
-            var jobType = typeof(KeepPoolAliveJob);
-            IJobDetail job = JobBuilder.Create(jobType)
-                .WithDescription("Job to rescan jobs from SQL db")
-                .WithIdentity(jobType.FullName)
-                //.UsingJobData(jobData)
-                .Build();
-
-            TriggerKey triggerKey = new TriggerKey($"{jobType.FullName}.trigger");
-
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithCronSchedule("0/5 * * * * ?")
-                .StartNow()
-                .WithDescription("trigger for sql job loader")
-                .WithIdentity(triggerKey)
-                .WithPriority(1)
-                .Build();
-
-            _scheduler.ScheduleJob(job, trigger);
+            _service = service;
         }
 
-        [HttpGet]
+        [HttpGet("trigger/{key}")]
+        public ActionResult GetTrigger(string key)
+        {
+            return Ok(_service.GetTrigger(key));
+        }
+        
+        [HttpPost("reschedule/{key}")]
+        public async System.Threading.Tasks.Task<ActionResult> GetJobAsync(string key, [FromBody] JobSchedule schedule)
+        {
+            var trigger = await _service.GetTrigger(key);
+            var job = await _service.GetJob(trigger.JobKey.Name);
+            var newTrigger = _service.CreateTrigger(schedule, key);
+            //new JobSchedule(typeof(KeepPoolAliveJob))
+            //{
+            //    CronExpression = "0/5 * * * * ?",
+            //    IsStartNow = true,
+            //    StartAt = DateTime.Now,
+            //    Interval = 1,
+            //    IntervalType = MixIntevalType.Second
+            //}
+            await _service.Scheduler.RescheduleJob(trigger.Key, newTrigger);
+            return Ok();
+        }
+        
+        [HttpGet("jobs")]
         public ActionResult GetJobs()
         {
-            var mixJobs = Assembly.GetAssembly(typeof(BaseJob))
+            var mixJobs = Assembly.GetAssembly(typeof(MixJobBase))
                 .GetExportedTypes()
-                .Where(m => m.BaseType.Name == typeof(BaseJob).Name);
+                .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
             return Ok(mixJobs);
+        }
+        
+        [HttpGet("trigger-keys")]
+        public ActionResult GetTriggerKeys()
+        {
+            var result = _service.GetJobTriggerKeys();
+            return Ok(result);
         }
     }
 }

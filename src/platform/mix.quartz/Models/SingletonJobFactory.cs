@@ -15,7 +15,7 @@ namespace Mix.Quartz.Models
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            return _serviceProvider.GetServices(typeof(BaseJob)).First(m => m.GetType() == bundle.JobDetail.JobType) as IJob;
+            return _serviceProvider.GetServices(typeof(MixJobBase)).First(m => m.GetType() == bundle.JobDetail.JobType) as IJob;
         }
 
         public void ReturnJob(IJob job) { }

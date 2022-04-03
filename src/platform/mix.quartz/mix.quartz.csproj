@@ -15,8 +15,8 @@
 		<Using Include="Quartz" />
 		<Using Include="Quartz.Spi" />
 		<Using Include="Mix.MixQuartz.Models" />
-		<Using Include="Mix.Queue.Interfaces" />
-		<Using Include="Mix.Queue.Enums" />
+		<Using Include="Mix.MixQuartz.Jobs" />
+		<Using Include="Mix.MixQuartz.Enums" />
 	</ItemGroup>
 
   <ItemGroup>

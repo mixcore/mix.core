@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace Mix.MixQuartz.Jobs
 {
-    public class KeepPoolAliveJob : BaseJob
+    public class KeepPoolAliveJob : MixJobBase
     {
         private readonly HttpService _httpService;
         public KeepPoolAliveJob(HttpService httpService, IServiceProvider provider) 
             : base(provider)
         {
             _httpService = httpService;
-            Trigger = new JobSchedule()
+            Schedule = new JobSchedule(GetType())
             {
                 StartAt = DateTime.Now,
-                Interval = 5,
+                Interval = 1,
                 IntervalType = Enums.MixIntevalType.Second
             };
         }
