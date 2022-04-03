@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-database")]
+    [Route("api/v2/rest/mix-portal/mix-post-content")]
     [ApiController]
     [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
-    public class MixDatabaseController
-        : MixRestApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
+    public class MixPostContentController
+        : MixRestApiControllerBase<MixPostContentViewModel, MixCmsContext, MixPostContent, int>
     {
-        public MixDatabaseController(
+        public MixPostContentController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
@@ -25,16 +27,13 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task DeleteHandler(MixDatabaseViewModel data)
+
+        protected override Expression<Func<MixPostContent, bool>> BuildAndPredicate(SearchRequestDto req)
         {
-            if (data.Type == MixDatabaseType.System)
-            {
-                throw new MixException($"Cannot Delete System Database: {data.SystemName}");
-            }
-            return base.DeleteHandler(data);
+            var predicate = base.BuildAndPredicate(req);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(req.Keyword), m => EF.Functions.Like(m.Title.ToLower(), $"%{req.Keyword.ToLower()}%"));
+            return predicate;
         }
         #endregion
-
-
     }
 }

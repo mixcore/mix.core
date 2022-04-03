@@ -6,7 +6,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-page-content")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize("SyperAdmin, Owner")]
     public class MixPageContentController
         : MixRestApiControllerBase<MixPageContentViewModel, MixCmsContext, MixPageContent, int>
     {

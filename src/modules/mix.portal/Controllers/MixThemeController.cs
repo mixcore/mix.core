@@ -5,6 +5,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-theme")]
     [ApiController]
+    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
     public class MixThemeController
         : MixRestApiControllerBase<MixThemeViewModel, MixCmsContext, MixTheme, int>
     {

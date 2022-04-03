@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
+using System.Security.Claims;
 
 namespace Mix.Lib.Attributes
 {
@@ -19,7 +20,7 @@ namespace Mix.Lib.Attributes
         public string[] Roles { get; set; }
         protected readonly MixIdentityService _idService;
         private readonly TenantUserManager _userManager;
-
+        private ClaimsPrincipal userPrinciple;
         public AuthorizeActionFilter(
             string roles,
             MixIdentityService idService,
@@ -32,25 +33,59 @@ namespace Mix.Lib.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var userRoles = _idService.GetClaim(context.HttpContext.User, MixClaims.Role).Split(',');
-            bool isInRole = false;
+            userPrinciple = context.HttpContext.User;
+            
+            if (!ValidateToken())
+            {
+                context.Result = new UnauthorizedResult();
+                return;
+            }
+
+            if (!IsInRoles())
+            {
+                context.Result = new ForbidResult();
+                return;
+            }
+
+            if (!ValidEnpointPermission(context))
+            {
+                context.Result = new ForbidResult();
+                return;
+            }
+        }
+
+        #region Privates
+
+        private bool ValidEnpointPermission(AuthorizationFilterContext context)
+        {
+            return _idService.CheckEndpointPermission(
+                    context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
+        }
+
+        private bool ValidateToken()
+        {
+            var tmp = DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt);
+            return (userPrinciple.Identity.IsAuthenticated && tmp && DateTime.UtcNow < expireAt);
+        }
+
+        private bool IsInRoles()
+        {
+            if (Roles.Count() == 0)
+            {
+                return true;
+            }
+
+            var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',');
             foreach (var role in userRoles)
             {
                 if (Roles.Contains(role))
                 {
-                    isInRole = true;
-                    break;
+                    return true;
                 }
             }
-            bool isAuthorized = context.HttpContext.User.Identity.IsAuthenticated
-                && isInRole
-                && _idService.CheckEndpointPermission(
-                    context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
-
-            if (!isAuthorized)
-            {
-                context.Result = new UnauthorizedResult();
-            }
+            return false;
         }
+
+        #endregion
     }
 }

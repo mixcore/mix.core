@@ -1,6 +1,6 @@
 ﻿namespace Mix.Identity.Enums
 {
-    public enum MixRoles
+    public enum MixRoleEnums
     {
         SuperAdmin,
         Owner,
