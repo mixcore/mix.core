@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSchedulerJobs();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton(StdSchedulerFactory.GetDefaultScheduler().GetAwaiter().GetResult());
-
+            services.AddSingleton<QuartzService>();
             services.AddHostedService<QuartzHostedService>();
             return services;
         }
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var assembly = Assembly.GetExecutingAssembly();
             var mixJobs = assembly
                 .GetExportedTypes()
-                .Where(m => m.BaseType.Name == typeof(BaseJob).Name);
+                .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
             var applyGenericMethod = typeof(ServiceCollectionServiceExtensions)
                 .GetMethods()
                 .First(m => m.IsGenericMethodDefinition
@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     );
             foreach (var job in mixJobs)
             {
-                MethodInfo generic = applyGenericMethod.MakeGenericMethod(typeof(BaseJob), job);
+                MethodInfo generic = applyGenericMethod.MakeGenericMethod(typeof(MixJobBase), job);
                 generic.Invoke(null, new object[] { services });
             }
         }

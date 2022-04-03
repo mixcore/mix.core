@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Mix.MixQuartz.Jobs
 {
-    public class PublishScheduledPostsJob : BaseJob
+    public class PublishScheduledPostsJob : MixJobBase
     {
         public PublishScheduledPostsJob(IServiceProvider provider) : base(provider, true)
         {

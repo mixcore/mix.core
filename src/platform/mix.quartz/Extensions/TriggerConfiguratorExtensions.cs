@@ -11,9 +11,9 @@ namespace Mix.MixQuartz.Extensions
             return condition ? trigger.StartNow() : trigger;
         }
 
-        public static TriggerBuilder StartAtIf(this TriggerBuilder trigger, bool condition, DateTime startAt)
+        public static TriggerBuilder StartAtIfHaveValue(this TriggerBuilder trigger, DateTime? startAt)
         {
-            return condition ? trigger.StartAt(startAt) : trigger;
+            return startAt.HasValue ? trigger.StartAt(startAt.Value) : trigger;
         }
         
         public static TriggerBuilder WithCronScheduleIf(this TriggerBuilder trigger, bool condition, string cron)
