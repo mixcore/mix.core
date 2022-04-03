@@ -55,11 +55,11 @@ namespace Mix.Messenger.Domain.Services
         {
             return Task.Run(() =>
             {
-                    foreach (var prop in data.Properties())
-                    {
-                        template = template.Replace($"[[{prop.Name}]]", data[prop.Name].Value<string>());
-                    }
-                    SendMail(subject, template, to, from);
+                foreach (var prop in data.Properties())
+                {
+                    template = template.Replace($"[[{prop.Name}]]", data[prop.Name].Value<string>());
+                }
+                SendMail(subject, template, to, from);
             });
         }
     }

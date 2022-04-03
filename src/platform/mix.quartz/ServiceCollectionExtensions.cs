@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.MixQuartz.Jobs;
 using Mix.Quartz.Models;
 using Mix.Quartz.Services;
 using Quartz.Impl;

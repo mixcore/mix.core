@@ -1,5 +1,4 @@
-﻿using Mix.MixQuartz.Enums;
-using System;
+﻿using System;
 
 namespace Mix.MixQuartz.Models
 {
@@ -15,7 +14,7 @@ namespace Mix.MixQuartz.Models
 
         }
 
-        
+
         public string CronExpression { get; set; }
         public string Name { get; set; }
         public string GroupName { get; set; }

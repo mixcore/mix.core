@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Heart.Exceptions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 

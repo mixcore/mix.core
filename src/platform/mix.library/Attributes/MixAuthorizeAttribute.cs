@@ -34,7 +34,7 @@ namespace Mix.Lib.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             userPrinciple = context.HttpContext.User;
-            
+
             if (!ValidateToken())
             {
                 context.Result = new UnauthorizedResult();

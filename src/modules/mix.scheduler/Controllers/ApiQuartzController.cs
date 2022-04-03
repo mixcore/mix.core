@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.MixQuartz.Enums;
 using Mix.MixQuartz.Jobs;
 using Mix.MixQuartz.Models;
 using Mix.Quartz.Services;
-using System;
 using System.Linq;
 using System.Reflection;
 
@@ -24,7 +22,7 @@ namespace Mix.Scheduler.Controllers
         {
             return Ok(_service.GetTrigger(key));
         }
-        
+
         [HttpPost("reschedule/{key}")]
         public async System.Threading.Tasks.Task<ActionResult> GetJobAsync(string key, [FromBody] JobSchedule schedule)
         {
@@ -42,7 +40,7 @@ namespace Mix.Scheduler.Controllers
             await _service.Scheduler.RescheduleJob(trigger.Key, newTrigger);
             return Ok();
         }
-        
+
         [HttpGet("jobs")]
         public ActionResult GetJobs()
         {
@@ -51,7 +49,7 @@ namespace Mix.Scheduler.Controllers
                 .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
             return Ok(mixJobs);
         }
-        
+
         [HttpGet("trigger-keys")]
         public ActionResult GetTriggerKeys()
         {
