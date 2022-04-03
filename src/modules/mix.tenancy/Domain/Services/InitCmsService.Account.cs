@@ -15,7 +15,7 @@ namespace Mix.Tenancy.Domain.Services
             await accountContext.Database.MigrateAsync();
             if (!_roleManager.Roles.Any())
             {
-                var roles = MixHelper.LoadEnumValues(typeof(MixRoles));
+                var roles = MixHelper.LoadEnumValues(typeof(MixRoleEnums));
                 foreach (var role in roles)
                 {
                     await _roleManager.CreateAsync(new MixRole()
@@ -42,8 +42,8 @@ namespace Mix.Tenancy.Domain.Services
                 if (createResult.Succeeded)
                 {
                     user = await _userManager.FindByEmailAsync(model.Email).ConfigureAwait(false);
-                    await _userManager.AddToRoleAsync(user, MixRoles.SuperAdmin.ToString());
-                    await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString());
+                    await _userManager.AddToRoleAsync(user, MixRoleEnums.SuperAdmin.ToString());
+                    await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString());
                     await _userManager.AddToTenant(user, tenantId);
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();

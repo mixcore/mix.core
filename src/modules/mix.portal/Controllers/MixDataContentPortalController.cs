@@ -4,6 +4,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-data-content")]
     [ApiController]
+    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
     public class MixDataContentPortalController
         : MixRestApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {

@@ -41,7 +41,7 @@ namespace Mix.Portal.Controllers
             MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
-            await _userManager.AddToRoleAsync(user, MixRoles.Owner.ToString(), tenantId);
+            await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
             return tenantId;
         }

@@ -138,7 +138,7 @@ namespace Mix.Lib.Services
             var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
             if (createResult.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, MixRoles.Guest.ToString(), tenantId);
+                await _userManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
@@ -364,7 +364,8 @@ namespace Mix.Lib.Services
                     new Claim(MixClaims.Username, user.UserName),
                     new Claim(MixClaims.RefreshToken, refreshToken),
                     new Claim(MixClaims.AESKey, aesKey),
-                    new Claim(MixClaims.RSAPublicKey, rsaPublicKey)
+                    new Claim(MixClaims.RSAPublicKey, rsaPublicKey),
+                    new Claim(MixClaims.ExpireAt, expires.ToString())
                 });
 
             JwtSecurityToken jwtSecurityToken = new(

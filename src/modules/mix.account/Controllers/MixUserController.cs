@@ -67,7 +67,7 @@ namespace Mix.Account.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [Route("my-tenants")]
         [HttpGet]
-        public async Task<ActionResult> MyProfile()
+        public async Task<ActionResult> MyTenants()
         {
             var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
             var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
@@ -143,6 +143,23 @@ namespace Mix.Account.Controllers
         {
             var token = await _idService.RenewTokenAsync(refreshTokenDto);
             return Ok(token);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        [Route("my-profile")]
+        public async Task<ActionResult<MixUserViewModel>> MyProfile()
+        {
+            var id = _idService.GetClaim(User, MixClaims.Id);
+            var user = await _userManager.FindByIdAsync(id); ;
+
+            if (user != null)
+            {
+                var result = new MixUserViewModel(user, _cmsContext);
+                await result.LoadUserDataAsync(MixTenantId);
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpGet]
