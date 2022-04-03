@@ -14,7 +14,8 @@ namespace Mix.Xunittest.Domain.Tests
             var data = new MixConfigurationViewModel()
             {
                 DisplayName = "unit test",
-                SystemName = "unit_test"
+                SystemName = "unit_test",
+                MixTenantId = 1
             };
             data.InitDefaultValues();
             return data;

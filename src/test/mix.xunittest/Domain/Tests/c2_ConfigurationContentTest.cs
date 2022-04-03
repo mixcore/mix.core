@@ -19,7 +19,8 @@ namespace Mix.Xunittest.Domain.Tests
                 SystemName = "unit_test",
                 DisplayName = "unit test",
                 Content = "test case 1",
-                DefaultContent = ""
+                DefaultContent = "",
+                MixTenantId = 1
             };
             data.InitDefaultValues();
             return data;

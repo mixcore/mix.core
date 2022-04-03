@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
@@ -36,8 +37,9 @@ namespace Mix.XUnittest
 
             ConfigureServices((context, services) =>
             {
+                services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 services.AddMixTestServices(Assembly.GetExecutingAssembly(), Configuration);
-                services.AddMixAuthorize<ApplicationDbContext>();
+                services.AddMixAuthorize<MixCmsAccountContext>();
             });
         }
     }

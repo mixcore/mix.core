@@ -18,7 +18,8 @@ namespace Mix.Xunittest.Domain.Tests
                 MixCultureId = 1,
                 Title = "unit test",
                 Content = "test case 1",
-                Excerpt = "test case 1"
+                Excerpt = "test case 1",
+                MixTenantId = 1
             };
             data.InitDefaultValues();
             return data;

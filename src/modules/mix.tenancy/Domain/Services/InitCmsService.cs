@@ -13,9 +13,9 @@ namespace Mix.Tenancy.Domain.Services
         private readonly MixDatabaseService _databaseService;
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
-        public readonly int tenantId;
+        public readonly int tenantId = 1;
         public InitCmsService(
-             IHttpContextAccessor httpContext,
+            IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
             MixIdentityService identityService,
             MixDatabaseService databaseService,
@@ -29,9 +29,9 @@ namespace Mix.Tenancy.Domain.Services
             _roleManager = roleManager;
             _context = context;
             _databaseService = databaseService;
-            if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
-                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+                tenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
         }
 
