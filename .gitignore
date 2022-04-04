@@ -292,3 +292,5 @@ src/applications/Mixcore/wwwroot/mix-content/exports/
 src/applications/Mixcore/wwwroot/mix-content/
 
 src/shared/__pycache__/
+
+src/applications/Mixcore/logs/

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31229.75
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "platform", "platform", "{45077DFB-D35A-4491-993C-2AC4C8AC838E}"
 EndProject
@@ -72,12 +72,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.tenancy", "src\modules\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{5A7852A8-8ACC-4ADE-AD9F-3661973C3045}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.kiotviet", "src\services\mix.services.kiotviet\mix.services.kiotviet.csproj", "{F44C2E13-940F-4EEF-9927-254F8D55E0E5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{634C95AF-27D5-4DE7-AA3D-6067C3682C91}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.communicator", "mix.communicator\mix.communicator.csproj", "{A6A7367B-29AD-42A8-8688-7F6037E191FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +157,10 @@ Global
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A7367B-29AD-42A8-8688-7F6037E191FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A7367B-29AD-42A8-8688-7F6037E191FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A7367B-29AD-42A8-8688-7F6037E191FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A7367B-29AD-42A8-8688-7F6037E191FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +189,7 @@ Global
 		{932D5063-AEC8-4DA6-8C1E-21BA6214BD5A} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
 		{D4938E22-22C3-4364-A710-557B63954B5E} = {A18F9CE9-32BA-46D6-B902-CF0E51102BD3}
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
+		{A6A7367B-29AD-42A8-8688-7F6037E191FD} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

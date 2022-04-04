@@ -56,11 +56,13 @@ namespace Mix.Quartz.Services
                 .Build();
         }
 
-        public ITrigger CreateTrigger(JobSchedule schedule, string identity)
+        public ITrigger CreateTrigger(JobSchedule schedule, string identity, IJobDetail job = null)
         {
             return TriggerBuilder
                 .Create()
+                .ForJobIf(job != null, job)
                 .WithIdentity(identity)
+                .UsingJobDataIf(schedule.JobData != null, schedule.JobData)
                 .StartNowIf(schedule.IsStartNow)
                 .StartAtIfHaveValue(schedule.StartAt)
                 .WithMixSchedule(schedule.Interval, schedule.IntervalType, schedule.RepeatCount)
@@ -81,14 +83,14 @@ namespace Mix.Quartz.Services
 
         public Task ScheduleJob(MixJobBase jobSchedule, CancellationToken cancellationToken = default)
         {
-            var job = CreateJob(jobSchedule.JobType);
 
             if (jobSchedule.Schedule != null)
             {
+                var job = CreateJob(jobSchedule.JobType);
                 var trigger = CreateTrigger(jobSchedule.Schedule, $"{jobSchedule.Key}.trigger");
-
                 return Scheduler.ScheduleJob(job, trigger, cancellationToken);
             }
+
             return Task.CompletedTask;
         }
 

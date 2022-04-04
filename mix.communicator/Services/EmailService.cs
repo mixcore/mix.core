@@ -1,14 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Lib.Services;
-using Mix.Messenger.Domain.Models;
+using Mix.Communicator.Models;
 using Mix.Shared.Constants;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
-namespace Mix.Messenger.Domain.Services
+namespace Mix.Communicator.Services
 {
     public class EmailService
     {
@@ -47,7 +44,7 @@ namespace Mix.Messenger.Domain.Services
             }
             catch (Exception e)
             {
-                MixService.LogException(e);
+                Console.WriteLine(e);
             }
         }
 

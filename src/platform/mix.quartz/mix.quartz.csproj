@@ -20,6 +20,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\mix.communicator\mix.communicator.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />

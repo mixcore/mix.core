@@ -1,4 +1,4 @@
-﻿namespace Mix.Messenger.Domain.Models
+﻿namespace Mix.Communicator.Models
 {
     public class FirebaseSettingModel
     {
