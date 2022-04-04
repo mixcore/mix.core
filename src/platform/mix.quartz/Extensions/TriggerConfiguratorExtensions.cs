@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Mix.MixQuartz.Extensions
 {
@@ -12,6 +13,16 @@ namespace Mix.MixQuartz.Extensions
         public static TriggerBuilder StartAtIfHaveValue(this TriggerBuilder trigger, DateTime? startAt)
         {
             return startAt.HasValue ? trigger.StartAt(startAt.Value) : trigger;
+        }
+        
+        public static TriggerBuilder UsingJobDataIf(this TriggerBuilder trigger, bool condition, IDictionary<string, object> dicJobData)
+        {
+            return  condition ? trigger.UsingJobData(new(dicJobData)) : trigger;
+        }
+        
+        public static TriggerBuilder ForJobIf(this TriggerBuilder trigger, bool condition, IJobDetail job)
+        {
+            return  condition ? trigger.ForJob(job) : trigger;
         }
 
         public static TriggerBuilder WithCronScheduleIf(this TriggerBuilder trigger, bool condition, string cron)

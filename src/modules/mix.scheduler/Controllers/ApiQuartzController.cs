@@ -2,8 +2,11 @@
 using Mix.MixQuartz.Jobs;
 using Mix.MixQuartz.Models;
 using Mix.Quartz.Services;
+using Quartz;
+using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Mix.Scheduler.Controllers
 {
@@ -22,21 +25,32 @@ namespace Mix.Scheduler.Controllers
         {
             return Ok(_service.GetTrigger(key));
         }
+        
+        [HttpPost("trigger/{jobKey}")]
+        public async Task<ActionResult> CreateTriggerAsync(string jobKey, [FromBody] JobSchedule schedule)
+        {
+            var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(jobKey);
+            var job = await _service.GetJob(jobKey);
+            if (job == null)
+            {
+                job = _service.CreateJob(jobType);
+                var trigger = _service.CreateTrigger(schedule, DateTime.Now.Ticks.ToString());
+                await _service.Scheduler.ScheduleJob(job, trigger);
+            }
+            else
+            {
+                var trigger = _service.CreateTrigger(schedule, DateTime.Now.Ticks.ToString(), job);
+                await _service.Scheduler.ScheduleJob(trigger);
+            }
+            return Ok();
+        }
 
         [HttpPost("reschedule/{key}")]
-        public async System.Threading.Tasks.Task<ActionResult> GetJobAsync(string key, [FromBody] JobSchedule schedule)
+        public async Task<ActionResult> GetJobAsync(string key, [FromBody] JobSchedule schedule)
         {
             var trigger = await _service.GetTrigger(key);
             var job = await _service.GetJob(trigger.JobKey.Name);
             var newTrigger = _service.CreateTrigger(schedule, key);
-            //new JobSchedule(typeof(KeepPoolAliveJob))
-            //{
-            //    CronExpression = "0/5 * * * * ?",
-            //    IsStartNow = true,
-            //    StartAt = DateTime.Now,
-            //    Interval = 1,
-            //    IntervalType = MixIntevalType.Second
-            //}
             await _service.Scheduler.RescheduleJob(trigger.Key, newTrigger);
             return Ok();
         }

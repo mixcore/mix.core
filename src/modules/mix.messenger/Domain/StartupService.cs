@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Messenger.Domain.Services;
+using Mix.Communicator.Services;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
