@@ -81,17 +81,15 @@ namespace Mix.Quartz.Services
             return Scheduler?.Shutdown(cancellationToken);
         }
 
-        public Task ScheduleJob(MixJobBase jobSchedule, CancellationToken cancellationToken = default)
+        public async Task ScheduleJob(MixJobBase jobSchedule, CancellationToken cancellationToken = default)
         {
-
-            if (jobSchedule.Schedule != null)
+            var existed = await Scheduler.CheckExists(new JobKey(jobSchedule.Key));
+            if (!existed && jobSchedule.Schedule != null)
             {
                 var job = CreateJob(jobSchedule.JobType);
                 var trigger = CreateTrigger(jobSchedule.Schedule, $"{jobSchedule.Key}.trigger");
-                return Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                await Scheduler.ScheduleJob(job, trigger, cancellationToken);
             }
-
-            return Task.CompletedTask;
         }
 
         public Task ScheduleJob<T>(JobSchedule schedule, CancellationToken cancellationToken = default)

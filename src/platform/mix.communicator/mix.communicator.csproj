@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\platform\mix.shared\mix.shared.csproj" />
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
 </Project>
