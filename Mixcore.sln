@@ -70,6 +70,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mix.Heart", "src\framework\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.tenancy", "src\modules\mix.tenancy\mix.tenancy.csproj", "{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{5A7852A8-8ACC-4ADE-AD9F-3661973C3045}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.kiotviet", "src\services\mix.services.kiotviet\mix.services.kiotviet.csproj", "{F44C2E13-940F-4EEF-9927-254F8D55E0E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{634C95AF-27D5-4DE7-AA3D-6067C3682C91}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -35,7 +35,7 @@ namespace Mix.Lib.Attributes
         {
             userPrinciple = context.HttpContext.User;
 
-            if (!ValidateToken())
+            if (!ValidToken())
             {
                 context.Result = new UnauthorizedResult();
                 return;
@@ -62,10 +62,11 @@ namespace Mix.Lib.Attributes
                     context.HttpContext.User, context.HttpContext.Request.Path, context.HttpContext.Request.Method);
         }
 
-        private bool ValidateToken()
+        private bool ValidToken()
         {
-            var tmp = DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt);
-            return (userPrinciple.Identity.IsAuthenticated && tmp && DateTime.UtcNow < expireAt);
+            return userPrinciple.Identity.IsAuthenticated 
+                    && DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt) 
+                    && DateTime.UtcNow < expireAt;
         }
 
         private bool IsInRoles()

@@ -96,4 +96,8 @@
 		<Folder Include="Subscribers\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
 </Project>

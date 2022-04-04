@@ -41,7 +41,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
-                options.User = new UserOptions() { RequireUniqueEmail = true };
+                options.User = new UserOptions() { RequireUniqueEmail = false };
             })
             .AddUserStore<TenantUserStore>()
             .AddRoleStore<TenantRoleStore>()
