@@ -88,11 +88,12 @@ namespace Mix.Lib.Services
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
-                token.Info = new(user, context);
+                token.Info = new(user, new UnitOfWorkInfo(context));
                 await token.Info.LoadUserDataAsync(tenantId);
-                var plainText = JsonConvert.SerializeObject(
-                    token,
-                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+                var plainText = ReflectionHelper.ParseObject(token).ToString(Formatting.None);
+                //JsonConvert.SerializeObject(
+                //    token,
+                //    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
                 var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
 
                 var resp = new JObject()

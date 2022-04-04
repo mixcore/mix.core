@@ -2,6 +2,8 @@
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
+using System.Text.Json.Serialization;
+
 namespace Mix.Lib.ViewModels
 {
     public class MixUserViewModel
@@ -9,13 +11,13 @@ namespace Mix.Lib.ViewModels
         public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
-        public DateTime JoinDate { get; set; }
+        public DateTime CreatedDateTime { get; set; }
         public DateTime? LockoutEnd { get; set; }
         public bool IsActived { get; set; }
         public System.DateTime? LastModified { get; set; }
         public string ModifiedBy { get; set; }
 
-        //public MixUser User { get; set; }
+        public string PhoneNumber { get; set; }
 
         public FileModel MediaFile { get; set; } = new();
 
@@ -30,21 +32,22 @@ namespace Mix.Lib.ViewModels
         public bool IsChangePassword { get; set; }
 
         public ChangePasswordViewModel ChangePassword { get; set; }
-
-        private readonly MixCmsContext _cmsContext;
+        [JsonIgnore]
+        private UnitOfWorkInfo _cmsUow { get; }
 
         #endregion Change Password
 
-        public MixUserViewModel(MixUser user, MixCmsContext cmsContext)
+        
+        public MixUserViewModel(MixUser user, UnitOfWorkInfo uow)
         {
-            _cmsContext = cmsContext;
             ReflectionHelper.Mapping(user, this);
+            _cmsUow = uow;
         }
 
         public async Task LoadUserDataAsync(int tenantId)
         {
             UserData ??= await MixDataHelper.GetAdditionalDataAsync(
-                new UnitOfWorkInfo(_cmsContext),
+                _cmsUow,
                 MixDatabaseParentType.User,
                 MixDatabaseNames.SYSTEM_USER_DATA,
                 Id);

@@ -155,7 +155,7 @@ namespace Mix.Account.Controllers
 
             if (user != null)
             {
-                var result = new MixUserViewModel(user, _cmsContext);
+                var result = new MixUserViewModel(user, _cmsUOW);
                 await result.LoadUserDataAsync(MixTenantId);
                 return Ok(result);
             }
@@ -171,7 +171,7 @@ namespace Mix.Account.Controllers
 
             if (user != null)
             {
-                var result = new MixUserViewModel(user, _cmsContext);
+                var result = new MixUserViewModel(user, _cmsUOW);
                 await result.LoadUserDataAsync(MixTenantId);
                 return Ok(result);
             }
