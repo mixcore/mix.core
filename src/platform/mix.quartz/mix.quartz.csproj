@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.28" />
     <PackageReference Include="Quartz" Version="3.4.0" />
     <PackageReference Include="Quartz.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.4.0" />
@@ -22,6 +23,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />

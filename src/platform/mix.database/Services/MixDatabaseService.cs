@@ -1,5 +1,6 @@
 ﻿using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
+using Mix.Database.Entities.Quartz;
 using Mix.Heart.Services;
 using Mix.Shared.Constants;
 using Mix.Shared.Models;
@@ -108,6 +109,12 @@ namespace Mix.Database.Services
             //transaction.Dispose();
             //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
             //Console.WriteLine(query);
+        }
+        
+        public async Task InitQuartzContextAsync()
+        {
+            using var ctx = new QuartzDbContext(DatabaseProvider, GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION));
+            await ctx.Database.MigrateAsync();
         }
     }
 }
