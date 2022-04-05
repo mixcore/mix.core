@@ -4,6 +4,7 @@ using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
+using Mix.Quartz.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Enums;
@@ -21,9 +22,11 @@ namespace Mix.Tenancy.Controllers
     public class InitController : MixApiControllerBase
     {
         private readonly InitCmsService _initCmsService;
+        private readonly QuartzService _quartzService;
         private readonly MixThemeImportService _importService;
         private readonly HttpService _httpService;
         protected readonly IHubContext<MixThemeHub> _hubContext;
+        IHostApplicationLifetime _appLifetime;
         public InitController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -34,7 +37,7 @@ namespace Mix.Tenancy.Controllers
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixThemeImportService importService,
-            HttpService httpService, IHubContext<MixThemeHub> hubContext)
+            HttpService httpService, IHubContext<MixThemeHub> hubContext, IHostApplicationLifetime appLifetime, QuartzService quartzService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
 
@@ -42,6 +45,8 @@ namespace Mix.Tenancy.Controllers
             _importService = importService;
             _httpService = httpService;
             _hubContext = hubContext;
+            _appLifetime = appLifetime;
+            _quartzService = quartzService;
         }
 
 
@@ -67,6 +72,7 @@ namespace Mix.Tenancy.Controllers
                     model.PrimaryDomain ??= Request.Headers.Host;
                     await _initCmsService.InitDbContext(model);
                     await _initCmsService.InitTenantAsync(model);
+                    await _quartzService.LoadScheduler();
                     return NoContent();
                 }
                 catch (Exception ex)

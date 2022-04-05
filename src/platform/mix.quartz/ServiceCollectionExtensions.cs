@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Mix.Database.Services;
 using Mix.Quartz.Models;
 using Mix.Quartz.Services;
+using Mix.Shared.Constants;
+using Mix.Shared.Services;
 using Quartz.Impl;
 using System.Linq;
 using System.Reflection;
@@ -11,33 +14,12 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
+            
             services.AddSchedulerJobs();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton(BuildScheduler(configuration));
             services.AddSingleton<QuartzService>();
             services.AddHostedService<QuartzHostedService>();
             return services;
-        }
-
-        private static IScheduler BuildScheduler(IConfiguration configuration)
-        {
-            return StdSchedulerFactory.GetDefaultScheduler().GetAwaiter().GetResult();
-            
-            // TODO: use database for quartz
-            //var config = SchedulerBuilder.Create();
-            //config.UsePersistentStore(store =>
-            //{
-            //    // it's generally recommended to stick with
-            //    // string property keys and values when serializing
-            //    store.UseProperties = true;
-            //    store.UseGenericDatabase("SQLite", db =>
-            //        db.ConnectionString = "Data Source = MixContent/mix-cms-quartz.db"
-            //    );
-
-            //    store.UseJsonSerializer();
-            //});
-            //ISchedulerFactory schedulerFactory = config.Build();
-            //return schedulerFactory.GetScheduler().GetAwaiter().GetResult();
         }
 
         private static void AddSchedulerJobs(this IServiceCollection services)

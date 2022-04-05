@@ -141,13 +141,7 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             return services;
         }
-
-        public static T GetService<T>(this IServiceCollection services)
-        {
-            var sp = services.BuildServiceProvider();
-            return sp.GetService<T>();
-        }
-
+       
         #endregion
 
 

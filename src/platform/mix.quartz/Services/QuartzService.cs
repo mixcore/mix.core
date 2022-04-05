@@ -1,4 +1,8 @@
-﻿using Mix.MixQuartz.Extensions;
+﻿using Mix.Database.Services;
+using Mix.Heart.Enums;
+using Mix.MixQuartz.Extensions;
+using Mix.Shared.Constants;
+using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
@@ -9,13 +13,54 @@ namespace Mix.Quartz.Services
 {
     public class QuartzService
     {
-        public readonly IScheduler Scheduler;
+        public IScheduler Scheduler;
 
-        public QuartzService(IScheduler scheduler, IJobFactory jobFactory)
+        public QuartzService(IJobFactory jobFactory)
         {
-            Scheduler = scheduler;
+            LoadScheduler().GetAwaiter().GetResult();
             Scheduler.JobFactory = jobFactory;
         }
+
+        public async Task LoadScheduler()
+        {
+            MixDatabaseService databaseService = new();
+            string cnn = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+
+            if (string.IsNullOrEmpty(cnn))
+            {
+                Scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+            }
+            else
+            {
+                await databaseService.InitQuartzContextAsync();
+                string dbProvider = GetQuartzDbProvider(databaseService.DatabaseProvider);
+                // TODO: use database for quartz
+                var config = SchedulerBuilder.Create();
+                config.UsePersistentStore(store =>
+                {
+                    // it's generally recommended to stick with
+                    // string property keys and values when serializing
+                    store.UseProperties = true;
+                    store.UseGenericDatabase(dbProvider, db =>
+                        db.ConnectionString = cnn
+                    );
+
+                    store.UseJsonSerializer();
+                });
+                ISchedulerFactory schedulerFactory = config.Build();
+                Scheduler = await schedulerFactory.GetScheduler();
+            }
+        }
+
+        private string GetQuartzDbProvider(MixDatabaseProvider databaseProvider)
+        => databaseProvider switch
+        {
+            MixDatabaseProvider.SQLSERVER => "SqlServer",
+            MixDatabaseProvider.MySQL => "MySql",
+            MixDatabaseProvider.PostgreSQL => "NpgSql",
+            MixDatabaseProvider.SQLITE => "SQLite",
+            _ => throw new NotImplementedException(),
+        };
 
         public Task PauseTrigger(string id, CancellationToken cancellationToken = default)
         {
