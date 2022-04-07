@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mix.Heart.Helpers;
+using System;
 using System.Collections.Generic;
 
 namespace Mix.MixQuartz.Extensions
@@ -17,6 +18,13 @@ namespace Mix.MixQuartz.Extensions
         
         public static TriggerBuilder UsingJobDataIf(this TriggerBuilder trigger, bool condition, IDictionary<string, object> dicJobData)
         {
+            foreach (var key in dicJobData.Keys)
+            {
+                if (dicJobData[key].GetType() != typeof(string))
+                {
+                    dicJobData[key] = ReflectionHelper.ParseObject(dicJobData[key]).ToString();
+                }
+            }
             return  condition ? trigger.UsingJobData(new(dicJobData)) : trigger;
         }
         

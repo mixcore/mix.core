@@ -8,6 +8,13 @@
       "subMenus": []
     },
     {
+      "path": "/portal/scheduler",
+      "icon": "mi mi-Tiles",
+      "svg": "tabler-icon-smart-home.svg",
+      "title": "Scheduler",
+      "subMenus": []
+    },
+    {
       "title": "Tenants",
       "path": "#",
       "icon": "mi mi-ReadingList",
@@ -374,6 +381,21 @@
           "path": "/portal",
           "templatePath": "/mix-app/views/app-portal/pages/dashboard/dashboard.html",
           "controller": "DashboardController"
+        },
+        {
+          "path": "/portal/scheduler",
+          "templatePath": "/mix-app/views/app-portal/pages/scheduler/list.html",
+          "controller": "SchedulerController"
+        },
+        {
+          "path": "/portal/scheduler/create",
+          "templatePath": "/mix-app/views/app-portal/pages/scheduler/details.html",
+          "controller": "SchedulerController"
+        },
+        {
+          "path": "/portal/scheduler/details/:name",
+          "templatePath": "/mix-app/views/app-portal/pages/scheduler/details.html",
+          "controller": "SchedulerController"
         },
         {
           "path": "/portal/import",

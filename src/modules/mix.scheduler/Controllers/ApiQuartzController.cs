@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Helpers;
 using Mix.MixQuartz.Jobs;
 using Mix.MixQuartz.Models;
 using Mix.Quartz.Services;
+using Newtonsoft.Json.Linq;
 using Quartz;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Mix.Scheduler.Controllers
 {
-    [Route("api/quartz")]
+    [Route("/api/v2/scheduler")]
     [ApiController]
     public class ApiQuartzController : ControllerBase
     {
@@ -20,54 +23,75 @@ namespace Mix.Scheduler.Controllers
             _service = service;
         }
 
-        [HttpGet("trigger/{key}")]
-        public ActionResult GetTrigger(string key)
+        [HttpGet("job-schedule/default")]
+        public ActionResult GetDefaultJobSchedule()
         {
-            return Ok(_service.GetTrigger(key));
+            var obj = new JobSchedule();
+            return Ok( ReflectionHelper.ParseObject(obj).ToString());
         }
         
-        [HttpPost("trigger/{jobKey}")]
-        public async Task<ActionResult> CreateTriggerAsync(string jobKey, [FromBody] JobSchedule schedule)
+        [HttpGet("trigger/{name}")]
+        public async Task<ActionResult> GetTrigger(string name)
         {
-            var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(jobKey);
-            var job = await _service.GetJob(jobKey);
-            if (job == null)
-            {
-                job = _service.CreateJob(jobType);
-                var trigger = _service.CreateTrigger(schedule, DateTime.Now.Ticks.ToString());
-                await _service.Scheduler.ScheduleJob(job, trigger);
-            }
-            else
-            {
-                var trigger = _service.CreateTrigger(schedule, DateTime.Now.Ticks.ToString(), job);
-                await _service.Scheduler.ScheduleJob(trigger);
-            }
+            var trigger = await _service.GetTrigger(name);
+            return Ok(trigger);
+        }
+        
+        [HttpGet("trigger/pause/{name}")]
+        public async Task<ActionResult> PauseTrigger(string name)
+        {
+            await _service.PauseTrigger(name);
+            return Ok();
+        }
+        
+
+        [HttpGet("trigger/resume/{name}")]
+        public async Task<ActionResult> ResumeTrigger(string name)
+        {
+            await _service.ResumeTrigger(name);
             return Ok();
         }
 
-        [HttpPost("reschedule/{key}")]
-        public async Task<ActionResult> GetJobAsync(string key, [FromBody] JobSchedule schedule)
+        [HttpPost("trigger/create")]
+        public async Task<ActionResult> CreateTriggerAsync([FromBody] JobSchedule schedule)
         {
-            var trigger = await _service.GetTrigger(key);
-            var job = await _service.GetJob(trigger.JobKey.Name);
-            var newTrigger = _service.CreateTrigger(schedule, key);
-            await _service.Scheduler.RescheduleJob(trigger.Key, newTrigger);
+            await _service.ScheduleJob(schedule);
             return Ok();
         }
 
-        [HttpGet("jobs")]
+        [HttpPost("schedule")]
+        public async Task<ActionResult> Schedule([FromBody] JobSchedule schedule)
+        {
+            await _service.ScheduleJob(schedule);
+            return Ok();
+        }
+        
+        [HttpPost("reschedule")]
+        public async Task<ActionResult> Reschedule([FromBody] JobSchedule schedule)
+        {
+            await _service.ReScheduleJob(schedule);
+            return Ok();
+        }
+
+        [HttpGet("job")]
         public ActionResult GetJobs()
         {
             var mixJobs = Assembly.GetAssembly(typeof(MixJobBase))
                 .GetExportedTypes()
                 .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
-            return Ok(mixJobs);
+            return Ok(mixJobs.Select(m => m.FullName));
         }
 
-        [HttpGet("trigger-keys")]
-        public ActionResult GetTriggerKeys()
+        [HttpGet("trigger")]
+        public async Task<ActionResult> GetTriggerKeysAsync()
         {
-            var result = _service.GetJobTriggerKeys();
+            var keys = await _service.GetJobTriggerKeys();
+            List<JobSchedule> result = new();
+            foreach (var key in keys)
+            {
+                var trigger = await _service.GetTrigger(key.Name);
+                result.Add(trigger);
+            }
             return Ok(result);
         }
     }

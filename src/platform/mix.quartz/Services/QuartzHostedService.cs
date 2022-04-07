@@ -24,7 +24,10 @@ namespace Mix.Quartz.Services
 
             foreach (var jobSchedule in _jobSchedules)
             {
-                await _service.ScheduleJob(jobSchedule, cancellationToken);
+                if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name))
+                {
+                    await _service.ScheduleJob(jobSchedule, cancellationToken);
+                }
             }
 
             await _service.Start(cancellationToken);
