@@ -22,7 +22,7 @@ namespace Mixcore.Domain.Subscribers
 
         public override async Task Handler(MessageQueueModel data)
         {
-            var template = data.Model.ToObject<MixPageContentViewModel>();
+            var template = data.Data.ToObject<MixPageContentViewModel>();
             switch (data.Action)
             {
                 case "Get":

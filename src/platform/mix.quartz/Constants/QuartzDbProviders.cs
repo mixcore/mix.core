@@ -1,8 +1,8 @@
 ﻿namespace Mix.Quartz.Constants
 {
-    public class DbProviders
+    public class QuartzDbProviders
     {
-        public const string Sqlite = "Sqlite";
+        public const string SQLite = "SQLite";
         public const string MySql = "MySql";
         public const string SqlServer = "SqlServer";
         public const string PostgresSql = "NpgSql";
