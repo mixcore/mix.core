@@ -1,6 +1,7 @@
 ﻿using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.MixQuartz.Extensions;
+using Mix.Quartz.Constants;
 using Mix.Shared.Constants;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
@@ -55,10 +56,10 @@ namespace Mix.Quartz.Services
         private string GetQuartzDbProvider(MixDatabaseProvider databaseProvider)
         => databaseProvider switch
         {
-            MixDatabaseProvider.SQLSERVER => "SqlServer",
-            MixDatabaseProvider.MySQL => "MySql",
-            MixDatabaseProvider.PostgreSQL => "NpgSql",
-            MixDatabaseProvider.SQLITE => "SQLite",
+            MixDatabaseProvider.SQLSERVER => QuartzDbProviders.SqlServer,
+            MixDatabaseProvider.MySQL => QuartzDbProviders.MySql,
+            MixDatabaseProvider.PostgreSQL => QuartzDbProviders.PostgresSql,
+            MixDatabaseProvider.SQLITE => QuartzDbProviders.SQLite,
             _ => throw new NotImplementedException(),
         };
 
