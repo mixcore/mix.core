@@ -41,7 +41,7 @@ namespace Mix.Cms.Lib.Extensions
                             item.DateTimeValue = date;
                         }
                     }
-                    return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue.Value.ToString("yyyy-MM-dd HH:mm:ss")));
+                    return (new JProperty(item.MixDatabaseColumnName, !item.DateTimeValue.HasValue ? null : item.DateTimeValue.Value.ToString("yyyy-MM-dd HH:mm:ss")));
 
                 case MixDataType.Time:
                     return (new JProperty(item.MixDatabaseColumnName, item.DateTimeValue));
