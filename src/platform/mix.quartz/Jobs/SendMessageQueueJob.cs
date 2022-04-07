@@ -1,5 +1,6 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -16,14 +17,18 @@ namespace Mix.MixQuartz.Jobs
 
         public override Task ExecuteHandler(IJobExecutionContext context)
         {
+            string objData = context.Trigger.JobDataMap.GetString("data") ?? "{}";
             var msg = new MessageQueueModel()
             {
+                Success = true,
                 TopicId = context.Trigger.JobDataMap.GetString("topic"),
-                Action = context.Trigger.JobDataMap.GetString("action")
+                Action = context.Trigger.JobDataMap.GetString("action"),
+                Data = JObject.Parse(objData)
             };
             _queueService.PushQueue(msg);
-            Console.WriteLine(msg.TopicId);
-            Console.WriteLine(msg.Action);
+#if DEBUG
+            Console.WriteLine(JObject.FromObject(msg).ToString());
+#endif
             return Task.CompletedTask;
         }
     }

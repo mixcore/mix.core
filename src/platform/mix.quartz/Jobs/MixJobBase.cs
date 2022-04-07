@@ -13,7 +13,7 @@ namespace Mix.MixQuartz.Jobs
             _provider = provider;
             _singleton = singleton;
             JobType = GetType();
-            Key = JobType.FullName;
+            JobName = JobType.FullName;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -35,7 +35,7 @@ namespace Mix.MixQuartz.Jobs
             }
         }
 
-        public string Key { get; set; }
+        public string JobName { get; set; }
         public string Group { get; set; }
         public Type JobType { get; set; }
         public JobSchedule Schedule { get; set; }
