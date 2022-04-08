@@ -80,7 +80,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            var result = await _idService.Register(model, MixTenantId);
+            var result = await _idService.Register(model, MixTenantId, _cmsUOW);
             if (result != null)
             {
                 return Ok(result);
@@ -174,6 +174,21 @@ namespace Mix.Account.Controllers
                 var result = new MixUserViewModel(user, _cmsUOW);
                 await result.LoadUserDataAsync(MixTenantId);
                 return Ok(result);
+            }
+            return BadRequest();
+        }
+        
+        [HttpDelete]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [Route("remove-user/{id}")]
+        public async Task<ActionResult> Remove(string id)
+        {
+            MixUser user = await _userManager.FindByIdAsync(id); ;
+
+            var idRresult = await _userManager.DeleteAsync(user);
+            if (idRresult.Succeeded)
+            {
+                return Ok();
             }
             return BadRequest();
         }
