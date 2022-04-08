@@ -26,6 +26,7 @@ namespace Mix.Quartz.Services
             {
                 if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name))
                 {
+                    jobSchedule.JobName = typeof(JobSchedule).FullName;
                     await _service.ScheduleJob(jobSchedule, cancellationToken);
                 }
             }
