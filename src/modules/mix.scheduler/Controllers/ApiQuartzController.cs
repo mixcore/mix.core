@@ -27,23 +27,23 @@ namespace Mix.Scheduler.Controllers
         public ActionResult GetDefaultJobSchedule()
         {
             var obj = new JobSchedule();
-            return Ok( ReflectionHelper.ParseObject(obj).ToString());
+            return Ok(ReflectionHelper.ParseObject(obj).ToString());
         }
-        
+
         [HttpGet("trigger/{name}")]
         public async Task<ActionResult> GetTrigger(string name)
         {
             var trigger = await _service.GetTrigger(name);
             return Ok(trigger);
         }
-        
+
         [HttpGet("trigger/pause/{name}")]
         public async Task<ActionResult> PauseTrigger(string name)
         {
             await _service.PauseTrigger(name);
             return Ok();
         }
-        
+
 
         [HttpGet("trigger/resume/{name}")]
         public async Task<ActionResult> ResumeTrigger(string name)
@@ -65,11 +65,11 @@ namespace Mix.Scheduler.Controllers
             await _service.ScheduleJob(schedule);
             return Ok();
         }
-        
+
         [HttpPost("reschedule")]
         public async Task<ActionResult> Reschedule([FromBody] JobSchedule schedule)
         {
-            await _service.ReScheduleJob(schedule);
+            await _service.ResheduleJob(schedule);
             return Ok();
         }
 
@@ -90,7 +90,10 @@ namespace Mix.Scheduler.Controllers
             foreach (var key in keys)
             {
                 var trigger = await _service.GetTrigger(key.Name);
-                result.Add(trigger);
+                if (trigger != null)
+                {
+                    result.Add(trigger);
+                }
             }
             return Ok(result);
         }

@@ -4,10 +4,12 @@ using Mix.Heart.Exceptions;
 using Mix.MixQuartz.Extensions;
 using Mix.Quartz.Constants;
 using Mix.Shared.Constants;
+using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,8 +88,12 @@ namespace Mix.Quartz.Services
         {
             var key = new TriggerKey(id);
             var trigger = await Scheduler.GetTrigger(key, cancellationToken);
-            var state = await Scheduler.GetTriggerState(key, cancellationToken);
-            return new JobSchedule(trigger, state);
+            if (trigger != null)
+            {
+                var state = await Scheduler.GetTriggerState(key, cancellationToken);
+                return new JobSchedule(trigger, state);
+            }
+            return default;
         }
 
         public async Task<IJobDetail> GetJob(string id, CancellationToken cancellationToken = default)
@@ -105,7 +111,6 @@ namespace Mix.Quartz.Services
         public async Task<IEnumerable<TriggerKey>> GetJobTriggerKeys(CancellationToken cancellationToken = default)
         {
             return await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup(), cancellationToken);
-
         }
 
         public IJobDetail CreateJob(Type jobType)
@@ -126,8 +131,8 @@ namespace Mix.Quartz.Services
                 .WithIdentity(schedule.Name)
                 .UsingJobDataIf(schedule.JobData != null, schedule.JobData)
                 .StartNowIf(schedule.IsStartNow)
-                .StartAtIfHaveValue(schedule.StartAt)
-                .WithMixSchedule(schedule.Interval, schedule.IntervalType, schedule.RepeatCount)
+                .StartAtIfHaveValue(!schedule.IsStartNow && schedule.StartAt.HasValue, schedule.StartAt)
+                .WithMixSchedule(schedule)
                 .WithCronScheduleIf(!string.IsNullOrEmpty(schedule.CronExpression), schedule.CronExpression)
                 .WithDescription(schedule.CronExpression)
                 .Build();
@@ -168,7 +173,7 @@ namespace Mix.Quartz.Services
                 var existed = await Scheduler.CheckExists(triggerKey);
                 if (existed)
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, $"Trigger: {triggerKey.Name} existed");
+                    LogException(message: $"Trigger: {triggerKey.Name} existed");
                 }
 
                 var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(schedule.JobName);
@@ -179,17 +184,60 @@ namespace Mix.Quartz.Services
             }
             catch (Exception ex)
             {
-                throw new MixException(MixErrorStatus.ServerError, ex);
+                LogException(ex);
             }
         }
 
 
-        public async Task ReScheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
+        public async Task ResheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
         {
             if (schedule != null)
             {
                 var newTrigger = CreateTrigger(schedule);
                 await Scheduler.RescheduleJob(newTrigger.Key, newTrigger, cancellationToken);
+            }
+        }
+
+        public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
+        {
+            string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
+            if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+            {
+                Directory.CreateDirectory(fullPath);
+            }
+            string filePath = $"{fullPath}/log_exceptions.json";
+
+            try
+            {
+                FileInfo file = new(filePath);
+                string content = "[]";
+                if (file.Exists)
+                {
+                    using (StreamReader s = file.OpenText())
+                    {
+                        content = s.ReadToEnd();
+                    }
+                    File.Delete(filePath);
+                }
+
+                JArray arrExceptions = JArray.Parse(content);
+                JObject jex = new()
+                {
+                    new JProperty("CreatedDateTime", DateTime.UtcNow),
+                    new JProperty("Status", status?.ToString()),
+                    new JProperty("Message", message),
+                    new JProperty("Details", ex == null ? null : JObject.FromObject(ex))
+                };
+                arrExceptions.Add(jex);
+                content = arrExceptions.ToString();
+
+                using var writer = File.CreateText(filePath);
+                writer.WriteLine(content);
+            }
+            catch
+            {
+                Console.Write($"Cannot write log file {filePath}");
+                // File invalid
             }
         }
     }
