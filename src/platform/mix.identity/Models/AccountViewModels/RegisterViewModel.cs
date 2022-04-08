@@ -2,15 +2,15 @@
 // The Mixcore Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string NickName { get; set; }
+        [Required]
+        public string PhoneNumber { get; set; }
 
         [Required]
         public string UserName { get; set; }
@@ -43,6 +43,6 @@ namespace Mix.Identity.Models.AccountViewModels
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public JObject Data { get; set; }
     }
 }

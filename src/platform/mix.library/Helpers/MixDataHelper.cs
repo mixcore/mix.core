@@ -232,6 +232,7 @@ namespace Mix.Lib.Helpers
             int? intParentId = null,
             string specificulture = null)
         {
+            specificulture ??= GlobalConfigService.Instance.DefaultCulture;
             AdditionalDataContentViewModel result = null;
             var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);

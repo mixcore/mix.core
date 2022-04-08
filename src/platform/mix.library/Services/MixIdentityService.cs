@@ -90,19 +90,23 @@ namespace Mix.Lib.Services
             {
                 token.Info = new(user, new UnitOfWorkInfo(context));
                 await token.Info.LoadUserDataAsync(tenantId);
-                var plainText = ReflectionHelper.ParseObject(token).ToString(Formatting.None);
-                //JsonConvert.SerializeObject(
-                //    token,
-                //    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-                var encryptedInfo = AesEncryptionHelper.EncryptString(plainText, aesKey);
+                var data = ReflectionHelper.ParseObject(token);
+                if (GlobalConfigService.Instance.IsEncryptApi)
+                {
+                    var encryptedInfo = AesEncryptionHelper.EncryptString(data.ToString(Formatting.None), aesKey);
 
-                var resp = new JObject()
-                        {
-                            //new JProperty(MixEncryptKeywords.AESKey, aesKey),
-                            //new JProperty(MixEncryptKeywords.RSAKey, rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
-                            new JProperty(MixEncryptKeywords.Message, encryptedInfo)
-                        };
-                return resp;
+                    var resp = new JObject()
+                            {
+                                //new JProperty(MixEncryptKeywords.AESKey, aesKey),
+                                //new JProperty(MixEncryptKeywords.RSAKey, rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
+                                new JProperty(MixEncryptKeywords.Message, encryptedInfo)
+                            };
+                    return resp;
+                }
+                else
+                {
+                    return data;
+                }
             }
             return default;
         }
@@ -126,13 +130,14 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public async Task<JObject> Register(RegisterViewModel model, int tenantId)
+        public async Task<JObject> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW)
         {
             var user = new MixUser
             {
                 Id = Guid.NewGuid(),
                 UserName = model.UserName,
                 Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
                 CreatedDateTime = DateTime.UtcNow
             };
 
@@ -143,9 +148,13 @@ namespace Mix.Lib.Services
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                var vm = new MixUserViewModel(user, _cmsUOW);
+                await vm.LoadUserDataAsync(MixTenantId);
+                vm.UserData.Data = model.Data;
+                await vm.UserData.SaveAsync();
                 return await GetAuthData(_context, user, true, tenantId);
             }
-            throw new MixException(createResult.Errors.First().Description);
+            throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, string aesKey, string rsaPublicKey)

@@ -51,6 +51,7 @@ namespace Mix.Shared.Services
 
 
         public bool IsInit => AppSettings.IsInit;
+        public bool IsEncryptApi => AppSettings.IsEncryptApi;
         public string DefaultCulture => AppSettings.DefaultCulture;
         public string Domain => AppSettings.Domain;
         public InitStep InitStatus => AppSettings.InitStatus;
