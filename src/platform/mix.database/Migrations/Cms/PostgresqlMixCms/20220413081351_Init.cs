@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -509,7 +510,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     DateTimeValue = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     DoubleValue = table.Column<double>(type: "double precision", nullable: true),
                     IntegerValue = table.Column<int>(type: "integer", nullable: true),
-                    StringValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
+                    StringValue = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     EncryptValue = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
                     EncryptKey = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     EncryptType = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),

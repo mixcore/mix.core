@@ -1,13 +1,9 @@
-﻿using Mix.Database.EntityConfigurations.MYSQL.Quartz;
-using Mix.Database.EntityConfigurations.POSTGRES.Quartz;
-using Mix.Database.EntityConfigurations.SQLITE.Quartz;
-using Mix.Database.EntityConfigurations.SQLSERVER.Quartz;
-using Mix.Database.Services;
+﻿using Mix.Database.Services;
 using Mix.Shared.Constants;
 
 namespace Mix.Database.Entities.Quartz
 {
-    public partial class QuartzDbContext : DbContext
+    public abstract class QuartzDbContext : DbContext
     {
         public QuartzDbContext()
         {
@@ -38,61 +34,8 @@ namespace Mix.Database.Entities.Quartz
         public virtual DbSet<QrtzSimpleTrigger> QrtzSimpleTriggers { get; set; }
         public virtual DbSet<QrtzSimpropTrigger> QrtzSimpropTriggers { get; set; }
         public virtual DbSet<QrtzTrigger> QrtzTriggers { get; set; }
-        public MixDatabaseProvider DbProvider { get; }
-        public string ConnectionString { get; }
+        public MixDatabaseProvider DbProvider { get; protected set; }
+        public string ConnectionString { get; protected set; }
 
-        protected override void OnConfiguring(
-             DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!string.IsNullOrEmpty(ConnectionString))
-            {
-                switch (DbProvider)
-                {
-                    case MixDatabaseProvider.SQLSERVER:
-                        optionsBuilder.UseSqlServer(ConnectionString);
-                        break;
-
-                    case MixDatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(ConnectionString, ServerVersion.AutoDetect(ConnectionString));
-                        break;
-
-                    case MixDatabaseProvider.SQLITE:
-                        optionsBuilder.UseSqlite(ConnectionString);
-                        break;
-
-                    case MixDatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(ConnectionString);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            switch (DbProvider)
-            {
-                case MixDatabaseProvider.SQLSERVER:
-                    SqlServerQuartzConfigurations.Configure(modelBuilder);
-                    break;
-                case MixDatabaseProvider.MySQL:
-                    MySqlQuartzConfigurations.Config(modelBuilder);
-                    break;
-                case MixDatabaseProvider.PostgreSQL:
-                    PostgresSqlQuartzConfigurations.Config(modelBuilder);
-                    break;
-                case MixDatabaseProvider.SQLITE:
-                    SQLiteQuartzConfigurations.Configure(modelBuilder);
-                    break;
-                default:
-                    break;
-            }
-            base.OnModelCreating(modelBuilder);
-            OnModelCreatingPartial(modelBuilder);
-        }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

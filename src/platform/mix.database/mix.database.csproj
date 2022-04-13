@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\PostgresqlMixCms\" />
-    <Folder Include="Migrations\SqliteMixCms\" />
-    <Folder Include="Migrations\SqlServerMixCms\" />
+    <Folder Include="Migrations\Quartz\" />
+    <Folder Include="Migrations\Cms\SqliteMixCms\" />
+    <Folder Include="Migrations\Cms\SqlServerMixCms\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

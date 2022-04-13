@@ -716,7 +716,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringValue")
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(4000)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 

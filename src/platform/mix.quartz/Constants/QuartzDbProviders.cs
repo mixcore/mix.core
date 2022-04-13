@@ -5,6 +5,6 @@
         public const string SQLite = "SQLite";
         public const string MySql = "MySql";
         public const string SqlServer = "SqlServer";
-        public const string PostgresSql = "NpgSql";
+        public const string PostgresSql = "Npgsql";
     }
 }

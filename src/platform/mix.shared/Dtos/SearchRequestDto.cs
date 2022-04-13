@@ -13,6 +13,8 @@ namespace Mix.Shared.Dtos
         public string OrderBy { get; set; }
         public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
+        public ExpressionMethod? SearchMethod { get; set; }
         public string Columns { get; set; }
+        public string SearchColumns { get; set; }
     }
 }
