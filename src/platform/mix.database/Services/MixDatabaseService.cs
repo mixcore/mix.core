@@ -77,6 +77,18 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
+        
+        public QuartzDbContext GetQuartzDbContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(this),
+                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(this),
+                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(this),
+                _ => null,
+            };
+        }
 
         public void InitMixCmsContext(string connectionString,
             MixDatabaseProvider databaseProvider,
@@ -113,7 +125,7 @@ namespace Mix.Database.Services
         
         public async Task InitQuartzContextAsync()
         {
-            using var ctx = new QuartzDbContext(DatabaseProvider, GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION));
+            using var ctx = GetQuartzDbContext();
             await ctx.Database.MigrateAsync();
         }
     }

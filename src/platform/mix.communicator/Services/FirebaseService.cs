@@ -7,6 +7,7 @@ using Mix.Shared.Constants;
 
 namespace Mix.Communicator.Services
 {
+    // Ref: https://firebase.google.com/docs/cloud-messaging/send-message
     public class FirebaseService
     {
         private IConfiguration _configuration;

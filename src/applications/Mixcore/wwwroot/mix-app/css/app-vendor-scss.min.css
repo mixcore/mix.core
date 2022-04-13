@@ -1,4 +1,4 @@
-/* Fri Apr 01 2022 10:02:33 GMT+0700 (Indochina Time) */fb-login {
+/* Wed Apr 13 2022 16:35:15 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -43,6 +43,9 @@ body {
 
 .content-body {
   max-width: 66vw; }
+
+.w-85 {
+  width: 85vw; }
 
 /* body {
     color: #212529!important;
@@ -105,6 +108,17 @@ ul[dnd-list] li.selected,
 div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
+
+hub-messages .nav-link {
+  position: relative; }
+  hub-messages .nav-link .new-msg-count {
+    position: absolute;
+    color: white;
+    font-weight: bold;
+    top: -5px;
+    right: 5px;
+    background-color: red;
+    padding: 2px 4px 0; }
 
 main-side-bar-dynamic .sw-sidebar .sw-toc-item {
   position: relative; }

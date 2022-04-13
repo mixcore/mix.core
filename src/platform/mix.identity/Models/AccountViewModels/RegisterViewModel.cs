@@ -9,7 +9,6 @@ namespace Mix.Identity.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
         public string PhoneNumber { get; set; }
 
         [Required]

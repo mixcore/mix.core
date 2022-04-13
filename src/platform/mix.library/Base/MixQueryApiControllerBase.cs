@@ -132,6 +132,15 @@ namespace Mix.Lib.Base
                         MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
             }
 
+            if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)
+            {
+                foreach (var col in req.SearchColumns.Split(','))
+                {
+                    andPredicate = andPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
+                        col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));
+                }
+            }
+
             return andPredicate;
         }
 
