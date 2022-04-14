@@ -18,7 +18,7 @@ namespace Mix.Common
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
 
             // Must app Auth config after Add mixservice to init App config 
-            services.AddMixAuthorize<ApplicationDbContext>();
+            services.AddMixAuthorize<MixCmsAccountContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

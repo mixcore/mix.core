@@ -37,7 +37,10 @@ namespace Mix.Tenancy.Controllers
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixThemeImportService importService,
-            HttpService httpService, IHubContext<MixThemeHub> hubContext, IHostApplicationLifetime appLifetime, QuartzService quartzService)
+            IHostApplicationLifetime appLifetime,
+            QuartzService quartzService,
+            HttpService httpService, IHubContext<MixThemeHub> hubContext = null
+            )
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
 

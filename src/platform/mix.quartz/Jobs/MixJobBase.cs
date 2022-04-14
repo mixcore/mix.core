@@ -6,7 +6,7 @@ namespace Mix.MixQuartz.Jobs
 {
     public abstract class MixJobBase : IJob
     {
-        private readonly IServiceProvider _provider;
+        protected readonly IServiceProvider _provider;
         protected bool _singleton;
         protected MixJobBase(IServiceProvider provider, bool singleton = false)
         {

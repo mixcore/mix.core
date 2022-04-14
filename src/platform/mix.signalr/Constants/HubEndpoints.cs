@@ -2,8 +2,8 @@
 {
     public class HubEndpoints
     {
-        public const string MixThemeHub = "/mixThemeHub";
-        public const string PortalHub = "/portalhub";
-        public const string EditFileHub = "/editFileHub";
+        public const string MixThemeHub = "/hub/mixThemeHub";
+        public const string PortalHub = "/hub/portalhub";
+        public const string EditFileHub = "/hub/editFileHub";
     }
 }

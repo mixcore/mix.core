@@ -34,7 +34,7 @@ namespace Mix.Database.Entities.Account
 
         }
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApplicationDbContext" /> class.
+        /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
         public MixCmsAccountContext(

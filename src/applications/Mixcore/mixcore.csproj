@@ -49,10 +49,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.43.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2">
+		<PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -63,7 +63,6 @@
 		<ProjectReference Include="..\..\modules\mix.account\mix.account.csproj" />
 		<ProjectReference Include="..\..\modules\mix.common\mix.common.csproj" />
 		<ProjectReference Include="..\..\modules\mix.grpc\mix.grpc.csproj" />
-		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />

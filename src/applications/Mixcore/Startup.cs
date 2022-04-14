@@ -25,15 +25,8 @@ namespace Mixcore
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin();
-                    builder.AllowAnyHeader();
-                    builder.AllowAnyMethod();
-                });
-            });
+            services.AddMixCors();
+
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddScoped<MixNavigationService>();
@@ -42,7 +35,7 @@ namespace Mixcore
             services.AddHostedService<TemplateSubscriber>();
             services.AddHostedService<PageContentSubscriber>();
 
-            services.AddMixAuthorize<ApplicationDbContext>();
+            services.AddMixAuthorize<MixCmsAccountContext>();
             services.AddMixRoutes();
 
             // Must app Auth config after Add mixservice to init App config 

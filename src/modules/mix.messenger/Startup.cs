@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Reflection;
 
 namespace Mix.Messenger
 {
@@ -15,11 +17,27 @@ namespace Mix.Messenger
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMixCors();
+            services.AddMixDbContexts(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixCache();
+            services.AddMixSignalR();
+            services.AddMixCommunicators();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMixCors();
+            var webSocketOptions = new WebSocketOptions
+            {
+                KeepAliveInterval = TimeSpan.FromMinutes(2)
+            };
+
+            webSocketOptions.AllowedOrigins.Add("https://localhost:5010");
+
+            app.UseWebSockets(webSocketOptions);
+            app.UseRouting();
+            app.UseMixSignalRApp();
         }
     }
 }
