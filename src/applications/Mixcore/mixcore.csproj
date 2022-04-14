@@ -18,7 +18,7 @@
 		<Using Include="Newtonsoft.Json" />
 		<Using Include="Mix.Lib.Base" />
 		<Using Include="Mix.Lib.ViewModels" />
-		<Using Include="Mix.Shared.Constants" />
+		
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />
 		<Using Include="Mix.Heart.Models" />
@@ -26,7 +26,7 @@
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Lib.Attributes" />
-		<Using Include="Mix.Shared.Enums" />
+		
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Identity.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
@@ -34,6 +34,9 @@
 		<Using Include="Mixcore.Domain.Models" />
 		<Using Include="Mixcore.Domain.ViewModels" />
 		<Using Include="Mixcore.Domain.Services" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
