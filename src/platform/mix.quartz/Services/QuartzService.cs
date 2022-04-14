@@ -1,9 +1,8 @@
 ﻿using Mix.Database.Services;
 using Mix.Heart.Enums;
-using Mix.Heart.Exceptions;
 using Mix.MixQuartz.Extensions;
 using Mix.Quartz.Constants;
-using Mix.Shared.Constants;
+
 using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;

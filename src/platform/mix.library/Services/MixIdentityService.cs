@@ -11,7 +11,6 @@ using Mix.Identity.ViewModels;
 using Mix.Lib.Models;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

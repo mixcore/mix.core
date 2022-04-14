@@ -55,33 +55,33 @@ namespace Mix.MixQuartz.Extensions
                 switch (schedule.IntervalType)
                 {
                     case MixIntevalType.Second:
-                        schedule.StartAt = !schedule.IsStartNow 
-                                                ? schedule.StartAt.Value.AddSeconds(schedule.Interval.Value) 
+                        schedule.StartAt = !schedule.IsStartNow
+                                                ? schedule.StartAt.Value.AddSeconds(schedule.Interval.Value)
                                                 : schedule.StartAt;
                         schedule.EndAt = schedule.StartAt.Value.AddSeconds(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                     case MixIntevalType.Minute:
-                        schedule.StartAt =  schedule.StartAt.Value.AddMinutes(schedule.Interval.Value);
+                        schedule.StartAt = schedule.StartAt.Value.AddMinutes(schedule.Interval.Value);
                         schedule.EndAt = schedule.StartAt.Value.AddMinutes(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                     case MixIntevalType.Hour:
-                        schedule.StartAt =  schedule.StartAt.Value.AddHours(schedule.Interval.Value);
+                        schedule.StartAt = schedule.StartAt.Value.AddHours(schedule.Interval.Value);
                         schedule.EndAt = schedule.StartAt.Value.AddHours(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                     case MixIntevalType.Day:
-                        schedule.StartAt =  schedule.StartAt.Value.AddDays(schedule.Interval.Value);
+                        schedule.StartAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value);
                         schedule.EndAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                     case MixIntevalType.Week:
-                        schedule.StartAt =  schedule.StartAt.Value.AddDays(schedule.Interval.Value * 7);
+                        schedule.StartAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * 7);
                         schedule.EndAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * schedule.RepeatCount.Value * 7);
                         break;
                     case MixIntevalType.Month:
-                        schedule.StartAt =  schedule.StartAt.Value.AddMonths(schedule.Interval.Value);
+                        schedule.StartAt = schedule.StartAt.Value.AddMonths(schedule.Interval.Value);
                         schedule.EndAt = schedule.StartAt.Value.AddMonths(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                     case MixIntevalType.Year:
-                        schedule.StartAt =  schedule.StartAt.Value.AddYears(schedule.Interval.Value);
+                        schedule.StartAt = schedule.StartAt.Value.AddYears(schedule.Interval.Value);
                         schedule.EndAt = schedule.StartAt.Value.AddYears(schedule.Interval.Value * schedule.RepeatCount.Value);
                         break;
                 }

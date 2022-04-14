@@ -64,8 +64,8 @@ namespace Mix.Lib.Attributes
 
         private bool ValidToken()
         {
-            return userPrinciple.Identity.IsAuthenticated 
-                    && DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt) 
+            return userPrinciple.Identity.IsAuthenticated
+                    && DateTime.TryParse(_idService.GetClaim(userPrinciple, MixClaims.ExpireAt), out var expireAt)
                     && DateTime.UtcNow < expireAt;
         }
 

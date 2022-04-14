@@ -3,7 +3,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
-using Mix.Shared.Enums;
+
 using System;
 using System.Threading.Tasks;
 

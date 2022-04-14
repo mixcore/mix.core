@@ -12,7 +12,7 @@ namespace Mix.Tenancy.Domain
             services.AddScoped<ImportSiteService>();
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
-            if (GlobalConfigService.Instance.InitStatus == Shared.Enums.InitStep.Blank)
+            if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
                 GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
                 GlobalConfigService.Instance.SaveSettings();

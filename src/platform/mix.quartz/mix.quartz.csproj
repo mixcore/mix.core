@@ -20,6 +20,9 @@
 		<Using Include="Mix.MixQuartz.Models" />
 		<Using Include="Mix.MixQuartz.Jobs" />
 		<Using Include="Mix.MixQuartz.Enums" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
 
   <ItemGroup>

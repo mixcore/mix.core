@@ -7,7 +7,7 @@ using Mix.Lib.ViewModels;
 using Mix.Quartz.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Shared.Enums;
+
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using Mix.Tenancy.Domain.Dtos;

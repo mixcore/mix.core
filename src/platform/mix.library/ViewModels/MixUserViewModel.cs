@@ -37,7 +37,7 @@ namespace Mix.Lib.ViewModels
 
         #endregion Change Password
 
-        
+
         public MixUserViewModel(MixUser user, UnitOfWorkInfo uow)
         {
             ReflectionHelper.Mapping(user, this);

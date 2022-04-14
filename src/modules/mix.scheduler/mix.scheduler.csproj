@@ -1,13 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Mix.Scheduler</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<RootNamespace>Mix.Scheduler</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
+		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+	</ItemGroup>
 
 </Project>

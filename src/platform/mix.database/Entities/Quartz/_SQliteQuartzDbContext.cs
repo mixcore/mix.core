@@ -1,6 +1,6 @@
 ﻿using Mix.Database.EntityConfigurations.SQLITE.Quartz;
 using Mix.Database.Services;
-using Mix.Shared.Constants;
+
 
 namespace Mix.Database.Entities.Quartz
 {

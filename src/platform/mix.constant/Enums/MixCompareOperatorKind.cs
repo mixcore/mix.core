@@ -1,0 +1,16 @@
+﻿namespace Mix.Constant.Enums
+{
+    public enum MixCompareOperatorKind
+    {
+        Equal,
+        NotEqual,
+        Contain,
+        NotContain,
+        InRange,
+        NotInRange,
+        GreaterThanOrEqual,
+        GreaterThan,
+        LessThanOrEqual,
+        LessThan
+    }
+}

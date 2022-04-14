@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Database.Services;
 using Mix.Quartz.Models;
 using Mix.Quartz.Services;
-using Mix.Shared.Constants;
-using Mix.Shared.Services;
-using Quartz.Impl;
 using System.Linq;
 using System.Reflection;
 
@@ -14,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
-            
+
             services.AddSchedulerJobs();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<QuartzService>();

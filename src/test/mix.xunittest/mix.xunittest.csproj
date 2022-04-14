@@ -30,6 +30,9 @@
 		<Using Include="Mix.Xunittest.Domain.Base" />
 		<Using Include="Mix.Portal.Domain.ViewModels" />
 		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
 
 	<ItemGroup>

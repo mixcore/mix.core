@@ -3,7 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Models;
-using Mix.Shared.Enums;
+
 
 namespace Mix.Tenancy.Domain.Services
 {

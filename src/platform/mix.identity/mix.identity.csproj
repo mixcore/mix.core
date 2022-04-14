@@ -7,7 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Repositories\AuthRepository.cs" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Repositories\AuthRepository.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

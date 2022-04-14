@@ -10,7 +10,6 @@
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Mix.Lib.Base" />
-		<Using Include="Mix.Shared.Constants" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />
 		<Using Include="Mix.Heart.Enums" />
@@ -20,10 +19,12 @@
 		<Using Include="Mix.Heart.Repository" />
 		<Using Include="Mix.Heart.Helpers" />
 		<Using Include="Mix.Lib.Attributes" />
-		<Using Include="Mix.Shared.Enums" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />
 		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
 
 	<ItemGroup>

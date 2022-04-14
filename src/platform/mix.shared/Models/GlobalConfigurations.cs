@@ -1,4 +1,4 @@
-﻿using Mix.Shared.Enums;
+﻿
 using Newtonsoft.Json.Linq;
 
 namespace Mix.Shared.Models

@@ -2,7 +2,6 @@
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
 using Mix.Heart.Services;
-using Mix.Shared.Constants;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 using System.Threading.Tasks;
@@ -77,7 +76,7 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        
+
         public QuartzDbContext GetQuartzDbContext()
         {
             return DatabaseProvider switch
@@ -122,7 +121,7 @@ namespace Mix.Database.Services
             //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
             //Console.WriteLine(query);
         }
-        
+
         public async Task InitQuartzContextAsync()
         {
             using var ctx = GetQuartzDbContext();

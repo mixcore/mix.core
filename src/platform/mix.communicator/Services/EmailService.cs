@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
-using Mix.Shared.Constants;
+
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;

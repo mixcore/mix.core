@@ -11,7 +11,7 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
-using Mix.Shared.Dtos;
+
 using Mix.Shared.Services;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
@@ -177,7 +177,7 @@ namespace Mix.Account.Controllers
             }
             return BadRequest();
         }
-        
+
         [HttpDelete]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
         [Route("remove-user/{id}")]

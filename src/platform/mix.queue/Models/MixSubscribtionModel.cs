@@ -1,4 +1,4 @@
-﻿using Mix.Shared.Enums;
+﻿
 
 namespace Mix.Queue.Models
 {

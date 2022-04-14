@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Mix.Database.Entities.Quartz
+﻿namespace Mix.Database.Entities.Quartz
 {
     public partial class QrtzPausedTriggerGrp
     {

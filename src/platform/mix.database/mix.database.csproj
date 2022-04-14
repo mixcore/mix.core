@@ -21,17 +21,20 @@
 		<Using Include="Microsoft.EntityFrameworkCore" />
 		<Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
 		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Migrations\Quartz\" />
     <Folder Include="Migrations\Cms\SqliteMixCms\" />
     <Folder Include="Migrations\Cms\SqlServerMixCms\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
 </Project>
