@@ -79,6 +79,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.communicator", "src\platform\mix.communicator\mix.communicator.csproj", "{5953D4C9-C11D-4307-815C-95898416A0FB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.constant", "src\platform\mix.constant\mix.constant.csproj", "{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{5953D4C9-C11D-4307-815C-95898416A0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5953D4C9-C11D-4307-815C-95898416A0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5953D4C9-C11D-4307-815C-95898416A0FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,6 +196,7 @@ Global
 		{D4938E22-22C3-4364-A710-557B63954B5E} = {A18F9CE9-32BA-46D6-B902-CF0E51102BD3}
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{5953D4C9-C11D-4307-815C-95898416A0FB} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
