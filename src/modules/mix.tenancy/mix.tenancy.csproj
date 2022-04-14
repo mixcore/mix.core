@@ -11,7 +11,7 @@
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Mix.Lib.Base" />
-		<Using Include="Mix.Shared.Constants" />
+		
 		<Using Include="Mix.Shared.Services" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />
@@ -26,6 +26,9 @@
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.Repositories" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
 
 	<ItemGroup>

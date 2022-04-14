@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Helpers;
-using Mix.Shared.Constants;
+
 using System.Reflection;
 
 namespace Mix.XUnittest

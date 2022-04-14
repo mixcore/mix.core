@@ -1,4 +1,4 @@
-﻿using Mix.Shared.Enums;
+﻿
 using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.ViewModels.Init;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.EntityConfigurations.SQLITE.Base;
-using Mix.Shared.Enums;
+
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {

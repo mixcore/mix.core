@@ -8,7 +8,7 @@ using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
-using Mix.Shared.Constants;
+
 using MySqlConnector;
 
 namespace Mix.Database.Entities.Account

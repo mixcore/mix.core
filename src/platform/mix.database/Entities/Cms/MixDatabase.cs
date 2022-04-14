@@ -1,5 +1,5 @@
 ﻿using Mix.Database.Entities.Base;
-using Mix.Shared.Enums;
+
 using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms

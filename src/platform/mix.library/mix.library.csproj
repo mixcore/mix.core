@@ -10,10 +10,7 @@
 		<Using Include="System" />
 		<Using Include="System.Threading.Tasks" />
 		<Using Include="Mix.Lib.Base" />
-		<Using Include="Mix.Shared.Constants" />
-		<Using Include="Mix.Shared.Enums" />
 		<Using Include="Mix.Shared.Services" />
-		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.Enums" />
 		<Using Include="Mix.Heart.ViewModel" />
@@ -34,6 +31,9 @@
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Queue.Attributes" />
 		<Using Include="Newtonsoft.Json.Linq" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
 
 	</ItemGroup>
 	<ItemGroup>
