@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Mix.SignalR.Constants;
-using Mix.SignalR.Hubs;
-using Mix.SignalR.Models;
+﻿using Mix.SignalR.Models;
+using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
@@ -10,8 +8,8 @@ namespace Mix.MixQuartz.Jobs
 {
     public class SendPortalMessageJob : MixJobBase
     {
-        protected IHubContext<PortalHub> _portalHub;
-        public SendPortalMessageJob(IServiceProvider provider, IHubContext<PortalHub> portalHub)
+        protected PortalHubClientService _portalHub;
+        public SendPortalMessageJob(IServiceProvider provider, PortalHubClientService portalHub)
             : base(provider)
         {
             _portalHub = portalHub;
@@ -26,7 +24,7 @@ namespace Mix.MixQuartz.Jobs
                 Message = JObject.Parse(objData),
                 Type = SignalR.Enums.HubMessageType.Success
             };
-            await _portalHub.Clients.All.SendAsync(HubMethods.ReceiveMethod, msg.ToString());
+            await _portalHub.SendMessageAsync(msg.ToString());
 
 #if DEBUG
             Console.WriteLine(JObject.FromObject(msg).ToString());

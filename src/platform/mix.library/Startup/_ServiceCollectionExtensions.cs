@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Mix.Shared.Interfaces;
+using Mix.SignalR.Services;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -20,8 +21,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts(executingAssembly, configuration);
-            services.AddMixCache(executingAssembly, configuration);
-
+            services.AddMixCache();
+            services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddLogging();
 
@@ -47,6 +48,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
+
+            services.AddSingleton<PortalHubClientService>();
             return services;
         }
 
@@ -56,7 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // Clone Settings from shared folder
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts(executingAssembly, configuration);
-            services.AddMixCache(executingAssembly, configuration);
+            services.AddMixCache();
 
             services.AddHttpClient();
             services.AddLogging();

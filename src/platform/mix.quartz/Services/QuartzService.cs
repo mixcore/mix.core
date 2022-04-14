@@ -2,7 +2,6 @@
 using Mix.Heart.Enums;
 using Mix.MixQuartz.Extensions;
 using Mix.Quartz.Constants;
-
 using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;

@@ -10,7 +10,6 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixQuartzServices(this IServiceCollection services, IConfiguration configuration)
         {
-
             services.AddSchedulerJobs();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
             services.AddSingleton<QuartzService>();

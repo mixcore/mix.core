@@ -8,15 +8,15 @@ using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account
 {
-    public class ApplicationDbContext : IdentityDbContext<MixUser, MixRole, Guid>
+    public class MixCmsAccountContext : IdentityDbContext<MixUser, MixRole, Guid>
     {
         private static MixDatabaseService _databaseService;
         /// <summary>
         /// Initializes a new instance of the <see cref="MixDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options,
+        public MixCmsAccountContext(
+            DbContextOptions<MixCmsAccountContext> options,
             MixDatabaseService databaseService)
                     : base(options)
         {
