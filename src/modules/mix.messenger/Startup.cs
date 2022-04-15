@@ -18,7 +18,7 @@ namespace Mix.Messenger
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMixCors();
-            services.AddMixDbContexts(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixDbContexts();
             services.AddMixCache();
             services.AddMixSignalR();
             services.AddMixCommunicators();

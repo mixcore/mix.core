@@ -39,7 +39,6 @@ namespace Mix.Xunittest.Domain.Tests
         [Fact, TestPriority(1)]
         public async Task Step_1_Init_Site()
         {
-            MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
             DbFixture.Context = new(DbFixture.ConnectionString, DbFixture.DbProvider);
             DbFixture.Context.Database.EnsureDeleted();
             model.PrimaryDomain = "localhost";
