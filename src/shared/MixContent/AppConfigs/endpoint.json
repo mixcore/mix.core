@@ -1,10 +1,10 @@
 ﻿{
-  "Account": "https://localhost:5010", // https://localhost:5002
-  "Common": "https://localhost:5010", // https://localhost:5004
-  "Portal": "https://localhost:5010", // https://localhost:5006
-  "Theme": "https://localhost:5010", // https://localhost:5008
-  "Mixcore": "https://localhost:5010", // https://localhost:5010
-  "Messenger": "https://localhost:5010", // https://localhost:5012
-  "Scheduler": "https://localhost:5010", // https://localhost:5014
-  "Grpc": "https://localhost:5010" // https://localhost:5016
+  "Account": "", // https://localhost:5002
+  "Common": "", // https://localhost:5004
+  "Portal": "", // https://localhost:5006
+  "Theme": "", // https://localhost:5008
+  "Mixcore": "", // 
+  "Messenger": "", // https://localhost:5012
+  "Scheduler": "", // https://localhost:5014
+  "Grpc": "" // https://localhost:5016
 }

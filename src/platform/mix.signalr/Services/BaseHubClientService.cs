@@ -7,18 +7,39 @@ using System.Threading.Tasks;
 
 namespace Mix.SignalR.Services
 {
-    public class BaseHubClientService
+    public abstract class BaseHubClientService
     {
         protected HubConnection connection;
-        protected string endpoint;
+        protected string hubName;
         public bool IsStarted => connection != null;
 
         public BaseHubClientService(string hub)
         {
-            endpoint = $"{MixEndpointService.Instance.Messenger}{hub}";
+
+        }
+        public async Task SendMessageAsync(string message)
+        {
+            try
+            {
+                if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
+                {
+                    Init();
+                }
+
+                if (connection.State == HubConnectionState.Disconnected)
+                {
+                    await connection.StartAsync();
+                }
+                await connection.InvokeAsync(HubMethods.SendMessage, message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
         public void Init()
         {
+            string endpoint = $"{MixEndpointService.Instance.Messenger}{hubName}";
             connection = new HubConnectionBuilder()
                .WithUrl(endpoint)
                .WithAutomaticReconnect()
@@ -43,29 +64,9 @@ namespace Mix.SignalR.Services
 
                 return Task.CompletedTask;
             };
-           
+
         }
-        public async Task SendMessageAsync(string message)
-        {
-            if (connection != null)
-            {
-                try
-                {
-                    if (connection.State == HubConnectionState.Disconnected)
-                    {
-                        await connection.StartAsync();
-                    }
-                    await connection.InvokeAsync(HubMethods.SendMessage, message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-        }
-        private void HandleMessage<T>(SignalRMessageModel<T> message)
-        {
-            Console.WriteLine(message);
-        }
+
+        protected abstract void HandleMessage<T>(SignalRMessageModel<T> message);
     }
 }
