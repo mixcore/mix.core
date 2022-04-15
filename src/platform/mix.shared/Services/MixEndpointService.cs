@@ -4,6 +4,37 @@ namespace Mix.Shared.Services
 {
     public class MixEndpointService : JsonConfigurationServiceBase
     {
+        #region Instance
+        /// <summary>
+        /// The synchronize root
+        /// </summary>
+        protected static readonly object syncRoot = new object();
+
+        /// <summary>
+        /// The instance
+        /// </summary>
+        private static MixEndpointService instance;
+
+        public static MixEndpointService Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new();
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+        #endregion
+
         public MixEndpointService() : base(MixAppConfigFilePaths.Endpoint)
         {
         }

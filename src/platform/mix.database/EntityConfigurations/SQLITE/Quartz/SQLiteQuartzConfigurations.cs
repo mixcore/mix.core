@@ -32,14 +32,6 @@ namespace Mix.Database.EntityConfigurations.SQLITE.Quartz
 
                     entity.Property(e => e.BlobData).HasColumnName("BLOB_DATA");
 
-                    entity.HasOne(d => d.QrtzTrigger)
-                                .WithOne(p => p.QrtzBlobTrigger)
-                                .HasForeignKey<QrtzBlobTrigger>(d => new
-                                {
-                                    d.SchedName,
-                                    d.TriggerName,
-                                    d.TriggerGroup
-                                });
                 });
 
             modelBuilder.Entity<QrtzCalendar>(entity =>

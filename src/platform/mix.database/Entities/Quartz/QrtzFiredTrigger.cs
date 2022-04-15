@@ -1,4 +1,7 @@
-﻿namespace Mix.Database.Entities.Quartz
+﻿using System;
+using System.Collections.Generic;
+
+namespace Mix.Database.Entities.Quartz
 {
     public partial class QrtzFiredTrigger
     {
