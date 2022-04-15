@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Helpers;
-
+using Mix.Tenancy.Domain.Services;
 using System.Reflection;
 
 namespace Mix.XUnittest
@@ -14,10 +14,11 @@ namespace Mix.XUnittest
         public IConfiguration Configuration { get; }
         protected override void Configure()
         {
-            if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
+            if (Directory.Exists(MixFolders.ConfiguratoinFolder))
             {
-                MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
+                MixFileHelper.DeleteFolder(MixFolders.ConfiguratoinFolder);
             }
+            MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
             ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config
@@ -37,6 +38,9 @@ namespace Mix.XUnittest
 
             ConfigureServices((context, services) =>
             {
+
+                services.AddMixDbContexts();
+                services.AddScoped<InitCmsService>();
                 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                 services.AddMixTestServices(Assembly.GetExecutingAssembly(), Configuration);
                 services.AddMixAuthorize<MixCmsAccountContext>();

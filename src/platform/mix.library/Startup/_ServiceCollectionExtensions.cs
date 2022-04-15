@@ -20,7 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
-            services.AddMixDbContexts(executingAssembly, configuration);
+            services.AddMixDbContexts();
             services.AddMixCache();
             services.CustomValidationResponse();
             services.AddHttpClient();
@@ -58,7 +58,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             // Clone Settings from shared folder
             services.AddMixCommonServices(executingAssembly, configuration);
-            services.AddMixDbContexts(executingAssembly, configuration);
+            services.AddMixDbContexts();
             services.AddMixCache();
 
             services.AddHttpClient();
