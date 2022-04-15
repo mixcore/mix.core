@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
+    <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 
 </Project>

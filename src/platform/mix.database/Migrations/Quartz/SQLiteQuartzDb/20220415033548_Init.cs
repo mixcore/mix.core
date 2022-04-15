@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.QuartzDb
+namespace Mix.Database.Migrations.SQLiteQuartzDb
 {
     public partial class Init : Migration
     {

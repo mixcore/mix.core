@@ -35,12 +35,6 @@ namespace Mix.Database.EntityConfigurations.MYSQL.Quartz
                 entity.Property(e => e.BlobData)
                     .HasColumnType("blob")
                     .HasColumnName("BLOB_DATA");
-
-                entity.HasOne(d => d.QrtzTrigger)
-                    .WithOne(p => p.QrtzBlobTrigger)
-                    .HasForeignKey<QrtzBlobTrigger>(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("qrtz_blob_triggers_ibfk_1");
             });
 
             modelBuilder.Entity<QrtzCalendar>(entity =>

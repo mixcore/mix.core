@@ -2,37 +2,45 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Quartz;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.QuartzDb
+namespace Mix.Database.Migrations.SQLServerQuartzDb
 {
-    [DbContext(typeof(QuartzDbContext))]
-    partial class QuartzDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SQLServerQuartzDbContext))]
+    partial class SQLServerQuartzDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.2");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzBlobTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.Property<byte[]>("BlobData")
-                        .HasColumnType("BLOB")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("BLOB_DATA");
 
                     b.HasKey("SchedName", "TriggerName", "TriggerGroup");
@@ -43,16 +51,18 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzCalendar", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("CalendarName")
-                        .HasColumnType("NVARCHAR(200)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("CALENDAR_NAME");
 
                     b.Property<byte[]>("Calendar")
                         .IsRequired()
-                        .HasColumnType("BLOB")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("CALENDAR");
 
                     b.HasKey("SchedName", "CalendarName");
@@ -63,24 +73,29 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzCronTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.Property<string>("CronExpression")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(250)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("CRON_EXPRESSION");
 
                     b.Property<string>("TimeZoneId")
-                        .HasColumnType("NVARCHAR(80)")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)")
                         .HasColumnName("TIME_ZONE_ID");
 
                     b.HasKey("SchedName", "TriggerName", "TriggerGroup");
@@ -91,62 +106,76 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzFiredTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("EntryId")
-                        .HasColumnType("NVARCHAR(140)")
+                        .HasMaxLength(140)
+                        .HasColumnType("nvarchar(140)")
                         .HasColumnName("ENTRY_ID");
 
                     b.Property<long>("FiredTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("FIRED_TIME");
 
                     b.Property<string>("InstanceName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(200)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("INSTANCE_NAME");
 
                     b.Property<bool?>("IsNonconcurrent")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("IS_NONCONCURRENT");
 
                     b.Property<string>("JobGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_GROUP");
 
                     b.Property<string>("JobName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_NAME");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("PRIORITY");
 
                     b.Property<bool?>("RequestsRecovery")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("REQUESTS_RECOVERY");
 
                     b.Property<long>("SchedTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("SCHED_TIME");
 
                     b.Property<string>("State")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(16)")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
                         .HasColumnName("STATE");
 
                     b.Property<string>("TriggerGroup")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.Property<string>("TriggerName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.HasKey("SchedName", "EntryId");
+
+                    b.HasIndex(new[] { "SchedName", "JobGroup", "JobName" }, "IDX_QRTZ_FT_G_J");
+
+                    b.HasIndex(new[] { "SchedName", "TriggerGroup", "TriggerName" }, "IDX_QRTZ_FT_G_T");
+
+                    b.HasIndex(new[] { "SchedName", "InstanceName", "RequestsRecovery" }, "IDX_QRTZ_FT_INST_JOB_REQ_RCVRY");
 
                     b.ToTable("QRTZ_FIRED_TRIGGERS", (string)null);
                 });
@@ -154,44 +183,49 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzJobDetail", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("JobName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_NAME");
 
                     b.Property<string>("JobGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_GROUP");
 
                     b.Property<string>("Description")
-                        .HasColumnType("NVARCHAR(250)")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<bool>("IsDurable")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("IS_DURABLE");
 
                     b.Property<bool>("IsNonconcurrent")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("IS_NONCONCURRENT");
 
                     b.Property<bool>("IsUpdateData")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("IS_UPDATE_DATA");
 
                     b.Property<string>("JobClassName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(250)")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
                         .HasColumnName("JOB_CLASS_NAME");
 
                     b.Property<byte[]>("JobData")
-                        .HasColumnType("BLOB")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("JOB_DATA");
 
                     b.Property<bool>("RequestsRecovery")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("REQUESTS_RECOVERY");
 
                     b.HasKey("SchedName", "JobName", "JobGroup");
@@ -202,11 +236,13 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzLock", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("LockName")
-                        .HasColumnType("NVARCHAR(40)")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
                         .HasColumnName("LOCK_NAME");
 
                     b.HasKey("SchedName", "LockName");
@@ -217,11 +253,13 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzPausedTriggerGrp", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.HasKey("SchedName", "TriggerGroup");
@@ -232,19 +270,21 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzSchedulerState", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("InstanceName")
-                        .HasColumnType("NVARCHAR(200)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("INSTANCE_NAME");
 
                     b.Property<long>("CheckinInterval")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("CHECKIN_INTERVAL");
 
                     b.Property<long>("LastCheckinTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("LAST_CHECKIN_TIME");
 
                     b.HasKey("SchedName", "InstanceName");
@@ -255,27 +295,30 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzSimpleTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
-                    b.Property<long>("RepeatCount")
-                        .HasColumnType("BIGINT")
+                    b.Property<int>("RepeatCount")
+                        .HasColumnType("int")
                         .HasColumnName("REPEAT_COUNT");
 
                     b.Property<long>("RepeatInterval")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("REPEAT_INTERVAL");
 
-                    b.Property<long>("TimesTriggered")
-                        .HasColumnType("BIGINT")
+                    b.Property<int>("TimesTriggered")
+                        .HasColumnType("int")
                         .HasColumnName("TIMES_TRIGGERED");
 
                     b.HasKey("SchedName", "TriggerName", "TriggerGroup");
@@ -286,63 +329,70 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzSimpropTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR (120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerName")
-                        .HasColumnType("NVARCHAR (150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR (150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.Property<bool?>("BoolProp1")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("BOOL_PROP_1");
 
                     b.Property<bool?>("BoolProp2")
-                        .HasColumnType("BIT")
+                        .HasColumnType("bit")
                         .HasColumnName("BOOL_PROP_2");
 
                     b.Property<decimal?>("DecProp1")
-                        .HasColumnType("NUMERIC")
+                        .HasColumnType("numeric(13,4)")
                         .HasColumnName("DEC_PROP_1");
 
                     b.Property<decimal?>("DecProp2")
-                        .HasColumnType("NUMERIC")
+                        .HasColumnType("numeric(13,4)")
                         .HasColumnName("DEC_PROP_2");
 
                     b.Property<int?>("IntProp1")
-                        .HasColumnType("INT")
+                        .HasColumnType("int")
                         .HasColumnName("INT_PROP_1");
 
                     b.Property<int?>("IntProp2")
-                        .HasColumnType("INT")
+                        .HasColumnType("int")
                         .HasColumnName("INT_PROP_2");
 
                     b.Property<long?>("LongProp1")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("LONG_PROP_1");
 
                     b.Property<long?>("LongProp2")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("LONG_PROP_2");
 
                     b.Property<string>("StrProp1")
-                        .HasColumnType("NVARCHAR (512)")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)")
                         .HasColumnName("STR_PROP_1");
 
                     b.Property<string>("StrProp2")
-                        .HasColumnType("NVARCHAR (512)")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)")
                         .HasColumnName("STR_PROP_2");
 
                     b.Property<string>("StrProp3")
-                        .HasColumnType("NVARCHAR (512)")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)")
                         .HasColumnName("STR_PROP_3");
 
                     b.Property<string>("TimeZoneId")
-                        .HasColumnType("NVARCHAR(80)")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)")
                         .HasColumnName("TIME_ZONE_ID");
 
                     b.HasKey("SchedName", "TriggerName", "TriggerGroup");
@@ -353,89 +403,105 @@ namespace Mix.Database.Migrations.QuartzDb
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzTrigger", b =>
                 {
                     b.Property<string>("SchedName")
-                        .HasColumnType("NVARCHAR(120)")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)")
                         .HasColumnName("SCHED_NAME");
 
                     b.Property<string>("TriggerName")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_NAME");
 
                     b.Property<string>("TriggerGroup")
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("TRIGGER_GROUP");
 
                     b.Property<string>("CalendarName")
-                        .HasColumnType("NVARCHAR(200)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnName("CALENDAR_NAME");
 
                     b.Property<string>("Description")
-                        .HasColumnType("NVARCHAR(250)")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<long?>("EndTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("END_TIME");
 
                     b.Property<byte[]>("JobData")
-                        .HasColumnType("BLOB")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("JOB_DATA");
 
                     b.Property<string>("JobGroup")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_GROUP");
 
                     b.Property<string>("JobName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(150)")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
                         .HasColumnName("JOB_NAME");
 
-                    b.Property<short?>("MisfireInstr")
-                        .HasColumnType("INTEGER")
+                    b.Property<int?>("MisfireInstr")
+                        .HasColumnType("int")
                         .HasColumnName("MISFIRE_INSTR");
 
                     b.Property<long?>("NextFireTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("NEXT_FIRE_TIME");
 
                     b.Property<long?>("PrevFireTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("PREV_FIRE_TIME");
 
                     b.Property<int?>("Priority")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("PRIORITY");
 
                     b.Property<long>("StartTime")
-                        .HasColumnType("BIGINT")
+                        .HasColumnType("bigint")
                         .HasColumnName("START_TIME");
 
                     b.Property<string>("TriggerState")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(16)")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)")
                         .HasColumnName("TRIGGER_STATE");
 
                     b.Property<string>("TriggerType")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(8)")
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)")
                         .HasColumnName("TRIGGER_TYPE");
 
                     b.HasKey("SchedName", "TriggerName", "TriggerGroup");
 
                     b.HasIndex("SchedName", "JobName", "JobGroup");
 
+                    b.HasIndex(new[] { "SchedName", "CalendarName" }, "IDX_QRTZ_T_C");
+
+                    b.HasIndex(new[] { "SchedName", "JobGroup", "JobName" }, "IDX_QRTZ_T_G_J");
+
+                    b.HasIndex(new[] { "SchedName", "NextFireTime" }, "IDX_QRTZ_T_NEXT_FIRE_TIME");
+
+                    b.HasIndex(new[] { "SchedName", "TriggerState", "NextFireTime" }, "IDX_QRTZ_T_NFT_ST");
+
+                    b.HasIndex(new[] { "SchedName", "MisfireInstr", "NextFireTime", "TriggerState" }, "IDX_QRTZ_T_NFT_ST_MISFIRE");
+
+                    b.HasIndex(new[] { "SchedName", "MisfireInstr", "NextFireTime", "TriggerGroup", "TriggerState" }, "IDX_QRTZ_T_NFT_ST_MISFIRE_GRP");
+
+                    b.HasIndex(new[] { "SchedName", "TriggerGroup", "TriggerState" }, "IDX_QRTZ_T_N_G_STATE");
+
+                    b.HasIndex(new[] { "SchedName", "TriggerName", "TriggerGroup", "TriggerState" }, "IDX_QRTZ_T_N_STATE");
+
+                    b.HasIndex(new[] { "SchedName", "TriggerState" }, "IDX_QRTZ_T_STATE");
+
                     b.ToTable("QRTZ_TRIGGERS", (string)null);
-                });
-
-            modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzBlobTrigger", b =>
-                {
-                    b.HasOne("Mix.Database.Entities.Quartz.QrtzTrigger", "QrtzTrigger")
-                        .WithOne("QrtzBlobTrigger")
-                        .HasForeignKey("Mix.Database.Entities.Quartz.QrtzBlobTrigger", "SchedName", "TriggerName", "TriggerGroup")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("QrtzTrigger");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzCronTrigger", b =>
@@ -444,7 +510,8 @@ namespace Mix.Database.Migrations.QuartzDb
                         .WithOne("QrtzCronTrigger")
                         .HasForeignKey("Mix.Database.Entities.Quartz.QrtzCronTrigger", "SchedName", "TriggerName", "TriggerGroup")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_QRTZ_CRON_TRIGGERS_QRTZ_TRIGGERS");
 
                     b.Navigation("QrtzTrigger");
                 });
@@ -455,7 +522,8 @@ namespace Mix.Database.Migrations.QuartzDb
                         .WithOne("QrtzSimpleTrigger")
                         .HasForeignKey("Mix.Database.Entities.Quartz.QrtzSimpleTrigger", "SchedName", "TriggerName", "TriggerGroup")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_QRTZ_SIMPLE_TRIGGERS_QRTZ_TRIGGERS");
 
                     b.Navigation("QrtzTrigger");
                 });
@@ -466,7 +534,8 @@ namespace Mix.Database.Migrations.QuartzDb
                         .WithOne("QrtzSimpropTrigger")
                         .HasForeignKey("Mix.Database.Entities.Quartz.QrtzSimpropTrigger", "SchedName", "TriggerName", "TriggerGroup")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_QRTZ_SIMPROP_TRIGGERS_QRTZ_TRIGGERS");
 
                     b.Navigation("QrtzTrigger");
                 });
@@ -476,7 +545,8 @@ namespace Mix.Database.Migrations.QuartzDb
                     b.HasOne("Mix.Database.Entities.Quartz.QrtzJobDetail", "QrtzJobDetail")
                         .WithMany("QrtzTriggers")
                         .HasForeignKey("SchedName", "JobName", "JobGroup")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_QRTZ_TRIGGERS_QRTZ_JOB_DETAILS");
 
                     b.Navigation("QrtzJobDetail");
                 });
@@ -488,8 +558,6 @@ namespace Mix.Database.Migrations.QuartzDb
 
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzTrigger", b =>
                 {
-                    b.Navigation("QrtzBlobTrigger");
-
                     b.Navigation("QrtzCronTrigger");
 
                     b.Navigation("QrtzSimpleTrigger");

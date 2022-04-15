@@ -21,10 +21,6 @@ namespace Mix.Database.EntityConfigurations.POSTGRES.Quartz
 
                 entity.Property(e => e.BlobData).HasColumnName("blob_data");
 
-                entity.HasOne(d => d.QrtzTrigger)
-                    .WithOne(p => p.QrtzBlobTrigger)
-                    .HasForeignKey<QrtzBlobTrigger>(d => new { d.SchedName, d.TriggerName, d.TriggerGroup })
-                    .HasConstraintName("qrtz_blob_triggers_sched_name_trigger_name_trigger_group_fkey");
             });
 
             modelBuilder.Entity<QrtzCalendar>(entity =>

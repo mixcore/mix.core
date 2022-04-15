@@ -1,4 +1,7 @@
-﻿namespace Mix.Database.Entities.Quartz
+﻿using System;
+using System.Collections.Generic;
+
+namespace Mix.Database.Entities.Quartz
 {
     public partial class QrtzTrigger
     {
@@ -16,11 +19,10 @@
         public long StartTime { get; set; }
         public long? EndTime { get; set; }
         public string CalendarName { get; set; }
-        public short? MisfireInstr { get; set; }
+        public int? MisfireInstr { get; set; }
         public byte[] JobData { get; set; }
 
         public virtual QrtzJobDetail QrtzJobDetail { get; set; }
-        public virtual QrtzBlobTrigger QrtzBlobTrigger { get; set; }
         public virtual QrtzCronTrigger QrtzCronTrigger { get; set; }
         public virtual QrtzSimpleTrigger QrtzSimpleTrigger { get; set; }
         public virtual QrtzSimpropTrigger QrtzSimpropTrigger { get; set; }

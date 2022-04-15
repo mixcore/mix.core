@@ -1,4 +1,5 @@
-﻿using Mix.SignalR.Models;
+﻿using Mix.Shared.Services;
+using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,6 +14,10 @@ namespace Mix.MixQuartz.Jobs
             : base(provider)
         {
             _portalHub = portalHub;
+            if (!_portalHub.IsStarted)
+            {
+                _portalHub.Init();
+            }
         }
 
         public override async Task ExecuteHandler(IJobExecutionContext context)

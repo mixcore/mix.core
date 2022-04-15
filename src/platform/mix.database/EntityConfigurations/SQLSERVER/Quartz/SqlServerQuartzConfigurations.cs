@@ -5,7 +5,6 @@ namespace Mix.Database.EntityConfigurations.SQLSERVER.Quartz
     public class SqlServerQuartzConfigurations
     {
         public static void Configure(ModelBuilder modelBuilder)
-
         {
             modelBuilder.Entity<QrtzBlobTrigger>(entity =>
             {
