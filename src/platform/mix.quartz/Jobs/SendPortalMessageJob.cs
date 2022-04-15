@@ -14,10 +14,6 @@ namespace Mix.MixQuartz.Jobs
             : base(provider)
         {
             _portalHub = portalHub;
-            if (!_portalHub.IsStarted)
-            {
-                _portalHub.Init();
-            }
         }
 
         public override async Task ExecuteHandler(IJobExecutionContext context)

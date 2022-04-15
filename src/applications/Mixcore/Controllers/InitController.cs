@@ -28,9 +28,11 @@ namespace Mixcore.Controllers
             {
                 page ??= "";
                 var initStatus = GlobalConfigService.Instance.AppSettings.InitStatus;
+                
                 switch (initStatus)
                 {
                     case InitStep.Blank:
+                        InitEndpoints();
                         if (page.ToLower() != "")
                         {
                             return Redirect(InitRoutePath.Default);
@@ -58,6 +60,23 @@ namespace Mixcore.Controllers
                         break;
                 }
                 return View();
+            }
+        }
+
+        private void InitEndpoints()
+        {
+            if (string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
+            {
+                string endpoint = $"{Request.Scheme}://{Request.Host}";
+                MixEndpointService.Instance.Messenger = endpoint;
+                MixEndpointService.Instance.Portal = endpoint;
+                MixEndpointService.Instance.Grpc = endpoint;
+                MixEndpointService.Instance.Scheduler = endpoint;
+                MixEndpointService.Instance.Theme = endpoint;
+                MixEndpointService.Instance.Account = endpoint;
+                MixEndpointService.Instance.Common = endpoint;
+                MixEndpointService.Instance.Mixcore = endpoint;
+                MixEndpointService.Instance.SaveSettings();
             }
         }
     }
