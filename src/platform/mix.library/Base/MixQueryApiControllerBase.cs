@@ -135,7 +135,7 @@ namespace Mix.Lib.Base
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)
             {
                 Expression<Func<TEntity, bool>> searchPredicate = m => false;
-                foreach (var col in req.SearchColumns.Split(','))
+                foreach (var col in req.SearchColumns.Replace(" ", string.Empty).Split(','))
                 {
                     searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
                         col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));

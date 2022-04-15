@@ -53,7 +53,7 @@ namespace Mix.Shared.Services
 
         public bool SaveSettings()
         {
-            var settings = MixFileHelper.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true, "{}");
+            var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true);
             if (settings != null)
             {
                 settings.Content = AppSettings.ToString();
@@ -81,7 +81,7 @@ namespace Mix.Shared.Services
 
         protected virtual void LoadAppSettings()
         {
-            var settings = MixFileHelper.GetFile(FilePath, MixFileExtensions.Json, string.Empty, true);
+            var settings = MixFileHelper.GetFileByFullName($"{FilePath}{MixFileExtensions.Json}", true);
             string content = string.IsNullOrWhiteSpace(settings.Content) ? "{}" : settings.Content;
             JObject jsonSettings = JObject.Parse(content);
             AppSettings = jsonSettings;
