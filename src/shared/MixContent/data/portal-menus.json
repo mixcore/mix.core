@@ -77,10 +77,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_category&mixDatabaseTitle=Category&dataId=default&isGroup=true",
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -95,10 +95,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseName=sys_tag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -113,10 +113,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/media/create"
+          "path": "/portal/mix-database-data/create?mixDatabaseName=sysMedia&mixDatabaseTitle=Media&dataId=default"
         },
         {
-          "path": "/portal/media/list",
+          "path": "/portal/mix-database-data/list?mixDatabaseName=sysMedia&mixDatabaseTitle=Media&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -188,10 +188,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation&dataId=default"
+          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
 
           "title": "List",
           "icon": "mi mi-List"
@@ -303,7 +303,7 @@
           "path": "/portal/store/list"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sys_navigation&mixDatabaseTitle=Navigation",
+          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
 
           "title": "Navigations",
           "icon": "mi mi-ButtonMenu"

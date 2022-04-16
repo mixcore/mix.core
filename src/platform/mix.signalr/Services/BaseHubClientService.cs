@@ -19,25 +19,24 @@ namespace Mix.SignalR.Services
         }
         public async Task SendMessageAsync(string message)
         {
-            try
+            if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
             {
-                if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
-                {
-                    Init();
-                }
-
-                while (connection.State != HubConnectionState.Connected)
+                Init();
+            }
+            while (connection.State != HubConnectionState.Connected)
+            {
+                try
                 {
                     await Task.Delay(new Random().Next(0, 5) * 1000);
                     await connection.StartAsync();
                 }
 
-                await connection.InvokeAsync(HubMethods.SendMessage, message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            await connection.InvokeAsync(HubMethods.SendMessage, message);
         }
         public void Init()
         {
