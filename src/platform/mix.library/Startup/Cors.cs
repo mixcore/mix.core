@@ -4,15 +4,26 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
+        static string[] origins = MixEndpointService.Instance.Endpoints
+            .Where(e => !string.IsNullOrEmpty(e))
+            .Distinct()
+            .ToArray();
+
         public static IServiceCollection AddMixCors(this IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.AllowAnyOrigin();
+                    if (origins.Count() > 0)
+                    {
+                        builder.WithOrigins(origins);
+                        builder.AllowCredentials();
+                    }
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
+
                 });
             });
             return services;
@@ -22,7 +33,11 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             app.UseCors(builder =>
             {
-                builder.AllowAnyOrigin();
+                if (origins.Count() > 0)
+                {
+                    builder.WithOrigins(origins);
+                    builder.AllowCredentials();
+                }
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
                 builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");

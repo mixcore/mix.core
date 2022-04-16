@@ -39,6 +39,22 @@ namespace Mix.Shared.Services
         {
         }
 
+        protected override void LoadAppSettings()
+        {
+            base.LoadAppSettings();
+            Endpoints = new string[] {
+                Account,
+                Common,
+                Portal,
+                Theme,
+                Mixcore,
+                Messenger,
+                Scheduler,
+                Grpc
+            };
+        }
+
+        public string[] Endpoints;
         public string Account
         {
             get => GetConfig<string>(MixModuleNames.Account);

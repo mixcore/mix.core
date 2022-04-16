@@ -1,3 +1,4 @@
+
 # Run module as a microservice :
 ## 1. Remove Reference to module from Mixcore project
 ## 2. Copy MixContent to Module's source code
@@ -40,3 +41,5 @@ Ex:
   }
 ```
 ## 5. Update "EnableOcelot" in mixcore -> global.json = true.
+
+**Make sure the enpoints in MixContent/AppConfigs/endpoints.json are correct (when deploy to from local to production, must change the localhost to real endpoints)**

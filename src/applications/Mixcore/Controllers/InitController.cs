@@ -28,7 +28,7 @@ namespace Mixcore.Controllers
             {
                 page ??= "";
                 var initStatus = GlobalConfigService.Instance.AppSettings.InitStatus;
-                
+
                 switch (initStatus)
                 {
                     case InitStep.Blank:

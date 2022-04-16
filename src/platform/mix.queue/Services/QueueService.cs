@@ -56,7 +56,10 @@ namespace Mix.Queue.Services
         public void PushQueue(MessageQueueModel model)
         {
             var _queue = GetQueue(model.TopicId);
-            _queue.Enqueue(model);
+            if (_queue != null)
+            {
+                _queue.Enqueue(model);
+            }
         }
 
         public void PushMessage<T>(T data, string action, bool success)
