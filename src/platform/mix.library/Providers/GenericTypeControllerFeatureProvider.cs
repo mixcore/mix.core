@@ -23,7 +23,12 @@ namespace Mix.Lib.Providers
                 {
                     var attr = candidate.GetCustomAttribute<GenerateRestApiControllerAttribute>();
 
-                    var baseType = attr.QueryOnly
+                    var baseType =
+                        attr.IsAuthorized
+                        ? attr.QueryOnly
+                            ? typeof(MixAutoGenerateAuthorizedQueryApiController<,,,>)
+                            : typeof(MixAutoGenerateAuthorizedRestApiController<,,,>)
+                        : attr.QueryOnly
                             ? typeof(MixAutoGenerateQueryApiController<,,,>)
                             : typeof(MixAutoGenerateRestApiController<,,,>);
 

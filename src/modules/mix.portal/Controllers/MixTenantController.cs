@@ -38,7 +38,7 @@ namespace Mix.Portal.Controllers
             data.InitDomain();
             data.CloneCulture(_culture);
             var tenantId = await base.CreateHandlerAsync(data);
-            MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
+            MixTenantRepository.Instance.AllTenants = await _repository.GetAllAsync(m => true);
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
@@ -49,13 +49,13 @@ namespace Mix.Portal.Controllers
         protected override async Task UpdateHandler(string id, MixTenantViewModel data)
         {
             await base.UpdateHandler(id, data);
-            MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
+            MixTenantRepository.Instance.AllTenants = await _repository.GetAllAsync(m => true);
         }
 
         protected override async Task DeleteHandler(MixTenantViewModel data)
         {
             await base.DeleteHandler(data);
-            MixTenantRepository.Instance.AllTenants = await _context.MixTenant.ToListAsync();
+            MixTenantRepository.Instance.AllTenants = await _repository.GetAllAsync(m => true);
             await _uow.CompleteAsync();
             foreach (var item in _accContext.AspNetUserRoles.Where(m => m.MixTenantId == data.Id))
             {

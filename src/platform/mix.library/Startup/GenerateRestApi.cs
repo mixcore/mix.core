@@ -8,7 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static IServiceCollection AddGeneratedRestApi(this IServiceCollection services)
         {
-            List<Type> restCandidates = GetCandidatesByAttributeType(MixAssemblies, typeof(GenerateRestApiControllerAttribute));
+            List<Type> restCandidates = GetCandidatesByAttributeType(
+                MixAssemblies, typeof(GenerateRestApiControllerAttribute));
             services.
                 AddControllers(o => o.Conventions.Add(
                     new GenericControllerRouteConvention()
@@ -17,8 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     m.FeatureProviders.Add(
                         new GenericTypeControllerFeatureProvider(restCandidates));
-                }
-                    )
+                })
                 .AddJsonOptions(opts =>
                 {
                     var enumConverter = new JsonStringEnumConverter();
