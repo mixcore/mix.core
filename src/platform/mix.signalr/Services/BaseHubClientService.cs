@@ -15,7 +15,7 @@ namespace Mix.SignalR.Services
 
         public BaseHubClientService(string hub)
         {
-
+            hubName = hub;
         }
         public async Task SendMessageAsync(string message)
         {
@@ -26,10 +26,12 @@ namespace Mix.SignalR.Services
                     Init();
                 }
 
-                if (connection.State == HubConnectionState.Disconnected)
+                while (connection.State != HubConnectionState.Connected)
                 {
+                    await Task.Delay(new Random().Next(0, 5) * 1000);
                     await connection.StartAsync();
                 }
+
                 await connection.InvokeAsync(HubMethods.SendMessage, message);
             }
             catch (Exception ex)

@@ -43,7 +43,7 @@
 		<Compile Remove="Entities\EntityConfigurations\**" />
 		<Compile Remove="Entities\Messenger\**" />
 		<Compile Remove="Enums\**" />
-		<Compile Remove="Subscribers\Google\**" />
+		<Compile Remove="Subscribers\**" />
 		<Compile Remove="ViewModels\Account\**" />
 		<Compile Remove="ViewModels\Cms\**" />
 		<EmbeddedResource Remove="Abstracts\ViewModels\**" />
@@ -52,7 +52,7 @@
 		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
 		<EmbeddedResource Remove="Entities\Messenger\**" />
 		<EmbeddedResource Remove="Enums\**" />
-		<EmbeddedResource Remove="Subscribers\Google\**" />
+		<EmbeddedResource Remove="Subscribers\**" />
 		<EmbeddedResource Remove="ViewModels\Account\**" />
 		<EmbeddedResource Remove="ViewModels\Cms\**" />
 		<None Remove="Abstracts\ViewModels\**" />
@@ -61,7 +61,7 @@
 		<None Remove="Entities\EntityConfigurations\**" />
 		<None Remove="Entities\Messenger\**" />
 		<None Remove="Enums\**" />
-		<None Remove="Subscribers\Google\**" />
+		<None Remove="Subscribers\**" />
 		<None Remove="ViewModels\Account\**" />
 		<None Remove="ViewModels\Cms\**" />
 	</ItemGroup>
@@ -93,7 +93,6 @@
 
 	<ItemGroup>
 		<Folder Include="Abstracts\" />
-		<Folder Include="Subscribers\" />
 	</ItemGroup>
 
 	<ItemGroup>

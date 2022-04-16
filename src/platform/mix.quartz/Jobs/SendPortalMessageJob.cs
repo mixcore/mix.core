@@ -1,5 +1,4 @@
-﻿using Mix.Shared.Services;
-using Mix.SignalR.Models;
+﻿using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
 using System;

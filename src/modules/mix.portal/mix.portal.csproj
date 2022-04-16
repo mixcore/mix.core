@@ -50,7 +50,6 @@
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\mix.grpc\mix.grpc.csproj" />
-		<ProjectReference Include="..\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\mix.scheduler\mix.scheduler.csproj" />
 	</ItemGroup>
 
