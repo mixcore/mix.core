@@ -1,7 +1,8 @@
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
+    [GenerateRestApiController]
+    public class MixDomainViewModel
+        : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
         #region Contructors
 
@@ -19,11 +20,14 @@ namespace Mix.Lib.ViewModels
 
         #endregion
 
+        #region Properties
+
         public string Host { get; set; }
-        public override void InitDefaultValues(string language = null, int? DomainId = null)
-        {
-            CreatedDateTime = DateTime.UtcNow;
-            Status = MixContentStatus.Published;
-        }
+
+        #endregion
+
+        #region Overrides
+
+        #endregion
     }
 }

@@ -8,10 +8,10 @@ namespace Mix.Lib.Attributes
 {
     public class MixAuthorizeAttribute : TypeFilterAttribute
     {
-        public MixAuthorizeAttribute(string roles)
+        public MixAuthorizeAttribute(string roles = null)
         : base(typeof(AuthorizeActionFilter))
         {
-            Arguments = new object[] { roles };
+            Arguments = new object[] { roles ?? string.Empty };
         }
     }
 

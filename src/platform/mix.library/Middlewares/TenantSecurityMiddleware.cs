@@ -17,7 +17,7 @@ namespace Mix.Lib.Middlewares
             HttpContext context,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor,
-            EntityRepository<MixCmsContext, MixTenant, int> repository)
+            MixCmsContext cmsContext)
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
@@ -27,7 +27,8 @@ namespace Mix.Lib.Middlewares
             {
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
-                    MixTenantRepository.Instance.AllTenants = await repository.GetAllQuery().ToListAsync();
+                    var uow = new UnitOfWorkInfo(cmsContext);
+                    MixTenantRepository.Instance.AllTenants = await MixTenantViewModel.GetRepository(uow).GetAllAsync(m => true);
                 }
                 if (!context.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
                 {

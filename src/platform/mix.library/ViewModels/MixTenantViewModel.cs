@@ -13,7 +13,7 @@ namespace Mix.Lib.ViewModels
         public string Description { get; set; }
 
         public MixCultureViewModel Culture { get; set; }
-        public MixDomainViewModel Domain { get; set; }
+        public List<MixDomainViewModel> Domains { get; set; } = new();
         #endregion
 
         #region Contructors
@@ -36,6 +36,11 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
+        public override async Task ExpandView()
+        {
+            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
+        }
+
         public override async Task Validate()
         {
             await base.Validate();
@@ -56,7 +61,7 @@ namespace Mix.Lib.ViewModels
                 await SaveCultureAsync(parent);
             }
 
-            if (Domain != null)
+            if (Domains != null)
             {
                 await SaveDomainAsync(parent);
             }
@@ -71,9 +76,12 @@ namespace Mix.Lib.ViewModels
 
         private async Task SaveDomainAsync(MixTenant parent)
         {
-            Domain.MixTenantId = parent.Id;
-            Domain.SetUowInfo(UowInfo);
-            await Domain.SaveAsync();
+            foreach (var domain in Domains)
+            {
+                domain.MixTenantId = parent.Id;
+                domain.SetUowInfo(UowInfo);
+                await domain.SaveAsync();
+            }
         }
         #endregion
 
@@ -81,11 +89,14 @@ namespace Mix.Lib.ViewModels
 
         public void InitDomain()
         {
-            Domain = new()
+            Domains = new()
             {
-                DisplayName = PrimaryDomain,
-                Host = PrimaryDomain,
-                CreatedBy = CreatedBy
+                new()
+                {
+                    DisplayName = PrimaryDomain,
+                    Host = PrimaryDomain,
+                    CreatedBy = CreatedBy
+                }
             };
         }
 
