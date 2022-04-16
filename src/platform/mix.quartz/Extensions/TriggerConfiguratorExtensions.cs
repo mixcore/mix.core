@@ -47,46 +47,6 @@ namespace Mix.MixQuartz.Extensions
             {
                 return trigger.EndAt(schedule.EndAt.Value);
             }
-
-            if (schedule.StartAt.HasValue && schedule.RepeatCount.HasValue && schedule.Interval.HasValue)
-            {
-                schedule.StartAt ??= DateTime.UtcNow;
-
-                switch (schedule.IntervalType)
-                {
-                    case MixIntevalType.Second:
-                        schedule.StartAt = !schedule.IsStartNow
-                                                ? schedule.StartAt.Value.AddSeconds(schedule.Interval.Value)
-                                                : schedule.StartAt;
-                        schedule.EndAt = schedule.StartAt.Value.AddSeconds(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                    case MixIntevalType.Minute:
-                        schedule.StartAt = schedule.StartAt.Value.AddMinutes(schedule.Interval.Value);
-                        schedule.EndAt = schedule.StartAt.Value.AddMinutes(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                    case MixIntevalType.Hour:
-                        schedule.StartAt = schedule.StartAt.Value.AddHours(schedule.Interval.Value);
-                        schedule.EndAt = schedule.StartAt.Value.AddHours(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                    case MixIntevalType.Day:
-                        schedule.StartAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value);
-                        schedule.EndAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                    case MixIntevalType.Week:
-                        schedule.StartAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * 7);
-                        schedule.EndAt = schedule.StartAt.Value.AddDays(schedule.Interval.Value * schedule.RepeatCount.Value * 7);
-                        break;
-                    case MixIntevalType.Month:
-                        schedule.StartAt = schedule.StartAt.Value.AddMonths(schedule.Interval.Value);
-                        schedule.EndAt = schedule.StartAt.Value.AddMonths(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                    case MixIntevalType.Year:
-                        schedule.StartAt = schedule.StartAt.Value.AddYears(schedule.Interval.Value);
-                        schedule.EndAt = schedule.StartAt.Value.AddYears(schedule.Interval.Value * schedule.RepeatCount.Value);
-                        break;
-                }
-                return trigger.EndAt(schedule.EndAt.Value);
-            }
             return trigger;
         }
 
@@ -102,19 +62,19 @@ namespace Mix.MixQuartz.Extensions
                 switch (schedule.IntervalType)
                 {
                     case MixIntevalType.Second:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInSeconds(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSimpleSchedule(x => x.WithIntervalInSeconds(schedule.Interval.Value).Repeat(schedule.RepeatCount));
                     case MixIntevalType.Minute:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInMinutes(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSimpleSchedule(x => x.WithIntervalInMinutes(schedule.Interval.Value).Repeat(schedule.RepeatCount));
                     case MixIntevalType.Hour:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInHours(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSimpleSchedule(x => x.WithIntervalInHours(schedule.Interval.Value).Repeat(schedule.RepeatCount));
                     case MixIntevalType.Day:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInDays(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSchedule(calendarSchedule.WithIntervalInDays(schedule.Interval.Value));
                     case MixIntevalType.Week:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInWeeks(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSchedule(calendarSchedule.WithIntervalInWeeks(schedule.Interval.Value));
                     case MixIntevalType.Month:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInMonths(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSchedule(calendarSchedule.WithIntervalInMonths(schedule.Interval.Value));
                     case MixIntevalType.Year:
-                        return trigger.WithSchedule(calendarSchedule.WithIntervalInYears(schedule.Interval.Value)).EndAtIf(schedule);
+                        return trigger.WithSchedule(calendarSchedule.WithIntervalInYears(schedule.Interval.Value));
                     default:
                         return trigger;
                 }
