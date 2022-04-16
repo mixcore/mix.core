@@ -1,4 +1,5 @@
-﻿using Mix.SignalR.Models;
+﻿using Mix.SignalR.Enums;
+using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
 using System;
@@ -18,17 +19,27 @@ namespace Mix.MixQuartz.Jobs
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
             string objData = context.Trigger.JobDataMap.GetString("data") ?? "{}";
-
+            var obj = JObject.Parse(objData);
             SignalRMessageModel<JObject> msg = new()
             {
-                Message = JObject.Parse(objData),
-                Type = SignalR.Enums.HubMessageType.Success
+                Message = obj,
+                Type = GetHubMessageType(obj)
             };
             await _portalHub.SendMessageAsync(msg.ToString());
+        }
 
-#if DEBUG
-            Console.WriteLine(JObject.FromObject(msg).ToString());
-#endif
+        private HubMessageType GetHubMessageType(JObject obj)
+        {
+            var status = obj.Value<string>("status");
+            switch (status)
+            {
+                case "success":
+                    return HubMessageType.Success;
+                case "error":
+                    return HubMessageType.Error;
+                default:
+                    return HubMessageType.Success;
+            }
         }
     }
 }

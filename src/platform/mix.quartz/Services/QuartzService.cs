@@ -127,12 +127,13 @@ namespace Mix.Quartz.Services
                 .Create()
                 .ForJobIf(job != null, job)
                 .WithIdentity(schedule.Name)
-                .UsingJobDataIf(schedule.JobData != null, schedule.JobData)
-                .StartNowIf(schedule.IsStartNow)
-                .StartAtIfHaveValue(!schedule.IsStartNow && schedule.StartAt.HasValue, schedule.StartAt)
-                .WithMixSchedule(schedule)
-                .WithCronScheduleIf(!string.IsNullOrEmpty(schedule.CronExpression), schedule.CronExpression)
                 .WithDescription(schedule.CronExpression)
+                .UsingJobDataIf(schedule.JobData != null, schedule.JobData)
+                .WithCronScheduleIf(!string.IsNullOrEmpty(schedule.CronExpression), schedule.CronExpression)
+                .StartNowIf(schedule.IsStartNow)
+                .WithMixSchedule(schedule)
+                .StartAtIfHaveValue(!schedule.IsStartNow && schedule.StartAt.HasValue, schedule.StartAt)
+                .EndAtIf(schedule)
                 .Build();
         }
 
@@ -173,11 +174,23 @@ namespace Mix.Quartz.Services
                 {
                     LogException(message: $"Trigger: {triggerKey.Name} existed");
                 }
+               
 
                 var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(schedule.JobName);
-                var job = CreateJob(jobType);
-                var trigger = CreateTrigger(schedule);
-                await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                var jobKey = new JobKey(jobType.FullName);
+                var job = await GetJob(jobType.FullName, cancellationToken);
+                if (job == null)
+                {
+                    var trigger = CreateTrigger(schedule);
+                    job = CreateJob(jobType);
+                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                }
+                else
+                {
+                    var trigger = CreateTrigger(schedule, job);
+                    await Scheduler.ScheduleJob(trigger);
+                }
+
 
             }
             catch (Exception ex)
