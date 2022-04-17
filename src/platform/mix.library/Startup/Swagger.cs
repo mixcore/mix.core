@@ -36,10 +36,12 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 };
                 c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {securityScheme, new string[] { }}
-    });
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {securityScheme, new string[] { }}
+                    }
+                );
             });
             return services;
         }

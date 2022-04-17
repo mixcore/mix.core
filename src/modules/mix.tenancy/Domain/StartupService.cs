@@ -8,10 +8,19 @@ namespace Mix.Tenancy.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<EntityRepository<MixCmsContext, MixConfiguration, int>>();
+            services.AddScoped<EntityRepository<MixCmsContext, MixLanguage, int>>();
+            services.AddScoped<EntityRepository<MixCmsContext, MixPost, int>>();
+            services.AddScoped<EntityRepository<MixCmsContext, MixPage, int>>();
+            services.AddScoped<EntityRepository<MixCmsContext, MixModule, int>>();
+
+
             services.AddScoped<InitCmsService>();
             services.AddScoped<ImportSiteService>();
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
+
+
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
                 GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
