@@ -30,6 +30,7 @@ namespace Mix.Identity.Models.AccountViewModels
         public string UserName { get; set; }
 
         public string Email { get; set; }
+        public string PhoneNumber { get; set; }
 
         [Required]
         public MixExternalLoginProviders Provider { get; set; }

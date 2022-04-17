@@ -83,6 +83,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
 		<ProjectReference Include="..\mix.database\mix.database.csproj" />
 		<ProjectReference Include="..\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\mix.quartz\mix.quartz.csproj" />

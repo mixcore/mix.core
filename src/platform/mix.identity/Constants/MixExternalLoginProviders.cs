@@ -5,6 +5,7 @@
         Facebook,
         Google,
         Twitter,
-        Microsoft
+        Microsoft,
+        Firebase
     }
 }

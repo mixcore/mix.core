@@ -128,6 +128,17 @@ namespace Mix.Account.Controllers
             return Ok(loginResult);
         }
 
+        [Route("external-login")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> ExternalLogin([FromBody] LoginDto requestDto)
+        {
+            string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
+            var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
+            var loginResult = await _idService.ExternalLogin(model);
+            return Ok(loginResult);
+        }
 
         [Route("get-external-login-providers")]
         [HttpGet]

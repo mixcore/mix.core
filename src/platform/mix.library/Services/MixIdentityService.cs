@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Constants;
 using Mix.Identity.Domain.Models;
@@ -25,6 +26,7 @@ namespace Mix.Lib.Services
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
+        private readonly FirebaseService _firebaseService;
         private readonly MixCmsContext _context;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
@@ -60,8 +62,27 @@ namespace Mix.Lib.Services
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(
-                model.UserName, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+
+            MixUser user = null;
+            if (!string.IsNullOrEmpty(model.Email))
+            {
+                user = await _userManager.FindByEmailAsync(model.Email);
+            }
+            if (!string.IsNullOrEmpty(model.UserName))
+            {
+                user = await _userManager.FindByNameAsync(model.UserName);
+            }
+            if (!string.IsNullOrEmpty(model.PhoneNumber))
+            {
+                user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+            }
+
+            if (user == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Login failed");
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
 
             if (result.IsLockedOut)
             {
@@ -70,7 +91,6 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 return await GetAuthData(_context, user, model.RememberMe, MixTenantId);
             }
             else
@@ -208,7 +228,19 @@ namespace Mix.Lib.Services
             var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
             if (verifiedAccessToken != null)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
+                MixUser user = null;
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    user  = await _userManager.FindByEmailAsync(model.Email);
+                }
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    user  = await _userManager.FindByNameAsync(model.UserName);
+                }
+                if (!string.IsNullOrEmpty(model.PhoneNumber))
+                {
+                    user  = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                }
 
                 // return local token if already register
                 if (user != null)
@@ -232,7 +264,6 @@ namespace Mix.Lib.Services
             }
             return default;
         }
-
         public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
             JObject result = new();
@@ -273,7 +304,6 @@ namespace Mix.Lib.Services
                 throw new MixException(MixErrorStatus.Badrequest, "Token expired");
             }
         }
-
         public bool CheckEndpointPermission(ClaimsPrincipal user, PathString path, string method)
         {
             return true;
@@ -312,6 +342,14 @@ namespace Mix.Lib.Services
                     break;
                 case MixExternalLoginProviders.Google:
                     verifyTokenEndPoint = string.Format("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}", accessToken);
+                    break;
+                case MixExternalLoginProviders.Firebase:
+                    var token = await _firebaseService.VeriryTokenAsync(accessToken);
+                    return new ParsedExternalAccessToken()
+                    {
+                        app_id = token.TenantId,
+                        user_id = token.Uid
+                    };
                     break;
                 case MixExternalLoginProviders.Twitter:
                 case MixExternalLoginProviders.Microsoft:
