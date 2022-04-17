@@ -72,9 +72,13 @@ namespace Mix.Lib.Base
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
             var data = await _repository.GetSingleAsync(id);
-            data.SetUowInfo(_uow);
-            await DeleteHandler(data);
-            return Ok(id);
+            if (data != null)
+            {
+                data.SetUowInfo(_uow);
+                await DeleteHandler(data);
+                return Ok(id);
+            }
+            throw new MixException(MixErrorStatus.NotFound, "Not Found");
         }
 
         [HttpPatch("{id}")]

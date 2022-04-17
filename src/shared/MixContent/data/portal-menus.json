@@ -29,6 +29,11 @@
           "path": "/portal/tenant/list",
           "title": "List Tenant",
           "icon": "mi mi-List"
+        },
+        {
+          "path": "/portal/domain/list",
+          "title": "List Domain",
+          "icon": "mi mi-List"
         }
       ]
     },
@@ -451,6 +456,26 @@
           "path": "/portal/tenant/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
           "controller": "TenantController"
+        }
+      ]
+    },
+    {
+      "cate": "domain",
+      "items": [
+        {
+          "path": "/portal/domain/create",
+          "templatePath": "/mix-app/views/app-portal/pages/domain/details.html",
+          "controller": "DomainController"
+        },
+        {
+          "path": "/portal/domain/list",
+          "templatePath": "/mix-app/views/app-portal/pages/domain/list.html",
+          "controller": "DomainController"
+        },
+        {
+          "path": "/portal/domain/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/domain/details.html",
+          "controller": "DomainController"
         }
       ]
     },

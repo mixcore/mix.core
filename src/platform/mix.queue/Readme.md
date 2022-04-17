@@ -72,38 +72,36 @@ _queueService.PushQueue(new MessageQueueModel()
 # Subscribe Queue
 - Create Subscriber for each module
 ```
-public class PageContentSubscriberService : SubscriberService
+public class TenantSubscriber : SubscriberBase
 {
-    protected UnitOfWorkInfo _uow;
-    protected Repository<MixCmsContext, MixPageContent, int, MixPageContentViewModel> _repo;
-    static string topicId = typeof(MixPageContentViewModel).FullName;
-    public PageContentSubscriberService(
+    private UnitOfWorkInfo _uow;
+    static string topicId = typeof(MixTenantViewModel).FullName;
+    public TenantSubscriber(
         IConfiguration configuration,
-        MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Portal, configuration, queueService)
+        MixMemoryMessageQueue<MessageQueueModel> queueService) 
+        : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
     {
-        _uow = new UnitOfWorkInfo(new MixCmsContext());
-        _repo = MixPageContentViewModel.GetRepository(_uow);
+        _uow = new(new MixCmsContext());
     }
 
-    public override Task Handler(MessageQueueModel data)
+    public override async Task Handler(MessageQueueModel data)
     {
-        var post = data.Model.ToObject<MixPageContentViewModel>();
+        var _repository = MixTenantViewModel.GetRepository(_uow);
+        var post = data.Data.ToObject<MixTenantViewModel>();
         switch (data.Action)
         {
-            case MixRestAction.Get:
+            case "Get":
                 break;
-            case MixRestAction.Post:
-                break;
-            case MixRestAction.Put:
-                break;
-            case MixRestAction.Patch:
-                break;
-            case MixRestAction.Delete:
+            case "Post":
+            case "Put":
+            case "Patch":
+            case "Delete":
+                MixTenantRepository.Instance.AllTenants = await _repository.GetAllAsync(m => true);
                 break;
             default:
                 break;
         }
-        return Task.CompletedTask;
+        await _uow.CompleteAsync();
     }
 }
 ```

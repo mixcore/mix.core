@@ -2,6 +2,7 @@
 
 namespace Mix.Lib.ViewModels
 {
+    [GeneratePublisher]
     public class MixTenantViewModel
         : ViewModelBase<MixCmsContext, MixTenant, int, MixTenantViewModel>
     {
