@@ -35,21 +35,19 @@ namespace Mix.Lib.Attributes
         {
             userPrinciple = context.HttpContext.User;
 
-            if (!ValidToken())
+            if (ValidToken())
             {
+                if (!IsInRoles())
+                {
+                    if (!ValidEnpointPermission(context))
+                    {
+                        context.Result = new ForbidResult();
+                        return;
+                    }
+                }
+            }
+            else {
                 context.Result = new UnauthorizedResult();
-                return;
-            }
-
-            if (!IsInRoles())
-            {
-                context.Result = new ForbidResult();
-                return;
-            }
-
-            if (!ValidEnpointPermission(context))
-            {
-                context.Result = new ForbidResult();
                 return;
             }
         }

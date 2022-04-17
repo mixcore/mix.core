@@ -30,8 +30,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddQueues(executingAssembly, configuration);
 
+            // Don't need to inject all entity repository by default
+            //services.AddEntityRepositories();
 
-            services.AddEntityRepositories();
             services.AddMixTenant();
             services.AddGeneratedPublisher();
 
@@ -68,9 +69,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddQueues(executingAssembly, configuration);
 
-
-            services.AddEntityRepositories();
-
+            // Don't need to inject all entity repository by default
+            //services.AddEntityRepositories();
 
             services.AddMixModuleServices(configuration);
 

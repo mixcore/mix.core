@@ -3,7 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Models;
-
+using Mix.Lib.ViewModels;
 
 namespace Mix.Tenancy.Domain.Services
 {
@@ -48,8 +48,11 @@ namespace Mix.Tenancy.Domain.Services
                     // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+                    var userInfo = new MixUserViewModel(user, _cmsUow);
+                    await userInfo.LoadUserDataAsync(tenantId);
 
-                    var token = await _identityService.GenerateAccessTokenAsync(user, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+                    var token = await _identityService.GenerateAccessTokenAsync(
+                        user, userInfo, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)
                     {
                         GlobalConfigService.Instance.AppSettings.ApiEncryptKey = aesKey;

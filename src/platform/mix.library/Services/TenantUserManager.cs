@@ -106,5 +106,15 @@ namespace Mix.Lib.Services
                         select r.Name;
             return await roles.ToListAsync();
         }
+        
+        public async Task<IList<MixRole>> GetUserRolesAsync(MixUser user)
+        {
+            var roles = from ur in Context.AspNetUserRoles
+                        join r in Context.MixRoles
+                        on ur.RoleId equals r.Id
+                        where ur.UserId == user.Id && ur.MixTenantId == MixTenantId
+                        select r;
+            return await roles.ToListAsync();
+        }
     }
 }

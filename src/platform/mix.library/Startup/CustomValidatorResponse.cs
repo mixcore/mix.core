@@ -8,11 +8,15 @@ namespace Microsoft.Extensions.DependencyInjection
         private static void CustomValidationResponse(this IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(
-                options => options.InvalidModelStateResponseFactory = actionContext =>
+                options =>
                 {
-                    return CustomErrorResponse(actionContext);
+                    options.InvalidModelStateResponseFactory = 
+                        actionContext =>
+                        {
+                            return CustomErrorResponse(actionContext);
+                        };
                 }
-                );
+            );
         }
 
         private static BadRequestObjectResult CustomErrorResponse(ActionContext actionContext)

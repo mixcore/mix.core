@@ -9,5 +9,6 @@
         public const string AESKey = "AESKey";
         public const string RSAPublicKey = "RSAPublicKey";
         public const string ExpireAt = "ExpireAt";
+        public const string Endpoints = "Endpoints";
     }
 }

@@ -15,19 +15,21 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Services
 {
     public class MixIdentityService
     {
-        private readonly UnitOfWorkInfo _uow;
+        private readonly UnitOfWorkInfo _accountUow;
+        private readonly UnitOfWorkInfo _cmsUow;
         private readonly MixCacheService _cacheService;
         private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
         private readonly RoleManager<MixRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
         private readonly FirebaseService _firebaseService;
-        private readonly MixCmsContext _context;
+        private readonly MixCmsContext _cmsSontext;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
@@ -38,24 +40,27 @@ namespace Mix.Lib.Services
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             AuthConfigService authConfigService,
-            MixCmsContext context,
+            MixCmsContext cmsContext,
             MixCmsAccountContext accountContext,
-            MixCacheService cacheService)
+            MixCacheService cacheService,
+            FirebaseService firebaseService)
         {
-            _context = context;
+            _cmsSontext = cmsContext;
             _cacheService = cacheService;
-            _uow = new(accountContext);
+            _accountUow = new(accountContext);
+            _cmsUow = new(cmsContext);
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _authConfigService = authConfigService;
             _roleRepo = RoleViewModel.GetRootRepository(accountContext);
             _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
+            _firebaseService = firebaseService;
+
             if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
-            LoadRoles();
         }
 
         public async Task<JObject> Login(LoginViewModel model)
@@ -91,7 +96,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(_context, user, model.RememberMe, MixTenantId);
+                return await GetAuthData(_cmsSontext, user, model.RememberMe, MixTenantId);
             }
             else
             {
@@ -104,11 +109,13 @@ namespace Mix.Lib.Services
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
-            var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+
+            var userInfo = new MixUserViewModel(user, _cmsUow);
+            await userInfo.LoadUserDataAsync(tenantId);
+
+            var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
-                token.Info = new(user, new UnitOfWorkInfo(context));
-                await token.Info.LoadUserDataAsync(tenantId);
                 var data = ReflectionHelper.ParseObject(token);
                 if (GlobalConfigService.Instance.IsEncryptApi)
                 {
@@ -144,7 +151,7 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(_context, user, true, MixTenantId);
+                return await GetAuthData(_cmsSontext, user, true, MixTenantId);
             }
             return default;
         }
@@ -171,12 +178,17 @@ namespace Mix.Lib.Services
                 await vm.LoadUserDataAsync(MixTenantId);
                 vm.UserData.Data = model.Data;
                 await vm.UserData.SaveAsync();
-                return await GetAuthData(_context, user, true, tenantId);
+                return await GetAuthData(_cmsSontext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, string aesKey, string rsaPublicKey)
+        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
+            MixUser user,
+            MixUserViewModel info,
+            bool isRemember,
+            string aesKey,
+            string rsaPublicKey)
         {
             try
             {
@@ -205,8 +217,9 @@ namespace Mix.Lib.Services
 
                 AccessTokenViewModel token = new()
                 {
+                    Info = info,
                     AccessToken = await GenerateTokenAsync(
-                        user, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AppSettings),
+                        user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
                     TokenType = _authConfigService.AppSettings.TokenType,
                     ExpiresIn = _authConfigService.AppSettings.AccessTokenExpiration,
@@ -231,31 +244,33 @@ namespace Mix.Lib.Services
                 MixUser user = null;
                 if (!string.IsNullOrEmpty(model.Email))
                 {
-                    user  = await _userManager.FindByEmailAsync(model.Email);
+                    user = await _userManager.FindByEmailAsync(model.Email);
                 }
                 if (!string.IsNullOrEmpty(model.UserName))
                 {
-                    user  = await _userManager.FindByNameAsync(model.UserName);
+                    user = await _userManager.FindByNameAsync(model.UserName);
                 }
                 if (!string.IsNullOrEmpty(model.PhoneNumber))
                 {
-                    user  = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                    user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
                 }
 
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(_context, user, true, MixTenantId);
+                    return await GetAuthData(_cmsSontext, user, true, MixTenantId);
                 }
-                else if (!string.IsNullOrEmpty(model.Email))// register new account
+                // register new account
+                else if (!string.IsNullOrEmpty(model.Email))
                 {
                     user = new MixUser()
                     {
                         Email = model.Email,
-                        UserName = model.Email
+                        PhoneNumber = model.PhoneNumber,
+                        UserName = model.Email ?? model.PhoneNumber,
                     };
                     await _userManager.CreateAsync(user);
-                    return await GetAuthData(_context, user, true, MixTenantId);
+                    return await GetAuthData(_cmsSontext, user, true, MixTenantId);
                 }
                 else
                 {
@@ -264,6 +279,7 @@ namespace Mix.Lib.Services
             }
             return default;
         }
+
         public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto)
         {
             JObject result = new();
@@ -279,7 +295,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(_context, user, true, MixTenantId);
+                        var token = await GetAuthData(_cmsSontext, user, true, MixTenantId);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();
@@ -304,9 +320,19 @@ namespace Mix.Lib.Services
                 throw new MixException(MixErrorStatus.Badrequest, "Token expired");
             }
         }
+
         public bool CheckEndpointPermission(ClaimsPrincipal user, PathString path, string method)
         {
-            return true;
+            var endpoints = GetClaims(user, MixClaims.Endpoints);
+
+            // Pattern: "[method] - [regex]"
+            // Example: "post - /api/v1/rest/.+/module-data/portal$"
+            string currentEndpoint = $"{method.ToLower()} - {path.ToString().ToLower()}";
+
+            return endpoints.Any(
+                    e => new Regex(e.ToLower()).Match(currentEndpoint).Success);
+
+            //return true;
 
             // TODO: 
             //var roles = _idHelper.GetClaims(user, MixClaims.Role);
@@ -398,21 +424,26 @@ namespace Mix.Lib.Services
 
         public async Task<string> GenerateTokenAsync(
             MixUser user,
+            MixUserViewModel info,
             DateTime expires,
             string refreshToken,
             string aesKey,
             string rsaPublicKey,
             MixAuthenticationConfigurations appConfigs)
         {
-            List<Claim> claims = await GetClaimsAsync(user);
+            var userRoles = await _userManager.GetUserRolesAsync(user);
+            List<Claim> claims = await GetClaimsAsync(user, userRoles);
+
+            List<string> endpoints = GetUserEndpoints(userRoles, info);
+
             claims.AddRange(new[]
                 {
-                    new Claim(MixClaims.Id, user.Id.ToString()),
-                    new Claim(MixClaims.Username, user.UserName),
-                    new Claim(MixClaims.RefreshToken, refreshToken),
-                    new Claim(MixClaims.AESKey, aesKey),
-                    new Claim(MixClaims.RSAPublicKey, rsaPublicKey),
-                    new Claim(MixClaims.ExpireAt, expires.ToString())
+                    CreateClaim(MixClaims.Id, user.Id.ToString()),
+                    CreateClaim(MixClaims.Username, user.UserName),
+                    CreateClaim(MixClaims.RefreshToken, refreshToken),
+                    CreateClaim(MixClaims.AESKey, aesKey),
+                    CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
+                    CreateClaim(MixClaims.ExpireAt, expires.ToString())
                 });
 
             JwtSecurityToken jwtSecurityToken = new(
@@ -425,10 +456,26 @@ namespace Mix.Lib.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        public async Task<List<Claim>> GetClaimsAsync(MixUser user)
+        private List<string> GetUserEndpoints(IList<MixRole> userRoles, MixUserViewModel info)
+        {
+            List<string> endpoints = new List<string>();
+            if (info.UserData.Data.ContainsKey("endpoints"))
+            {
+
+                foreach (JObject endpoint in info.UserData.Data.Value<JArray>("endpoints"))
+                {
+                    string method = endpoint.Value<string>("method").ToLower();
+                    string path = endpoint.Value<string>("path").ToLower();
+                    endpoints.Add($"{method} - {path}");
+                }
+            }
+
+            return endpoints;
+        }
+
+        private async Task<List<Claim>> GetClaimsAsync(MixUser user, IList<MixRole> userRoles)
         {
             List<Claim> claims = new();
-            var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var claim in user.Claims)
             {
                 claims.Add(CreateClaim(claim.ClaimType, claim.ClaimValue));
@@ -436,8 +483,8 @@ namespace Mix.Lib.Services
 
             foreach (var userRole in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, userRole));
-                var role = await _roleManager.FindByNameAsync(userRole);
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Name));
+                var role = await _roleManager.FindByNameAsync(userRole.Name);
                 if (role != null)
                 {
                     var roleClaims = await _roleManager.GetClaimsAsync(role);
@@ -494,18 +541,6 @@ namespace Mix.Lib.Services
             public static SymmetricSecurityKey Create(string secret)
             {
                 return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
-            }
-        }
-
-        private void LoadRoles()
-        {
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
-            {
-                //Roles = _roleRepo.GetListAsync(m => true, _cacheService, _uow).GetAwaiter().GetResult();
-                //using var ctx = new MixCmsContext();
-                //var transaction = ctx.Database.BeginTransaction();
-                // TODO:
-                //Roles.ForEach(m => m.LoadMixPermissions(ctx, transaction).GetAwaiter().GetResult());
             }
         }
     }
