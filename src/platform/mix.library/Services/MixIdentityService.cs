@@ -459,7 +459,7 @@ namespace Mix.Lib.Services
         private List<string> GetUserEndpoints(IList<MixRole> userRoles, MixUserViewModel info)
         {
             List<string> endpoints = new List<string>();
-            if (info.UserData.Data.ContainsKey("endpoints"))
+            if (info.UserData != null && info.UserData.Data.ContainsKey("endpoints"))
             {
 
                 foreach (JObject endpoint in info.UserData.Data.Value<JArray>("endpoints"))
