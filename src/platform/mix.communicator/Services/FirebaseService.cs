@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin;
+using FirebaseAdmin.Auth;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,13 @@ namespace Mix.Communicator.Services
             {
                 Credential = credential
             });
+            
+        }
+
+        public async Task<FirebaseToken> VeriryTokenAsync(string idToken)
+        {
+            FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            return decodedToken;
         }
 
         public async Task SendToDevice(string registrationToken)

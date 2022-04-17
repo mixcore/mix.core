@@ -24,6 +24,8 @@ namespace Mix.Identity.Models.AccountViewModels
         /// </value>
         public string UserName { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         /// <summary>
         /// Gets or sets the password.
         /// </summary>
