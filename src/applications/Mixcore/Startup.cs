@@ -30,10 +30,13 @@ namespace Mixcore
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddScoped<MixNavigationService>();
+
             // Queue Subscribers
             services.AddHostedService<ThemeSubscriber>();
             services.AddHostedService<TemplateSubscriber>();
             services.AddHostedService<PageContentSubscriber>();
+            services.AddHostedService<TenantSubscriber>();
+            services.AddHostedService<DomainSubscriber>();
 
             services.AddMixAuthorize<MixCmsAccountContext>();
             services.AddMixRoutes();

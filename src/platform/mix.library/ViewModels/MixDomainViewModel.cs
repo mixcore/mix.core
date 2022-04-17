@@ -1,6 +1,9 @@
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Mix.Lib.ViewModels
 {
+    [GeneratePublisher]
     public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
         #region Contructors
@@ -18,7 +21,7 @@ namespace Mix.Lib.ViewModels
         }
 
         #endregion
-
+        [Required]
         public string Host { get; set; }
         public override void InitDefaultValues(string language = null, int? DomainId = null)
         {
