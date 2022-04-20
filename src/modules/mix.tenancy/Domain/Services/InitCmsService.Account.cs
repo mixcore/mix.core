@@ -49,8 +49,8 @@ namespace Mix.Tenancy.Domain.Services
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
                     var userInfo = new MixUserViewModel(user, _cmsUow);
-                    await userInfo.LoadUserDataAsync(tenantId);
-
+                    await userInfo.LoadUserDataAsync(tenantId, _mixDataService);
+                    await _cmsUow.CompleteAsync();
                     var token = await _identityService.GenerateAccessTokenAsync(
                         user, userInfo, true, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
                     if (token != null)

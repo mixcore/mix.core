@@ -29,18 +29,10 @@ namespace Mix.Portal.Controllers
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
 
-        public override async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Get([FromQuery] SearchRequestDto req)
+        public override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler([FromQuery] SearchRequestDto req)
         {
             SearchMixDataDto searchReq = new SearchMixDataDto(req, Request);
-            var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(searchReq, _lang);
-            return Ok(result);
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<PagingResponseModel<MixDataContentViewModel>>> Search([FromQuery] SearchMixDataDto request)
-        {
-            var result = await _mixDataService.FilterByKeywordAsync<MixDataContentViewModel>(request, _lang);
-            return Ok(result);
+            return await _mixDataService.Search<MixDataContentViewModel>(searchReq, _lang);
         }
 
         [HttpGet("additional-data")]

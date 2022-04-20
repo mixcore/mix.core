@@ -44,6 +44,12 @@
             }
             return base.ParseEntity();
         }
+
+        public override async Task ExpandView()
+        {
+            var contentRepo = MixDataContentViewModel.GetRepository(UowInfo);
+            ChildDataContent = await contentRepo.GetSingleAsync(DataContentId);
+        }
         #endregion
 
     }

@@ -23,7 +23,28 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<PagingResponseModel<TView>> FilterByKeywordAsync<TView>(
+        public async Task<List<TView>> GetByAllParent<TView>(
+            SearchMixDataDto request,
+            string culture = null)
+           where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
+        {
+            try
+            {
+                var _associationRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
+                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
+                Expression<Func<MixDataContentAssociation, bool>> predicate = mbox => false;
+                predicate = predicate.OrIf(request.IntParentId.HasValue, m => m.IntParentId == request.IntParentId.Value);
+                predicate = predicate.OrIf(request.GuidParentId.HasValue, m => m.GuidParentId == request.GuidParentId.Value);
+                var associations = _associationRepo.GetListQuery(predicate);
+                return await _contentRepo.GetAllAsync(m => associations.Any(n => n.DataContentId == m.Id));
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, ex);
+            }
+        }
+
+        public async Task<PagingResponseModel<TView>> Search<TView>(
             SearchMixDataDto request,
             string culture = null)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
@@ -116,8 +137,7 @@ namespace Mix.Lib.Services
             List<MixDatabaseColumn> refColumns = null)
              where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
-            var context = (MixCmsContext)_uow.ActiveDbContext;
-            refColumns ??= context.MixDatabaseColumn.Where(
+            refColumns ??= _dbContext.MixDatabaseColumn.Where(
                    m => m.MixDatabaseName == mixDatabaseName
                     && m.DataType == MixDataType.Reference).ToList();
 

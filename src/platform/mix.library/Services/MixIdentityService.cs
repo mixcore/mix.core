@@ -9,6 +9,7 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
+using Mix.Lib.Dtos;
 using Mix.Lib.Models;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
@@ -29,6 +30,7 @@ namespace Mix.Lib.Services
         private readonly RoleManager<MixRole> _roleManager;
         private readonly AuthConfigService _authConfigService;
         private readonly FirebaseService _firebaseService;
+        private readonly MixDataService _mixDataService;
         private readonly MixCmsContext _cmsSontext;
         private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
@@ -43,7 +45,7 @@ namespace Mix.Lib.Services
             MixCmsContext cmsContext,
             MixCmsAccountContext accountContext,
             MixCacheService cacheService,
-            FirebaseService firebaseService)
+            FirebaseService firebaseService, MixDataService mixDataService)
         {
             _cmsSontext = cmsContext;
             _cacheService = cacheService;
@@ -53,14 +55,16 @@ namespace Mix.Lib.Services
             _signInManager = signInManager;
             _roleManager = roleManager;
             _authConfigService = authConfigService;
-            _roleRepo = RoleViewModel.GetRootRepository(accountContext);
-            _refreshTokenRepo = RefreshTokenViewModel.GetRootRepository(accountContext);
+            _roleRepo = RoleViewModel.GetRepository(_accountUow);
+            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_accountUow);
             _firebaseService = firebaseService;
 
             if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
+            _mixDataService = mixDataService;
+            _mixDataService.SetUnitOfWork(_cmsUow);
         }
 
         public async Task<JObject> Login(LoginViewModel model)
@@ -111,11 +115,12 @@ namespace Mix.Lib.Services
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
             var userInfo = new MixUserViewModel(user, _cmsUow);
-            await userInfo.LoadUserDataAsync(tenantId);
-
+            await userInfo.LoadUserDataAsync(tenantId, _mixDataService);
+            await _cmsUow.CompleteAsync();
             var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
+                await _accountUow.CompleteAsync();
                 var data = ReflectionHelper.ParseObject(token);
                 if (GlobalConfigService.Instance.IsEncryptApi)
                 {
@@ -175,7 +180,7 @@ namespace Mix.Lib.Services
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 var vm = new MixUserViewModel(user, _cmsUOW);
-                await vm.LoadUserDataAsync(MixTenantId);
+                await vm.LoadUserDataAsync(MixTenantId, _mixDataService);
                 vm.UserData.Data = model.Data;
                 await vm.UserData.SaveAsync();
                 return await GetAuthData(_cmsSontext, user, true, tenantId);
@@ -209,7 +214,7 @@ namespace Mix.Lib.Services
                                     ClientId = _authConfigService.AppSettings.ClientId,
                                     Username = user.UserName,
                                     ExpiresUtc = dtRefreshTokenExpired
-                                });
+                                }, _accountUow);
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
                     refreshTokenId = saveRefreshTokenResult;
@@ -328,25 +333,8 @@ namespace Mix.Lib.Services
             // Pattern: "[method] - [regex]"
             // Example: "post - /api/v1/rest/.+/module-data/portal$"
             string currentEndpoint = $"{method.ToLower()} - {path.ToString().ToLower()}";
-
             return endpoints.Any(
                     e => new Regex(e.ToLower()).Match(currentEndpoint).Success);
-
-            //return true;
-
-            // TODO: 
-            //var roles = _idHelper.GetClaims(user, MixClaims.Role);
-            //if (roles.Any(r => r == MixRoles.Owner|| r == MixDefaultRoles.Admin))
-            //{
-            //    return true;
-            //}
-            //var endpoint = $"{method}-{path}";
-            //var role = Roles.Find(r => r.Name == roles.First());
-            //return role.MixPermissions.Any(
-            //        p => p.Property<JArray>("endpoints")
-            //                .Any(e => new Regex(e["endpoint"].Value<string>()).Match(path).Success
-            //                        && e["method"].Value<string>() == method.ToUpper())
-            //        );
         }
 
         public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
@@ -433,9 +421,11 @@ namespace Mix.Lib.Services
         {
             var userRoles = await _userManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
-
-            List<string> endpoints = GetUserEndpoints(userRoles, info);
-
+           
+            foreach (var endpoint in info.Endpoints)
+            {
+                claims.Add(CreateClaim(MixClaims.Endpoints, endpoint));
+            }
             claims.AddRange(new[]
                 {
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
@@ -456,23 +446,7 @@ namespace Mix.Lib.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        private List<string> GetUserEndpoints(IList<MixRole> userRoles, MixUserViewModel info)
-        {
-            List<string> endpoints = new List<string>();
-            if (info.UserData != null && info.UserData.Data.ContainsKey("endpoints"))
-            {
-
-                foreach (JObject endpoint in info.UserData.Data.Value<JArray>("endpoints"))
-                {
-                    string method = endpoint.Value<string>("method").ToLower();
-                    string path = endpoint.Value<string>("path").ToLower();
-                    endpoints.Add($"{method} - {path}");
-                }
-            }
-
-            return endpoints;
-        }
-
+        
         private async Task<List<Claim>> GetClaimsAsync(MixUser user, IList<MixRole> userRoles)
         {
             List<Claim> claims = new();

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Linq.Expressions;
 
 namespace Mix.Lib.ViewModels
 {
@@ -103,16 +104,18 @@ namespace Mix.Lib.ViewModels
 
             if (!MixHelper.IsDefaultId(GuidParentId) || !MixHelper.IsDefaultId(IntParentId))
             {
-                var getNav = await assoRepo.CheckIsExistsAsync(
-                    m => m.DataContentId == Id
-                    && (m.GuidParentId == GuidParentId || m.IntParentId == IntParentId)
+                Expression<Func<MixDataContentAssociation, bool>> predicate = m => m.DataContentId == Id
                     && m.ParentType == ParentType
-                    && m.Specificulture == Specificulture);
+                    && m.Specificulture == Specificulture;
+                predicate = predicate.AndAlsoIf(GuidParentId.HasValue, m => m.GuidParentId == GuidParentId);
+                predicate = predicate.AndAlsoIf(IntParentId.HasValue, m => m.IntParentId == IntParentId);
+                var getNav = await assoRepo.CheckIsExistsAsync(predicate);
                 if (!getNav)
                 {
                     var nav = new MixDataContentAssociationViewModel(UowInfo)
                     {
                         Id = Guid.NewGuid(),
+                        MixTenantId = MixTenantId,
                         DataContentId = Id,
                         Specificulture = Specificulture,
                         MixDatabaseId = MixDatabaseId,
@@ -146,16 +149,15 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync()
         {
+            using var assoRepo = MixDataContentAssociationViewModel.GetRepository(UowInfo);
+            await assoRepo.DeleteManyAsync(m => m.DataContentId == Id && m.Specificulture == Specificulture);
+            await base.DeleteHandlerAsync();
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
                 var dataRepo = MixDataViewModel.GetRepository(UowInfo);
 
                 await Repository.DeleteAsync(Id);
                 await dataRepo.DeleteAsync(ParentId);
-            }
-            else
-            {
-                await base.DeleteHandlerAsync();
             }
         }
         #endregion

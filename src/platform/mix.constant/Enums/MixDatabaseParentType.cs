@@ -6,6 +6,7 @@
         Post,
         Page,
         Module,
-        User
+        User,
+        Role
     }
 }
