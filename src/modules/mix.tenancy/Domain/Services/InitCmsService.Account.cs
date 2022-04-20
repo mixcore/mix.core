@@ -45,7 +45,6 @@ namespace Mix.Tenancy.Domain.Services
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.SuperAdmin.ToString());
                     await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString());
                     await _userManager.AddToTenant(user, tenantId);
-                    // TODO: await MixAccountHelper.LoadUserInfoAsync(user.UserName);
                     var rsaKeys = RSAEncryptionHelper.GenerateKeys();
                     var aesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
                     var userInfo = new MixUserViewModel(user, _cmsUow);

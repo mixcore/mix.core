@@ -275,7 +275,7 @@ namespace Mix.Lib.ViewModels
                         {
                             foreach (JObject objData in arr)
                             {
-                                Guid id = objData["id"]?.Value<Guid>() ?? Guid.Empty;
+                                Guid.TryParse(objData.Value<string>("id"), out var id);
                                 // if have id => update data, else add new
                                 if (id != Guid.Empty)
                                 {

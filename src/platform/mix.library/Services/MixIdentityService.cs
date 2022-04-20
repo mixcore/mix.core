@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Services
 {
-    public class MixIdentityService
+    public class MixIdentityService: IDisposable
     {
         private readonly UnitOfWorkInfo _accountUow;
         private readonly UnitOfWorkInfo _cmsUow;
@@ -67,6 +67,7 @@ namespace Mix.Lib.Services
             _mixDataService.SetUnitOfWork(_cmsUow);
         }
 
+        
         public async Task<JObject> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
@@ -116,11 +117,9 @@ namespace Mix.Lib.Services
 
             var userInfo = new MixUserViewModel(user, _cmsUow);
             await userInfo.LoadUserDataAsync(tenantId, _mixDataService);
-            await _cmsUow.CompleteAsync();
             var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
-                await _accountUow.CompleteAsync();
                 var data = ReflectionHelper.ParseObject(token);
                 if (GlobalConfigService.Instance.IsEncryptApi)
                 {
@@ -181,8 +180,14 @@ namespace Mix.Lib.Services
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 var vm = new MixUserViewModel(user, _cmsUOW);
                 await vm.LoadUserDataAsync(MixTenantId, _mixDataService);
-                vm.UserData.Data = model.Data;
-                await vm.UserData.SaveAsync();
+
+                if (model.Data != null)
+                {
+                    vm.UserData.SetUowInfo(_cmsUOW);
+                    vm.UserData.Data = model.Data;
+                    await vm.UserData.SaveAsync();
+                }
+
                 return await GetAuthData(_cmsSontext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
@@ -421,7 +426,7 @@ namespace Mix.Lib.Services
         {
             var userRoles = await _userManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
-           
+
             foreach (var endpoint in info.Endpoints)
             {
                 claims.Add(CreateClaim(MixClaims.Endpoints, endpoint));
@@ -446,7 +451,7 @@ namespace Mix.Lib.Services
             return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         }
 
-        
+
         private async Task<List<Claim>> GetClaimsAsync(MixUser user, IList<MixRole> userRoles)
         {
             List<Claim> claims = new();
@@ -508,6 +513,20 @@ namespace Mix.Lib.Services
                 ValidateIssuerSigningKey = appConfigs.ValidateIssuerSigningKey,
                 IssuerSigningKey = JwtSecurityKey.Create(appConfigs.SecretKey)
             };
+        }
+
+        public void Dispose()
+        {
+            if (_accountUow.ActiveTransaction != null)
+            {
+                _accountUow.Complete();
+            }
+
+            if (_cmsUow.ActiveTransaction != null)
+            {
+                _cmsUow.Complete();
+            }
+            GC.SuppressFinalize(this);
         }
 
         public static class JwtSecurityKey

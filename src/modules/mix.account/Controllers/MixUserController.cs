@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
@@ -20,7 +21,7 @@ namespace Mix.Account.Controllers
 {
     [Route("api/v2/rest/mix-account/user")]
     [ApiController]
-    public class MixUserController : ControllerBase
+    public class MixUserController : Controller
     {
         private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
@@ -65,6 +66,26 @@ namespace Mix.Account.Controllers
             }
             _mixDataService = mixDataService;
         }
+
+        #region Overrides
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            if (_accUOW.ActiveTransaction != null)
+            {
+                _accUOW.Complete();
+            }
+            
+            if (_cmsUOW.ActiveTransaction != null)
+            {
+                _cmsUOW.Complete();
+            }
+
+            base.OnActionExecuted(context);
+        }
+
+        #endregion
+
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [Route("my-tenants")]
