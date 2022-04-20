@@ -8,7 +8,7 @@ namespace Mix.Tenancy.Domain.Services
     {
         public async Task InitDbContext(InitCmsDto model)
         {
-            _databaseService.InitMixCmsContext(
+            _databaseService.InitConnectionStrings(
                 model.ConnectionString,
                 model.DatabaseProvider,
                 model.Culture.Specificulture);
