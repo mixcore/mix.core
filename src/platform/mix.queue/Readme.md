@@ -1,3 +1,7 @@
+# Azure Service Bus:
+- https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-dotnet-how-to-use-topics-subscriptions
+- If you want to use topics and subscriptions, choose either Standard or Premium. Topics/subscriptions aren't supported in the Basic pricing tier.
+
 # Google Cloud Pub/Sub :
 
 - Enable Pub/Sub API https://console.cloud.google.com/apis/library/pubsub.googleapis.com

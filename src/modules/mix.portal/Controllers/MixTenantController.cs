@@ -59,6 +59,12 @@ namespace Mix.Portal.Controllers
             await _uow.CompleteAsync();
 
             await DeleteTenantAccount(data.Id);
+            _queueService.PushQueue(new MessageQueueModel()
+            {
+                Action = "Delete",
+                Success = true,
+                TopicId = typeof(MixTenantViewModel).FullName
+            });
         }
 
         private async Task DeleteTenantAccount(int tenantId)

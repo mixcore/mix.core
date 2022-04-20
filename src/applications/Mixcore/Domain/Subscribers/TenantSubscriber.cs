@@ -1,5 +1,5 @@
 ﻿using Mix.Lib.Repositories;
-using Mix.Lib.Subscribers;
+using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers

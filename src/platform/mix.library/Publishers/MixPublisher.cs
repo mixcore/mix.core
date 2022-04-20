@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Publishers
@@ -12,7 +13,7 @@ namespace Mix.Lib.Publishers
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration, IWebHostEnvironment environment,
             MixMemoryMessageQueue<MessageQueueModel> queueMessage)
-            : base(topicId, queueService, configuration, environment, queueMessage)
+            : base(topicId, queueService, configuration, queueMessage)
         {
         }
     }

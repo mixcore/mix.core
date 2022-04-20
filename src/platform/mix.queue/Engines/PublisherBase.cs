@@ -1,18 +1,23 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Queue.Engines;
+using Mix.Heart.Exceptions;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Mix.Lib.Base
+namespace Mix.Queue.Engines
 {
     public abstract class PublisherBase : BackgroundService, IHostedService
     {
         private IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
         private IConfiguration _configuration;
-        private IWebHostEnvironment _environment;
         private MixMemoryMessageQueue<MessageQueueModel> _queue;
         private const int MAX_CONSUME_LENGTH = 100;
         private string _topicId;
@@ -20,12 +25,11 @@ namespace Mix.Lib.Base
         public PublisherBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
-            IConfiguration configuration, IWebHostEnvironment environment,
+            IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             _queueService = queueService;
             _configuration = configuration;
-            _environment = environment;
             _queue = queue;
             _topicId = topicId;
         }
@@ -39,24 +43,34 @@ namespace Mix.Lib.Base
                 List<IQueuePublisher<MessageQueueModel>> queuePublishers =
                     new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
-                var settingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
+
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
 
                 switch (provider)
                 {
-                    case MixQueueProvider.GOOGLE:
+                    case MixQueueProvider.AZURE:
+                        var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSetting = new AzureQueueSetting();
+                        azureSettingPath.Bind(azureSetting);
 
+                        queuePublishers.Add(
+                            QueueEngineFactory.CreatePublisher<MessageQueueModel>(
+                                provider, azureSetting, topicName));
+                        break;
+                    case MixQueueProvider.GOOGLE:
+                        var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
-                        settingPath.Bind(googleSetting);
-                        googleSetting.CredentialFile = Path.Combine(_environment.ContentRootPath, googleSetting.CredentialFile);
+                        googleSettingPath.Bind(googleSetting);
+                        googleSetting.CredentialFile = googleSetting.CredentialFile;
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
                                 provider, googleSetting, topicName));
                         break;
                     case MixQueueProvider.MIX:
+                        var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
-                        settingPath.Bind(mixSetting);
+                        mixSettingPath.Bind(mixSetting);
                         queuePublishers.Add(
                            QueueEngineFactory.CreatePublisher(
                                provider, mixSetting, topicName, queue));
@@ -94,11 +108,7 @@ namespace Mix.Lib.Base
             var providerSetting = _configuration["MessageQueueSetting:Provider"];
             var provider = Enum.Parse<MixQueueProvider>(providerSetting);
             _publishers = CreatePublisher(_topicId, _queue, stoppingToken);
-            if (provider == MixQueueProvider.MIX)
-            {
-                return StartMixQueueEngine(stoppingToken);
-            }
-            return Task.CompletedTask;
+            return StartMixQueueEngine(stoppingToken);
         }
     }
 }
