@@ -11,5 +11,6 @@
         public const string Smtp = "Smtp";
         public const string MixHeart = "MixHeart";
         public const string GoogleFirebase = "GoogleFirebase";
+        public const string Azure = "Azure";
     }
 }
