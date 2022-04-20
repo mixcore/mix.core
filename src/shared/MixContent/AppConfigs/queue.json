@@ -4,6 +4,13 @@
     "GoogleQueueSetting": {
       "CredentialFile": "MixContent/Credentials/google_credential.json",
       "ProjectId": "mixcore-225013"
+    },
+    "AzureServiceBus": {
+      "ConnectionString": "",
+      "QueueName": ""
+    },
+    "Mix": {
+      "ProjectId": ""
     }
   }
 }

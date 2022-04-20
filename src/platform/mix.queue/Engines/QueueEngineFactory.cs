@@ -1,4 +1,5 @@
-﻿using Mix.Queue.Engines.GooglePubSub;
+﻿using Mix.Queue.Engines.Azure;
+using Mix.Queue.Engines.GooglePubSub;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -19,6 +20,10 @@ namespace Mix.Queue.Engines
             IQueuePublisher<T> publisher = default;
             switch (provider)
             {
+                case MixQueueProvider.AZURE:
+                    publisher = new AzureQueuePublisher<T>(queueSetting, topicId);
+                    break;
+                    
                 case MixQueueProvider.GOOGLE:
                     publisher = new GoogleQueuePublisher<T>(queueSetting, topicId);
                     break;
@@ -41,6 +46,9 @@ namespace Mix.Queue.Engines
             IQueueSubscriber subscriber = default;
             switch (provider)
             {
+                case MixQueueProvider.AZURE:
+                    subscriber = new AzureQueueSubscriber(queueSetting, topicId, subscriptionId, handler);
+                    break;
                 case MixQueueProvider.GOOGLE:
                     subscriber = new GoogleQueueSubscriber(queueSetting, topicId, subscriptionId, handler);
                     break;

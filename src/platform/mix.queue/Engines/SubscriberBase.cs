@@ -1,10 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Mix.Queue.Engines;
+using Mix.Heart.Exceptions;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Mix.Lib.Subscribers
+namespace Mix.Queue.Engines
 {
     public abstract class SubscriberBase : IHostedService
     {
@@ -49,18 +54,26 @@ namespace Mix.Lib.Subscribers
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
-                var settingPath = _configuration.GetSection(
-                                            "MessageQueueSetting:GoogleQueueSetting");
+                
                 switch (provider)
                 {
+                    case MixQueueProvider.AZURE:
+                        var azureSettingPath = _configuration.GetSection("MessageQueueSetting:AzureServiceBus");
+                        var azureSetting = new AzureQueueSetting();
+                        azureSettingPath.Bind(azureSetting);
+                        return QueueEngineFactory.CreateSubscriber(
+                            provider, azureSetting, topicId, subscriptionId, MesageHandler, _queueService);
                     case MixQueueProvider.GOOGLE:
+                        var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
-                        settingPath.Bind(googleSetting);
+                        googleSettingPath.Bind(googleSetting);
+                        googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber(
                             provider, googleSetting, topicId, subscriptionId, MesageHandler, _queueService);
                     case MixQueueProvider.MIX:
+                        var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
-                        settingPath.Bind(mixSetting);
+                        mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber(
                            provider, mixSetting, topicId, subscriptionId, MesageHandler, _queueService);
                 }
