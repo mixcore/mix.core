@@ -9,7 +9,7 @@ namespace Mix.Messenger.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixSignalR();
+            services.AddMixSignalR(configuration);
             services.AddMixCommunicators();
         }
 

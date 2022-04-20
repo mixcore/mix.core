@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.17.0" />
   </ItemGroup>
 
   <ItemGroup>

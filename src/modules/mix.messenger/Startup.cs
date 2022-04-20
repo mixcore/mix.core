@@ -19,7 +19,7 @@ namespace Mix.Messenger
             services.AddMixCors();
             services.AddMixDbContexts();
             services.AddMixCache();
-            services.AddMixSignalR();
+            services.AddMixSignalR(Configuration);
             services.AddMixCommunicators();
         }
 
