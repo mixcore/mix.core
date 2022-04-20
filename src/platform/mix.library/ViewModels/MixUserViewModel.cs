@@ -2,6 +2,8 @@
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
+using Mix.Lib.Dtos;
+using Mix.Lib.Services;
 using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
@@ -25,6 +27,8 @@ namespace Mix.Lib.ViewModels
 
         public List<AspNetUserRoles> Roles { get; set; }
 
+        public List<string> Endpoints { get; set; } = new();
+
         #region Change Password
 
         public ResetPasswordViewModel ResetPassword { get; set; }
@@ -44,9 +48,9 @@ namespace Mix.Lib.ViewModels
             _cmsUow = uow;
         }
 
-        public async Task LoadUserDataAsync(int tenantId)
+        public async Task LoadUserDataAsync(int tenantId, MixDataService mixDataService)
         {
-            UserData ??= await MixDataHelper.GetAdditionalDataAsync(
+            UserData = await MixDataHelper.GetAdditionalDataAsync(
                 _cmsUow,
                 MixDatabaseParentType.User,
                 MixDatabaseNames.SYSTEM_USER_DATA,
@@ -59,6 +63,35 @@ namespace Mix.Lib.ViewModels
                         select ur;
             Roles = await roles.ToListAsync();
 
+            await LoadUserEndpointsAsync(mixDataService);
         }
+        
+
+        public async Task LoadUserEndpointsAsync(MixDataService mixDataService)
+        {
+            List<JObject> endpoints = new();
+            foreach (var role in Roles)
+            {
+                var temp = await mixDataService.GetByAllParent<MixDataContentViewModel>(new SearchMixDataDto()
+                {
+                    MixDatabaseName = MixDatabaseNames.SYSTEM_ENDPOINT,
+                    GuidParentId = role.RoleId
+                });
+                endpoints.AddRange(temp.Select(m => m.Data));
+            }
+
+            if (UserData != null && UserData.Data.ContainsKey("endpoints"))
+            {
+                var userEndpoints = UserData.Data.Value<JArray>("endpoints");
+                endpoints.AddRange(userEndpoints.ToObject<List<JObject>>());
+            }
+
+            Endpoints = endpoints.Select(e => {
+                string method = e.Value<string>("method")?.ToLower();
+                string path = e.Value<string>("path")?.ToLower();
+                return $"{method} - {path}";
+            }).Distinct().ToList();
+        }
+
     }
 }

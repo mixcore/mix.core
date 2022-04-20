@@ -46,7 +46,8 @@ namespace Mix.Lib.Attributes
                     }
                 }
             }
-            else {
+            else
+            {
                 context.Result = new UnauthorizedResult();
                 return;
             }
@@ -75,6 +76,10 @@ namespace Mix.Lib.Attributes
             }
 
             var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',');
+            if (userRoles.Any(r => r == MixRoles.SuperAdmin))
+            {
+                return true;
+            }
             foreach (var role in userRoles)
             {
                 if (Roles.Contains(role))

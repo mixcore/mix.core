@@ -29,6 +29,7 @@ namespace Mix.Account.Controllers
         private readonly MixIdentityService _idService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
+        private readonly MixDataService _mixDataService;
         protected UnitOfWorkInfo _accUOW;
         protected UnitOfWorkInfo _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
@@ -43,7 +44,7 @@ namespace Mix.Account.Controllers
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext)
+            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixDataService mixDataService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -62,6 +63,7 @@ namespace Mix.Account.Controllers
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
+            _mixDataService = mixDataService;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
@@ -167,7 +169,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(MixTenantId);
+                await result.LoadUserDataAsync(MixTenantId, _mixDataService);
                 return Ok(result);
             }
             return BadRequest();
@@ -183,7 +185,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(MixTenantId);
+                await result.LoadUserDataAsync(MixTenantId, _mixDataService);
                 return Ok(result);
             }
             return BadRequest();

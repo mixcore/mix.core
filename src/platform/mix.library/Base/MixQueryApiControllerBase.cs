@@ -54,14 +54,15 @@ namespace Mix.Lib.Base
         #region Routes
 
         [HttpGet]
-        public virtual async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
-            var searchRequest = BuildSearchRequest(req);
+            var result = await SearchHandler(req);
+
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
-            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 List<object> objects = new List<object>();
@@ -99,6 +100,16 @@ namespace Mix.Lib.Base
         }
 
         #endregion Routes
+
+        #region Handlers
+        public virtual async Task<PagingResponseModel<TView>> SearchHandler([FromQuery] SearchRequestDto req)
+        {
+            var searchRequest = BuildSearchRequest(req);
+            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+        }
+
+
+        #endregion
 
         #region Helpers
 

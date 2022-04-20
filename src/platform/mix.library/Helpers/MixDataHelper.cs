@@ -219,7 +219,7 @@ namespace Mix.Lib.Helpers
             JArray arr = new JArray();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
             {
-                arr.Add(nav.ChildDataContent);
+                arr.Add(nav.ChildDataContent.Data);
             }
             return arr;
         }

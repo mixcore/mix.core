@@ -16,6 +16,8 @@
         public const string Keyword = "keyword";
         public const string ParentType = "parentType";
         public const string ParentId = "parentId";
+        public const string IntParentId = "intParentId";
+        public const string GuidParentId = "guidParentId";
         public const string Category = "category";
         public const string Tag = "tag";
         public const string ThemeId = "themeId";
