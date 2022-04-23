@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using Mix.Account.Domain.Dtos;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;

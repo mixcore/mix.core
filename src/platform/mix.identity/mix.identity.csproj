@@ -11,9 +11,6 @@
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Constant.Dtos" />
 	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Repositories\AuthRepository.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
@@ -25,12 +22,6 @@
 		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Filters\" />
-		<Folder Include="Helpers\" />
-		<Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>

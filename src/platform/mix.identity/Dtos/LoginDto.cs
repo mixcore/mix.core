@@ -1,4 +1,4 @@
-﻿namespace Mix.Account.Domain.Dtos
+﻿namespace Mix.Identity.Dtos
 {
     public class LoginDto
     {

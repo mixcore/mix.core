@@ -10,6 +10,7 @@ using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Dtos;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Services
 {
-    public class MixIdentityService: IDisposable
+    public class MixIdentityService : IDisposable, IMixIdentityService
     {
         private readonly UnitOfWorkInfo _accountUow;
         private readonly UnitOfWorkInfo _cmsUow;
@@ -67,7 +68,7 @@ namespace Mix.Lib.Services
             _mixDataService.SetUnitOfWork(_cmsUow);
         }
 
-        
+
         public async Task<JObject> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
@@ -246,7 +247,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        public async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
+        public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
             var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
             if (verifiedAccessToken != null)
@@ -363,13 +364,13 @@ namespace Mix.Lib.Services
                     verifyTokenEndPoint = string.Format("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}", accessToken);
                     break;
                 case MixExternalLoginProviders.Firebase:
+                    GetPrincipalFromExpiredToken(accessToken, appConfigs);
                     var token = await _firebaseService.VeriryTokenAsync(accessToken);
                     return new ParsedExternalAccessToken()
                     {
                         app_id = token.TenantId,
                         user_id = token.Uid
                     };
-                    break;
                 case MixExternalLoginProviders.Twitter:
                 case MixExternalLoginProviders.Microsoft:
                 default:
