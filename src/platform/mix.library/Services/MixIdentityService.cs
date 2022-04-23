@@ -23,18 +23,18 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService : IDisposable, IMixIdentityService
     {
-        private readonly UnitOfWorkInfo _accountUow;
-        private readonly UnitOfWorkInfo _cmsUow;
-        private readonly MixCacheService _cacheService;
-        private readonly TenantUserManager _userManager;
-        private readonly SignInManager<MixUser> _signInManager;
-        private readonly RoleManager<MixRole> _roleManager;
-        private readonly AuthConfigService _authConfigService;
-        private readonly FirebaseService _firebaseService;
-        private readonly MixDataService _mixDataService;
-        private readonly MixCmsContext _cmsSontext;
-        private readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
-        private readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
+        protected readonly UnitOfWorkInfo _accountUow;
+        protected readonly UnitOfWorkInfo _cmsUow;
+        protected readonly MixCacheService _cacheService;
+        protected readonly TenantUserManager _userManager;
+        protected readonly SignInManager<MixUser> _signInManager;
+        protected readonly RoleManager<MixRole> _roleManager;
+        protected readonly AuthConfigService _authConfigService;
+        protected readonly FirebaseService _firebaseService;
+        protected readonly MixDataService _mixDataService;
+        protected readonly MixCmsContext _cmsSontext;
+        protected readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
+        protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
         protected int MixTenantId { get; set; } = 1;
         public MixIdentityService(
@@ -252,19 +252,10 @@ namespace Mix.Lib.Services
             var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
             if (verifiedAccessToken != null)
             {
-                MixUser user = null;
-                if (!string.IsNullOrEmpty(model.Email))
-                {
-                    user = await _userManager.FindByEmailAsync(model.Email);
-                }
-                if (!string.IsNullOrEmpty(model.UserName))
-                {
-                    user = await _userManager.FindByNameAsync(model.UserName);
-                }
-                if (!string.IsNullOrEmpty(model.PhoneNumber))
-                {
-                    user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
-                }
+
+                MixUser user = await _userManager.FindByLoginAsync(
+                    model.Provider.ToString(),
+                    verifiedAccessToken.user_id);
 
                 // return local token if already register
                 if (user != null)
@@ -278,9 +269,11 @@ namespace Mix.Lib.Services
                     {
                         Email = model.Email,
                         PhoneNumber = model.PhoneNumber,
-                        UserName = model.Email ?? model.PhoneNumber,
+                        UserName = model.UserName ?? model.Email ?? model.PhoneNumber,
                     };
                     await _userManager.CreateAsync(user);
+                    await _userManager.AddLoginAsync(user, new UserLoginInfo(model.Provider.ToString(), model.Provider.ToString(), model.Provider.ToString()));
+
                     return await GetAuthData(_cmsSontext, user, true, MixTenantId);
                 }
                 else
