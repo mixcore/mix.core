@@ -102,7 +102,7 @@ namespace Mix.Lib.Base
         #endregion Routes
 
         #region Handlers
-        public virtual async Task<PagingResponseModel<TView>> SearchHandler([FromQuery] SearchRequestDto req)
+        protected virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
             return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
