@@ -224,17 +224,18 @@ namespace Mix.Lib.Helpers
             return arr;
         }
 
-        public static async Task<AdditionalDataContentViewModel> GetAdditionalDataAsync(
+        public static async Task<T> GetAdditionalDataAsync<T>(
             UnitOfWorkInfo uow,
             MixDatabaseParentType parentType,
             string databaseName,
             Guid? guidParentId = null,
             int? intParentId = null,
             string specificulture = null)
+            where T : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, T>
         {
             specificulture ??= GlobalConfigService.Instance.DefaultCulture;
-            AdditionalDataContentViewModel result = null;
-            var contentRepo = AdditionalDataContentViewModel.GetRepository(uow);
+            T result = null;
+            var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, T>(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
             var context = (MixCmsContext)uow.ActiveDbContext;
             Expression<Func<MixDataContentAssociation, bool>> predicate =
@@ -255,19 +256,19 @@ namespace Mix.Lib.Helpers
                         m => m.Id == dataId);
 
                 }
-                result ??= new()
-                {
-                    Data = new(),
-                    Specificulture = specificulture,
-                    MixDatabaseId = mixDb.Id,
-                    MixDatabaseName = mixDb.SystemName,
-                    Status = MixContentStatus.Published,
-                    Columns = mixDb.Columns,
-                    CreatedDateTime = DateTime.UtcNow
-                };
-                result.GuidParentId = guidParentId;
-                result.IntParentId = intParentId;
-                result.ParentType = parentType;
+                //result ??= new()
+                //{
+                //    Data = new(),
+                //    Specificulture = specificulture,
+                //    MixDatabaseId = mixDb.Id,
+                //    MixDatabaseName = mixDb.SystemName,
+                //    Status = MixContentStatus.Published,
+                //    Columns = mixDb.Columns,
+                //    CreatedDateTime = DateTime.UtcNow
+                //};
+                //result.GuidParentId = guidParentId;
+                //result.IntParentId = intParentId;
+                //result.ParentType = parentType;
                 return result;
             }
             return default;

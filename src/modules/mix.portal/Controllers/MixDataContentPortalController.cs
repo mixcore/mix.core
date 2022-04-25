@@ -40,7 +40,7 @@ namespace Mix.Portal.Controllers
         {
             if (dto.IsValid())
             {
-                var getData = await MixDataHelper.GetAdditionalDataAsync(
+                var getData = await MixDataHelper.GetAdditionalDataAsync<AdditionalDataContentViewModel>(
                     _uow,
                     dto.ParentType.Value,
                     dto.DatabaseName,

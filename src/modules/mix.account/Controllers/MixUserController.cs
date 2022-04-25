@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;
@@ -27,6 +28,7 @@ namespace Mix.Account.Controllers
         private readonly RoleManager<MixRole> _roleManager;
         private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
+        private readonly EmailService _emailService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
         private readonly MixDataService _mixDataService;
@@ -44,7 +46,7 @@ namespace Mix.Account.Controllers
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixDataService mixDataService)
+            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixDataService mixDataService, EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -64,6 +66,7 @@ namespace Mix.Account.Controllers
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
             _mixDataService = mixDataService;
+            _emailService = emailService;
         }
 
         #region Overrides
@@ -74,7 +77,7 @@ namespace Mix.Account.Controllers
             {
                 _accUOW.Complete();
             }
-            
+
             if (_cmsUOW.ActiveTransaction != null)
             {
                 _cmsUOW.Complete();
@@ -217,13 +220,25 @@ namespace Mix.Account.Controllers
         public async Task<ActionResult> Remove(string id)
         {
             MixUser user = await _userManager.FindByIdAsync(id); ;
-
-            var idRresult = await _userManager.DeleteAsync(user);
-            if (idRresult.Succeeded)
+            if (user != null)
             {
-                return Ok();
+                var logins = await _userManager.GetLoginsAsync(user);
+                foreach (var login in logins)
+                {
+                    var result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+                    if (!result.Succeeded)
+                    {
+                        Console.WriteLine(result.Errors);
+                    }
+                }
+                var idRresult = await _userManager.DeleteAsync(user);
+                if (idRresult.Succeeded)
+                {
+
+                    return Ok();
+                }
             }
-            return BadRequest();
+            throw new MixException(MixErrorStatus.NotFound);
         }
 
         [HttpPost]
@@ -293,7 +308,7 @@ namespace Mix.Account.Controllers
         }
 
         // POST api/template
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize(roles: $"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
         [HttpPost]
         [Route("save")]
         public async Task<ActionResult<MixUserViewModel>> Save(
@@ -318,8 +333,11 @@ namespace Mix.Account.Controllers
                     else
                     {
                         // Remove other token if change password success
-                        var refreshToken = User.Claims.SingleOrDefault(c => c.Type == "RefreshToken")?.Value;
-                        //await RefreshTokenViewModel.Repository.RemoveModelAsync(r => r.Id != refreshToken);
+                        if (Guid.TryParse(_idService.GetClaim(User, MixClaims.RefreshToken), out var refreshTokenId))
+                        {
+                            await _refreshTokenRepo.DeleteManyAsync(
+                                m => m.Username == user.UserName && m.Id != refreshTokenId);
+                        }
                     }
                 }
                 return Ok(model);
@@ -327,6 +345,64 @@ namespace Mix.Account.Controllers
             return BadRequest();
         }
 
+
+        [HttpPost]
+        [Route("forgot-password")]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Email");
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Email Not Exist");
+            }
+
+            //if (!await _userManager.IsEmailConfirmedAsync(user))
+            //    result.Data = "Invalid Email";
+
+            var confrimationCode =
+                    await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var callbackurl = $"{Request.Scheme}://{Request.Host}/security/reset-password/?token={System.Web.HttpUtility.UrlEncode(confrimationCode)}";
+            var edmTemplate = await MixTemplateViewModel.GetRepository(_cmsUOW).GetSingleAsync(
+                m => m.FolderType == MixTemplateFolderType.Edms && m.FileName == "ForgotPassword");
+            string content = callbackurl;
+            if (edmTemplate != null)
+            {
+                content = edmTemplate.Content.Replace("[URL]", callbackurl);
+            }
+            _emailService.SendMail(
+                    to: user.Email,
+                    subject: "Reset Password",
+                    message: content);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid User");
+            }
+            string code = System.Web.HttpUtility.UrlDecode(model.Code).Replace(' ', '+');
+            var idRresult = await _userManager.ResetPasswordAsync(
+                                        user, model.Code, model.Password);
+            if (!idRresult.Succeeded)
+            {
+                var errors = idRresult.Errors.Select(m => m.Description);
+                throw new MixException(MixErrorStatus.Badrequest, errors);
+            }
+
+            return Ok();
+        }
         #region Helpers
 
 

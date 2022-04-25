@@ -27,13 +27,6 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-
-        protected override Expression<Func<MixPostContent, bool>> BuildAndPredicate(SearchRequestDto req)
-        {
-            var predicate = base.BuildAndPredicate(req);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(req.Keyword), m => EF.Functions.Like(m.Title.ToLower(), $"%{req.Keyword.ToLower()}%"));
-            return predicate;
-        }
         #endregion
     }
 }
