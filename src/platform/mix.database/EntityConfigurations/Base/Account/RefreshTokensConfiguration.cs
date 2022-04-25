@@ -18,7 +18,6 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
 
             builder.Property(e => e.Email)
-                .IsRequired()
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");

@@ -50,11 +50,12 @@ namespace Mix.Lib.ViewModels
 
         public async Task LoadUserDataAsync(int tenantId, MixDataService mixDataService)
         {
-            UserData = await MixDataHelper.GetAdditionalDataAsync(
+            UserData = await MixDataHelper.GetAdditionalDataAsync<AdditionalDataContentViewModel>(
                 _cmsUow,
                 MixDatabaseParentType.User,
                 MixDatabaseNames.SYSTEM_USER_DATA,
                 Id);
+            UserData ??= await CreateDefaultUserData(tenantId, mixDataService);
             using var context = new MixCmsAccountContext();
             var roles = from ur in context.AspNetUserRoles
                         join r in context.MixRoles
@@ -65,7 +66,21 @@ namespace Mix.Lib.ViewModels
 
             await LoadUserEndpointsAsync(mixDataService);
         }
-        
+
+        private async Task<AdditionalDataContentViewModel> CreateDefaultUserData(int tenantId, MixDataService mixDataService)
+        {
+            var data = new AdditionalDataContentViewModel(_cmsUow)
+            {
+                MixTenantId = tenantId,
+                Data = new JObject(),
+                GuidParentId = Id,
+                MixDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
+                ParentType = MixDatabaseParentType.User
+            };
+            await data.SaveAsync();
+            return data;
+        }
+
 
         public async Task LoadUserEndpointsAsync(MixDataService mixDataService)
         {
@@ -86,7 +101,8 @@ namespace Mix.Lib.ViewModels
                 endpoints.AddRange(userEndpoints.ToObject<List<JObject>>());
             }
 
-            Endpoints = endpoints.Select(e => {
+            Endpoints = endpoints.Select(e =>
+            {
                 string method = e.Value<string>("method")?.ToLower();
                 string path = e.Value<string>("path")?.ToLower();
                 return $"{method} - {path}";

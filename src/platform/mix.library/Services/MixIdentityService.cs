@@ -172,9 +172,17 @@ namespace Mix.Lib.Services
                 CreatedDateTime = DateTime.UtcNow
             };
 
-            var createResult = await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false);
+            var createResult = !string.IsNullOrEmpty(model.Password)
+                ? await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false)
+                : await _userManager.CreateAsync(user).ConfigureAwait(false);
             if (createResult.Succeeded)
             {
+                if (model.Provider.HasValue && !string.IsNullOrEmpty(model.ProviderKey))
+                {
+                    await _userManager.AddLoginAsync(
+                        user,
+                        new UserLoginInfo(model.Provider.ToString(), model.ProviderKey, model.Provider.ToString()));
+                }
                 await _userManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
                 await _userManager.AddToTenant(user, tenantId);
 
@@ -256,29 +264,31 @@ namespace Mix.Lib.Services
                 MixUser user = await _userManager.FindByLoginAsync(
                     model.Provider.ToString(),
                     verifiedAccessToken.user_id);
-
                 // return local token if already register
                 if (user != null)
                 {
                     return await GetAuthData(_cmsSontext, user, true, MixTenantId);
                 }
                 // register new account
-                else if (!string.IsNullOrEmpty(model.Email))
-                {
-                    user = new MixUser()
-                    {
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        UserName = model.UserName ?? model.Email ?? model.PhoneNumber,
-                    };
-                    await _userManager.CreateAsync(user);
-                    await _userManager.AddLoginAsync(user, new UserLoginInfo(model.Provider.ToString(), model.Provider.ToString(), model.Provider.ToString()));
-
-                    return await GetAuthData(_cmsSontext, user, true, MixTenantId);
-                }
                 else
                 {
-                    throw new MixException(MixErrorStatus.Badrequest, "Login Failed");
+                    string userName = model.UserName ?? model.Email ?? model.PhoneNumber;
+
+                    if (!string.IsNullOrEmpty(userName))
+                    {
+                        return await Register(new RegisterViewModel()
+                        {
+                            Email = model.Email,
+                            PhoneNumber = model.PhoneNumber,
+                            UserName = userName,
+                            Provider = model.Provider,
+                            ProviderKey = verifiedAccessToken.user_id
+                        }, MixTenantId, _cmsUow);
+                    }
+                    else
+                    {
+                        throw new MixException(MixErrorStatus.Badrequest, "Login Failed");
+                    }
                 }
             }
             return default;
@@ -357,7 +367,6 @@ namespace Mix.Lib.Services
                     verifyTokenEndPoint = string.Format("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}", accessToken);
                     break;
                 case MixExternalLoginProviders.Firebase:
-                    GetPrincipalFromExpiredToken(accessToken, appConfigs);
                     var token = await _firebaseService.VeriryTokenAsync(accessToken);
                     return new ParsedExternalAccessToken()
                     {
