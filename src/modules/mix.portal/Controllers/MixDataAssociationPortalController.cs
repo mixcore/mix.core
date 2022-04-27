@@ -21,7 +21,6 @@ namespace Mix.Portal.Controllers
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
-            MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
@@ -30,17 +29,9 @@ namespace Mix.Portal.Controllers
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
 
-        protected override Expression<Func<MixDataContentAssociation, bool>> BuildAndPredicate(SearchRequestDto req)
+        protected override SearchQueryModel<MixDataContentAssociation, Guid> BuildSearchRequest(SearchRequestDto req)
         {
-            SearchMixDataDto searchReq = new SearchMixDataDto(req, Request);
-
-            var predicate = base.BuildAndPredicate(req);
-            predicate = predicate.AndAlso(m => 
-            m.MixDatabaseId == searchReq.MixDatabaseId 
-            || m.MixDatabaseName == searchReq.MixDatabaseName);
-            predicate = predicate.AndAlsoIf(searchReq.IntParentId.HasValue, m => m.IntParentId == searchReq.IntParentId);
-            predicate = predicate.AndAlsoIf(searchReq.GuidParentId.HasValue, m => m.GuidParentId == searchReq.GuidParentId);
-            return predicate;
+            return new SearchDataContentAssociationModel(MixTenantId, req, Request);
         }
     }
 }

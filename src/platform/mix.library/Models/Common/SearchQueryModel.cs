@@ -8,6 +8,7 @@ namespace Mix.Lib.Models.Common
          where TPrimaryKey : IComparable
         where TEntity : EntityBase<TPrimaryKey>
     {
+        public int MixTenantId { get; set; }
         public string Specificulture { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
@@ -19,27 +20,32 @@ namespace Mix.Lib.Models.Common
         protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
         protected Expression<Func<TEntity, bool>> OrPredicate { get; set; }
 
-        public SearchQueryModel()
+        public SearchQueryModel(int tenantId)
         {
-
+            MixTenantId = tenantId;
         }
 
         public SearchQueryModel(
+            int tenantId,
             HttpRequest request,
             Expression<Func<TEntity, bool>> andPredicate = null,
             Expression<Func<TEntity, bool>> orPredicate = null)
         {
-            AndPredicate = andPredicate;
+            MixTenantId = tenantId;
+            AndPredicate = AndPredicate.AndAlso(andPredicate);
             OrPredicate = orPredicate;
             Init(request, default);
         }
 
         public SearchQueryModel(
+            int tenantId,
             SearchRequestDto request,
+            HttpRequest httpRequest,
             Expression<Func<TEntity, bool>> andPredicate = null,
             Expression<Func<TEntity, bool>> orPredicate = null)
         {
-            AndPredicate = andPredicate;
+            MixTenantId = tenantId;
+            AndPredicate = AndPredicate.AndAlso(andPredicate);
             OrPredicate = orPredicate;
 
             Specificulture = request.Culture;
@@ -55,6 +61,7 @@ namespace Mix.Lib.Models.Common
                 SortBy = request.OrderBy
             };
 
+            BuildAndPredicate(request, httpRequest);
             BuildPredicate();
         }
 
@@ -72,6 +79,7 @@ namespace Mix.Lib.Models.Common
             PagingData = new PagingRequestModel(request, defaultPageSize);
 
             BuildPredicate();
+            
         }
 
         private void BuildPredicate()
@@ -84,5 +92,33 @@ namespace Mix.Lib.Models.Common
             Predicate = Predicate.OrIf(OrPredicate != null, OrPredicate);
 
         }
+
+        protected virtual void BuildAndPredicate(SearchRequestDto req, HttpRequest request)
+        {
+            if (req.Culture != null)
+            {
+                AndPredicate = AndPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq));
+            }
+
+            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
+            {
+                AndPredicate = ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
+            }
+
+            if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)
+            {
+                Expression<Func<TEntity, bool>> searchPredicate = m => false;
+                foreach (var col in req.SearchColumns.Replace(" ", string.Empty).Split(','))
+                {
+                    searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
+                        col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));
+                }
+                AndPredicate = AndPredicate.AndAlso(searchPredicate);
+            }
+
+        }
+
     }
 }

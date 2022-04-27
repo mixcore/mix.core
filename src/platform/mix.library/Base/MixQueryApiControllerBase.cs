@@ -113,8 +113,6 @@ namespace Mix.Lib.Base
 
         #region Helpers
 
-
-
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
             if (!req.PageSize.HasValue)
@@ -122,39 +120,7 @@ namespace Mix.Lib.Base
                 req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
             }
 
-            Expression<Func<TEntity, bool>> andPredicate = BuildAndPredicate(req);
-
-            return new SearchQueryModel<TEntity, TPrimaryKey>(req, andPredicate);
-        }
-
-        protected virtual Expression<Func<TEntity, bool>> BuildAndPredicate(SearchRequestDto req)
-        {
-            Expression<Func<TEntity, bool>> andPredicate = m => true;
-
-            if (req.Culture != null)
-            {
-                andPredicate = andPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq));
-            }
-
-            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
-            {
-                andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
-            }
-
-            if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)
-            {
-                Expression<Func<TEntity, bool>> searchPredicate = m => false;
-                foreach (var col in req.SearchColumns.Replace(" ", string.Empty).Split(','))
-                {
-                    searchPredicate = searchPredicate.Or(ReflectionHelper.GetExpression<TEntity>(
-                        col.ToTitleCase(), req.Keyword, req.SearchMethod.Value));
-                }
-                andPredicate = andPredicate.AndAlso(searchPredicate);
-            }
-
-            return andPredicate;
+            return new SearchQueryModel<TEntity, TPrimaryKey>(MixTenantId, req, Request);
         }
 
         protected virtual async Task<TView> GetById(TPrimaryKey id)

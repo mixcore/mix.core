@@ -23,6 +23,18 @@ namespace Mix.Portal.Controllers
 
         }
 
+        #region Routes
+
+        [HttpGet("get-by-name/{name}")]
+        public async Task<ActionResult<MixDatabaseViewModel>> GetByName(string name)
+        {
+            var result = await _repository.GetSingleAsync(m=>m.SystemName == name);
+            if (result != null) 
+                return Ok(result);
+            return NotFound();
+        }
+
+        #endregion
         #region Overrides
 
         protected override Task DeleteHandler(MixDatabaseViewModel data)

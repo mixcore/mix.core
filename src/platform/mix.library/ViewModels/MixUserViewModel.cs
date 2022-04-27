@@ -3,6 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Lib.Dtos;
+using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Text.Json.Serialization;
 
@@ -64,7 +65,7 @@ namespace Mix.Lib.ViewModels
                         select ur;
             Roles = await roles.ToListAsync();
 
-            await LoadUserEndpointsAsync(mixDataService);
+            await LoadUserEndpointsAsync(tenantId, mixDataService);
         }
 
         private async Task<AdditionalDataContentViewModel> CreateDefaultUserData(int tenantId, MixDataService mixDataService)
@@ -82,12 +83,13 @@ namespace Mix.Lib.ViewModels
         }
 
 
-        public async Task LoadUserEndpointsAsync(MixDataService mixDataService)
+        public async Task LoadUserEndpointsAsync(int tenantId, MixDataService mixDataService)
         {
             List<JObject> endpoints = new();
             foreach (var role in Roles)
             {
-                var temp = await mixDataService.GetByAllParent<MixDataContentViewModel>(new SearchMixDataDto()
+                var temp = await mixDataService.GetByAllParent<MixDataContentViewModel>(
+                    new SearchDataContentModel(tenantId)
                 {
                     MixDatabaseName = MixDatabaseNames.SYSTEM_ENDPOINT,
                     GuidParentId = role.RoleId
