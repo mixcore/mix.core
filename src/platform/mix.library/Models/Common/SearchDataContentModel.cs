@@ -55,11 +55,10 @@ namespace Mix.Lib.Models.Common
 
         protected override void BuildAndPredicate(SearchRequestDto req, HttpRequest request)
         {
-            SearchDataContentModel searchReq = new SearchDataContentModel(MixTenantId, req, request);
             base.BuildAndPredicate(req, request);
             AndPredicate = AndPredicate.AndAlso(m =>
-            m.MixDatabaseId == searchReq.MixDatabaseId
-            || m.MixDatabaseName == searchReq.MixDatabaseName);
+            m.MixDatabaseId == MixDatabaseId
+            || m.MixDatabaseName == MixDatabaseName);
             //AndPredicate = AndPredicate.AndAlsoIf(searchReq.IntParentId.HasValue, m => m.IntParentId == searchReq.IntParentId);
             //AndPredicate = AndPredicate.AndAlsoIf(searchReq.GuidParentId.HasValue, m => m.GuidParentId == searchReq.GuidParentId);
         }
