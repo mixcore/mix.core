@@ -24,7 +24,7 @@ namespace Mix.Lib.Services
         }
 
         public async Task<List<TView>> GetByAllParent<TView>(
-            SearchMixDataDto request,
+            SearchDataContentModel request,
             string culture = null)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
@@ -45,7 +45,7 @@ namespace Mix.Lib.Services
         }
 
         public async Task<PagingResponseModel<TView>> Search<TView>(
-            SearchMixDataDto request,
+            SearchDataContentModel searchRequest,
             string culture = null)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
@@ -57,18 +57,17 @@ namespace Mix.Lib.Services
                 var tasks = new List<Task<TView>>();
                 culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
                 var fields = await _colRepo.GetListQuery(
-                    m => m.MixDatabaseId == request.MixDatabaseId
-                            || m.MixDatabaseName == request.MixDatabaseName).ToListAsync();
+                    m => m.MixDatabaseId == searchRequest.MixDatabaseId
+                            || m.MixDatabaseName == searchRequest.MixDatabaseName).ToListAsync();
 
                 // Data predicate
                 Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
-                   && (m.MixDatabaseId == request.MixDatabaseId
-                        || m.MixDatabaseName == request.MixDatabaseName);
+                   && (m.MixDatabaseId == searchRequest.MixDatabaseId
+                        || m.MixDatabaseName == searchRequest.MixDatabaseName);
 
-                var searchRequest = new SearchQueryModel<MixDataContent, Guid>(request, andPredicate);
                 // val predicate
-                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == request.MixDatabaseId
-                || m.MixDatabaseName == request.MixDatabaseName);
+                Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == searchRequest.MixDatabaseId
+                || m.MixDatabaseName == searchRequest.MixDatabaseName);
 
                 PagingResponseModel<TView> result = new()
                 {
@@ -87,10 +86,10 @@ namespace Mix.Lib.Services
                             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                                 m => m.MixDatabaseColumnName == field.SystemName;
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Equal,
+                                                .AndAlsoIf(searchRequest.CompareKind == MixCompareOperatorKind.Equal,
                                                             m => m.StringValue == searchRequest.Keyword);
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(request.CompareKind == MixCompareOperatorKind.Contain,
+                                                .AndAlsoIf(searchRequest.CompareKind == MixCompareOperatorKind.Contain,
                                                             m => EF.Functions.Like(m.StringValue, $"%{searchRequest.Keyword}%"));
 
                             pre = pre == null
@@ -100,9 +99,9 @@ namespace Mix.Lib.Services
                         attrPredicate = attrPredicate.AndAlsoIf(pre != null, pre);
                     }
 
-                    if (request.Fields != null && request.Fields.Properties().Any()) // filter by specific field name
+                    if (searchRequest.Fields != null && searchRequest.Fields.Properties().Any()) // filter by specific field name
                     {
-                        var valPredicate = GetFilterValueByFields(fields, request.Fields, request.CompareKind);
+                        var valPredicate = GetFilterValueByFields(fields, searchRequest.Fields, searchRequest.CompareKind);
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
@@ -110,10 +109,10 @@ namespace Mix.Lib.Services
                     searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(valDataIds != null, m => valDataIds.Any(id => m.Id == id));
                 }
 
-                if (request.IsGroup)
+                if (searchRequest.IsGroup)
                 {
                     var excludeIds = _dbContext.MixDataContentAssociation.Where(
-                        m => (m.MixDatabaseId == request.MixDatabaseId || m.MixDatabaseName == request.MixDatabaseName)
+                        m => (m.MixDatabaseId == searchRequest.MixDatabaseId || m.MixDatabaseName == searchRequest.MixDatabaseName)
                         && m.Specificulture == culture
                         && m.ParentType == MixDatabaseParentType.Set
                         && m.ParentId != Guid.Empty)

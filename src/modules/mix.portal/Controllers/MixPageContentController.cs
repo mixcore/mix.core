@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace Mix.Portal.Controllers
 {
@@ -18,7 +16,6 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context,
-            MixCacheService cacheService,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
         {
@@ -28,12 +25,6 @@ namespace Mix.Portal.Controllers
         #region Overrides
 
 
-        protected override Expression<Func<MixPageContent, bool>> BuildAndPredicate(SearchRequestDto req)
-        {
-            var predicate = base.BuildAndPredicate(req);
-            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(req.Keyword), m => EF.Functions.Like(m.Title.ToLower(), $"%{req.Keyword.ToLower()}%"));
-            return predicate;
-        }
         #endregion
     }
 }

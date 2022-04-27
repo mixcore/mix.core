@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
 
         public override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler([FromQuery] SearchRequestDto req)
         {
-            SearchMixDataDto searchReq = new SearchMixDataDto(req, Request);
+            SearchDataContentModel searchReq = new SearchDataContentModel(MixTenantId, req, Request);
             return await _mixDataService.Search<MixDataContentViewModel>(searchReq, _lang);
         }
 

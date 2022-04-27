@@ -41,34 +41,36 @@ namespace Mix.Lib.Services
                 // Get all post data query
                 var postDataContentIdsQuery = _associationRepo.GetListQuery(m => m.ParentType == MixDatabaseParentType.Post);
 
-                // Get matched data Ids from searched categories
-                var matchedCateDataContentIds = _valRepo.GetListQuery(
-                    m => m.MixDatabaseName == MixDatabaseNames.SYSTEM_CATEGORY
-                        && searchRequest.Categories.Any(c => c == m.StringValue))
+                IQueryable<Guid> matchedCateDataContentIds = null;
+                if (searchRequest.Categories != null && searchRequest.Categories.Count() > 0)
+                {
+                    // Get matched data Ids from searched categories
+                    matchedCateDataContentIds = _valRepo.GetListQuery(
+                        m => m.MixDatabaseName == MixDatabaseNames.SYSTEM_CATEGORY
+                            && searchRequest.Categories.Any(c => c == m.StringValue))
+                        .Select(m => m.ParentId);
+
+                    var postIdsByCate = postDataContentIdsQuery
+                       .Where(m => matchedCateDataContentIds.Contains(m.DataContentId))
+                       .Select(m => m.IntParentId);
+
+                    andPredicate = andPredicate.AndAlso(m => postIdsByCate.Contains(m.Id));
+                }
+
+                if (searchRequest.Tags != null && searchRequest.Tags.Count() > 0)
+                {
+                    // Get matched data Ids from searched tags
+                    var matchedTagDataContentIds = _valRepo.GetListQuery(
+                    m => m.MixDatabaseName == MixDatabaseNames.SYSTEM_TAG
+                        && searchRequest.Tags.Any(c => c == m.StringValue))
                     .Select(m => m.ParentId);
 
-                var postIdsByCate = postDataContentIdsQuery
-                   .Where(m => matchedCateDataContentIds.Contains(m.DataContentId))
-                   .Select(m => m.IntParentId);
+                    var postIdsByTag = postDataContentIdsQuery
+                       .Where(m => matchedCateDataContentIds.Contains(m.DataContentId))
+                       .Select(m => m.IntParentId);
 
-                // Get matched data Ids from searched tags
-                var matchedTagDataContentIds = _valRepo.GetListQuery(
-                    m => m.MixDatabaseName == MixDatabaseNames.SYSTEM_CATEGORY
-                        && searchRequest.Categories.Any(c => c == m.StringValue))
-                    .Select(m => m.ParentId);
-
-                var postIdsByTag = postDataContentIdsQuery
-                   .Where(m => matchedCateDataContentIds.Contains(m.DataContentId))
-                   .Select(m => m.IntParentId);
-
-                andPredicate = andPredicate.AndAlsoIf(
-                    searchRequest.Categories.Count() > 0,
-                        m => postIdsByCate.Contains(m.Id)
-                    );
-                andPredicate = andPredicate.AndAlsoIf(
-                    searchRequest.Tags.Count() > 0,
-                        m => postIdsByTag.Contains(m.Id)
-                    );
+                    andPredicate = andPredicate.AndAlso(m => postIdsByTag.Contains(m.Id));
+                }
 
                 searchRequest.Predicate = searchRequest.Predicate.AndAlso(andPredicate);
 

@@ -1,22 +1,22 @@
-﻿using Mix.Database.Entities.Cms;
+﻿using Microsoft.AspNetCore.Http;
 using Mix.Lib.Dtos;
-using Mix.Lib.Models.Common;
-using System;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Models.Common
 {
     public class SearchPostQueryModel : SearchQueryModel<MixPostContent, int>
     {
-        public SearchPostQueryModel()
+        public SearchPostQueryModel(int tenantId) : base(tenantId)
         {
         }
 
         public SearchPostQueryModel(
-            SearchPostDto request, 
+            int tenantId,
+            SearchPostDto request,
+            HttpRequest httpRequest,
             Expression<Func<MixPostContent, bool>> andPredicate = null, 
             Expression<Func<MixPostContent, bool>> orPredicate = null) 
-            : base(request, andPredicate, orPredicate)
+            : base(tenantId, request, httpRequest, andPredicate, orPredicate)
         {
             if (!string.IsNullOrEmpty(request.Categories))
             {
