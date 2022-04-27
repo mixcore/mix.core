@@ -58,28 +58,10 @@ namespace Mix.Lib.Base
         {
             var result = await SearchHandler(req);
 
-            if (!string.IsNullOrEmpty(req.Columns))
-            {
-                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
-            }
-
-            if (!string.IsNullOrEmpty(req.Columns))
-            {
-                List<object> objects = new List<object>();
-                foreach (var item in result.Items)
-                {
-                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
-                }
-                return Ok(new PagingResponseModel<object>()
-                {
-                    Items = objects,
-                    PagingData = result.PagingData
-                });
-            }
-
-            return result;
+            return ParseSearchResult(req, result);
         }
 
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
         {
@@ -108,6 +90,28 @@ namespace Mix.Lib.Base
             return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
+        protected virtual ActionResult<PagingResponseModel<TView>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
+        {
+            if (!string.IsNullOrEmpty(req.Columns))
+            {
+                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
+            }
+
+            if (!string.IsNullOrEmpty(req.Columns))
+            {
+                List<object> objects = new List<object>();
+                foreach (var item in result.Items)
+                {
+                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
+                }
+                return Ok(new PagingResponseModel<object>()
+                {
+                    Items = objects,
+                    PagingData = result.PagingData
+                });
+            }
+            return result;
+        }
 
         #endregion
 
