@@ -28,8 +28,8 @@ namespace Mix.Portal.Controllers
             _mixDataService.SetUnitOfWork(_uow);
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
         }
-
-        public override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler([FromQuery] SearchRequestDto req)
+        protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
+            [FromQuery] SearchRequestDto req)
         {
             SearchDataContentModel searchReq = new SearchDataContentModel(MixTenantId, req, Request);
             return await _mixDataService.Search<MixDataContentViewModel>(searchReq, _lang);

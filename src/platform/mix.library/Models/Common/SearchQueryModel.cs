@@ -8,17 +8,29 @@ namespace Mix.Lib.Models.Common
          where TPrimaryKey : IComparable
         where TEntity : EntityBase<TPrimaryKey>
     {
-        public int MixTenantId { get; set; }
-        public string Specificulture { get; set; }
+        #region Properties
+
+        public string Keyword { get; set; }
+        public string Culture { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public int PageIndex { get; set; }
+        public int? PageSize { get; set; }
+        public string OrderBy { get; set; }
+        public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
-        public string Keyword { get; set; }
+        public ExpressionMethod? SearchMethod { get; set; }
+        public string Columns { get; set; }
+        public string SearchColumns { get; set; }
+
+        public int MixTenantId { get; set; }
         public PagingRequestModel PagingData { get; set; }
         public Expression<Func<TEntity, bool>> Predicate { get; set; }
 
         protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
         protected Expression<Func<TEntity, bool>> OrPredicate { get; set; }
+
+        #endregion
 
         public SearchQueryModel(int tenantId)
         {
@@ -45,29 +57,17 @@ namespace Mix.Lib.Models.Common
             Expression<Func<TEntity, bool>> orPredicate = null)
         {
             MixTenantId = tenantId;
-            AndPredicate = AndPredicate.AndAlso(andPredicate);
+            ReflectionHelper.MapObject(request, this);
+
             OrPredicate = orPredicate;
-
-            Specificulture = request.Culture;
-            FromDate = request.FromDate;
-            ToDate = request.ToDate;
-            Status = request.Status;
-            Keyword = request.Keyword;
-            PagingData = new PagingRequestModel()
-            {
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortDirection = request.Direction,
-                SortBy = request.OrderBy
-            };
-
+            AndPredicate = AndPredicate.AndAlso(andPredicate);
             BuildAndPredicate(request, httpRequest);
             BuildPredicate();
         }
 
         private void Init(HttpRequest request, int defaultPageSize = 1000)
         {
-            Specificulture = request.Query[MixRequestQueryKeywords.Specificulture];
+            Culture = request.Query[MixRequestQueryKeywords.Specificulture];
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate : null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)

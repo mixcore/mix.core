@@ -34,10 +34,6 @@ namespace Mix.Lib.Models.Common
             {
                 IsGroup = isGroup;
             }
-            if (Enum.TryParse(httpRequest.Query["compareKind"], out MixCompareOperatorKind compareKind))
-            {
-                CompareKind = compareKind;
-            }
             if (!string.IsNullOrEmpty(httpRequest.Query["fields"]))
             {
                 Fields = JObject.Parse(httpRequest.Query["fields"]);
@@ -48,7 +44,6 @@ namespace Mix.Lib.Models.Common
         public Guid? GuidParentId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
-        public MixCompareOperatorKind CompareKind { get; set; }
         public bool IsGroup { get; set; }
         public JObject Fields { get; set; }
 
@@ -59,8 +54,6 @@ namespace Mix.Lib.Models.Common
             AndPredicate = AndPredicate.AndAlso(m =>
             m.MixDatabaseId == MixDatabaseId
             || m.MixDatabaseName == MixDatabaseName);
-            //AndPredicate = AndPredicate.AndAlsoIf(searchReq.IntParentId.HasValue, m => m.IntParentId == searchReq.IntParentId);
-            //AndPredicate = AndPredicate.AndAlsoIf(searchReq.GuidParentId.HasValue, m => m.GuidParentId == searchReq.GuidParentId);
         }
     }
 }

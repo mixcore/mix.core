@@ -86,10 +86,10 @@ namespace Mix.Lib.Services
                             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                                 m => m.MixDatabaseColumnName == field.SystemName;
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(searchRequest.CompareKind == MixCompareOperatorKind.Equal,
+                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Eq ,
                                                             m => m.StringValue == searchRequest.Keyword);
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(searchRequest.CompareKind == MixCompareOperatorKind.Contain,
+                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Ct,
                                                             m => EF.Functions.Like(m.StringValue, $"%{searchRequest.Keyword}%"));
 
                             pre = pre == null
@@ -101,7 +101,7 @@ namespace Mix.Lib.Services
 
                     if (searchRequest.Fields != null && searchRequest.Fields.Properties().Any()) // filter by specific field name
                     {
-                        var valPredicate = GetFilterValueByFields(fields, searchRequest.Fields, searchRequest.CompareKind);
+                        var valPredicate = GetFilterValueByFields(fields, searchRequest.Fields, searchRequest.SearchMethod);
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
                     }
 
@@ -176,7 +176,7 @@ namespace Mix.Lib.Services
         }
 
         private static Expression<Func<MixDataContentValue, bool>> GetFilterValueByFields(
-                List<MixDatabaseColumn> fields, JObject fieldQueries, MixCompareOperatorKind compareKind)
+                List<MixDatabaseColumn> fields, JObject fieldQueries, ExpressionMethod? compareKind)
         {
             Expression<Func<MixDataContentValue, bool>> valPredicate = null;
             foreach (var q in fieldQueries)
@@ -187,8 +187,8 @@ namespace Mix.Lib.Services
                     if (!string.IsNullOrEmpty(value))
                     {
                         Expression<Func<MixDataContentValue, bool>> pre = m => m.MixDatabaseColumnName == q.Key;
-                        pre = pre.AndAlsoIf(compareKind == MixCompareOperatorKind.Equal, m => m.StringValue == (q.Value.ToString()));
-                        pre = pre.AndAlsoIf(compareKind == MixCompareOperatorKind.Contain, m => EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
+                        pre = pre.AndAlsoIf(compareKind == ExpressionMethod.Eq, m => m.StringValue == (q.Value.ToString()));
+                        pre = pre.AndAlsoIf(compareKind == ExpressionMethod.Ct, m => EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
 
                         valPredicate = valPredicate == null
                             ? pre
