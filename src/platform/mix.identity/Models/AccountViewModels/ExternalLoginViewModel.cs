@@ -4,6 +4,7 @@
 
 using Mix.Identity.Constants;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Identity.Models.AccountViewModels
@@ -27,12 +28,13 @@ namespace Mix.Identity.Models.AccountViewModels
     public class RegisterExternalBindingModel
     {
         public string UserName { get; set; }
-
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public MixExternalLoginProviders Provider { get; set; }
 
         public string ExternalAccessToken { get; set; }
+
+        public JObject Data { get; set; }
 
     }
 

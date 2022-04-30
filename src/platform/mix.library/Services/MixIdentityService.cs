@@ -190,11 +190,9 @@ namespace Mix.Lib.Services
                 var vm = new MixUserViewModel(user, _cmsUOW);
                 await vm.LoadUserDataAsync(MixTenantId, _mixDataService);
 
-                if (model.Data != null)
+                if (vm.UserData == null)
                 {
-                    vm.UserData.SetUowInfo(_cmsUOW);
-                    vm.UserData.Data = model.Data;
-                    await vm.UserData.SaveAsync();
+                    vm.UserData = await vm.CreateDefaultUserData(MixTenantId, model.Data);
                 }
 
                 return await GetAuthData(_cmsSontext, user, true, tenantId);
@@ -258,6 +256,7 @@ namespace Mix.Lib.Services
         public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
             var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
+            
             if (verifiedAccessToken != null)
             {
 
@@ -282,7 +281,8 @@ namespace Mix.Lib.Services
                             PhoneNumber = model.PhoneNumber,
                             UserName = userName,
                             Provider = model.Provider,
-                            ProviderKey = verifiedAccessToken.user_id
+                            ProviderKey = verifiedAccessToken.user_id,
+                            Data = model.Data
                         }, MixTenantId, _cmsUow);
                     }
                     else

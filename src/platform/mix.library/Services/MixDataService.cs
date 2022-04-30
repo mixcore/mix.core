@@ -86,7 +86,7 @@ namespace Mix.Lib.Services
                             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                                 m => m.MixDatabaseColumnName == field.SystemName;
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Eq ,
+                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Eq,
                                                             m => m.StringValue == searchRequest.Keyword);
                             keywordPredicate = keywordPredicate
                                                 .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Ct,
@@ -99,7 +99,7 @@ namespace Mix.Lib.Services
                         attrPredicate = attrPredicate.AndAlsoIf(pre != null, pre);
                     }
 
-                    if (searchRequest.Fields != null && searchRequest.Fields.Properties().Any()) // filter by specific field name
+                    if (searchRequest.Fields != null && searchRequest.Fields.Any()) // filter by specific field name
                     {
                         var valPredicate = GetFilterValueByFields(fields, searchRequest.Fields, searchRequest.SearchMethod);
                         attrPredicate = attrPredicate.AndAlsoIf(valPredicate != null, valPredicate);
@@ -176,19 +176,110 @@ namespace Mix.Lib.Services
         }
 
         private static Expression<Func<MixDataContentValue, bool>> GetFilterValueByFields(
-                List<MixDatabaseColumn> fields, JObject fieldQueries, ExpressionMethod? compareKind)
+                List<MixDatabaseColumn> columns, List<SearchContentValueModel> fieldQueries, ExpressionMethod? compareKind)
         {
             Expression<Func<MixDataContentValue, bool>> valPredicate = null;
             foreach (var q in fieldQueries)
             {
-                if (fields.Any(f => f.SystemName == q.Key))
+                var column = columns.SingleOrDefault(f => f.SystemName == q.ColumnName);
+                if (column != null)
                 {
-                    string value = q.Value.ToString();
-                    if (!string.IsNullOrEmpty(value))
+                    if (q.Value != null)
                     {
-                        Expression<Func<MixDataContentValue, bool>> pre = m => m.MixDatabaseColumnName == q.Key;
-                        pre = pre.AndAlsoIf(compareKind == ExpressionMethod.Eq, m => m.StringValue == (q.Value.ToString()));
-                        pre = pre.AndAlsoIf(compareKind == ExpressionMethod.Ct, m => EF.Functions.Like(m.StringValue, $"%{q.Value}%"));
+                        Expression<Func<MixDataContentValue, bool>> pre =
+                            m => m.MixDatabaseColumnName == q.ColumnName;
+                        Expression<Func<MixDataContentValue, bool>> andPredicate = null;
+                        switch (column.DataType)
+                        {
+                            case MixDataType.DateTime:
+                            case MixDataType.Date:
+                            case MixDataType.Time:
+                                switch (q.SearchMethod)
+                                {
+                                    case ExpressionMethod.Eq:
+                                        andPredicate = m => m.DateTimeValue == (DateTime)q.Value;
+                                        break;
+                                    case ExpressionMethod.Lt:
+                                        andPredicate = m => (DateTime)q.Value < m.DateTimeValue;
+                                        break;
+                                    case ExpressionMethod.Gt:
+                                        andPredicate = m => (DateTime)q.Value > m.DateTimeValue;
+                                        break;
+                                    case ExpressionMethod.Lte:
+                                        andPredicate = m => (DateTime)q.Value >= m.DateTimeValue;
+                                        break;
+                                    case ExpressionMethod.Gte:
+                                        andPredicate = m => (DateTime)q.Value >= m.DateTimeValue;
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                break;
+                            case MixDataType.Integer:
+                                switch (q.SearchMethod)
+                                {
+                                    case ExpressionMethod.Eq:
+                                        andPredicate = m => m.IntegerValue == (int)q.Value;
+                                        break;
+                                    case ExpressionMethod.Lt:
+                                        andPredicate = m => (int)q.Value < m.IntegerValue;
+                                        break;
+                                    case ExpressionMethod.Gt:
+                                        andPredicate = m => (int)q.Value > m.IntegerValue;
+                                        break;
+                                    case ExpressionMethod.Lte:
+                                        andPredicate = m => (int)q.Value >= m.IntegerValue;
+                                        break;
+                                    case ExpressionMethod.Gte:
+                                        andPredicate = m => (int)q.Value >= m.IntegerValue;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case MixDataType.Double:
+                                switch (q.SearchMethod)
+                                {
+                                    case ExpressionMethod.Eq:
+                                        andPredicate = m => m.DoubleValue == (double)q.Value;
+                                        break;
+                                    case ExpressionMethod.Lt:
+                                        andPredicate = m => (double)q.Value < m.DoubleValue;
+                                        break;
+                                    case ExpressionMethod.Gt:
+                                        andPredicate = m => (double)q.Value > m.DoubleValue;
+                                        break;
+                                    case ExpressionMethod.Lte:
+                                        andPredicate = m => (double)q.Value >= m.DoubleValue;
+                                        break;
+                                    case ExpressionMethod.Gte:
+                                        andPredicate = m => (double)q.Value >= m.DoubleValue;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
+                            case MixDataType.Boolean:
+                                andPredicate = m => m.BooleanValue == (bool)q.Value;
+                                break;
+                            case MixDataType.Reference:
+                                break;
+                            default:
+                                switch (q.SearchMethod)
+                                {
+                                    case ExpressionMethod.Eq:
+                                        andPredicate = m => m.StringValue == (string)q.Value;
+                                        break;
+                                    case ExpressionMethod.Ct:
+                                        andPredicate = m => EF.Functions.Like(m.StringValue, $"%{q.Value}%");
+                                        break;
+
+                                }
+                                break;
+                        }
+
+                        pre = pre.AndAlso(andPredicate);
 
                         valPredicate = valPredicate == null
                             ? pre

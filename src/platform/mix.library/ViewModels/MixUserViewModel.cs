@@ -56,7 +56,6 @@ namespace Mix.Lib.ViewModels
                 MixDatabaseParentType.User,
                 MixDatabaseNames.SYSTEM_USER_DATA,
                 Id);
-            UserData ??= await CreateDefaultUserData(tenantId, mixDataService);
             using var context = new MixCmsAccountContext();
             var roles = from ur in context.AspNetUserRoles
                         join r in context.MixRoles
@@ -68,12 +67,12 @@ namespace Mix.Lib.ViewModels
             await LoadUserEndpointsAsync(tenantId, mixDataService);
         }
 
-        private async Task<AdditionalDataContentViewModel> CreateDefaultUserData(int tenantId, MixDataService mixDataService)
+        public async Task<AdditionalDataContentViewModel> CreateDefaultUserData(int tenantId, JObject userData = null)
         {
             var data = new AdditionalDataContentViewModel(_cmsUow)
             {
                 MixTenantId = tenantId,
-                Data = new JObject(),
+                Data = userData,
                 GuidParentId = Id,
                 MixDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
                 ParentType = MixDatabaseParentType.User

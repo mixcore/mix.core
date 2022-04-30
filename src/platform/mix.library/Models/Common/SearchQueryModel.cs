@@ -14,10 +14,6 @@ namespace Mix.Lib.Models.Common
         public string Culture { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
-        public int PageIndex { get; set; }
-        public int? PageSize { get; set; }
-        public string OrderBy { get; set; }
-        public SortDirection Direction { get; set; }
         public MixContentStatus? Status { get; set; }
         public ExpressionMethod? SearchMethod { get; set; }
         public string Columns { get; set; }
@@ -58,7 +54,13 @@ namespace Mix.Lib.Models.Common
         {
             MixTenantId = tenantId;
             ReflectionHelper.MapObject(request, this);
-
+            PagingData = new PagingRequestModel()
+            {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                SortBy = request.OrderBy,
+                SortDirection = request.Direction
+            };
             OrPredicate = orPredicate;
             AndPredicate = AndPredicate.AndAlso(andPredicate);
             BuildAndPredicate(request, httpRequest);
