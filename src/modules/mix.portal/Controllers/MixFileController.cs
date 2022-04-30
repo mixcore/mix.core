@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -63,8 +64,14 @@ namespace Mix.Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = MixFileHelper.SaveFile(file, $"{folder}");
-                return Ok(result);
+                folder ??= DateTime.Now.ToString("yyyy-MMM");
+                folder = $"{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                string webPath = $"{MixFolders.WebRootPath}/{folder}";
+                var result = MixFileHelper.SaveFile(file, webPath);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    return Ok($"{GlobalConfigService.Instance.Domain}/{folder}/{result}");
+                }
             }
             return BadRequest();
         }

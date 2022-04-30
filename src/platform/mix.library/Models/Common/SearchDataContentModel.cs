@@ -12,10 +12,6 @@ namespace Mix.Lib.Models.Common
         public SearchDataContentModel(int tenantId, SearchRequestDto req, HttpRequest httpRequest)
             : base(tenantId, req, httpRequest)
         {
-            Keyword = req.Keyword;
-            FromDate = req.FromDate;
-            ToDate = req.ToDate;
-            Status = req.Status;
             MixDatabaseName = httpRequest.Query[MixRequestQueryKeywords.DatabaseName];
 
             if (int.TryParse(httpRequest.Query[MixRequestQueryKeywords.DatabaseId], out int mixDbId))
@@ -34,10 +30,6 @@ namespace Mix.Lib.Models.Common
             {
                 IsGroup = isGroup;
             }
-            if (!string.IsNullOrEmpty(httpRequest.Query["fields"]))
-            {
-                Fields = JObject.Parse(httpRequest.Query["fields"]);
-            }
         }
         public string ParentId { get; set; }
         public int? IntParentId { get; set; }
@@ -45,7 +37,7 @@ namespace Mix.Lib.Models.Common
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
         public bool IsGroup { get; set; }
-        public JObject Fields { get; set; }
+        public List<SearchContentValueModel> Fields { get; set; }
 
 
         protected override void BuildAndPredicate(SearchRequestDto req, HttpRequest request)

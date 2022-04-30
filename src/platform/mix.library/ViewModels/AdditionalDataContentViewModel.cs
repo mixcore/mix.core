@@ -61,15 +61,6 @@
                 CreatedDateTime = DateTime.UtcNow;
             }
 
-            if (string.IsNullOrEmpty(MixDatabaseName))
-            {
-                MixDatabaseName = Context.MixDatabase.First(m => m.Id == MixDatabaseId)?.SystemName;
-            }
-            if (MixDatabaseId == 0)
-            {
-                MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
-            }
-
             Columns ??= await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
             Values = await valRepo.GetListAsync(m => m.ParentId == Id);
 
@@ -83,6 +74,17 @@
 
         protected override async Task<MixDataContent> SaveHandlerAsync()
         {
+            if (string.IsNullOrEmpty(MixDatabaseName))
+            {
+                MixDatabaseName = Context.MixDatabase.First(m => m.Id == MixDatabaseId)?.SystemName;
+            }
+            if (MixDatabaseId == 0)
+            {
+                MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
+            }
+
+            Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
+
             var result = await base.SaveHandlerAsync();
 
             var assoRepo = new Repository<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>(UowInfo);

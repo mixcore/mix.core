@@ -19,7 +19,9 @@
         public const string IntParentId = "intParentId";
         public const string GuidParentId = "guidParentId";
         public const string Category = "category";
+        public const string Categories = "categories";
         public const string Tag = "tag";
+        public const string Tags = "tags";
         public const string ThemeId = "themeId";
         public const string ModuleContentId = "moduleContentId";
         public const string LeftId = "leftId";

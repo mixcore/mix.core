@@ -12,19 +12,22 @@ namespace Mix.Lib.Models.Common
 
         public SearchPostQueryModel(
             int tenantId,
-            SearchPostDto request,
+            SearchRequestDto request,
             HttpRequest httpRequest,
             Expression<Func<MixPostContent, bool>> andPredicate = null, 
             Expression<Func<MixPostContent, bool>> orPredicate = null) 
             : base(tenantId, request, httpRequest, andPredicate, orPredicate)
         {
-            if (!string.IsNullOrEmpty(request.Categories))
+            var strCategories = httpRequest.Query[MixRequestQueryKeywords.Categories].ToString();
+            var strTags = httpRequest.Query[MixRequestQueryKeywords.Tag].ToString();
+
+            if (!string.IsNullOrEmpty(strCategories))
             {
-                Categories = request.Categories.Split(',', StringSplitOptions.TrimEntries);
+                Categories = strCategories.Split(',', StringSplitOptions.TrimEntries);
             }
-            if (!string.IsNullOrEmpty(request.Tags))
+            if (!string.IsNullOrEmpty(strTags))
             {
-                Tags = request.Tags.Split(',', StringSplitOptions.TrimEntries);
+                Tags = strTags.Split(',', StringSplitOptions.TrimEntries);
             }
         }
 
