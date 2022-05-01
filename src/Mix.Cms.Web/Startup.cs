@@ -18,7 +18,6 @@ using Mix.Cms.Lib.Models.Account;
 using Mix.Cms.Lib.Models.Cms;
 using Mix.Cms.Lib.Services;
 using Mix.Cms.Messenger.Models.Data;
-using Mix.Cms.Schedule;
 using Mix.Infrastructure.Repositories;
 using Mix.Rest.Api.Client;
 using Mix.Services;
@@ -63,8 +62,6 @@ namespace Mix.Cms.Web
                                   });
             });
 
-
-
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()
                 .AddNewtonsoftJson(options =>
@@ -101,8 +98,6 @@ namespace Mix.Cms.Web
             services.AddMixRestApi();
             services.AddMixDbRepository();
             services.AddMixSignalR();
-            //services.AddMixGprc();
-            services.AddMixScheduler(Configuration);
 
             services.AddScoped<InitCmsService>();
             services.AddSingleton<MixCacheService>();
@@ -193,7 +188,6 @@ namespace Mix.Cms.Web
             app.UseMixSignalR();
 
             app.UseMixRoutes();
-            app.UseMixScheduler();
 
             #endregion Additionals Config for Mixcore Cms
         }

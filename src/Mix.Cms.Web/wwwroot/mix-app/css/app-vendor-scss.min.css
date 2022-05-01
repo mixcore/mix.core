@@ -1,4 +1,4 @@
-/* Sat Oct 16 2021 14:15:51 GMT+0700 (Indochina Time) */fb-login {
+/* Sat Apr 09 2022 14:18:04 GMT+0700 (Indochina Time) */fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -32,10 +32,6 @@ mix-module-data-table .preview-container {
 upload-croppie .cr-boundary {
   overflow: hidden; }
 
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
-
 main-side-bar-dynamic .sw-sidebar .sw-toc-item {
   position: relative; }
   main-side-bar-dynamic .sw-sidebar .sw-toc-item .sw-toc-link .sw-toc-link {
@@ -51,7 +47,7 @@ main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
   padding: 2px 0; }
 
 .custom-image {
-  max-width: 30vw; }
+  max-width: 300px; }
 
 .attr-set-value-item:last-child {
   border-bottom: 0 !important; }
@@ -67,3 +63,7 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
+
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }

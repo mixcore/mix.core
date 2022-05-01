@@ -43,9 +43,10 @@ namespace Mix.Cms.Api.RestFul.Controllers.v1
             bool isFromDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate);
             bool isToDate = DateTime.TryParse(Request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate);
             string keyword = Request.Query[MixRequestQueryKeywords.Keyword];
+            string createdBy = _mixIdentityHelper.GetClaim(User, MixClaims.Username);
             Expression<Func<MixPage, bool>> predicate = model =>
                 model.Specificulture == _lang
-                && (User.IsInRole(MixDefaultRoles.SuperAdmin) || model.CreatedBy == User.Claims.FirstOrDefault(c => c.Type == "Username").Value)
+                && (User.IsInRole(MixDefaultRoles.SuperAdmin) || User.IsInRole(MixDefaultRoles.Admin) || model.CreatedBy == createdBy)
                 && (!isStatus || model.Status == status)
                 && (!isFromDate || model.CreatedDateTime >= fromDate)
                 && (!isToDate || model.CreatedDateTime <= toDate)
