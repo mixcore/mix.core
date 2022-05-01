@@ -35,7 +35,10 @@ namespace Mix.Communicator.Services
             return decodedToken;
         }
 
-        public async Task SendToDevice(string registrationToken)
+        public async Task<string> SendToDevice(
+            string registrationToken,
+            Notification notification,
+            Dictionary<string, string> messages)
         {
             // This registration token comes from the client FCM SDKs.
             //var registrationToken = "YOUR_REGISTRATION_TOKEN";
@@ -43,11 +46,8 @@ namespace Mix.Communicator.Services
             // See documentation on defining a message payload.
             var message = new Message()
             {
-                Data = new Dictionary<string, string>()
-                {
-                    { "score", "850" },
-                    { "time", "2:45" },
-                },
+                Data = messages,
+                Notification = notification,
                 Token = registrationToken,
             };
 
@@ -63,7 +63,10 @@ namespace Mix.Communicator.Services
              */
         }
 
-        public async Task SendToMultipleDevices(List<string> registrationTokens)
+        public async Task<string> SendToMultipleDevices(
+            List<string> registrationTokens, 
+            Notification notification,
+            Dictionary<string, string> data)
         {
             // Create a list containing up to 500 registration tokens.
             // These registration tokens come from the client FCM SDKs.
@@ -71,11 +74,8 @@ namespace Mix.Communicator.Services
             var message = new MulticastMessage()
             {
                 Tokens = registrationTokens,
-                Data = new Dictionary<string, string>()
-                {
-                    { "score", "850" },
-                    { "time", "2:45" },
-                },
+                Data = data,
+                Notification = notification
             };
 
             var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
