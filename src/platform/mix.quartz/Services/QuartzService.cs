@@ -93,6 +93,13 @@ namespace Mix.Quartz.Services
             }
             return default;
         }
+        
+        public async Task<bool> DeleteJob(string jobName, CancellationToken cancellationToken = default)
+        {
+            var key = new JobKey(jobName);
+            var result = await Scheduler.DeleteJob(key, cancellationToken);
+            return result;
+        }
 
         public async Task<IJobDetail> GetJob(string id, CancellationToken cancellationToken = default)
         {

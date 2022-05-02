@@ -9,7 +9,6 @@ using Mix.Lib.Services;
 namespace Mix.Lib.Controllers
 {
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
         : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
