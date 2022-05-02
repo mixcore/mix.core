@@ -2,8 +2,12 @@
 
 [![backer](https://opencollective.com/mixcore/tiers/backer/badge.svg?label=backer&color=brightgreen)](https://opencollective.com/mixcore#support) [![Donate](https://img.shields.io/badge/$-donate-ff69b4.svg)](https://www.paypal.me/mixcore) [![Buy us a coffee](https://img.shields.io/badge/$-BuyMeACoffee-orange.svg)](https://www.buymeacoffee.com/mixcore) 
 
-## Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
+### Fully Open Source UI Tools to create multi-purpose Enterprise Web Apps, Mobile Apps & Application Services
 
+## Branchs
+
+- **master**: Mixcore v1.0.x LTS
+- **develop**: Mixcore v2.0.0-alpha.x
 
 ## UI Screenshots 
 
@@ -58,12 +62,15 @@ Codefactor     |[![CodeFactor](https://www.codefactor.io/repository/github/mixco
 
 |  |Links  |
 |---------|---------|
-|STAG / Demo     |https://demo.mixcore.org or https://dev.mixcore.org or https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd)  Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)|
+|STAG / Demo     |https://demo.mixcore.org <br /> https://dev.mixcore.org <br /> https://v2.dev.mixcore.org <br /> https://mochahost.demo.mixcore.org/portal (administrator / P@ssw0rd) <br /> |
+|Swagger (v2) | https://v2.dev.mixcore.org/api/v2/mixcore/swagger/index.html |
 |Dev docs     |https://docs.mixcore.org / https://mixcore.dev|
 |Community     |https://community.mixcore.org|
 |Youtube     |https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw|
 |Twitter     |https://twitter.com/mixcore_cms         |
 |Medium     |https://medium.com/mixcore         |
+
+Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.mixcore.org/topic/4/install-mixcore-cms-with-azure-and-docker-compose)
 
 ## Run with Docker
 
