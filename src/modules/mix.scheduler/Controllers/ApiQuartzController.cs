@@ -94,5 +94,12 @@ namespace Mix.Scheduler.Controllers
             }
             return Ok(result);
         }
+
+        [HttpDelete("job/{jobName}")]
+        public async Task<ActionResult> DeleteJobAsync(string jobName)
+        {
+            var result = await _service.DeleteJob(jobName);
+            return result ? Ok() : BadRequest();
+        }
     }
 }
