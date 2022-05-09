@@ -4,7 +4,7 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
-
+using Mix.Heart.Exceptions;
 
 namespace Mix.Communicator.Services
 {
@@ -64,24 +64,29 @@ namespace Mix.Communicator.Services
         }
 
         public async Task<string> SendToMultipleDevices(
-            List<string> registrationTokens, 
+            List<string> registrationTokens,
             Notification notification,
             Dictionary<string, string> data)
         {
             // Create a list containing up to 500 registration tokens.
             // These registration tokens come from the client FCM SDKs.
-
-            var message = new MulticastMessage()
+            try
             {
-                Tokens = registrationTokens,
-                Data = data,
-                Notification = notification
-            };
-
-            var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
-            // See the BatchResponse reference documentation
-            // for the contents of response.
-            Console.WriteLine($"{response.SuccessCount} messages were sent successfully");
+                var message = new MulticastMessage()
+                {
+                    Tokens = registrationTokens,
+                    Data = data,
+                    Notification = notification
+                };
+                var responses = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
+                // See the BatchResponse reference documentation
+                // for the contents of response.
+                return string.Join(",", responses.Responses.Select(r => r.MessageId));
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, ex);
+            }
         }
 
         public async Task SendAll()

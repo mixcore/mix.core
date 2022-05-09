@@ -1,1 +1,1 @@
-<div id="qr-output"></div><input type="text" ng-model="$ctrl.model" ng-enter="$ctrl.generate()"> <a class="btn btn-success" ng-click="$ctrl.generate()">Generate</a>
+<div class="text-center"><div class="qr-output" ng-if="$ctrl.model" ng-init="$ctrl.initOutput()"></div><h6 ng-bind="$ctrl.model"></h6><input ng-if="!$ctrl.viewOnly" type="text" ng-model="$ctrl.model" ng-change="$ctrl.generate()"> <a class="btn btn-success" ng-if="!$ctrl.viewOnly" ng-click="$ctrl.generate()">Reload</a></div>

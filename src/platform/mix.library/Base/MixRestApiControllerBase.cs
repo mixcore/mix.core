@@ -85,6 +85,10 @@ namespace Mix.Lib.Base
         public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
             var data = await _repository.GetSingleAsync(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
             data.SetUowInfo(_uow);
             await PatchHandler(id, data, properties);
             return Ok(id);

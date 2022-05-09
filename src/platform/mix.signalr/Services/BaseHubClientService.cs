@@ -17,7 +17,13 @@ namespace Mix.SignalR.Services
         {
             hubName = hub;
         }
-        public async Task SendMessageAsync(string message)
+
+        public Task SendMessageAsync<T>(SignalRMessageModel<T> message)
+        {
+            return SendMessageAsync(message.ToString());
+        }
+
+            public async Task SendMessageAsync(string message)
         {
             if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
             {
