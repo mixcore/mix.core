@@ -6,6 +6,14 @@ namespace Mix.SignalR.Models
 {
     public class SignalRMessageModel<T>
     {
+        public SignalRMessageModel()
+        {
+
+        }
+        public SignalRMessageModel(T message)
+        {
+            Message = message;
+        }
         public HubMessageType Type { get; set; }
         public T Message { get; set; }
         public DateTime CreatedDateTime { get; set; }

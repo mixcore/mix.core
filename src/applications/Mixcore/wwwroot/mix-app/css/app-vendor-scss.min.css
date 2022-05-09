@@ -1,4 +1,7 @@
-/* Sat Apr 30 2022 11:57:47 GMT+0700 (Indochina Time) */fb-login {
+/* Tue May 03 2022 19:41:31 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+  max-width: 100%; }
+
+fb-login {
   background-color: aqua; }
 
 medias .modal {
@@ -26,6 +29,9 @@ mix-module-data-table .data-table .header {
 mix-module-data-table .preview-container {
   max-height: 4em;
   overflow: hidden; }
+
+qr-code .qr-output canvas {
+  max-width: 100%; }
 
 /* PROPORTIONALLY resize the canvas to the intended viewing size */
 /* canvas{width:300px; height:380px;} */
@@ -109,6 +115,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 hub-messages .nav-link {
   position: relative; }
   hub-messages .nav-link .new-msg-count {
@@ -151,10 +161,6 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;
