@@ -6,7 +6,8 @@
         public const string TemplatesFolder = "Views/Shared/Templates";
         public const string TempFolder = "MixContent/Temp";
         public const string ThemePackage = "MixContent/Temp/Themes";
-        public const string ConfiguratoinFolder = "MixContent";
+        public const string MixContentFolder = "MixContent";
+        public const string AppConfigFolder = "MixContent/AppConfigs";
         public const string JsonDataFolder = "MixContent/Data";
         public const string MixCacheFolder = "MixContent/cache";
         public const string MixLogsFolder = "MixContent/logs";
