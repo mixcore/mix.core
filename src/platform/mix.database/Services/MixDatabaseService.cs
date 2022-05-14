@@ -1,6 +1,7 @@
 ﻿using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
+using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
@@ -88,6 +89,18 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
+        
+        public MixCacheDbContext GetCacheDbContext()
+        {
+            return DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new MsSqlCacheDbContext(),
+                MixDatabaseProvider.MySQL => new MySqlCacheDbContext(),
+                MixDatabaseProvider.SQLITE => new SqliteCacheDbContext(),
+                MixDatabaseProvider.PostgreSQL => new PostgresCacheDbContext(),
+                _ => null,
+            };
+        }
 
         public void InitConnectionStrings(string connectionString,
             MixDatabaseProvider databaseProvider,
@@ -114,6 +127,8 @@ namespace Mix.Database.Services
         {
             using var ctx = GetDbContext();
             await ctx.Database.MigrateAsync();
+            using var cacheCtx = GetCacheDbContext();
+            await cacheCtx.Database.MigrateAsync();
             //var transaction = ctx.Database.BeginTransaction();
             //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
             //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();

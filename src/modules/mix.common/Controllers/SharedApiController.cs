@@ -7,6 +7,7 @@ using Mix.Common.Domain.Helpers;
 using Mix.Common.Domain.Models;
 using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;
+using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -94,11 +95,78 @@ namespace Mix.Common.Controllers
             return Ok(res);
         }
 
+        [MixAuthorize(roles: MixRoles.SuperAdmin)]
+        [HttpGet]
+        [Route("clear-cache")]
+        public ActionResult ClearCache()
+        {
+            MixFileHelper.EmptyFolder(MixFolders.MixCacheFolder);
+            return Ok();
+        }
+
         [HttpGet]
         [Route("mix-configuration/{lang}")]
         public ActionResult GetMixConfigurations(string lang)
         {
             return Ok(_configRepo.GetListQuery(c => c.Specificulture == lang).ToList());
+        }
+
+        [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
+        [HttpGet]
+        [Route("settings/{name}")]
+        public ActionResult GetSettings(string name)
+        {
+            try
+            {
+                var data = MixFileHelper.GetFile(
+                    name, MixFileExtensions.Json, MixFolders.AppConfigFolder, false);
+                var obj = JObject.Parse(data.Content);
+                return Ok(obj);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NotFound();
+            }
+        }
+        
+        [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
+        [HttpPost]
+        [Route("settings/{name}")]
+        public ActionResult SaveSettings(string name, [FromBody]JObject settings)
+        {
+            try
+            {
+                var data = MixFileHelper.GetFile(
+                    name, MixFileExtensions.Json, MixFolders.AppConfigFolder, false);
+                if (data != null)
+                {
+                    data.Content = settings.ToString();
+                }
+                MixFileHelper.SaveFile(data);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return NotFound();
+            }
+        }
+        
+        [HttpGet]
+        [Route("global-settings")]
+        public ActionResult GetGlobalSettings()
+        {
+            return Ok(GlobalConfigService.Instance.AppSettings);
+        }
+
+        [HttpPost]
+        [Route("global-settings")]
+        public ActionResult GetSettings([FromBody] GlobalConfigurations settings)
+        {
+            GlobalConfigService.Instance.AppSettings = settings;
+            GlobalConfigService.Instance.SaveSettings();
+            return Ok(GlobalConfigService.Instance.AppSettings);
         }
 
         [HttpGet]

@@ -14,11 +14,11 @@ namespace Mix.XUnittest
         public IConfiguration Configuration { get; }
         protected override void Configure()
         {
-            if (Directory.Exists(MixFolders.ConfiguratoinFolder))
+            if (Directory.Exists(MixFolders.MixContentFolder))
             {
-                MixFileHelper.DeleteFolder(MixFolders.ConfiguratoinFolder);
+                MixFileHelper.DeleteFolder(MixFolders.MixContentFolder);
             }
-            MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.ConfiguratoinFolder);
+            MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.MixContentFolder);
             ConfigureAppConfiguration((hostingContext, config) =>
             {
                 config

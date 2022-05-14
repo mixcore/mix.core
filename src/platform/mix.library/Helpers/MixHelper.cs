@@ -14,10 +14,10 @@ namespace Mix.Lib.Helpers
         public static IHostBuilder CreateHostBuilder<Startup>(string[] args)
             where Startup : class
         {
-            if (!Directory.Exists(MixFolders.ConfiguratoinFolder))
+            if (!Directory.Exists(MixFolders.MixContentFolder))
             {
                 // Clone Settings from shared folder
-                CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.ConfiguratoinFolder);
+                CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.MixContentFolder);
             }
             return Host.CreateDefaultBuilder(args)
             .UseContentRoot(Directory.GetCurrentDirectory())
