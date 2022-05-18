@@ -22,6 +22,7 @@ namespace Mix.MixQuartz.Jobs
             var obj = JObject.Parse(objData);
             SignalRMessageModel<JObject> msg = new()
             {
+                Title = "Message from SendPortalMessageJob",
                 Message = obj,
                 Type = GetHubMessageType(obj)
             };

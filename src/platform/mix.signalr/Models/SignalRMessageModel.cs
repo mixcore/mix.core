@@ -14,6 +14,9 @@ namespace Mix.SignalR.Models
         {
             Message = message;
         }
+
+        public string Title { get; set; }
+        public string Description { get; set; }
         public HubMessageType Type { get; set; }
         public T Message { get; set; }
         public DateTime CreatedDateTime { get; set; }

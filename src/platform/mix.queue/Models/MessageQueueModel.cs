@@ -12,6 +12,17 @@ namespace Mix.Queue.Models
 
         public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
 
+        public MessageQueueModel()
+        {
+
+        }
+        public MessageQueueModel(string action, string topicId, object data)
+        {
+            Action = action;
+            TopicId = topicId;
+            Data = JObject.FromObject(data);
+        }
+
         public void Package<T>(T data)
         {
             TopicId = typeof(T).FullName;
