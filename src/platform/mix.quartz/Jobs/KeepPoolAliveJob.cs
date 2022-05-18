@@ -25,7 +25,7 @@ namespace Mix.MixQuartz.Jobs
             if (!string.IsNullOrEmpty(domain))
             {
                 var now = DateTime.UtcNow;
-                var ping = await _httpService.GetAsync<DateTime>($"{domain}/api/v1/rest/shared/ping");
+                var ping = await _httpService.GetAsync<DateTime>($"{domain}/api/v2/rest/shared/ping");
                 Console.WriteLine($"Ping at {now}: {(ping - now).TotalMilliseconds}");
             }
             Console.WriteLine(DateTime.UtcNow);
