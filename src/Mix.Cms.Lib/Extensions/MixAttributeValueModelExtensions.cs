@@ -59,13 +59,11 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
-                    string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
-                    string url = !string.IsNullOrEmpty(item.StringValue)
-                   ? !item.StringValue.Contains(domain)
-                        ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain)}{item.StringValue}"
-                        : item.StringValue
-                   : null;
-                    return (new JProperty(item.MixDatabaseColumnName, url));
+                    string fullUrl = item.StringValue;
+                    fullUrl = string.IsNullOrEmpty(fullUrl) || fullUrl.IndexOf("http") >= 0
+                           ? fullUrl
+                           : $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{fullUrl.TrimStart('/')}";
+                    return (new JProperty(item.MixDatabaseColumnName, fullUrl));
                 case MixDataType.Json:
                     try
                     {
@@ -146,13 +144,11 @@ namespace Mix.Cms.Lib.Extensions
                     return (new JProperty(item.MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
-                    string domain = MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain);
-                    string url = !string.IsNullOrEmpty(item.StringValue)
-                   ? !item.StringValue.Contains(domain)
-                        ? $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{item.StringValue.TrimStart('/')}"
-                        : item.StringValue
-                   : null;
-                    return (new JProperty(item.MixDatabaseColumnName, url));
+                    string fullUrl = item.StringValue;
+                    fullUrl = string.IsNullOrEmpty(fullUrl) || fullUrl.IndexOf("http") >= 0
+                           ? fullUrl
+                           : $"{MixService.GetAppSetting<string>(MixAppSettingKeywords.Domain.TrimEnd('/'))}/{fullUrl.TrimStart('/')}";
+                    return (new JProperty(item.MixDatabaseColumnName, fullUrl));
                 case MixDataType.Tag:
                     try
                     {
