@@ -1,7 +1,6 @@
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mixcore.Domain.Subscribers;
-using Ocelot.DependencyInjection;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;

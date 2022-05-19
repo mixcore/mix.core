@@ -10,7 +10,7 @@ namespace Mix.Lib.Dtos
         }
         public SearchPostDto(SearchRequestDto req, HttpRequest request)
         {
-           ReflectionHelper.MapObject(req, this);
+            ReflectionHelper.MapObject(req, this);
             Categories = request.Query[MixRequestQueryKeywords.Categories];
             Tags = request.Query[MixRequestQueryKeywords.Tag];
             if (Enum.TryParse(request.Query["compareKind"], out MixCompareOperatorKind compareKind))
@@ -21,7 +21,7 @@ namespace Mix.Lib.Dtos
             {
                 Fields = JObject.Parse(request.Query["fields"]);
             }
-            
+
         }
         public string Categories { get; set; }
         public string Tags { get; set; }

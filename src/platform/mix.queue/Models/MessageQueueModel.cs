@@ -16,11 +16,14 @@ namespace Mix.Queue.Models
         {
 
         }
-        public MessageQueueModel(string action, string topicId, object data)
+        public MessageQueueModel(string topicId, string action, object data = null)
         {
-            Action = action;
             TopicId = topicId;
-            Data = JObject.FromObject(data);
+            Action = action;
+            if (data != null)
+            {
+                Data = JObject.FromObject(data);
+            }
         }
 
         public void Package<T>(T data)

@@ -36,7 +36,7 @@ namespace Mix.Queue.Engines.Azure
                 _client = new ServiceBusClient(_queueSetting.ConnectionString);
 
                 CreateSubscription(topicId, subscriptionId).GetAwaiter().GetResult();
-               
+
             }
         }
 

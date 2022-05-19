@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Mix.Lib.Models.Common
+﻿namespace Mix.Lib.Models.Common
 {
     public class SearchContentValueModel
     {

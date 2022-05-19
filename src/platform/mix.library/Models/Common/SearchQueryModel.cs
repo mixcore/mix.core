@@ -81,7 +81,7 @@ namespace Mix.Lib.Models.Common
             PagingData = new PagingRequestModel(request, defaultPageSize);
 
             BuildPredicate();
-            
+
         }
 
         private void BuildPredicate()

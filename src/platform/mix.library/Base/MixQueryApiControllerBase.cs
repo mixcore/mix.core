@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Mix.Lib.Base
@@ -61,7 +60,7 @@ namespace Mix.Lib.Base
             return ParseSearchResult(req, result);
         }
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TView>> GetSingle(TPrimaryKey id)
         {

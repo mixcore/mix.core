@@ -89,7 +89,7 @@ namespace Mix.Database.Services
                 _ => null,
             };
         }
-        
+
         public MixCacheDbContext GetCacheDbContext()
         {
             return DatabaseProvider switch
