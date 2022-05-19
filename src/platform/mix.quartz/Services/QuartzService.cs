@@ -93,7 +93,7 @@ namespace Mix.Quartz.Services
             }
             return default;
         }
-        
+
         public async Task<bool> DeleteJob(string jobName, CancellationToken cancellationToken = default)
         {
             var key = new JobKey(jobName);
@@ -181,7 +181,7 @@ namespace Mix.Quartz.Services
                 {
                     LogException(message: $"Trigger: {triggerKey.Name} existed");
                 }
-               
+
 
                 var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(schedule.JobName);
                 var jobKey = new JobKey(jobType.FullName);

@@ -5,6 +5,7 @@ namespace Mix.Queue.Interfaces
     public interface IQueueService<T>
     {
         void PushQueue(T model);
+        void PushQueue(string topicId, string action, object data);
 
         IList<T> ConsumeQueue(int lenght, string topicId);
 

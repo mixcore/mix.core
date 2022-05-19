@@ -10,7 +10,7 @@ namespace Mixcore.Domain.Subscribers
         static string topicId = typeof(MixDomainViewModel).FullName;
         public DomainSubscriber(
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService) 
+            MixMemoryMessageQueue<MessageQueueModel> queueService)
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
             _uow = new(new MixCmsContext());

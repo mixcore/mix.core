@@ -9,7 +9,6 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
-using Mix.Lib.Dtos;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.Shared.Models;

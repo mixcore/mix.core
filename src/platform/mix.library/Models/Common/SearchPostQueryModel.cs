@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Lib.Dtos;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Models.Common
@@ -14,8 +13,8 @@ namespace Mix.Lib.Models.Common
             int tenantId,
             SearchRequestDto request,
             HttpRequest httpRequest,
-            Expression<Func<MixPostContent, bool>> andPredicate = null, 
-            Expression<Func<MixPostContent, bool>> orPredicate = null) 
+            Expression<Func<MixPostContent, bool>> andPredicate = null,
+            Expression<Func<MixPostContent, bool>> orPredicate = null)
             : base(tenantId, request, httpRequest, andPredicate, orPredicate)
         {
             var strCategories = httpRequest.Query[MixRequestQueryKeywords.Categories].ToString();

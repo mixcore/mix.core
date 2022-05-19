@@ -8,7 +8,7 @@ namespace Mix.Queue.Services
 {
     public class QueueService : IQueueService<MessageQueueModel>
     {
-        private ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
+        private readonly ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>> _queues;
         public QueueService()
         {
             _queues = new ConcurrentDictionary<string, ConcurrentQueue<MessageQueueModel>>();
@@ -23,7 +23,7 @@ namespace Mix.Queue.Services
         public IList<MessageQueueModel> ConsumeQueue(int lenght, string topicId)
         {
             var _queue = GetQueue(topicId);
-            List<MessageQueueModel> result = new List<MessageQueueModel>();
+            List<MessageQueueModel> result = new();
             if (!_queue.Any(m => m.TopicId == topicId))
                 return result;
 
@@ -60,6 +60,12 @@ namespace Mix.Queue.Services
             {
                 _queue.Enqueue(model);
             }
+        }
+
+        public void PushQueue(string topicId, string action, object data)
+        {
+            var msg = new MessageQueueModel(topicId, action, data);
+            PushQueue(msg);
         }
 
         public void PushMessage<T>(T data, string action, bool success)

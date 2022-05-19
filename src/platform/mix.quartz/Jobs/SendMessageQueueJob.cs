@@ -8,7 +8,7 @@ namespace Mix.MixQuartz.Jobs
 {
     public class SendMessageQueueJob : MixJobBase
     {
-        IQueueService<MessageQueueModel> _queueService;
+        readonly IQueueService<MessageQueueModel> _queueService;
         public SendMessageQueueJob(IQueueService<MessageQueueModel> queueService, IServiceProvider provider)
             : base(provider)
         {
@@ -26,9 +26,7 @@ namespace Mix.MixQuartz.Jobs
                 Data = JObject.Parse(objData)
             };
             _queueService.PushQueue(msg);
-#if DEBUG
-            Console.WriteLine(JObject.FromObject(msg).ToString());
-#endif
+
             return Task.CompletedTask;
         }
     }

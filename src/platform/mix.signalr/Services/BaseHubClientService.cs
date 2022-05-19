@@ -23,7 +23,7 @@ namespace Mix.SignalR.Services
             return SendMessageAsync(message.ToString());
         }
 
-            public async Task SendMessageAsync(string message)
+        public async Task SendMessageAsync(string message)
         {
             if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
             {

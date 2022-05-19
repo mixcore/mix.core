@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.Configure<ApiBehaviorOptions>(
                 options =>
                 {
-                    options.InvalidModelStateResponseFactory = 
+                    options.InvalidModelStateResponseFactory =
                         actionContext =>
                         {
                             return CustomErrorResponse(actionContext);

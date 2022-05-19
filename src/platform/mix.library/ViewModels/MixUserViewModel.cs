@@ -2,7 +2,6 @@
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
-using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Text.Json.Serialization;
@@ -89,10 +88,10 @@ namespace Mix.Lib.ViewModels
             {
                 var temp = await mixDataService.GetByAllParent<MixDataContentViewModel>(
                     new SearchDataContentModel(tenantId)
-                {
-                    MixDatabaseName = MixDatabaseNames.SYSTEM_ENDPOINT,
-                    GuidParentId = role.RoleId
-                });
+                    {
+                        MixDatabaseName = MixDatabaseNames.SYSTEM_ENDPOINT,
+                        GuidParentId = role.RoleId
+                    });
                 endpoints.AddRange(temp.Select(m => m.Data));
             }
 

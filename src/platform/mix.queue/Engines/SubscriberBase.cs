@@ -54,7 +54,7 @@ namespace Mix.Queue.Engines
             {
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
-                
+
                 switch (provider)
                 {
                     case MixQueueProvider.AZURE:

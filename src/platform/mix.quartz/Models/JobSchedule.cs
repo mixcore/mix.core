@@ -32,10 +32,10 @@ namespace Mix.MixQuartz.Models
         public TriggerState State { get; set; }
 
         public Dictionary<string, object> JobData { get; set; }
-        public string? CronExpression { get; set; }
-        public string? GroupName { get; set; }
-        public string? JobName { get; set; }
-        public string? Description { get; set; }
+        public string CronExpression { get; set; }
+        public string GroupName { get; set; }
+        public string JobName { get; set; }
+        public string Description { get; set; }
         public DateTime? StartAt { get; set; }
         public DateTime? EndAt { get; set; }
         public bool IsStartNow { get; set; }

@@ -28,8 +28,8 @@ namespace Mix.Portal.Controllers
         [HttpGet("get-by-name/{name}")]
         public async Task<ActionResult<MixDatabaseViewModel>> GetByName(string name)
         {
-            var result = await _repository.GetSingleAsync(m=>m.SystemName == name);
-            if (result != null) 
+            var result = await _repository.GetSingleAsync(m => m.SystemName == name);
+            if (result != null)
                 return Ok(result);
             return NotFound();
         }

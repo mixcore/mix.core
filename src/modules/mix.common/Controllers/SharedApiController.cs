@@ -129,11 +129,11 @@ namespace Mix.Common.Controllers
                 return NotFound();
             }
         }
-        
+
         [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
         [HttpPost]
         [Route("settings/{name}")]
-        public ActionResult SaveSettings(string name, [FromBody]JObject settings)
+        public ActionResult SaveSettings(string name, [FromBody] JObject settings)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace Mix.Common.Controllers
                 return NotFound();
             }
         }
-        
+
         [HttpGet]
         [Route("global-settings")]
         public ActionResult GetGlobalSettings()
