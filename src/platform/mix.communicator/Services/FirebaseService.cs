@@ -26,7 +26,7 @@ namespace Mix.Communicator.Services
             {
                 Credential = credential
             });
-            
+
         }
 
         public async Task<FirebaseToken> VeriryTokenAsync(string idToken)
@@ -35,7 +35,7 @@ namespace Mix.Communicator.Services
             return decodedToken;
         }
 
-        public async Task<string> SendToDevice(
+        public static async Task<string> SendToDevice(
             string registrationToken,
             Notification notification,
             Dictionary<string, string> messages)
@@ -54,13 +54,11 @@ namespace Mix.Communicator.Services
             // Send a message to the device corresponding to the provided
             // registration token.
             string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+
             // Response is a message ID string.
             Console.WriteLine("Successfully sent message: " + response);
-            /* Sample response
-             *  {
-                  "name":"projects/myproject-b5ae1/messages/0:1500415314455276%31bd1c9631bd1c96"
-                }
-             */
+
+            return response;
         }
 
         public async Task<string> SendToMultipleDevices(
