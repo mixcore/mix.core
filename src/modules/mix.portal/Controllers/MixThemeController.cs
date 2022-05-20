@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Entities.Cache;
 using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
@@ -20,10 +21,11 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixThemeExportService exportService,
-            MixCmsContext context, MixThemeImportService importService,
-            IQueueService<MessageQueueModel> queueService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            MixCacheDbContext cacheDbContext,
+            MixCmsContext context,
+            MixThemeImportService importService,
+            IQueueService<MessageQueueModel> queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
         {
 
             _exportService = exportService;

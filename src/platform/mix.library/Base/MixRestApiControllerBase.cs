@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Entities.Cache;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 
@@ -22,9 +23,10 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
+            MixCacheDbContext cacheDbContext,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
         {
         }
 
@@ -129,14 +131,14 @@ namespace Mix.Lib.Base
         protected virtual async Task UpdateHandler(string id, TView data)
         {
             var result = await data.SaveAsync();
-            await MixCacheService.Instance.RemoveCacheAsync(id, typeof(TView));
+            await _cacheService.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TView data)
         {
             await data.DeleteAsync();
-            await MixCacheService.Instance.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
@@ -144,7 +146,7 @@ namespace Mix.Lib.Base
         protected virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
             await data.SaveFieldsAsync(properties);
-            await MixCacheService.Instance.RemoveCacheAsync(id.ToString(), typeof(TView));
+            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 

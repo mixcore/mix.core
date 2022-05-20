@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Entities.Cache;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Reflection;
@@ -20,6 +21,10 @@ namespace Mix.Lib.Base
         protected readonly TDbContext _context;
         protected bool _forbidden;
         protected UnitOfWorkInfo _uow;
+        protected UnitOfWorkInfo _cacheUOW;
+        protected MixCacheDbContext _cacheDbContext;
+        protected MixCacheService _cacheService;
+
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixQueryApiControllerBase(
@@ -29,12 +34,17 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
+            MixCacheDbContext cacheDbContext,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _uow = new(_context);
+
+            _cacheDbContext = cacheDbContext;
+            _cacheUOW = new(_cacheDbContext);
+            _cacheService = new();
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
 
@@ -45,7 +55,13 @@ namespace Mix.Lib.Base
             {
                 _uow.Complete();
             }
-            _context.Dispose();
+            _context?.Dispose();
+            
+            if (_cacheUOW.ActiveTransaction != null)
+            {
+                _cacheUOW.Complete();
+            }
+            _cacheDbContext?.Dispose();
             base.OnActionExecuted(context);
         }
         #endregion

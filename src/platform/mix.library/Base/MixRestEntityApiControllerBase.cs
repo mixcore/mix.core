@@ -20,9 +20,10 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
+            MixCacheDbContext cacheDbContext,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService, cacheDbContext)
         {
         }
 
@@ -109,14 +110,14 @@ namespace Mix.Lib.Base
         protected virtual async Task UpdateHandler(string id, TEntity data)
         {
             await _repository.UpdateAsync(data);
-            await MixCacheService.Instance.RemoveCacheAsync(id, typeof(TEntity));
+            await _cacheService.RemoveCacheAsync(id, typeof(TEntity));
             _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TEntity data)
         {
             await _repository.DeleteAsync(data);
-            await MixCacheService.Instance.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity));
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity));
             _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
@@ -124,7 +125,7 @@ namespace Mix.Lib.Base
         protected virtual async Task PatchHandler(TPrimaryKey id, TEntity data, IEnumerable<EntityPropertyModel> properties)
         {
             await _repository.SaveFieldsAsync(data, properties);
-            await MixCacheService.Instance.RemoveCacheAsync(id.ToString(), typeof(TEntity));
+            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity));
             _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
