@@ -1,14 +1,14 @@
 {
-  "isInit": false,
+  "isInit": true,
   "isEncryptApi": false,
   "enableOcelot": false,
   "portalThemeSettings": null,
   "isMaintenance": false,
   "isHttps": false,
   "maxPageSize": 100,
-  "initStatus": 4,
+  "initStatus": "Blank",
   "defaultCulture": "en-us",
-  "domain": "https://floralpunk.stag.mixcore.studio",
+  "domain": "",
   "apiEncryptKey": "NElUempOSmx4QVlXRFRmSys5Z0lpZz09LERBSENTUUlZWEVNYVRJRlErc256bE9Ibmo1Z0wwcm5PRm9iMDlXSEJSM0U9",
   "lastUpdateConfiguration": null
 }
