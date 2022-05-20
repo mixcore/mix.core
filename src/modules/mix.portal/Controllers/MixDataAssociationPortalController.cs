@@ -19,9 +19,10 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
+            MixCacheDbContext cacheDbContext,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
         {
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(_uow);

@@ -23,6 +23,7 @@
 		<Using Include="Mix.Heart.Helpers" />
 		<Using Include="Mix.Heart.Exceptions" />
 		<Using Include="Mix.Heart.Extensions" />
+		<Using Include="Mix.Heart.Entities.Cache" />
 		<Using Include="Mix.Lib.Attributes" />
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />

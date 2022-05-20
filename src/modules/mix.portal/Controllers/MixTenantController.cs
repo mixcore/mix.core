@@ -21,11 +21,12 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
+            MixCacheDbContext cacheDbContext,
             MixCmsContext context,
             IQueueService<MessageQueueModel> queueService,
             TenantUserManager userManager,
             MixCmsAccountContext accContext)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;
