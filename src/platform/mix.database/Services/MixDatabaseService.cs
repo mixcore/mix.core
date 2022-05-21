@@ -1,6 +1,7 @@
 ﻿using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
+using Mix.Heart.Constants;
 using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
 using Mix.Shared.Models;
@@ -118,6 +119,8 @@ namespace Mix.Database.Services
             }
 
             AppSettings.DatabaseProvider = databaseProvider;
+            MixHeartConfigService.Instance.AppSettings.DatabaseProvider = databaseProvider;
+            MixHeartConfigService.Instance.SetConnectionString(MixHeartConstants.CACHE_CONNECTION, connectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.MixConfigurations, WebConfiguration.MixCacheConnectionString, model.ConnectionString);
             //MixAppSettingService.Instance.SetConfig<string>(MixAppSettingsSection.GlobalSettings, WebConfiguration.MixCacheDbProvider, model.DatabaseProvider.ToString());
             SaveSettings();

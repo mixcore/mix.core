@@ -127,7 +127,7 @@ namespace Mix.Lib.Services
 
                     var resp = new JObject()
                             {
-                                new JProperty(MixEncryptKeywords.AESKey, aesKey),
+                                //new JProperty(MixEncryptKeywords.AESKey, aesKey),
                                 //new JProperty(MixEncryptKeywords.RSAKey, rsaKeys[MixConstants.CONST_RSA_PRIVATE_KEY]),
                                 new JProperty(MixEncryptKeywords.Message, encryptedInfo)
                             };
