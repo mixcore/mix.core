@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Database.Services;
+using Mix.Lib.Publishers;
 using Mix.Lib.Services;
+using Mix.Lib.Subscribers;
 using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -11,6 +13,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSingleton<HttpService>();
             services.AddSingleton<MixDatabaseService>();
+            services.AddSingleton<AuditLogService>();
+            services.AddHostedService<MixBackgrouTaskPublisher>();
+            services.AddHostedService<MixBackgrouTaskSubscriber>();
 
             services.AddScoped<MixHeartConfigService>();
             services.AddScoped<CultureService>();
