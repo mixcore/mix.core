@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
+using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
 using System.Threading.Tasks;
@@ -18,6 +19,17 @@ namespace Mix.SignalR.Services
             hubName = hub;
         }
 
+        public Task SendMessageAsync<T>(string title, string description, object data, HubMessageType messageType = HubMessageType.Info)
+        {
+            var msg = new SignalRMessageModel<object>(data)
+            {
+                Title = title,
+                Description = description,
+                Type = messageType
+            };
+            return SendMessageAsync(msg);
+        }
+        
         public Task SendMessageAsync<T>(SignalRMessageModel<T> message)
         {
             return SendMessageAsync(message.ToString());
