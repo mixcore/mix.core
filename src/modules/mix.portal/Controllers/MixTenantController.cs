@@ -8,7 +8,7 @@ namespace Mix.Portal.Controllers
     [Route("api/v2/rest/mix-portal/mix-tenant")]
     [Route($"api/v2/rest/mix-portal/mix-tenant/{MixRequestQueryKeywords.Specificulture}")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [MixAuthorize]
     public class MixTenantController
         : MixRestApiControllerBase<MixTenantViewModel, MixCmsContext, MixTenant, int>
     {

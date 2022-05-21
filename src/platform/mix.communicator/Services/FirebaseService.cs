@@ -35,7 +35,7 @@ namespace Mix.Communicator.Services
             return decodedToken;
         }
 
-        public static async Task<string> SendToDevice(
+        public async Task<string> SendToDevice(
             string registrationToken,
             Notification notification,
             Dictionary<string, string> messages)
