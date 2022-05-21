@@ -28,6 +28,7 @@
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />
 		<Using Include="Mix.Lib.Repositories" />
+		<Using Include="Mix.Lib.Commands" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Queue.Attributes" />
@@ -38,31 +39,28 @@
 
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Abstracts\ViewModels\**" />
+		<Compile Remove="Commands\ViewModels\**" />
 		<Compile Remove="Constants\**" />
 		<Compile Remove="Entities\Cms\**" />
 		<Compile Remove="Entities\EntityConfigurations\**" />
 		<Compile Remove="Entities\Messenger\**" />
 		<Compile Remove="Enums\**" />
-		<Compile Remove="Subscribers\**" />
 		<Compile Remove="ViewModels\Account\**" />
 		<Compile Remove="ViewModels\Cms\**" />
-		<EmbeddedResource Remove="Abstracts\ViewModels\**" />
+		<EmbeddedResource Remove="Commands\ViewModels\**" />
 		<EmbeddedResource Remove="Constants\**" />
 		<EmbeddedResource Remove="Entities\Cms\**" />
 		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
 		<EmbeddedResource Remove="Entities\Messenger\**" />
 		<EmbeddedResource Remove="Enums\**" />
-		<EmbeddedResource Remove="Subscribers\**" />
 		<EmbeddedResource Remove="ViewModels\Account\**" />
 		<EmbeddedResource Remove="ViewModels\Cms\**" />
-		<None Remove="Abstracts\ViewModels\**" />
+		<None Remove="Commands\ViewModels\**" />
 		<None Remove="Constants\**" />
 		<None Remove="Entities\Cms\**" />
 		<None Remove="Entities\EntityConfigurations\**" />
 		<None Remove="Entities\Messenger\**" />
 		<None Remove="Enums\**" />
-		<None Remove="Subscribers\**" />
 		<None Remove="ViewModels\Account\**" />
 		<None Remove="ViewModels\Cms\**" />
 	</ItemGroup>
@@ -91,10 +89,6 @@
 		<ProjectReference Include="..\mix.queue\mix.queue.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 		<ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Abstracts\" />
 	</ItemGroup>
 
 	<ItemGroup>

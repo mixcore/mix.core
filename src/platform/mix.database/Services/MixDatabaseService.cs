@@ -132,6 +132,7 @@ namespace Mix.Database.Services
             await ctx.Database.MigrateAsync();
             using var cacheCtx = GetCacheDbContext();
             await cacheCtx.Database.MigrateAsync();
+
             //var transaction = ctx.Database.BeginTransaction();
             //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
             //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();

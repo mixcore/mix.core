@@ -31,6 +31,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\AuditLog\" />
     <Folder Include="Migrations\Quartz\" />
     <Folder Include="Migrations\Cms\SqliteMixCms\" />
     <Folder Include="Migrations\Cms\SqlServerMixCms\" />

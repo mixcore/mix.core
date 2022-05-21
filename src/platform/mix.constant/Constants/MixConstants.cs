@@ -2,6 +2,7 @@
 {
     public class MixConstants
     {
+        public const string CONST_AUDIT_LOG_CONNECTION = "MixAuditLogConnection";
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
         public const string CONST_QUARTZ_CONNECTION = "MixCmsConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";

@@ -98,7 +98,8 @@ namespace Mix.Queue.Engines
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.ServerError, ex);
+                Console.WriteLine(ex.Message);
+                return Task.CompletedTask;
             }
         }
 

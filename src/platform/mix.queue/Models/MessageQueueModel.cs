@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Mix.Heart.Helpers;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Mix.Queue.Models
@@ -22,14 +23,14 @@ namespace Mix.Queue.Models
             Action = action;
             if (data != null)
             {
-                Data = JObject.FromObject(data);
+                Data = ReflectionHelper.ParseObject(data);
             }
         }
 
         public void Package<T>(T data)
         {
             TopicId = typeof(T).FullName;
-            Data = JObject.FromObject(data);
+            Data = ReflectionHelper.ParseObject(data);
         }
     }
 }
