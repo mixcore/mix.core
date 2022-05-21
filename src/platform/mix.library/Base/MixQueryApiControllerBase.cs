@@ -49,12 +49,6 @@ namespace Mix.Lib.Base
         }
 
         #region Overrides
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            var cmd = new LogAuditLogCommand(User.Identity?.Name, Request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
-            base.OnActionExecuting(context);
-        }
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             if (_uow.ActiveTransaction != null)

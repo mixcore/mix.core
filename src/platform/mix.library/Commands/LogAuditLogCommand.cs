@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Lib.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Mix.Lib.Models;
 
 namespace Mix.Lib.Commands
 {
@@ -14,10 +8,10 @@ namespace Mix.Lib.Commands
         {
 
         }
-        public LogAuditLogCommand(string userName, HttpRequest request, Exception ex = null)
+        public LogAuditLogCommand(string userName, ParsedRequestModel request, Exception ex = null)
         {
             UserName = userName;
-            Request = new(request);
+            Request = request;
             Exception = ex;
         }
         public string UserName { get; set; }
