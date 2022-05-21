@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Models;
 
 namespace Mix.Lib.Middlewares
 {
     public class TenantSecurityMiddleware
     {
         private readonly RequestDelegate next;
-
-        public TenantSecurityMiddleware(RequestDelegate next)
+        protected readonly IQueueService<MessageQueueModel> _queueService;
+        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService)
         {
             this.next = next;
+            _queueService = queueService;
         }
 
         public async Task Invoke(
@@ -24,6 +26,7 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
+                LogRequest(context);
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
                     var uow = new UnitOfWorkInfo(cmsContext);
@@ -37,6 +40,15 @@ namespace Mix.Lib.Middlewares
                 }
                 await next.Invoke(context);
             }
+        }
+
+        private void LogRequest(HttpContext context)
+        {
+            context.Request.EnableBuffering();
+            var request = new ParsedRequestModel(context.Request);
+            var cmd = new LogAuditLogCommand(context.User.Identity?.Name, request);
+            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
+            context.Request.Body.Seek(0, SeekOrigin.Begin);
         }
     }
 }
