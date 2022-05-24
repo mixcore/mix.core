@@ -1,4 +1,6 @@
-﻿using Mix.Shared.Services;
+﻿using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
+using Mix.Shared.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -7,8 +9,11 @@ namespace Mix.MixQuartz.Jobs
     public class KeepPoolAliveJob : MixJobBase
     {
         private readonly HttpService _httpService;
-        public KeepPoolAliveJob(HttpService httpService, IServiceProvider provider)
-            : base(provider)
+        public KeepPoolAliveJob(
+            HttpService httpService, 
+            IServiceProvider provider, 
+            IQueueService<MessageQueueModel> queueService)
+            : base(provider, queueService)
         {
             _httpService = httpService;
             Schedule = new JobSchedule(GetType())

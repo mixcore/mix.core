@@ -8,11 +8,9 @@ namespace Mix.MixQuartz.Jobs
 {
     public class SendMessageQueueJob : MixJobBase
     {
-        readonly IQueueService<MessageQueueModel> _queueService;
         public SendMessageQueueJob(IQueueService<MessageQueueModel> queueService, IServiceProvider provider)
-            : base(provider)
+            : base(provider, queueService)
         {
-            _queueService = queueService;
         }
 
         public override Task ExecuteHandler(IJobExecutionContext context)
@@ -23,7 +21,7 @@ namespace Mix.MixQuartz.Jobs
                 Success = true,
                 TopicId = context.Trigger.JobDataMap.GetString("topic"),
                 Action = context.Trigger.JobDataMap.GetString("action"),
-                Data = JObject.Parse(objData)
+                Data = objData
             };
             _queueService.PushQueue(msg);
 

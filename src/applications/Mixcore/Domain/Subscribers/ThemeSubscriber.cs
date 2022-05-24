@@ -14,7 +14,7 @@ namespace Mixcore.Domain.Subscribers
 
         public override Task Handler(MessageQueueModel data)
         {
-            var post = data.Data.ToObject<MixThemeViewModel>();
+            var post = data.ParseData<MixThemeViewModel>();
             Console.WriteLine($"{post.DisplayName} -  from {MixModuleNames.Mixcore}");
             return Task.CompletedTask;
         }

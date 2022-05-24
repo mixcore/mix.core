@@ -28,7 +28,7 @@
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Lib.ViewModels" />
 		<Using Include="Mix.Lib.Repositories" />
-		<Using Include="Mix.Lib.Commands" />
+		<Using Include="Mix.Shared.Commands" />
 		<Using Include="Mix.Queue.Interfaces" />
 		<Using Include="Mix.Queue.Models" />
 		<Using Include="Mix.Queue.Attributes" />
@@ -39,7 +39,6 @@
 
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Commands\ViewModels\**" />
 		<Compile Remove="Constants\**" />
 		<Compile Remove="Entities\Cms\**" />
 		<Compile Remove="Entities\EntityConfigurations\**" />
@@ -47,7 +46,6 @@
 		<Compile Remove="Enums\**" />
 		<Compile Remove="ViewModels\Account\**" />
 		<Compile Remove="ViewModels\Cms\**" />
-		<EmbeddedResource Remove="Commands\ViewModels\**" />
 		<EmbeddedResource Remove="Constants\**" />
 		<EmbeddedResource Remove="Entities\Cms\**" />
 		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
@@ -55,7 +53,6 @@
 		<EmbeddedResource Remove="Enums\**" />
 		<EmbeddedResource Remove="ViewModels\Account\**" />
 		<EmbeddedResource Remove="ViewModels\Cms\**" />
-		<None Remove="Commands\ViewModels\**" />
 		<None Remove="Constants\**" />
 		<None Remove="Entities\Cms\**" />
 		<None Remove="Entities\EntityConfigurations\**" />

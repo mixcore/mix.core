@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Mix.Database.Entities.AuditLog;
-using Mix.Lib.Models;
+using Mix.Shared.Models;
 
 namespace Mix.Lib.Services
 {

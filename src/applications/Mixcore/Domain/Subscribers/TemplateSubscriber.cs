@@ -18,7 +18,7 @@ namespace Mixcore.Domain.Subscribers
 
         public override Task Handler(MessageQueueModel data)
         {
-            var template = data.Data.ToObject<MixTemplateViewModel>();
+            var template = data.ParseData<MixTemplateViewModel>();
             switch (data.Action)
             {
                 case "Get":

@@ -1,4 +1,6 @@
-﻿using Mix.SignalR.Enums;
+﻿using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
+using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
@@ -10,8 +12,11 @@ namespace Mix.MixQuartz.Jobs
     public class SendPortalMessageJob : MixJobBase
     {
         protected PortalHubClientService _portalHub;
-        public SendPortalMessageJob(IServiceProvider provider, PortalHubClientService portalHub)
-            : base(provider)
+        public SendPortalMessageJob(
+            IServiceProvider provider,
+            IQueueService<MessageQueueModel> queueService,
+            PortalHubClientService portalHub)
+            : base(provider, queueService)
         {
             _portalHub = portalHub;
         }
