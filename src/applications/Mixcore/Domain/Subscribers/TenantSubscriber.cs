@@ -19,7 +19,7 @@ namespace Mixcore.Domain.Subscribers
         public override async Task Handler(MessageQueueModel data)
         {
             var _repository = MixTenantViewModel.GetRepository(_uow);
-            var post = data.Data.ToObject<MixTenantViewModel>();
+            var post = data.ParseData<MixTenantViewModel>();
             switch (data.Action)
             {
                 case "Get":

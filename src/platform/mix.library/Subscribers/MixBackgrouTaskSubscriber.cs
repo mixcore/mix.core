@@ -2,6 +2,7 @@
 using Mix.Lib.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Shared.Commands;
 
 namespace Mix.Lib.Subscribers
 {
@@ -23,7 +24,7 @@ namespace Mix.Lib.Subscribers
             switch (model.Action)
             {
                 case MixQueueActions.AuditLog:
-                    var cmd = model.Data.ToObject<LogAuditLogCommand>();
+                    var cmd = model.ParseData<LogAuditLogCommand>();
                     _auditLogService.Log(cmd.UserName, cmd.Request, true, null);
                     break;
             }

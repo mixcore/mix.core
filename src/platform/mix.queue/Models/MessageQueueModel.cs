@@ -9,7 +9,7 @@ namespace Mix.Queue.Models
         public string Action { get; set; }
         public bool Success { get; set; }
         public string TopicId { get; set; }
-        public JObject Data { get; set; }
+        public string Data { get; set; }
 
         public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
 
@@ -21,16 +21,36 @@ namespace Mix.Queue.Models
         {
             TopicId = topicId;
             Action = action;
+
             if (data != null)
             {
-                Data = ReflectionHelper.ParseObject(data);
+                try
+                {
+                    Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None);
+                }
+                catch
+                {
+                    Data = data.ToString();
+                }
             }
         }
 
         public void Package<T>(T data)
         {
             TopicId = typeof(T).FullName;
-            Data = ReflectionHelper.ParseObject(data);
+            Data = ReflectionHelper.ParseObject(data).ToString(Newtonsoft.Json.Formatting.None);
+        }
+
+        public T ParseData<T>()
+        {
+            try
+            {
+                return JObject.Parse(Data).ToObject<T>();
+            }
+            catch
+            {
+                return default(T);
+            }
         }
     }
 }
