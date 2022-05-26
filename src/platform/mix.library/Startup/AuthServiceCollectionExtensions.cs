@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Extensions;
 using Mix.Lib.Services;
@@ -98,6 +99,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
+            services.AddScoped<EmailService>();
+            services.AddScoped<FirebaseService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }

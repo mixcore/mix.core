@@ -21,6 +21,10 @@ namespace Microsoft.Extensions.DependencyInjection
                         builder.WithOrigins(origins);
                         builder.AllowCredentials();
                     }
+                    else
+                    {
+                        builder.AllowAnyOrigin();
+                    }
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
 
@@ -38,9 +42,12 @@ namespace Microsoft.Extensions.DependencyInjection
                     builder.WithOrigins(origins);
                     builder.AllowCredentials();
                 }
+                else
+                {
+                    builder.AllowAnyOrigin();
+                }
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
-                builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
             });
             return app;
         }

@@ -43,3 +43,4 @@ Ex:
 ## 5. Update "EnableOcelot" in mixcore -> global.json = true.
 
 **Make sure the enpoints in MixContent/AppConfigs/endpoints.json are correct (when deploy to from local to production, must change the localhost to real endpoints)**
+## 5. Update Enpoints to production domain when golive (/MixContent/AppConfigs/enpoints.json)
