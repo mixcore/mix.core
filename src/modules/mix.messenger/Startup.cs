@@ -27,14 +27,6 @@ namespace Mix.Messenger
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMixCors();
-            var webSocketOptions = new WebSocketOptions
-            {
-                KeepAliveInterval = TimeSpan.FromMinutes(2)
-            };
-
-            webSocketOptions.AllowedOrigins.Add("https://localhost:5010");
-
-            app.UseWebSockets(webSocketOptions);
             app.UseRouting();
             app.UseMixSignalRApp();
         }

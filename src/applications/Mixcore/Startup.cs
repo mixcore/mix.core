@@ -53,13 +53,7 @@ namespace Mixcore
                 app.UseHsts();
             }
 
-            app.UseCors(builder =>
-            {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
-                builder.WithExposedHeaders("Grpc-Status", "Grpc-Message");
-            });
+            app.UseMixCors();
 
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
 
