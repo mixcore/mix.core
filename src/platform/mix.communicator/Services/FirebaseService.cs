@@ -4,6 +4,7 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
+using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 
 namespace Mix.Communicator.Services
@@ -16,16 +17,24 @@ namespace Mix.Communicator.Services
         public FirebaseService(IConfiguration configuration)
         {
             _configuration = configuration;
-            var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
-            session.Bind(_settings);
-            var googleCredential = _settings.Filename;
-
-            var credential = GoogleCredential.FromFile(googleCredential);
-
-            FirebaseApp.Create(new AppOptions()
+            try
             {
-                Credential = credential
-            });
+
+                var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
+                session.Bind(_settings);
+                var googleCredential = _settings.Filename;
+
+                var credential = GoogleCredential.FromFile(googleCredential);
+
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = credential
+                });
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
 
         }
 
