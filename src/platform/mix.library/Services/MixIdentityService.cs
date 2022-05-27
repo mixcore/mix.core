@@ -178,9 +178,13 @@ namespace Mix.Lib.Services
             {
                 if (model.Provider.HasValue && !string.IsNullOrEmpty(model.ProviderKey))
                 {
-                    await _userManager.AddLoginAsync(
+                    var createLoginResult =  await _userManager.AddLoginAsync(
                         user,
                         new UserLoginInfo(model.Provider.ToString(), model.ProviderKey, model.Provider.ToString()));
+                    if (!createLoginResult.Succeeded)
+                    {
+                        throw new MixException(MixErrorStatus.Badrequest, createLoginResult.Errors.First().Description);
+                    }
                 }
                 await _userManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
                 await _userManager.AddToTenant(user, tenantId);
@@ -517,7 +521,7 @@ namespace Mix.Lib.Services
             };
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_accountUow.ActiveTransaction != null)
             {

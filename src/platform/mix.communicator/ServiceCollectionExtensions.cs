@@ -1,4 +1,5 @@
-﻿using Mix.Communicator.Services;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Communicator.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -7,8 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixCommunicators(this IServiceCollection services)
         {
 
-            services.AddSingleton<FirebaseService>();
-            services.AddScoped<EmailService>();
+            services.TryAddSingleton<FirebaseService>();
+            services.TryAddScoped<EmailService>();
             return services;
         }
     }

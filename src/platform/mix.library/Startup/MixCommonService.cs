@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Services;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
@@ -11,24 +12,24 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static IServiceCollection AddMixCommonServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
-            services.AddSingleton<HttpService>();
-            services.AddSingleton<MixDatabaseService>();
-            services.AddSingleton<AuditLogService>();
+            services.TryAddSingleton<HttpService>();
+            services.TryAddSingleton<MixDatabaseService>();
+            services.TryAddSingleton<AuditLogService>();
             services.AddHostedService<MixBackgrouTaskPublisher>();
             services.AddHostedService<MixBackgrouTaskSubscriber>();
 
-            services.AddScoped<MixHeartConfigService>();
-            services.AddScoped<CultureService>();
-            services.AddScoped<AuthConfigService>();
-            services.AddScoped<SmtpConfigService>();
-            services.AddScoped<MixEndpointService>();
-            services.AddScoped<IPSecurityConfigService>();
-            services.AddScoped<MixPostService>();
-            services.AddScoped<MixDataService>();
+            services.TryAddScoped<MixHeartConfigService>();
+            services.TryAddScoped<CultureService>();
+            services.TryAddScoped<AuthConfigService>();
+            services.TryAddScoped<SmtpConfigService>();
+            services.TryAddScoped<MixEndpointService>();
+            services.TryAddScoped<IPSecurityConfigService>();
+            services.TryAddScoped<MixPostService>();
+            services.TryAddScoped<MixDataService>();
 
-            services.AddScoped<MixService>();
-            services.AddScoped<TranslatorService>();
-            services.AddScoped<MixConfigurationService>();
+            services.TryAddScoped<MixService>();
+            services.TryAddScoped<TranslatorService>();
+            services.TryAddScoped<MixConfigurationService>();
             return services;
         }
     }

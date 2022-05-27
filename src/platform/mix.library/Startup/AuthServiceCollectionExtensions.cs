@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -100,7 +101,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.SlidingExpiration = true;
             });
             services.AddScoped<EmailService>();
-            services.AddScoped<FirebaseService>();
+            // Firebase service must be singleton (only one firebase default instance)
+            services.TryAddSingleton<FirebaseService>();
             services.AddScoped<MixIdentityService>();
             return services;
         }
