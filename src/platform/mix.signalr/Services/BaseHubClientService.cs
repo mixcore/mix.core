@@ -24,7 +24,7 @@ namespace Mix.SignalR.Services
             var msg = new SignalRMessageModel<object>(data)
             {
                 Title = title,
-                Description = description,
+                Message = description,
                 Type = messageType
             };
             return SendMessageAsync(msg);

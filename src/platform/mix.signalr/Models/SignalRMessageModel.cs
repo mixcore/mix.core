@@ -10,15 +10,15 @@ namespace Mix.SignalR.Models
         {
 
         }
-        public SignalRMessageModel(T message)
+        public SignalRMessageModel(T data)
         {
-            Message = message;
+            Data = data;
         }
 
         public string Title { get; set; }
-        public string Description { get; set; }
-        public HubMessageType Type { get; set; }
-        public T Message { get; set; }
+        public string Message { get; set; }
+        public HubMessageType Type { get; set; } = HubMessageType.Info;
+        public T Data { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public override string ToString()
         {
