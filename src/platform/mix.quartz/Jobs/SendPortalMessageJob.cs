@@ -28,7 +28,7 @@ namespace Mix.MixQuartz.Jobs
             SignalRMessageModel<JObject> msg = new()
             {
                 Title = "Message from SendPortalMessageJob",
-                Message = obj,
+                Data = obj,
                 Type = GetHubMessageType(obj)
             };
             await _portalHub.SendMessageAsync(msg.ToString());
