@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Models;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
 namespace Mix.SignalR.Hubs
 {
-    public abstract class BaseSignalrHub: Hub
+    public abstract class BaseSignalrHub : Hub
     {
-        public async Task JoinRoom(string room)
+        public virtual async Task JoinRoom(string room)
         {
             var msg = new SignalRMessageModel<object>()
             {
@@ -33,19 +32,21 @@ namespace Mix.SignalR.Hubs
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
 
-        public async Task SendMessage(string message)
+        public virtual async Task SendMessage(string message)
         {
             await Clients.All.SendAsync(Constants.HubMethods.ReceiveMethod, message).ConfigureAwait(false);
         }
 
-        public Task SendMessageToCaller(string message)
+        public virtual Task SendMessageToCaller(string message)
         {
             return Clients.Caller.SendAsync(Constants.HubMethods.ReceiveMethod, message);
         }
 
-        public Task SendMessageToGroups(string message, string groupName)
+        public virtual Task SendMessageToGroups(string message, string groupName, bool exceptCaller = true)
         {
-            return Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
+            return exceptCaller
+                ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
+                : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
         }
 
 
