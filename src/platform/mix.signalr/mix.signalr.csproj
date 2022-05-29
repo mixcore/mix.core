@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.5" />
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
+    <ProjectReference Include="..\mix.identity\mix.identity.csproj" />
     <ProjectReference Include="..\mix.shared\mix.shared.csproj" />
   </ItemGroup>
 

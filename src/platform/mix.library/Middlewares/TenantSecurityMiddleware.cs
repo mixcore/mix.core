@@ -29,7 +29,7 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
-                LogRequest(context);
+                //LogRequest(context);
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
                     var uow = new UnitOfWorkInfo(cmsContext);
