@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Mix.SignalR;
+using System.Text.Json.Serialization;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,8 +14,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             string azureConnectionString = configuration.GetSection("Azure")["SignalRConnectionString"];
             services.AddSignalR()
-                   .AddJsonProtocol()
+                   .AddJsonProtocol(options =>
+                   {
+                       options.PayloadSerializerOptions.Converters
+                          .Add(new JsonStringEnumConverter());
+                   })
                    .AddAzureSignalRIf(azureConnectionString);
+            services.TryAddEnumerable(
+                ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>,
+                ConfigureJwtBearerOptions>());
+
             return services;
         }
 

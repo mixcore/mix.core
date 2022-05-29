@@ -12,6 +12,7 @@ namespace Mix.SignalR.Services
     {
         protected HubConnection connection;
         protected string hubName;
+        protected string _accessToken;
         public bool IsStarted => connection != null;
 
         public BaseHubClientService(string hub)
@@ -19,9 +20,9 @@ namespace Mix.SignalR.Services
             hubName = hub;
         }
 
-        public Task SendMessageAsync<T>(string title, string description, object data, HubMessageType messageType = HubMessageType.Info)
+        public Task SendMessageAsync(string title, string description, object data, HubMessageType messageType = HubMessageType.Info)
         {
-            var msg = new SignalRMessageModel<object>(data)
+            var msg = new SignalRMessageModel(data)
             {
                 Title = title,
                 Message = description,
@@ -29,13 +30,8 @@ namespace Mix.SignalR.Services
             };
             return SendMessageAsync(msg);
         }
-        
-        public Task SendMessageAsync<T>(SignalRMessageModel<T> message)
-        {
-            return SendMessageAsync(message.ToString());
-        }
 
-        public async Task SendMessageAsync(string message)
+        public async Task SendMessageAsync(SignalRMessageModel message)
         {
             if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
             {
@@ -60,7 +56,10 @@ namespace Mix.SignalR.Services
         {
             string endpoint = $"{MixEndpointService.Instance.Messenger}{hubName}";
             connection = new HubConnectionBuilder()
-               .WithUrl(endpoint)
+               .WithUrl(endpoint, options =>
+               {
+                   options.AccessTokenProvider = () => Task.FromResult(_accessToken);
+               })
                .WithAutomaticReconnect()
                .Build();
             connection.Closed += async (error) =>
@@ -69,7 +68,7 @@ namespace Mix.SignalR.Services
                 await connection.StartAsync();
             };
 
-            connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel<string> message) =>
+            connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
             {
                 this.HandleMessage(message);
             });
@@ -86,6 +85,6 @@ namespace Mix.SignalR.Services
 
         }
 
-        protected abstract void HandleMessage<T>(SignalRMessageModel<T> message);
+        protected abstract void HandleMessage(SignalRMessageModel message);
     }
 }

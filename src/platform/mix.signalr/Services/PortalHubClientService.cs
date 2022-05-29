@@ -11,7 +11,7 @@ namespace Mix.SignalR.Services
         {
         }
 
-        protected override void HandleMessage<T>(SignalRMessageModel<T> message)
+        protected override void HandleMessage(SignalRMessageModel message)
         {
             Console.WriteLine(message.ToString());
         }

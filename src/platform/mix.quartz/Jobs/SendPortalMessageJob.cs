@@ -23,15 +23,11 @@ namespace Mix.MixQuartz.Jobs
 
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
-            string objData = context.Trigger.JobDataMap.GetString("data") ?? "{}";
-            var obj = JObject.Parse(objData);
-            SignalRMessageModel<JObject> msg = new()
+            if (context.Trigger.JobDataMap.TryGetValue("data", out object obj))
             {
-                Title = "Message from SendPortalMessageJob",
-                Data = obj,
-                Type = GetHubMessageType(obj)
-            };
-            await _portalHub.SendMessageAsync(msg.ToString());
+                var msg = JObject.Parse(obj.ToString()).ToObject<SignalRMessageModel>();
+                await _portalHub.SendMessageAsync(msg);
+            }
         }
 
         private HubMessageType GetHubMessageType(JObject obj)
@@ -44,7 +40,7 @@ namespace Mix.MixQuartz.Jobs
                 case "error":
                     return HubMessageType.Error;
                 default:
-                    return HubMessageType.Success;
+                    return HubMessageType.Info;
             }
         }
     }
