@@ -30,17 +30,17 @@ namespace Mix.MixQuartz.Jobs
             }
         }
 
-        private HubMessageType GetHubMessageType(JObject obj)
+        private MessageType GetHubMessageType(JObject obj)
         {
             var status = obj.Value<string>("status");
             switch (status)
             {
                 case "success":
-                    return HubMessageType.Success;
+                    return MessageType.Success;
                 case "error":
-                    return HubMessageType.Error;
+                    return MessageType.Error;
                 default:
-                    return HubMessageType.Info;
+                    return MessageType.Info;
             }
         }
     }

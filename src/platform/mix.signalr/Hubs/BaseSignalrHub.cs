@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Constant.Constants;
+using Mix.Identity.Constants;
 using Mix.SignalR.Constants;
+using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
 using System.Collections.Generic;
@@ -13,14 +16,7 @@ namespace Mix.SignalR.Hubs
         public static Dictionary<string, List<HubUserModel>> Rooms = new Dictionary<string, List<HubUserModel>>();
         public virtual async Task JoinRoom(string roomName)
         {
-            var msg = new SignalRMessageModel()
-            {
-                Title = $"New member joined {roomName}",
-                Message = $"New member {Context.ConnectionId}"
-            };
-
             await AddUserToRoom(roomName);
-            await SendMessageToGroups(msg, roomName);
         }
 
         public virtual async Task SendMessage(SignalRMessageModel message)
@@ -32,9 +28,10 @@ namespace Mix.SignalR.Hubs
         {
             return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
         }
-        
+
         public virtual Task SendMessageToGroups(SignalRMessageModel message, string groupName, bool exceptCaller = true)
         {
+            message.From ??= GetCurrentUser();
             return exceptCaller
                 ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
                 : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
@@ -52,8 +49,12 @@ namespace Mix.SignalR.Hubs
             var users = Rooms[roomName];
             if (!users.Any(u => u.ConnectionId == Context.ConnectionId))
             {
-                users.Add(GetCurrentUser());
+                var user = GetCurrentUser();
+                users.Add(user);
                 Rooms[roomName] = users;
+                await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
+                await SendMessageToCaller(new(users) { Action = MessageAction.MemberList });
+                await SendMessageToGroups(new(user) { Action = MessageAction.NewMember }, roomName);
             }
         }
 
@@ -63,7 +64,8 @@ namespace Mix.SignalR.Hubs
             return new()
             {
                 ConnectionId = Context.ConnectionId,
-                Username = Context.User.Identity?.Name
+                Username = Context.User.Identity?.Name,
+                Avatar = Context.User.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
             };
         }
         #endregion
@@ -77,6 +79,15 @@ namespace Mix.SignalR.Hubs
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            foreach (var room in Rooms)
+            {
+                var user = room.Value.FirstOrDefault(m => m.ConnectionId == Context.ConnectionId);
+                if (user != null)
+                {
+                    room.Value.Remove(user);
+                    await SendMessageToGroups(new(user) { Action = MessageAction.MemberOffline }, room.Key);
+                }
+            }
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
         }
         #endregion
