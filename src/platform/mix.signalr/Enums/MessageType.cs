@@ -1,6 +1,6 @@
 ﻿namespace Mix.SignalR.Enums
 {
-    public enum HubMessageType
+    public enum MessageType
     {
         Success,
         Error,

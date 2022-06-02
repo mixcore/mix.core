@@ -12,13 +12,14 @@ namespace Mix.SignalR.Models
         }
         public SignalRMessageModel(object data)
         {
-            Data = ReflectionHelper.ParseObject(data);
+            Data = data;
         }
-
+        public HubUserModel From { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
-        public HubMessageType Type { get; set; } = HubMessageType.Info;
-        public JObject Data { get; set; }
+        public MessageAction Action{ get; set; } = MessageAction.NewMessage;
+        public MessageType Type { get; set; } = MessageType.Info;
+        public dynamic Data { get; set; }
         public DateTime CreatedDateTime => DateTime.UtcNow;
         public override string ToString()
         {

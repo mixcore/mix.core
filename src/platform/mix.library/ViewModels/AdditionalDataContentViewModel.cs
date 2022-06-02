@@ -152,7 +152,10 @@
         #endregion
 
         #region Helpers
-
+        public T Property<T>(string propertyName)
+        {
+            return Data.ContainsKey(propertyName) ? Data.Value<T>(propertyName) : default(T);
+        }
 
         private async Task ParseObjectToValues()
         {

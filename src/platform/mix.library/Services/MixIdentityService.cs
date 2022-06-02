@@ -178,7 +178,7 @@ namespace Mix.Lib.Services
             {
                 if (model.Provider.HasValue && !string.IsNullOrEmpty(model.ProviderKey))
                 {
-                    var createLoginResult =  await _userManager.AddLoginAsync(
+                    var createLoginResult = await _userManager.AddLoginAsync(
                         user,
                         new UserLoginInfo(model.Provider.ToString(), model.ProviderKey, model.Provider.ToString()));
                     if (!createLoginResult.Succeeded)
@@ -259,7 +259,7 @@ namespace Mix.Lib.Services
         public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
         {
             var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
-            
+
             if (verifiedAccessToken != null)
             {
 
@@ -442,6 +442,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
+                    CreateClaim(MixClaims.Avatar, info.UserData.Property<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString())

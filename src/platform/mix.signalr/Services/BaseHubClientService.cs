@@ -20,7 +20,7 @@ namespace Mix.SignalR.Services
             hubName = hub;
         }
 
-        public Task SendMessageAsync(string title, string description, object data, HubMessageType messageType = HubMessageType.Info)
+        public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
         {
             var msg = new SignalRMessageModel(data)
             {
