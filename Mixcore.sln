@@ -58,6 +58,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.communicator", "src\pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.constant", "src\platform\mix.constant\mix.constant.csproj", "{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.signalr.hub", "mix.signalr.hub\mix.signalr.hub.csproj", "{081A8E1E-B431-4044-B4B7-203BD1E00589}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -140,6 +142,10 @@ Global
 		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081A8E1E-B431-4044-B4B7-203BD1E00589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081A8E1E-B431-4044-B4B7-203BD1E00589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081A8E1E-B431-4044-B4B7-203BD1E00589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081A8E1E-B431-4044-B4B7-203BD1E00589}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -169,6 +175,7 @@ Global
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{5953D4C9-C11D-4307-815C-95898416A0FB} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{081A8E1E-B431-4044-B4B7-203BD1E00589} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

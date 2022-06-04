@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
+using Mix.Heart.Helpers;
 using Mix.Identity.Constants;
+using Mix.Lib.Services;
+using Mix.Shared.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
@@ -13,6 +17,13 @@ namespace Mix.SignalR.Hubs
 {
     public abstract class BaseSignalRHub : Hub
     {
+        protected AuditLogService _auditLogService;
+
+        protected BaseSignalRHub(AuditLogService auditLogService)
+        {
+            _auditLogService = auditLogService;
+        }
+
         public static Dictionary<string, List<HubUserModel>> Rooms = new Dictionary<string, List<HubUserModel>>();
         public virtual async Task JoinRoom(string roomName)
         {
@@ -21,21 +32,43 @@ namespace Mix.SignalR.Hubs
 
         public virtual async Task SendMessage(SignalRMessageModel message)
         {
+            LogMessage(message);
             await Clients.All.SendAsync(HubMethods.ReceiveMethod, message);
         }
-        
+
+        private void LogMessage(SignalRMessageModel message)
+        {
+            _auditLogService.LogRequest(Context.User?.Identity?.Name, new ParsedRequestModel()
+            {
+                RequestIp = GetIPAddress(),
+                Endpoint = GetType().Name,
+                Method = "SignalR",
+                Body = message.ToString()
+            });
+        }
+
+        private string GetIPAddress()
+        {
+            var feature = Context.Features.Get<IHttpConnectionFeature>();
+            // here you could get your client remote address
+            return feature?.RemoteIpAddress?.ToString();
+        }
+
         public virtual async Task SendPrivateMessage(SignalRMessageModel message, string connectionId)
         {
+            LogMessage(message);
             await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
         }
 
         public virtual Task SendMessageToCaller(SignalRMessageModel message)
         {
+            LogMessage(message);
             return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
         }
 
         public virtual Task SendGroupMessage(SignalRMessageModel message, string groupName, bool exceptCaller = true)
         {
+            LogMessage(message);
             message.From ??= GetCurrentUser();
             return exceptCaller
                 ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)

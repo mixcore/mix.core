@@ -25,7 +25,7 @@ namespace Mix.Lib.Subscribers
             {
                 case MixQueueActions.AuditLog:
                     var cmd = model.ParseData<LogAuditLogCommand>();
-                    _auditLogService.Log(cmd.UserName, cmd.Request, true, null);
+                    _auditLogService.SaveToDatabase(cmd.UserName, cmd.Request, true, null);
                     break;
             }
             return Task.CompletedTask;
