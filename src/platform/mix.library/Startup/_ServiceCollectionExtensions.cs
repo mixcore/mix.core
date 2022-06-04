@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Services;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Services;
 using System.Reflection;
@@ -50,6 +52,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
 
+            services.TryAddSingleton<AuditLogService>();
             services.AddSingleton<PortalHubClientService>();
             return services;
         }

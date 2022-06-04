@@ -29,7 +29,6 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
-                //LogRequest(context);
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
                     var uow = new UnitOfWorkInfo(cmsContext);
@@ -43,36 +42,6 @@ namespace Mix.Lib.Middlewares
                 }
                 await next.Invoke(context);
             }
-        }
-
-        private void LogRequest(HttpContext context)
-        {
-            context.Request.EnableBuffering();
-            var request = new ParsedRequestModel(
-                $"{context.Request.HttpContext.Connection.RemoteIpAddress} - {context.Request.Headers.Referer}",
-                context.Request.Path,
-                context.Request.Method,
-                GetBody(context.Request)
-                );
-            var cmd = new LogAuditLogCommand(context.User.Identity?.Name, request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
-            context.Request.Body.Seek(0, SeekOrigin.Begin);
-        }
-
-
-
-        private string GetBody(HttpRequest request)
-        {
-            var bodyStr = "";
-            // Arguments: Stream, Encoding, detect encoding, buffer size 
-            // AND, the most important: keep stream opened
-            using (StreamReader reader
-                      = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
-            {
-                bodyStr = reader.ReadToEndAsync().GetAwaiter().GetResult();
-            }
-
-            return bodyStr;
         }
     }
 }
