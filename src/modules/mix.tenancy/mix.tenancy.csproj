@@ -62,6 +62,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\mix.signalr.hub\mix.signalr.hub.csproj" />
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />
 		<ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
 	</ItemGroup>

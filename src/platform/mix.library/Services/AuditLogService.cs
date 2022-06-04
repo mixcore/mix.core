@@ -17,7 +17,7 @@ namespace Mix.Lib.Services
             this.servicesProvider = servicesProvider;
             _queueService = queueService;
         }
-        public void Log(string createdBy, ParsedRequestModel request, bool isSucceed, Exception exception)
+        public void SaveToDatabase(string createdBy, ParsedRequestModel request, bool isSucceed, Exception exception)
         {
             try
             {
@@ -63,9 +63,14 @@ namespace Mix.Lib.Services
                 context.Request.Method,
                 GetBody(context.Request)
                 );
-            var cmd = new LogAuditLogCommand(context.User.Identity?.Name, request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
+            LogRequest(context.User.Identity?.Name, request);
             context.Request.Body.Seek(0, SeekOrigin.Begin);
+        }
+        
+        public void LogRequest(string createdBy, ParsedRequestModel request)
+        {
+            var cmd = new LogAuditLogCommand(createdBy, request);
+            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
         }
 
 
