@@ -6,5 +6,8 @@
   "Mixcore": "", // 
   "Messenger": "", // https://localhost:5012
   "Scheduler": "", // https://localhost:5014
-  "Grpc": "" // https://localhost:5016
+  "Grpc":, "" // https://localhost:5016
+  "Store": "https://store.mixcore.org", // 
+  "UniversalPortal": "https://universal.mixcore.net", // https://localhost:5012
+  "UniversalPortalDev": "https://mix-portal-angular.vercel.app/" // https://localhost:5014
 }
