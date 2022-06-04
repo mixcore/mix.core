@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
         public static IApplicationBuilder UseMixTenant(this IApplicationBuilder app)
         {
+            app.UseMiddleware<AuditLogMiddleware>();
             app.UseMiddleware<TenantSecurityMiddleware>();
             return app;
         }
