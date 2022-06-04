@@ -193,10 +193,7 @@ namespace Mix.Lib.Services
                 var vm = new MixUserViewModel(user, _cmsUOW);
                 await vm.LoadUserDataAsync(MixTenantId, _mixDataService);
 
-                if (vm.UserData == null)
-                {
-                    vm.UserData = await vm.CreateDefaultUserData(MixTenantId, model.Data);
-                }
+                vm.UserData = await vm.CreateDefaultUserData(MixTenantId, model.Data);
 
                 return await GetAuthData(_cmsSontext, user, true, tenantId);
             }
@@ -442,7 +439,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.UserData.Property<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info.UserData?.Property<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString())
