@@ -23,13 +23,18 @@ namespace Mix.SignalR.Hubs
         {
             await Clients.All.SendAsync(HubMethods.ReceiveMethod, message);
         }
+        
+        public virtual async Task SendPrivateMessage(SignalRMessageModel message, string connectionId)
+        {
+            await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
+        }
 
         public virtual Task SendMessageToCaller(SignalRMessageModel message)
         {
             return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
         }
 
-        public virtual Task SendMessageToGroups(SignalRMessageModel message, string groupName, bool exceptCaller = true)
+        public virtual Task SendGroupMessage(SignalRMessageModel message, string groupName, bool exceptCaller = true)
         {
             message.From ??= GetCurrentUser();
             return exceptCaller
@@ -54,7 +59,7 @@ namespace Mix.SignalR.Hubs
                 Rooms[roomName] = users;
                 await SendMessageToCaller(new(user) { Action = MessageAction.MyConnection });
                 await SendMessageToCaller(new(users) { Action = MessageAction.MemberList });
-                await SendMessageToGroups(new(user) { Action = MessageAction.NewMember }, roomName);
+                await SendGroupMessage(new(user) { Action = MessageAction.NewMember }, roomName);
             }
         }
 
@@ -85,7 +90,7 @@ namespace Mix.SignalR.Hubs
                 if (user != null)
                 {
                     room.Value.Remove(user);
-                    await SendMessageToGroups(new(user) { Action = MessageAction.MemberOffline }, room.Key);
+                    await SendGroupMessage(new(user) { Action = MessageAction.MemberOffline }, room.Key);
                 }
             }
             await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
