@@ -17,11 +17,11 @@ namespace Mix.Communicator.Services
         public FirebaseService(IConfiguration configuration)
         {
             _configuration = configuration;
-            try
+            var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
+            session.Bind(_settings);
+            if (!string.IsNullOrEmpty(_settings.Filename))
             {
 
-                var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
-                session.Bind(_settings);
                 var googleCredential = _settings.Filename;
 
                 var credential = GoogleCredential.FromFile(googleCredential);
@@ -31,11 +31,6 @@ namespace Mix.Communicator.Services
                     Credential = credential
                 });
             }
-            catch (Exception ex)
-            {
-                throw new MixException(MixErrorStatus.ServerError, ex);
-            }
-
         }
 
         public async Task<FirebaseToken> VeriryTokenAsync(string idToken)
@@ -92,7 +87,7 @@ namespace Mix.Communicator.Services
             }
             catch (Exception ex)
             {
-                throw new MixException(Heart.Enums.MixErrorStatus.Badrequest, ex);
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 

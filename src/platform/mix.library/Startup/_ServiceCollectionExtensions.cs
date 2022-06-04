@@ -61,10 +61,12 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixTestServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             // Clone Settings from shared folder
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
             services.AddMixCache();
-
+            services.CustomValidationResponse();
             services.AddHttpClient();
             services.AddLogging();
 
@@ -75,14 +77,25 @@ namespace Microsoft.Extensions.DependencyInjection
             // Don't need to inject all entity repository by default
             //services.AddEntityRepositories();
 
+            services.AddMixTenant();
+            services.AddGeneratedPublisher();
+
+
             services.AddMixModuleServices(configuration);
 
             services.AddGeneratedRestApi();
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
 
-            services.AddResponseCompression();
+
+
+            services.Configure<GzipCompressionProviderOptions>(
+                options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
+            services.AddResponseCompression(options => options.EnableForHttps = true);
             services.AddResponseCaching();
+
+            services.TryAddSingleton<AuditLogService>();
+            services.AddSingleton<PortalHubClientService>();
             return services;
         }
 
