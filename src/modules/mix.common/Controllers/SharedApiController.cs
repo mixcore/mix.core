@@ -13,6 +13,7 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Common.Controllers
 {
@@ -20,6 +21,7 @@ namespace Mix.Common.Controllers
     [ApiController]
     public class SharedApiController : MixApiControllerBase
     {
+        private readonly ApplicationLifetime _applicationLifetime;
         protected UnitOfWorkInfo _uow;
         protected readonly MixCmsContext _context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
@@ -37,7 +39,7 @@ namespace Mix.Common.Controllers
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
             CultureService cultureService,
-            MixCmsContext context, IQueueService<MessageQueueModel> queueService)
+            MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _authConfigurations = authConfigService.AppSettings;
@@ -48,6 +50,7 @@ namespace Mix.Common.Controllers
             _routeProvider = routeProvider;
             _authConfigService = authConfigService;
             _cultureService = cultureService;
+            _applicationLifetime = applicationLifetime;
         }
 
         #region Routes
@@ -72,6 +75,14 @@ namespace Mix.Common.Controllers
             string key = encryptMessage.Key ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = AesEncryptionHelper.DecryptString(encryptMessage.StringData, key);
             return Ok(msg);
+        }
+
+        [HttpGet]
+        [Route("stop-application")]
+        public ActionResult StopApplication()
+        {
+            _applicationLifetime.StopApplication();
+            return Ok(DateTime.UtcNow);
         }
 
         [HttpGet]

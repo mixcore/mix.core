@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
-using Mix.Heart.Helpers;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Shared.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Mix.SignalR.Hubs
 {
@@ -54,10 +49,14 @@ namespace Mix.SignalR.Hubs
             return feature?.RemoteIpAddress?.ToString();
         }
 
-        public virtual async Task SendPrivateMessage(SignalRMessageModel message, string connectionId)
+        public virtual async Task SendPrivateMessage(SignalRMessageModel message, string connectionId, bool selfReceive)
         {
             LogMessage(message);
             await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
+            if (selfReceive)
+            {
+                await SendMessageToCaller(message);
+            }
         }
 
         public virtual Task SendMessageToCaller(SignalRMessageModel message)

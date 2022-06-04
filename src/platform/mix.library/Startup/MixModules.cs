@@ -16,6 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddControllers(options =>
             {
                 options.Filters.Add(new HttpResponseExceptionFilter());
+                options.Filters.Add(new AuditLogFilter());
                 options.Conventions.Add(new ControllerDocumentationConvention());
             })
             .AddJsonOptions(opts =>
