@@ -66,6 +66,7 @@
 		<ProjectReference Include="..\..\modules\mix.messenger\mix.messenger.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
+		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>
 	<ItemGroup>

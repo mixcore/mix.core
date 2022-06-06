@@ -50,7 +50,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\Mix.Heart.csproj" />
+		<ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\mix.heart.csproj" />
 		<ProjectReference Include="..\..\modules\mix.portal\mix.portal.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 	</ItemGroup>

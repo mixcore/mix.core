@@ -15,7 +15,7 @@ namespace Mix.Database.Services
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
 
         public MixDatabaseService()
-            : base(MixAppConfigFilePaths.Database, true)
+            : base(MixAppConfigFilePaths.Database, false)
         {
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
         }

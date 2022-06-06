@@ -111,6 +111,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixTenant> MixTenant { get; set; }
         public virtual DbSet<MixDomain> MixDomain { get; set; }
         public virtual DbSet<MixCulture> MixCulture { get; set; }
+        public virtual DbSet<MixMedia> MixMedia { get; set; }
         public virtual DbSet<MixPage> MixPage { get; set; }
         public virtual DbSet<MixPageContent> MixPageContent { get; set; }
         public virtual DbSet<MixModule> MixModule { get; set; }

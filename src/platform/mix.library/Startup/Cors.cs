@@ -11,7 +11,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixCors(this IServiceCollection services)
         {
-
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -27,7 +26,6 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
-
                 });
             });
             return services;
