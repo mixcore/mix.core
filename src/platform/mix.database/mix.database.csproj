@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\AuditLog\**" />
+    <EmbeddedResource Remove="Migrations\AuditLog\**" />
+    <None Remove="Migrations\AuditLog\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Entities\Account\_ApplicationDbContext.cs" />
   </ItemGroup>
 
@@ -31,7 +37,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\AuditLog\" />
     <Folder Include="Migrations\Quartz\" />
     <Folder Include="Migrations\Cms\SqliteMixCms\" />
     <Folder Include="Migrations\Cms\SqlServerMixCms\" />
