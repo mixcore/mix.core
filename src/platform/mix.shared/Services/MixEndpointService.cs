@@ -42,16 +42,7 @@ namespace Mix.Shared.Services
         protected override void LoadAppSettings()
         {
             base.LoadAppSettings();
-            Endpoints = new string[] {
-                Account,
-                Common,
-                Portal,
-                Theme,
-                Mixcore,
-                Messenger,
-                Scheduler,
-                Grpc
-            };
+            Endpoints = AppSettings.Properties().Select(m => m.Value.ToString()).ToArray();
         }
 
         public string[] Endpoints;

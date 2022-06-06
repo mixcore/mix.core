@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Mix.Storage</RootNamespace>
+  </PropertyGroup>
+	<ItemGroup>
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
+	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\..\platform\mix.storage.lib\mix.storage.lib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
+</Project>
