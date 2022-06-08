@@ -7,7 +7,7 @@ namespace Mixcore.Domain.Bases
 {
     public class MvcBaseController : MixControllerBase
     {
-        protected UnitOfWorkInfo _uow;
+        protected GenericUnitOfWorkInfo<MixCmsContext> _uow;
         protected readonly MixCmsContext _context;
         protected readonly TranslatorService _translator;
         protected readonly MixDatabaseService _databaseService;
@@ -17,13 +17,11 @@ namespace Mixcore.Domain.Bases
             MixService mixService,
             TranslatorService translator,
             MixDatabaseService databaseService,
-            MixCmsContext context) : base(httpContextAccessor, mixService, ipSecurityConfigService)
+            GenericUnitOfWorkInfo<MixCmsContext> uow) : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
-            _context = context;
-            _uow = new(_context);
             _translator = translator;
             _databaseService = databaseService;
-            _context = context;
+            _uow = uow;
         }
 
         protected override void ValidateRequest()

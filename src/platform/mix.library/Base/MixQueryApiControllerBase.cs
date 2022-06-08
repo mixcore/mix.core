@@ -33,36 +33,22 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCacheDbContext cacheDbContext,
-            TDbContext context,
+            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            GenericUnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
-            _context = context;
-            _uow = new(_context);
+            _context = (TDbContext)uow.ActiveDbContext;
+            _uow = uow;
 
-            _cacheDbContext = cacheDbContext;
-            _cacheUOW = new(_cacheDbContext);
+            _cacheDbContext = (MixCacheDbContext)cacheUOW.ActiveDbContext;
+            _cacheUOW = cacheUOW;
             _cacheService = new();
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
 
         #region Overrides
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            if (_uow.ActiveTransaction != null)
-            {
-                _uow.Complete();
-            }
-            _context?.Dispose();
-            
-            if (_cacheUOW.ActiveTransaction != null)
-            {
-                _cacheUOW.Complete();
-            }
-            _cacheDbContext?.Dispose();
-            base.OnActionExecuted(context);
-        }
+       
         #endregion
 
         #region Routes

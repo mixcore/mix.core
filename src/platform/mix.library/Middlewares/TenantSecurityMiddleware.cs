@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Models;
-using Mix.Shared.Commands;
-using Mix.Shared.Models;
-using System.Text;
 
 namespace Mix.Lib.Middlewares
 {

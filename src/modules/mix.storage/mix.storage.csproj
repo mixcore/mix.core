@@ -7,16 +7,46 @@
     <RootNamespace>Mix.Storage</RootNamespace>
   </PropertyGroup>
 	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="System.ComponentModel.DataAnnotations" />
+		<Using Include="Newtonsoft.Json.Linq" />
+		<Using Include="Newtonsoft.Json" />
+		<Using Include="Microsoft.AspNetCore.Authorization" />
+		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Lib.Services" />
+		<Using Include="Mix.Lib.Models.Common" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Dtos" />
+		<Using Include="Mix.Lib.ViewModels" />
+
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Extensions" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Heart.Models" />
+		<Using Include="Mix.Heart.Entities.Cache" />
+
+
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Queue.Interfaces" />
+		<Using Include="Mix.Queue.Models" />
+		<Using Include="Mix.Queue.Attributes" />
+		<Using Include="Mix.Queue.Engines.MixQueue" />
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Microsoft.Extensions.DependencyInjection.Extensions" />
+		<Using Include="Mix.Storage.Lib.Services" />
 	</ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\platform\mix.library\mix.library.csproj" />
     <ProjectReference Include="..\..\platform\mix.storage.lib\mix.storage.lib.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
