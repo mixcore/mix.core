@@ -19,14 +19,14 @@ namespace Mix.Portal.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
-            MixCacheDbContext cacheDbContext,
-            MixCmsContext context,
+            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            GenericUnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(_uow);
-            _colRepository = MixDatabaseColumnViewModel.GetRootRepository(context);
+            _colRepository = MixDatabaseColumnViewModel.GetRootRepository(cmsUOW.DbContext);
         }
         protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
             [FromQuery] SearchRequestDto req)

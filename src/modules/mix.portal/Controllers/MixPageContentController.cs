@@ -15,10 +15,10 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCacheDbContext cacheDbContext,
-            MixCmsContext context,
+            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            GenericUnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
 
         }

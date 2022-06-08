@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Entities.Cache;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
 
@@ -23,10 +22,10 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCacheDbContext cacheDbContext,
-            TDbContext context,
+            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            GenericUnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheDbContext, context, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
         {
         }
 
