@@ -8,10 +8,10 @@ namespace Mix.Lib.Services
     {
         private readonly MixCmsContext _dbContext;
         private UnitOfWorkInfo _uow;
-        public MixDataService(MixCmsContext dbContext)
+        public MixDataService(UnitOfWorkInfo<MixCmsContext> uow)
         {
-            _dbContext = dbContext;
-            _uow = new(_dbContext);
+            _uow = uow;
+            _dbContext = uow.DbContext;
         }
 
         public void SetUnitOfWork(UnitOfWorkInfo uow)

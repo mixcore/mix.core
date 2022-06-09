@@ -20,8 +20,8 @@ namespace Mix.Lib.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
-            GenericUnitOfWorkInfo<TDbContext> uow,
+            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
         {

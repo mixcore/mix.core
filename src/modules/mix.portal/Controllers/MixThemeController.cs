@@ -22,8 +22,8 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixThemeImportService importService,
             MixThemeExportService exportService,
-            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
-            GenericUnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {

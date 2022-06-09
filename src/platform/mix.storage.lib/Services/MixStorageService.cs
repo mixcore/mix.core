@@ -6,7 +6,7 @@ namespace Mix.Storage.Lib.Services
     public class MixStorageService
     {
         private UnitOfWorkInfo _cmsUOW;
-        public MixStorageService(GenericUnitOfWorkInfo<MixCmsContext> cmsUOW)
+        public MixStorageService(UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             _cmsUOW = cmsUOW;
         }

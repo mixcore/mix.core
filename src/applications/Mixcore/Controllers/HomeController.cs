@@ -17,7 +17,7 @@ namespace Mixcore.Controllers
             MixService mixService,
             TranslatorService translator,
             MixDatabaseService databaseService,
-            GenericUnitOfWorkInfo<MixCmsContext> uow)
+            UnitOfWorkInfo<MixCmsContext> uow)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, translator, databaseService, uow)
         {
             _logger = logger;

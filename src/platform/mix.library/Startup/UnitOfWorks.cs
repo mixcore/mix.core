@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Database.Entities.Account;
 using Mix.Lib.Middlewares;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -8,8 +9,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddUOWs(this IServiceCollection services)
         {
-            services.TryAddScoped<GenericUnitOfWorkInfo<MixCmsContext>>();
-            services.TryAddScoped<GenericUnitOfWorkInfo<MixCacheDbContext>>();
+            services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
+            services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
+            services.TryAddScoped<UnitOfWorkInfo<MixCmsAccountContext>>();
             return services;
         }
 
