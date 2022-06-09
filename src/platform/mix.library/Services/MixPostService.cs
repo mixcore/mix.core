@@ -6,12 +6,10 @@ namespace Mix.Lib.Services
 {
     public class MixPostService : IDisposable
     {
-        private readonly MixCmsContext _dbContext;
         private UnitOfWorkInfo _uow;
-        public MixPostService(MixCmsContext dbContext)
+        public MixPostService(UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
-            _dbContext = dbContext;
-            _uow = new(_dbContext);
+            _uow = cmsUOW;
         }
 
         public void SetUnitOfWork(UnitOfWorkInfo uow)

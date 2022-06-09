@@ -12,8 +12,8 @@ namespace Mix.Lib.Middlewares
         }
 
         public async Task Invoke(HttpContext context, 
-            [FromServices] GenericUnitOfWorkInfo<MixCmsContext> cmsUOW,
-            [FromServices] GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW
+            [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUOW
             )
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)

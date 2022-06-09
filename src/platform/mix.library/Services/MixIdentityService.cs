@@ -42,15 +42,15 @@ namespace Mix.Lib.Services
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             AuthConfigService authConfigService,
-            MixCmsContext cmsContext,
-            MixCmsAccountContext accountContext,
+            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixDataService mixDataService)
         {
-            _cmsSontext = cmsContext;
+            _cmsUow = cmsUOW;
+            _cmsSontext = cmsUOW.DbContext;
             _cacheService = cacheService;
-            _accountUow = new(accountContext);
-            _cmsUow = new(cmsContext);
+            _accountUow = accountUOW;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;

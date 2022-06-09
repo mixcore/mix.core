@@ -7,6 +7,7 @@ using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
@@ -22,8 +23,8 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            GenericUnitOfWorkInfo<MixCacheDbContext> cacheUOW,
-            GenericUnitOfWorkInfo<TDbContext> uow,
+            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
+            UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
         {
