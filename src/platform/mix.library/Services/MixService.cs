@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using System.Net;
 using System.Net.Mail;
 
 namespace Mix.Lib.Services
@@ -7,13 +8,18 @@ namespace Mix.Lib.Services
     {
         public readonly SmtpConfigService _smtpConfigService;
         public readonly MixConfigurationService _configService;
-
+        public readonly int MixTenantId;
         public MixService(
             MixConfigurationService configService,
-            SmtpConfigService smtpConfigService)
+            SmtpConfigService smtpConfigService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _configService = configService;
             _smtpConfigService = smtpConfigService;
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            {
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+            }
         }
 
         public string GetAssetFolder(string culture = null)
@@ -30,51 +36,6 @@ namespace Mix.Lib.Services
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
-        }
-
-        public void SendMail(string subject, string message, string to, string from = null)
-        {
-            MailMessage mailMessage = new()
-            {
-                IsBodyHtml = true,
-                From = new MailAddress(from)
-            };
-            mailMessage.To.Add(to);
-            mailMessage.Body = message;
-            mailMessage.Subject = subject;
-            try
-            {
-                string server = _smtpConfigService.GetConfig<string>("Server");
-                string user = _smtpConfigService.GetConfig<string>("User");
-                string pwd = _smtpConfigService.GetConfig<string>("Password");
-                int port = _smtpConfigService.GetConfig<int>("Port");
-                bool ssl = _smtpConfigService.GetConfig<bool>("SSL");
-                SmtpClient client = new(server)
-                {
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential(user, pwd),
-                    Port = port,
-                    EnableSsl = ssl
-                };
-
-                client.Send(mailMessage);
-            }
-            catch
-            {
-                try
-                {
-                    SmtpClient smtpClient = new()
-                    {
-                        UseDefaultCredentials = true
-                    };
-                    smtpClient.Send(mailMessage);
-                }
-                catch (Exception ex)
-                {
-                    LogException(ex);
-                    // ToDo: cannot send mail
-                }
-            }
         }
 
         public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)

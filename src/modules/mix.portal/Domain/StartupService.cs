@@ -1,4 +1,6 @@
-﻿using Mix.Shared.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Portal.Domain.Services;
+using Mix.Shared.Interfaces;
 
 namespace Mix.Portal
 {
@@ -8,6 +10,7 @@ namespace Mix.Portal
         {
             services.AddScoped<MixThemeExportService>();
             services.AddScoped<MixThemeImportService>();
+            services.TryAddScoped<CloneCultureService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
