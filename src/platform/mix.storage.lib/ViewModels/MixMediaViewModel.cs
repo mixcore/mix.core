@@ -29,6 +29,7 @@
         public string Source { get; set; }
         public string TargetUrl { get; set; }
 
+        public string FullPath => $"{GlobalConfigService.Instance.Domain}/{FileFolder}/{FileName}";
         #endregion
     }
 }
