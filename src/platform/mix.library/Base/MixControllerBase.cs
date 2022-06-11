@@ -41,10 +41,7 @@ namespace Mix.Lib.Base
         {
             _mixService = mixService;
 
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
-            {
-                LoadCulture();
-            }
+            
             _ipSecurityConfigService = ipSecurityConfigService;
 
             if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
@@ -63,7 +60,7 @@ namespace Mix.Lib.Base
             //{
             //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             //}
-            Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
+            Culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);
@@ -86,7 +83,10 @@ namespace Mix.Lib.Base
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             ValidateRequest();
-
+            if (!GlobalConfigService.Instance.AppSettings.IsInit)
+            {
+                LoadCulture();
+            }
             ViewBag.culture = Culture;
             if (!string.IsNullOrEmpty(Culture))
             {

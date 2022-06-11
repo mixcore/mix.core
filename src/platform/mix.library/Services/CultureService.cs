@@ -2,18 +2,14 @@
 {
     public class CultureService : JsonConfigurationServiceBase
     {
+        private readonly MixCmsContext _ctx;
         public CultureService(MixCmsContext ctx)
             : base(MixAppConfigFilePaths.Culture)
         {
-
+            _ctx = ctx;
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
-                if (Cultures == null)
-                {
-                    Cultures = ctx.MixCulture.ToList();
-                    SetConfig(MixAppSettingKeywords.Cultures, Cultures);
-                }
+                LoadCultures();
             }
         }
 
@@ -28,6 +24,16 @@
         public MixCulture LoadCulture(string specificulture)
         {
             return Cultures.FirstOrDefault(m => m.Specificulture == specificulture) ?? DefaultCulture;
+        }
+
+        public void LoadCultures()
+        {
+            Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
+            if (Cultures == null)
+            {
+                Cultures = _ctx.MixCulture.ToList();
+                SetConfig(MixAppSettingKeywords.Cultures, Cultures);
+            }
         }
     }
 }

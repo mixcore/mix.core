@@ -113,7 +113,7 @@ namespace Mix.SignalR.Hubs
         {
             await base.OnConnectedAsync().ConfigureAwait(false);
         }
-
+        
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             foreach (var room in Rooms)

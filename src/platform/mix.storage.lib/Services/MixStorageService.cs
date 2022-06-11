@@ -12,7 +12,7 @@ namespace Mix.Storage.Lib.Services
         }
         #region Methods
 
-        public async Task<string> UploadFile(string? folder, IFormFile file, int tenantId, string? createdBy)
+        public async Task<string?> UploadFile(string? folder, IFormFile file, int tenantId, string? createdBy)
         {
             folder ??= DateTime.Now.ToString("yyyy-MMM");
             folder = $"{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
@@ -26,7 +26,7 @@ namespace Mix.Storage.Lib.Services
             return default;
         }
 
-        public async Task CreateMedia(string folder, string result, int tenantId, string createdBy)
+        public async Task CreateMedia(string folder, string result, int tenantId, string? createdBy)
         {
             var media = new MixMediaViewModel(_cmsUOW)
             {

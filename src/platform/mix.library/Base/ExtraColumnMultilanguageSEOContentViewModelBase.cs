@@ -5,8 +5,8 @@
         : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultiLanguageContentBase<TPrimaryKey>
+        where TView : ExtraColumnMultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 

@@ -35,7 +35,6 @@ namespace Mixcore.Domain.Services
             var keyIndex = 1;
             if (_cultureService.CheckValidCulture(language))
             {
-                language = GlobalConfigService.Instance.AppSettings.DefaultCulture;
                 keyIndex -= 1;
                 result["controller"] = "home";
                 result["culture"] = language;
