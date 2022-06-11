@@ -58,7 +58,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.communicator", "src\pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.constant", "src\platform\mix.constant\mix.constant.csproj", "{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.signalr.hub", "mix.signalr.hub\mix.signalr.hub.csproj", "{081A8E1E-B431-4044-B4B7-203BD1E00589}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.signalr.hub", "src\platform\mix.signalr.hub\mix.signalr.hub.csproj", "{081A8E1E-B431-4044-B4B7-203BD1E00589}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.storage", "src\modules\mix.storage\mix.storage.csproj", "{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6}"
 EndProject

@@ -118,10 +118,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseName=sysMedia&mixDatabaseTitle=Media&dataId=default"
+          "path": "/portal/media/create"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseName=sysMedia&mixDatabaseTitle=Media&dataId=default&isGroup=true",
+          "path": "/portal/media/list",
           "title": "List",
           "icon": "mi mi-List"
         }

@@ -42,7 +42,7 @@ namespace Mix.SignalR.Hubs
             });
         }
 
-        private string GetIPAddress()
+        private string? GetIPAddress()
         {
             var feature = Context.Features.Get<IHttpConnectionFeature>();
             // here you could get your client remote address
@@ -101,8 +101,8 @@ namespace Mix.SignalR.Hubs
             return new()
             {
                 ConnectionId = Context.ConnectionId,
-                Username = Context.User.Identity?.Name,
-                Avatar = Context.User.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
+                Username = Context.User?.Identity?.Name,
+                Avatar = Context.User?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
             };
         }
         #endregion
@@ -114,7 +114,7 @@ namespace Mix.SignalR.Hubs
             await base.OnConnectedAsync().ConfigureAwait(false);
         }
 
-        public override async Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
             foreach (var room in Rooms)
             {
