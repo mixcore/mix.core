@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Base;
 using Mix.Shared.Services;
 
 namespace Mix.Portal.Domain.Services
@@ -7,6 +8,10 @@ namespace Mix.Portal.Domain.Services
     {
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private MixService _mixService;
+        private Dictionary<int, int> pageIds = new();
+        private Dictionary<int, int> postIds = new();
+        private Dictionary<int, int> moduleIds = new();
+        private Dictionary<int, int> dataIds = new();
         public CloneCultureService(UnitOfWorkInfo<MixCmsContext> cmsUOW, MixService mixService)
         {
             _cmsUOW = cmsUOW;
@@ -18,23 +23,46 @@ namespace Mix.Portal.Domain.Services
         public async Task CloneDefaultCulture(string specificulture)
         {
             string defaultCulture = GlobalConfigService.Instance.DefaultCulture;
-            await ClonePageContents(defaultCulture, specificulture);
+            await CloneData<MixConfigurationContent, int>(defaultCulture, specificulture);
+            await CloneData<MixLanguageContent, int>(defaultCulture, specificulture);
+
+            await CloneData<MixPageContent, int>(defaultCulture, specificulture);
+            await CloneData<MixPostContent, int>(defaultCulture, specificulture);
+            await CloneData<MixModuleContent, int>(defaultCulture, specificulture);
+            //await CloneData<MixDataContent, Guid>(defaultCulture, specificulture);
         }
 
-        private async Task ClonePageContents(string defaultCulture, string specificulture)
+        private async Task CloneData<T, TPrimaryKey>(string sourceCulture, string destCulture)
+            where TPrimaryKey : IComparable
+            where T : MultiLanguageContentBase<TPrimaryKey>
         {
-            List<Task> tasks = new List<Task>();
-            var pageContents = await MixPageContentViewModel.GetRepository(_cmsUOW)
-                    .GetAllAsync(m => m.Specificulture == defaultCulture
-                        && m.MixTenantId == _mixService.MixTenantId); ;
-            foreach (var item in pageContents)
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.Specificulture == sourceCulture
+                         && m.MixTenantId == _mixService.MixTenantId)
+                 .AsNoTracking()
+                 .ToList();
+            foreach (var item in contents)
             {
-                item.Id = 0;
-                item.Specificulture = specificulture;
-                tasks.Add(item.SaveAsync());
+                item.Id = default;
+                item.Specificulture = destCulture;
+                item.CreatedDateTime = DateTime.UtcNow;
+                await _cmsUOW.DbContext.Set<T>().AddAsync(item);
             }
-            await Task.WhenAll(tasks);
+            await _cmsUOW.DbContext.SaveChangesAsync();
         }
+        
+        //private async Task CloneAssociations<T>(string sourceCulture, string destCulture)
+        //    where T : AssociationBase<int>
+        //{
+        //    var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.Specificulture == sourceCulture
+        //                 && m.MixTenantId == _mixService.MixTenantId)
+        //         .AsNoTracking()
+        //         .ToList();
+        //    foreach (var item in contents)
+        //    {
+        //        await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+        //    }
+        //    await _cmsUOW.DbContext.SaveChangesAsync();
+        //}
 
         #endregion
     }

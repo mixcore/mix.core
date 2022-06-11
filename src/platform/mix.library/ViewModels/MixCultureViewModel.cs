@@ -32,6 +32,12 @@
 
         #region Overrides
 
+        protected override async Task DeleteHandlerAsync()
+        {
+            await base.DeleteHandlerAsync();
+            await MixPageContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m=>m.Specificulture == Specificulture);
+        }
+
         #endregion
 
         #region Expands

@@ -1,4 +1,5 @@
-﻿using Mix.Lib.ViewModels.ReadOnly;
+﻿using Mix.Database.Entities.Base;
+using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.Base
 {
@@ -6,8 +7,8 @@ namespace Mix.Lib.Base
         : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
-        where TEntity : class, IEntity<TPrimaryKey>
-        where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultiLanguageContentBase<TPrimaryKey>
+        where TView : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 
