@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHostedService<MixBackgrouTaskSubscriber>();
 
             services.TryAddScoped<MixHeartConfigService>();
-            services.TryAddScoped<CultureService>();
+            services.TryAddSingleton<CultureService>();
             services.TryAddScoped<AuthConfigService>();
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<MixEndpointService>();
