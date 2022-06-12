@@ -18,6 +18,10 @@
 
         public bool CheckValidCulture(string specificulture)
         {
+            if (Cultures == null)
+            {
+                LoadCultures();
+            }
             return Cultures != null && Cultures.Any(c => c.Specificulture == specificulture);
         }
 
@@ -28,12 +32,8 @@
 
         public void LoadCultures()
         {
-            Cultures = AppSettings[MixAppSettingKeywords.Cultures]?.ToObject<List<MixCulture>>();
-            if (Cultures == null)
-            {
-                Cultures = _ctx.MixCulture.ToList();
-                SetConfig(MixAppSettingKeywords.Cultures, Cultures);
-            }
+            Cultures = _ctx.MixCulture.ToList();
+            SetConfig(MixAppSettingKeywords.Cultures, Cultures);
         }
     }
 }

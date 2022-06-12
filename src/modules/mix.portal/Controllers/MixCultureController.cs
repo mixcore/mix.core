@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Portal.Domain.Services;
+using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -38,7 +39,7 @@ namespace Mix.Portal.Controllers
             var result = await base.CreateHandlerAsync(data);
             if (result > 0)
             {
-                await _cloneCultureService.CloneDefaultCulture(data.Specificulture);
+                await _cloneCultureService.CloneDefaultCulture(GlobalConfigService.Instance.DefaultCulture, data.Specificulture);
                 var cultures = _uow.ActiveDbContext.Set<MixCulture>().ToList();
                 _cultureService.SetConfig(MixAppSettingKeywords.Cultures, cultures);
                 _cultureService.LoadCultures();
