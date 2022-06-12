@@ -1,16 +1,21 @@
-﻿namespace Mix.Lib.Services
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
-        private readonly MixCmsContext _ctx;
-        public CultureService(MixCmsContext ctx)
+        private MixCmsContext _ctx;
+        private readonly IServiceProvider servicesProvider;
+        public CultureService(IServiceProvider servicesProvider)
             : base(MixAppConfigFilePaths.Culture)
         {
-            _ctx = ctx;
+            this.servicesProvider = servicesProvider;
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 LoadCultures();
             }
+
         }
 
         public List<MixCulture> Cultures { get; set; }
@@ -32,7 +37,9 @@
 
         public void LoadCultures()
         {
-            Cultures = _ctx.MixCulture.ToList();
+            using var scope = servicesProvider.CreateScope();
+            _ctx = scope.ServiceProvider.GetService<MixCmsContext>();
+            Cultures = _ctx.MixCulture.AsNoTracking().ToList();
             SetConfig(MixAppSettingKeywords.Cultures, Cultures);
         }
     }

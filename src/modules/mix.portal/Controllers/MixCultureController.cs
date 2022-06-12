@@ -40,8 +40,6 @@ namespace Mix.Portal.Controllers
             if (result > 0)
             {
                 await _cloneCultureService.CloneDefaultCulture(GlobalConfigService.Instance.DefaultCulture, data.Specificulture);
-                var cultures = _uow.ActiveDbContext.Set<MixCulture>().ToList();
-                _cultureService.SetConfig(MixAppSettingKeywords.Cultures, cultures);
                 _cultureService.LoadCultures();
             }
             return result;

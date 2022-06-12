@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Mix.Shared.Services;
+using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
 {
@@ -49,8 +50,9 @@ namespace Mix.Portal.Domain.Services
                 await CloneAssociations<MixPagePostAssociation>(pageIds, postIds);
                 await CloneAssociations<MixModulePostAssociation>(moduleIds, postIds);
 
-                //await CloneData<MixDataContent, Guid>();
+                await CloneGuidData<MixDataContent>(dataIds);
 
+                await CloneDataAssociations();
             }
             catch (Exception ex)
             {
@@ -80,6 +82,29 @@ namespace Mix.Portal.Domain.Services
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
         }
+
+        private async Task CloneGuidData<T>(Dictionary<Guid, Guid> dictionaryIds)
+            where T : MultiLanguageContentBase<Guid>
+        {
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+                 .AsNoTracking()
+                 .ToList();
+            if (contents.Any())
+            {
+                foreach (var item in contents)
+                {
+                    Guid newId = Guid.NewGuid();
+                    dictionaryIds.Add(item.Id, newId);
+                    item.Id = newId;
+                    item.Specificulture = _destCulture.Specificulture;
+                    item.MixCultureId = _destCulture.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+                }
+                await _cmsUOW.DbContext.SaveChangesAsync();
+            }
+        }
+
         private async Task CloneAssociations<T>(
                    Dictionary<int, int> leftDic,
                    Dictionary<int, int> rightDic)
@@ -99,6 +124,42 @@ namespace Mix.Portal.Domain.Services
                 }
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
+        }
+        private async Task CloneDataAssociations()
+        {
+            Expression<Func<MixDataContentAssociation, bool>> predicate = m => false;
+            predicate = predicate.OrIf(postIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Post && m.IntParentId.HasValue && postIds.Keys.Contains(m.IntParentId.Value));
+            predicate = predicate.OrIf(pageIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId.HasValue && pageIds.Keys.Contains(m.IntParentId.Value));
+            predicate = predicate.OrIf(moduleIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId.HasValue && moduleIds.Keys.Contains(m.IntParentId.Value));
+            predicate = predicate.OrIf(dataIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId.HasValue && dataIds.Keys.Contains(m.GuidParentId.Value));
+            predicate = predicate.AndAlso(m => m.MixTenantId == _tenantId && m.Specificulture == _srcCulture.Specificulture);
+            var data = _cmsUOW.DbContext.MixDataContentAssociation
+                .Where(predicate)
+                .AsNoTracking()
+                .ToList();
+            if (data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    item.Id = Guid.NewGuid();
+                    item.IntParentId = GetIntegerParentId(item);
+                    item.MixCultureId = _destCulture.Id;
+                    item.Specificulture = _destCulture.Specificulture;
+                    await _cmsUOW.DbContext.MixDataContentAssociation.AddAsync(item);
+                }
+                await _cmsUOW.DbContext.SaveChangesAsync();
+            }
+        }
+
+        private int? GetIntegerParentId(MixDataContentAssociation item)
+        {
+            return item.ParentType switch
+            {
+                MixDatabaseParentType.Page => pageIds[item.IntParentId.Value],
+                MixDatabaseParentType.Post => postIds[item.IntParentId.Value],
+                MixDatabaseParentType.Module => moduleIds[item.IntParentId.Value],
+                _ => null
+            };
         }
 
         private int GetStartIntegerId<T>()

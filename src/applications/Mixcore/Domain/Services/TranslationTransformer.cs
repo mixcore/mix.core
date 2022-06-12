@@ -12,11 +12,10 @@ namespace Mixcore.Domain.Services
         private readonly CultureService _cultureService;
 
         public TranslationTransformer(
-            IConfiguration configuration)
+            IConfiguration configuration, CultureService cultureService)
         {
             _databaseService = new();
-            MixCmsContext ctx = new MixCmsContext(_databaseService);
-            _cultureService = new(ctx);
+            _cultureService = cultureService;
         }
 
         public override ValueTask<RouteValueDictionary> TransformAsync(
