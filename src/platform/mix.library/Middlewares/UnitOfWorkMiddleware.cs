@@ -23,16 +23,25 @@ namespace Mix.Lib.Middlewares
             else
             {
                 await next.Invoke(context);
-                await CompleteUOW(cmsUOW);
-                await CompleteUOW(cacheUOW);
+                
+                await CompleteUOW(cmsUOW, context.Response.StatusCode);
+                await CompleteUOW(cacheUOW, context.Response.StatusCode);
+
             }
         }
 
-        private async Task CompleteUOW(UnitOfWorkInfo _cmsUOW)
+        private async Task CompleteUOW(UnitOfWorkInfo _cmsUOW, int statusCode)
         {
             if (_cmsUOW.ActiveTransaction != null)
             {
-                await _cmsUOW.CompleteAsync();
+                if (Enum.IsDefined(typeof(MixErrorStatus), statusCode))
+                {
+                    await _cmsUOW.RollbackAsync();
+                }
+                else
+                {
+                    await _cmsUOW.CompleteAsync();
+                }
             }
             _ = _cmsUOW.ActiveDbContext?.DisposeAsync();
         }
