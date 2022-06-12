@@ -105,8 +105,9 @@ namespace Mix.Lib.Models.Common
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
             {
-                AndPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
+                AndPredicate = AndPredicate.AndAlso(
+                        ReflectionHelper.GetExpression<TEntity>(
+                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq));
             }
 
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)

@@ -5,7 +5,6 @@ namespace Mix.Lib.Services
 {
     public class CultureService : JsonConfigurationServiceBase
     {
-        private MixCmsContext _ctx;
         private readonly IServiceProvider servicesProvider;
         public CultureService(IServiceProvider servicesProvider)
             : base(MixAppConfigFilePaths.Culture)
@@ -35,11 +34,15 @@ namespace Mix.Lib.Services
             return Cultures.FirstOrDefault(m => m.Specificulture == specificulture) ?? DefaultCulture;
         }
 
-        public void LoadCultures()
+        public void LoadCultures(MixCmsContext ctx = null)
         {
             using var scope = servicesProvider.CreateScope();
-            _ctx = scope.ServiceProvider.GetService<MixCmsContext>();
-            Cultures = _ctx.MixCulture.AsNoTracking().ToList();
+            if (ctx == null)
+            {
+                ctx = scope.ServiceProvider.GetService<MixCmsContext>();
+            }
+
+            Cultures = ctx.MixCulture.AsNoTracking().ToList();
             SetConfig(MixAppSettingKeywords.Cultures, Cultures);
         }
     }
