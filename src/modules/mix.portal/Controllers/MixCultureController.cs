@@ -40,11 +40,16 @@ namespace Mix.Portal.Controllers
             if (result > 0)
             {
                 await _cloneCultureService.CloneDefaultCulture(GlobalConfigService.Instance.DefaultCulture, data.Specificulture);
-                _cultureService.LoadCultures();
+                _cultureService.LoadCultures((MixCmsContext)_uow.ActiveDbContext);
             }
             return result;
         }
 
+        protected override async Task DeleteHandler(MixCultureViewModel data)
+        {
+            await base.DeleteHandler(data);
+            _cultureService.LoadCultures((MixCmsContext)_uow.ActiveDbContext);
+        }
 
         #endregion
 
