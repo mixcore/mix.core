@@ -149,9 +149,9 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync()
         {
-            using var assoRepo = MixDataContentAssociationViewModel.GetRepository(UowInfo);
-            await assoRepo.DeleteManyAsync(m => m.DataContentId == Id && m.Specificulture == Specificulture);
-            await base.DeleteHandlerAsync();
+            Context.MixDataContentValue.RemoveRange(Context.MixDataContentValue.Where(m => m.ParentId == Id));
+            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId == Id));
+
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
                 var dataRepo = MixDataViewModel.GetRepository(UowInfo);
@@ -159,6 +159,7 @@ namespace Mix.Lib.ViewModels
                 await Repository.DeleteAsync(Id);
                 await dataRepo.DeleteAsync(ParentId);
             }
+            await base.DeleteHandlerAsync();
         }
         #endregion
 

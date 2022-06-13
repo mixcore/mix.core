@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mix.Lib.ViewModels
+namespace Mix.Portal.Domain.ViewModels
 {
     [GeneratePublisher]
     public class MixTenantViewModel

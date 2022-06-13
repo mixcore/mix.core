@@ -14,6 +14,7 @@ namespace Mix.Common.Domain.Helpers
             return new()
             {
                 Domain = GlobalConfigService.Instance.AppSettings.Domain,
+                DefaultCulture = GlobalConfigService.Instance.AppSettings.DefaultCulture,
                 PortalThemeSettings = PortalConfigService.Instance.AppSettings,
                 ApiEncryptKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey,
                 IsEncryptApi = GlobalConfigService.Instance.AppSettings.IsEncryptApi,

@@ -5,6 +5,8 @@
     {
         public string Domain { get; set; }
 
+        public string DefaultCulture { get; set; }
+
         public string LangIcon { get; set; }
 
         public JObject PortalThemeSettings { get; set; }

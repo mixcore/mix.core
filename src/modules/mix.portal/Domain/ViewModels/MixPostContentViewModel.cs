@@ -51,6 +51,10 @@
 
         protected override async Task DeleteHandlerAsync()
         {
+            Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.RightId == Id));
+            Context.MixModulePostAssociation.RemoveRange(Context.MixModulePostAssociation.Where(m => m.RightId == Id));
+            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Post && m.IntParentId == Id));
+
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
                 var postRepo = MixPostViewModel.GetRepository(UowInfo);
