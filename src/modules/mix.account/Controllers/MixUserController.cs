@@ -96,7 +96,7 @@ namespace Mix.Account.Controllers
         {
             var userId = Guid.Parse(_idService.GetClaim(User, MixClaims.Id));
             var tenantIds = await _accContext.MixUserTenants.Where(m => m.MixUserId == userId).Select(m => m.TenantId).ToListAsync();
-            var tenants = await MixTenantViewModel.GetRepository(_cmsUOW).GetListAsync(m => tenantIds.Contains(m.Id));
+            var tenants = await MixTenantSystemViewModel.GetRepository(_cmsUOW).GetListAsync(m => tenantIds.Contains(m.Id));
             return Ok(tenants);
         }
 

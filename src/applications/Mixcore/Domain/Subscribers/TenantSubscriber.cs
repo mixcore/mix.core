@@ -7,7 +7,7 @@ namespace Mixcore.Domain.Subscribers
     public class TenantSubscriber : SubscriberBase
     {
         private UnitOfWorkInfo _uow;
-        static string topicId = typeof(MixTenantViewModel).FullName;
+        static string topicId = typeof(MixTenantSystemViewModel).FullName;
         public TenantSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService)
@@ -18,8 +18,8 @@ namespace Mixcore.Domain.Subscribers
 
         public override async Task Handler(MessageQueueModel data)
         {
-            var _repository = MixTenantViewModel.GetRepository(_uow);
-            var post = data.ParseData<MixTenantViewModel>();
+            var _repository = MixTenantSystemViewModel.GetRepository(_uow);
+            var post = data.ParseData<MixTenantSystemViewModel>();
             switch (data.Action)
             {
                 case "Get":

@@ -70,6 +70,11 @@
 
         protected override async Task DeleteHandlerAsync()
         {
+            Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.RightId == Id));
+            Context.MixModuleData.RemoveRange(Context.MixModuleData.Where(m => m.ParentId == Id));
+            Context.MixModulePostAssociation.RemoveRange(Context.MixModulePostAssociation.Where(m => m.LeftId == Id));
+            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId == Id));
+
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
                 var mdlRepo = MixModuleViewModel.GetRepository(UowInfo);

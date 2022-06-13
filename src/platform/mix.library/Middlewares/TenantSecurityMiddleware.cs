@@ -28,7 +28,7 @@ namespace Mix.Lib.Middlewares
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
                     var uow = new UnitOfWorkInfo(cmsContext);
-                    MixTenantRepository.Instance.AllTenants = await MixTenantViewModel.GetRepository(uow).GetAllAsync(m => true);
+                    MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(uow).GetAllAsync(m => true);
                 }
                 if (!context.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
                 {
