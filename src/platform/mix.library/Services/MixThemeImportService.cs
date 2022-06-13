@@ -250,6 +250,7 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.MixTenantId = tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
+                item.Specificulture = _siteData.Specificulture;
                 _context.Entry(item).State = EntityState.Added;
                 await _context.SaveChangesAsync(_cts.Token);
                 dicPageContentIds.Add(oldId, item.Id);
@@ -394,7 +395,7 @@ namespace Mix.Lib.Services
                     item.Id = 0;
                     item.MixTenantId = tenantId;
                     item.ParentId = parentDic[item.ParentId];
-                    item.Specificulture ??= _siteData.Specificulture;
+                    item.Specificulture = _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
                     dic.Add(oldId, item.Id);
