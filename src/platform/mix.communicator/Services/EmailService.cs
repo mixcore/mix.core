@@ -18,7 +18,7 @@ namespace Mix.Communicator.Services
             session.Bind(_settings);
         }
 
-        public void SendMail(string subject, string message, string to, string from = null)
+        public void SendMail(string subject, string message, string to, string? from = null)
         {
             MailMessage mailMessage = new MailMessage
             {
@@ -48,7 +48,7 @@ namespace Mix.Communicator.Services
             }
         }
 
-        public Task SendMailWithEdmTemplate(string template, JObject data, string subject, string to, string from = null)
+        public Task SendMailWithEdmTemplate(string template, JObject data, string subject, string to, string? from = null)
         {
             return Task.Run(() =>
             {
