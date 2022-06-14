@@ -2,6 +2,7 @@
 {
     public class GetAdditionalDataDto
     {
+        public string Specificulture { get; set; }
         public string ParentId { get; set; }
 
         public MixDatabaseParentType? ParentType { get; set; }

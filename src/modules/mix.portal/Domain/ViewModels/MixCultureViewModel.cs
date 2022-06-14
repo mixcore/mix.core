@@ -38,7 +38,6 @@
             await MixModuleContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
             await MixPostContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
             await MixDataContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
-            //Context.MixPostContent.RemoveRange(Context.MixPostContent.Where(m => m.Specificulture == Specificulture));
             Context.MixDataContent.RemoveRange(Context.MixDataContent.Where(m => m.Specificulture == Specificulture));
             Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.Specificulture == Specificulture));
             Context.MixDataContentValue.RemoveRange(Context.MixDataContentValue.Where(m => m.Specificulture == Specificulture));

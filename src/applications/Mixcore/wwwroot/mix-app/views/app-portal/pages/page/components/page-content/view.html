@@ -1,4 +1,1 @@
-<div class="card mb-5"><div class="card-body"><page-main page="$ctrl.model" generate-seo="$ctrl.generateSEO()"></page-main></div></div><div class="card mb-5"><div class="card-body"><page-general is-admin="isAdmin" page="$ctrl.model"></page-general></div></div><div class="row mb-5"><pre>
-        {{$ctrl.additionalData.data|json}}
-
-    </pre><div class="col-12" ng-if="$ctrl.additionalData"><additional-value class="mb-4" additional-data="$ctrl.additionalData" mix-database-name="'sysPageColumn'" parent-type="'Page'" parent-id="$ctrl.model.id" back-url="$ctrl.backUrl"></additional-value></div></div>
+<div class="card mb-5"><div class="card-body"><page-main page="$ctrl.model" generate-seo="$ctrl.generateSEO()"></page-main></div></div><div class="card mb-5"><div class="card-body"><page-general is-admin="isAdmin" page="$ctrl.model"></page-general></div></div><div class="row mb-5"><div class="col-12"><additional-value ng-if="$ctrl.additionalData" class="mb-4" additional-data="$ctrl.additionalData" mix-database-name="'sysPageColumn'" parent-type="'Page'" parent-id="$ctrl.model.id" back-url="$ctrl.backUrl"></additional-value></div></div>

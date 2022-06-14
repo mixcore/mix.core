@@ -46,7 +46,7 @@ namespace Mix.Portal.Controllers
                     dto.DatabaseName,
                     dto.GuidParentId,
                     dto.IntParentId,
-                    _lang);
+                    dto.Specificulture);
                 return Ok(getData);
             }
             return BadRequest();

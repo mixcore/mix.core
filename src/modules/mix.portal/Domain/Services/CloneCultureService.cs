@@ -18,6 +18,7 @@ namespace Mix.Portal.Domain.Services
         private Dictionary<int, int> postIds = new();
         private Dictionary<int, int> moduleIds = new();
         private Dictionary<Guid, Guid> dataIds = new();
+        private Dictionary<Guid, Guid> valueIds = new();
         public CloneCultureService(UnitOfWorkInfo<MixCmsContext> cmsUOW, MixService mixService)
         {
             _cmsUOW = cmsUOW;
@@ -51,6 +52,7 @@ namespace Mix.Portal.Domain.Services
                 await CloneAssociations<MixModulePostAssociation>(moduleIds, postIds);
 
                 await CloneGuidData<MixDataContent>(dataIds);
+                await CloneDataValues<MixDataContentValue>(valueIds);
 
                 await CloneDataAssociations();
             }
@@ -104,6 +106,29 @@ namespace Mix.Portal.Domain.Services
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
         }
+        
+        private async Task CloneDataValues<T>(Dictionary<Guid, Guid> dictionaryIds)
+            where T : MultiLanguageContentBase<Guid>
+        {
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+                 .AsNoTracking()
+                 .ToList();
+            if (contents.Any())
+            {
+                foreach (var item in contents)
+                {
+                    Guid newId = Guid.NewGuid();
+                    dictionaryIds.Add(item.Id, newId);
+                    item.Id = newId;
+                    item.ParentId = dataIds[item.ParentId];
+                    item.Specificulture = _destCulture.Specificulture;
+                    item.MixCultureId = _destCulture.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+                }
+                await _cmsUOW.DbContext.SaveChangesAsync();
+            }
+        }
 
         private async Task CloneAssociations<T>(
                    Dictionary<int, int> leftDic,
@@ -142,6 +167,7 @@ namespace Mix.Portal.Domain.Services
                 foreach (var item in data)
                 {
                     item.Id = Guid.NewGuid();
+                    item.DataContentId = dataIds[item.DataContentId];
                     item.IntParentId = GetIntegerParentId(item);
                     item.MixCultureId = _destCulture.Id;
                     item.Specificulture = _destCulture.Specificulture;

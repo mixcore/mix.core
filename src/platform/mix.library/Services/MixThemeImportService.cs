@@ -271,6 +271,7 @@ namespace Mix.Lib.Services
                     item.Id = 0;
                     item.MixTenantId = tenantId;
                     item.ParentId = dicModuleIds[item.ParentId];
+                    item.Specificulture = _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
                     dicModuleContentIds.Add(oldId, item.Id);
@@ -344,14 +345,16 @@ namespace Mix.Lib.Services
             {
                 foreach (var item in data)
                 {
-                    if (ReflectionHelper.HasProperty(typeof(T), MixRequestQueryKeywords.MixTenantId))
+                    ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                     {
-                        ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
-                        {
-                            PropertyName = MixRequestQueryKeywords.MixTenantId,
-                            PropertyValue = tenantId
-                        });
-                    }
+                        PropertyName = MixRequestQueryKeywords.MixTenantId,
+                        PropertyValue = tenantId
+                    });
+                    ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
+                    {
+                        PropertyName = MixRequestQueryKeywords.Specificulture,
+                        PropertyValue = _siteData.Specificulture
+                    });
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);
