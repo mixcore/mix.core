@@ -81,8 +81,9 @@ namespace Mix.Queue.Engines.Azure
         /// Process message queue
         /// </summary>
         /// <returns></returns>
-        public async Task ProcessQueue(CancellationToken cancel)
+        public Task ProcessQueue(CancellationToken cancel)
         {
+            return Task.CompletedTask;
         }
     }
 }
