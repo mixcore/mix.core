@@ -39,7 +39,6 @@ namespace Mix.Database.Entities.Cms
             //            // TODO: will be removed
             //            optionsBuilder.LogTo(Console.WriteLine);
             //#endif
-
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)
@@ -135,6 +134,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixPagePostAssociation> MixPagePostAssociation { get; set; }
         public virtual DbSet<MixPageModuleAssociation> MixPageModuleAssociation { get; set; }
         public virtual DbSet<MixModulePostAssociation> MixModulePostAssociation { get; set; }
+        public virtual DbSet<MixContributor> MixContributor { get; set; }
 
         private static string _connectionString;
         private static MixDatabaseProvider _databaseProvider;

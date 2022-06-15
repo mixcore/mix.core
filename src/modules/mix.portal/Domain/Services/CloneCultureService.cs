@@ -106,7 +106,7 @@ namespace Mix.Portal.Domain.Services
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
         }
-        
+
         private async Task CloneDataValues<T>(Dictionary<Guid, Guid> dictionaryIds)
             where T : MultiLanguageContentBase<Guid>
         {
@@ -117,14 +117,17 @@ namespace Mix.Portal.Domain.Services
             {
                 foreach (var item in contents)
                 {
-                    Guid newId = Guid.NewGuid();
-                    dictionaryIds.Add(item.Id, newId);
-                    item.Id = newId;
-                    item.ParentId = dataIds[item.ParentId];
-                    item.Specificulture = _destCulture.Specificulture;
-                    item.MixCultureId = _destCulture.Id;
-                    item.CreatedDateTime = DateTime.UtcNow;
-                    await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+                    if (dataIds.ContainsKey(item.ParentId))
+                    {
+                        Guid newId = Guid.NewGuid();
+                        dictionaryIds.Add(item.Id, newId);
+                        item.Id = newId;
+                        item.ParentId = dataIds[item.ParentId];
+                        item.Specificulture = _destCulture.Specificulture;
+                        item.MixCultureId = _destCulture.Id;
+                        item.CreatedDateTime = DateTime.UtcNow;
+                        await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+                    }
                 }
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
