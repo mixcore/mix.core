@@ -46,6 +46,7 @@ namespace Mix.Portal.Domain.Services
                 await CloneIntegerData<MixPageContent>(pageIds);
                 await CloneIntegerData<MixPostContent>(postIds);
                 await CloneIntegerData<MixModuleContent>(moduleIds);
+                await CloneModuleData();
 
                 await CloneAssociations<MixPageModuleAssociation>(pageIds, moduleIds);
                 await CloneAssociations<MixPagePostAssociation>(pageIds, postIds);
@@ -80,6 +81,28 @@ namespace Mix.Portal.Domain.Services
                     item.MixCultureId = _destCulture.Id;
                     item.CreatedDateTime = DateTime.UtcNow;
                     await _cmsUOW.DbContext.Set<T>().AddAsync(item);
+                }
+                await _cmsUOW.DbContext.SaveChangesAsync();
+            }
+        }
+        
+        private async Task CloneModuleData()
+        {
+            var contents = _cmsUOW.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+                 .AsNoTracking()
+                 .ToList();
+            if (contents.Any())
+            {
+                var startId = GetStartIntegerId<MixModuleData>();
+                foreach (var item in contents)
+                {
+                    startId++;
+                    item.Id = startId;
+                    item.ParentId = moduleIds[item.ParentId];
+                    item.Specificulture = _destCulture.Specificulture;
+                    item.MixCultureId = _destCulture.Id;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    await _cmsUOW.DbContext.MixModuleData.AddAsync(item);
                 }
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
