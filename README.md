@@ -76,7 +76,7 @@ Ref: [How to install Mixcore CMS with Azure Docker Composer](https://community.m
 
 ###  Latest Docker Image
 ```sh
-docker pull mixcore/mix.core:latest
+docker pull ghcr.io/mixcore/mix.core:master
 docker run -it --rm -p 5000:80 --name mixcore_cms mixcore/mix.core:latest
 ```
 
