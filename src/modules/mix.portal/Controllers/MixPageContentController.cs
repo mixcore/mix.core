@@ -6,9 +6,10 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize("SyperAdmin, Owner")]
     public class MixPageContentController
-        : MixRestApiControllerBase<MixPageContentViewModel, MixCmsContext, MixPageContent, int>
+        : MixBaseContentController<MixPageContentViewModel, MixPageContent, int>
     {
         public MixPageContentController(
+            TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
@@ -18,7 +19,7 @@ namespace Mix.Portal.Controllers
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(MixContentType.Page, userManager, httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
 
         }
