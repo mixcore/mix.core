@@ -5,6 +5,7 @@
     {
         public int MixTenantId { get; set; }
         public string Specificulture { get; set; }
+        public string Icon { get; set; }
 
         public TPrimaryKey ParentId { get; set; }
         public int MixCultureId { get; set; }

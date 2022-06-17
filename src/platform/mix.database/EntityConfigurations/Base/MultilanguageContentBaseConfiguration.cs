@@ -16,6 +16,12 @@ namespace Mix.Database.EntityConfigurations.Base
                 .HasColumnType($"{Config.NString}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation);
+            
+            builder.Property(e => e.Icon)
+                .IsRequired(false)
+                .HasColumnType($"{Config.NString}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet)
+                .UseCollation(Config.DatabaseCollation);
         }
 
     }
