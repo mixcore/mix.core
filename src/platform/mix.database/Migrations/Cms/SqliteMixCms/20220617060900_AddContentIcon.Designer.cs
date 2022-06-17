@@ -2,35 +2,30 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.SqlServerMixCms
+namespace Mix.Database.Migrations.SqliteMixCms
 {
-    [DbContext(typeof(SqlServerMixCmsContext))]
-    partial class SqlServerMixCmsContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SqliteMixCmsContext))]
+    [Migration("20220617060900_AddContentIcon")]
+    partial class AddContentIcon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -39,24 +34,24 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -71,8 +66,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -87,14 +82,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Content")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -105,54 +98,54 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("DefaultContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int?>("MixConfigurationId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -162,8 +155,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -180,14 +173,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -197,22 +188,22 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("GuidContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("IntContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsOwner")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -226,7 +217,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id")
                         .HasName("PK_MixContributor");
@@ -238,14 +229,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Alias")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -255,33 +244,33 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnType("varchar(4000)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Lcid")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -290,8 +279,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -311,8 +300,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -321,21 +310,21 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -360,10 +349,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -372,24 +359,24 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -404,13 +391,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -425,14 +412,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Configurations")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -443,37 +428,37 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("DataType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DefaultValue")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -482,7 +467,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int?>("ReferenceId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -491,8 +476,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -507,12 +492,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -522,22 +507,22 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -546,25 +531,25 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MixDataId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -573,32 +558,32 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -610,8 +595,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -628,8 +613,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -638,51 +623,51 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<Guid>("DataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("GuidParentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("IntParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ParentType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -701,11 +686,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<bool?>("BooleanValue")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -715,79 +700,79 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("DataType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<DateTime?>("DateTimeValue")
                         .HasColumnType("datetime");
 
                     b.Property<double?>("DoubleValue")
-                        .HasColumnType("float");
+                        .HasColumnType("REAL");
 
                     b.Property<string>("EncryptKey")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("EncryptType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("EncryptValue")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("IntegerValue")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MixDatabaseColumnId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseColumnName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixDatabaseId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<Guid>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -795,8 +780,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("StringValue")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -815,10 +800,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -827,30 +810,30 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Host")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -875,10 +858,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -887,24 +868,24 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -919,8 +900,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -935,14 +916,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Content")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -953,54 +932,54 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("DefaultContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixLanguageId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1010,8 +989,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1028,8 +1007,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("newid()");
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1038,51 +1017,51 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
-                        .HasColumnType("nvarchar(250)")
+                        .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileProperties")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FileType")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -1091,8 +1070,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1101,18 +1080,18 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Tags")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("TargetUrl")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1127,10 +1106,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1139,24 +1116,24 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -1171,13 +1148,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1192,10 +1169,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1203,7 +1178,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -1213,22 +1188,22 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1237,28 +1212,28 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("MixModuleId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1267,35 +1242,35 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SimpleDataColumns")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1311,8 +1286,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -1336,90 +1311,88 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixModuleContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("PublishedDateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SimpleDataColumns")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Specificulture")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -1434,42 +1407,40 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("LeftId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixModuleContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RightId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -1482,10 +1453,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1494,27 +1463,27 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int?>("MixPostContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -1541,10 +1510,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1552,7 +1519,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -1562,22 +1529,22 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1586,28 +1553,28 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("MixPageId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int?>("PageSize")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1616,32 +1583,32 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1653,8 +1620,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Type")
@@ -1678,42 +1645,40 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("LeftId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixPageContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RightId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -1726,42 +1691,40 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("LeftId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixPageContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("RightId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -1774,10 +1737,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1786,19 +1747,19 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -1823,10 +1784,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClassName")
                         .HasColumnType("varchar(50)")
@@ -1834,7 +1793,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -1844,22 +1803,22 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Excerpt")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Image")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -1868,28 +1827,28 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<int>("MixCultureId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("MixPostContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int?>("MixPostId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
                         .HasColumnType("int");
@@ -1898,32 +1857,32 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("SeoDescription")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoKeywords")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoName")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SeoTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Source")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -1935,8 +1894,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -1957,14 +1916,12 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Content")
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("CreatedBy")
@@ -1975,44 +1932,44 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("Extension")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileFolder")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("FolderType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("MixThemeId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("MixThemeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("ModifiedBy")
@@ -2024,7 +1981,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("Scripts")
                         .IsRequired()
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Status")
@@ -2035,7 +1992,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("Styles")
                         .IsRequired()
                         .HasColumnType("ntext")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2050,10 +2007,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -2062,18 +2017,18 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
@@ -2083,8 +2038,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("PrimaryDomain")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2097,8 +2052,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.Property<string>("SystemName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")
@@ -2111,10 +2066,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -2123,37 +2076,37 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("MixDataContentId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MixDatabaseName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<string>("PreviewUrl")
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
@@ -2165,7 +2118,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("SystemName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id")
                         .HasName("PK_MixTheme");
@@ -2181,13 +2134,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("Alias")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -2196,24 +2147,24 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(4000)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(250)")
-                        .UseCollation("Vietnamese_CI_AS")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
                     b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -2222,10 +2173,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("int");
 
                     b.Property<Guid?>("SourceContentGuidId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("SourceContentId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2233,7 +2184,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id")
                         .HasName("PK_MixUrlAlias");

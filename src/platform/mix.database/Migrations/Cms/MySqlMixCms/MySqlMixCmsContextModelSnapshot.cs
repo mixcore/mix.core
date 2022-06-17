@@ -121,6 +121,12 @@ namespace Mix.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -182,6 +188,12 @@ namespace Mix.Database.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ContentType"), "utf8");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -218,12 +230,8 @@ namespace Mix.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("utf8_unicode_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("UserName"), "utf8");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id")
                         .HasName("PK_MixContributor");
@@ -540,6 +548,12 @@ namespace Mix.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("utf8_unicode_ci");
@@ -660,6 +674,9 @@ namespace Mix.Database.Migrations
                     b.Property<Guid?>("GuidParentId")
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("longtext");
+
                     b.Property<int?>("IntParentId")
                         .HasColumnType("int");
 
@@ -759,6 +776,9 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("EncryptValue"), "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("longtext");
 
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("int");
@@ -994,6 +1014,12 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -1258,6 +1284,12 @@ namespace Mix.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("utf8_unicode_ci");
@@ -1394,6 +1426,9 @@ namespace Mix.Database.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Excerpt")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Icon")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Image")
@@ -1606,6 +1641,12 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
@@ -1888,6 +1929,12 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Excerpt"), "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")

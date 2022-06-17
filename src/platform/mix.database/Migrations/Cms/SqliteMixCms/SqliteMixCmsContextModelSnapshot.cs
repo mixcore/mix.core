@@ -111,6 +111,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
@@ -169,6 +174,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -204,11 +214,8 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("NOCASE")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id")
                         .HasName("PK_MixContributor");
@@ -502,6 +509,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
@@ -614,6 +626,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<Guid?>("GuidParentId")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("IntParentId")
                         .HasColumnType("INTEGER");
 
@@ -707,6 +722,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("ntext")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("INTEGER");
@@ -924,6 +942,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1167,6 +1190,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("NOCASE")
@@ -1293,6 +1321,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Excerpt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Icon")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Image")
@@ -1497,6 +1528,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1766,6 +1802,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
+                        .UseCollation("NOCASE")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 

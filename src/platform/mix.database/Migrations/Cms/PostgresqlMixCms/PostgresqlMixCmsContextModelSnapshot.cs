@@ -118,6 +118,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -177,6 +182,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -212,11 +222,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("varchar(250)")
-                        .UseCollation("und-x-icu")
-                        .HasAnnotation("MySql:CharSet", "utf8");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id")
                         .HasName("PK_MixContributor");
@@ -513,6 +520,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
@@ -625,6 +637,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<Guid?>("GuidParentId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
                     b.Property<int?>("IntParentId")
                         .HasColumnType("integer");
 
@@ -718,6 +733,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("text")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
 
                     b.Property<int?>("IntegerValue")
                         .HasColumnType("integer");
@@ -938,6 +956,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("varchar(250)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1183,6 +1206,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Image")
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
@@ -1314,6 +1342,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1546,6 +1579,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
@@ -1827,6 +1865,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<string>("Excerpt")
                         .HasColumnType("varchar(4000)")
+                        .UseCollation("und-x-icu")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("varchar(50)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
