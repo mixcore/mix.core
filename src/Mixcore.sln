@@ -49,23 +49,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.heart", "framework\mix-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.tenancy", "modules\mix.tenancy\mix.tenancy.csproj", "{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{5A7852A8-8ACC-4ADE-AD9F-3661973C3045}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.kiotviet", "services\mix.services.kiotviet\mix.services.kiotviet.csproj", "{F44C2E13-940F-4EEF-9927-254F8D55E0E5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.communicator", "platform\mix.communicator\mix.communicator.csproj", "{94790DB1-AC71-48BF-8665-D04C86064231}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.constant", "platform\mix.constant\mix.constant.csproj", "{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.signalr.hub", "platform\mix.signalr.hub\mix.signalr.hub.csproj", "{081A8E1E-B431-4044-B4B7-203BD1E00589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.storage", "modules\mix.storage\mix.storage.csproj", "{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage", "modules\mix.storage\mix.storage.csproj", "{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.storage.lib", "platform\mix.storage.lib\mix.storage.lib.csproj", "{5486F6D4-6144-470A-BEB5-270C4D02486B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.floralpunk", "services\mix.services.floralpunk\mix.services.floralpunk.csproj", "{D3315776-BE1C-416D-A68D-57F94FE97C79}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.services.library", "services\mix.services.library\mix.services.library.csproj", "{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage.lib", "platform\mix.storage.lib\mix.storage.lib.csproj", "{5486F6D4-6144-470A-BEB5-270C4D02486B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,10 +133,6 @@ Global
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F44C2E13-940F-4EEF-9927-254F8D55E0E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F44C2E13-940F-4EEF-9927-254F8D55E0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F44C2E13-940F-4EEF-9927-254F8D55E0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F44C2E13-940F-4EEF-9927-254F8D55E0E5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94790DB1-AC71-48BF-8665-D04C86064231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94790DB1-AC71-48BF-8665-D04C86064231}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94790DB1-AC71-48BF-8665-D04C86064231}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -165,14 +153,6 @@ Global
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D3315776-BE1C-416D-A68D-57F94FE97C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3315776-BE1C-416D-A68D-57F94FE97C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3315776-BE1C-416D-A68D-57F94FE97C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3315776-BE1C-416D-A68D-57F94FE97C79}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -200,15 +180,11 @@ Global
 		{2E843175-B948-4D90-A11B-415EE67D9E1A} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{D4938E22-22C3-4364-A710-557B63954B5E} = {A18F9CE9-32BA-46D6-B902-CF0E51102BD3}
 		{2D254550-CE54-43A2-8AE9-FAA72F2C0FD6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
-		{5A7852A8-8ACC-4ADE-AD9F-3661973C3045} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
-		{F44C2E13-940F-4EEF-9927-254F8D55E0E5} = {5A7852A8-8ACC-4ADE-AD9F-3661973C3045}
 		{94790DB1-AC71-48BF-8665-D04C86064231} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{34A92D4D-B94A-4674-BBA4-8D2F80BECCB6} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{081A8E1E-B431-4044-B4B7-203BD1E00589} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{5486F6D4-6144-470A-BEB5-270C4D02486B} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
-		{D3315776-BE1C-416D-A68D-57F94FE97C79} = {5A7852A8-8ACC-4ADE-AD9F-3661973C3045}
-		{50C5A6DC-14E8-4F1C-AD63-4DD360E8C957} = {5A7852A8-8ACC-4ADE-AD9F-3661973C3045}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
