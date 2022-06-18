@@ -193,6 +193,7 @@ namespace Mix.Lib.Services
                 _siteData.Templates.ForEach(x =>
                 {
                     x.MixTenantId = tenantId;
+                    x.CreatedBy = _siteData.CreatedBy;
                     x.MixThemeId = _siteData.ThemeId;
                     x.MixThemeName = _siteData.ThemeSystemName;
                     x.Content = ReplaceContent(x.Content, _siteData.ThemeSystemName);
@@ -248,6 +249,7 @@ namespace Mix.Lib.Services
                     item.SeoName = $"{item.SeoName}-1";
                 }
                 item.Id = 0;
+                item.CreatedBy = _siteData.CreatedBy;
                 item.MixTenantId = tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
                 item.Specificulture = _siteData.Specificulture;
@@ -269,6 +271,7 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
                     item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = tenantId;
                     item.ParentId = dicModuleIds[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
@@ -296,6 +299,7 @@ namespace Mix.Lib.Services
                 }
                 item.MixTenantId = tenantId;
                 item.Id = 0;
+                item.CreatedBy = _siteData.CreatedBy;
                 _context.Entry(item).State = EntityState.Added;
                 await _context.SaveChangesAsync(_cts.Token);
                 dicMixDatabaseIds.Add(oldId, item.Id);
@@ -313,6 +317,7 @@ namespace Mix.Lib.Services
                 }
                 var oldId = item.Id;
                 item.Id = 0;
+                item.CreatedBy = _siteData.CreatedBy;
                 item.MixTenantId = tenantId;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
@@ -355,6 +360,7 @@ namespace Mix.Lib.Services
                         PropertyName = MixRequestQueryKeywords.Specificulture,
                         PropertyValue = _siteData.Specificulture
                     });
+                    item.CreatedBy = _siteData.CreatedBy;
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);
@@ -380,6 +386,7 @@ namespace Mix.Lib.Services
                     }
 
                     item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
                     dic.Add(oldId, item.Id);
@@ -396,6 +403,7 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
                     item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = tenantId;
                     item.ParentId = parentDic[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
@@ -417,6 +425,7 @@ namespace Mix.Lib.Services
                 foreach (var item in data)
                 {
                     item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = tenantId;
                     item.LeftId = leftDic[item.LeftId];
                     item.RightId = rightDic[item.RightId];
