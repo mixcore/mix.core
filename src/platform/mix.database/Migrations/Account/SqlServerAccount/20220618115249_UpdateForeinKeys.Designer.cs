@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mix.Database.Entities.Account;
 
@@ -11,9 +12,10 @@ using Mix.Database.Entities.Account;
 namespace Mix.Database.Migrations.SqlServerAccount
 {
     [DbContext(typeof(SqlServerAccountContext))]
-    partial class SqlServerAccountContextModelSnapshot : ModelSnapshot
+    [Migration("20220618115249_UpdateForeinKeys")]
+    partial class UpdateForeinKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

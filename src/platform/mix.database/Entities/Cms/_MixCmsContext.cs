@@ -39,6 +39,8 @@ namespace Mix.Database.Entities.Cms
             //            // TODO: will be removed
             //            optionsBuilder.LogTo(Console.WriteLine);
             //#endif
+            _connectionString = "Server=localhost;Database=mixcore_structure;UID=tinku;Pwd=1234qwe@;MultipleActiveResultSets=true;";
+            _databaseProvider = MixDatabaseProvider.SQLSERVER;
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)

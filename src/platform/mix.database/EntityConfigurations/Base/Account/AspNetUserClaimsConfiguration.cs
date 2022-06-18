@@ -28,6 +28,10 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .IsRequired()
                 .HasDefaultValueSql(Config.GenerateUUID);
 
+            builder.HasOne(d => d.MixUser)
+                    .WithMany(p => p.AspNetUserClaimsUser)
+                    .HasForeignKey(d => d.UserId);
+
         }
     }
 }
