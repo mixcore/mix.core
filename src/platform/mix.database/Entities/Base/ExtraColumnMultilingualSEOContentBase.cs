@@ -1,6 +1,6 @@
 ﻿namespace Mix.Database.Entities.Base
 {
-    public abstract class ExtraColumnMultilanguageSEOContentBase<TPrimaryKey> : MultiLanguageSEOContentBase<TPrimaryKey>
+    public abstract class ExtraColumnMultilingualSEOContentBase<TPrimaryKey> : MultilingualSEOContentBase<TPrimaryKey>
         where TPrimaryKey : IComparable
     {
         public string MixDatabaseName { get; set; }

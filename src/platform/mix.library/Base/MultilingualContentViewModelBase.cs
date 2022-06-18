@@ -4,25 +4,25 @@ using Mix.Lib.Entities.Base;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : DbContext
          where TPrimaryKey : IComparable
-        where TEntity : MultiLanguageContentBase<TPrimaryKey>
-        where TView : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultilingualContentBase<TPrimaryKey>
+        where TView : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
 
-        public MultilanguageContentViewModelBase()
+        public MultilingualContentViewModelBase()
         {
 
         }
 
-        protected MultilanguageContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilingualContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected MultilanguageContentViewModelBase(TEntity entity,
+        protected MultilingualContentViewModelBase(TEntity entity,
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -31,7 +31,8 @@ namespace Mix.Lib.Base
 
         #region Properties
         public int MixTenantId { get; set; }
-
+        public string Icon { get; set; }
+        public bool IsPublic { get; set; } = true;
         public string Specificulture { get; set; }
 
         public TPrimaryKey ParentId { get; set; }

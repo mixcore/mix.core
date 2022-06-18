@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixPostContentConfiguration : SqliteMultiLanguageSEOContentBaseConfiguration<MixPostContent, int>
+    public class MixPostContentConfiguration : SqliteMultilingualSEOContentBaseConfiguration<MixPostContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPostContent> builder)
         {

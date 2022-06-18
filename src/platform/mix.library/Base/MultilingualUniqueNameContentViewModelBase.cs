@@ -3,25 +3,25 @@ using Mix.Database.Entities.Base;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class MultilingualUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         where TDbContext : DbContext
         where TPrimaryKey : IComparable
-        where TEntity : MultiLanguageContentBase<TPrimaryKey>
-        where TView : MultilanguageUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultilingualContentBase<TPrimaryKey>
+        where TView : MultilingualUniqueNameContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
 
-        public MultilanguageUniqueNameContentViewModelBase()
+        public MultilingualUniqueNameContentViewModelBase()
         {
 
         }
 
-        protected MultilanguageUniqueNameContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilingualUniqueNameContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected MultilanguageUniqueNameContentViewModelBase(TEntity entity,
+        protected MultilingualUniqueNameContentViewModelBase(TEntity entity,
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

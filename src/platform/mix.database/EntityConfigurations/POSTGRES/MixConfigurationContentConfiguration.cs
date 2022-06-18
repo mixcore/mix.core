@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixConfigurationContentConfiguration : PostgresMultilanguageUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
+    public class MixConfigurationContentConfiguration : PostgresMultilingualUniqueNameContentBaseConfiguration<MixConfigurationContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixConfigurationContent> builder)
         {

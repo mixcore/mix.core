@@ -3,25 +3,25 @@ using Mix.Lib.ViewModels.ReadOnly;
 
 namespace Mix.Lib.Base
 {
-    public abstract class MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-        : MultilanguageContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
-        where TEntity : MultiLanguageContentBase<TPrimaryKey>
-        where TView : MultilanguageSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultilingualContentBase<TPrimaryKey>
+        where TView : MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Contructors
 
-        public MultilanguageSEOContentViewModelBase()
+        public MultilingualSEOContentViewModelBase()
         {
 
         }
 
-        protected MultilanguageSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilingualSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected MultilanguageSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        protected MultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

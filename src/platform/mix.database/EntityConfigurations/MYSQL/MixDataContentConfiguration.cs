@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MixDataContentConfiguration : MySqlMultiLanguageSEOContentBaseConfiguration<MixDataContent, Guid>
+    public class MixDataContentConfiguration : MySqlMultilingualSEOContentBaseConfiguration<MixDataContent, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContent> builder)
         {

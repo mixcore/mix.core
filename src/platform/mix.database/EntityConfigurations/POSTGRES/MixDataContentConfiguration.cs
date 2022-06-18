@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixDataContentConfiguration : PostgresMultilanguageSEOContentBaseConfiguration<MixDataContent, Guid>
+    public class MixDataContentConfiguration : PostgresMultilingualSEOContentBaseConfiguration<MixDataContent, Guid>
     {
         public override void Configure(EntityTypeBuilder<MixDataContent> builder)
         {

@@ -2,9 +2,9 @@
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class MultiLanguageSEOContentBaseConfiguration<T, TPrimaryKey, TConfig> : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
+    public abstract class MultilingualSEOContentBaseConfiguration<T, TPrimaryKey, TConfig> : MultilingualContentBaseConfiguration<T, TPrimaryKey, TConfig>
        where TPrimaryKey : IComparable
-       where T : MultiLanguageSEOContentBase<TPrimaryKey>
+       where T : MultilingualSEOContentBase<TPrimaryKey>
          where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)

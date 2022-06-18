@@ -4,7 +4,7 @@ namespace Mixcore.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
     public class PageContentViewModel
-        : ExtraColumnMultilanguageSEOContentViewModelBase
+        : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, PageContentViewModel>
     {
         #region Contructors
