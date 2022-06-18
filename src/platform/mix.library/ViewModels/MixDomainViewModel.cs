@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
     [GeneratePublisher]
     public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixDomainViewModel()
         {

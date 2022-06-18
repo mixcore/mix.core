@@ -13,7 +13,7 @@ namespace Mix.Lib.Base
         where TContentEntity : MultilingualContentBase<TPrimaryKey>
         where TContent : MultilingualContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>
     {
-        #region Contructors
+        #region Constructors
         protected SiteDataWithContentViewModelBase()
         {
         }

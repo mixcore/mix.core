@@ -4,7 +4,7 @@
     public class MixModuleViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixModule, int, MixModuleViewModel, MixModuleContent, MixModuleContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixModuleViewModel()
         {

@@ -6,7 +6,7 @@ namespace Mix.Portal.Domain.ViewModels
     public class MixRoleViewModel
         : ViewModelBase<MixCmsAccountContext, MixRole, Guid, MixRoleViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixRoleViewModel()
         {

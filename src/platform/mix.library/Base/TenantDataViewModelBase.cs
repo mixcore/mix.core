@@ -10,7 +10,7 @@ namespace Mix.Lib.Base
         where TEntity : class, IEntity<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
         protected TenantDataViewModelBase()
         {
         }

@@ -3,7 +3,7 @@
     public class MixDataContentAssociationViewModel
         : MultilingualContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixDataContentAssociationViewModel()
         {

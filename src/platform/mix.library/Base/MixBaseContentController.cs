@@ -10,15 +10,17 @@ namespace Mix.Portal.Controllers
     public abstract class MixBaseContentController<TView, TEntity, TPrimaryKey>
         : MixRestApiControllerBase<TView, MixCmsContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
-        where TEntity : EntityBase<TPrimaryKey>
-        where TView : ViewModelBase<MixCmsContext, TEntity, TPrimaryKey, TView>
+        where TEntity : MultilingualContentBase<TPrimaryKey>
+        where TView : MultilingualContentViewModelBase<MixCmsContext, TEntity, TPrimaryKey, TView>
     {
+        protected MixIdentityService _identityService;
         protected MixContentType _contentType;
         protected TenantUserManager _userManager;
         protected MixUser _currentUser;
         protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         public MixBaseContentController(
             MixContentType contentType,
+            MixIdentityService identityService,
             TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -34,9 +36,19 @@ namespace Mix.Portal.Controllers
             _contentType = contentType;
             _cmsUOW = cmsUOW;
             _userManager = userManager;
+            _identityService = identityService;
         }
 
         #region Overrides
+        protected override async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        {
+            var result = await base.SearchHandler(req);
+            foreach (var item in result.Items)
+            {
+                await item.LoadContributorsAsync(_contentType, _identityService);
+            }
+            return result;
+        }
         protected override async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
             var result = await base.CreateHandlerAsync(data);

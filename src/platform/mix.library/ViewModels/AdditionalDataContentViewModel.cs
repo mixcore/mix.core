@@ -3,7 +3,7 @@
     public class AdditionalDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public AdditionalDataContentViewModel()
         {

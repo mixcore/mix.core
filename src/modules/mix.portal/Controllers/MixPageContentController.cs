@@ -9,6 +9,7 @@ namespace Mix.Portal.Controllers
         : MixBaseContentController<MixPageContentViewModel, MixPageContent, int>
     {
         public MixPageContentController(
+            MixIdentityService identityService,
             TenantUserManager userManager,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -19,7 +20,7 @@ namespace Mix.Portal.Controllers
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(MixContentType.Page, userManager, httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(MixContentType.Page, identityService, userManager, httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
 
         }

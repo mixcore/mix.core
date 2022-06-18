@@ -20,7 +20,7 @@ using System.Text.RegularExpressions;
 
 namespace Mix.Lib.Services
 {
-    public class MixIdentityService : IDisposable, IMixIdentityService
+    public class MixIdentityService : IMixIdentityService
     {
         protected readonly UnitOfWorkInfo _accountUow;
         protected readonly UnitOfWorkInfo _cmsUow;
@@ -30,8 +30,9 @@ namespace Mix.Lib.Services
         protected readonly RoleManager<MixRole> _roleManager;
         protected readonly AuthConfigService _authConfigService;
         protected readonly FirebaseService _firebaseService;
+        protected readonly MixService _mixService;
         protected readonly MixDataService _mixDataService;
-        protected readonly MixCmsContext _cmsSontext;
+        protected readonly MixCmsContext _cmsContext;
         protected readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
@@ -45,10 +46,10 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             MixCacheService cacheService,
-            FirebaseService firebaseService, MixDataService mixDataService)
+            FirebaseService firebaseService, MixDataService mixDataService, MixService mixService)
         {
             _cmsUow = cmsUOW;
-            _cmsSontext = cmsUOW.DbContext;
+            _cmsContext = cmsUOW.DbContext;
             _cacheService = cacheService;
             _accountUow = accountUOW;
             _userManager = userManager;
@@ -65,9 +66,19 @@ namespace Mix.Lib.Services
             }
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(_cmsUow);
+            _mixService = mixService;
         }
 
-
+        public async Task<MixUserViewModel> GetUserAsync(Guid userId){
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                var userInfo = new MixUserViewModel(user, _cmsUow);
+                await userInfo.LoadUserDataAsync(_mixService.MixTenantId, _mixDataService);
+                return userInfo;
+            }
+            return null;
+        }
         public async Task<JObject> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
@@ -101,7 +112,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(_cmsSontext, user, model.RememberMe, MixTenantId);
+                return await GetAuthData(_cmsContext, user, model.RememberMe, MixTenantId);
             }
             else
             {
@@ -155,7 +166,7 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(_cmsSontext, user, true, MixTenantId);
+                return await GetAuthData(_cmsContext, user, true, MixTenantId);
             }
             return default;
         }
@@ -195,7 +206,7 @@ namespace Mix.Lib.Services
 
                 vm.UserData = await vm.CreateDefaultUserData(MixTenantId, model.Data);
 
-                return await GetAuthData(_cmsSontext, user, true, tenantId);
+                return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
@@ -266,7 +277,7 @@ namespace Mix.Lib.Services
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(_cmsSontext, user, true, MixTenantId);
+                    return await GetAuthData(_cmsContext, user, true, MixTenantId);
                 }
                 // register new account
                 else
@@ -309,7 +320,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(_cmsSontext, user, true, MixTenantId);
+                        var token = await GetAuthData(_cmsContext, user, true, MixTenantId);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();
@@ -517,20 +528,6 @@ namespace Mix.Lib.Services
                 ValidateIssuerSigningKey = appConfigs.ValidateIssuerSigningKey,
                 IssuerSigningKey = JwtSecurityKey.Create(appConfigs.SecretKey)
             };
-        }
-
-        public virtual void Dispose()
-        {
-            if (_accountUow.ActiveTransaction != null)
-            {
-                _accountUow.Complete();
-            }
-
-            if (_cmsUow.ActiveTransaction != null)
-            {
-                _cmsUow.Complete();
-            }
-            GC.SuppressFinalize(this);
         }
 
         public static class JwtSecurityKey

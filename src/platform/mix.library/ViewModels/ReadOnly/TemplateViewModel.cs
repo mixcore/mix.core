@@ -17,7 +17,7 @@
         public string FilePath { get; set; }
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public TemplateViewModel()
         {

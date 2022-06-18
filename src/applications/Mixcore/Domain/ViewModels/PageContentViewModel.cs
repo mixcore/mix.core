@@ -7,7 +7,7 @@ namespace Mixcore.Domain.ViewModels
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, PageContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public PageContentViewModel()
         {

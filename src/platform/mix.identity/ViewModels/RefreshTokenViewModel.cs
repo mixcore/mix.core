@@ -9,7 +9,7 @@ namespace Mix.Identity.ViewModels
         public RefreshTokenViewModel()
         {
         }
-        #region Contructors
+        #region Constructors
 
         public RefreshTokenViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {

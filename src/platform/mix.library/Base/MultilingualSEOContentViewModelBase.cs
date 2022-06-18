@@ -10,7 +10,7 @@ namespace Mix.Lib.Base
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
 
         public MultilingualSEOContentViewModelBase()
         {

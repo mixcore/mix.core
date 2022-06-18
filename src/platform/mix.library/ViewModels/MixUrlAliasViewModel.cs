@@ -14,7 +14,7 @@
         public MixUrlAliasType Type { get; set; }
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixUrlAliasViewModel()
         {
