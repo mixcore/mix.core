@@ -17,7 +17,6 @@ namespace Mix.Lib.Interfaces
 
         bool CheckEndpointPermission(ClaimsPrincipal user, PathString path, string method);
         Claim CreateClaim(string type, string value);
-        void Dispose();
         Task<JObject> ExternalLogin(RegisterExternalBindingModel model);
         Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, MixUserViewModel info, bool isRemember, string aesKey, string rsaPublicKey);
         Task<string> GenerateTokenAsync(MixUser user, MixUserViewModel info, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey, MixAuthenticationConfigurations appConfigs);

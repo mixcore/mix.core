@@ -20,7 +20,7 @@ namespace Mix.Lib.ViewModels
         public ColumnConfigurations ColumnConfigurations { get; set; }
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixDatabaseColumnViewModel()
         {

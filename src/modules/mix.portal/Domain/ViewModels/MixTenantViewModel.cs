@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.ViewModels
         public List<MixDomainViewModel> Domains { get; set; } = new();
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixTenantViewModel()
         {

@@ -3,7 +3,7 @@
     public class NavigationViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, NavigationViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public NavigationViewModel()
         {

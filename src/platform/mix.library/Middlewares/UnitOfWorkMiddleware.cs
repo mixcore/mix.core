@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Entities.Account;
 
 namespace Mix.Lib.Middlewares
 {
@@ -13,6 +14,7 @@ namespace Mix.Lib.Middlewares
 
         public async Task Invoke(HttpContext context, 
             [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            [FromServices] UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUOW
             )
         {
@@ -25,6 +27,7 @@ namespace Mix.Lib.Middlewares
                 await next.Invoke(context);
                 
                 await CompleteUOW(cmsUOW, context.Response.StatusCode);
+                await CompleteUOW(accountUOW, context.Response.StatusCode);
                 await CompleteUOW(cacheUOW, context.Response.StatusCode);
 
             }

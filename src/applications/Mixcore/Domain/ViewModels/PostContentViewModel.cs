@@ -8,7 +8,7 @@ namespace Mixcore.Domain.ViewModels
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPostContent, int, PostContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public PostContentViewModel()
         {

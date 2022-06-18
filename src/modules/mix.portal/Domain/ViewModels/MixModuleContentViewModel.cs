@@ -4,7 +4,7 @@
     public class MixModuleContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixModuleContent, int, MixModuleContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixModuleContentViewModel()
         {

@@ -35,7 +35,7 @@
         }
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixThemeViewModel()
         {

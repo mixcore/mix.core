@@ -8,7 +8,7 @@
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : ExtraColumnMultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
 
         public ExtraColumnMultilingualSEOContentViewModelBase()
         {

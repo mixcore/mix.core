@@ -5,7 +5,7 @@
         : SiteDataWithContentViewModelBase
             <MixCmsContext, MixPage, int, MixPageViewModel, MixPageContent, MixPageContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixPageViewModel()
         {

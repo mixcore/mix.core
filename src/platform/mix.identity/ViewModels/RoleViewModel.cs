@@ -6,7 +6,7 @@ namespace Mix.Identity.ViewModels
 {
     public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel>
     {
-        #region Contructors
+        #region Constructors
         public RoleViewModel()
         {
         }

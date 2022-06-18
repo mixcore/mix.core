@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
 using Mix.Lib.Entities.Base;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
@@ -38,6 +40,7 @@ namespace Mix.Lib.Base
         public TPrimaryKey ParentId { get; set; }
         public int MixCultureId { get; set; }
 
+        public List<MixContributorViewModel> Contributors { get; set; }
         #endregion
 
         #region Overrides
@@ -52,6 +55,22 @@ namespace Mix.Lib.Base
             base.InitDefaultValues(language, cultureId);
             Specificulture ??= language;
             MixCultureId = cultureId ?? 1;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public async Task LoadContributorsAsync(MixContentType contentType, MixIdentityService identityService)
+        {
+            Expression<Func<MixContributor, bool>> expression = m => m.ContentType == contentType;
+            expression = expression.AndAlsoIf(Guid.TryParse(Id.ToString(), out var guidId), m => m.GuidContentId == guidId);
+            expression = expression.AndAlsoIf(int.TryParse(Id.ToString(), out var integerId), m => m.IntContentId == integerId);
+            Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(expression);
+            foreach (var item in Contributors)
+            {
+                await item.LoadUserDataAsync(identityService);
+            }
         }
 
         #endregion

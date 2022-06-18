@@ -15,7 +15,7 @@ namespace Mix.Lib.ViewModels
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixDatabaseViewModel()
         {

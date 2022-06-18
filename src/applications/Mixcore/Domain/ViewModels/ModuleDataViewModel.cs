@@ -4,7 +4,7 @@
         : MultilingualSEOContentViewModelBase
             <MixCmsContext, MixModuleData, int, ModuleDataViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public ModuleDataViewModel()
         {

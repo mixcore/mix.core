@@ -6,7 +6,7 @@ namespace Mix.Lib.ViewModels
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixPageContentViewModel()
         {
@@ -76,8 +76,9 @@ namespace Mix.Lib.ViewModels
             {
                 await base.DeleteHandlerAsync();
             }
-            
+
         }
         #endregion
+
     }
 }

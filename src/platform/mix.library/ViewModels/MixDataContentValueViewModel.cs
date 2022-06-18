@@ -26,7 +26,7 @@ namespace Mix.Lib.ViewModels
 
         #endregion
 
-        #region Contructors
+        #region Constructors
 
         public MixDataContentValueViewModel()
         {

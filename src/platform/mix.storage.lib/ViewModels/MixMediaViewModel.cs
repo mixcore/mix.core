@@ -2,7 +2,7 @@
 {
     public class MixMediaViewModel : TenantDataViewModelBase<MixCmsContext, MixMedia, Guid, MixMediaViewModel>
     {
-        #region Contructors
+        #region Constructors
 
         public MixMediaViewModel()
         {

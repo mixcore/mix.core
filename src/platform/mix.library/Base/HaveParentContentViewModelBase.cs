@@ -7,7 +7,7 @@
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        #region Contructors
+        #region Constructors
 
         public HaveParentContentViewModelBase()
         {
