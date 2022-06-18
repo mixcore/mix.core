@@ -130,6 +130,9 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -563,6 +566,9 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -683,6 +689,9 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -784,6 +793,9 @@ namespace Mix.Database.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
@@ -1022,6 +1034,9 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Icon"), "utf8");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
@@ -1299,6 +1314,9 @@ namespace Mix.Database.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
@@ -1435,6 +1453,9 @@ namespace Mix.Database.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
@@ -1655,6 +1676,9 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")
@@ -1943,6 +1967,9 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Image"), "utf8");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPublic")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<DateTime?>("LastModified")

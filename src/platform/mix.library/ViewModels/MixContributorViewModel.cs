@@ -49,7 +49,7 @@ namespace Mix.Lib.ViewModels
             if (userData != null)
             {
                 UserName = userData.UserName;
-                Avatar = userData.UserData?.Property<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR;
+                Avatar = userData.Avatar ?? MixConstants.CONST_DEFAULT_AVATAR;
             }
         }
         #endregion

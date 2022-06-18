@@ -2,6 +2,6 @@
 {
     public partial class AspNetUserTokens : IdentityUserToken<Guid>
     {
-
+        public virtual MixUser MixUser { get; set; }
     }
 }

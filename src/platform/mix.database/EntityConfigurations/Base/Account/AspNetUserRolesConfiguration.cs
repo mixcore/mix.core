@@ -19,6 +19,13 @@ namespace Mix.Database.EntityConfigurations.Base.Account
             builder.Property(e => e.RoleId)
                 .HasDefaultValueSql(Config.GenerateUUID);
 
+            builder.Property(e => e.MixTenantId)
+                .HasColumnType(Config.Integer);
+
+            builder.HasOne(d => d.MixUser)
+                    .WithMany(p => p.AspNetUserRolesUser)
+                    .HasForeignKey(d => d.UserId);
+
         }
     }
 }

@@ -21,6 +21,13 @@ namespace Mix.Lib.ViewModels
 
         public string PhoneNumber { get; set; }
 
+        public string Avatar { get; set; }
+        public string NickName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Gender { get; set; }
+        public DateTime? DOB { get; set; }
+
         public FileModel MediaFile { get; set; } = new();
 
         public AdditionalDataContentViewModel UserData { get; set; }
