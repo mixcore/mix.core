@@ -3,7 +3,7 @@ namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
     public class MixPageContentViewModel
-        : ExtraColumnMultilanguageSEOContentViewModelBase
+        : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
         #region Contructors

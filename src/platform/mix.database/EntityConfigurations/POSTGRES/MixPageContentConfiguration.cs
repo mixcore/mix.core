@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {
-    public class MixPageContentConfiguration : PostgresMultilanguageSEOContentBaseConfiguration<MixPageContent, int>
+    public class MixPageContentConfiguration : PostgresMultilingualSEOContentBaseConfiguration<MixPageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPageContent> builder)
         {

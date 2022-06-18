@@ -10,8 +10,8 @@ namespace Mix.Lib.Base
         where TEntity : class, IEntity<TPrimaryKey>
         where TPrimaryKey : IComparable
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-        where TContentEntity : MultiLanguageContentBase<TPrimaryKey>
-        where TContent : MultilanguageContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>
+        where TContentEntity : MultilingualContentBase<TPrimaryKey>
+        where TContent : MultilingualContentViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>
     {
         #region Contructors
         protected SiteDataWithContentViewModelBase()

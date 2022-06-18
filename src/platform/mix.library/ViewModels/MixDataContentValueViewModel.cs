@@ -3,7 +3,7 @@
 namespace Mix.Lib.ViewModels
 {
     public class MixDataContentValueViewModel
-        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
+        : MultilingualContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties
         public int MixDatabaseId { get; set; }

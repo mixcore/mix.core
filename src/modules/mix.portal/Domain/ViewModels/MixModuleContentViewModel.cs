@@ -2,7 +2,7 @@
 {
     [GenerateRestApiController]
     public class MixModuleContentViewModel
-        : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixModuleContent, int, MixModuleContentViewModel>
+        : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixModuleContent, int, MixModuleContentViewModel>
     {
         #region Contructors
 

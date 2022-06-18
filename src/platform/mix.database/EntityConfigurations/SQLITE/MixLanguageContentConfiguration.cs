@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.SQLITE
 {
-    public class MixLanguageContentConfiguration : SqliteMultiLanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
+    public class MixLanguageContentConfiguration : SqliteMultilingualUniqueNameContentBaseConfiguration<MixLanguageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixLanguageContent> builder)
         {

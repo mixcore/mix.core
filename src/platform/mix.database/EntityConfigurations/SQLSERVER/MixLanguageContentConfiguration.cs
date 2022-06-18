@@ -2,7 +2,7 @@
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixLanguageContentConfiguration : SqlServerMultilanguageUniqueNameContentBaseConfiguration<MixLanguageContent, int>
+    public class MixLanguageContentConfiguration : SqlServerMultilingualUniqueNameContentBaseConfiguration<MixLanguageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixLanguageContent> builder)
         {

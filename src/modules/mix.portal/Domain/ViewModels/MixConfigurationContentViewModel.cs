@@ -2,7 +2,7 @@
 {
     [GenerateRestApiController]
     public class MixConfigurationContentViewModel
-        : MultilanguageUniqueNameContentViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>
+        : MultilingualUniqueNameContentViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>
     {
         public string DefaultContent { get; set; }
 

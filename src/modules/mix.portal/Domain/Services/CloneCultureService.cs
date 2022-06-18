@@ -64,7 +64,7 @@ namespace Mix.Portal.Domain.Services
         }
 
         private async Task CloneIntegerData<T>(Dictionary<int, int> dictionaryIds)
-            where T : MultiLanguageContentBase<int>
+            where T : MultilingualContentBase<int>
         {
             var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
                  .AsNoTracking()
@@ -109,7 +109,7 @@ namespace Mix.Portal.Domain.Services
         }
 
         private async Task CloneGuidData<T>(Dictionary<Guid, Guid> dictionaryIds)
-            where T : MultiLanguageContentBase<Guid>
+            where T : MultilingualContentBase<Guid>
         {
             var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
                  .AsNoTracking()
@@ -131,7 +131,7 @@ namespace Mix.Portal.Domain.Services
         }
 
         private async Task CloneDataValues<T>(Dictionary<Guid, Guid> dictionaryIds)
-            where T : MultiLanguageContentBase<Guid>
+            where T : MultilingualContentBase<Guid>
         {
             var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
                  .AsNoTracking()
@@ -215,7 +215,7 @@ namespace Mix.Portal.Domain.Services
         }
 
         private int GetStartIntegerId<T>()
-            where T : MultiLanguageContentBase<int>
+            where T : MultilingualContentBase<int>
         {
             return _cmsUOW.DbContext
                 .Set<T>()

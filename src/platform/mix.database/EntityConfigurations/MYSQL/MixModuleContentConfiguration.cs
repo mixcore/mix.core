@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.MYSQL.Base;
 
 namespace Mix.Database.EntityConfigurations.MYSQL
 {
-    public class MixModuleContentConfiguration : MySqlMultiLanguageSEOContentBaseConfiguration<MixModuleContent, int>
+    public class MixModuleContentConfiguration : MySqlMultilingualSEOContentBaseConfiguration<MixModuleContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixModuleContent> builder)
         {

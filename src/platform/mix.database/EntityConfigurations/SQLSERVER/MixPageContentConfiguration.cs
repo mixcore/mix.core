@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
-    public class MixPageContentConfiguration : SqlServerMultilanguageSEOContentBaseConfiguration<MixPageContent, int>
+    public class MixPageContentConfiguration : SqlServerMultilingualSEOContentBaseConfiguration<MixPageContent, int>
     {
         public override void Configure(EntityTypeBuilder<MixPageContent> builder)
         {

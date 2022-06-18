@@ -2,7 +2,7 @@
 {
     [GenerateRestApiController]
     public class MixDataContentValueViewModel
-        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
+        : MultilingualContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties
 

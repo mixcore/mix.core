@@ -2,10 +2,10 @@
 
 namespace Mix.Database.EntityConfigurations.Base
 {
-    public abstract class MultiLanguageUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig>
-        : MultiLanguageContentBaseConfiguration<T, TPrimaryKey, TConfig>
+    public abstract class MultilingualUniqueNameContentBaseConfiguration<T, TPrimaryKey, TConfig>
+        : MultilingualContentBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable
-        where T : MultiLanguageUniqueNameContentBase<TPrimaryKey>
+        where T : MultilingualUniqueNameContentBase<TPrimaryKey>
         where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<T> builder)

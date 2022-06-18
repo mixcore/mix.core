@@ -1,7 +1,7 @@
 ﻿namespace Mixcore.Domain.ViewModels
 {
     public class ModuleDataViewModel
-        : MultilanguageSEOContentViewModelBase
+        : MultilingualSEOContentViewModelBase
             <MixCmsContext, MixModuleData, int, ModuleDataViewModel>
     {
         #region Contructors

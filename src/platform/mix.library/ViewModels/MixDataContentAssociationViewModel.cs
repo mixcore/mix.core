@@ -1,7 +1,7 @@
 ﻿namespace Mix.Lib.ViewModels
 {
     public class MixDataContentAssociationViewModel
-        : MultilanguageContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
+        : MultilingualContentViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>
     {
         #region Contructors
 

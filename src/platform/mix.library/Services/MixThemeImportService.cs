@@ -388,7 +388,7 @@ namespace Mix.Lib.Services
         }
 
         private async Task ImportContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
-            where T : MultiLanguageContentBase<int>
+            where T : MultilingualContentBase<int>
         {
             if (data.Count > 0)
             {

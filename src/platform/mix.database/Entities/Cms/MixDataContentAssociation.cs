@@ -3,7 +3,7 @@
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixDataContentAssociation : MultiLanguageContentBase<Guid>
+    public class MixDataContentAssociation : MultilingualContentBase<Guid>
     {
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }

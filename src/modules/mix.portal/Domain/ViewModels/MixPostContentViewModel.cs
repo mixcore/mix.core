@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     public class MixPostContentViewModel
-        : ExtraColumnMultilanguageSEOContentViewModelBase<MixCmsContext, MixPostContent, int, MixPostContentViewModel>
+        : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPostContent, int, MixPostContentViewModel>
     {
         #region Contructors
 
