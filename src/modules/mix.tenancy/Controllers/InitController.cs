@@ -160,12 +160,13 @@ namespace Mix.Tenancy.Controllers
             return Ok(data);
         }
 
+        [MixAuthorize(roles: MixRoles.SuperAdmin)]
         [HttpPost("import-theme")]
         public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
         {
             if (ModelState.IsValid)
             {
-                siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                siteData.CreatedBy = User.Identity.Name;
                 siteData.Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
