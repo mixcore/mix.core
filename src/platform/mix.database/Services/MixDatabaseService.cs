@@ -126,13 +126,14 @@ namespace Mix.Database.Services
             SaveSettings();
         }
 
-        public async Task InitMixCmsContextAsync()
+        public async Task UpdateMixCmsContextAsync()
         {
             using var ctx = GetDbContext();
             await ctx.Database.MigrateAsync();
             using var cacheCtx = GetCacheDbContext();
             await cacheCtx.Database.MigrateAsync();
-
+            using var accCtx = GetAccountDbContext();
+            await accCtx.Database.MigrateAsync();
             //var transaction = ctx.Database.BeginTransaction();
             //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
             //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
