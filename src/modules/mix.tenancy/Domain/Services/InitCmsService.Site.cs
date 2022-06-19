@@ -13,7 +13,7 @@ namespace Mix.Tenancy.Domain.Services
                 model.DatabaseProvider,
                 model.Culture.Specificulture);
 
-            await _databaseService.InitMixCmsContextAsync();
+            await _databaseService.UpdateMixCmsContextAsync();
         }
 
         public async Task InitTenantAsync(InitCmsDto model)
