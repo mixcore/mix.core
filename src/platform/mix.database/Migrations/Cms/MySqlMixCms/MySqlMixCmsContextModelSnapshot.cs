@@ -864,6 +864,70 @@ namespace Mix.Database.Migrations
                     b.ToTable("MixDataContentValue");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDiscussion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ContentType"), "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("GuidContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("IntContentId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDiscussion");
+
+                    b.ToTable("MixDiscussion");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDomain", b =>
                 {
                     b.Property<int>("Id")
