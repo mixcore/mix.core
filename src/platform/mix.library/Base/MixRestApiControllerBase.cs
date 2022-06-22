@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
+using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -113,6 +114,41 @@ namespace Mix.Lib.Base
             await SaveManyHandler(data);
             return Ok();
         }
+
+
+        [HttpPut("update-priority/{id}/{priority}")]
+        public async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
+        {
+            var data = await _repository.GetSingleAsync(dto.Id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            var min = Math.Min(data.Priority, dto.Priority);
+            var max = Math.Max(data.Priority, dto.Priority);
+            var query = await _repository.GetListAsync(m => !m.Id.Equals(dto.Id) && m.Priority >= min & m.Priority <= max);
+            int start = min;
+            if (dto.Priority == min)
+            {
+                data.Priority = dto.Priority;
+                start++;
+            }
+            foreach (var item in query.OrderBy(m => m.Priority))
+            {
+                item.Priority = start;
+                await item.SaveAsync();
+                start++;
+            }
+            if (dto.Priority == max)
+            {
+                data.Priority = query.Count > max ? start : dto.Priority;
+            }
+            await data.SaveAsync();
+            return Ok();
+        }
+
+
 
 
         #endregion Routes
