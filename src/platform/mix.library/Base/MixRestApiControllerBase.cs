@@ -116,7 +116,7 @@ namespace Mix.Lib.Base
         }
 
 
-        [HttpPut("update-priority/{id}/{priority}")]
+        [HttpPut("update-priority/{id}")]
         public async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
         {
             var data = await _repository.GetSingleAsync(dto.Id);
@@ -142,7 +142,7 @@ namespace Mix.Lib.Base
             }
             if (dto.Priority == max)
             {
-                data.Priority = query.Count > max ? start : dto.Priority;
+                data.Priority = start;
             }
             await data.SaveAsync();
             return Ok();
