@@ -56,11 +56,21 @@ namespace Microsoft.Extensions.DependencyInjection
             string endPoint = $"/{swaggerBasePath}/swagger/{version}/swagger.json";
             if (isDevelop)
             {
-                app.UseSwagger(opt => opt.RouteTemplate = routeTemplate);
+                // using System.Reflection;
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+                app.UseSwagger(opt =>
+                   {
+                       opt.RouteTemplate = routeTemplate;
+                    });
                 app.UseSwaggerUI(c =>
                 {
+                    c.InjectStylesheet("/mix-app/css/swagger.css");
                     c.SwaggerEndpoint(endPoint, $"{title} {version}");
                     c.RoutePrefix = routePrefix;
+                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+
+                    //c.IncludeXmlComments(xmlFilename);
                 });
             }
             app.UseEndpoints(endpoints =>

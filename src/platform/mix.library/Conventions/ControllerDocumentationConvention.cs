@@ -13,7 +13,7 @@ namespace Mix.Lib.Conventions
             {
                 string moduleName = controller.ControllerType.Assembly.GetName().Name;
                 string name = controller.ControllerName.ToHypenCase(' ', false);
-                controller.ControllerName = $"{moduleName} - {name}";
+                controller.ControllerName = $"{moduleName} | {name}";
             }
         }
     }
