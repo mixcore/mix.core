@@ -26,7 +26,7 @@ namespace Mix.Lib.Conventions
                         {
                             AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)),
                         });
-                        controller.ControllerName = $"[ Autogen ] {moduleName} | {name}";
+                        controller.ControllerName = $"{moduleName.Replace("mix.","").ToTitleCase()} - {name.Replace("Mix ", "")} [ ⚙️ autogen ]";
                     }
                 }
                 else

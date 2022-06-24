@@ -66,10 +66,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 app.UseSwaggerUI(c =>
                 {
                     c.InjectStylesheet("/mix-app/css/swagger.css");
+                    c.InjectJavascript("/mix-app/js/swagger.js");
                     c.SwaggerEndpoint(endPoint, $"{title} {version}");
                     c.RoutePrefix = routePrefix;
                     c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-
+                    c.DocumentTitle = "Mixcore - API Specification";
+                    c.EnableFilter();
+                    c.EnableDeepLinking();
+                    //c.HeadContent = "Mixcore - API Specification";
                     //c.IncludeXmlComments(xmlFilename);
                 });
             }

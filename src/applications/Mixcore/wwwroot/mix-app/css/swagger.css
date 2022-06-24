@@ -20,3 +20,10 @@
     margin: 0 0 5px;
     background: #333;*/
 }
+.opblock-tag-section.is-open h3{
+    color: #fff;
+    background: #333;
+}
+.swagger-ui .opblock-tag:hover {
+    color: #333;
+}
