@@ -86,4 +86,9 @@
 	  <EmbeddedResource Remove="wwwroot\mix-content\**" />
 	  <None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="wwwroot\mix-app\css\swagger.css">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 </Project>

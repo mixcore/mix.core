@@ -26,7 +26,7 @@ namespace Mix.Lib.Conventions
                         {
                             AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)),
                         });
-                        controller.ControllerName = $"{moduleName} - {name} (Auto Generate)";
+                        controller.ControllerName = $"[ Autogen ] {moduleName} | {name}";
                     }
                 }
                 else

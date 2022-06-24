@@ -4,6 +4,8 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Mix.Lib</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
 	
 	<ItemGroup>
