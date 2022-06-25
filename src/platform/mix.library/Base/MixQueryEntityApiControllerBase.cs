@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Entities.Cache;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Linq.Expressions;
@@ -39,7 +38,7 @@ namespace Mix.Lib.Base
             _context = context;
             _uow = new(_context);
             _repository = new(_uow);
-            _cacheDbContext = cacheDbContext; 
+            _cacheDbContext = cacheDbContext;
             _cacheUOW = new(_cacheDbContext);
             _cacheService = new();
         }
@@ -52,7 +51,7 @@ namespace Mix.Lib.Base
                 _uow.Complete();
             }
             _context.Dispose();
-            
+
             if (_cacheUOW.ActiveTransaction != null)
             {
                 _cacheUOW.Complete();

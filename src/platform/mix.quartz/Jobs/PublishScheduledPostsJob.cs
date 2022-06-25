@@ -8,8 +8,8 @@ namespace Mix.MixQuartz.Jobs
     public class PublishScheduledPostsJob : MixJobBase
     {
         public PublishScheduledPostsJob(
-            IServiceProvider provider, 
-            IQueueService<MessageQueueModel> queueService) 
+            IServiceProvider provider,
+            IQueueService<MessageQueueModel> queueService)
             : base(provider, queueService, true)
         {
         }

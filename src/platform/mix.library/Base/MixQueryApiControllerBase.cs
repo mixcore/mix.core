@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
@@ -48,7 +47,7 @@ namespace Mix.Lib.Base
         }
 
         #region Overrides
-       
+
         #endregion
 
         #region Routes

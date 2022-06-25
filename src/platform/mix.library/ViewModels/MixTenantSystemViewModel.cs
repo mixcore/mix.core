@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
     public class MixTenantSystemViewModel
@@ -41,7 +39,7 @@ namespace Mix.Lib.ViewModels
             Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
         }
 
-        
+
         #endregion
 
         #region Methods

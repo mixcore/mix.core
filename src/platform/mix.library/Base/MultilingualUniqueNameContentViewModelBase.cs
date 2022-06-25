@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Base;
 
 namespace Mix.Lib.Base
 {

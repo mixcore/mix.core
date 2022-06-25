@@ -13,7 +13,7 @@ namespace Mix.MixQuartz.Jobs
         protected bool _singleton;
         protected readonly IQueueService<MessageQueueModel> _queueService;
         protected MixJobBase(
-            IServiceProvider provider, 
+            IServiceProvider provider,
             IQueueService<MessageQueueModel> queueService,
             bool singleton = false)
         {

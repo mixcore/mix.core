@@ -1,7 +1,4 @@
-﻿using Mix.Database.Services;
-
-
-namespace Mix.Database.Entities.AuditLog
+﻿namespace Mix.Database.Entities.AuditLog
 {
     public class AuditLogDbContext : DbContext
     {
