@@ -10,8 +10,8 @@ namespace Mix.MixQuartz.Jobs
     {
         private readonly HttpService _httpService;
         public KeepPoolAliveJob(
-            HttpService httpService, 
-            IServiceProvider provider, 
+            HttpService httpService,
+            IServiceProvider provider,
             IQueueService<MessageQueueModel> queueService)
             : base(provider, queueService)
         {

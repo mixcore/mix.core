@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Mix.Lib.Services;
-using Mix.SignalR.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Mix.Lib.Services;
 
 namespace Mix.SignalR.Hubs
 {

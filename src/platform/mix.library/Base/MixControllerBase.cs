@@ -41,7 +41,7 @@ namespace Mix.Lib.Base
         {
             _mixService = mixService;
 
-            
+
             _ipSecurityConfigService = ipSecurityConfigService;
 
             if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)

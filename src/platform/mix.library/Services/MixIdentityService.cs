@@ -69,7 +69,8 @@ namespace Mix.Lib.Services
             _mixService = mixService;
         }
 
-        public async Task<MixUserViewModel> GetUserAsync(Guid userId){
+        public async Task<MixUserViewModel> GetUserAsync(Guid userId)
+        {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user != null)
             {

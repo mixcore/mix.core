@@ -66,7 +66,7 @@ namespace Mix.Lib.Services
             LogRequest(context.User.Identity?.Name, request);
             context.Request.Body.Seek(0, SeekOrigin.Begin);
         }
-        
+
         public void LogRequest(string createdBy, ParsedRequestModel request)
         {
             var cmd = new LogAuditLogCommand(createdBy, request);

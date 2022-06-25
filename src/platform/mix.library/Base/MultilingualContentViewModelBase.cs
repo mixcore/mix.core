@@ -1,8 +1,6 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Base;
-using Mix.Lib.Entities.Base;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Services;
+using System.Linq.Expressions;
 
 namespace Mix.Lib.Base
 {

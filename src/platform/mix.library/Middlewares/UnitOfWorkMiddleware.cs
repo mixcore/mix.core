@@ -12,7 +12,7 @@ namespace Mix.Lib.Middlewares
             this.next = next;
         }
 
-        public async Task Invoke(HttpContext context, 
+        public async Task Invoke(HttpContext context,
             [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUOW,
             [FromServices] UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUOW
@@ -25,7 +25,7 @@ namespace Mix.Lib.Middlewares
             else
             {
                 await next.Invoke(context);
-                
+
                 await CompleteUOW(cmsUOW, context.Response.StatusCode);
                 await CompleteUOW(accountUOW, context.Response.StatusCode);
                 await CompleteUOW(cacheUOW, context.Response.StatusCode);

@@ -93,7 +93,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.SmallLength}");
-            
+
             builder.Property(e => e.Gender)
                 .HasCharSet(Config.CharSet)
                 .UseCollation(Config.DatabaseCollation)

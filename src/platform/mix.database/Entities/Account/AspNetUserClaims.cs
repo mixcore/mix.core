@@ -2,6 +2,6 @@
 {
     public partial class AspNetUserClaims : IdentityUserClaim<Guid>
     {
-        public virtual MixUser MixUser{ get; set; }
+        public virtual MixUser MixUser { get; set; }
     }
 }

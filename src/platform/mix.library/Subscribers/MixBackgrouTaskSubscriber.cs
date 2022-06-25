@@ -2,7 +2,6 @@
 using Mix.Lib.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
-using Mix.Shared.Commands;
 
 namespace Mix.Lib.Subscribers
 {
@@ -12,7 +11,7 @@ namespace Mix.Lib.Subscribers
         private static string topicId = MixQueueTopics.MixBackgroundTasks;
         public MixBackgrouTaskSubscriber(
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService, 
+            MixMemoryMessageQueue<MessageQueueModel> queueService,
             AuditLogService auditLogService)
             : base(topicId, string.Empty, configuration, queueService)
         {

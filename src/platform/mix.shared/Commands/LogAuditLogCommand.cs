@@ -19,6 +19,6 @@ namespace Mix.Shared.Commands
         public ParsedRequestModel Request { get; set; }
         public Exception Exception { get; set; }
 
-        
+
     }
 }
