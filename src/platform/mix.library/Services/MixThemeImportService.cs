@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
+using Mix.Database.Services;
 
 namespace Mix.Lib.Services
 {
@@ -8,6 +9,7 @@ namespace Mix.Lib.Services
     {
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
+        private MixDatabaseService _databaseService;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
         public readonly int tenantId;
@@ -27,16 +29,18 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicTemplateIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
+        private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(MixCmsContext cmsContext, IHttpContextAccessor httpContext)
+        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, MixDatabaseService databaseService)
         {
-            _context = cmsContext;
-            _uow = new UnitOfWorkInfo(_context);
+            _uow = uow;
+            _context = uow.DbContext;
             _cts = new CancellationTokenSource();
             if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
             {
                 tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
+            _databaseService = databaseService;
         }
 
         #region Import
@@ -163,8 +167,11 @@ namespace Mix.Lib.Services
 
         private async Task ImportMixDatabases()
         {
+            await ImportDatabaseContextsAsync();
             await ImportDatabasesAsync();
             await ImportDatabaseColumnsAsync();
+
+            await ImportAssociationDataAsync(_siteData.DatabaseContextDatabaseAssociations, dicMixDatabaseContextIds, dicMixDatabaseIds);
         }
 
         private async Task ImportPosts()
@@ -286,6 +293,26 @@ namespace Mix.Lib.Services
         #endregion Import Module
 
         #region Import Database Data
+        private async Task ImportDatabaseContextsAsync()
+        {
+            foreach (var item in _siteData.MixDatabaseContexts)
+            {
+                var oldId = item.Id;
+
+                while (_context.MixDatabaseContext.Any(m => m.SystemName == item.SystemName))
+                {
+                    item.SystemName = $"{item.SystemName}_1";
+                }
+                item.MixTenantId = tenantId;
+                item.Id = 0;
+                item.CreatedBy = _siteData.CreatedBy;
+                item.DatabaseProvider = _databaseService.DatabaseProvider;
+                item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+                _context.Entry(item).State = EntityState.Added;
+                await _context.SaveChangesAsync(_cts.Token);
+                dicMixDatabaseContextIds.Add(oldId, item.Id);
+            }
+        }
 
         private async Task ImportDatabasesAsync()
         {

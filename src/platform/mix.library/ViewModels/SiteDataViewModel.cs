@@ -20,6 +20,7 @@
 
         public List<MixModule> Modules { get; set; }
 
+        public List<MixDatabaseContext> MixDatabaseContexts { get; set; } = new();
         public List<MixDatabase> MixDatabases { get; set; } = new();
 
         public List<MixTemplate> Templates { get; set; } = new();
@@ -54,6 +55,7 @@
 
         public List<MixModuleData> ModuleDatas { get; set; } = new();
 
+        public List<MixDatabaseContextDatabaseAssociation> DatabaseContextDatabaseAssociations { get; set; } = new();
         public List<MixPagePostAssociation> PagePosts { get; set; } = new();
 
         public List<MixPageModuleAssociation> PageModules { get; set; } = new();
