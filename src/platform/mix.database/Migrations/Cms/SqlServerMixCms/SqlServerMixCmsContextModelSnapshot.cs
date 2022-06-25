@@ -391,6 +391,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
+                    b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
@@ -418,6 +421,8 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     b.HasKey("Id")
                         .HasName("PK_MixDatabase");
+
+                    b.HasIndex("MixDatabaseContextDatabaseAssociationId");
 
                     b.HasIndex("MixTenantId");
 
@@ -504,6 +509,124 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.HasIndex("MixDatabaseId");
 
                     b.ToTable("MixDatabaseColumn");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContext", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConnectionString")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(4000)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("SystemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabaseContext");
+
+                    b.HasIndex("MixDatabaseContextDatabaseAssociationId");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixDatabaseContext");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LeftId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MixDatabaseContextDatabaseAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
@@ -2385,6 +2508,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", null)
+                        .WithMany("MixDatabases")
+                        .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
+
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixTenantId")
@@ -2403,6 +2530,21 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .IsRequired();
 
                     b.Navigation("MixDatabase");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContext", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", null)
+                        .WithMany("MixDatabaseContext")
+                        .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
@@ -2708,6 +2850,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
                     b.Navigation("MixDatabaseColumns");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", b =>
+                {
+                    b.Navigation("MixDatabaseContext");
+
+                    b.Navigation("MixDatabases");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
