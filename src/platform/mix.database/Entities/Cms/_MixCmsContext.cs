@@ -117,6 +117,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixUrlAlias> MixUrlAlias { get; set; }
         public virtual DbSet<MixConfiguration> MixConfiguration { get; set; }
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
+        public virtual DbSet<MixDatabaseContext> MixDatabaseContext { get; set; }
         public virtual DbSet<MixDatabase> MixDatabase { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixTemplate> MixViewTemplate { get; set; }

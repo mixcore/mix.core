@@ -18,6 +18,7 @@ namespace Mix.Tenancy.Domain.Services
         private readonly Dictionary<int, int> dicPageIds = new();
         private readonly Dictionary<int, int> dicFieldIds = new();
         private readonly Dictionary<int, int> dicMixDatabaseIds = new();
+        private readonly Dictionary<int, int> dicMixDatabaseContextIds = new();
 
         public ImportSiteService(
             MixCmsContext dbContext,
