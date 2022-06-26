@@ -46,8 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddMixSwaggerServices(executingAssembly);
             services.AddSSL();
 
-
-
             services.Configure<GzipCompressionProviderOptions>(
                 options => options.Level = System.IO.Compression.CompressionLevel.Fastest);
             services.AddResponseCompression(options => options.EnableForHttps = true);
@@ -55,6 +53,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<AuditLogService>();
             services.AddSingleton<PortalHubClientService>();
+
+            services.AddMixRepoDb();
             return services;
         }
 

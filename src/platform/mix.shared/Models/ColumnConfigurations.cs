@@ -9,6 +9,7 @@ namespace Mix.Shared.Models
         {
         }
 
+        public bool IsRequire { get; set; }
         public bool IsEncrypt { get; set; }
         public int? MaxLength { get; set; }
         public string BelongTo { get; set; }
