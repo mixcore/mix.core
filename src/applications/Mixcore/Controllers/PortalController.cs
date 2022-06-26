@@ -7,12 +7,12 @@ namespace Mixcore.Controllers
 {
     public class PortalController : MixControllerBase
     {
-        private readonly MixDatabaseService _databaseService;
+        private readonly DatabaseService _databaseService;
 
         public PortalController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            MixDatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
+            DatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
             MixCacheService cacheService)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {

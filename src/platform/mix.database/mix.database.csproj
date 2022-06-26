@@ -40,7 +40,6 @@
     <Folder Include="Migrations\Quartz\" />
     <Folder Include="Migrations\Cms\SqliteMixCms\" />
     <Folder Include="Migrations\Cms\SqlServerMixCms\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

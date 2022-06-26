@@ -16,7 +16,7 @@ namespace Mixcore.Controllers
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator,
-            MixDatabaseService databaseService,
+            DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, translator, databaseService, uow)
         {

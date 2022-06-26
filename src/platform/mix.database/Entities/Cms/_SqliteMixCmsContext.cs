@@ -5,7 +5,7 @@ namespace Mix.Database.Entities
 {
     public class SqliteMixCmsContext : MixCmsContext
     {
-        public SqliteMixCmsContext(MixDatabaseService databaseService)
+        public SqliteMixCmsContext(DatabaseService databaseService)
             : base(databaseService)
         {
         }
