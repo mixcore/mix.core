@@ -6,7 +6,7 @@ namespace Mix.Database.Entities.Quartz
 {
     public partial class MySQLQuartzDbContext : QuartzDbContext
     {
-        public MySQLQuartzDbContext(MixDatabaseService databaseService)
+        public MySQLQuartzDbContext(DatabaseService databaseService)
         {
             DbProvider = MixDatabaseProvider.MySQL;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);

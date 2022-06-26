@@ -9,7 +9,7 @@ namespace Mix.Lib.Services
     {
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
-        private MixDatabaseService _databaseService;
+        private DatabaseService _databaseService;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
         public readonly int tenantId;
@@ -31,7 +31,7 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, MixDatabaseService databaseService)
+        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService)
         {
             _uow = uow;
             _context = uow.DbContext;

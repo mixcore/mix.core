@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Mix.Database.Services
 {
-    public class MixDatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
+    public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
 
-        public MixDatabaseService()
+        public DatabaseService()
             : base(MixAppConfigFilePaths.Database, true)
         {
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;

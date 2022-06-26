@@ -5,7 +5,7 @@ namespace Mix.Database.Entities
 {
     public class MySqlMixCmsContext : MixCmsContext
     {
-        public MySqlMixCmsContext(MixDatabaseService databaseService) : base(databaseService)
+        public MySqlMixCmsContext(DatabaseService databaseService) : base(databaseService)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         private static IServiceCollection AddMixCommonServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             services.TryAddSingleton<HttpService>();
-            services.TryAddSingleton<MixDatabaseService>();
+            services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<AuditLogService>();
             services.AddHostedService<MixBackgrouTaskPublisher>();
             services.AddHostedService<MixBackgrouTaskSubscriber>();

@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                var mixDatabaseService = services.GetService<MixDatabaseService>();
+                var mixDatabaseService = services.GetService<DatabaseService>();
                 mixDatabaseService.UpdateMixCmsContextAsync().GetAwaiter();
             }
         }

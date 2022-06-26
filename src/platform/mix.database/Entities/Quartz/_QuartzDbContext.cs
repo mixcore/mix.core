@@ -7,7 +7,7 @@ namespace Mix.Database.Entities.Quartz
     {
         public QuartzDbContext()
         {
-            var databaseService = new MixDatabaseService();
+            var databaseService = new DatabaseService();
             DbProvider = databaseService.DatabaseProvider;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
         }

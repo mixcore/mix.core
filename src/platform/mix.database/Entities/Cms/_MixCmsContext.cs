@@ -26,7 +26,7 @@ namespace Mix.Database.Entities.Cms
             _databaseProvider = _databaseService.DatabaseProvider;
         }
 
-        public MixCmsContext(MixDatabaseService databaseService)
+        public MixCmsContext(DatabaseService databaseService)
         {
             _databaseService = databaseService;
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
@@ -35,8 +35,6 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _databaseProvider = MixDatabaseProvider.PostgreSQL;
-            _connectionString = "Host=localhost;Database=mixcore_structure;Username=postgres;Password=1234qwe@";
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)
@@ -138,6 +136,6 @@ namespace Mix.Database.Entities.Cms
 
         private static string _connectionString;
         private static MixDatabaseProvider _databaseProvider;
-        private readonly MixDatabaseService _databaseService;
+        private readonly DatabaseService _databaseService;
     }
 }

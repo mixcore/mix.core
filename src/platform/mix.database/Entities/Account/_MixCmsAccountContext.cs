@@ -27,7 +27,7 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
         public virtual DbSet<MixRole> MixRoles { get; set; }
 
-        private static MixDatabaseService _databaseService;
+        private static DatabaseService _databaseService;
 
         public MixCmsAccountContext()
         {
@@ -38,7 +38,7 @@ namespace Mix.Database.Entities.Account
         /// </summary>
         /// <param name="options">The options.</param>
         public MixCmsAccountContext(
-            MixDatabaseService databaseService)
+            DatabaseService databaseService)
                     : base()
         {
             _databaseService = databaseService;

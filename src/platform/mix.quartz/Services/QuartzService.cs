@@ -26,7 +26,7 @@ namespace Mix.Quartz.Services
 
         public async Task LoadScheduler()
         {
-            MixDatabaseService databaseService = new();
+            DatabaseService databaseService = new();
             string cnn = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
 
             if (string.IsNullOrEmpty(cnn))

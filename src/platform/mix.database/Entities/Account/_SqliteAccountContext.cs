@@ -12,7 +12,7 @@ namespace Mix.Database.Entities.Account
         /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
-        public SqliteAccountContext(MixDatabaseService databaseService)
+        public SqliteAccountContext(DatabaseService databaseService)
                     : base(databaseService)
         {
         }

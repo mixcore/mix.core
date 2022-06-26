@@ -12,14 +12,14 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext _context;
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
-        private readonly MixDatabaseService _databaseService;
+        private readonly DatabaseService _databaseService;
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             TranslatorService translator,
-            MixDatabaseService databaseService,
+            DatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)

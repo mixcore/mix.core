@@ -10,7 +10,7 @@ namespace Mix.Tenancy.Domain.Services
         private readonly MixIdentityService _identityService;
         private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
-        private readonly MixDatabaseService _databaseService;
+        private readonly DatabaseService _databaseService;
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
         private readonly MixDataService _mixDataService;
@@ -20,7 +20,7 @@ namespace Mix.Tenancy.Domain.Services
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
             MixIdentityService identityService,
-            MixDatabaseService databaseService,
+            DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
             IConfiguration configuration,
             MixCmsContext context, MixDataService mixDataService)

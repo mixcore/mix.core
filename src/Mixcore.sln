@@ -59,6 +59,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage", "modules\mix.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage.lib", "platform\mix.storage.lib\mix.storage.lib.csproj", "{5486F6D4-6144-470A-BEB5-270C4D02486B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.repodb", "platform\mix.repodb\mix.repodb.csproj", "{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5486F6D4-6144-470A-BEB5-270C4D02486B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +191,7 @@ Global
 		{081A8E1E-B431-4044-B4B7-203BD1E00589} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{5486F6D4-6144-470A-BEB5-270C4D02486B} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}
