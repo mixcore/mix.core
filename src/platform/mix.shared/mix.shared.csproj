@@ -23,10 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Base\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\..\framework\mix-heart\src\Mix.Heart\mix.heart.csproj" />
 	  <ProjectReference Include="..\mix.constant\mix.constant.csproj" />
 	</ItemGroup>

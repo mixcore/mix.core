@@ -1,7 +1,10 @@
-﻿    using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Heart.Entities;
+using Mix.Heart.UnitOfWork;
+using Mix.Heart.ViewModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Mix.Lib.Base
+namespace Mix.RepoDb.Base
 {
     public abstract class TenantDataViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>

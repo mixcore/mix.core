@@ -1,15 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mix.Constant.Constants;
-using Mix.Heart.Enums;
-using Mix.RepoDb.Services;
+﻿using Mix.RepoDb.Services;
 using RepoDb;
 using RepoDb.Interfaces;
 
-namespace Mix.RepoDb
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMixDbRepository(this IServiceCollection services)
+        public static IServiceCollection AddMixRepoDb(this IServiceCollection services)
         {
             services.AddScoped<ICache, MemoryCache>();
             services.AddScoped<MixDbService>();
