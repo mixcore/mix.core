@@ -1,4 +1,6 @@
-﻿using Mix.RepoDb.Services;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.RepoDb.Repositories;
+using Mix.RepoDb.Services;
 using RepoDb;
 using RepoDb.Interfaces;
 
@@ -9,7 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixRepoDb(this IServiceCollection services)
         {
             services.AddScoped<ICache, MemoryCache>();
-            services.AddScoped<MixDbService>();
+            services.TryAddScoped<MixDbService>();
+            services.TryAddTransient<MixRepoDbRepository>();
             return services;
         }
     }
