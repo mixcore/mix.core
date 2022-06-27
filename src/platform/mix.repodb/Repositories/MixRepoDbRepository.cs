@@ -115,15 +115,19 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object> UpdateAsync(JObject entity,
+        public async Task<object?> UpdateAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
             using (var connection = CreateConnection())
             {
-                object obj = entity.ToObject<Dictionary<string, object>>()!;
-                return await connection.UpdateAsync(_tableName, obj,
-                    commandTimeout: _settings.CommandTimeout,
-                    trace: Trace);
+                if (connection.Exists(_tableName, new { id = entity.Value<int>("id") }))
+                {
+                    object obj = entity.ToObject<Dictionary<string, object>>()!;
+                    return await connection.UpdateAsync(_tableName, obj,
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace);
+                }
+                return null;
             }
         }
 
@@ -131,9 +135,13 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                return await connection.DeleteAsync(_tableName, id,
-                    commandTimeout: _settings.CommandTimeout,
-                    trace: Trace);
+                if (connection.Exists(_tableName, new { id = id }))
+                {
+                    return await connection.DeleteAsync(_tableName, id,
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace);
+                }
+                return 0;
             }
         }
 
