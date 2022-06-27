@@ -84,7 +84,7 @@ namespace Mix.RepoDb.Repositories
 
         // Get
 
-        public async Task<dynamic> GetAsync(int id)
+        public async Task<dynamic?> GetAsync(int id)
         {
             using (var connection = CreateConnection())
             {
@@ -95,17 +95,16 @@ namespace Mix.RepoDb.Repositories
                         id = id
                     },
                     commandTimeout: _settings.CommandTimeout,
-                    trace: Trace)).First();
+                    trace: Trace)).FirstOrDefault();
             }
         }
 
-        public async Task<object> InsertAsync(JObject entity,
+        public async Task<object?> InsertAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
             using (var connection = CreateConnection())
             {
-                List<Field> fields = ParseFields(entity);
-                var obj = JsonConvert.DeserializeObject(entity.ToString());
+                object obj = entity.ToObject<Dictionary<string, object>>()!;
                 var result = await connection.InsertAsync(
                         _tableName,
                         entity: obj,
@@ -116,22 +115,13 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        private List<Field> ParseFields(JObject entity)
-        {
-            var fields = new List<Field>();
-            foreach (var prop in entity.Properties())
-            {
-                fields.Add(new Field(prop.Name));
-            }
-            return fields;
-        }
-
-        public async Task<object> UpdateAsync(object entity,
+        public async Task<object> UpdateAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
             using (var connection = CreateConnection())
             {
-                return await connection.UpdateAsync(_tableName, entity,
+                object obj = entity.ToObject<Dictionary<string, object>>()!;
+                return await connection.UpdateAsync(_tableName, obj,
                     commandTimeout: _settings.CommandTimeout,
                     trace: Trace);
             }

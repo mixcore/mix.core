@@ -2,6 +2,7 @@
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.ViewModels;
@@ -16,13 +17,14 @@ namespace Mix.RepoDb.Services
         public ITrace Trace { get; }
 
         public ICache Cache { get; }
-        UnitOfWorkInfo<MixCmsContext> _uow;
-        private static MixDatabaseProvider _databaseProvider;
+        private UnitOfWorkInfo<MixCmsContext> _uow;
+        private DatabaseService _databaseService;
         #endregion
 
-        public MixDbService(UnitOfWorkInfo<MixCmsContext> uow)
+        public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService)
         {
             _uow = uow;
+            _databaseService = databaseService;
         }
 
         #region Migrate
@@ -55,7 +57,7 @@ namespace Mix.RepoDb.Services
 
         private string GetAutoIncreaseIdSyntax()
         {
-            return _databaseProvider switch
+            return _databaseService.DatabaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => "int IDENTITY(1,1) PRIMARY KEY",
                 MixDatabaseProvider.SQLITE => "INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -65,7 +67,7 @@ namespace Mix.RepoDb.Services
             };
         }
 
-        private static string GenerateColumnSql(MixDatabaseColumnViewModel col)
+        private string GenerateColumnSql(MixDatabaseColumnViewModel col)
         {
 
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
@@ -73,14 +75,14 @@ namespace Mix.RepoDb.Services
             return $"{col.SystemName} {colType} {nullable}";
         }
 
-        private static string GetColumnType(MixDataType dataType, int? maxLength = null)
+        private string GetColumnType(MixDataType dataType, int? maxLength = null)
         {
             switch (dataType)
             {
                 case MixDataType.DateTime:
                 case MixDataType.Date:
                 case MixDataType.Time:
-                    return _databaseProvider switch
+                    return _databaseService.DatabaseProvider switch
                     {
                         MixDatabaseProvider.PostgreSQL => "timestamp without time zone",
                         _ => "datetime"
@@ -91,7 +93,7 @@ namespace Mix.RepoDb.Services
                     return "int";
                 case MixDataType.Reference: // JObject - { ref_table_name: "", children: [] }
                 case MixDataType.Html:
-                    return _databaseProvider switch
+                    return _databaseService.DatabaseProvider switch
                     {
                         MixDatabaseProvider.SQLSERVER => "ntext",
                         _ => "text"
