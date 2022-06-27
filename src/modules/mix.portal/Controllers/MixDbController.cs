@@ -91,9 +91,9 @@ namespace Mix.Portal.Controllers
             });
         }
 
-        private object BuildSearchRequest(SearchRequestDto req)
+        private PagingRequestModel BuildSearchRequest(SearchRequestDto req)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         private ActionResult<PagingResponseModel<JObject>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<JObject> result)

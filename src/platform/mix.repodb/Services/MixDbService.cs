@@ -43,7 +43,7 @@ namespace Mix.RepoDb.Services
                 string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.SystemName}";
                 string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
                     $"CREATE TABLE {tableName} " +
-                    $"(id {GetAutoIncreaseIdSyntax()}, specificulture varchar(50), status varchar(50), createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                    $"(id {GetAutoIncreaseIdSyntax()}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
                     $" {string.Join(",", colSqls.ToArray())})";
                 if (!string.IsNullOrEmpty(commandText))
                 {
@@ -62,7 +62,7 @@ namespace Mix.RepoDb.Services
                 MixDatabaseProvider.SQLSERVER => "int IDENTITY(1,1) PRIMARY KEY",
                 MixDatabaseProvider.SQLITE => "INTEGER PRIMARY KEY AUTOINCREMENT",
                 MixDatabaseProvider.PostgreSQL => "SERIAL PRIMARY KEY",
-                MixDatabaseProvider.MySQL => "int NOT NULL AUTO_INCREMENT",
+                MixDatabaseProvider.MySQL => "int NOT NULL AUTO_INCREMENT PRIMARY KEY",
                 _ => string.Empty
             };
         }
