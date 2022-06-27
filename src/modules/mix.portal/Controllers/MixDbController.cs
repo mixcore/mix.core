@@ -59,12 +59,27 @@ namespace Mix.Portal.Controllers
             var data = await _repository.InsertAsync(obj);
             return data != null ? Ok() : BadRequest();
         }
+        
+        [HttpPut]
+        public async Task<ActionResult<object>> Update(JObject obj)
+        {
+            var data = await _repository.UpdateAsync(obj);
+            return data != null ? Ok() : BadRequest();
+        }
+        
+        [HttpDelete]
+        public async Task<ActionResult<object>> Delete(int id)
+        {
+            var data = await _repository.DeleteAsync(id);
+            return data > 0 ? Ok() : NotFound();
+        }
 
 
         #region Handler
 
         private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchRequestDto request)
         {
+            // TODO: Build search mix db by column names
             //var searchRequest = BuildSearchRequest(req);
             //return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             return await _repository.GetPagingAsync(null, new PagingRequestModel()
