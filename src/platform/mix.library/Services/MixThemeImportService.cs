@@ -201,6 +201,7 @@ namespace Mix.Lib.Services
                 {
                     x.MixTenantId = tenantId;
                     x.CreatedBy = _siteData.CreatedBy;
+                    x.CreatedDateTime = DateTime.UtcNow;
                     x.MixThemeId = _siteData.ThemeId;
                     x.MixThemeName = _siteData.ThemeSystemName;
                     x.Content = ReplaceContent(x.Content, _siteData.ThemeSystemName);
@@ -257,6 +258,7 @@ namespace Mix.Lib.Services
                 }
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
+                item.CreatedDateTime = DateTime.UtcNow;
                 item.MixTenantId = tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
                 item.Specificulture = _siteData.Specificulture;
@@ -306,6 +308,7 @@ namespace Mix.Lib.Services
                 item.MixTenantId = tenantId;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
+                item.CreatedDateTime = DateTime.UtcNow;
                 item.DatabaseProvider = _databaseService.DatabaseProvider;
                 item.ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
                 _context.Entry(item).State = EntityState.Added;
@@ -345,6 +348,7 @@ namespace Mix.Lib.Services
                 var oldId = item.Id;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
+                item.CreatedDateTime = DateTime.UtcNow;
                 item.MixTenantId = tenantId;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
@@ -388,6 +392,7 @@ namespace Mix.Lib.Services
                         PropertyValue = _siteData.Specificulture
                     });
                     item.CreatedBy = _siteData.CreatedBy;
+                    item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);
@@ -414,6 +419,7 @@ namespace Mix.Lib.Services
 
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
+                    item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
                     dic.Add(oldId, item.Id);
@@ -434,6 +440,7 @@ namespace Mix.Lib.Services
                     item.MixTenantId = tenantId;
                     item.ParentId = parentDic[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
+                    item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
                     dic.Add(oldId, item.Id);
@@ -456,6 +463,7 @@ namespace Mix.Lib.Services
                     item.MixTenantId = tenantId;
                     item.LeftId = leftDic[item.LeftId];
                     item.RightId = rightDic[item.RightId];
+                    item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                 }
                 await _context.SaveChangesAsync(_cts.Token);
