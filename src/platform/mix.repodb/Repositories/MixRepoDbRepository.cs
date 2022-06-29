@@ -54,6 +54,24 @@ namespace Mix.RepoDb.Repositories
         public void Init(string tableName)
         {
             _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
+            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            _databaseProvider = _databaseService.DatabaseProvider;
+        }
+
+        public void Init(string tableName, MixDatabaseProvider databaseProvider, string connectionString)
+        {
+            _databaseProvider = databaseProvider;
+            _connectionString = connectionString;
+            _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
+        }
+
+
+        public Task<int> ExecuteCommand(string commandSql)
+        {
+            using (var connection = CreateConnection())
+            {
+                return connection.ExecuteNonQueryAsync(commandSql);
+            }
         }
 
         public async Task<PagingResponseModel<dynamic>> GetPagingAsync(JObject query, PagingRequestModel pagingRequest)
@@ -79,6 +97,23 @@ namespace Mix.RepoDb.Repositories
                         TotalPage = (int)Math.Ceiling((double)pagingRequest.Total / pageSize)
                     }
                 };
+            }
+        }
+
+        public async Task<List<dynamic>?> GetAllAsync()
+        {
+            using (var connection = CreateConnection())
+            {
+                try
+                {
+                    var data = await connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout);
+                    return data.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    return default;
+                }
             }
         }
 
@@ -108,6 +143,21 @@ namespace Mix.RepoDb.Repositories
                 var result = await connection.InsertAsync(
                         _tableName,
                         entity: obj,
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace);
+
+                return result;
+            }
+        }
+
+        public async Task<int?> InsertManyAsync(List<dynamic> entities,
+            IDbTransaction? transaction = null)
+        {
+            using (var connection = CreateConnection())
+            {
+                var result = await connection.InsertAllAsync(
+                        _tableName,
+                        entities: entities,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
 

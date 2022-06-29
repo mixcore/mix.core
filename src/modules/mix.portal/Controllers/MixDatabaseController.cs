@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Entities.Cache;
 using Mix.RepoDb.Services;
-using Mix.RepoDb.ViewModels;
 
 namespace Mix.Portal.Controllers
 {
@@ -38,10 +36,17 @@ namespace Mix.Portal.Controllers
             return NotFound();
         }
 
-        [HttpGet("migrate/{id}")]
-        public async Task<ActionResult> Migrate(int id)
+        [HttpGet("migrate/{name}")]
+        public async Task<ActionResult> Migrate(string name)
         {
-            var result = await _mixDbService.MigrateDatabase(id);
+            var result = await _mixDbService.MigrateDatabase(name);
+            return result ? Ok() : BadRequest();
+        }
+        
+        [HttpGet("backup/{name}")]
+        public async Task<ActionResult> Backup(string name)
+        {
+            var result = await _mixDbService.BackupDatabase(name);
             return result ? Ok() : BadRequest();
         }
 
