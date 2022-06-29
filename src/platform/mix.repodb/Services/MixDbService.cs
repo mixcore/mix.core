@@ -5,6 +5,8 @@ using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
+using Mix.RepoDb.Entities;
+using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
 using RepoDb.Interfaces;
 
@@ -12,6 +14,8 @@ namespace Mix.RepoDb.Services
 {
     public class MixDbService
     {
+        private MixRepoDbRepository _repository;
+        private MixRepoDbRepository _bkRepository;
         #region Properties
 
         public ITrace Trace { get; }
@@ -21,40 +25,105 @@ namespace Mix.RepoDb.Services
         private DatabaseService _databaseService;
         #endregion
 
-        public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService)
+        public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
+            ICache cache)
         {
             _uow = uow;
             _databaseService = databaseService;
+            _repository = repository;
+            _bkRepository = new(cache, databaseService, uow);
         }
 
-        #region Migrate
+        #region Methods
 
-        public async Task<bool> MigrateDatabase(int databaseId)
+        public async Task<bool> MigrateDatabase(string name)
         {
-            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(databaseId);
-            if (database!= null && database.Columns.Count > 0)
+            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
+            if (database != null && database.Columns.Count > 0)
             {
-
-                List<string> colSqls = new List<string>();
-                foreach (var col in database.Columns)
-                {
-                    colSqls.Add(GenerateColumnSql(col));
-                }
-                string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.SystemName}";
-                string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
-                    $"CREATE TABLE {tableName} " +
-                    $"(id {GetAutoIncreaseIdSyntax()}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
-                    $" {string.Join(",", colSqls.ToArray())})";
-                if (!string.IsNullOrEmpty(commandText))
-                {
-                        await _uow.ActiveDbContext.Database.ExecuteSqlRawAsync(commandText);
-                        return true;
-                }
-                return false;
+                await BackupToLocal(database);
+                await Migrate(database, _uow.DbContext);
+                await RestoreFromLocal(database);
+                return true;
             }
             return false;
         }
 
+
+
+        public async Task<bool> BackupDatabase(string databaseName)
+        {
+            var database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == databaseName);
+            if (database != null)
+            {
+                return await BackupToLocal(database);
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region Private
+
+        private async Task<bool> BackupToLocal(MixDatabaseViewModel database)
+        {
+            var data = await GetCurrentData(database.SystemName);
+            if (data != null)
+            {
+                InitBackupRepository(database.SystemName);
+                var result = await _bkRepository.InsertManyAsync(data);
+                return result > 0;
+            }
+            return false;
+        }
+
+        private void InitBackupRepository(string databaseName)
+        {
+            string cnn = $"Data Source=MixContent/backup/backup_{databaseName}.db";
+            using var ctx = new BackupDbContext(cnn);
+            ctx.Database.EnsureCreated();
+
+            _bkRepository.Init(databaseName, MixDatabaseProvider.SQLITE, cnn);
+            
+        }
+
+        private async Task<bool> RestoreFromLocal(MixDatabaseViewModel database)
+        {
+            InitBackupRepository(database.SystemName);
+            var data = await _bkRepository.GetAllAsync();
+            if (data != null && data.Count > 0)
+            {
+                _repository.Init(database.SystemName);
+                var result = await _repository.InsertManyAsync(data);
+                return result >= 0;
+            }
+            return false;
+        }
+
+        private async Task<List<dynamic>?> GetCurrentData(string databaseName)
+        {
+            _repository.Init(databaseName);
+            return await _repository.GetAllAsync();
+        }
+        private async Task<bool> Migrate(MixDatabaseViewModel database, DbContext ctx)
+        {
+            List<string> colSqls = new List<string>();
+            foreach (var col in database.Columns)
+            {
+                colSqls.Add(GenerateColumnSql(col));
+            }
+            string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.SystemName}";
+            string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
+                $"CREATE TABLE {tableName} " +
+                $"(id {GetAutoIncreaseIdSyntax()}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $" {string.Join(",", colSqls.ToArray())})";
+            if (!string.IsNullOrEmpty(commandText))
+            {
+                var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
+                return result >= 0;
+            }
+            return false;
+        }
         private string GetAutoIncreaseIdSyntax()
         {
             return _databaseService.DatabaseProvider switch
@@ -120,8 +189,7 @@ namespace Mix.RepoDb.Services
                     return $"varchar({maxLength ?? 250})";
             }
         }
-
         #endregion
-        
+
     }
 }
