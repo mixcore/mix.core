@@ -28,8 +28,8 @@ namespace Mix.RepoDb.Repositories
         public ICache Cache { get; }
 
         UnitOfWorkInfo<MixCmsContext> _uow;
-        private static string _connectionString;
-        private static MixDatabaseProvider _databaseProvider;
+        public string ConnectionString { get; set; }
+        public MixDatabaseProvider DatabaseProvider { get; set; }
         readonly DatabaseService _databaseService;
         private AppSetting _settings;
         private string _tableName;
@@ -44,8 +44,8 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
             _databaseService = databaseService;
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            DatabaseProvider = _databaseService.DatabaseProvider;
             InitializeRepoDb();
             _uow = uow;
         }
@@ -54,15 +54,16 @@ namespace Mix.RepoDb.Repositories
         public void Init(string tableName)
         {
             _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            DatabaseProvider = _databaseService.DatabaseProvider;
         }
 
         public void Init(string tableName, MixDatabaseProvider databaseProvider, string connectionString)
         {
-            _databaseProvider = databaseProvider;
-            _connectionString = connectionString;
+            DatabaseProvider = databaseProvider;
+            ConnectionString = connectionString;
             _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
+            InitializeRepoDb();
         }
 
 
@@ -160,7 +161,6 @@ namespace Mix.RepoDb.Repositories
                         entities: entities,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
-
                 return result;
             }
         }
@@ -214,9 +214,9 @@ namespace Mix.RepoDb.Repositories
         }
 
 
-        private static void InitializeRepoDb()
+        private void InitializeRepoDb()
         {
-            switch (_databaseProvider)
+            switch (DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
                     SqlServerBootstrap.Initialize();
@@ -237,9 +237,9 @@ namespace Mix.RepoDb.Repositories
         }
         public IDbConnection CreateConnection()
         {
-            var connectionType = GetDbConnectionType(_databaseProvider);
+            var connectionType = GetDbConnectionType(DatabaseProvider);
             var connection = Activator.CreateInstance(connectionType) as IDbConnection;
-            connection.ConnectionString = _connectionString;
+            connection.ConnectionString = ConnectionString;
             return connection;
         }
 

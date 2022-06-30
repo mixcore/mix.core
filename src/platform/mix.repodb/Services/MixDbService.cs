@@ -42,7 +42,7 @@ namespace Mix.RepoDb.Services
             if (database != null && database.Columns.Count > 0)
             {
                 await BackupToLocal(database);
-                await Migrate(database, _uow.DbContext);
+                await Migrate(database, _databaseService.DatabaseProvider, _uow.DbContext);
                 await RestoreFromLocal(database);
                 return true;
             }
@@ -68,9 +68,10 @@ namespace Mix.RepoDb.Services
         private async Task<bool> BackupToLocal(MixDatabaseViewModel database)
         {
             var data = await GetCurrentData(database.SystemName);
-            if (data != null)
+            if (data != null && data.Count > 0)
             {
                 InitBackupRepository(database.SystemName);
+                await Migrate(database, _bkRepository.DatabaseProvider, new BackupDbContext(_bkRepository.ConnectionString));
                 var result = await _bkRepository.InsertManyAsync(data);
                 return result > 0;
             }
@@ -84,7 +85,7 @@ namespace Mix.RepoDb.Services
             ctx.Database.EnsureCreated();
 
             _bkRepository.Init(databaseName, MixDatabaseProvider.SQLITE, cnn);
-            
+
         }
 
         private async Task<bool> RestoreFromLocal(MixDatabaseViewModel database)
@@ -105,7 +106,7 @@ namespace Mix.RepoDb.Services
             _repository.Init(databaseName);
             return await _repository.GetAllAsync();
         }
-        private async Task<bool> Migrate(MixDatabaseViewModel database, DbContext ctx)
+        private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
         {
             List<string> colSqls = new List<string>();
             foreach (var col in database.Columns)
@@ -115,7 +116,7 @@ namespace Mix.RepoDb.Services
             string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.SystemName}";
             string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
                 $"CREATE TABLE {tableName} " +
-                $"(id {GetAutoIncreaseIdSyntax()}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
                 $" {string.Join(",", colSqls.ToArray())})";
             if (!string.IsNullOrEmpty(commandText))
             {
@@ -124,9 +125,9 @@ namespace Mix.RepoDb.Services
             }
             return false;
         }
-        private string GetAutoIncreaseIdSyntax()
+        private string GetAutoIncreaseIdSyntax(MixDatabaseProvider databaseProvider)
         {
-            return _databaseService.DatabaseProvider switch
+            return databaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => "int IDENTITY(1,1) PRIMARY KEY",
                 MixDatabaseProvider.SQLITE => "INTEGER PRIMARY KEY AUTOINCREMENT",
