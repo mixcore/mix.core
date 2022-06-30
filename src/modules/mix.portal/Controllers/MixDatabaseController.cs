@@ -5,7 +5,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-database")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+    //[MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
     public class MixDatabaseController
         : MixRestApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
@@ -46,8 +46,9 @@ namespace Mix.Portal.Controllers
         [HttpGet("backup/{name}")]
         public async Task<ActionResult> Backup(string name)
         {
-            var result = await _mixDbService.BackupDatabase(name);
-            return result ? Ok() : BadRequest();
+            var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
+            _queueService.PushQueue(msg);
+            return Ok();
         }
 
         #endregion
