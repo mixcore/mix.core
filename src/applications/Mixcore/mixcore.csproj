@@ -91,7 +91,4 @@
 	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="MixContent\backup\" />
-	</ItemGroup>
 </Project>
