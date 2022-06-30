@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\mix.database\mix.database.csproj" />
+    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
   </ItemGroup>
 
 </Project>
