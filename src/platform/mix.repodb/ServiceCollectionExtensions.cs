@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<ICache, MemoryCache>();
             services.TryAddScoped<MixDbService>();
-            services.TryAddTransient<MixRepoDbRepository>();
+            services.TryAddScoped<MixRepoDbRepository>();
             return services;
         }
     }
