@@ -4,6 +4,7 @@ using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
 using RepoDb;
+using RepoDb.Enumerations;
 
 namespace Mix.Portal.Controllers
 {
@@ -90,13 +91,42 @@ namespace Mix.Portal.Controllers
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
                 var searchColumns = req.SearchColumns.Replace(" ", string.Empty).Split(',');
+                var operation = ParseSearchOperation(req.SearchMethod);
+                var keyword = ParseSearchKeyword(req.SearchMethod, req.Keyword);
+
                 foreach (var item in searchColumns)
                 {
-                    QueryField field = new QueryField(item, req.Keyword);
+                    QueryField field = new QueryField(item, operation, keyword);
                     queries.Add(field);
                 }
             }
             return queries;
+        }
+
+        private object ParseSearchKeyword(ExpressionMethod? searchMethod, string keyword)
+        {
+            return searchMethod switch
+            {
+                ExpressionMethod.Like => $"%{keyword}%",
+                ExpressionMethod.In => keyword.Split(',', StringSplitOptions.TrimEntries),
+                _ => keyword
+            };
+        }
+
+        private Operation ParseSearchOperation(ExpressionMethod? searchMethod)
+        {
+            return searchMethod switch
+            {
+                ExpressionMethod.Like => Operation.Like,
+                ExpressionMethod.Equal => Operation.Equal,
+                ExpressionMethod.NotEqual => Operation.NotEqual,
+                ExpressionMethod.LessThanOrEqual => Operation.LessThanOrEqual,
+                ExpressionMethod.LessThan => Operation.LessThan,
+                ExpressionMethod.GreaterThan => Operation.GreaterThan,
+                ExpressionMethod.GreaterThanOrEqual => Operation.GreaterThanOrEqual,
+                ExpressionMethod.In => Operation.In,
+                _ => Operation.Equal
+            };
         }
 
         private ActionResult<PagingResponseModel<JObject>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<JObject> result)

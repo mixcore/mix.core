@@ -100,14 +100,14 @@ namespace Mix.Lib.Models.Common
             if (req.Culture != null)
             {
                 AndPredicate = AndPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq));
+                        MixRequestQueryKeywords.Specificulture, req.Culture, ExpressionMethod.Equal));
             }
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
             {
                 AndPredicate = AndPredicate.AndAlso(
                         ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq));
+                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Equal));
             }
 
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)

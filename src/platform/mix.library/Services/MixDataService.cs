@@ -85,10 +85,10 @@ namespace Mix.Lib.Services
                             Expression<Func<MixDataContentValue, bool>> keywordPredicate =
                                 m => m.MixDatabaseColumnName == field.SystemName;
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Eq,
+                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Equal,
                                                             m => m.StringValue == searchRequest.Keyword);
                             keywordPredicate = keywordPredicate
-                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Ct,
+                                                .AndAlsoIf(searchRequest.SearchMethod == ExpressionMethod.Like,
                                                             m => EF.Functions.Like(m.StringValue, $"%{searchRequest.Keyword}%"));
 
                             pre = pre == null
@@ -195,19 +195,19 @@ namespace Mix.Lib.Services
                             case MixDataType.Time:
                                 switch (q.SearchMethod)
                                 {
-                                    case ExpressionMethod.Eq:
+                                    case ExpressionMethod.Equal:
                                         andPredicate = m => m.DateTimeValue == (DateTime)q.Value;
                                         break;
-                                    case ExpressionMethod.Lt:
+                                    case ExpressionMethod.LessThan:
                                         andPredicate = m => (DateTime)q.Value < m.DateTimeValue;
                                         break;
-                                    case ExpressionMethod.Gt:
+                                    case ExpressionMethod.GreaterThan:
                                         andPredicate = m => (DateTime)q.Value > m.DateTimeValue;
                                         break;
-                                    case ExpressionMethod.Lte:
+                                    case ExpressionMethod.LessThanOrEqual:
                                         andPredicate = m => (DateTime)q.Value >= m.DateTimeValue;
                                         break;
-                                    case ExpressionMethod.Gte:
+                                    case ExpressionMethod.GreaterThanOrEqual:
                                         andPredicate = m => (DateTime)q.Value >= m.DateTimeValue;
                                         break;
                                     default:
@@ -218,19 +218,19 @@ namespace Mix.Lib.Services
                             case MixDataType.Integer:
                                 switch (q.SearchMethod)
                                 {
-                                    case ExpressionMethod.Eq:
+                                    case ExpressionMethod.Equal:
                                         andPredicate = m => m.IntegerValue == (int)q.Value;
                                         break;
-                                    case ExpressionMethod.Lt:
+                                    case ExpressionMethod.LessThan:
                                         andPredicate = m => (int)q.Value < m.IntegerValue;
                                         break;
-                                    case ExpressionMethod.Gt:
+                                    case ExpressionMethod.GreaterThan:
                                         andPredicate = m => (int)q.Value > m.IntegerValue;
                                         break;
-                                    case ExpressionMethod.Lte:
+                                    case ExpressionMethod.LessThanOrEqual:
                                         andPredicate = m => (int)q.Value >= m.IntegerValue;
                                         break;
-                                    case ExpressionMethod.Gte:
+                                    case ExpressionMethod.GreaterThanOrEqual:
                                         andPredicate = m => (int)q.Value >= m.IntegerValue;
                                         break;
                                     default:
@@ -240,19 +240,19 @@ namespace Mix.Lib.Services
                             case MixDataType.Double:
                                 switch (q.SearchMethod)
                                 {
-                                    case ExpressionMethod.Eq:
+                                    case ExpressionMethod.Equal:
                                         andPredicate = m => m.DoubleValue == (double)q.Value;
                                         break;
-                                    case ExpressionMethod.Lt:
+                                    case ExpressionMethod.LessThan:
                                         andPredicate = m => (double)q.Value < m.DoubleValue;
                                         break;
-                                    case ExpressionMethod.Gt:
+                                    case ExpressionMethod.GreaterThan:
                                         andPredicate = m => (double)q.Value > m.DoubleValue;
                                         break;
-                                    case ExpressionMethod.Lte:
+                                    case ExpressionMethod.LessThanOrEqual:
                                         andPredicate = m => (double)q.Value >= m.DoubleValue;
                                         break;
-                                    case ExpressionMethod.Gte:
+                                    case ExpressionMethod.GreaterThanOrEqual:
                                         andPredicate = m => (double)q.Value >= m.DoubleValue;
                                         break;
                                     default:
@@ -267,10 +267,10 @@ namespace Mix.Lib.Services
                             default:
                                 switch (q.SearchMethod)
                                 {
-                                    case ExpressionMethod.Eq:
+                                    case ExpressionMethod.Equal:
                                         andPredicate = m => m.StringValue == (string)q.Value;
                                         break;
-                                    case ExpressionMethod.Ct:
+                                    case ExpressionMethod.Like:
                                         andPredicate = m => EF.Functions.Like(m.StringValue, $"%{q.Value}%");
                                         break;
 

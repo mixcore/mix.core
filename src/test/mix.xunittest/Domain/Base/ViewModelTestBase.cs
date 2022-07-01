@@ -49,7 +49,7 @@ namespace Mix.Xunittest.Domain.Base
         {
             try
             {
-                var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Eq);
+                var predicate = ReflectionHelper.GetExpression<TEntity>("Id", 1, ExpressionMethod.Equal);
                 await Repository.DeleteAsync(predicate);
                 await UowInfo.CompleteAsync();
                 Assert.True(true);
