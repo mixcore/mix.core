@@ -11,12 +11,12 @@ namespace Mix.Shared.Models
         public int Page { get; set; }
         protected readonly int _defaultPageSize;
 
-        public PagingRequestModel(int defaultPageSize = 1000)
+        public PagingRequestModel(int defaultPageSize = MixConstants.CONST_DEFAULT_PAGESIZE)
         {
             _defaultPageSize = defaultPageSize;
         }
 
-        public PagingRequestModel(HttpRequest request, int defaultPageSize = 1000)
+        public PagingRequestModel(HttpRequest request, int defaultPageSize = MixConstants.CONST_DEFAULT_PAGESIZE)
         {
             _defaultPageSize = defaultPageSize;
             request.Query.TryGetValue(MixRequestQueryKeywords.PageSize, out var strPageSize);
