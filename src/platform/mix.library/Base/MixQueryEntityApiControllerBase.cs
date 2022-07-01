@@ -131,13 +131,13 @@ namespace Mix.Lib.Base
             if (req.Culture != null)
             {
                 andPredicate = andPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Eq));
+                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Equal));
             }
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
             {
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Eq);
+                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Equal);
             }
 
             return andPredicate;
