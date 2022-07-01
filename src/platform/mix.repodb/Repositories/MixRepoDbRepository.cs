@@ -75,11 +75,10 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(JObject query, PagingRequestModel pagingRequest)
+        public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest)
         {
             using (var connection = CreateConnection())
             {
-                IEnumerable<QueryField> queryFields = ParseQuery(query);
                 List<OrderField> orderFields = new List<OrderField>() {
                     new OrderField(pagingRequest.SortBy ?? "id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
                 };

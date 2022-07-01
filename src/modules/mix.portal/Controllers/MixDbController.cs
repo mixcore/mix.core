@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using RepoDb;
 
 namespace Mix.Portal.Controllers
 {
@@ -52,21 +53,21 @@ namespace Mix.Portal.Controllers
             var data = await _repository.GetAsync(id);
             return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject obj)
         {
             var data = await _repository.InsertAsync(obj);
             return data != null ? Ok() : BadRequest();
         }
-        
+
         [HttpPut]
         public async Task<ActionResult<object>> Update(JObject obj)
         {
             var data = await _repository.UpdateAsync(obj);
             return data != null ? Ok() : BadRequest();
         }
-        
+
         [HttpDelete]
         public async Task<ActionResult<object>> Delete(int id)
         {
@@ -79,21 +80,23 @@ namespace Mix.Portal.Controllers
 
         private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchRequestDto request)
         {
-            // TODO: Build search mix db by column names
-            //var searchRequest = BuildSearchRequest(req);
-            //return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            return await _repository.GetPagingAsync(null, new PagingRequestModel()
-            {
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortBy = request.OrderBy,
-                SortDirection = request.Direction
-            });
+            var queries = BuildSearchPredicate(request);
+            return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }
 
-        private PagingRequestModel BuildSearchRequest(SearchRequestDto req)
+        private IEnumerable<QueryField> BuildSearchPredicate(SearchRequestDto req)
         {
-            throw new NotImplementedException();
+            var queries = new List<QueryField>();
+            if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
+            {
+                var searchColumns = req.SearchColumns.Replace(" ", string.Empty).Split(',');
+                foreach (var item in searchColumns)
+                {
+                    QueryField field = new QueryField(item, req.Keyword);
+                    queries.Add(field);
+                }
+            }
+            return queries;
         }
 
         private ActionResult<PagingResponseModel<JObject>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<JObject> result)
