@@ -8,6 +8,11 @@ namespace Mix.Database.EntityConfigurations.POSTGRES.Account
         public override void Configure(EntityTypeBuilder<AspNetRoles> builder)
         {
             base.Configure(builder);
+
+            builder.HasIndex(e => e.NormalizedName)
+                    .HasDatabaseName("RoleNameIndex")
+                    .IsUnique()
+                    .HasFilter("(\"NormalizedName\" IS NOT NULL)");
         }
     }
 }

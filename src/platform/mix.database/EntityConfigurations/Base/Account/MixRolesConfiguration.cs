@@ -9,9 +9,11 @@ namespace Mix.Database.EntityConfigurations.Base.Account
         public virtual void Configure(EntityTypeBuilder<MixRole> builder)
         {
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
-            builder.HasIndex(e => e.NormalizedName)
-                    .HasDatabaseName("MixRoleNameIndex")
-                    .HasFilter("(NormalizedName IS NOT NULL)");
+
+            // Error: column "normalizedname" does not exist
+            //builder.HasIndex(e => e.NormalizedName)
+            //        .HasDatabaseName("MixRoleNameIndex")
+            //        .HasFilter("(NormalizedName IS NOT NULL)");
 
             builder.Property(e => e.Id)
                 .HasDefaultValueSql(Config.GenerateUUID);

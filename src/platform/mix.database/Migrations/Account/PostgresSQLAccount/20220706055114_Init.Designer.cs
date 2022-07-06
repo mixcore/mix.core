@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations.PostgresSQLAccount
 {
     [DbContext(typeof(PostgresSQLAccountContext))]
-    [Migration("20220618121651_UpdateForeinKeys")]
-    partial class UpdateForeinKeys
+    [Migration("20220706055114_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -88,7 +88,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("(NormalizedName IS NOT NULL)");
+                        .HasFilter("(\"NormalizedName\" IS NOT NULL)");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -279,10 +279,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .HasDatabaseName("MixRoleNameIndex")
-                        .HasFilter("(NormalizedName IS NOT NULL)");
-
                     b.ToTable("MixRoles");
                 });
 
@@ -406,7 +402,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
-                        .HasFilter("(NormalizedUserName IS NOT NULL)");
+                        .HasFilter("(\"NormalizedUserName\" IS NOT NULL)");
 
                     b.ToTable("MixUsers");
                 });
