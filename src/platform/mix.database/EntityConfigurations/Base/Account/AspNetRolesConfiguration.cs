@@ -9,6 +9,7 @@ namespace Mix.Database.EntityConfigurations.Base.Account
         public virtual void Configure(EntityTypeBuilder<AspNetRoles> builder)
         {
             Config = (TConfig)Activator.CreateInstance(typeof(TConfig));
+            
             builder.HasIndex(e => e.NormalizedName)
                     .HasDatabaseName("RoleNameIndex")
                     .IsUnique()

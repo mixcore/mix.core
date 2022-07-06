@@ -8,6 +8,10 @@ namespace Mix.Database.EntityConfigurations.POSTGRES.Account
         public override void Configure(EntityTypeBuilder<MixUser> builder)
         {
             base.Configure(builder);
+            builder.HasIndex(e => e.NormalizedUserName)
+               .HasDatabaseName("UserNameIndex")
+               .IsUnique()
+               .HasFilter("(\"NormalizedUserName\" IS NOT NULL)");
         }
     }
 }
