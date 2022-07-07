@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
@@ -33,7 +33,7 @@ namespace Mixcore.Controllers
                 {
                     case InitStep.Blank:
                         InitEndpoints();
-                        if (page.ToLower() != "")
+                        if (!string.IsNullOrEmpty(page.ToLower()))
                         {
                             return Redirect(InitRoutePath.Default);
                         }
