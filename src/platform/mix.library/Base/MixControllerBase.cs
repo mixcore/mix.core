@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -120,7 +120,7 @@ namespace Mix.Lib.Base
             if (forbidden)
             {
                 isValid = false;
-                _redirectUrl = $"/403";
+                _redirectUrl = "/403";
             }
 
             // If mode Maintenance enabled in appsettings
@@ -128,7 +128,7 @@ namespace Mix.Lib.Base
                     && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;
-                _redirectUrl = $"/maintenance";
+                _redirectUrl = "/maintenance";
             }
         }
 
