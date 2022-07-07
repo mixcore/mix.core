@@ -48,8 +48,6 @@ namespace Mix.Database.Entities.Account
             DbContextOptionsBuilder optionsBuilder)
         {
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION);
-            var _databaseProvider = MixDatabaseProvider.PostgreSQL;
-            cnn = "Host=localhost;Database=mixtest1234;Username=postgres;Password=1234qwe@";
             if (!string.IsNullOrEmpty(cnn))
             {
                 switch (_databaseProvider)
