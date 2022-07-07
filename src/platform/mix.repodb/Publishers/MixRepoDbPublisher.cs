@@ -10,12 +10,12 @@ namespace Mix.RepoDb.Publishers
     public class MixRepoDbPublisher : PublisherBase
     {
         public MixRepoDbPublisher(
-            IQueueService<MessageQueueModel> queueService, 
-            IConfiguration configuration, 
-            MixMemoryMessageQueue<MessageQueueModel> queue) 
+            IQueueService<MessageQueueModel> queueService,
+            IConfiguration configuration,
+            MixMemoryMessageQueue<MessageQueueModel> queue)
             : base(MixQueueTopics.MixRepoDb, queueService, configuration, queue)
         {
-            
+
         }
     }
 }

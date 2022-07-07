@@ -22,7 +22,7 @@ namespace Mix.RepoDb.Base
         {
         }
 
-        protected TenantDataViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+        protected TenantDataViewModelBase(TEntity entity, UnitOfWorkInfo? uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -42,7 +42,7 @@ namespace Mix.RepoDb.Base
 
         #region Overrides
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string? language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
         }

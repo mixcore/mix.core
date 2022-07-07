@@ -9,7 +9,6 @@ using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Models;
 using Mix.Shared.Models;
 using MySql.Data.MySqlClient;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using RepoDb;
@@ -197,9 +196,9 @@ namespace Mix.RepoDb.Repositories
         #endregion
 
         #region private
-        private IEnumerable<QueryField> ParseQuery(JObject query)
+        private IEnumerable<QueryField>? ParseQuery(JObject query)
         {
-            List<QueryField> result = null;
+            List<QueryField>? result = null;
             if (query != null)
             {
                 result = new List<QueryField>();
@@ -238,7 +237,7 @@ namespace Mix.RepoDb.Repositories
         {
             var connectionType = GetDbConnectionType(DatabaseProvider);
             var connection = Activator.CreateInstance(connectionType) as IDbConnection;
-            connection.ConnectionString = ConnectionString;
+            connection!.ConnectionString = ConnectionString;
             return connection;
         }
 
