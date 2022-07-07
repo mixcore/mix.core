@@ -5,7 +5,7 @@ using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
 using System.Threading.Tasks;
-
+using System.Security.Cryptography;
 namespace Mix.SignalR.Services
 {
     public abstract class BaseHubClientService
@@ -41,7 +41,7 @@ namespace Mix.SignalR.Services
             {
                 try
                 {
-                    await Task.Delay(new Random().Next(0, 5) * 1000);
+                    await Task.Delay(RandomNumberGenerator.GetInt32(0, 5) * 1000);
                     await connection.StartAsync();
                 }
 
@@ -64,7 +64,7 @@ namespace Mix.SignalR.Services
                .Build();
             connection.Closed += async (error) =>
             {
-                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await Task.Delay(RandomNumberGenerator.GetInt32(0, 5) * 1000);
                 await connection.StartAsync();
             };
 
