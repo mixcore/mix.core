@@ -50,7 +50,7 @@ namespace Mix.Database.Entities.Account
             string cnn = _databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
-                switch (_databaseProvider)
+                switch (_databaseService.DatabaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
