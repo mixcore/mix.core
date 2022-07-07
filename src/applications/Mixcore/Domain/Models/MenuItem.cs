@@ -1,4 +1,4 @@
-﻿namespace Mixcore.Domain.Models
+namespace Mixcore.Domain.Models
 {
     public class MenuItem
     {
@@ -17,7 +17,7 @@
             get
             {
                 var domain = "/";
-                return Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
+                return Uri != null && Uri.Contains(domain[0]) ? Uri : $"{domain}{Uri}";
             }
         }
 
