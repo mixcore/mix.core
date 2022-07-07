@@ -1,4 +1,4 @@
-﻿using Mix.Tenancy.Domain.Models;
+using Mix.Tenancy.Domain.Models;
 
 namespace Mix.Tenancy.Domain.Dtos
 {
@@ -37,7 +37,7 @@ namespace Mix.Tenancy.Domain.Dtos
         public string DatabaseName { get; set; }
         public string DatabaseUser { get; set; }
         public string DatabasePassword { get; set; }
-        public string SqliteDbConnectionString { get; set; } = $"Data Source=mix-cms.db";
+        public string SqliteDbConnectionString { get; set; } = "Data Source=mix-cms.db";
         public MixDatabaseProvider DatabaseProvider { get; set; }
         public InitCultureModel Culture { get; set; }
         public string SiteName { get; set; } = "MixCore";

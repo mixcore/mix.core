@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
@@ -50,7 +50,7 @@ namespace Mixcore.Controllers
             if (ForbiddenPortal)
             {
                 isValid = false;
-                _redirectUrl = $"/403";
+                _redirectUrl = "/403";
             }
 
             base.ValidateRequest();
