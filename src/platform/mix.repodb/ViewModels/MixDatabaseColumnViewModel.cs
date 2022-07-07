@@ -29,14 +29,14 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixDatabaseColumnViewModel(UnitOfWorkInfo? unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
         public MixDatabaseColumnViewModel(
             MixDatabaseColumn entity,
 
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
         #endregion
@@ -58,7 +58,7 @@ namespace Mix.RepoDb.ViewModels
         {
             base.ParseView(sourceObject);
             ColumnConfigurations = Configurations != null
-                        ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)
+                        ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)!
                         : new();
         }
 

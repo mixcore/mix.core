@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Base;
 using Mix.Database.Services;
 
 namespace Mix.Lib.Services

@@ -25,7 +25,7 @@
         public string DetailUrl { get; set; }
 
         public List<MixUrlAliasViewModel> UrlAliases { get; set; }
-        
+
         #endregion
 
         #region Overrides
@@ -71,10 +71,10 @@
         {
             Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(
                 m => m.ContentType == MixContentType.Post && m.IntContentId == Id);
-                foreach (var item in Contributors)
-                {
-                    await item.LoadUserDataAsync(identityService);
-                }
+            foreach (var item in Contributors)
+            {
+                await item.LoadUserDataAsync(identityService);
+            }
         }
 
         private async Task LoadAliasAsync()

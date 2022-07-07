@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
-using Mix.Shared.Services;
 using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
@@ -85,7 +84,7 @@ namespace Mix.Portal.Domain.Services
                 await _cmsUOW.DbContext.SaveChangesAsync();
             }
         }
-        
+
         private async Task CloneModuleData()
         {
             var contents = _cmsUOW.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)

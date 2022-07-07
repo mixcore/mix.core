@@ -7,7 +7,7 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
         public override void Configure(EntityTypeBuilder<MixMedia> builder)
         {
             base.Configure(builder);
-            
+
             builder.Property(e => e.Extension)
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet)
@@ -31,7 +31,7 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
                .HasColumnType($"{Config.NString}{Config.SmallLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Title)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
@@ -41,12 +41,12 @@ namespace Mix.Database.EntityConfigurations.POSTGRES
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.TargetUrl)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet)
                .UseCollation(Config.DatabaseCollation);
-            
+
             builder.Property(e => e.Tags)
                .HasColumnType($"{Config.NString}{Config.MaxLength}")
                .HasCharSet(Config.CharSet)

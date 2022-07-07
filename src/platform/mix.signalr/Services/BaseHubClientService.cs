@@ -4,8 +4,8 @@ using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 namespace Mix.SignalR.Services
 {
     public abstract class BaseHubClientService

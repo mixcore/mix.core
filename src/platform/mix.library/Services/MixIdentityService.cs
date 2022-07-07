@@ -364,8 +364,8 @@ namespace Mix.Lib.Services
             MixAuthenticationConfigurations appConfigs)
         {
             ParsedExternalAccessToken parsedToken = null;
+            string verifyTokenEndPoint = string.Empty;
 
-            string verifyTokenEndPoint;
             switch (provider)
             {
                 case MixExternalLoginProviders.Facebook:

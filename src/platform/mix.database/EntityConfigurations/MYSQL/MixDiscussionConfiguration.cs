@@ -8,7 +8,7 @@ namespace Mix.Database.EntityConfigurations.MYSQL
         public override void Configure(EntityTypeBuilder<MixDiscussion> builder)
         {
             base.Configure(builder);
-            
+
             builder.Property(e => e.Content)
              .IsRequired()
              .HasColumnType(Config.Text)

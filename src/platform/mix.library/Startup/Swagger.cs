@@ -62,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 app.UseSwagger(opt =>
                    {
                        opt.RouteTemplate = routeTemplate;
-                    });
+                   });
                 app.UseSwaggerUI(c =>
                 {
                     c.InjectStylesheet("/mix-app/css/swagger.css");

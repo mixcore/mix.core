@@ -33,6 +33,7 @@ namespace Mix.Lib.Helpers
         /// Gets the seo string.
         /// </summary>
         /// <param name="s">The s.</param>
+        /// <param name="replaceChar"></param>
         /// <returns></returns>
         public static string GetSEOString(string s, char replaceChar = '-')
         {
@@ -77,7 +78,7 @@ namespace Mix.Lib.Helpers
                 text = "";
             }
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"\p{IsCombiningDiacriticalMarks}+");
+            Regex regex = new(@"\p{IsCombiningDiacriticalMarks}+");
 
             string strFormD = text.Normalize(System.Text.NormalizationForm.FormD);
 
@@ -91,6 +92,7 @@ namespace Mix.Lib.Helpers
         /// Whites the space to hyphen.
         /// </summary>
         /// <param name="str">The string.</param>
+        /// <param name="replaceChar"></param>
         /// <returns></returns>
         public static string WhiteSpaceToHyphen(string str, char replaceChar = '-')
         {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Entities.Cache;
 using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
