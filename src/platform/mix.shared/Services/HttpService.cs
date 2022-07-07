@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -78,7 +78,7 @@ namespace Mix.Shared.Services
                 ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
                 : string.Empty;
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
-                ? (!requestUrl.Contains("?") ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
+                ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
@@ -93,7 +93,7 @@ namespace Mix.Shared.Services
                 ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
                 : string.Empty;
             var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
-                ? (!requestUrl.Contains("?") ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
+                ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
                 : requestUrl;
             return SendRequestAsync(client => client.DeleteAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
