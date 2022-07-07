@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
 using Mix.Queue.Engines.MixQueue;
@@ -61,7 +61,6 @@ namespace Mix.Queue.Engines
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
-                        googleSetting.CredentialFile = googleSetting.CredentialFile;
 
                         queuePublishers.Add(
                             QueueEngineFactory.CreatePublisher<MessageQueueModel>(
