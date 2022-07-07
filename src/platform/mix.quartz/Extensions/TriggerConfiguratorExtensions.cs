@@ -1,4 +1,4 @@
-﻿using Mix.Heart.Helpers;
+using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +22,7 @@ namespace Mix.MixQuartz.Extensions
             {
                 foreach (var key in dicJobData.Keys)
                 {
-                    if (dicJobData[key].GetType() != typeof(string))
+                    if (dicJobData[key] is string)
                     {
                         dicJobData[key] = ReflectionHelper.ParseObject(dicJobData[key]).ToString();
                     }
