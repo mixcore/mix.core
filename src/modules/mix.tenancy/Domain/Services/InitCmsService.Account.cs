@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
@@ -9,7 +9,7 @@ namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {
-        public async Task<AccessTokenViewModel> InitAccountAsync(RegisterViewModel model)
+        public async Task<AccessTokenViewModel>? InitAccountAsync(RegisterViewModel model)
         {
             var accountContext = _databaseService.GetAccountDbContext();
             await accountContext.Database.MigrateAsync();

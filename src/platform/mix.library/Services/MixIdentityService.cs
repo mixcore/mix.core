@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
@@ -69,7 +69,7 @@ namespace Mix.Lib.Services
             _mixService = mixService;
         }
 
-        public async Task<MixUserViewModel> GetUserAsync(Guid userId)
+        public async Task<MixUserViewModel>? GetUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user != null)
@@ -212,7 +212,7 @@ namespace Mix.Lib.Services
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
+        public async Task<AccessTokenViewModel>? GenerateAccessTokenAsync(
             MixUser user,
             MixUserViewModel info,
             bool isRemember,
@@ -358,7 +358,7 @@ namespace Mix.Lib.Services
                     e => new Regex(e.ToLower()).Match(currentEndpoint).Success);
         }
 
-        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
+        public async Task<ParsedExternalAccessToken>? VerifyExternalAccessToken(
             MixExternalLoginProviders provider,
             string accessToken,
             MixAuthenticationConfigurations appConfigs)
@@ -507,7 +507,7 @@ namespace Mix.Lib.Services
             return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
         }
 
-        public static ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
+        public static ClaimsPrincipal? GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
         {
             var tokenValidationParameters = GetValidationParameters(appConfigs, false);
             var tokenHandler = new JwtSecurityTokenHandler();

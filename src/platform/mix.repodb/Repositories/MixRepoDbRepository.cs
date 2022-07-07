@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
@@ -164,7 +164,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> UpdateAsync(JObject entity,
+        public async Task<object?>? UpdateAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
             using (var connection = CreateConnection())
