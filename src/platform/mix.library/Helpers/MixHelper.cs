@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -66,7 +66,7 @@ namespace Mix.Lib.Helpers
 
 
         public static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) =>
-            id == null
+object.Equals(id, default(TPrimaryKey))
             || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
             || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
 
