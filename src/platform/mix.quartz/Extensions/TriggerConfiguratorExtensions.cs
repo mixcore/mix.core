@@ -22,7 +22,7 @@ namespace Mix.MixQuartz.Extensions
             {
                 foreach (var key in dicJobData.Keys)
                 {
-                    if (dicJobData[key] is string)
+                    if (dicJobData[key] is not string)
                     {
                         dicJobData[key] = ReflectionHelper.ParseObject(dicJobData[key]).ToString();
                     }
