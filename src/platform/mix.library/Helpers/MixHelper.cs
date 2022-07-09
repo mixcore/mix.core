@@ -59,6 +59,7 @@ namespace Mix.Lib.Helpers
         public static void MixCli(string[] args)
         {
             var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
+            var templatesFolder = new DirectoryInfo(MixFolders.TemplatesFolder);
 
             // Parse Mixcore cli
             Parser.Default.ParseArguments<Options>(args)
@@ -67,19 +68,20 @@ namespace Mix.Lib.Helpers
                        // Check if clean before run is required
                        if (o.Clean)
                        {
-                           Console.WriteLine($"Current Arguments: -v {o.Clean}");
+                           Console.WriteLine($"Clean Arguments: -c {o.Clean}");
+
+                            // Delete existing MixContent folder
+                            Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
+                            string isClean = Console.ReadLine().ToLower();
 
                            if (mixContentFolder.Exists)
                            {
-                               // Delete existing MixContent folder
-                               Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
-                               string isClean = Console.ReadLine().ToLower();
                                if (isClean.Equals("y"))
                                {
                                    try
                                    {
                                        mixContentFolder.Delete(true);
-                                       Console.WriteLine("Clean completed! Continue to web interface.");
+                                       Console.WriteLine("Clean MixContent folder completed!");
                                    }
                                    catch (IOException ex)
                                    {
@@ -87,6 +89,23 @@ namespace Mix.Lib.Helpers
                                    }
                                }
                            }
+
+                           if (templatesFolder.Exists)
+                           {
+                               if (isClean.Equals("y"))
+                               {
+                                   try
+                                   {
+                                       templatesFolder.Delete(true);
+                                       Console.WriteLine("Clean Templates folder completed!");
+                                   }
+                                   catch (IOException ex)
+                                   {
+                                       Console.WriteLine(ex.Message);
+                                   }
+                               }
+                           }
+                           Console.WriteLine("Continue to web interface.");
                        }
                        else
                        {
