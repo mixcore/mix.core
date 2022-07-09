@@ -109,15 +109,19 @@ namespace Mix.RepoDb.Services
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
         {
             List<string> colSqls = new List<string>();
-            foreach (var col in database.Columns)
+            foreach (var col in database.Columns.Where(m => m.DataType != MixDataType.Reference))
             {
                 colSqls.Add(GenerateColumnSql(col));
             }
-            string tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{database.SystemName}";
-            string commandText = $"DROP TABLE IF EXISTS {tableName}; " +
-                $"CREATE TABLE {tableName} " +
-                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
-                $" {string.Join(",", colSqls.ToArray())})";
+
+            foreach (var col in database.Columns.Where(m => m.DataType == MixDataType.Reference))
+            {
+                var subDb= await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == col.ReferenceId);
+                await MigrateReferenceDatabase(subDb, $"{database.SystemName}Id", databaseProvider, ctx);
+            }
+            
+            var commandText = GetMigrateTableSql(database.SystemName, databaseProvider, colSqls);
+
             if (!string.IsNullOrEmpty(commandText))
             {
                 var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
@@ -125,6 +129,27 @@ namespace Mix.RepoDb.Services
             }
             return false;
         }
+
+        private async Task<bool> MigrateReferenceDatabase(
+            MixDatabaseViewModel database, string referenceColumnName, 
+            MixDatabaseProvider databaseProvider, DbContext ctx)
+        {
+            database.Columns.Add(new MixDatabaseColumnViewModel()
+            {
+                DataType = MixDataType.Integer,
+                SystemName = referenceColumnName
+            });
+            return await Migrate(database, databaseProvider, ctx);
+        }
+
+        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
+        {
+            return $"DROP TABLE IF EXISTS {tableName}; " +
+                $"CREATE TABLE {tableName} " +
+                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $" {string.Join(",", colSqls.ToArray())})";
+        }
+
         private string GetAutoIncreaseIdSyntax(MixDatabaseProvider databaseProvider)
         {
             return databaseProvider switch
@@ -159,9 +184,10 @@ namespace Mix.RepoDb.Services
                     };
                 case MixDataType.Double:
                     return "float";
+                case MixDataType.Reference:
+                // JObject - { ref_table_name: "", children: [] }
                 case MixDataType.Integer:
                     return "int";
-                case MixDataType.Reference: // JObject - { ref_table_name: "", children: [] }
                 case MixDataType.Html:
                     return _databaseService.DatabaseProvider switch
                     {

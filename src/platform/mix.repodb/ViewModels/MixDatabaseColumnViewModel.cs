@@ -20,7 +20,7 @@ namespace Mix.RepoDb.ViewModels
         public string DefaultValue { get; set; }
         public int MixDatabaseId { get; set; }
         public string Configurations { get; set; }
-        public ColumnConfigurations ColumnConfigurations { get; set; }
+        public ColumnConfigurations ColumnConfigurations { get; set; } = new();
         #endregion
 
         #region Constructors
