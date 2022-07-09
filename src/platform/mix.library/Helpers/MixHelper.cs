@@ -1,7 +1,9 @@
+using CommandLine;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -10,14 +12,26 @@ namespace Mix.Lib.Helpers
 {
     public class MixHelper
     {
+        public class Options
+        {
+            [Option('c', "clean", Required = false, HelpText = "Clean installed Mixcore CMS version.")]
+            public bool Clean { get; set; }
+        }
 
         public static IHostBuilder CreateHostBuilder<Startup>(string[] args)
             where Startup : class
         {
-            if (!Directory.Exists(MixFolders.MixContentFolder))
+
+            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
+
+            // Mixcore Cli
+            MixCli(args);
+
+            // Clone Settings from shared folder
+            if (!mixContentFolder.Exists)
             {
-                // Clone Settings from shared folder
                 CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.MixContentFolder);
+                Console.WriteLine("Clone Settings from shared folder completed.");
             }
             return Host.CreateDefaultBuilder(args)
             .UseContentRoot(Directory.GetCurrentDirectory())
@@ -42,8 +56,48 @@ namespace Mix.Lib.Helpers
                 });
         }
 
+        public static void MixCli(string[] args)
+        {
+            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
 
-        public static bool CopyFolder(string srcPath, string desPath)
+            // Parse Mixcore cli
+            Parser.Default.ParseArguments<Options>(args)
+                   .WithParsed<Options>(o =>
+                   {
+                       // Check if clean before run is required
+                       if (o.Clean)
+                       {
+                           Console.WriteLine($"Current Arguments: -v {o.Clean}");
+
+                           if (mixContentFolder.Exists)
+                           {
+                               // Delete existing MixContent folder
+                               Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
+                               string isClean = Console.ReadLine().ToLower();
+                               if (isClean.Equals("y"))
+                               {
+                                   try
+                                   {
+                                       mixContentFolder.Delete(true);
+                                       Console.WriteLine("Clean completed! Continue to web interface.");
+                                   }
+                                   catch (IOException ex)
+                                   {
+                                       Console.WriteLine(ex.Message);
+                                   }
+                               }
+                           }
+                       }
+                       else
+                       {
+                           //Console.WriteLine($"Current Arguments: -v {o.Clean}");
+                           Console.WriteLine("There is no cli arg! Continue to web interface.");
+                       }
+                   });
+        }
+
+
+            public static bool CopyFolder(string srcPath, string desPath)
         {
             if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
             {
