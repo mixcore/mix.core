@@ -52,7 +52,7 @@ namespace Mix.RepoDb.Repositories
         #region Methods
         public void Init(string tableName)
         {
-            _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
+            _tableName = tableName;
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
         }

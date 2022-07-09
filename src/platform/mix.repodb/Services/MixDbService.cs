@@ -109,17 +109,11 @@ namespace Mix.RepoDb.Services
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
         {
             List<string> colSqls = new List<string>();
-            foreach (var col in database.Columns.Where(m => m.DataType != MixDataType.Reference))
+            foreach (var col in database.Columns)
             {
                 colSqls.Add(GenerateColumnSql(col));
             }
 
-            foreach (var col in database.Columns.Where(m => m.DataType == MixDataType.Reference))
-            {
-                var subDb= await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == col.ReferenceId);
-                await MigrateReferenceDatabase(subDb, $"{database.SystemName}Id", databaseProvider, ctx);
-            }
-            
             var commandText = GetMigrateTableSql(database.SystemName, databaseProvider, colSqls);
 
             if (!string.IsNullOrEmpty(commandText))
@@ -128,18 +122,6 @@ namespace Mix.RepoDb.Services
                 return result >= 0;
             }
             return false;
-        }
-
-        private async Task<bool> MigrateReferenceDatabase(
-            MixDatabaseViewModel database, string referenceColumnName, 
-            MixDatabaseProvider databaseProvider, DbContext ctx)
-        {
-            database.Columns.Add(new MixDatabaseColumnViewModel()
-            {
-                DataType = MixDataType.Integer,
-                SystemName = referenceColumnName
-            });
-            return await Migrate(database, databaseProvider, ctx);
         }
 
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
@@ -185,7 +167,6 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Double:
                     return "float";
                 case MixDataType.Reference:
-                // JObject - { ref_table_name: "", children: [] }
                 case MixDataType.Integer:
                     return "int";
                 case MixDataType.Html:
