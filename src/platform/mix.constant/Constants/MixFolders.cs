@@ -3,7 +3,7 @@
     public class MixFolders
     {
         public const string WebRootPath = "wwwroot";
-        public const string TemplatesFolder = "Views/Shared/Templates";
+        public const string TemplatesFolder = "MixContent/Templates";//"Views/Shared/Templates"
         public const string TempFolder = "MixContent/Temp";
         public const string ThemePackage = "MixContent/Temp/Themes";
         public const string MixContentFolder = "MixContent";

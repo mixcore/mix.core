@@ -209,9 +209,9 @@ namespace Mix.Lib.Services
                     {
                         Content = x.Content,
                         Extension = x.Extension,
-                        FileFolder = x.FileFolder,
+                        FileFolder = String.Format(@"{0}/{1}/{2}", MixFolders.TemplatesFolder, x.MixThemeName, x.FolderType), //x.FileFolder,
                         Filename = x.FileName
-                    });
+                    }); ;
                 });
                 await ImportEntitiesAsync(_siteData.Templates, dicTemplateIds);
             }

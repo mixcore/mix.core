@@ -40,7 +40,7 @@ namespace Mixcore.Domain.Subscribers
 
         private void DeleteTemplate(MixTemplateViewModel template)
         {
-            MixFileHelper.DeleteFile($"{template.FileFolder}/{template.FileName}{template.Extension}");
+            MixFileHelper.DeleteFile($"{MixFolders.TemplatesFolder}/{template.MixThemeName}/{template.FolderType}/{template.FileName}{template.Extension}"); //MixFileHelper.DeleteFile($"{template.FileFolder}/{template.FileName}{template.Extension}");
             logger.LogWarning("Removed Template File {0}/{1}{2}", template.FileFolder, template.FileName, template.Extension);
         }
 
@@ -51,7 +51,7 @@ namespace Mixcore.Domain.Subscribers
                 Content = template.Content,
                 Filename = template.FileName,
                 Extension = template.Extension,
-                FileFolder = template.FileFolder
+                FileFolder = $"{MixFolders.TemplatesFolder}/{template.MixThemeName}/{template.FolderType}" //template.FileFolder
             });
             logger.LogInformation("Saved Template File {0}/{1}{2}", template.FileFolder, template.FileName, template.Extension);
         }
