@@ -1,4 +1,4 @@
-﻿using Mix.Lib.Services;
+﻿using Mix.Service.Services;
 
 namespace Mix.SignalR.Hubs
 {

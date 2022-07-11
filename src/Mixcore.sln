@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{5B29B975-B0AC-46B3-8398-4C8A22EAE355}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{38F30F45-7DB6-4097-BA85-788ACCCBC5F2}"
+	ProjectSection(SolutionItems) = preProject
+		CodeMap.dgml = CodeMap.dgml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "applications", "applications", "{4E880812-C336-4EB2-9FED-2E437957F50A}"
 EndProject
@@ -59,7 +62,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage", "modules\mix.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.storage.lib", "platform\mix.storage.lib\mix.storage.lib.csproj", "{5486F6D4-6144-470A-BEB5-270C4D02486B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.repodb", "platform\mix.repodb\mix.repodb.csproj", "{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.repodb", "platform\mix.repodb\mix.repodb.csproj", "{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.service", "platform\mix.service\mix.service.csproj", "{728EBD5B-266E-4476-9BDC-37D12194AFE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +164,10 @@ Global
 		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +201,7 @@ Global
 		{E974EBC1-B6C9-4BC0-AFA5-33EB182CB6A6} = {5B29B975-B0AC-46B3-8398-4C8A22EAE355}
 		{5486F6D4-6144-470A-BEB5-270C4D02486B} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 		{C6B46863-6A6E-4BC0-84F6-EF9DCBCA77D1} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
+		{728EBD5B-266E-4476-9BDC-37D12194AFE2} = {45077DFB-D35A-4491-993C-2AC4C8AC838E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

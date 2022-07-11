@@ -78,7 +78,7 @@ namespace Mix.Shared.Services
 
         public string Messenger
         {
-            get => GetConfig<string>(MixModuleNames.Messenger);
+            get => GetConfig<string>(MixModuleNames.Messenger) ?? string.Empty;
             set => SetConfig(MixModuleNames.Messenger, value);
         }
 

@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mix.library\mix.library.csproj" />
-    <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
-    <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
+    <ProjectReference Include="..\mix.service\mix.service.csproj" />
   </ItemGroup>
 
 </Project>
