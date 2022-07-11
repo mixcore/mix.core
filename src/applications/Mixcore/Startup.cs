@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
 using Mixcore.Domain.Subscribers;
@@ -58,6 +59,17 @@ namespace Mixcore
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
 
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
+            });
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, MixFolders.UploadsFolder))
+            });
 
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
             {

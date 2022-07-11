@@ -3,10 +3,10 @@
     public class MixThemePackageConstants
     {
         public const string DefaultThemeFilePath = "MixContent/default.zip";
-        public const string AssetFolder = "Assets";
-        public const string UploadFolder = "Uploads";
-        public const string SchemaFolder = "Schema";
-        public const string TemplateFolder = "Templates";
+        public const string AssetFolder = "assets";
+        public const string UploadFolder = "uploads";
+        public const string SchemaFolder = "schema";
+        public const string TemplateFolder = "templates";
         public const string SchemaFilename = "schema";
     }
 }

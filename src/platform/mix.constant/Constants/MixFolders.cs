@@ -13,8 +13,8 @@
         public const string MixLogsFolder = "MixContent/logs";
         public const string ExportFolder = "mix-content/exports";
         public const string ImportFolder = "mix-content/imports/themes";
-        public const string UploadsFolder = "mix-content/uploads";
-        public const string SiteContentAssetsFolder = "mix-content/assets";
+        public const string UploadsFolder = "MixContent/Uploads";
+        public const string SiteContentAssetsFolder = "Assets";
         public const string SharedConfigurationFolder = "../../shared/MixContent";
         public const string MixCoreConfigurationFolder = "../../applications/Mixcore/MixContent";
     }
