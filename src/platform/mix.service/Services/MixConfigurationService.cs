@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Constant.Constants;
+using Mix.Database.Entities.Cms;
+using Mix.Shared.Services;
 
-namespace Mix.Lib.Services
+namespace Mix.Service.Services
 {
     public class MixConfigurationService : JsonConfigurationServiceBase
     {
@@ -8,7 +11,7 @@ namespace Mix.Lib.Services
         {
         }
 
-        public static void Reload(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static void Reload(MixCmsContext? _context = null, IDbContextTransaction _transaction = null)
         {
             //UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction
             //    , out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);

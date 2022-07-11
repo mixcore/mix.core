@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Identity.Constants;
-using Mix.Lib.Services;
+using Mix.Service.Services;
 using Mix.Shared.Models;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;

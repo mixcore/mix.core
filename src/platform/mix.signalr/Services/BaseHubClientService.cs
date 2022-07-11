@@ -10,6 +10,7 @@ namespace Mix.SignalR.Services
 {
     public abstract class BaseHubClientService
     {
+        //protected AuditLogService _auditLogService;
         protected HubConnection connection;
         protected string hubName;
         protected string _accessToken;
@@ -33,9 +34,9 @@ namespace Mix.SignalR.Services
 
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
-            if (connection == null && !string.IsNullOrEmpty(MixEndpointService.Instance.Messenger))
+            if (connection == null)
             {
-                Init();
+                await Init();
             }
             while (connection.State != HubConnectionState.Connected)
             {
@@ -52,36 +53,31 @@ namespace Mix.SignalR.Services
             }
             await connection.InvokeAsync(HubMethods.SendMessage, message);
         }
-        public void Init()
+        public async Task Init()
         {
-            string endpoint = $"{MixEndpointService.Instance.Messenger}{hubName}";
-            connection = new HubConnectionBuilder()
-               .WithUrl(endpoint, options =>
-               {
-                   options.AccessTokenProvider = () => Task.FromResult(_accessToken);
-               })
-               .WithAutomaticReconnect()
-               .Build();
-            connection.Closed += async (error) =>
+            try
             {
                 await Task.Delay(RandomNumberGenerator.GetInt32(0, 5) * 1000);
                 await connection.StartAsync();
-            };
 
-            connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
+                connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
+                {
+                    this.HandleMessage(message);
+                });
+
+                connection.Reconnecting += error =>
+                {
+                    Console.WriteLine(connection.State);
+
+                    // Notify users the connection was lost and the client is reconnecting.
+                    // Start queuing or dropping messages.
+
+                    return Task.CompletedTask;
+                };
+            }
+            catch (Exception ex)
             {
-                this.HandleMessage(message);
-            });
-
-            connection.Reconnecting += error =>
-            {
-                Console.WriteLine(connection.State);
-
-                // Notify users the connection was lost and the client is reconnecting.
-                // Start queuing or dropping messages.
-
-                return Task.CompletedTask;
-            };
+            }
 
         }
 

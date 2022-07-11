@@ -39,6 +39,7 @@
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Mix.Service.Services" />
 
 	</ItemGroup>
 	<ItemGroup>
@@ -84,13 +85,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
-		<ProjectReference Include="..\mix.database\mix.database.csproj" />
-		<ProjectReference Include="..\mix.identity\mix.identity.csproj" />
-		<ProjectReference Include="..\mix.quartz\mix.quartz.csproj" />
-		<ProjectReference Include="..\mix.queue\mix.queue.csproj" />
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
-		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
-		<ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
+		<ProjectReference Include="..\mix.service\mix.service.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

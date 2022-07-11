@@ -44,6 +44,7 @@
 		<Using Include="Mix.Constant.Dtos" />
 		<Using Include="Microsoft.Extensions.DependencyInjection.Extensions" />
 		<Using Include="Mix.Storage.Lib.Services" />
+		<Using Include="Mix.Service.Services" />
 	</ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\platform\mix.storage.lib\mix.storage.lib.csproj" />

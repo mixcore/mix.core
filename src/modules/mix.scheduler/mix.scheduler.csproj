@@ -9,6 +9,8 @@
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Mix.Service.Services" />
+		
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\platform\mix.identity\mix.identity.csproj" />

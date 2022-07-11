@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Constant.Constants;
+using Mix.Heart.Enums;
+using Mix.Shared.Services;
+using Newtonsoft.Json.Linq;
 
-namespace Mix.Lib.Services
+namespace Mix.Service.Services
 {
     public class MixService
     {
@@ -14,9 +18,12 @@ namespace Mix.Lib.Services
         {
             _configService = configService;
             _smtpConfigService = smtpConfigService;
-            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContextAccessor != null)
             {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+                if (httpContextAccessor.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+                {
+                    MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId)!.Value;
+                }
             }
         }
 
