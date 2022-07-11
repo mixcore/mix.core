@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Interfaces;
@@ -139,10 +140,12 @@ namespace Microsoft.Extensions.DependencyInjection
             var provider = new FileExtensionContentTypeProvider();
             app.UseDefaultFiles();
             provider.Mappings[".vue"] = "application/text";
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 ContentTypeProvider = provider
             });
+
 
             return app;
         }

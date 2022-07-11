@@ -113,11 +113,16 @@ namespace Mix.Lib.Services
 
         private void ImportAssets()
         {
+            // Copy theme's assets
             string srcAssets = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.AssetFolder}";
-            string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
-            string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
-            string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}";
+            //string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
+            string destAssets = $"{MixFolders.TemplatesFolder}/{_siteData.ThemeSystemName}/{MixFolders.SiteContentAssetsFolder}";
             MixFileHelper.CopyFolder(srcAssets, destAssets);
+
+            // Copy theme's upload files
+            string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
+            //string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}";
+            string destUpload = $"{MixFolders.UploadsFolder}";
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 

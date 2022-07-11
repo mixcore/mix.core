@@ -18,6 +18,7 @@ namespace Mix.XUnittest
             {
                 MixFileHelper.DeleteFolder(MixFolders.MixContentFolder);
             }
+            // TODO: To check again as once publish the release version, the path will be invalid
             MixHelper.CopyFolder("../../../../../shared/MixContent", MixFolders.MixContentFolder);
             ConfigureAppConfiguration((hostingContext, config) =>
             {
