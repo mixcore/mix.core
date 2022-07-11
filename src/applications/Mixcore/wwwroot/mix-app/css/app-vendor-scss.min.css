@@ -1,4 +1,4 @@
-/* Mon Jul 04 2022 20:17:49 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
+/* Mon Jul 11 2022 16:06:11 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -143,15 +143,15 @@ main-side-bar-dynamic .sw-sidebar .sw-toc-sub-link .btn-group {
 .custom-image {
   max-width: 30vw; }
 
-.attr-set-value-item:last-child {
-  border-bottom: 0 !important; }
-
 mix-database-nav-values .row {
   padding: 10px 0; }
 
 mix-database-nav-values mix-column-preview .rowx {
   max-height: 110px;
   overflow: hidden; }
+
+.attr-set-value-item:last-child {
+  border-bottom: 0 !important; }
 
 @media (min-width: 992px) {
   #modal-content-filter .modal-lg,
