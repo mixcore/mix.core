@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using Mix.Shared.Services;
+using Mix.Service.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+
 namespace Mix.SignalR.Services
 {
     public abstract class BaseHubClientService
     {
-        //protected AuditLogService _auditLogService;
         protected HubConnection connection;
         protected string hubName;
         protected string _accessToken;
@@ -38,7 +38,7 @@ namespace Mix.SignalR.Services
             {
                 await Init();
             }
-            while (connection.State != HubConnectionState.Connected)
+            while (connection!.State != HubConnectionState.Connected)
             {
                 try
                 {
@@ -48,7 +48,7 @@ namespace Mix.SignalR.Services
 
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    MixService.LogException(ex);
                 }
             }
             await connection.InvokeAsync(HubMethods.SendMessage, message);
@@ -77,6 +77,7 @@ namespace Mix.SignalR.Services
             }
             catch (Exception ex)
             {
+                MixService.LogException(ex);
             }
 
         }
