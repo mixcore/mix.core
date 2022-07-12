@@ -44,7 +44,7 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpGet("backup/{name}")]
-        public async Task<ActionResult> Backup(string name)
+        public ActionResult Backup(string name)
         {
             var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
             _queueService.PushQueue(msg);

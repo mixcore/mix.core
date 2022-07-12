@@ -20,7 +20,7 @@ namespace Mix.Service.Services
             _smtpConfigService = smtpConfigService;
             if (httpContextAccessor != null)
             {
-                if (httpContextAccessor.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+                if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
                 {
                     MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId)!.Value;
                 }
