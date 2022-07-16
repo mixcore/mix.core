@@ -1,0 +1,16 @@
+import { Injectable } from '@angular/core';
+import { MixApiDict } from '@mix-spa/mix.lib';
+import { BaseApiService } from '../../bases/base-api.service';
+import * as i0 from "@angular/core";
+export class DatabaseApiService extends BaseApiService {
+    getDatabase(request) {
+        return this.get(MixApiDict.DatabaseApi.getDatabasesEndpoint, request);
+    }
+}
+DatabaseApiService.ɵfac = /*@__PURE__*/ function () { let ɵDatabaseApiService_BaseFactory; return function DatabaseApiService_Factory(t) { return (ɵDatabaseApiService_BaseFactory || (ɵDatabaseApiService_BaseFactory = i0.ɵɵgetInheritedFactory(DatabaseApiService)))(t || DatabaseApiService); }; }();
+DatabaseApiService.ɵprov = /*@__PURE__*/ i0.ɵɵdefineInjectable({ token: DatabaseApiService, factory: DatabaseApiService.ɵfac, providedIn: 'root' });
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && i0.ɵsetClassMetadata(DatabaseApiService, [{
+        type: Injectable,
+        args: [{ providedIn: 'root' }]
+    }], null, null); })();
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWl4LWRhdGFiYXNlLWFwaS5zZXJ2aWNlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vbWl4LnBvcnRhbC5hbmd1bGFyL2xpYnMvbWl4LnNoYXJlL3NyYy9zZXJ2aWNlcy9hcGkvbWl4LWRhdGFiYXNlLWFwaS5zZXJ2aWNlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxVQUFVLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDM0MsT0FBTyxFQUNMLFVBQVUsRUFJWCxNQUFNLGtCQUFrQixDQUFDO0FBRzFCLE9BQU8sRUFBRSxjQUFjLEVBQW9CLE1BQU0sOEJBQThCLENBQUM7O0FBR2hGLE1BQU0sT0FBTyxrQkFBbUIsU0FBUSxjQUFjO0lBQzdDLFdBQVcsQ0FDaEIsT0FBK0I7UUFFL0IsT0FBTyxJQUFJLENBQUMsR0FBRyxDQUNiLFVBQVUsQ0FBQyxXQUFXLENBQUMsb0JBQW9CLEVBQ3pCLE9BQU8sQ0FDMUIsQ0FBQztJQUNKLENBQUM7O2tQQVJVLGtCQUFrQixTQUFsQixrQkFBa0I7d0VBQWxCLGtCQUFrQixXQUFsQixrQkFBa0IsbUJBREwsTUFBTTt1RkFDbkIsa0JBQWtCO2NBRDlCLFVBQVU7ZUFBQyxFQUFFLFVBQVUsRUFBRSxNQUFNLEVBQUUiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7XHJcbiAgTWl4QXBpRGljdCxcclxuICBNaXhEYXRhYmFzZU1vZGVsLFxyXG4gIFBhZ2luYXRpb25SZXF1ZXN0TW9kZWwsXHJcbiAgUGFnaW5hdGlvblJlc3VsdE1vZGVsXHJcbn0gZnJvbSAnQG1peC1zcGEvbWl4LmxpYic7XHJcbmltcG9ydCB7IE9ic2VydmFibGUgfSBmcm9tICdyeGpzJztcclxuXHJcbmltcG9ydCB7IEJhc2VBcGlTZXJ2aWNlLCBJSHR0cFBhcmFtT2JqZWN0IH0gZnJvbSAnLi4vLi4vYmFzZXMvYmFzZS1hcGkuc2VydmljZSc7XHJcblxyXG5ASW5qZWN0YWJsZSh7IHByb3ZpZGVkSW46ICdyb290JyB9KVxyXG5leHBvcnQgY2xhc3MgRGF0YWJhc2VBcGlTZXJ2aWNlIGV4dGVuZHMgQmFzZUFwaVNlcnZpY2Uge1xyXG4gIHB1YmxpYyBnZXREYXRhYmFzZShcclxuICAgIHJlcXVlc3Q6IFBhZ2luYXRpb25SZXF1ZXN0TW9kZWxcclxuICApOiBPYnNlcnZhYmxlPFBhZ2luYXRpb25SZXN1bHRNb2RlbDxNaXhEYXRhYmFzZU1vZGVsPj4ge1xyXG4gICAgcmV0dXJuIHRoaXMuZ2V0PFBhZ2luYXRpb25SZXN1bHRNb2RlbDxNaXhEYXRhYmFzZU1vZGVsPj4oXHJcbiAgICAgIE1peEFwaURpY3QuRGF0YWJhc2VBcGkuZ2V0RGF0YWJhc2VzRW5kcG9pbnQsXHJcbiAgICAgIDxJSHR0cFBhcmFtT2JqZWN0PnJlcXVlc3RcclxuICAgICk7XHJcbiAgfVxyXG59XHJcbiJdfQ==

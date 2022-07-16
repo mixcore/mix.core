@@ -65,10 +65,16 @@ namespace Mixcore
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.UploadsFolder))
+            });
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, MixFolders.WebRootPath, "mix-portal"))
             });
 
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)

@@ -48,6 +48,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     pattern: "{controller:" + notStartWithPattern + "}/{id}/{seoName}");
                 routes.MapDynamicControllerRoute<TranslationTransformer>(
                     pattern: "{culture:" + notStartWithPattern + "}/{controller}/{id}/{seoName}");
+                routes.MapFallbackToFile("/index.html");
             });
             app.MapWhen(
                context =>
@@ -58,6 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
                        path.StartsWith("/mix-content");
                },
                config => config.UseStaticFiles());
+            
             return app;
         }
 

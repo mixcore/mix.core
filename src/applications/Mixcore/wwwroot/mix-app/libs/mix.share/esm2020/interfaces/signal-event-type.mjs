@@ -1,0 +1,5 @@
+export var SignalEventType;
+(function (SignalEventType) {
+    SignalEventType[SignalEventType["THEME_DOWNLOAD"] = 0] = "THEME_DOWNLOAD";
+})(SignalEventType || (SignalEventType = {}));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2lnbmFsLWV2ZW50LXR5cGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9taXgucG9ydGFsLmFuZ3VsYXIvbGlicy9taXguc2hhcmUvc3JjL2ludGVyZmFjZXMvc2lnbmFsLWV2ZW50LXR5cGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFOLElBQVksZUFFWDtBQUZELFdBQVksZUFBZTtJQUN6Qix5RUFBYyxDQUFBO0FBQ2hCLENBQUMsRUFGVyxlQUFlLEtBQWYsZUFBZSxRQUUxQiIsInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBlbnVtIFNpZ25hbEV2ZW50VHlwZSB7XHJcbiAgVEhFTUVfRE9XTkxPQURcclxufVxyXG4iXX0=

@@ -6,6 +6,7 @@
         InitTenant,
         InitAccount,
         SelectTheme,
-        InitTheme
+        InitTheme,
+        Done
     }
 }

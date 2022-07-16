@@ -1,0 +1,38 @@
+import { OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { TuiAlertService } from '@taiga-ui/core';
+import { MixPageApiService, MixPostApiService, PortalSidebarControlService } from '../../../services';
+import { MixModuleApiService } from '../../../services/api/mix-module-api.service';
+import * as i0 from "@angular/core";
+export declare type MixCreationType = 'Post' | 'Page' | 'Module';
+export declare class CreationDialogComponent implements OnInit {
+    postApi: MixPostApiService;
+    moduleApi: MixModuleApiService;
+    pageApi: MixPageApiService;
+    private readonly alertService;
+    private readonly sidebarControl;
+    type: MixCreationType;
+    items: MixCreationType[];
+    form: FormGroup;
+    goToPostAfterCreate: boolean;
+    closeDialogAfterCreate: boolean;
+    loading: boolean;
+    initialize: boolean;
+    activeTabIndex: number;
+    showRightSideMenu: boolean;
+    largeMode: boolean;
+    get canShowRelatedModule(): boolean;
+    get canShowSEOConfig(): boolean;
+    constructor(postApi: MixPostApiService, moduleApi: MixModuleApiService, pageApi: MixPageApiService, alertService: TuiAlertService, sidebarControl: PortalSidebarControlService);
+    ngOnInit(): void;
+    submitForm(): void;
+    createNewPost(): void;
+    createNewModule(): void;
+    createNewPage(): void;
+    handleBeforeCreate(): void;
+    handleAfterCreate(): void;
+    closeSidebar(): void;
+    toggleLargeMode(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CreationDialogComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CreationDialogComponent, "mix-creation-dialog", never, { "type": "type"; }, {}, never, never, true>;
+}

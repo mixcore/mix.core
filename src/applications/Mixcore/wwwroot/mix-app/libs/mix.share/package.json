@@ -1,0 +1,16 @@
+{
+  "name": "@mix-spa/mix.share",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^13.3.0",
+    "@angular/core": "^13.3.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "module": "esm2020/mix-spa-mix.share.mjs",
+  "es2020": "esm2020/mix-spa-mix.share.mjs",
+  "esm2020": "esm2020/mix-spa-mix.share.mjs",
+  "typings": "mix-spa-mix.share.d.ts",
+  "sideEffects": false
+}
