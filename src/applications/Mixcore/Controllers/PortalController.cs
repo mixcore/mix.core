@@ -19,28 +19,28 @@ namespace Mixcore.Controllers
             _databaseService = databaseService;
         }
 
-        //[HttpGet]
-        //[Route("portal")]
-        //[Route("portal/page/{type}")]
-        //[Route("portal/post/{type}")]
-        //[Route("portal/{pageName}")]
-        //[Route("portal/{pageName}/{type}")]
-        //[Route("portal/{pageName}/{type}/{param}")]
-        //[Route("portal/{pageName}/{type}/{param}/{param1}")]
-        //[Route("portal/{pageName}/{type}/{param}/{param1}/{param2}")]
-        //[Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
-        //[Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        //public IActionResult Index()
-        //{
-        //    if (isValid)
-        //    {
-        //        return View();
-        //    }
-        //    else
-        //    {
-        //        return Redirect(_redirectUrl);
-        //    }
-        //}
+        [HttpGet]
+        [Route("admin")]
+        [Route("admin/page/{type}")]
+        [Route("admin/post/{type}")]
+        [Route("admin/{pageName}")]
+        [Route("admin/{pageName}/{type}")]
+        [Route("admin/{pageName}/{type}/{param}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
+        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
+        public IActionResult Index()
+        {
+            if (isValid)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect(_redirectUrl);
+            }
+        }
 
         [Route("portal")]
         [Route("portal/page/{type}")]
