@@ -11,7 +11,7 @@ namespace Mix.Lib.Base
         : MixRestApiControllerBase<TView, TDbContext, TEntity, int>
         where TDbContext : DbContext
         where TEntity : AssociationBase<int>
-        where TView : ViewModelBase<TDbContext, TEntity, int, TView>
+        where TView : AssociationViewModelBase<TDbContext, TEntity, int, TView>
     {
         public MixAssociationApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
@@ -26,6 +26,7 @@ namespace Mix.Lib.Base
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
         {
         }
+
         protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)
         {
             var request = new SearchAssociationDto(req, Request);
@@ -40,7 +41,5 @@ namespace Mix.Lib.Base
 
             return searchRequest;
         }
-
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
@@ -15,7 +14,7 @@ namespace Mix.RepoDb.Services
     public class MixDbService
     {
         private MixRepoDbRepository _repository;
-        private MixRepoDbRepository _bkRepository;
+        private MixRepoDbRepository _backupRepository;
         #region Properties
 
         public ITrace Trace { get; }
@@ -31,7 +30,7 @@ namespace Mix.RepoDb.Services
             _uow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _bkRepository = new(cache, databaseService, uow);
+            _backupRepository = new(cache, databaseService, uow);
         }
 
         #region Methods
@@ -71,8 +70,8 @@ namespace Mix.RepoDb.Services
             if (data != null && data.Count > 0)
             {
                 InitBackupRepository(database.SystemName);
-                await Migrate(database, _bkRepository.DatabaseProvider, new BackupDbContext(_bkRepository.ConnectionString));
-                var result = await _bkRepository.InsertManyAsync(data);
+                await Migrate(database, _backupRepository.DatabaseProvider, new BackupDbContext(_backupRepository.ConnectionString));
+                var result = await _backupRepository.InsertManyAsync(data);
                 return result > 0;
             }
             return false;
@@ -84,14 +83,14 @@ namespace Mix.RepoDb.Services
             using var ctx = new BackupDbContext(cnn);
             ctx.Database.EnsureCreated();
 
-            _bkRepository.Init(databaseName, MixDatabaseProvider.SQLITE, cnn);
+            _backupRepository.Init(databaseName, MixDatabaseProvider.SQLITE, cnn);
 
         }
 
         private async Task<bool> RestoreFromLocal(MixDatabaseViewModel database)
         {
             InitBackupRepository(database.SystemName);
-            var data = await _bkRepository.GetAllAsync();
+            var data = await _backupRepository.GetAllAsync();
             if (data != null && data.Count > 0)
             {
                 _repository.Init(database.SystemName);
