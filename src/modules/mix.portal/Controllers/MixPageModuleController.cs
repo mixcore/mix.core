@@ -7,6 +7,8 @@ namespace Mix.Portal.Controllers
     public class MixPageModuleController
         : MixAssociationApiControllerBase<MixPageModuleViewModel, MixCmsContext, MixPageModuleAssociation>
     {
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+
         public MixPageModuleController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -19,12 +21,22 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
-
+            _cmsUOW = cmsUOW;
         }
 
         #region Overrides
 
-
+        protected override Task<int> CreateHandlerAsync(MixPageModuleViewModel data)
+        {
+            if (_cmsUOW.DbContext.MixPageModuleAssociation.Any(
+                m => m.MixTenantId == MixTenantId
+                && m.LeftId == data.LeftId
+                && m.RightId == data.RightId))
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Entity existed");
+            }
+            return base.CreateHandlerAsync(data);
+        }
         #endregion
 
 

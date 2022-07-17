@@ -61,7 +61,7 @@ namespace Mix.RepoDb.Repositories
         {
             DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
-            _tableName = $"{MixConstants.CONST_MIXDB_PREFIX}{tableName}";
+            _tableName = tableName;
             InitializeRepoDb();
         }
 

@@ -1,14 +1,14 @@
 {
   "items": [
     {
-      "path": "/portal",
+      "path": "/admin",
       "icon": "mi mi-Tiles",
       "svg": "tabler-icon-smart-home.svg",
       "title": "Dashboard",
       "subMenus": []
     },
     {
-      "path": "/portal/scheduler",
+      "path": "/admin/scheduler",
       "icon": "mi mi-Tiles",
       "svg": "tabler-icon-smart-home.svg",
       "title": "Scheduler",
@@ -23,15 +23,15 @@
         {
           "title": "Create Tenant",
           "icon": "mi mi-Add",
-          "path": "/portal/tenant/create"
+          "path": "/admin/tenant/create"
         },
         {
-          "path": "/portal/tenant/list",
+          "path": "/admin/tenant/list",
           "title": "List Tenant",
           "icon": "mi mi-List"
         },
         {
-          "path": "/portal/domain/list",
+          "path": "/admin/domain/list",
           "title": "List Domain",
           "icon": "mi mi-List"
         }
@@ -46,10 +46,10 @@
         {
           "title": "Create Post",
           "icon": "mi mi-Add",
-          "path": "/portal/post/create"
+          "path": "/admin/post/create"
         },
         {
-          "path": "/portal/post/list",
+          "path": "/admin/post/list",
           "title": "List Post",
           "icon": "mi mi-List"
         }
@@ -64,10 +64,10 @@
         {
           "title": "Create",
           "icon": "mi mi-Add",
-          "path": "/portal/page/create"
+          "path": "/admin/page/create"
         },
         {
-          "path": "/portal/page/list",
+          "path": "/admin/page/list",
           "title": "List Page",
           "icon": "mi mi-List"
         }
@@ -82,10 +82,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default"
+          "path": "/admin/mix-database-data/create?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default&isGroup=true",
+          "path": "/admin/mix-database-data/list?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -100,10 +100,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default"
+          "path": "/admin/mix-database-data/create?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "path": "/admin/mix-database-data/list?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -118,10 +118,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/media/create"
+          "path": "/admin/media/create"
         },
         {
-          "path": "/portal/media/list",
+          "path": "/admin/media/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -137,10 +137,10 @@
         {
           "title": "Create new",
           "icon": "mi mi-Add",
-          "path": "/portal/module/create"
+          "path": "/admin/module/create"
         },
         {
-          "path": "/portal/module/list",
+          "path": "/admin/module/list",
           "title": "List Module",
           "icon": "mi mi-List"
         }
@@ -155,10 +155,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/service/create"
+          "path": "/admin/service/create"
         },
         {
-          "path": "/portal/service/list",
+          "path": "/admin/service/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -174,10 +174,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database/create"
+          "path": "/admin/mix-database/create"
         },
         {
-          "path": "/portal/mix-database/list",
+          "path": "/admin/mix-database/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -193,10 +193,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation&dataId=default"
+          "path": "/admin/mix-database-data/create?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation&dataId=default"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
+          "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
 
           "title": "List",
           "icon": "mi mi-List"
@@ -211,12 +211,12 @@
       "isHiden": true,
       "subMenus": [
         {
-          "path": "/portal/file/list",
+          "path": "/admin/file/list",
           "title": "List",
           "icon": "mi mi-List"
         },
         {
-          "path": "/portal/file/list?folder=MixContent/logs",
+          "path": "/admin/file/list?folder=MixContent/logs",
           "title": "Logs",
           "icon": "mi mi-Error"
         }
@@ -231,20 +231,20 @@
         {
           "title": "Create",
           "icon": "mi mi-Add",
-          "path": "/portal/user/create"
+          "path": "/admin/user/create"
         },
         {
-          "path": "/portal/user/list",
+          "path": "/admin/user/list",
           "title": "List",
           "icon": "mi mi-List"
         },
         {
-          "path": "/portal/role/list",
+          "path": "/admin/role/list",
           "title": "Roles",
           "icon": "mi mi-GuestUser"
         },
         {
-          "path": "/portal/permission/list",
+          "path": "/admin/permission/list",
           "title": "Permission",
           "icon": "mi mi-Permissions"
         }
@@ -259,10 +259,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/localize/create"
+          "path": "/admin/localize/create"
         },
         {
-          "path": "/portal/localize/list",
+          "path": "/admin/localize/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -277,10 +277,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/portal/permission/create"
+          "path": "/admin/permission/create"
         },
         {
-          "path": "/portal/permission/list",
+          "path": "/admin/permission/list",
           "title": "List",
           "icon": "mi mi-List"
         }
@@ -295,31 +295,31 @@
         {
           "title": "Create Theme",
           "icon": "mi mi-Add",
-          "path": "/portal/theme/create"
+          "path": "/admin/theme/create"
         },
         {
-          "path": "/portal/theme/list",
+          "path": "/admin/theme/list",
           "title": "Theme List",
           "icon": "mi mi-List"
         },
         {
           "title": "Store",
           "icon": "mi mi-ShoppingCart",
-          "path": "/portal/store/list"
+          "path": "/admin/store/list"
         },
         {
-          "path": "/portal/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
+          "path": "/admin/mix-database-data/list?mixDatabaseId=2&mixDatabaseName=sysNavigation&mixDatabaseTitle=Navigation",
 
           "title": "Navigations",
           "icon": "mi mi-ButtonMenu"
         },
         {
-          "path": "/portal/module/list",
+          "path": "/admin/module/list",
           "title": "Modules",
           "icon": "mi mi-Apps"
         },
         {
-          "path": "/portal/mix-database/list",
+          "path": "/admin/mix-database/list",
           "title": "Databases",
           "icon": "mi mi-Wheel"
         }
@@ -335,7 +335,7 @@
         {
           "title": "List Online",
           "icon": "mi mi-Cloud",
-          "path": "/portal/store/list"
+          "path": "/admin/store/list"
         }
       ]
     },
@@ -348,30 +348,30 @@
         {
           "title": "Global Settings",
           "icon": "mi mi-Equalizer",
-          "path": "/portal/app-settings/details"
+          "path": "/admin/app-settings/details"
         },
         {
-          "path": "/portal/configuration/list",
+          "path": "/admin/configuration/list",
           "title": "Local settings",
           "icon": "mi mi-Repair"
         },
         {
-          "path": "/portal/language/list",
+          "path": "/admin/language/list",
           "title": "Languages",
           "icon": "mi mi-World"
         },
         {
-          "path": "/portal/localize/list",
+          "path": "/admin/localize/list",
           "title": "Localization",
           "icon": "mi mi-TimeLanguage"
         },
         {
-          "path": "/portal/file/list",
+          "path": "/admin/file/list",
           "title": "Files",
           "icon": "mi mi-FileExplorer"
         },
         {
-          "path": "/portal/file/list?folder=MixContent/logs",
+          "path": "/admin/file/list?folder=MixContent/logs",
           "title": "Logs",
           "icon": "mi mi-Error"
         }
@@ -383,57 +383,57 @@
       "cate": "common",
       "items": [
         {
-          "path": "/portal",
+          "path": "/admin",
           "templatePath": "/mix-app/views/app-portal/pages/dashboard/dashboard.html",
           "controller": "DashboardController"
         },
         {
-          "path": "/portal/scheduler",
+          "path": "/admin/scheduler",
           "templatePath": "/mix-app/views/app-portal/pages/scheduler/list.html",
           "controller": "SchedulerController"
         },
         {
-          "path": "/portal/scheduler/create",
+          "path": "/admin/scheduler/create",
           "templatePath": "/mix-app/views/app-portal/pages/scheduler/details.html",
           "controller": "SchedulerController"
         },
         {
-          "path": "/portal/scheduler/details/:name",
+          "path": "/admin/scheduler/details/:name",
           "templatePath": "/mix-app/views/app-portal/pages/scheduler/details.html",
           "controller": "SchedulerController"
         },
         {
-          "path": "/portal/import",
+          "path": "/admin/import",
           "templatePath": "/mix-app/views/app-portal/pages/import/details.html",
           "controller": "ImportFileController"
         },
         {
-          "path": "/portal/app-settings/details",
+          "path": "/admin/app-settings/details",
           "templatePath": "/mix-app/views/app-portal/pages/app-settings/details.html",
           "controller": "AppSettingsController"
         },
         {
-          "path": "/portal/messenger",
+          "path": "/admin/messenger",
           "templatePath": "/mix-app/views/app-portal/pages/messenger/index.html",
           "controller": "MessengerController"
         },
         {
-          "path": "/portal/social-feed",
+          "path": "/admin/social-feed",
           "templatePath": "/mix-app/views/app-portal/pages/social-feed/index.html",
           "controller": "SocialFeedController"
         },
         {
-          "path": "/portal/json-data/list",
+          "path": "/admin/json-data/list",
           "templatePath": "/mix-app/views/app-portal/pages/json-data/list.html",
           "controller": "JsonDataController"
         },
         {
-          "path": "/portal/json-data/details",
+          "path": "/admin/json-data/details",
           "templatePath": "/mix-app/views/app-portal/pages/json-data/details.html",
           "controller": "JsonDataController"
         },
         {
-          "path": "/portal/json-data/create",
+          "path": "/admin/json-data/create",
           "templatePath": "/mix-app/views/app-portal/pages/json-data/details.html",
           "controller": "JsonDataController"
         }
@@ -443,17 +443,17 @@
       "cate": "tenant",
       "items": [
         {
-          "path": "/portal/tenant/create",
+          "path": "/admin/tenant/create",
           "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
           "controller": "TenantController"
         },
         {
-          "path": "/portal/tenant/list",
+          "path": "/admin/tenant/list",
           "templatePath": "/mix-app/views/app-portal/pages/tenant/list.html",
           "controller": "TenantController"
         },
         {
-          "path": "/portal/tenant/details/:id",
+          "path": "/admin/tenant/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
           "controller": "TenantController"
         }
@@ -463,17 +463,17 @@
       "cate": "domain",
       "items": [
         {
-          "path": "/portal/domain/create",
+          "path": "/admin/domain/create",
           "templatePath": "/mix-app/views/app-portal/pages/domain/details.html",
           "controller": "DomainController"
         },
         {
-          "path": "/portal/domain/list",
+          "path": "/admin/domain/list",
           "templatePath": "/mix-app/views/app-portal/pages/domain/list.html",
           "controller": "DomainController"
         },
         {
-          "path": "/portal/domain/details/:id",
+          "path": "/admin/domain/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/domain/details.html",
           "controller": "DomainController"
         }
@@ -483,32 +483,32 @@
       "cate": "post",
       "items": [
         {
-          "path": "/portal/post/create",
+          "path": "/admin/post/create",
           "templatePath": "/mix-app/views/app-portal/pages/post/details.html",
           "controller": "PostController"
         },
         {
-          "path": "/portal/post/list",
+          "path": "/admin/post/list",
           "templatePath": "/mix-app/views/app-portal/pages/post/list.html",
           "controller": "PostController"
         },
         {
-          "path": "/portal/post/details/:id",
+          "path": "/admin/post/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/post/details.html",
           "controller": "PostController"
         },
         {
-          "path": "/portal/post/gallery-list",
+          "path": "/admin/post/gallery-list",
           "templatePath": "/mix-app/views/app-portal/pages/post/gallery-list.html",
           "controller": "PostController"
         },
         {
-          "path": "/portal/post/gallery-details/:id",
+          "path": "/admin/post/gallery-details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/post/gallery-details.html",
           "controller": "PostController"
         },
         {
-          "path": "/portal/post/create-gallery",
+          "path": "/admin/post/create-gallery",
           "templatePath": "/mix-app/views/app-portal/pages/post/gallery-details.html",
           "controller": "PostController"
         }
@@ -518,27 +518,27 @@
       "cate": "page",
       "items": [
         {
-          "path": "/portal/page/create",
+          "path": "/admin/page/create",
           "templatePath": "/mix-app/views/app-portal/pages/page/details.html",
           "controller": "PageController"
         },
         {
-          "path": "/portal/page/list",
+          "path": "/admin/page/list",
           "templatePath": "/mix-app/views/app-portal/pages/page/list.html",
           "controller": "PageController"
         },
         {
-          "path": "/portal/page/details/:id",
+          "path": "/admin/page/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/page/details.html",
           "controller": "PageController"
         },
         {
-          "path": "/portal/page/page-post/list/:id",
+          "path": "/admin/page/page-post/list/:id",
           "templatePath": "/mix-app/views/app-portal/pages/page-post/list.html",
           "controller": "PagePostController"
         },
         {
-          "path": "/portal/page/page-gallery/list/:id",
+          "path": "/admin/page/page-gallery/list/:id",
           "templatePath": "/mix-app/views/app-portal/pages/page-gallery/list.html",
           "controller": "PageGalleryController"
         }
@@ -548,47 +548,47 @@
       "cate": "module",
       "items": [
         {
-          "path": "/portal/module/create",
+          "path": "/admin/module/create",
           "templatePath": "/mix-app/views/app-portal/pages/module/details.html",
           "controller": "ModuleController"
         },
         {
-          "path": "/portal/module/list",
+          "path": "/admin/module/list",
           "templatePath": "/mix-app/views/app-portal/pages/module/list.html",
           "controller": "ModuleController"
         },
         {
-          "path": "/portal/module/details/:id",
+          "path": "/admin/module/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module/details.html",
           "controller": "ModuleController"
         },
         {
-          "path": "/portal/module/data/:id",
+          "path": "/admin/module/data/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module/data.html",
           "controller": "ModuleController"
         },
         {
-          "path": "/portal/module-post/list/:id",
+          "path": "/admin/module-post/list/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module-post/list.html",
           "controller": "ModulePostController"
         },
         {
-          "path": "/portal/module-gallery/list/:id",
+          "path": "/admin/module-gallery/list/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module-gallery/list.html",
           "controller": "ModuleGalleryController"
         },
         {
-          "path": "/portal/module-data/details/:moduleContentId",
+          "path": "/admin/module-data/details/:moduleContentId",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/details.html",
           "controller": "ModuleDataController"
         },
         {
-          "path": "/portal/module-data/details/:moduleContentId/:id",
+          "path": "/admin/module-data/details/:moduleContentId/:id",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/details.html",
           "controller": "ModuleDataController"
         },
         {
-          "path": "/portal/module-data/list/:moduleContentId",
+          "path": "/admin/module-data/list/:moduleContentId",
           "templatePath": "/mix-app/views/app-portal/pages/module-data/list.html",
           "controller": "ModuleDataController"
         }
@@ -598,27 +598,27 @@
       "cate": "theme",
       "items": [
         {
-          "path": "/portal/theme/create",
+          "path": "/admin/theme/create",
           "templatePath": "/mix-app/views/app-portal/pages/theme/details.html",
           "controller": "ThemeController"
         },
         {
-          "path": "/portal/theme/list",
+          "path": "/admin/theme/list",
           "templatePath": "/mix-app/views/app-portal/pages/theme/list.html",
           "controller": "ThemeController"
         },
         {
-          "path": "/portal/theme/details/:id",
+          "path": "/admin/theme/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/theme/details.html",
           "controller": "ThemeController"
         },
         {
-          "path": "/portal/theme/export/:id",
+          "path": "/admin/theme/export/:id",
           "templatePath": "/mix-app/views/app-portal/pages/theme/export.html",
           "controller": "ThemeController"
         },
         {
-          "path": "/portal/theme/import",
+          "path": "/admin/theme/import",
           "templatePath": "/mix-app/views/app-portal/pages/theme/import.html",
           "controller": "ThemeController"
         }
@@ -628,22 +628,22 @@
       "cate": "template",
       "items": [
         {
-          "path": "/portal/template/list/:themeId/:folderType",
+          "path": "/admin/template/list/:themeId/:folderType",
           "templatePath": "/mix-app/views/app-portal/pages/template/list.html",
           "controller": "TemplateController"
         },
         {
-          "path": "/portal/template/details/:themeId/:folderType/:id",
+          "path": "/admin/template/details/:themeId/:folderType/:id",
           "templatePath": "/mix-app/views/app-portal/pages/template/details.html",
           "controller": "TemplateController"
         },
         {
-          "path": "/portal/template/create/:themeId/:folderType",
+          "path": "/admin/template/create/:themeId/:folderType",
           "templatePath": "/mix-app/views/app-portal/pages/template/details.html",
           "controller": "TemplateController"
         },
         {
-          "path": "/portal/template/list/:themeId",
+          "path": "/admin/template/list/:themeId",
           "templatePath": "/mix-app/views/app-portal/pages/template/list.html",
           "controller": "TemplateController"
         }
@@ -653,17 +653,17 @@
       "cate": "role",
       "items": [
         {
-          "path": "/portal/role/create",
+          "path": "/admin/role/create",
           "templatePath": "/mix-app/views/app-portal/pages/role/details.html",
           "controller": "RoleController"
         },
         {
-          "path": "/portal/role/list",
+          "path": "/admin/role/list",
           "templatePath": "/mix-app/views/app-portal/pages/role/list.html",
           "controller": "RoleController"
         },
         {
-          "path": "/portal/role/details/:id",
+          "path": "/admin/role/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/role/details.html",
           "controller": "RoleController"
         }
@@ -673,22 +673,22 @@
       "cate": "user",
       "items": [
         {
-          "path": "/portal/user/create",
+          "path": "/admin/user/create",
           "templatePath": "/mix-app/views/app-portal/pages/user/register.html",
           "controller": "UserController"
         },
         {
-          "path": "/portal/user/list",
+          "path": "/admin/user/list",
           "templatePath": "/mix-app/views/app-portal/pages/user/list.html",
           "controller": "UserController"
         },
         {
-          "path": "/portal/user/details/:id",
+          "path": "/admin/user/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/user/details.html",
           "controller": "UserController"
         },
         {
-          "path": "/portal/my-profile",
+          "path": "/admin/my-profile",
           "templatePath": "/mix-app/views/app-portal/pages/user/my-profile.html",
           "controller": "UserController"
         }
@@ -698,22 +698,22 @@
       "cate": "media",
       "items": [
         {
-          "path": "/portal/media/create",
+          "path": "/admin/media/create",
           "templatePath": "/mix-app/views/app-portal/pages/media/details.html",
           "controller": "MediaController"
         },
         {
-          "path": "/portal/media/list",
+          "path": "/admin/media/list",
           "templatePath": "/mix-app/views/app-portal/pages/media/list.html",
           "controller": "MediaController"
         },
         {
-          "path": "/portal/media/grid",
+          "path": "/admin/media/grid",
           "templatePath": "/mix-app/views/app-portal/pages/media/list-grid.html",
           "controller": "MediaController"
         },
         {
-          "path": "/portal/media/details/:id",
+          "path": "/admin/media/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/media/details.html",
           "controller": "MediaController"
         }
@@ -723,17 +723,17 @@
       "cate": "file",
       "items": [
         {
-          "path": "/portal/file/create",
+          "path": "/admin/file/create",
           "templatePath": "/mix-app/views/app-portal/pages/file/details.html",
           "controller": "FileController"
         },
         {
-          "path": "/portal/file/list",
+          "path": "/admin/file/list",
           "templatePath": "/mix-app/views/app-portal/pages/file/list.html",
           "controller": "FileController"
         },
         {
-          "path": "/portal/file/details",
+          "path": "/admin/file/details",
           "templatePath": "/mix-app/views/app-portal/pages/file/details.html",
           "controller": "FileController"
         }
@@ -743,17 +743,17 @@
       "cate": "permission",
       "items": [
         {
-          "path": "/portal/permission/create",
+          "path": "/admin/permission/create",
           "templatePath": "/mix-app/views/app-portal/pages/permission/details.html",
           "controller": "PermissionController"
         },
         {
-          "path": "/portal/permission/list",
+          "path": "/admin/permission/list",
           "templatePath": "/mix-app/views/app-portal/pages/permission/list.html",
           "controller": "PermissionController"
         },
         {
-          "path": "/portal/permission/details/:id",
+          "path": "/admin/permission/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/permission/details.html",
           "controller": "PermissionController"
         }
@@ -763,17 +763,17 @@
       "cate": "localize",
       "items": [
         {
-          "path": "/portal/localize/create",
+          "path": "/admin/localize/create",
           "templatePath": "/mix-app/views/app-portal/pages/localize/details.html",
           "controller": "LocalizeController"
         },
         {
-          "path": "/portal/localize/list",
+          "path": "/admin/localize/list",
           "templatePath": "/mix-app/views/app-portal/pages/localize/list.html",
           "controller": "LocalizeController"
         },
         {
-          "path": "/portal/localize/details/:id",
+          "path": "/admin/localize/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/localize/details.html",
           "controller": "LocalizeController"
         }
@@ -783,17 +783,17 @@
       "cate": "language",
       "items": [
         {
-          "path": "/portal/language/create",
+          "path": "/admin/language/create",
           "templatePath": "/mix-app/views/app-portal/pages/culture/details.html",
           "controller": "CultureController"
         },
         {
-          "path": "/portal/language/list",
+          "path": "/admin/language/list",
           "templatePath": "/mix-app/views/app-portal/pages/culture/list.html",
           "controller": "CultureController"
         },
         {
-          "path": "/portal/language/details/:id",
+          "path": "/admin/language/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/culture/details.html",
           "controller": "CultureController"
         }
@@ -803,17 +803,17 @@
       "cate": "Mix Database",
       "items": [
         {
-          "path": "/portal/mix-database/create",
+          "path": "/admin/mix-database/create",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database/details.html",
           "controller": "MixDatabaseController"
         },
         {
-          "path": "/portal/mix-database/list",
+          "path": "/admin/mix-database/list",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database/list.html",
           "controller": "MixDatabaseController"
         },
         {
-          "path": "/portal/mix-database/details/:id",
+          "path": "/admin/mix-database/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database/details.html",
           "controller": "MixDatabaseController"
         }
@@ -823,7 +823,7 @@
       "cate": "Mix Store",
       "items": [
         {
-          "path": "/portal/store/list",
+          "path": "/admin/store/list",
           "templatePath": "/mix-app/views/app-portal/pages/store/list.html",
           "controller": "StoreController"
         }
@@ -833,17 +833,17 @@
       "cate": "configuration",
       "items": [
         {
-          "path": "/portal/configuration/create",
+          "path": "/admin/configuration/create",
           "templatePath": "/mix-app/views/app-portal/pages/configuration/details.html",
           "controller": "ConfigurationController"
         },
         {
-          "path": "/portal/configuration/list",
+          "path": "/admin/configuration/list",
           "templatePath": "/mix-app/views/app-portal/pages/configuration/list.html",
           "controller": "ConfigurationController"
         },
         {
-          "path": "/portal/configuration/details/:id",
+          "path": "/admin/configuration/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/configuration/details.html",
           "controller": "ConfigurationController"
         }
@@ -853,17 +853,17 @@
       "cate": "url alias",
       "items": [
         {
-          "path": "/portal/url-alias/create",
+          "path": "/admin/url-alias/create",
           "templatePath": "/mix-app/views/app-portal/pages/url-alias/details.html",
           "controller": "UrlAliasController"
         },
         {
-          "path": "/portal/url-alias/list",
+          "path": "/admin/url-alias/list",
           "templatePath": "/mix-app/views/app-portal/pages/url-alias/list.html",
           "controller": "UrlAliasController"
         },
         {
-          "path": "/portal/url-alias/details/:id",
+          "path": "/admin/url-alias/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/url-alias/details.html",
           "controller": "UrlAliasController"
         }
@@ -873,17 +873,17 @@
       "cate": "file",
       "items": [
         {
-          "path": "/portal/file/create",
+          "path": "/admin/file/create",
           "templatePath": "/mix-app/views/app-portal/pages/file/details.html",
           "controller": "FileController"
         },
         {
-          "path": "/portal/file/list",
+          "path": "/admin/file/list",
           "templatePath": "/mix-app/views/app-portal/pages/file/list.html",
           "controller": "FileController"
         },
         {
-          "path": "/portal/file/details/:id",
+          "path": "/admin/file/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/file/details.html",
           "controller": "FileController"
         }
@@ -893,17 +893,17 @@
       "cate": "mix database data",
       "items": [
         {
-          "path": "/portal/mix-database-data/create",
+          "path": "/admin/mix-database-data/create",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/details.html",
           "controller": "MixDatabaseDataController"
         },
         {
-          "path": "/portal/mix-database-data/list",
+          "path": "/admin/mix-database-data/list",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/list.html",
           "controller": "MixDatabaseDataController"
         },
         {
-          "path": "/portal/mix-database-data/details",
+          "path": "/admin/mix-database-data/details",
           "templatePath": "/mix-app/views/app-portal/pages/mix-database-data/details.html",
           "controller": "MixDatabaseDataController"
         }
@@ -913,17 +913,17 @@
       "cate": "Navigation",
       "items": [
         {
-          "path": "/portal/navigation/create",
+          "path": "/admin/navigation/create",
           "templatePath": "/mix-app/views/app-portal/pages/navigation/details.html",
           "controller": "NavigationController"
         },
         {
-          "path": "/portal/navigation/list",
+          "path": "/admin/navigation/list",
           "templatePath": "/mix-app/views/app-portal/pages/navigation/list.html",
           "controller": "NavigationController"
         },
         {
-          "path": "/portal/navigation/details",
+          "path": "/admin/navigation/details",
           "templatePath": "/mix-app/views/app-portal/pages/navigation/details.html",
           "controller": "NavigationController"
         }
@@ -933,17 +933,17 @@
       "cate": "service",
       "items": [
         {
-          "path": "/portal/service/create",
+          "path": "/admin/service/create",
           "templatePath": "/mix-app/views/app-portal/pages/service/details.html",
           "controller": "ServiceController"
         },
         {
-          "path": "/portal/service/list",
+          "path": "/admin/service/list",
           "templatePath": "/mix-app/views/app-portal/pages/service/list.html",
           "controller": "ServiceController"
         },
         {
-          "path": "/portal/service/details/:id",
+          "path": "/admin/service/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/service/details.html",
           "controller": "ServiceController"
         }
