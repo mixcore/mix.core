@@ -45,12 +45,12 @@ namespace Mix.Lib.Base
                 IsValid = false;
                 Errors.Add(new ValidationResult("Entity Existed"));
             }
-            if (!MixHelper.IsDefaultId(LeftId))
+            if (MixHelper.IsDefaultId(LeftId))
             {
                 IsValid = false;
                 Errors.Add(new("Parent Id cannot be null"));
             }
-            if (!MixHelper.IsDefaultId(RightId))
+            if (MixHelper.IsDefaultId(RightId))
             {
                 IsValid = false;
                 Errors.Add(new("Child Id cannot be null"));
