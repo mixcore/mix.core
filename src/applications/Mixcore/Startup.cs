@@ -27,7 +27,6 @@ namespace Mixcore
 
             services.AddMixCors();
 
-
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
             services.AddScoped<MixNavigationService>();
 
@@ -53,19 +52,14 @@ namespace Mixcore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseMixCors();
-
             app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
-
             app.UseStaticFiles();
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
@@ -85,7 +79,6 @@ namespace Mixcore
             {
                 app.UseHttpsRedirection();
             }
-
 
             app.UseMixRoutes();
         }
