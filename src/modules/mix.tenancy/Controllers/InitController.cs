@@ -199,6 +199,7 @@ namespace Mix.Tenancy.Controllers
             try
             {
                 dto.TenantData.PrimaryDomain ??= Request.Headers.Host;
+                await _initCmsService.InitDbContext(dto.TenantData);
                 await _initCmsService.InitTenantAsync(dto.TenantData);
                 await _initCmsService.InitAccountAsync(dto.AccountData);
                 return Ok(true);
