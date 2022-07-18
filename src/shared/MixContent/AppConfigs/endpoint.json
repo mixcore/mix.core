@@ -10,5 +10,6 @@
     "Storage": "", // https://localhost:5018
     "Store": "https://store.mixcore.org",
     "UniversalPortal": "https://universal.mixcore.net",
-    "UniversalPortalDev": "https://mix-portal-angular.vercel.app"
+    "UniversalPortalDev": "https://mix-portal-angular.vercel.app",
+    "LocalPortalDev": "http://localhost:4200"
 }
