@@ -1,0 +1,33 @@
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Database.EntityConfigurations.Converters;
+using Newtonsoft.Json.Linq;
+
+namespace Mix.Database.EntityConfigurations.Base.Cms
+{
+    public class MixDatabaseConfiguration<TConfig> : TenantEntityUniqueNameBaseConfiguration<MixDatabase, int, TConfig>
+        where TConfig : IDatabaseConstants
+    {
+        public override void Configure(EntityTypeBuilder<MixDatabase> builder)
+        {
+            base.Configure(builder);
+
+            builder.Property(e => e.Type)
+               .IsRequired()
+               .HasConversion(new EnumToStringConverter<MixDatabaseType>())
+               .HasColumnType($"{Config.NString}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.ReadPermissions)
+               .IsRequired()
+               //.HasConversion(new StringToJArrayConverter())
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.Property(e => e.WritePermissions)
+               .IsRequired()
+               //.HasConversion(new StringToJArrayConverter())
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet);
+        }
+    }
+}
