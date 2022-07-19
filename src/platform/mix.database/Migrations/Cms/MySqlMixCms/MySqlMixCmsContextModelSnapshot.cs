@@ -416,7 +416,6 @@ namespace Mix.Database.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ReadPermissions")
-                        .IsRequired()
                         .HasColumnType("varchar(250)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ReadPermissions"), "utf8");
@@ -441,7 +440,6 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
 
                     b.Property<string>("WritePermissions")
-                        .IsRequired()
                         .HasColumnType("varchar(250)");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("WritePermissions"), "utf8");
@@ -661,6 +659,62 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MixDatabaseContextDatabaseAssociation");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LeftId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RightId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Status"), "utf8");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Type"), "utf8");
+
+                    b.HasKey("Id")
+                        .HasName("PK_MixDatabaseRelationship");
+
+                    b.HasIndex("LeftId");
+
+                    b.HasIndex("RightId");
+
+                    b.ToTable("MixDatabaseRelationship");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
@@ -2666,6 +2720,25 @@ namespace Mix.Database.Migrations
                     b.Navigation("MixTenant");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("LeftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
+                        .WithMany("DestinateRelationships")
+                        .HasForeignKey("RightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DestinateDatabase");
+
+                    b.Navigation("SourceDatabase");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDataContent", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixCulture", "MixCulture")
@@ -2968,7 +3041,11 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabase", b =>
                 {
+                    b.Navigation("DestinateRelationships");
+
                     b.Navigation("MixDatabaseColumns");
+
+                    b.Navigation("SourceRelationships");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseContextDatabaseAssociation", b =>

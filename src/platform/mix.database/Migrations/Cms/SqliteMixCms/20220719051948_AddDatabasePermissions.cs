@@ -12,14 +12,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
                 name: "ReadPermissions",
                 table: "MixDatabase",
                 type: "varchar(250)",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "WritePermissions",
                 table: "MixDatabase",
                 type: "varchar(250)",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
         }
 

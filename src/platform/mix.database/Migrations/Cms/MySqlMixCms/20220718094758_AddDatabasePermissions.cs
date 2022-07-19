@@ -12,7 +12,7 @@ namespace Mix.Database.Migrations
                 name: "ReadPermissions",
                 table: "MixDatabase",
                 type: "varchar(250)",
-                nullable: false,
+                nullable: true,
                 defaultValue: "")
                 .Annotation("MySql:CharSet", "utf8");
 
@@ -20,7 +20,7 @@ namespace Mix.Database.Migrations
                 name: "WritePermissions",
                 table: "MixDatabase",
                 type: "varchar(250)",
-                nullable: false,
+                nullable: true,
                 defaultValue: "")
                 .Annotation("MySql:CharSet", "utf8");
         }
