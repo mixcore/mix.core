@@ -15,6 +15,7 @@ namespace Mix.RepoDb.Services
     {
         private MixRepoDbRepository _repository;
         private MixRepoDbRepository _backupRepository;
+
         #region Properties
 
         public ITrace Trace { get; }
