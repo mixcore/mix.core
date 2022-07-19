@@ -388,6 +388,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReadPermissions")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -402,6 +407,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("WritePermissions")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")

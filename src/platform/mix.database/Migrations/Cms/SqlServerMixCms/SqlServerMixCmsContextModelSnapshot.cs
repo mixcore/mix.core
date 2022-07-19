@@ -403,6 +403,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int>("Priority")
                         .HasColumnType("int");
 
+                    b.Property<string>("ReadPermissions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -417,6 +422,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("WritePermissions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.HasKey("Id")

@@ -35,8 +35,6 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _databaseProvider = MixDatabaseProvider.MySQL;
-            _connectionString = "Server=localhost;port=3306;Database=mixcore_structure;User=root;Password=;";
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)
