@@ -18,13 +18,13 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.ReadPermissions)
-               .IsRequired()
+               .IsRequired(false)
                //.HasConversion(new StringToJArrayConverter())
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.WritePermissions)
-               .IsRequired()
+               .IsRequired(false)
                //.HasConversion(new StringToJArrayConverter())
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
