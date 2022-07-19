@@ -11,5 +11,7 @@ namespace Mix.Database.Entities.Cms
         public string WritePermissions { get; set; }
 
         public virtual ICollection<MixDatabaseColumn> MixDatabaseColumns { get; set; }
+        public virtual ICollection<MixDatabaseRelationship> SourceRelationships { get; set; }
+        public virtual ICollection<MixDatabaseRelationship> DestinateRelationships { get; set; }
     }
 }
