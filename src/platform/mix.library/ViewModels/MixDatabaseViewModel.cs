@@ -13,6 +13,7 @@ namespace Mix.Lib.ViewModels
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
+        public List<MixDatabaseRelationship> Relationships{ get; set; } = new();
         #endregion
 
         #region Constructors
