@@ -13,7 +13,7 @@ namespace Mix.Lib.ViewModels
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
-        public List<MixDatabaseRelationship> Relationships{ get; set; } = new();
+        public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
         #endregion
 
         #region Constructors
@@ -39,6 +39,9 @@ namespace Mix.Lib.ViewModels
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
+
+            var relationshipRepo = MixDatabaseRelationshipViewModel.GetRepository(UowInfo);
+            Relationships = await relationshipRepo.GetListAsync(c => c.LeftId == Id || c.RightId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)
@@ -50,6 +53,17 @@ namespace Mix.Lib.ViewModels
                     item.SetUowInfo(UowInfo);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
+                    await item.SaveAsync();
+                }
+            }
+
+            if (Relationships != null)
+            {
+                foreach (var item in Relationships)
+                {
+                    item.SetUowInfo(UowInfo);
+                    item.MixTenantId = MixTenantId;
+                    item.LeftId = parentEntity.Id;
                     await item.SaveAsync();
                 }
             }
