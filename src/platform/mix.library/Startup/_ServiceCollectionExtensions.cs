@@ -51,6 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCaching();
 
             services.TryAddSingleton<AuditLogService>();
+            services.TryAddSingleton<MixMemoryCacheService>();
             services.AddSingleton<PortalHubClientService>();
 
             services.AddMixRepoDb();

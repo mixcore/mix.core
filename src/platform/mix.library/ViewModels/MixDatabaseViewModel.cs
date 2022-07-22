@@ -64,6 +64,7 @@ namespace Mix.Lib.ViewModels
                     item.SetUowInfo(UowInfo);
                     item.MixTenantId = MixTenantId;
                     item.LeftId = parentEntity.Id;
+                    item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync();
                 }
             }
