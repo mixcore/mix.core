@@ -674,6 +674,12 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("DestinateDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateDatabaseName"), "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -694,6 +700,12 @@ namespace Mix.Database.Migrations
 
                     b.Property<int>("RightId")
                         .HasColumnType("int");
+
+                    b.Property<string>("SourceDatabaseName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SourceDatabaseName"), "utf8");
 
                     b.Property<string>("Status")
                         .IsRequired()
