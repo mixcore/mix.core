@@ -66,6 +66,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
+            services.AddUOWs();
             services.AddMixCache();
             services.CustomValidationResponse();
             services.AddHttpClient();
@@ -74,9 +75,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.ApplyMigrations();
 
             services.AddQueues(executingAssembly, configuration);
-
-            // Don't need to inject all entity repository by default
-            //services.AddEntityRepositories();
 
             services.AddMixTenant();
             services.AddGeneratedPublisher();
@@ -96,6 +94,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddResponseCaching();
 
             services.TryAddSingleton<AuditLogService>();
+            services.TryAddSingleton<MixMemoryCacheService>();
             services.AddSingleton<PortalHubClientService>();
             return services;
         }
