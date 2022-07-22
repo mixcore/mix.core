@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.RepoDb.Dtos;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using RepoDb;
@@ -11,8 +12,11 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
+        UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixRepoDbRepository _repository;
+        private readonly MixMemoryCacheService _memoryCache;
         private readonly MixCmsContext _context;
+        private string _tableName;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -21,25 +25,28 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService, MixRepoDbRepository repository)
+            IQueueService<MessageQueueModel> queueService, MixRepoDbRepository repository, MixMemoryCacheService memoryCache, UnitOfWorkInfo<MixCmsContext> cmsUOW)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _repository = repository;
+            _cmsUOW = cmsUOW;
+            _memoryCache = memoryCache;
         }
 
         #region Overrides
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            _repository.Init(RouteData?.Values["name"].ToString());
+            _tableName = RouteData?.Values["name"].ToString();
+            _repository.Init(_tableName);
             base.OnActionExecuting(context);
         }
 
         #endregion
 
         [HttpGet]
-        public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchMixDbRequestDto req)
         {
             var result = await SearchHandler(req);
 
@@ -50,13 +57,40 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id)
         {
-            var data = await _repository.GetAsync(id);
+            var database = await GetMixDatabase();
+            var data = JObject.FromObject(await _repository.GetAsync(id));
+            foreach (var item in database.Relationships)
+            {
+                _repository.Init(item.DestinateDatabaseName);
+                var queries = new List<QueryField>()
+                {
+                    new QueryField($"{item.SourceDatabaseName}Id", id)
+                };
+                var nestedData = JArray.FromObject(await _repository.GetByAsync(queries));
+                data.Add(new JProperty(item.DestinateDatabaseName, nestedData));
+            }
             return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
+        }
+
+        private async Task<MixDatabaseViewModel> GetMixDatabase()
+        {
+            return await _memoryCache.TryGetValueAsync(
+                _tableName,
+                cache =>
+                {
+                    cache.SlidingExpiration = TimeSpan.FromSeconds(20);
+                    return MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
+                }
+                );
         }
 
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject obj)
         {
+            if (!obj.ContainsKey("createdDateTime"))
+            {
+                obj.Add(new JProperty("createdDateTime", DateTime.UtcNow));
+            }
             var data = await _repository.InsertAsync(obj);
             return data != null ? Ok() : BadRequest();
         }
@@ -78,13 +112,13 @@ namespace Mix.Portal.Controllers
 
         #region Handler
 
-        private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchRequestDto request)
+        private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchMixDbRequestDto request)
         {
             var queries = BuildSearchPredicate(request);
             return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }
 
-        private IEnumerable<QueryField> BuildSearchPredicate(SearchRequestDto req)
+        private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)
         {
             var queries = new List<QueryField>();
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
@@ -98,6 +132,11 @@ namespace Mix.Portal.Controllers
                     QueryField field = new QueryField(item, operation, keyword);
                     queries.Add(field);
                 }
+            }
+            if (req.ParentId.HasValue)
+            {
+                QueryField field = new QueryField($"{req.ParentName}Id", Operation.Equal, req.ParentId.Value);
+                queries.Add(field);
             }
             return queries;
         }

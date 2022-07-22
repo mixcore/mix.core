@@ -11,11 +11,21 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
         {
             base.Configure(builder);
 
-            builder.HasOne<MixDatabase>(e => e.SourceDatabase)
+            builder.Property(e => e.SourceDatabaseName)
+               .IsRequired()
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+            
+            builder.Property(e => e.DestinateDatabaseName)
+               .IsRequired()
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+
+            builder.HasOne(e => e.SourceDatabase)
                 .WithMany(e => e.SourceRelationships)
                 .HasForeignKey(e => e.LeftId);
             
-            builder.HasOne<MixDatabase>(e => e.DestinateDatabase)
+            builder.HasOne(e => e.DestinateDatabase)
                 .WithMany(e => e.DestinateRelationships)
                 .HasForeignKey(e => e.RightId);
 

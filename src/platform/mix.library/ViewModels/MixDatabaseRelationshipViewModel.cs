@@ -7,6 +7,8 @@ namespace Mix.Lib.ViewModels
         : AssociationViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
     {
         #region Properties
+        public string SourceDatabaseName { get; set; }
+        public string DestinateDatabaseName { get; set; }
         public MixDatabaseRelationshipType Type { get; set; }
         #endregion
 

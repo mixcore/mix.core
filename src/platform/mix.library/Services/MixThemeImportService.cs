@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
+using Mix.RepoDb.Services;
 
 namespace Mix.Lib.Services
 {
@@ -9,6 +10,7 @@ namespace Mix.Lib.Services
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
         private DatabaseService _databaseService;
+        private MixDbService _mixDbService;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
         public readonly int tenantId;
@@ -30,7 +32,7 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService)
+        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService, MixDbService mixDbService)
         {
             _uow = uow;
             _context = uow.DbContext;
@@ -40,6 +42,7 @@ namespace Mix.Lib.Services
                 tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
             }
             _databaseService = databaseService;
+            _mixDbService = mixDbService;
         }
 
         #region Import
@@ -174,8 +177,16 @@ namespace Mix.Lib.Services
             await ImportDatabaseContextsAsync();
             await ImportDatabasesAsync();
             await ImportDatabaseColumnsAsync();
-
+            await MigrateMixDatabaseAsync();
             await ImportAssociationDataAsync(_siteData.DatabaseContextDatabaseAssociations, dicMixDatabaseContextIds, dicMixDatabaseIds);
+        }
+
+        private async Task MigrateMixDatabaseAsync()
+        {
+            foreach (var item in _siteData.MixDatabases)
+            {
+                await _mixDbService.MigrateDatabase(item.SystemName);
+            }
         }
 
         private async Task ImportPosts()

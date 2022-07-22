@@ -99,6 +99,23 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
+        public async Task<List<dynamic>?> GetByAsync(List<QueryField> queryFields)
+        {
+            using (var connection = CreateConnection())
+            {
+                try
+                {
+                    var data = await connection.QueryAsync(_tableName, queryFields);
+                    return data.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                    return default;
+                }
+            }
+        }
+
         public async Task<List<dynamic>?> GetAllAsync()
         {
             using (var connection = CreateConnection())

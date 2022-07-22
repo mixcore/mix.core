@@ -36,6 +36,7 @@ namespace Mix.RepoDb.Services
 
         #region Methods
 
+        // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> MigrateDatabase(string name)
         {
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
