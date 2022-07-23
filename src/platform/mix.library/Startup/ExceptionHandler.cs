@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app, bool isDevelop)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             //app.UseDeveloperExceptionPage();
             app.UseExceptionHandler(appError =>

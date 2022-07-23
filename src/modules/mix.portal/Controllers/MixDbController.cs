@@ -67,7 +67,7 @@ namespace Mix.Portal.Controllers
                     new QueryField($"{item.SourceDatabaseName}Id", id)
                 };
                 var nestedData = JArray.FromObject(await _repository.GetByAsync(queries));
-                data.Add(new JProperty(item.DestinateDatabaseName, nestedData));
+                data.Add(new JProperty(item.DisplayName, nestedData));
             }
             return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
         }

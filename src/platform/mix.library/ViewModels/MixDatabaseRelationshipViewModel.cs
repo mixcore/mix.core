@@ -7,6 +7,7 @@ namespace Mix.Lib.ViewModels
         : AssociationViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
     {
         #region Properties
+        public string DisplayName { get; set; }
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }
         public MixDatabaseRelationshipType Type { get; set; }
@@ -31,9 +32,6 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
-        {
-        }
 
         public override async Task Validate()
         {

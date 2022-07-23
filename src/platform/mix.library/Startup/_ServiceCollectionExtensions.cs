@@ -120,7 +120,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseUOWs();
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
-            app.ConfigureExceptionHandler(isDevelop);
+            app.ConfigureExceptionHandler();
 
             return app;
         }

@@ -15,9 +15,9 @@ namespace Mix.Lib.Services
 
             : base(accContext, describer)
         {
-            if (httpContext.HttpContext != null && httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContext.HttpContext != null && httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
             {
-                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
         }
     }

@@ -34,6 +34,6 @@ namespace Mix.RepoDb.Dtos
         }
 
         public int? ParentId { get; set; }
-        public string ParentName { get; set; }
+        public string? ParentName { get; set; }
     }
 }

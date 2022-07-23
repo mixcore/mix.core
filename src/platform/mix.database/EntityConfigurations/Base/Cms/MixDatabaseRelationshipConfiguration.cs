@@ -16,6 +16,11 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
             
+            builder.Property(e => e.DisplayName)
+               .IsRequired()
+               .HasColumnType($"{Config.String}{Config.SmallLength}")
+               .HasCharSet(Config.CharSet);
+            
             builder.Property(e => e.DestinateDatabaseName)
                .IsRequired()
                .HasColumnType($"{Config.String}{Config.SmallLength}")

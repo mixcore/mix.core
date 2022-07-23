@@ -30,11 +30,15 @@ namespace Mix.Lib.Middlewares
                     var uow = new UnitOfWorkInfo(cmsContext);
                     MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(uow).GetAllAsync(m => true);
                 }
-                if (!context.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+                if (!context.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
                 {
+                    var currentTenant = MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host);
                     context.Session.SetInt32(
-                        MixRequestQueryKeywords.MixTenantId,
-                        MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host).Id);
+                        MixRequestQueryKeywords.TenantId,
+                        currentTenant.Id);
+                    context.Session.SetString(
+                        MixRequestQueryKeywords.TenantName,
+                        currentTenant.SystemName);
                 }
                 await next.Invoke(context);
             }
