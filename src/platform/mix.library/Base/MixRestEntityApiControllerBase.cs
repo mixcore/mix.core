@@ -39,11 +39,11 @@ namespace Mix.Lib.Base
             {
                 return BadRequest("Null Object");
             }
-            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
+            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
             {
                 ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
                 {
-                    PropertyName = MixRequestQueryKeywords.MixTenantId,
+                    PropertyName = MixRequestQueryKeywords.TenantId,
                     PropertyValue = MixTenantId
                 });
             }

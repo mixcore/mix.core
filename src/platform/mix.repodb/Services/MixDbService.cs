@@ -7,7 +7,9 @@ using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
+using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
+using System.Dynamic;
 
 namespace Mix.RepoDb.Services
 {
@@ -95,11 +97,27 @@ namespace Mix.RepoDb.Services
             var data = await _backupRepository.GetAllAsync();
             if (data != null && data.Count > 0)
             {
+                foreach (var item in data)
+                {
+                    GetMembers(item, database.Columns.Select(c => c.SystemName));
+                }
                 _repository.Init(database.SystemName);
                 var result = await _repository.InsertManyAsync(data);
                 return result >= 0;
             }
             return false;
+        }
+
+        private void GetMembers(ExpandoObject obj, IEnumerable<string> selectMembers)
+        {
+            var result = obj.ToList();
+            foreach (KeyValuePair<string, object> kvp in result)
+            {
+                if (kvp.Key != "id" && kvp.Key != "createdDateTime" && !selectMembers.Any(m=>m == kvp.Key))
+                {
+                    obj!.Remove(kvp.Key, out _);
+                }
+            }
         }
 
         private async Task<List<dynamic>?> GetCurrentData(string databaseName)
@@ -119,7 +137,8 @@ namespace Mix.RepoDb.Services
 
             if (!string.IsNullOrEmpty(commandText))
             {
-                var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
+                await _repository.ExecuteCommand($"DROP TABLE IF EXISTS {database.SystemName};");
+                var result = await _repository.ExecuteCommand(commandText);
                 return result >= 0;
             }
             return false;
@@ -127,8 +146,7 @@ namespace Mix.RepoDb.Services
 
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
         {
-            return $"DROP TABLE IF EXISTS {tableName}; " +
-                $"CREATE TABLE {tableName} " +
+            return $"CREATE TABLE {tableName} " +
                 $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
                 $" {string.Join(",", colSqls.ToArray())})";
         }

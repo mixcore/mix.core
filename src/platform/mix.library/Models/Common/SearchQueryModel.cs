@@ -103,11 +103,11 @@ namespace Mix.Lib.Models.Common
                         MixRequestQueryKeywords.Specificulture, req.Culture, ExpressionMethod.Equal));
             }
 
-            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
+            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
             {
                 AndPredicate = AndPredicate.AndAlso(
                         ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Equal));
+                        MixRequestQueryKeywords.TenantId, MixTenantId, ExpressionMethod.Equal));
             }
 
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)

@@ -22,7 +22,7 @@ namespace Mix.Lib.Base
         protected UnitOfWorkInfo _uow;
         protected UnitOfWorkInfo _cacheUOW;
         protected MixCacheDbContext _cacheDbContext;
-        protected ConstructorInfo classConstructor = typeof(TEntity).GetConstructor(new Type[] { });
+        protected ConstructorInfo classConstructor = typeof(TEntity).GetConstructor(Array.Empty<Type>());
         protected MixCacheService _cacheService;
         public MixQueryEntityApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
@@ -74,7 +74,7 @@ namespace Mix.Lib.Base
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             if (!string.IsNullOrEmpty(req.Columns))
             {
-                List<object> objects = new List<object>();
+                List<object> objects = new();
                 foreach (var item in result.Items)
                 {
                     objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
@@ -99,8 +99,7 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("default")]
-        [HttpGet("{lang}/default")]
-        public ActionResult<TEntity> GetDefault(string culture = null)
+        public ActionResult<TEntity> GetDefault()
         {
             var result = (TEntity)Activator.CreateInstance(typeof(TEntity), new[] { _uow });
             return Ok(result);
@@ -134,10 +133,10 @@ namespace Mix.Lib.Base
                         MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Equal));
             }
 
-            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.MixTenantId))
+            if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
             {
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.MixTenantId, MixTenantId, ExpressionMethod.Equal);
+                        MixRequestQueryKeywords.TenantId, MixTenantId, ExpressionMethod.Equal);
             }
 
             return andPredicate;

@@ -60,9 +60,9 @@ namespace Mix.Lib.Services
             _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_accountUow);
             _firebaseService = firebaseService;
 
-            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
             {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
             _mixDataService = mixDataService;
             _mixDataService.SetUnitOfWork(_cmsUow);

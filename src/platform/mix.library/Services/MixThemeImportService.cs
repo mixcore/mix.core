@@ -37,9 +37,9 @@ namespace Mix.Lib.Services
             _uow = uow;
             _context = uow.DbContext;
             _cts = new CancellationTokenSource();
-            if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).HasValue)
+            if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
             {
-                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.MixTenantId).Value;
+                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
             _databaseService = databaseService;
             _mixDbService = mixDbService;
@@ -398,7 +398,7 @@ namespace Mix.Lib.Services
                 {
                     ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                     {
-                        PropertyName = MixRequestQueryKeywords.MixTenantId,
+                        PropertyName = MixRequestQueryKeywords.TenantId,
                         PropertyValue = tenantId
                     });
                     ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
@@ -423,11 +423,11 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
 
-                    if (ReflectionHelper.HasProperty(typeof(T), MixRequestQueryKeywords.MixTenantId))
+                    if (ReflectionHelper.HasProperty(typeof(T), MixRequestQueryKeywords.TenantId))
                     {
                         ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                         {
-                            PropertyName = MixRequestQueryKeywords.MixTenantId,
+                            PropertyName = MixRequestQueryKeywords.TenantId,
                             PropertyValue = tenantId
                         });
                     }
