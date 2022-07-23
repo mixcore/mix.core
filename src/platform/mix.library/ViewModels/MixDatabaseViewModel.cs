@@ -41,7 +41,7 @@ namespace Mix.Lib.ViewModels
             Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
 
             var relationshipRepo = MixDatabaseRelationshipViewModel.GetRepository(UowInfo);
-            Relationships = await relationshipRepo.GetListAsync(c => c.LeftId == Id || c.RightId == Id);
+            Relationships = await relationshipRepo.GetListAsync(c => c.LeftId == Id);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)
