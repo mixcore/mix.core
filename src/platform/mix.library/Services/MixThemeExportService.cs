@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
+using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Services
@@ -8,6 +9,7 @@ namespace Mix.Lib.Services
     {
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCmsContext _context;
+        private MixRepoDbRepository _repository;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
         private MixThemeViewModel _exporTheme;
@@ -16,10 +18,11 @@ namespace Mix.Lib.Services
         private string webPath;
         private string fileName;
 
-        public MixThemeExportService(MixCmsContext context)
+        public MixThemeExportService(MixCmsContext context, MixRepoDbRepository repository)
         {
             _context = context;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
+            _repository = repository;
         }
 
         #region Export
@@ -124,7 +127,7 @@ namespace Mix.Lib.Services
             await ExportAdditionalData(_dto.Content.PostIds, MixDatabaseParentType.Post);
             await ExportPageDatas();
             await ExportModuleDatas();
-            await ExportDatabaseDatas();
+            //await ExportDatabaseDatas();
 
 
             await ExportUrlAliasAsync();
@@ -204,8 +207,20 @@ namespace Mix.Lib.Services
             await ExportDataAssociationsAsync();
         }
 
-
-
+        private async Task ExportMixDbAsync()
+        {
+            foreach (var database in _siteData.MixDatabases)
+            {
+                _repository.Init(database.SystemName);
+                var data = await _repository.GetAllAsync();
+                _siteData.MixDbModels.Add(new()
+                {
+                    DatabaseName = database.SystemName,
+                    Data = data
+                });
+            }
+        }
+        
         private async Task ExportMixDatasAsync()
         {
             var datas = await _context.MixData
@@ -284,12 +299,12 @@ namespace Mix.Lib.Services
             await ExportPosts();
             await ExportModules();
             await ExportDatabases();
+            await ExportMixDbAsync();
             if (_dto.IsIncludeConfigurations)
             {
                 await ExportConfigurationDataAsync();
                 await ExportLanguageDataAsync();
             }
-
         }
 
         private async Task ExportTemplates()
@@ -353,27 +368,29 @@ namespace Mix.Lib.Services
 
         private async Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
         {
-            var associations = await _context.MixDataContentAssociation
-                .Where(m =>
-                    m.IntParentId.HasValue
-                    && m.ParentType == type
-                    && parentIds.Any(p => p == m.IntParentId.Value))
-                .AsNoTracking()
-                .ToListAsync();
-            var dataIds = associations.Select(x => x.ParentId).ToList();
-            var contentIds = associations.Select(x => x.DataContentId).ToList();
-            var datas = await _context.MixData
-                .Where(m => dataIds.Contains(m.Id))
-                .AsNoTracking()
-                .ToListAsync();
-            var dataContents = await _context.MixDataContent
-                .Where(m => contentIds.Contains(m.Id))
-                .AsNoTracking()
-                .ToListAsync();
+            // TODO: Export Data from single datatable
 
-            _siteData.Datas = _siteData.Datas.Union(datas).ToList();
-            _siteData.DataContents = _siteData.DataContents.Union(dataContents).ToList();
-            _siteData.DataContentAssociations = _siteData.DataContentAssociations.Union(associations).ToList();
+            //var associations = await _context.MixDataContentAssociation
+            //    .Where(m =>
+            //        m.IntParentId.HasValue
+            //        && m.ParentType == type
+            //        && parentIds.Any(p => p == m.IntParentId.Value))
+            //    .AsNoTracking()
+            //    .ToListAsync();
+            //var dataIds = associations.Select(x => x.ParentId).ToList();
+            //var contentIds = associations.Select(x => x.DataContentId).ToList();
+            //var datas = await _context.MixData
+            //    .Where(m => dataIds.Contains(m.Id))
+            //    .AsNoTracking()
+            //    .ToListAsync();
+            //var dataContents = await _context.MixDataContent
+            //    .Where(m => contentIds.Contains(m.Id))
+            //    .AsNoTracking()
+            //    .ToListAsync();
+
+            //_siteData.Datas = _siteData.Datas.Union(datas).ToList();
+            //_siteData.DataContents = _siteData.DataContents.Union(dataContents).ToList();
+            //_siteData.DataContentAssociations = _siteData.DataContentAssociations.Union(associations).ToList();
         }
 
 

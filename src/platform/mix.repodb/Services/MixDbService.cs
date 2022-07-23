@@ -52,8 +52,6 @@ namespace Mix.RepoDb.Services
             return false;
         }
 
-
-
         public async Task<bool> BackupDatabase(string databaseName)
         {
             var database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == databaseName);
@@ -75,10 +73,14 @@ namespace Mix.RepoDb.Services
             {
                 InitBackupRepository(database.SystemName);
                 await Migrate(database, _backupRepository.DatabaseProvider, new BackupDbContext(_backupRepository.ConnectionString));
+                foreach (var item in data)
+                {
+                    GetMembers(item, database.Columns.Select(c => c.SystemName));
+                }
                 var result = await _backupRepository.InsertManyAsync(data);
                 return result > 0;
             }
-            return false;
+            return true;
         }
 
         private void InitBackupRepository(string databaseName)
@@ -105,7 +107,7 @@ namespace Mix.RepoDb.Services
                 var result = await _repository.InsertManyAsync(data);
                 return result >= 0;
             }
-            return false;
+            return true;
         }
 
         private void GetMembers(ExpandoObject obj, IEnumerable<string> selectMembers)
@@ -113,7 +115,7 @@ namespace Mix.RepoDb.Services
             var result = obj.ToList();
             foreach (KeyValuePair<string, object> kvp in result)
             {
-                if (kvp.Key != "id" && kvp.Key != "createdDateTime" && !selectMembers.Any(m=>m == kvp.Key))
+                if (kvp.Key != "id" && kvp.Key != "createdDateTime" && !selectMembers.Any(m => m == kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }
@@ -125,6 +127,7 @@ namespace Mix.RepoDb.Services
             _repository.Init(databaseName);
             return await _repository.GetAllAsync();
         }
+
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
         {
             List<string> colSqls = new List<string>();
@@ -137,8 +140,8 @@ namespace Mix.RepoDb.Services
 
             if (!string.IsNullOrEmpty(commandText))
             {
-                await _repository.ExecuteCommand($"DROP TABLE IF EXISTS {database.SystemName};");
-                var result = await _repository.ExecuteCommand(commandText);
+                await ctx.Database.ExecuteSqlRawAsync($"DROP TABLE IF EXISTS {database.SystemName};");
+                var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
                 return result >= 0;
             }
             return false;

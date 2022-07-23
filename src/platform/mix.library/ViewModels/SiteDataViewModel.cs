@@ -46,6 +46,7 @@
         public List<MixLanguageContent> LanguageContents { get; set; }
 
         public List<MixData> Datas { get; set; } = new();
+        public List<MixDbModel> MixDbModels { get; set; } = new();
 
         public List<MixDataContent> DataContents { get; set; } = new();
 
@@ -70,5 +71,11 @@
         {
 
         }
+    }
+
+    public class MixDbModel
+    {
+        public string DatabaseName { get; set; }
+        public List<dynamic> Data { get; set; }
     }
 }
