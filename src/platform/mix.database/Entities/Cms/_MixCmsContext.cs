@@ -35,8 +35,6 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            _databaseProvider = MixDatabaseProvider.PostgreSQL;
-            _connectionString = "Host=localhost;Database=mixcore_structure;Username=postgres;Password=myPassword";
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)
