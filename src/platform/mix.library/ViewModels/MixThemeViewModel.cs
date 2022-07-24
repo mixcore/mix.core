@@ -14,7 +14,7 @@
         {
             get
             {
-                return $"{MixFolders.SiteContentAssetsFolder}/{SystemName}";
+                return MixThemePackageConstants.AssetFolder;
             }
         }
 
@@ -22,7 +22,7 @@
         {
             get
             {
-                return MixFolders.UploadsFolder;
+                return MixThemePackageConstants.UploadFolder;
             }
         }
 

@@ -109,7 +109,6 @@ namespace Mix.Lib.Services
                 await ImportData();
 
                 await _uow.CompleteAsync();
-                _uow.Dispose();
                 return _siteData;
             }
             catch (Exception ex)
@@ -181,6 +180,7 @@ namespace Mix.Lib.Services
         {
             await ImportDatabaseContextsAsync();
             await ImportDatabasesAsync();
+            await ImportDatabaseRelationshipsAsync();
             await ImportDatabaseColumnsAsync();
             await MigrateMixDatabaseAsync();
             await ImportAssociationDataAsync(_siteData.DatabaseContextDatabaseAssociations, dicMixDatabaseContextIds, dicMixDatabaseIds);
@@ -352,9 +352,27 @@ namespace Mix.Lib.Services
                 item.MixTenantId = _tenantId;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
+                item.CreatedDateTime = DateTime.UtcNow;
                 _context.Entry(item).State = EntityState.Added;
                 await _context.SaveChangesAsync(_cts.Token);
                 dicMixDatabaseIds.Add(oldId, item.Id);
+            }
+        }
+        
+        private async Task ImportDatabaseRelationshipsAsync()
+        {
+            foreach (var item in _siteData.MixDatabaseRelationships)
+            {
+                var oldId = item.Id;
+
+                item.MixTenantId = _tenantId;
+                item.Id = 0;
+                item.LeftId = dicMixDatabaseIds[item.LeftId];
+                item.RightId= dicMixDatabaseIds[item.RightId];
+                item.CreatedBy = _siteData.CreatedBy;
+                item.CreatedDateTime = DateTime.UtcNow;
+                _context.Entry(item).State = EntityState.Added;
+                await _context.SaveChangesAsync(_cts.Token);
             }
         }
 
