@@ -76,6 +76,6 @@
     public class MixDbModel
     {
         public string DatabaseName { get; set; }
-        public List<dynamic> Data { get; set; }
+        public JArray Data { get; set; }
     }
 }

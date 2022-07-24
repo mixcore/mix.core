@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
+using Mix.RepoDb.Repositories;
 using Mix.RepoDb.Services;
 
 namespace Mix.Lib.Services
@@ -9,11 +10,13 @@ namespace Mix.Lib.Services
     {
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
+        private readonly MixRepoDbRepository _repository;
         private DatabaseService _databaseService;
         private MixDbService _mixDbService;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
-        public readonly int tenantId;
+        public readonly int _tenantId;
+        public readonly string _tenantName;
         #region Dictionaries
 
         private Dictionary<int, int> dicAliasIds = new Dictionary<int, int>();
@@ -39,8 +42,9 @@ namespace Mix.Lib.Services
             _cts = new CancellationTokenSource();
             if (httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
             {
-                tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
+                _tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
+            _tenantName = httpContext.HttpContext.Session.GetString(MixRequestQueryKeywords.TenantName);
             _databaseService = databaseService;
             _mixDbService = mixDbService;
         }
@@ -105,7 +109,7 @@ namespace Mix.Lib.Services
                 await ImportData();
 
                 await _uow.CompleteAsync();
-
+                _uow.Dispose();
                 return _siteData;
             }
             catch (Exception ex)
@@ -119,13 +123,13 @@ namespace Mix.Lib.Services
             // Copy theme's assets
             string srcAssets = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.AssetFolder}";
             //string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
-            string destAssets = $"{MixFolders.TemplatesFolder}/{_siteData.ThemeSystemName}/{MixFolders.SiteContentAssetsFolder}";
+            string destAssets = $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/assets";
             MixFileHelper.CopyFolder(srcAssets, destAssets);
 
             // Copy theme's upload files
             string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
             //string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}";
-            string destUpload = $"{MixFolders.UploadsFolder}";
+            string destUpload = $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/uploads";
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
@@ -135,7 +139,7 @@ namespace Mix.Lib.Services
             _siteData.ThemeId = table.Any() ? table.Max(m => m.Id) + 1 : 1;
             var theme = new MixTheme()
             {
-                MixTenantId = tenantId,
+                MixTenantId = _tenantId,
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
                 CreatedBy = _siteData.CreatedBy,
@@ -158,6 +162,7 @@ namespace Mix.Lib.Services
             await ImportLanguages();
             await ImportPosts();
             await ImportMixDatabases();
+            await ImportMixDbDataAsync();
         }
 
         private async Task ImportLanguages()
@@ -214,7 +219,7 @@ namespace Mix.Lib.Services
             {
                 _siteData.Templates.ForEach(x =>
                 {
-                    x.MixTenantId = tenantId;
+                    x.MixTenantId = _tenantId;
                     x.CreatedBy = _siteData.CreatedBy;
                     x.CreatedDateTime = DateTime.UtcNow;
                     x.MixThemeId = _siteData.ThemeId;
@@ -242,7 +247,9 @@ namespace Mix.Lib.Services
 
         private string ReplaceContent(string content, string themeName)
         {
-            return content.Replace("[THEME_NAME]", themeName);
+            return content
+                .Replace("[THEME_NAME]", themeName)
+                .Replace("[TENANT_NAME]", _tenantName);
         }
 
         #endregion
@@ -255,7 +262,7 @@ namespace Mix.Lib.Services
             await ImportAssociationDataAsync(_siteData.PagePosts, dicPageIds, dicPostIds);
             await ImportAssociationDataAsync(_siteData.ModulePosts, dicModuleIds, dicPostIds);
 
-            await ImportDatabaseDataAsync();
+            //await ImportDatabaseDataAsync();
 
             await ImportEntitiesAsync(_siteData.MixUrlAliases, dicAliasIds);
         }
@@ -274,7 +281,7 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
-                item.MixTenantId = tenantId;
+                item.MixTenantId = _tenantId;
                 item.ParentId = dicPageIds[item.ParentId];
                 item.Specificulture = _siteData.Specificulture;
                 _context.Entry(item).State = EntityState.Added;
@@ -296,7 +303,7 @@ namespace Mix.Lib.Services
                     var oldId = item.Id;
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
-                    item.MixTenantId = tenantId;
+                    item.MixTenantId = _tenantId;
                     item.ParentId = dicModuleIds[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
                     _context.Entry(item).State = EntityState.Added;
@@ -320,7 +327,7 @@ namespace Mix.Lib.Services
                 {
                     item.SystemName = $"{item.SystemName}_1";
                 }
-                item.MixTenantId = tenantId;
+                item.MixTenantId = _tenantId;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
@@ -342,7 +349,7 @@ namespace Mix.Lib.Services
                 {
                     item.SystemName = $"{item.SystemName}_1";
                 }
-                item.MixTenantId = tenantId;
+                item.MixTenantId = _tenantId;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 _context.Entry(item).State = EntityState.Added;
@@ -364,13 +371,41 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
-                item.MixTenantId = tenantId;
+                item.MixTenantId = _tenantId;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);
                 await _context.SaveChangesAsync(_cts.Token);
                 dicColumnIds.Add(oldId, item.Id);
             }
+        }
+        public async Task ImportMixDbDataAsync()
+        {
+            foreach (var database in _siteData.MixDbModels)
+            {
+                if (database.Data != null && database.Data.Count > 0)
+                {
+                    var sql = GetInsertQuery(database);
+                    await _context.Database.ExecuteSqlRawAsync(sql);
+                }
+            }
+        }
+
+        private string GetInsertQuery(MixDbModel database)
+        {
+            List<string> columns = new List<string> { "id", "createdDateTime" };
+            columns.AddRange(_siteData.MixDatabaseColumns.Where(c => c.MixDatabaseName == database.DatabaseName).Select(c => c.SystemName).ToList());
+            List<string> sqls = new();
+            foreach (JObject item in database.Data)
+            {
+                List<string> values = new();
+                foreach (var col in columns)
+                {
+                    values.Add($"'{item.Value<string>(col)}'");
+                }
+                sqls.Add($"Insert into {database.DatabaseName} ({string.Join(',', columns)}) Values ({string.Join(',', values)})");
+            }
+            return string.Join(';', sqls);
         }
 
         private async Task ImportDatabaseDataAsync()
@@ -399,7 +434,7 @@ namespace Mix.Lib.Services
                     ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                     {
                         PropertyName = MixRequestQueryKeywords.TenantId,
-                        PropertyValue = tenantId
+                        PropertyValue = _tenantId
                     });
                     ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                     {
@@ -428,7 +463,7 @@ namespace Mix.Lib.Services
                         ReflectionHelper.SetPropertyValue(item, new EntityPropertyModel()
                         {
                             PropertyName = MixRequestQueryKeywords.TenantId,
-                            PropertyValue = tenantId
+                            PropertyValue = _tenantId
                         });
                     }
 
@@ -452,7 +487,7 @@ namespace Mix.Lib.Services
                     var oldId = item.Id;
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
-                    item.MixTenantId = tenantId;
+                    item.MixTenantId = _tenantId;
                     item.ParentId = parentDic[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
@@ -475,7 +510,7 @@ namespace Mix.Lib.Services
                 {
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
-                    item.MixTenantId = tenantId;
+                    item.MixTenantId = _tenantId;
                     item.LeftId = leftDic[item.LeftId];
                     item.RightId = rightDic[item.RightId];
                     item.CreatedDateTime = DateTime.UtcNow;

@@ -34,7 +34,7 @@ namespace Mix.Scheduler
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMixCors();
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
         }
     }
 }

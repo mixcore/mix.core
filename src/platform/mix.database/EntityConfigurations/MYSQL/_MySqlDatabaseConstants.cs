@@ -22,7 +22,7 @@
 
         string IDatabaseConstants.NString => "varchar";
 
-        string IDatabaseConstants.Text => "text";
+        string IDatabaseConstants.Text => "longtext";
 
         string IDatabaseConstants.GenerateUUID => "uuid()";
     }
