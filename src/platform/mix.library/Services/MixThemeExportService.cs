@@ -41,9 +41,9 @@ namespace Mix.Lib.Services
             _siteData.ThemeName = _exporTheme.DisplayName;
             _siteData.ThemeSystemName = _exporTheme.SystemName;
             fileName = $"{_exporTheme.SystemName}-{Guid.NewGuid()}";
-            webPath = $"{MixFolders.ExportFolder}/Themes/{_exporTheme.SystemName}";
-            tempPath = $"{MixFolders.WebRootPath}/{webPath}/temp";
-            outputPath = $"{MixFolders.WebRootPath}/{webPath}";
+            webPath = $"{MixFolders.StaticFiles}/Themes/{_exporTheme.SystemName}";
+            tempPath = $"{MixFolders.StaticFiles}/{webPath}/temp";
+            outputPath = $"{MixFolders.StaticFiles}/{webPath}";
 
             await ExportSelectedItemsAsync();
 
@@ -73,11 +73,12 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.WebRootPath}/{_exporTheme.AssetFolder}", $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
+                    $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.AssetFolder}",
+                    $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.WebRootPath}/{_exporTheme.UploadsFolder}",
-                    $"{tempPath}/Uploads");
+                    $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.UploadFolder}",
+                    $"{tempPath}/{MixThemePackageConstants.UploadFolder}");
             }
         }
 
@@ -216,15 +217,18 @@ namespace Mix.Lib.Services
             foreach (var database in _siteData.MixDatabases)
             {
                 _repository.Init(database.SystemName);
-                var data = JArray.FromObject(await _repository.GetAllAsync());
-                _siteData.MixDbModels.Add(new()
+                var data = await _repository.GetAllAsync();
+                if (data != null)
                 {
-                    DatabaseName = database.SystemName,
-                    Data = data
-                });
+                    _siteData.MixDbModels.Add(new()
+                    {
+                        DatabaseName = database.SystemName,
+                        Data = JArray.FromObject(data)
+                    });
+                }
             }
         }
-        
+
         private async Task ExportMixDatasAsync()
         {
             var datas = await _context.MixData
@@ -362,6 +366,10 @@ namespace Mix.Lib.Services
                 .ToListAsync();
             _siteData.MixDatabases = await _context.MixDatabase
                 .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.Id))
+                .AsNoTracking()
+                .ToListAsync();
+            _siteData.MixDatabaseRelationships = await _context.MixDatabaseRelationship
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.LeftId))
                 .AsNoTracking()
                 .ToListAsync();
         }

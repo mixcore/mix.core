@@ -35,6 +35,8 @@ namespace Mix.Database.Entities.Cms
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            _databaseProvider = MixDatabaseProvider.PostgreSQL;
+            _connectionString = "Host=localhost;Database=mixcore_structure;Username=postgres;Password=myPassword";
             if (!string.IsNullOrEmpty(_connectionString))
             {
                 switch (_databaseProvider)
@@ -119,6 +121,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixLanguage> MixLanguage { get; set; }
         public virtual DbSet<MixDatabaseContext> MixDatabaseContext { get; set; }
         public virtual DbSet<MixDatabase> MixDatabase { get; set; }
+        public virtual DbSet<MixDatabaseRelationship> MixDatabaseRelationship { get; set; }
         public virtual DbSet<MixTheme> MixTheme { get; set; }
         public virtual DbSet<MixTemplate> MixViewTemplate { get; set; }
         public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }

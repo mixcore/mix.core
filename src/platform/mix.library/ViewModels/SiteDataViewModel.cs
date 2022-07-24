@@ -22,6 +22,7 @@
 
         public List<MixDatabaseContext> MixDatabaseContexts { get; set; } = new();
         public List<MixDatabase> MixDatabases { get; set; } = new();
+        public List<MixDatabaseRelationship> MixDatabaseRelationships { get; set; } = new();
 
         public List<MixTemplate> Templates { get; set; } = new();
 
