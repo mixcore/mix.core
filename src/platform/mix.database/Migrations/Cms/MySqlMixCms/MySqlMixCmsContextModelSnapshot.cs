@@ -462,7 +462,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Configurations")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Configurations"), "utf8");
@@ -480,7 +480,7 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
 
                     b.Property<string>("DefaultValue")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DefaultValue"), "utf8");
@@ -680,6 +680,12 @@ namespace Mix.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DestinateDatabaseName"), "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DisplayName"), "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -737,7 +743,7 @@ namespace Mix.Database.Migrations
                         .HasDefaultValueSql("uuid()");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
@@ -984,7 +990,7 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("EncryptType"), "utf8");
 
                     b.Property<string>("EncryptValue")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("EncryptValue"), "utf8");
@@ -1076,7 +1082,7 @@ namespace Mix.Database.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("longtext");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
 
@@ -1549,7 +1555,7 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
@@ -1913,7 +1919,7 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
@@ -2204,7 +2210,7 @@ namespace Mix.Database.Migrations
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClassName"), "utf8");
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
@@ -2346,7 +2352,7 @@ namespace Mix.Database.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Content"), "utf8");
@@ -2412,7 +2418,7 @@ namespace Mix.Database.Migrations
 
                     b.Property<string>("Scripts")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Scripts"), "utf8");
@@ -2425,7 +2431,7 @@ namespace Mix.Database.Migrations
 
                     b.Property<string>("Styles")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("longtext")
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Styles"), "utf8");

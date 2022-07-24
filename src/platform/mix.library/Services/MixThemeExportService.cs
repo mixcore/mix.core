@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
 using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;
@@ -17,11 +18,13 @@ namespace Mix.Lib.Services
         private string outputPath;
         private string webPath;
         private string fileName;
+        private string _tenantName;
 
-        public MixThemeExportService(MixCmsContext context, MixRepoDbRepository repository)
+        public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository)
         {
             _context = context;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
+            _tenantName = httpContext.HttpContext.Session.GetString(MixRequestQueryKeywords.TenantName);
             _repository = repository;
         }
 
@@ -83,7 +86,8 @@ namespace Mix.Lib.Services
             string filename = MixThemePackageConstants.SchemaFilename;
             string content = MixHelper.SerializeObject(siteData);
             content = content
-                .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]");
+                .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]")
+                .Replace($"/{_tenantName}", "/[TENANT_NAME]");
             if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
             {
                 content = content.Replace(GlobalConfigService.Instance.AppSettings.Domain, string.Empty);
@@ -212,7 +216,7 @@ namespace Mix.Lib.Services
             foreach (var database in _siteData.MixDatabases)
             {
                 _repository.Init(database.SystemName);
-                var data = await _repository.GetAllAsync();
+                var data = JArray.FromObject(await _repository.GetAllAsync());
                 _siteData.MixDbModels.Add(new()
                 {
                     DatabaseName = database.SystemName,

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Services;
 using System.Reflection;
@@ -107,13 +108,14 @@ namespace Microsoft.Extensions.DependencyInjection
             this IApplicationBuilder app,
             Assembly executingAssembly,
             IConfiguration configuration,
+            string contentRootPath,
             bool isDevelop)
         {
             app.UseSession();
             app.UseResponseCompression();
             app.UseMixResponseCaching();
             app.UseMixTenant();
-            app.UseMixStaticFiles();
+            app.UseMixStaticFiles(contentRootPath);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -131,9 +133,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         #region App
 
-        private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app)
+        private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app, string contentRootPath)
         {
             var provider = new FileExtensionContentTypeProvider();
+            app.UseStaticFiles();
             app.UseDefaultFiles();
             provider.Mappings[".vue"] = "application/text";
 
@@ -142,6 +145,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 ContentTypeProvider = provider
             });
 
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(contentRootPath, MixFolders.StaticFiles))
+            });
 
             return app;
         }

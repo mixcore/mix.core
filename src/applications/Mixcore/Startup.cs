@@ -53,19 +53,14 @@ namespace Mixcore
                 app.UseHsts();
             }
             app.UseMixCors();
-            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.IsDevelopment());
+            app.UseMixApps(Assembly.GetExecutingAssembly(), Configuration, env.ContentRootPath, env.IsDevelopment());
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, MixFolders.UploadsFolder))
-            });
-
+            
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, MixFolders.WebRootPath, "mix-portal"))

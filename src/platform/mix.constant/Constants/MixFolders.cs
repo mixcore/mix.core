@@ -3,6 +3,7 @@
     public class MixFolders
     {
         public const string WebRootPath = "wwwroot";
+        public const string StaticFiles = "MixContent/StaticFiles";
         public const string TemplatesFolder = "MixContent/Templates";//"Views/Shared/Templates"
         public const string TempFolder = "MixContent/Temp";
         public const string ThemePackage = "MixContent/Temp/Themes";
@@ -14,7 +15,7 @@
         public const string ExportFolder = "mix-content/exports";
         public const string ImportFolder = "mix-content/imports/themes";
         public const string UploadsFolder = "MixContent/Uploads";
-        public const string SiteContentAssetsFolder = "Assets";
+        public const string SiteContentAssetsFolder = "MixContent/Assets";
         public const string SharedConfigurationFolder = "../../shared/MixContent";
         public const string MixCoreConfigurationFolder = "../../applications/Mixcore/MixContent";
     }
