@@ -31,7 +31,7 @@ namespace Mix.Storage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _storageService.UploadFile(folder, file, MixTenantId, User?.Identity?.Name);
+                var result = await _storageService.UploadFile(file, folder,  User?.Identity?.Name);
                 return Ok(result);
             }
             return BadRequest();

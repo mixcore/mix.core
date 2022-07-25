@@ -6,21 +6,27 @@ namespace Mix.Storage.Lib.Services
     public class MixStorageService
     {
         private UnitOfWorkInfo _cmsUOW;
-        public MixStorageService(UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        private string? _tenantName;
+        private int _tenantId;
+
+        public MixStorageService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             _cmsUOW = cmsUOW;
+            if (httpContext.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
+            {
+                _tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId)!.Value;
+            }
+            _tenantName = httpContext.HttpContext?.Session.GetString(MixRequestQueryKeywords.TenantName);
         }
         #region Methods
 
-        public async Task<string?> UploadFile(string? folder, IFormFile file, int tenantId, string? createdBy)
+        public async Task<string?> UploadFile(IFormFile file, string? themeName, string? createdBy)
         {
-            folder ??= DateTime.Now.ToString("yyyy-MMM");
-            folder = $"{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
-            string webPath = $"{MixFolders.WebRootPath}/{folder}";
-            var result = MixFileHelper.SaveFile(file, webPath);
+            var folder = $"{MixFolders.StaticFiles}/{_tenantName}/{themeName}/{MixFolders.UploadsFolder}/{DateTime.Now.ToString("yyyy-MMM")}";
+            var result = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(folder, result, tenantId, createdBy);
+                await CreateMedia(folder, result, _tenantId, createdBy);
                 return $"{GlobalConfigService.Instance.Domain}/{folder}/{result}";
             }
             return default;
