@@ -95,8 +95,8 @@ namespace Mix.Portal.Controllers
             return data != null ? Ok() : BadRequest();
         }
 
-        [HttpPut]
-        public async Task<ActionResult<object>> Update(JObject obj)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<object>> Update(int id, [FromBody] JObject obj)
         {
             var data = await _repository.UpdateAsync(obj);
             return data != null ? Ok() : BadRequest();
