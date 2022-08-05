@@ -39,9 +39,8 @@ namespace Mix.Lib.Base
 
         #endregion
 
-        protected SearchQueryModel<TEntity, int> BuildSearchByParentRequest(SearchAssociationDto req)
+        protected SearchQueryModel<TEntity, int> BuildSearchByParentRequest(SearchAssociationDto request)
         {
-            var request = new SearchAssociationDto(req, Request);
             var searchRequest = base.BuildSearchRequest(request);
             int leftId = request.ParentId.HasValue ? request.ParentId.Value : 0;
             searchRequest.Predicate = searchRequest.Predicate.AndAlso(
