@@ -33,13 +33,13 @@
         public override async Task ExpandView()
         {
             var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo);
-            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.LeftId == Id).Select(m => m.RightId);
+            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id).Select(m => m.ChildId);
             Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id));
         }
 
         protected override async Task DeleteHandlerAsync()
         {
-            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.LeftId == Id);
+            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id);
             Context.MixDatabaseContextDatabaseAssociation.RemoveRange(associations);
             await Context.SaveChangesAsync();
             await base.DeleteHandlerAsync();

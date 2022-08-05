@@ -36,10 +36,10 @@ namespace Mix.Lib.ViewModels
         public override async Task Validate()
         {
             await base.Validate();
-            if (LeftId == 0 || RightId == 0)
+            if (ParentId == 0 || ChildId == 0)
             {
                 IsValid = false;
-                Errors.Add(new($"Ivalid relationship: leftId = {LeftId} - rightId = {RightId} - Type = {Type}"));
+                Errors.Add(new($"Ivalid relationship: leftId = {ParentId} - rightId = {ChildId} - Type = {Type}"));
             }
         }
 
@@ -47,13 +47,13 @@ namespace Mix.Lib.ViewModels
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             // Add Reference column to right db
-            var leftDb = Context.MixDatabase.Find(LeftId);
+            var leftDb = Context.MixDatabase.Find(ParentId);
             string leftColName = $"{leftDb.SystemName}Id";
-            var rightDb = Context.MixDatabase.Find(RightId);
+            var rightDb = Context.MixDatabase.Find(ChildId);
             string rightColName = $"{rightDb.SystemName}Id";
             if (Type == MixDatabaseRelationshipType.OneToMany)
             {
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == RightId && m.SystemName == leftColName))
+                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ChildId && m.SystemName == leftColName))
                 {
                     var col = new MixDatabaseColumnViewModel(UowInfo)
                     {
@@ -70,7 +70,7 @@ namespace Mix.Lib.ViewModels
             }
             if (Type == MixDatabaseRelationshipType.ManyToMany)
             {
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == RightId && m.SystemName == leftColName))
+                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ChildId && m.SystemName == leftColName))
                 {
                     var col = new MixDatabaseColumnViewModel(UowInfo)
                     {
@@ -85,7 +85,7 @@ namespace Mix.Lib.ViewModels
                     await col.SaveAsync();
                 }
 
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == LeftId && m.SystemName == rightColName))
+                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ParentId && m.SystemName == rightColName))
                 {
                     var leftCol = new MixDatabaseColumnViewModel(UowInfo)
                     {
@@ -104,13 +104,13 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync()
         {
-            var leftDb = Context.MixDatabase.Find(LeftId);
+            var leftDb = Context.MixDatabase.Find(ParentId);
             string leftColName = $"{leftDb.SystemName}Id";
-            var rightDb = Context.MixDatabase.Find(RightId);
+            var rightDb = Context.MixDatabase.Find(ChildId);
             string rightColName = $"{rightDb.SystemName}Id";
             await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(
-                m => (m.MixDatabaseId == LeftId && m.SystemName == rightColName)
-                    || (m.MixDatabaseId == RightId && m.SystemName == leftColName));
+                m => (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
+                    || (m.MixDatabaseId == ChildId && m.SystemName == leftColName));
             await base.DeleteHandlerAsync();
         }
 

@@ -2,19 +2,12 @@
 @{
     Layout = Model.Layout?.FilePath;
 }
-@* <mix-loader ng-show="isBusy"></mix-loader>
-    <confirm ng-if="isInit" message="confirmMessage"></confirm>
-    <preview-popup ng-if="isInit" preview-object="previewObject"></preview-popup> *@
 <input type="hidden" id="view-type" value="Page" />
 <input type="hidden" id="view-id" value="@Model.Id" />
 @if (!string.IsNullOrEmpty(Model.Template?.FilePath))
 {
     try
     {
-        @*foreach (var item in navs)
-            {
-                @item.ToString()
-            }*@
         <partial name="@Model.Template.FilePath" model="@Model" />
     }
     catch (System.InvalidOperationException invalidOperationException)
@@ -48,7 +41,7 @@ else
 @section Seo{
     <title>@Model.SeoTitle</title>
     <meta property="og:type" content="post" />
-    <!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
+    <!--points to the regular HTML version of the AMP H%TML document or to itself if no such HTML version exists-->
     <link rel="canonical" href="@domain@url" />
     <meta property="og:url" content="@domain@url" />
     <meta property="og:title" content="@title" />

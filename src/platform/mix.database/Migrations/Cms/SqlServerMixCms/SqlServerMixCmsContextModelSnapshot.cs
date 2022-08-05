@@ -602,6 +602,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -614,19 +617,16 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -646,6 +646,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -657,14 +660,16 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
@@ -672,10 +677,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("SourceDatabaseName")
@@ -696,9 +701,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixDatabaseRelationship");
 
-                    b.HasIndex("LeftId");
+                    b.HasIndex("ChildId");
 
-                    b.HasIndex("RightId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("MixDatabaseRelationship");
                 });
@@ -1719,6 +1724,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1731,9 +1739,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("int");
 
@@ -1743,10 +1748,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -1966,6 +1971,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1978,9 +1986,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
@@ -1990,10 +1995,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -2014,6 +2019,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -2026,9 +2034,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
@@ -2038,10 +2043,10 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -2238,6 +2243,49 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostPostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MixPostPostAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
@@ -2623,15 +2671,15 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
-                        .WithMany("SourceRelationships")
-                        .HasForeignKey("LeftId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
+                        .WithMany("DestinateRelationships")
+                        .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
-                        .WithMany("DestinateRelationships")
-                        .HasForeignKey("RightId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

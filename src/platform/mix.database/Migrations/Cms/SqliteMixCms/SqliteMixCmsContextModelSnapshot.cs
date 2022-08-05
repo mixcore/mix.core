@@ -581,6 +581,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -593,19 +596,16 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -622,6 +622,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -645,20 +648,17 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<int>("ParentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
-
-                    b.Property<int>("RightId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SourceDatabaseName")
                         .IsRequired()
@@ -678,9 +678,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixDatabaseRelationship");
 
-                    b.HasIndex("LeftId");
+                    b.HasIndex("ChildId");
 
-                    b.HasIndex("RightId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("MixDatabaseRelationship");
                 });
@@ -1685,6 +1685,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -1697,9 +1700,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("INTEGER");
 
@@ -1709,10 +1709,10 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -1926,6 +1926,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -1938,9 +1941,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("INTEGER");
 
@@ -1950,10 +1950,10 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -1972,6 +1972,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("TEXT");
 
@@ -1984,9 +1987,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("INTEGER");
 
@@ -1996,10 +1996,10 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
@@ -2192,6 +2192,47 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostPostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MixPostPostAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
@@ -2569,15 +2610,15 @@ namespace Mix.Database.Migrations.SqliteMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
-                        .WithMany("SourceRelationships")
-                        .HasForeignKey("LeftId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
+                        .WithMany("DestinateRelationships")
+                        .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
-                        .WithMany("DestinateRelationships")
-                        .HasForeignKey("RightId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

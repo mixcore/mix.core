@@ -30,8 +30,8 @@ namespace Mix.Portal.Controllers
         {
             if (_cmsUOW.DbContext.MixPageModuleAssociation.Any(
                 m => m.MixTenantId == MixTenantId
-                && m.LeftId == data.LeftId
-                && m.RightId == data.RightId))
+                && m.ParentId == data.ParentId
+                && m.ChildId == data.ChildId))
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Entity existed");
             }
