@@ -92,7 +92,8 @@ namespace Mix.Portal.Controllers
                 obj.Add(new JProperty("createdDateTime", DateTime.UtcNow));
             }
             var data = await _repository.InsertAsync(obj);
-            return data != null ? Ok() : BadRequest();
+
+            return data > 0 ? Ok(await _repository.GetAsync(data)) : BadRequest();
         }
 
         [HttpPut("{id}")]
@@ -102,7 +103,7 @@ namespace Mix.Portal.Controllers
             return data != null ? Ok() : BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
             var data = await _repository.DeleteAsync(id);
