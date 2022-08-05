@@ -61,8 +61,8 @@ namespace Mix.Lib.ViewModels
 
         protected override async Task DeleteHandlerAsync()
         {
-            Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.LeftId == Id));
-            Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.LeftId == Id));
+            Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ParentId == Id));
+            Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.ParentId == Id));
             Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId == Id));
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)

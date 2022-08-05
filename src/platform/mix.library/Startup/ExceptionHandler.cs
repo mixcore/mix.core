@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
-            //app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
             app.UseExceptionHandler(appError =>
             {
                 appError.Run((context) =>

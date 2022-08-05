@@ -595,6 +595,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -607,19 +610,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -638,6 +638,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
@@ -649,14 +652,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("LeftId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("integer");
@@ -664,11 +669,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
+                    b.Property<int>("ParentId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Priority")
                         .HasColumnType("int");
-
-                    b.Property<int>("RightId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SourceDatabaseName")
                         .IsRequired()
@@ -688,9 +693,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasKey("Id")
                         .HasName("PK_MixDatabaseRelationship");
 
-                    b.HasIndex("LeftId");
+                    b.HasIndex("ChildId");
 
-                    b.HasIndex("RightId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("MixDatabaseRelationship");
                 });
@@ -1705,6 +1710,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -1717,9 +1725,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("integer");
 
@@ -1729,10 +1734,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -1950,6 +1955,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -1962,9 +1970,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("integer");
 
@@ -1974,10 +1979,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -1998,6 +2003,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -2010,9 +2018,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("integer");
 
@@ -2022,10 +2027,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -2220,6 +2225,49 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostPostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MixPostPostAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
@@ -2601,15 +2649,15 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
-                        .WithMany("SourceRelationships")
-                        .HasForeignKey("LeftId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
+                        .WithMany("DestinateRelationships")
+                        .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
-                        .WithMany("DestinateRelationships")
-                        .HasForeignKey("RightId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

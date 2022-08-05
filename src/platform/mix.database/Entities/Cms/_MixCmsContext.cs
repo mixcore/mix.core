@@ -131,6 +131,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixDatabaseContextDatabaseAssociation> MixDatabaseContextDatabaseAssociation { get; set; }
         public virtual DbSet<MixDataContentAssociation> MixDataContentAssociation { get; set; }
         public virtual DbSet<MixPagePostAssociation> MixPagePostAssociation { get; set; }
+        public virtual DbSet<MixPostPostAssociation> MixPostPostAssociation { get; set; }
         public virtual DbSet<MixPageModuleAssociation> MixPageModuleAssociation { get; set; }
         public virtual DbSet<MixModulePostAssociation> MixModulePostAssociation { get; set; }
         public virtual DbSet<MixContributor> MixContributor { get; set; }

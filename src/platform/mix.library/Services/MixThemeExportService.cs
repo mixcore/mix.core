@@ -149,8 +149,8 @@ namespace Mix.Lib.Services
 
         private async Task ExportPageModules()
         {
-            _siteData.PageModules = await _context.MixPageModuleAssociation.Where(m => _dto.Content.PageIds.Any(p => p == m.LeftId)).ToListAsync();
-            var unloadModuleIds = _siteData.PageModules.Where(m => !_dto.Content.ModuleIds.Any(p => m.RightId == p)).Select(m => m.RightId);
+            _siteData.PageModules = await _context.MixPageModuleAssociation.Where(m => _dto.Content.PageIds.Any(p => p == m.ParentId)).ToListAsync();
+            var unloadModuleIds = _siteData.PageModules.Where(m => !_dto.Content.ModuleIds.Any(p => m.ChildId == p)).Select(m => m.ChildId);
 
             var modules = await _context.MixModule.Where(m => unloadModuleIds.Any(p => p == m.Id)).ToListAsync();
             _siteData.Modules.AddRange(modules);
@@ -158,11 +158,11 @@ namespace Mix.Lib.Services
         private async Task ExportPagePosts()
         {
             _siteData.PagePosts = await _context.MixPagePostAssociation.Where(
-                    m => _dto.Associations.PageContentIds.Any(p => p == m.LeftId)).ToListAsync();
+                    m => _dto.Associations.PageContentIds.Any(p => p == m.ParentId)).ToListAsync();
             // Get Posts unchecked when export but needed in selected Pages.
             var postContentIds = _siteData.PagePosts
-                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.RightId == n))
-                .Select(m => m.RightId).ToList();
+                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.ChildId == n))
+                .Select(m => m.ChildId).ToList();
             var postContents = _context.MixPostContent.Where(m => postContentIds.Contains(m.Id));
             var posts = _context.MixPost.Where(m => postContents.Any(p => p.ParentId == m.Id));
             _siteData.PostContents.Union(postContents);
@@ -189,11 +189,11 @@ namespace Mix.Lib.Services
         private async Task ExportModulePosts()
         {
             _siteData.ModulePosts = await _context.MixModulePostAssociation.Where(
-                    m => _dto.Associations.ModuleContentIds.Any(p => p == m.LeftId)).ToListAsync();
+                    m => _dto.Associations.ModuleContentIds.Any(p => p == m.ParentId)).ToListAsync();
             // Get Posts unchecked when export but needed in selected modules.
             var postContentIds = _siteData.ModulePosts
-                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.RightId == n))
-                .Select(m => m.RightId).ToList();
+                .Where(m => !_dto.Associations.PostContentIds.Any(n => m.ChildId == n))
+                .Select(m => m.ChildId).ToList();
             var postContents = _context.MixPostContent.Where(m => postContentIds.Contains(m.Id));
             var posts = _context.MixPost.Where(m => postContents.Any(p => p.ParentId == m.Id));
             _siteData.PostContents.Union(postContents);
@@ -369,7 +369,7 @@ namespace Mix.Lib.Services
                 .AsNoTracking()
                 .ToListAsync();
             _siteData.MixDatabaseRelationships = await _context.MixDatabaseRelationship
-                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.LeftId))
+                .Where(m => _dto.Content.MixDatabaseIds.Any(p => p == m.ParentId))
                 .AsNoTracking()
                 .ToListAsync();
         }
