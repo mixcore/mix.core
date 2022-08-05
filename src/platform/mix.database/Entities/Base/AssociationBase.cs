@@ -4,7 +4,7 @@
         where TPrimaryKey : IComparable
     {
         public int MixTenantId { get; set; }
-        public TPrimaryKey LeftId { get; set; }
-        public TPrimaryKey RightId { get; set; }
+        public TPrimaryKey ParentId { get; set; }
+        public TPrimaryKey ChildId { get; set; }
     }
 }

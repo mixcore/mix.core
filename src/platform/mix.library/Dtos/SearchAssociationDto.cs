@@ -20,17 +20,17 @@ namespace Mix.Lib.Dtos
             Direction = req.Direction;
             Status = req.Status;
 
-            if (int.TryParse(request.Query[MixRequestQueryKeywords.LeftId], out int leftId))
+            if (int.TryParse(request.Query[MixRequestQueryKeywords.LeftId], out int parentId))
             {
-                LeftId = leftId;
+                ParentId = parentId;
             }
-            if (int.TryParse(request.Query[MixRequestQueryKeywords.RightId], out int rightId))
+            if (int.TryParse(request.Query[MixRequestQueryKeywords.RightId], out int childId))
             {
-                RightId = rightId;
+                ChildId = childId;
             }
         }
 
-        public int? LeftId { get; set; }
-        public int? RightId { get; set; }
+        public int? ParentId { get; set; }
+        public int? ChildId { get; set; }
     }
 }

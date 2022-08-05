@@ -626,6 +626,9 @@ namespace Mix.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
@@ -638,19 +641,16 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -667,6 +667,9 @@ namespace Mix.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -692,19 +695,16 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<string>("SourceDatabaseName")
@@ -728,9 +728,9 @@ namespace Mix.Database.Migrations
                     b.HasKey("Id")
                         .HasName("PK_MixDatabaseRelationship");
 
-                    b.HasIndex("LeftId");
+                    b.HasIndex("ChildId");
 
-                    b.HasIndex("RightId");
+                    b.HasIndex("ParentId");
 
                     b.ToTable("MixDatabaseRelationship");
                 });
@@ -1806,6 +1806,9 @@ namespace Mix.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
@@ -1818,9 +1821,6 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixModuleContentId")
                         .HasColumnType("int");
 
@@ -1830,10 +1830,10 @@ namespace Mix.Database.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -2063,6 +2063,9 @@ namespace Mix.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
@@ -2075,9 +2078,6 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
@@ -2087,10 +2087,10 @@ namespace Mix.Database.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -2109,6 +2109,9 @@ namespace Mix.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("longtext");
 
@@ -2121,9 +2124,6 @@ namespace Mix.Database.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("LeftId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MixPageContentId")
                         .HasColumnType("int");
 
@@ -2133,10 +2133,10 @@ namespace Mix.Database.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RightId")
+                    b.Property<int>("Priority")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -2342,6 +2342,47 @@ namespace Mix.Database.Migrations
                     b.HasIndex("MixPostId");
 
                     b.ToTable("MixPostContent");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixPostPostAssociation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MixPostPostAssociation");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixTemplate", b =>
@@ -2740,15 +2781,15 @@ namespace Mix.Database.Migrations
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseRelationship", b =>
                 {
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
-                        .WithMany("SourceRelationships")
-                        .HasForeignKey("LeftId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
+                        .WithMany("DestinateRelationships")
+                        .HasForeignKey("ChildId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "DestinateDatabase")
-                        .WithMany("DestinateRelationships")
-                        .HasForeignKey("RightId")
+                    b.HasOne("Mix.Database.Entities.Cms.MixDatabase", "SourceDatabase")
+                        .WithMany("SourceRelationships")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -2,14 +2,14 @@
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-page-module")]
+    [Route("api/v2/rest/mix-portal/mix-page-post")]
     [ApiController]
-    public class MixPageModuleController
-        : MixAssociationApiControllerBase<MixPageModuleViewModel, MixCmsContext, MixPageModuleAssociation>
+    public class MixPagePostController
+        : MixAssociationApiControllerBase<MixPagePostAssociationViewModel, MixCmsContext, MixPagePostAssociation>
     {
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
 
-        public MixPageModuleController(
+        public MixPagePostController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
@@ -26,9 +26,9 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task<int> CreateHandlerAsync(MixPageModuleViewModel data)
+        protected override Task<int> CreateHandlerAsync(MixPagePostAssociationViewModel data)
         {
-            if (_cmsUOW.DbContext.MixPageModuleAssociation.Any(
+            if (_cmsUOW.DbContext.MixPagePostAssociation.Any(
                 m => m.MixTenantId == MixTenantId
                 && m.ParentId == data.ParentId
                 && m.ChildId == data.ChildId))

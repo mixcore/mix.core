@@ -160,7 +160,7 @@ namespace Mix.Portal.Domain.Services
                    Dictionary<int, int> rightDic)
                    where T : AssociationBase<int>
         {
-            var data = _cmsUOW.DbContext.Set<T>().Where(m => m.MixTenantId == _tenantId && leftDic.Keys.Contains(m.LeftId))
+            var data = _cmsUOW.DbContext.Set<T>().Where(m => m.MixTenantId == _tenantId && leftDic.Keys.Contains(m.ParentId))
                 .AsNoTracking()
                 .ToList();
             if (data.Count > 0)
@@ -168,8 +168,8 @@ namespace Mix.Portal.Domain.Services
                 foreach (var item in data)
                 {
                     item.Id = 0;
-                    item.LeftId = leftDic[item.LeftId];
-                    item.RightId = rightDic[item.RightId];
+                    item.ParentId = leftDic[item.ParentId];
+                    item.ChildId = rightDic[item.ChildId];
                     await _cmsUOW.DbContext.Set<T>().AddAsync(item);
                 }
                 await _cmsUOW.DbContext.SaveChangesAsync();

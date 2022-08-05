@@ -83,9 +83,9 @@ namespace Mixcore.Domain.ViewModels
             var tasks = new List<Task>();
             var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
-                    .Where(p => p.LeftId == Id)
+                    .Where(p => p.ParentId == Id)
                     .OrderBy(m => m.Priority)
-                    .Select(m => m.RightId)
+                    .Select(m => m.ChildId)
                     .ToListAsync();
             var moduleRepo = ModuleContentViewModel.GetRepository(UowInfo);
             Modules = await moduleRepo.GetListAsync(m => moduleIds.Contains(m.Id));
