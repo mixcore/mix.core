@@ -69,7 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.InjectJavascript("/mix-app/js/swagger.js");
                     c.SwaggerEndpoint(endPoint, $"{title} {version}");
                     c.RoutePrefix = routePrefix;
-                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+                    c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
                     c.DocumentTitle = "Mixcore - API Specification";
                     c.EnableFilter();
                     c.EnableDeepLinking();
