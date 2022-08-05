@@ -28,8 +28,8 @@ namespace Mix.Lib.Base
 
         #region Properties
 
-        public TPrimaryKey LeftId { get; set; }
-        public TPrimaryKey RightId { get; set; }
+        public TPrimaryKey ParentId { get; set; }
+        public TPrimaryKey ChildId { get; set; }
         public int MixTenantId { get; set; }
 
         #endregion
@@ -40,17 +40,17 @@ namespace Mix.Lib.Base
         {
             await base.Validate();
 
-            if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.MixTenantId == MixTenantId && m.LeftId.Equals(LeftId) && m.RightId.Equals(RightId)))
+            if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.MixTenantId == MixTenantId && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
             {
                 IsValid = false;
                 Errors.Add(new ValidationResult("Entity Existed"));
             }
-            if (MixHelper.IsDefaultId(LeftId))
+            if (MixHelper.IsDefaultId(ParentId))
             {
                 IsValid = false;
                 Errors.Add(new("Parent Id cannot be null"));
             }
-            if (MixHelper.IsDefaultId(RightId))
+            if (MixHelper.IsDefaultId(ChildId))
             {
                 IsValid = false;
                 Errors.Add(new("Child Id cannot be null"));

@@ -367,8 +367,8 @@ namespace Mix.Lib.Services
 
                 item.MixTenantId = _tenantId;
                 item.Id = 0;
-                item.LeftId = dicMixDatabaseIds[item.LeftId];
-                item.RightId= dicMixDatabaseIds[item.RightId];
+                item.ParentId = dicMixDatabaseIds[item.ParentId];
+                item.ChildId= dicMixDatabaseIds[item.ChildId];
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
                 _context.Entry(item).State = EntityState.Added;
@@ -529,8 +529,8 @@ namespace Mix.Lib.Services
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = _tenantId;
-                    item.LeftId = leftDic[item.LeftId];
-                    item.RightId = rightDic[item.RightId];
+                    item.ParentId = leftDic[item.ParentId];
+                    item.ChildId = rightDic[item.ChildId];
                     item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                 }

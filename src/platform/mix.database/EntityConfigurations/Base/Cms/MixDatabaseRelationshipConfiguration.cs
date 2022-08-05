@@ -28,11 +28,11 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
 
             builder.HasOne(e => e.SourceDatabase)
                 .WithMany(e => e.SourceRelationships)
-                .HasForeignKey(e => e.LeftId);
+                .HasForeignKey(e => e.ParentId);
             
             builder.HasOne(e => e.DestinateDatabase)
                 .WithMany(e => e.DestinateRelationships)
-                .HasForeignKey(e => e.RightId);
+                .HasForeignKey(e => e.ChildId);
 
             builder.Property(e => e.Type)
                .IsRequired()

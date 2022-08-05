@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
@@ -27,17 +28,28 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)
+        #region Routes
+
+        [HttpGet("search")]
+        public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchAssociationDto req)
+        {
+            var searchRequest = BuildSearchByParentRequest(req);
+            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+        }
+
+        #endregion
+
+        protected SearchQueryModel<TEntity, int> BuildSearchByParentRequest(SearchAssociationDto req)
         {
             var request = new SearchAssociationDto(req, Request);
             var searchRequest = base.BuildSearchRequest(request);
-            int leftId = request.LeftId.HasValue ? request.LeftId.Value : 0;
+            int leftId = request.ParentId.HasValue ? request.ParentId.Value : 0;
             searchRequest.Predicate = searchRequest.Predicate.AndAlso(
-                m => m.LeftId == leftId);
+                m => m.ParentId == leftId);
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                request.RightId.HasValue,
-                m => m.RightId == request.RightId.Value);
+                request.ChildId.HasValue,
+                m => m.ChildId == request.ChildId.Value);
 
             return searchRequest;
         }
