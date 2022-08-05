@@ -150,7 +150,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> InsertAsync(JObject entity,
+        public async Task<int> InsertAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
             using (var connection = CreateConnection())
@@ -162,7 +162,7 @@ namespace Mix.RepoDb.Repositories
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
 
-                return result;
+                return int.Parse(result?.ToString() ?? "0");
             }
         }
 

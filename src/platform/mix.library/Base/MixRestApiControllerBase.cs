@@ -37,7 +37,7 @@ namespace Mix.Lib.Base
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TPrimaryKey>> Create([FromBody] TView data)
+        public async Task<ActionResult<TView>> Create([FromBody] TView data)
         {
             if (data == null)
             {
@@ -52,8 +52,8 @@ namespace Mix.Lib.Base
                 });
             }
             data.SetUowInfo(_uow);
-            var result = await CreateHandlerAsync(data);
-            return Ok(result);
+            data.Id = await CreateHandlerAsync(data);
+            return Ok(data);
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
