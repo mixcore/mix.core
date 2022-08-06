@@ -125,6 +125,7 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixConfigurationContent> MixConfigurationContent { get; set; }
         public virtual DbSet<MixLanguageContent> MixLanguageContent { get; set; }
         public virtual DbSet<MixDatabaseColumn> MixDatabaseColumn { get; set; }
+        public virtual DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
         public virtual DbSet<MixData> MixData { get; set; }
         public virtual DbSet<MixDataContent> MixDataContent { get; set; }
         public virtual DbSet<MixDataContentValue> MixDataContentValue { get; set; }

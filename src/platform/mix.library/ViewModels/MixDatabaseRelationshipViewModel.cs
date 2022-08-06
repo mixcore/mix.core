@@ -42,65 +42,6 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity)
-        {
-            var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            // Add Reference column to right db
-            var leftDb = Context.MixDatabase.Find(ParentId);
-            string leftColName = $"{leftDb.SystemName}Id";
-            var rightDb = Context.MixDatabase.Find(ChildId);
-            string rightColName = $"{rightDb.SystemName}Id";
-            if (Type == MixDatabaseRelationshipType.OneToMany)
-            {
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ChildId && m.SystemName == leftColName))
-                {
-                    var col = new MixDatabaseColumnViewModel(UowInfo)
-                    {
-                        MixDatabaseId = rightDb.Id,
-                        MixDatabaseName = rightDb.SystemName,
-                        ReferenceId = leftDb.Id,
-                        SystemName = leftColName,
-                        DisplayName = leftColName,
-                        DataType = MixDataType.Reference,
-                        CreatedBy = CreatedBy
-                    };
-                    await col.SaveAsync();
-                }
-            }
-            if (Type == MixDatabaseRelationshipType.ManyToMany)
-            {
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ChildId && m.SystemName == leftColName))
-                {
-                    var col = new MixDatabaseColumnViewModel(UowInfo)
-                    {
-                        MixDatabaseId = rightDb.Id,
-                        MixDatabaseName = rightDb.SystemName,
-                        ReferenceId = leftDb.Id,
-                        SystemName = leftColName,
-                        DisplayName = leftColName,
-                        DataType = MixDataType.Reference,
-                        CreatedBy = CreatedBy
-                    };
-                    await col.SaveAsync();
-                }
-
-                if (!await colRepo.CheckIsExistsAsync(m => m.MixDatabaseId == ParentId && m.SystemName == rightColName))
-                {
-                    var leftCol = new MixDatabaseColumnViewModel(UowInfo)
-                    {
-                        MixDatabaseId = leftDb.Id,
-                        MixDatabaseName = leftDb.SystemName,
-                        ReferenceId = rightDb.Id,
-                        SystemName = rightColName,
-                        DisplayName = rightColName,
-                        DataType = MixDataType.Reference,
-                        CreatedBy = CreatedBy
-                    };
-                    await leftCol.SaveAsync();
-                }
-            }
-        }
-
         protected override async Task DeleteHandlerAsync()
         {
             var leftDb = Context.MixDatabase.Find(ParentId);
