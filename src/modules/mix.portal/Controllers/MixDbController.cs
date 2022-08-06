@@ -12,11 +12,13 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
-        UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        UnitOfWorkInfo<MixCmsContext> _cmsUOW;        
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
+        private readonly Repository<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel> _associationRepository;
         private readonly MixCmsContext _context;
         private string _tableName;
+        private static string _associationTableName = nameof(MixDatabaseAssociation);
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -25,13 +27,17 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService, MixRepoDbRepository repository, MixMemoryCacheService memoryCache, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+            IQueueService<MessageQueueModel> queueService, 
+            MixRepoDbRepository repository, 
+            MixMemoryCacheService memoryCache, 
+            UnitOfWorkInfo<MixCmsContext> cmsUOW)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _repository = repository;
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
+            _associationRepository = MixDatabaseAssociationViewModel.GetRepository(cmsUOW);
         }
 
         #region Overrides
@@ -61,10 +67,12 @@ namespace Mix.Portal.Controllers
             var data = JObject.FromObject(await _repository.GetAsync(id));
             foreach (var item in database.Relationships)
             {
-                _repository.Init(item.DestinateDatabaseName);
+                _repository.Init(_associationTableName);
                 var queries = new List<QueryField>()
                 {
-                    new QueryField($"{item.SourceDatabaseName}Id", id)
+                    new QueryField("ParentDatabaseName", item.SourceDatabaseName),
+                    new QueryField("ChildDatabaseName", item.DestinateDatabaseName),
+                    new QueryField("parentId", id)
                 };
                 var nestedData = JArray.FromObject(await _repository.GetByAsync(queries));
                 data.Add(new JProperty(item.DisplayName, nestedData));
