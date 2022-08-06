@@ -2,7 +2,6 @@
 
 namespace Mix.Lib.ViewModels
 {
-    [GenerateRestApiController]
     public class MixDatabaseRelationshipViewModel
         : AssociationViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
     {
