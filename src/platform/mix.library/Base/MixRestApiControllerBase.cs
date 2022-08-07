@@ -52,8 +52,8 @@ namespace Mix.Lib.Base
                 });
             }
             data.SetUowInfo(_uow);
-            data.Id = await CreateHandlerAsync(data);
-            return Ok(data);
+            var id = await CreateHandlerAsync(data);
+            return Ok(await GetSingle(id));
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -68,7 +68,7 @@ namespace Mix.Lib.Base
             }
             data.SetUowInfo(_uow);
             await UpdateHandler(id, data);
-            return Ok(id);
+            return Ok(await GetSingle(data.Id));
         }
 
         [HttpDelete("{id}")]
@@ -166,7 +166,7 @@ namespace Mix.Lib.Base
 
         protected virtual async Task UpdateHandler(string id, TView data)
         {
-            var result = await data.SaveAsync();
+            await data.SaveAsync();
             await _cacheService.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }

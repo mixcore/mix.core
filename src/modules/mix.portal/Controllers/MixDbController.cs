@@ -5,6 +5,10 @@ using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using RepoDb;
 using RepoDb.Enumerations;
+using Mix.Heart.Extensions;
+using System.Linq.Expressions;
+using RepoDb.Interfaces;
+using Mix.Database.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -12,10 +16,10 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
-        UnitOfWorkInfo<MixCmsContext> _cmsUOW;        
+        UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
-        private readonly Repository<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel> _associationRepository;
+        private readonly MixRepoDbRepository _associationRepository;
         private readonly MixCmsContext _context;
         private string _tableName;
         private static string _associationTableName = nameof(MixDatabaseAssociation);
@@ -27,17 +31,20 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService, 
-            MixRepoDbRepository repository, 
-            MixMemoryCacheService memoryCache, 
-            UnitOfWorkInfo<MixCmsContext> cmsUOW)
+            IQueueService<MessageQueueModel> queueService,
+            MixRepoDbRepository repository,
+            MixMemoryCacheService memoryCache,
+            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            ICache cache,
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
             _repository = repository;
+            _associationRepository = new(cache, databaseService, cmsUOW);
+            _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
-            _associationRepository = MixDatabaseAssociationViewModel.GetRepository(cmsUOW);
         }
 
         #region Overrides
@@ -46,6 +53,7 @@ namespace Mix.Portal.Controllers
         {
             _tableName = RouteData?.Values["name"].ToString();
             _repository.Init(_tableName);
+
             base.OnActionExecuting(context);
         }
 
@@ -61,36 +69,34 @@ namespace Mix.Portal.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<JObject>> GetSingle(int id)
+        public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
-            var database = await GetMixDatabase();
-            var data = JObject.FromObject(await _repository.GetAsync(id));
-            foreach (var item in database.Relationships)
+            var obj = await _repository.GetAsync(id);
+            if (obj != null)
             {
-                _repository.Init(_associationTableName);
-                var queries = new List<QueryField>()
+                var data = JObject.FromObject(obj);
+                if (loadNestedData)
                 {
-                    new QueryField("ParentDatabaseName", item.SourceDatabaseName),
-                    new QueryField("ChildDatabaseName", item.DestinateDatabaseName),
-                    new QueryField("parentId", id)
-                };
-                var nestedData = JArray.FromObject(await _repository.GetByAsync(queries));
-                data.Add(new JProperty(item.DisplayName, nestedData));
+                    var database = await GetMixDatabase();
+                    foreach (var item in database.Relationships)
+                    {
+                        List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
+                        var associations = await _associationRepository.GetByAsync(queries);
+                        if (associations.Count > 0)
+                        {
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
+                            _repository.Init(item.DestinateDatabaseName);
+                            List<QueryField> query = new() { new("id", Operation.In, nestedIds) };
+                            var nestedData = await _repository.GetByAsync(query);
+                            data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                        }
+                    }
+                }
+                return Ok(data);
             }
-            return data != null ? Ok(data) : throw new MixException(MixErrorStatus.NotFound, id);
+            throw new MixException(MixErrorStatus.NotFound, id);
         }
 
-        private async Task<MixDatabaseViewModel> GetMixDatabase()
-        {
-            return await _memoryCache.TryGetValueAsync(
-                _tableName,
-                cache =>
-                {
-                    cache.SlidingExpiration = TimeSpan.FromSeconds(20);
-                    return MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
-                }
-                );
-        }
 
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject obj)
@@ -108,13 +114,21 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject obj)
         {
             var data = await _repository.UpdateAsync(obj);
-            return data != null ? Ok() : BadRequest();
+            return data != null ? Ok(await _repository.GetAsync(id)) : BadRequest();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
             var data = await _repository.DeleteAsync(id);
+            //Expression<Func<MixDatabaseAssociation, bool>> associationPredicate = m => m.ParentDatabaseName == _tableName && m.ParentId == id;
+            //associationPredicate = associationPredicate.Or(m => m.ChildDatabaseName == _tableName && m.ChildId == id);
+            //await _associationRepository.DeleteManyAsync(associationPredicate);
+            var childAssociationsQueries = GetAssociatoinQueries(parentDatabaseName: _tableName, parentId: id);
+            var parentAssociationsQueries = GetAssociatoinQueries(childDatabaseName: _tableName, childId: id);
+            _repository.Init(_associationTableName);
+            await _repository.DeleteAsync(childAssociationsQueries);
+            await _repository.DeleteAsync(parentAssociationsQueries);
             return data > 0 ? Ok() : NotFound();
         }
 
@@ -179,6 +193,45 @@ namespace Mix.Portal.Controllers
         private ActionResult<PagingResponseModel<JObject>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<JObject> result)
         {
             throw new NotImplementedException();
+        }
+
+
+        #endregion
+
+        #region Private
+
+        private List<QueryField> GetAssociatoinQueries(string parentDatabaseName = null, string childDatabaseName = null, int? parentId = null, int? childId = null)
+        {
+            var queries = new List<QueryField>();
+            if (!string.IsNullOrEmpty(parentDatabaseName))
+            {
+                queries.Add(new QueryField("ParentDatabaseName", parentDatabaseName));
+            }
+            if (!string.IsNullOrEmpty(childDatabaseName))
+            {
+                queries.Add(new QueryField("ChildDatabaseName", childDatabaseName));
+            }
+            if (parentId.HasValue)
+            {
+                queries.Add(new QueryField("ParentId", parentId));
+            }
+            if (childId.HasValue)
+            {
+                queries.Add(new QueryField("ChildId", parentId));
+            }
+            return queries;
+        }
+
+        private async Task<MixDatabaseViewModel> GetMixDatabase()
+        {
+            return await _memoryCache.TryGetValueAsync(
+                _tableName,
+                cache =>
+                {
+                    cache.SlidingExpiration = TimeSpan.FromSeconds(20);
+                    return MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
+                }
+                );
         }
 
 
