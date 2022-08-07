@@ -146,7 +146,7 @@ namespace Mix.RepoDb.Repositories
                         id = id
                     },
                     commandTimeout: _settings.CommandTimeout,
-                    trace: Trace)).FirstOrDefault();
+                    trace: Trace))?.FirstOrDefault();
             }
         }
 
@@ -203,6 +203,20 @@ namespace Mix.RepoDb.Repositories
                 if (connection.Exists(_tableName, new { id = id }))
                 {
                     return await connection.DeleteAsync(_tableName, id,
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace);
+                }
+                return 0;
+            }
+        }
+        
+        public async Task<int> DeleteAsync(List<QueryField> queries)
+        {
+            using (var connection = CreateConnection())
+            {
+                if (connection.Exists(_tableName, queries))
+                {
+                    return await connection.DeleteAsync(_tableName, queries,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
                 }
