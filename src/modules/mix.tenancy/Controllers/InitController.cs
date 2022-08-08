@@ -191,7 +191,7 @@ namespace Mix.Tenancy.Controllers
         [Route("init-full-tenant")]
         public async Task<ActionResult> InitFullTenant([FromBody] InitFullSiteDto dto)
         {
-            if (dto == null || GlobalConfigService.Instance.AppSettings.InitStatus != InitStep.Blank)
+            if (dto == null)
             {
                 return BadRequest();
             }
