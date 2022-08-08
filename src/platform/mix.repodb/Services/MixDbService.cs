@@ -51,6 +51,17 @@ namespace Mix.RepoDb.Services
             }
             return false;
         }
+        
+        // TODO: check why need to restart application to load new database schema for Repo Db Context !important
+        public async Task<bool> RestoreFromLocal(string name)
+        {
+            MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
+            if (database != null && database.Columns.Count > 0)
+            {
+                return await RestoreFromLocal(database);
+            }
+            return false;
+        }
 
         public async Task<bool> BackupDatabase(string databaseName)
         {

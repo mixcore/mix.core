@@ -50,6 +50,13 @@ namespace Mix.Portal.Controllers
             _queueService.PushQueue(msg);
             return Ok();
         }
+        
+        [HttpGet("restore/{name}")]
+        public async Task<ActionResult> RestoreAsync(string name)
+        {
+            var result = await _mixDbService.RestoreFromLocal(name);
+            return result ? Ok() : BadRequest();
+        }
 
         #endregion
         #region Overrides

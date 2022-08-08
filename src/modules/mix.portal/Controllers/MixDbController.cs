@@ -9,6 +9,7 @@ using Mix.Heart.Extensions;
 using System.Linq.Expressions;
 using RepoDb.Interfaces;
 using Mix.Database.Services;
+using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -75,11 +76,12 @@ namespace Mix.Portal.Controllers
             if (obj != null)
             {
                 var data = JObject.FromObject(obj);
-                if (loadNestedData)
+                var database = await GetMixDatabase();
+                foreach (var item in database.Relationships)
                 {
-                    var database = await GetMixDatabase();
-                    foreach (var item in database.Relationships)
+                    if (loadNestedData)
                     {
+
                         List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
                         var associations = await _associationRepository.GetByAsync(queries);
                         if (associations.Count > 0)
@@ -90,6 +92,10 @@ namespace Mix.Portal.Controllers
                             var nestedData = await _repository.GetByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
                         }
+                    }
+                    else
+                    {
+                        data.Add(new JProperty($"{item.DisplayName}Url", $"{GlobalConfigService.Instance.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
                     }
                 }
                 return Ok(data);
@@ -137,7 +143,18 @@ namespace Mix.Portal.Controllers
 
         private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchMixDbRequestDto request)
         {
-            var queries = BuildSearchPredicate(request);
+            var queries = BuildSearchPredicate(request).ToList();
+            if (request.ParentId.HasValue)
+            {
+                List<QueryField> associationQueries = GetAssociatoinQueries(
+                    parentDatabaseName: request.ParentName, parentId: request.ParentId.Value);
+                var associations = await _associationRepository.GetByAsync(associationQueries);
+                if (associations.Count > 0)
+                {
+                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
+                    queries.Add(new("id", Operation.In, nestedIds));
+                }
+            }
             return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }
 
@@ -155,11 +172,6 @@ namespace Mix.Portal.Controllers
                     QueryField field = new QueryField(item, operation, keyword);
                     queries.Add(field);
                 }
-            }
-            if (req.ParentId.HasValue)
-            {
-                QueryField field = new QueryField($"{req.ParentName}Id", Operation.Equal, req.ParentId.Value);
-                queries.Add(field);
             }
             return queries;
         }
