@@ -60,11 +60,8 @@
         public List<MixDatabaseContextDatabaseAssociation> DatabaseContextDatabaseAssociations { get; set; } = new();
         public List<MixPagePostAssociation> PagePosts { get; set; } = new();
         public List<MixPostPostAssociation> PostPosts { get; set; } = new();
-
         public List<MixPageModuleAssociation> PageModules { get; set; } = new();
-
         public List<MixModulePostAssociation> ModulePosts { get; set; } = new();
-
         public List<MixUrlAlias> MixUrlAliases { get; set; } = new();
 
         #endregion
