@@ -3,6 +3,9 @@
     public enum MixDatabaseType
     {
         System,
-        Service
+        Service,
+        PostType,
+        PageType,
+        ModuleType
     }
 }

@@ -52,17 +52,17 @@ namespace Mix.Portal.Controllers
         protected override async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
             var result = await base.CreateHandlerAsync(data);
-            await UpdateContributor(result.ToString(), true);
+            await UpdateContributor(result, true);
             return result;
         }
 
-        protected override async Task UpdateHandler(string id, TView data)
+        protected override async Task UpdateHandler(TPrimaryKey id, TView data)
         {
             await base.UpdateHandler(id, data);
             await UpdateContributor(id, false);
         }
 
-        private async Task UpdateContributor(string id, bool isCreated)
+        private async Task UpdateContributor(TPrimaryKey id, bool isCreated)
         {
             Guid.TryParse(_userManager.GetUserId(HttpContext.User), out var userId);
             Expression<Func<MixContributor, bool>> expression = m => m.UserId == userId && m.ContentType == _contentType;

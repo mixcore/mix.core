@@ -21,6 +21,7 @@
         #endregion
 
         #region Properties
+        public new string MixDatabaseName { get; set; } = MixDatabaseNames.POST_COLUMN;
         public string ClassName { get; set; }
         public string DetailUrl { get; set; }
 

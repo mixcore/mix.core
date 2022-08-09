@@ -24,6 +24,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Properties
+        public new string MixDatabaseName { get; set; } = MixDatabaseNames.PAGE_COLUMN;
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
         public MixPageType Type { get; set; }

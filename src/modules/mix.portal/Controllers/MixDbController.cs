@@ -72,7 +72,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
-            var obj = await _repository.GetAsync(id);
+            var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
                 var data = JObject.FromObject(obj);
@@ -83,13 +83,13 @@ namespace Mix.Portal.Controllers
                     {
 
                         List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetByAsync(queries);
+                        var associations = await _associationRepository.GetListByAsync(queries);
                         if (associations.Count > 0)
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
                             _repository.Init(item.DestinateDatabaseName);
                             List<QueryField> query = new() { new("id", Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetByAsync(query);
+                            var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
                         }
                     }
@@ -102,6 +102,41 @@ namespace Mix.Portal.Controllers
             }
             throw new MixException(MixErrorStatus.NotFound, id);
         }
+        
+        [HttpGet("get-by-parent/{parentId}")]
+        public async Task<ActionResult<JObject>> GetSingleByParent(int parentId, [FromQuery] bool loadNestedData)
+        {
+            dynamic obj = await _repository.GetSingleByParentAsync(parentId);
+            if (obj != null)
+            {
+                var data = JObject.FromObject(obj);
+                var database = await GetMixDatabase();
+                foreach (var item in database.Relationships)
+                {
+                    if (loadNestedData)
+                    {
+
+                        List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, data.id);
+                        var associations = await _associationRepository.GetListByAsync(queries);
+                        if (associations.Count > 0)
+                        {
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
+                            _repository.Init(item.DestinateDatabaseName);
+                            List<QueryField> query = new() { new("id", Operation.In, nestedIds) };
+                            var nestedData = await _repository.GetListByAsync(query);
+                            data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                        }
+                    }
+                    else
+                    {
+                        data.Add(new JProperty($"{item.DisplayName}Url", $"{GlobalConfigService.Instance.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={data.id}&ParentName={item.SourceDatabaseName}"));
+                    }
+                }
+                return Ok(data);
+            }
+            return NotFound();
+            //throw new MixException(MixErrorStatus.NotFound, id);
+        }
 
 
         [HttpPost]
@@ -113,14 +148,14 @@ namespace Mix.Portal.Controllers
             }
             var data = await _repository.InsertAsync(obj);
 
-            return data > 0 ? Ok(await _repository.GetAsync(data)) : BadRequest();
+            return data > 0 ? Ok(await _repository.GetSingleAsync(data)) : BadRequest();
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject obj)
         {
             var data = await _repository.UpdateAsync(obj);
-            return data != null ? Ok(await _repository.GetAsync(id)) : BadRequest();
+            return data != null ? Ok(await _repository.GetSingleAsync(id)) : BadRequest();
         }
 
         [HttpDelete("{id}")]
@@ -148,7 +183,7 @@ namespace Mix.Portal.Controllers
             {
                 List<QueryField> associationQueries = GetAssociatoinQueries(
                     parentDatabaseName: request.ParentName, parentId: request.ParentId.Value);
-                var associations = await _associationRepository.GetByAsync(associationQueries);
+                var associations = await _associationRepository.GetListByAsync(associationQueries);
                 if (associations.Count > 0)
                 {
                     var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
