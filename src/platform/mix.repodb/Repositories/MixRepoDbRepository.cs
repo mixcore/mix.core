@@ -99,7 +99,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<List<dynamic>?> GetByAsync(List<QueryField> queryFields)
+        public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields)
         {
             using (var connection = CreateConnection())
             {
@@ -133,9 +133,21 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
+        public async Task<dynamic?> GetSingleByParentAsync(int parentId)
+        {
+            using (var connection = CreateConnection())
+            {
+                return (await connection.QueryAsync<dynamic>(
+                    _tableName,
+                    new QueryField("parentId", parentId),
+                    commandTimeout: _settings.CommandTimeout,
+                    trace: Trace))?.SingleOrDefault();
+            }
+        }
+
         // Get
 
-        public async Task<dynamic?> GetAsync(int id)
+        public async Task<dynamic?> GetSingleAsync(int id)
         {
             using (var connection = CreateConnection())
             {
@@ -146,7 +158,7 @@ namespace Mix.RepoDb.Repositories
                         id = id
                     },
                     commandTimeout: _settings.CommandTimeout,
-                    trace: Trace))?.FirstOrDefault();
+                    trace: Trace))?.SingleOrDefault();
             }
         }
 

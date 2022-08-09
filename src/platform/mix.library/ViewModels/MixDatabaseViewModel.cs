@@ -48,6 +48,17 @@ namespace Mix.Lib.ViewModels
         {
             if (Columns != null)
             {
+                if ((Type == MixDatabaseType.PageType || Type == MixDatabaseType.PostType || Type == MixDatabaseType.ModuleType)
+                    && !Columns.Any(m => m.SystemName == "parentId"))
+                {
+                    Columns.Add(new()
+                    {
+                        DisplayName = "Parent Id",
+                        SystemName = "parentId",
+                        DataType = MixDataType.Reference
+                    });
+                }
+                
                 foreach (var item in Columns)
                 {
                     item.SetUowInfo(UowInfo);

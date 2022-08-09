@@ -53,22 +53,24 @@ namespace Mix.Lib.Base
             }
             data.SetUowInfo(_uow);
             var id = await CreateHandlerAsync(data);
-            return Ok(await GetSingle(id));
+            var result = await GetById(id);
+            return Ok(result);
         }
 
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] TView data)
+        public async Task<IActionResult> Update(TPrimaryKey id, [FromBody] TView data)
         {
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
-            if (id != currentId)
+            if (id.ToString() != currentId)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
             }
             data.SetUowInfo(_uow);
             await UpdateHandler(id, data);
-            return Ok(await GetSingle(data.Id));
+            var result = await GetById(id);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -94,7 +96,8 @@ namespace Mix.Lib.Base
             }
             data.SetUowInfo(_uow);
             await PatchHandler(id, data, properties);
-            return Ok(id);
+            var result = await GetById(id);
+            return Ok(result);
         }
 
 
@@ -164,7 +167,7 @@ namespace Mix.Lib.Base
             return id;
         }
 
-        protected virtual async Task UpdateHandler(string id, TView data)
+        protected virtual async Task UpdateHandler(TPrimaryKey id, TView data)
         {
             await data.SaveAsync();
             await _cacheService.RemoveCacheAsync(id, typeof(TView));
