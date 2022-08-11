@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
@@ -14,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddSingleton<HttpService>();
             services.TryAddSingleton<DatabaseService>();
+            services.TryAddSingleton<RuntimeDbContextService>();
             services.TryAddSingleton<AuditLogService>();
             services.AddHostedService<MixBackgrouTaskPublisher>();
             services.AddHostedService<MixBackgrouTaskSubscriber>();

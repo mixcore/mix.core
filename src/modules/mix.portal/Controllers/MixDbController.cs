@@ -11,6 +11,7 @@ using RepoDb.Interfaces;
 using Mix.Database.Services;
 using Mix.Shared.Services;
 using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Runtime;
 
 namespace Mix.Portal.Controllers
 {
@@ -18,14 +19,14 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
-        private DbContext _mixDbContext;
-        UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
         private readonly MixRepoDbRepository _associationRepository;
         private readonly MixCmsContext _context;
         private string _tableName;
         private static string _associationTableName = nameof(MixDatabaseAssociation);
+        private RuntimeDbContextService _runtimeDbContextService;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -39,7 +40,8 @@ namespace Mix.Portal.Controllers
             MixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             ICache cache,
-            DatabaseService databaseService)
+            DatabaseService databaseService,
+            RuntimeDbContextService runtimeDbContextService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
@@ -48,7 +50,8 @@ namespace Mix.Portal.Controllers
             _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
-            _mixDbContext = databaseService.GetMixDatabaseDbContext();
+            _runtimeDbContextService = runtimeDbContextService;
+            var dbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
         }
 
         #region Overrides

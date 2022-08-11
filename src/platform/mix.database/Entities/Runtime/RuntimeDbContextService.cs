@@ -20,16 +20,71 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Sqlite.Diagnostics.Internal;
 using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
+using Mix.Heart.UnitOfWork;
+using Mix.Database.Services;
+using Mix.Heart.Extensions;
+using Mix.Heart.Repository;
+
 
 namespace Mix.Database.Entities.Runtime
 {
-    public class RuntimeDbContext
+    public class RuntimeDbContextService
     {
-        public static List<string> CreateDynamicDbContext(MixDatabaseProvider databaseProvider, string connectionString)
+        public DbContext MixDatabaseDbContext;
+        private AssemblyLoadContext _assemblyLoadContext;
+        private Assembly _assembly;
+        private Type _dbContextType;
+        private readonly DatabaseService _databaseService;
+        public RuntimeDbContextService(DatabaseService databaseService)
         {
-            var scaffolder = CreateScaffolder();
+            _databaseService = databaseService;
+            MixDatabaseDbContext = GetMixDatabaseDbContext();
+        }
 
-            var dbOpts = new DatabaseModelFactoryOptions();
+        public RuntimeDbRepository GetRepository(string tableName)
+        {
+            
+            return new(MixDatabaseDbContext, tableName);
+        }
+
+        #region Create Dynamic Context
+
+        
+        public DbContext GetMixDatabaseDbContext()
+        {
+            using var peStream = new MemoryStream();
+            var sourceFiles = CreateDynamicDbContext();
+            var enableLazyLoading = false;
+            var result = GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
+
+            if (!result.Success)
+            {
+                var failures = result.Diagnostics
+                    .Where(diagnostic => diagnostic.IsWarningAsError ||
+                                         diagnostic.Severity == DiagnosticSeverity.Error);
+
+                var error = failures.FirstOrDefault();
+                throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+            }
+            _assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
+
+            peStream.Seek(0, SeekOrigin.Begin);
+            _assembly = _assemblyLoadContext.LoadFromStream(peStream);
+
+            _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
+            _ = _dbContextType ?? throw new Exception("DataContext type not found");
+
+            var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
+            _ = constr ?? throw new Exception("DataContext ctor not found");
+            return (DbContext)constr.Invoke(null);
+        }
+
+        public List<string> CreateDynamicDbContext()
+        {
+            using var _cmsContext = new MixCmsContext(_databaseService);
+            var scaffolder = CreateScaffolder();
+            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName).ToList();
+            var dbOpts = new DatabaseModelFactoryOptions(databaseNames);
             var modelOpts = new ModelReverseEngineerOptions();
             var codeGenOpts = new ModelCodeGenerationOptions()
             {
@@ -40,7 +95,7 @@ namespace Mix.Database.Entities.Runtime
                 SuppressConnectionStringWarning = true
             };
 
-            var scaffoldedModelSources = scaffolder.ScaffoldModel(connectionString, dbOpts, modelOpts, codeGenOpts);
+            var scaffoldedModelSources = scaffolder.ScaffoldModel(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION), dbOpts, modelOpts, codeGenOpts);
             var sourceFiles = new List<string> { scaffoldedModelSources.ContextFile.Code };
             sourceFiles.AddRange(scaffoldedModelSources.AdditionalFiles?.Select(f => f.Code));
 
@@ -48,7 +103,7 @@ namespace Mix.Database.Entities.Runtime
         }
 
         [SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "We need it")]
-        static IReverseEngineerScaffolder CreateScaffolder() =>
+        IReverseEngineerScaffolder CreateScaffolder() =>
            new ServiceCollection()
                 .AddEntityFrameworkSqlite()
                 .AddLogging()
@@ -66,7 +121,7 @@ namespace Mix.Database.Entities.Runtime
                 .GetRequiredService<IReverseEngineerScaffolder>();
 
 
-        static List<MetadataReference> CompilationReferences(bool enableLazyLoading)
+        List<MetadataReference> CompilationReferences(bool enableLazyLoading)
         {
             var refs = new List<MetadataReference>();
             var referencedAssemblies = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
@@ -85,7 +140,7 @@ namespace Mix.Database.Entities.Runtime
             return refs;
         }
 
-        public static CSharpCompilation GenerateCode(List<string> sourceFiles, bool enableLazyLoading)
+        public CSharpCompilation GenerateCode(List<string> sourceFiles, bool enableLazyLoading)
         {
             var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp8);
 
@@ -99,19 +154,7 @@ namespace Mix.Database.Entities.Runtime
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
         }
 
+        #endregion
 
-        //public static class DynamicContextExtensions
-        //{
-        //    public static IQueryable Query(this DbContext context, string entityName) =>
-        //        context.Query(entityName, context.Model.FindEntityType(entityName).ClrType);
-
-        //    static readonly MethodInfo SetMethod =
-        //        typeof(DbContext).GetMethod(nameof(DbContext.Set), 1, new[] { typeof(string) }) ??
-        //        throw new Exception($"Type not found: DbContext.Set");
-
-        //    public static IQueryable Query(this DbContext context, string entityName, Type entityType) =>
-        //        (IQueryable)SetMethod.MakeGenericMethod(entityType)?.Invoke(context, new[] { entityName }) ??
-        //        throw new Exception($"Type not found: {entityType.FullName}");
-        //}
     }
 }
