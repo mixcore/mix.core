@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using RepoDb.Interfaces;
 using Mix.Database.Services;
 using Mix.Shared.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Portal.Controllers
 {
@@ -17,6 +18,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
+        private DbContext _mixDbContext;
         UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
@@ -46,6 +48,7 @@ namespace Mix.Portal.Controllers
             _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
+            _mixDbContext = databaseService.GetMixDatabaseDbContext();
         }
 
         #region Overrides

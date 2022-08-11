@@ -1,11 +1,16 @@
-﻿using Mix.Database.Entities;
+﻿using Microsoft.CodeAnalysis;
+using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
+using Mix.Database.Entities.Runtime;
 using Mix.Heart.Constants;
 using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
 using Mix.Shared.Models;
 using Mix.Shared.Services;
+using System.IO;
+using System.Linq;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 
 namespace Mix.Database.Services
@@ -53,6 +58,35 @@ namespace Mix.Database.Services
                     break;
             }
             SaveSettings();
+        }
+
+        public DbContext GetMixDatabaseDbContext()
+        {
+            using var peStream = new MemoryStream();
+            var sourceFiles = RuntimeDbContext.CreateDynamicDbContext(DatabaseProvider, GetConnectionString(MixConstants.CONST_CMS_CONNECTION));
+            var enableLazyLoading = false;
+            var result = RuntimeDbContext.GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
+
+            if (!result.Success)
+            {
+                var failures = result.Diagnostics
+                    .Where(diagnostic => diagnostic.IsWarningAsError ||
+                                         diagnostic.Severity == DiagnosticSeverity.Error);
+
+                var error = failures.FirstOrDefault();
+                throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+            }
+            var assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
+
+            peStream.Seek(0, SeekOrigin.Begin);
+            var assembly = assemblyLoadContext.LoadFromStream(peStream);
+
+            var type = assembly.GetType("TypedDataContext.Context.DataContext");
+            _ = type ?? throw new Exception("DataContext type not found");
+
+            var constr = type.GetConstructor(Type.EmptyTypes);
+            _ = constr ?? throw new Exception("DataContext ctor not found");
+            return (DbContext)constr.Invoke(null);
         }
 
         public MixCmsContext GetDbContext()

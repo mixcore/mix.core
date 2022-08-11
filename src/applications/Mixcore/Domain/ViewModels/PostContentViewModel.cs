@@ -33,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
 
         public Guid? AdditionalDataId { get; set; }
 
-        public AdditionalDataViewModel AdditionalData { get; set; }
+        public JObject AdditionalData { get; set; }
         #endregion
 
         #region Overrides
@@ -52,7 +52,7 @@ namespace Mixcore.Domain.ViewModels
         public T Property<T>(string fieldName)
         {
             return AdditionalData != null
-                ? AdditionalData.Property<T>(fieldName)
+                ? AdditionalData.Value<T>(fieldName)
                 : default;
         }
 
@@ -69,8 +69,8 @@ namespace Mixcore.Domain.ViewModels
             }
             if (AdditionalDataId.HasValue)
             {
-                var repo = AdditionalDataViewModel.GetRepository(UowInfo);
-                AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
+                //var repo = AdditionalDataViewModel.GetRepository(UowInfo);
+                //AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
             }
         }
 
