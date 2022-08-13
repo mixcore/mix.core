@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
@@ -25,15 +26,17 @@ namespace Mix.RepoDb.Services
         public ICache Cache { get; }
         private UnitOfWorkInfo<MixCmsContext> _uow;
         private DatabaseService _databaseService;
+        private RuntimeDbContextService _runtimeDbContextService;
         #endregion
 
         public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
-            ICache cache)
+            ICache cache, RuntimeDbContextService runtimeDbContextService)
         {
             _uow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _backupRepository = new(cache, databaseService, uow);
+            _backupRepository = new(cache, databaseService);
+            _runtimeDbContextService = runtimeDbContextService;
         }
 
         #region Methods
@@ -45,7 +48,7 @@ namespace Mix.RepoDb.Services
             if (database != null && database.Columns.Count > 0)
             {
                 await BackupToLocal(database);
-                await Migrate(database, _databaseService.DatabaseProvider, _uow.DbContext);
+                await Migrate(database, _databaseService.DatabaseProvider, _runtimeDbContextService.GetMixDatabaseDbContext());
                 await RestoreFromLocal(database);
                 return true;
             }

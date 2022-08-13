@@ -28,9 +28,8 @@ using Mix.Heart.Repository;
 
 namespace Mix.Database.Entities.Runtime
 {
-    public class RuntimeDbContextService
+    public class RuntimeDbContextService: IDisposable
     {
-        public DbContext MixDatabaseDbContext;
         private AssemblyLoadContext _assemblyLoadContext;
         private Assembly _assembly;
         private Type _dbContextType;
@@ -38,19 +37,25 @@ namespace Mix.Database.Entities.Runtime
         public RuntimeDbContextService(DatabaseService databaseService)
         {
             _databaseService = databaseService;
-            MixDatabaseDbContext = GetMixDatabaseDbContext();
+            LoadDbContextAssembly();
         }
 
-        public RuntimeDbRepository GetRepository(string tableName)
+        public RuntimeDbRepository GetRepository(string tableName, DbContext mixDatabaseDbContext = null)
         {
             
-            return new(MixDatabaseDbContext, tableName);
+            return new(mixDatabaseDbContext ?? GetMixDatabaseDbContext(), tableName);
+        }
+
+        public void Reload()
+        {
+            _assemblyLoadContext.Unload();
+            LoadDbContextAssembly();
         }
 
         #region Create Dynamic Context
 
         
-        public DbContext GetMixDatabaseDbContext()
+        public void LoadDbContextAssembly()
         {
             using var peStream = new MemoryStream();
             var sourceFiles = CreateDynamicDbContext();
@@ -70,13 +75,18 @@ namespace Mix.Database.Entities.Runtime
 
             peStream.Seek(0, SeekOrigin.Begin);
             _assembly = _assemblyLoadContext.LoadFromStream(peStream);
-
+        }
+        
+        public DbContext GetMixDatabaseDbContext()
+        {
             _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
             _ = _dbContextType ?? throw new Exception("DataContext type not found");
 
             var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
             _ = constr ?? throw new Exception("DataContext ctor not found");
-            return (DbContext)constr.Invoke(null);
+            var ctx = (DbContext)constr.Invoke(null);
+            ctx.Database.EnsureCreated();
+            return ctx;
         }
 
         public List<string> CreateDynamicDbContext()
@@ -91,11 +101,11 @@ namespace Mix.Database.Entities.Runtime
                 RootNamespace = "TypedDataContext",
                 ContextName = "DataContext",
                 ContextNamespace = "TypedDataContext.Context",
-                ModelNamespace = "TypedDataContext.Models",
+                //ModelNamespace = "TypedDataContext.Models",
                 SuppressConnectionStringWarning = true
             };
 
-            var scaffoldedModelSources = scaffolder.ScaffoldModel(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION), dbOpts, modelOpts, codeGenOpts);
+            var scaffoldedModelSources = scaffolder.ScaffoldModel(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION), dbOpts, modelOpts, codeGenOpts);
             var sourceFiles = new List<string> { scaffoldedModelSources.ContextFile.Code };
             sourceFiles.AddRange(scaffoldedModelSources.AdditionalFiles?.Select(f => f.Code));
 
@@ -152,6 +162,11 @@ namespace Mix.Database.Entities.Runtime
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                     optimizationLevel: OptimizationLevel.Release,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
+        }
+
+        public void Dispose()
+        {
+            _assemblyLoadContext.Unload();
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace Mix.Database.Entities.Runtime
         public RuntimeDbRepository(DbContext dbContext, string tableName)
         {
             _dbContext = dbContext;
-            _entityName = $"TypedDataContext.Models.{tableName.ToTitleCase()}";
+            _entityName = $"{tableName.ToTitleCase()}";
             _query = _dbContext.Query(_entityName);
         }
 
@@ -26,7 +26,13 @@ namespace Mix.Database.Entities.Runtime
             return _query.ToDynamicList();
         }
 
-        public dynamic GetBy(int id)
+        public dynamic GetListByParent(int parentId)
+        {
+            return parentId > 0 ? _query.Where($"parentId = {parentId}").ToDynamicList()
+                    : default;
+        }
+
+        public dynamic GetSingleBy(int id)
         {
             return _query.FirstOrDefault($"id = {id}");
         }

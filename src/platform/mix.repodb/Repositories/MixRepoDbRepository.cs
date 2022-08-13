@@ -26,7 +26,6 @@ namespace Mix.RepoDb.Repositories
 
         public ICache Cache { get; }
 
-        UnitOfWorkInfo<MixCmsContext> _uow;
         public string ConnectionString { get; set; }
         public MixDatabaseProvider DatabaseProvider { get; set; }
         readonly DatabaseService _databaseService;
@@ -34,7 +33,7 @@ namespace Mix.RepoDb.Repositories
         private string _tableName;
         #endregion
 
-        public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> uow)
+        public MixRepoDbRepository(ICache cache, DatabaseService databaseService)
         {
             Cache = cache;
             _settings = new AppSetting()
@@ -43,17 +42,16 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
             _databaseService = databaseService;
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
             InitializeRepoDb();
-            _uow = uow;
         }
 
         #region Methods
         public void Init(string tableName)
         {
             _tableName = tableName;
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Runtime;
 using Mix.Shared.Services;
 
 namespace Mixcore.Domain.ViewModels
@@ -31,15 +32,12 @@ namespace Mixcore.Domain.ViewModels
 
         public string DetailUrl => $"{GlobalConfigService.Instance.Domain}/post/{Id}/{SeoName}";
 
-        public Guid? AdditionalDataId { get; set; }
-
-        public JObject AdditionalData { get; set; }
+        public JArray AdditionalData{ get; set; }
         #endregion
 
         #region Overrides
         public override async Task ExpandView()
         {
-            await LoadAdditionalDataAsync();
             await base.ExpandView();
         }
 
@@ -49,6 +47,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
+
         public T Property<T>(string fieldName)
         {
             return AdditionalData != null
@@ -56,23 +55,15 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
+        public Task LoadAdditionalDataAsync(RuntimeDbContextService runtimeDbContextService)
+        {
+            var repo = runtimeDbContextService.GetRepository(MixDatabaseName);
+            AdditionalData = JArray.FromObject(repo.GetListByParent(Id));
+            return Task.CompletedTask;
+        }
         #endregion
         #region Private Methods
-        private async Task LoadAdditionalDataAsync()
-        {
-            if (AdditionalDataId == default)
-            {
-                var nav = await Context.MixDataContentAssociation
-                    .FirstOrDefaultAsync(m => m.ParentType == MixDatabaseParentType.Page
-                        && m.IntParentId == Id);
-                AdditionalDataId = nav?.DataContentId;
-            }
-            if (AdditionalDataId.HasValue)
-            {
-                //var repo = AdditionalDataViewModel.GetRepository(UowInfo);
-                //AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
-            }
-        }
+
 
         #endregion
     }
