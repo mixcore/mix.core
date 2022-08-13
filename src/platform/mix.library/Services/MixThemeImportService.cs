@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.Services;
@@ -11,9 +12,11 @@ namespace Mix.Lib.Services
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
         private readonly MixRepoDbRepository _repository;
+        private readonly RuntimeDbContextService _runtimeDbContextService;
         private DatabaseService _databaseService;
         private MixDbService _mixDbService;
         private readonly MixCmsContext _context;
+        private readonly DbContext _runtimeDbContext;
         private SiteDataViewModel _siteData;
         public readonly int _tenantId;
         public readonly string _tenantName;
@@ -35,7 +38,7 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService, MixDbService mixDbService)
+        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService)
         {
             _uow = uow;
             _context = uow.DbContext;
@@ -47,6 +50,8 @@ namespace Mix.Lib.Services
             _tenantName = httpContext.HttpContext.Session.GetString(MixRequestQueryKeywords.TenantName);
             _databaseService = databaseService;
             _mixDbService = mixDbService;
+            _runtimeDbContextService = runtimeDbContextService;
+            _runtimeDbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
         }
 
         #region Import
@@ -404,7 +409,7 @@ namespace Mix.Lib.Services
                 if (database.Data != null && database.Data.Count > 0)
                 {
                     var sql = GetInsertQuery(database);
-                    await _context.Database.ExecuteSqlRawAsync(sql);
+                    await _runtimeDbContext.Database.ExecuteSqlRawAsync(sql);
                 }
             }
         }

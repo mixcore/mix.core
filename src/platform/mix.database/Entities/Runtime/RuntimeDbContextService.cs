@@ -24,11 +24,18 @@ using Mix.Heart.UnitOfWork;
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Heart.Repository;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Scaffolding.Internal;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Diagnostics.Internal;
+using Pomelo.EntityFrameworkCore.MySql.Diagnostics.Internal;
+using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
+using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+using Mix.Shared.Services;
 
-
+// Ref: https://medium.com/@zaikinsr/roslyn-ef-core-runtime-dbcontext-constructing-285a9d67bc87
 namespace Mix.Database.Entities.Runtime
 {
-    public class RuntimeDbContextService: IDisposable
+    public class RuntimeDbContextService : IDisposable
     {
         private AssemblyLoadContext _assemblyLoadContext;
         private Assembly _assembly;
@@ -42,7 +49,7 @@ namespace Mix.Database.Entities.Runtime
 
         public RuntimeDbRepository GetRepository(string tableName, DbContext mixDatabaseDbContext = null)
         {
-            
+
             return new(mixDatabaseDbContext ?? GetMixDatabaseDbContext(), tableName);
         }
 
@@ -54,39 +61,50 @@ namespace Mix.Database.Entities.Runtime
 
         #region Create Dynamic Context
 
-        
+
         public void LoadDbContextAssembly()
         {
-            using var peStream = new MemoryStream();
-            var sourceFiles = CreateDynamicDbContext();
-            var enableLazyLoading = false;
-            var result = GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
-
-            if (!result.Success)
+            if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
             {
-                var failures = result.Diagnostics
-                    .Where(diagnostic => diagnostic.IsWarningAsError ||
-                                         diagnostic.Severity == DiagnosticSeverity.Error);
+                using var peStream = new MemoryStream();
+                var sourceFiles = CreateDynamicDbContext();
+                var enableLazyLoading = false;
+                var result = GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
 
-                var error = failures.FirstOrDefault();
-                throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+                if (!result.Success)
+                {
+                    var failures = result.Diagnostics
+                        .Where(diagnostic => diagnostic.IsWarningAsError ||
+                                             diagnostic.Severity == DiagnosticSeverity.Error);
+
+                    var error = failures.FirstOrDefault();
+                    throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+                }
+                _assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
+
+                peStream.Seek(0, SeekOrigin.Begin);
+                _assembly = _assemblyLoadContext.LoadFromStream(peStream);
             }
-            _assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
-
-            peStream.Seek(0, SeekOrigin.Begin);
-            _assembly = _assemblyLoadContext.LoadFromStream(peStream);
         }
-        
+
         public DbContext GetMixDatabaseDbContext()
         {
-            _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
-            _ = _dbContextType ?? throw new Exception("DataContext type not found");
+            if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
+            {
+                if (_assembly == null)
+                {
+                    LoadDbContextAssembly();
+                }
+                _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
+                _ = _dbContextType ?? throw new Exception("DataContext type not found");
 
-            var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
-            _ = constr ?? throw new Exception("DataContext ctor not found");
-            var ctx = (DbContext)constr.Invoke(null);
-            ctx.Database.EnsureCreated();
-            return ctx;
+                var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
+                _ = constr ?? throw new Exception("DataContext ctor not found");
+                var ctx = (DbContext)constr.Invoke(null);
+                ctx.Database.EnsureCreated();
+                return ctx;
+            }
+            return default;
         }
 
         public List<string> CreateDynamicDbContext()
@@ -113,13 +131,16 @@ namespace Mix.Database.Entities.Runtime
         }
 
         [SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "We need it")]
-        IReverseEngineerScaffolder CreateScaffolder() =>
-           new ServiceCollection()
+        IReverseEngineerScaffolder CreateScaffolder()
+        {
+            return _databaseService.DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLITE => new ServiceCollection()
                 .AddEntityFrameworkSqlite()
-                .AddLogging()
-                .AddEntityFrameworkDesignTimeServices()
                 .AddSingleton<ProviderCodeGeneratorDependencies>()
                 .AddSingleton<AnnotationCodeGeneratorDependencies>()
+                .AddLogging()
+                .AddEntityFrameworkDesignTimeServices()
                 .AddSingleton<LoggingDefinitions, SqliteLoggingDefinitions>()
                 .AddSingleton<IRelationalTypeMappingSource, SqliteTypeMappingSource>()
                 .AddSingleton<IAnnotationCodeGenerator, AnnotationCodeGenerator>()
@@ -128,7 +149,56 @@ namespace Mix.Database.Entities.Runtime
                 .AddSingleton<IScaffoldingModelFactory, RelationalScaffoldingModelFactory>()
                 .AddSingleton<IReverseEngineerScaffolder, ReverseEngineerScaffolder>()
                 .BuildServiceProvider()
-                .GetRequiredService<IReverseEngineerScaffolder>();
+                .GetRequiredService<IReverseEngineerScaffolder>(),
+
+                MixDatabaseProvider.PostgreSQL => new ServiceCollection()
+                .AddSingleton<ProviderCodeGeneratorDependencies>()
+                .AddSingleton<AnnotationCodeGeneratorDependencies>()
+                .AddEntityFrameworkNpgsql()
+                .AddLogging()
+                .AddEntityFrameworkDesignTimeServices()
+                .AddSingleton<LoggingDefinitions, NpgsqlLoggingDefinitions>()
+                .AddSingleton<IRelationalTypeMappingSource, NpgsqlTypeMappingSource>()
+                .AddSingleton<IAnnotationCodeGenerator, AnnotationCodeGenerator>()
+                .AddSingleton<IDatabaseModelFactory, NpgsqlDatabaseModelFactory>()
+                .AddSingleton<IProviderConfigurationCodeGenerator, NpgsqlCodeGenerator>()
+                .AddSingleton<IScaffoldingModelFactory, RelationalScaffoldingModelFactory>()
+                .BuildServiceProvider()
+                .GetRequiredService<IReverseEngineerScaffolder>(),
+
+                MixDatabaseProvider.MySQL => new ServiceCollection()
+                .AddSingleton<ProviderCodeGeneratorDependencies>()
+                .AddSingleton<AnnotationCodeGeneratorDependencies>()
+                .AddEntityFrameworkMySql()
+                .AddLogging()
+                .AddEntityFrameworkDesignTimeServices()
+                .AddSingleton<LoggingDefinitions, MySqlLoggingDefinitions>()
+                .AddSingleton<IRelationalTypeMappingSource, MySqlTypeMappingSource>()
+                .AddSingleton<IAnnotationCodeGenerator, AnnotationCodeGenerator>()
+                .AddSingleton<IDatabaseModelFactory, MySqlDatabaseModelFactory>()
+                .AddSingleton<IProviderConfigurationCodeGenerator, MySqlCodeGenerator>()
+                .AddSingleton<IScaffoldingModelFactory, RelationalScaffoldingModelFactory>()
+                .BuildServiceProvider()
+                .GetRequiredService<IReverseEngineerScaffolder>(),
+
+                MixDatabaseProvider.SQLSERVER => new ServiceCollection()
+                .AddSingleton<ProviderCodeGeneratorDependencies>()
+                .AddSingleton<AnnotationCodeGeneratorDependencies>()
+                .AddEntityFrameworkSqlServer()
+                .AddLogging()
+                .AddEntityFrameworkDesignTimeServices()
+                .AddSingleton<LoggingDefinitions, SqlServerLoggingDefinitions>()
+                .AddSingleton<IRelationalTypeMappingSource, SqlServerTypeMappingSource>()
+                .AddSingleton<IAnnotationCodeGenerator, AnnotationCodeGenerator>()
+                .AddSingleton<IDatabaseModelFactory, SqlServerDatabaseModelFactory>()
+                .AddSingleton<IProviderConfigurationCodeGenerator, SqlServerCodeGenerator>()
+                .AddSingleton<IScaffoldingModelFactory, RelationalScaffoldingModelFactory>()
+                .BuildServiceProvider()
+                .GetRequiredService<IReverseEngineerScaffolder>(),
+                _ => throw new NotImplementedException()
+            };
+        }
+
 
 
         List<MetadataReference> CompilationReferences(bool enableLazyLoading)
