@@ -39,6 +39,8 @@ namespace Mix.Database.Services
                     return AppSettings.ConnectionStrings?.MixCmsConnection;
                 case MixConstants.CONST_ACCOUNT_CONNECTION:
                     return AppSettings.ConnectionStrings?.MixAccountConnection;
+                case MixConstants.CONST_MIXDB_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixDbConnection;
                 default:
                     return string.Empty;
             }
@@ -53,6 +55,9 @@ namespace Mix.Database.Services
                     break;
                 case MixConstants.CONST_ACCOUNT_CONNECTION:
                     AppSettings.ConnectionStrings.MixAccountConnection = value;
+                    break;
+                case MixConstants.CONST_MIXDB_CONNECTION:
+                    AppSettings.ConnectionStrings.MixDbConnection = value;
                     break;
                 default:
                     break;
@@ -119,10 +124,12 @@ namespace Mix.Database.Services
             if (databaseProvider == MixDatabaseProvider.SQLITE)
             {
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString.Replace(".db", "") + "-account.db");
+                SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString.Replace(".db", "") + "-mixdb.db");
             }
             else
             {
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString);
+                SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString);
             }
 
             AppSettings.DatabaseProvider = databaseProvider;

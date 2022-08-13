@@ -46,12 +46,11 @@ namespace Mix.Portal.Controllers
         {
             _context = context;
             _repository = repository;
-            _associationRepository = new(cache, databaseService, cmsUOW);
+            _associationRepository = new(cache, databaseService);
             _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
             _runtimeDbContextService = runtimeDbContextService;
-            var dbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
         }
 
         #region Overrides

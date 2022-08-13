@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Entities.Runtime;
 using Mix.RepoDb.Services;
 
 namespace Mix.Portal.Controllers
@@ -10,6 +11,7 @@ namespace Mix.Portal.Controllers
         : MixRestApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
         private MixDbService _mixDbService;
+        private RuntimeDbContextService _runtimeDbContextService;
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -19,10 +21,11 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService)
+            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _mixDbService = mixDbService;
+            _runtimeDbContextService = runtimeDbContextService;
         }
 
         #region Routes
@@ -40,6 +43,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult> Migrate(string name)
         {
             var result = await _mixDbService.MigrateDatabase(name);
+            _runtimeDbContextService.Reload();
             return result ? Ok() : BadRequest();
         }
 
