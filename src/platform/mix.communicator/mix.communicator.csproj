@@ -14,7 +14,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
-		<PackageReference Include="Google.Api.Gax.Rest" Version="3.7.0" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

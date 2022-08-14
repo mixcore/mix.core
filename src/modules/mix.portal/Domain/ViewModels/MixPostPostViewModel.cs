@@ -27,17 +27,6 @@
         #endregion
 
         #region Overrides
-
-        public override async Task ExpandView()
-        {
-            await LoadChild();
-        }
-
-        private async Task LoadChild()
-        {
-            //Child = await MixPostContentViewModel.GetRepository(UowInfo).GetSingleAsync(m => m.Id == ChildId);
-        }
-
         #endregion
 
         #region Expands

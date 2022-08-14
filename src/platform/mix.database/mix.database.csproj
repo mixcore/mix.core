@@ -16,14 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.8" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="6.2.19" />
       <!--<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>-->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="6.2.19" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.8" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
