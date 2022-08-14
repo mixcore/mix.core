@@ -21,7 +21,6 @@ using Microsoft.EntityFrameworkCore.Sqlite.Diagnostics.Internal;
 using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
 using Microsoft.EntityFrameworkCore.Sqlite.Scaffolding.Internal;
 using Mix.Heart.UnitOfWork;
-using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Heart.Repository;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Scaffolding.Internal;
@@ -31,9 +30,10 @@ using Pomelo.EntityFrameworkCore.MySql.Diagnostics.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 using Mix.Shared.Services;
+using Mix.Database.Repositories;
 
 // Ref: https://medium.com/@zaikinsr/roslyn-ef-core-runtime-dbcontext-constructing-285a9d67bc87
-namespace Mix.Database.Entities.Runtime
+namespace Mix.Database.Services
 {
     public class RuntimeDbContextService : IDisposable
     {

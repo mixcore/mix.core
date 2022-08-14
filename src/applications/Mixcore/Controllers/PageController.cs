@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
+using Mix.Heart.Helpers;
 using Mix.Lib.Services;
+using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -14,7 +15,7 @@ namespace Mixcore.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
-        private readonly RuntimeDbContextService _runtimeDbContextService;
+        private readonly MixRepoDbRepository _repoDbRepository;
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
@@ -23,8 +24,7 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
-            MixCacheService cacheService,
-            RuntimeDbContextService runtimeDbContextService)
+            MixRepoDbRepository repoDbRepository)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
@@ -33,7 +33,7 @@ namespace Mixcore.Controllers
             _translator = translator;
             _databaseService = databaseService;
             _context = context;
-            _runtimeDbContextService = runtimeDbContextService;
+            _repoDbRepository = repoDbRepository;
         }
 
         protected override void ValidateRequest()
@@ -82,8 +82,12 @@ namespace Mixcore.Controllers
                 return NotFound();
             if (page.AdditionalData == null)
             {
-                await page.LoadAdditionalDataAsync(_runtimeDbContextService);
-                await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PostContentViewModel).FullName}", pageRepo, typeof(MixPostContent), pageRepo.CacheFilename);
+                _repoDbRepository.Init(page.MixDatabaseName);
+                page.AdditionalData = ReflectionHelper.ParseObject(await _repoDbRepository.GetSingleByParentAsync(page.Id));
+                if (page.AdditionalData != null)
+                {
+                    await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PageContentViewModel).FullName}", page, typeof(MixPageContent), pageRepo.CacheFilename);
+                }
             }
 
             ViewData["Title"] = page.SeoTitle;
