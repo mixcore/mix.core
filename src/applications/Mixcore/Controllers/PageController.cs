@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
@@ -13,6 +14,7 @@ namespace Mixcore.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
+        private readonly RuntimeDbContextService _runtimeDbContextService;
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
@@ -21,7 +23,8 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
-            MixCacheService cacheService)
+            MixCacheService cacheService,
+            RuntimeDbContextService runtimeDbContextService)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
@@ -30,6 +33,7 @@ namespace Mixcore.Controllers
             _translator = translator;
             _databaseService = databaseService;
             _context = context;
+            _runtimeDbContextService = runtimeDbContextService;
         }
 
         protected override void ValidateRequest()
@@ -76,6 +80,11 @@ namespace Mixcore.Controllers
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == MixTenantId);
             if (page == null)
                 return NotFound();
+            if (page.AdditionalData == null)
+            {
+                await page.LoadAdditionalDataAsync(_runtimeDbContextService);
+                await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PostContentViewModel).FullName}", pageRepo, typeof(MixPostContent), pageRepo.CacheFilename);
+            }
 
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;

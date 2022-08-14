@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using Microsoft.EntityFrameworkCore.DynamicLinq;
 
 namespace Mix.Database.Entities.Runtime
 {
@@ -26,9 +27,9 @@ namespace Mix.Database.Entities.Runtime
             return _query.ToDynamicList();
         }
 
-        public dynamic GetListByParent(int parentId)
+        public async Task<dynamic> GetSingleByParent(int parentId)
         {
-            return parentId > 0 ? _query.Where($"parentId = {parentId}").ToDynamicList()
+            return parentId > 0 ? await _query.FirstOrDefaultAsync($"parentId = {parentId}")
                     : default;
         }
 
