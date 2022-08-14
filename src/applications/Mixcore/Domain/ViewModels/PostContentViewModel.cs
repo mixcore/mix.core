@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Runtime;
+using Mix.Heart.Helpers;
 using Mix.Shared.Services;
 
 namespace Mixcore.Domain.ViewModels
@@ -32,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
 
         public string DetailUrl => $"{GlobalConfigService.Instance.Domain}/post/{Id}/{SeoName}";
 
-        public JArray AdditionalData{ get; set; }
+        public JObject AdditionalData { get; set; }
         #endregion
 
         #region Overrides
@@ -55,11 +56,11 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public Task LoadAdditionalDataAsync(RuntimeDbContextService runtimeDbContextService)
+        public async Task LoadAdditionalDataAsync(RuntimeDbContextService runtimeDbContextService)
         {
             var repo = runtimeDbContextService.GetRepository(MixDatabaseName);
-            AdditionalData = JArray.FromObject(repo.GetListByParent(Id));
-            return Task.CompletedTask;
+            var obj = await repo.GetSingleByParent(Id);
+            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }
         #endregion
         #region Private Methods

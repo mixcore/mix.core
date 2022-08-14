@@ -81,12 +81,13 @@ namespace Mixcore.Controllers
             var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == MixTenantId);
             if (post == null)
             {
-                string msg = $"PostController: {postId} - {keyword}";
-                MixService.LogException(status: MixErrorStatus.NotFound, message: msg);
                 return NotFound();
             }
-            await post.LoadAdditionalDataAsync(_runtimeDbContextService);
-
+            if (post.AdditionalData == null)
+            {
+                await post.LoadAdditionalDataAsync(_runtimeDbContextService);
+                await postRepo.CacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), postRepo.CacheFilename);
+            }
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

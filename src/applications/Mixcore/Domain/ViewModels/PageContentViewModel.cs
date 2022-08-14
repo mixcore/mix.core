@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.Runtime;
+using Mix.Heart.Helpers;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -33,14 +35,13 @@ namespace Mixcore.Domain.ViewModels
         public Guid? AdditionalDataId { get; set; }
 
         public List<ModuleContentViewModel> Modules { get; set; }
-        public AdditionalDataViewModel AdditionalData { get; set; }
+        public JObject AdditionalData { get; set; }
         #endregion
 
         #region Overrides
         public override async Task ExpandView()
         {
             await LoadModulesAsync();
-            await LoadAdditionalDataAsync();
             await base.ExpandView();
         }
 
@@ -56,25 +57,22 @@ namespace Mixcore.Domain.ViewModels
         public T Property<T>(string fieldName)
         {
             return AdditionalData != null
-                ? AdditionalData.Property<T>(fieldName)
+                ? AdditionalData.Value<T>(fieldName)
                 : default;
         }
 
         #endregion
+
         #region Private Methods
-        private async Task LoadAdditionalDataAsync()
+        public async Task LoadAdditionalDataAsync(RuntimeDbContextService runtimeDbContextService)
         {
-            if (AdditionalDataId == default)
+            var repo = runtimeDbContextService.GetRepository(MixDatabaseName);
+            var obj = await repo.GetSingleByParent(Id);
+            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            
+            foreach (var module in Modules)
             {
-                var nav = await Context.MixDataContentAssociation
-                    .FirstOrDefaultAsync(m => m.ParentType == MixDatabaseParentType.Page
-                        && m.IntParentId == Id);
-                AdditionalDataId = nav?.DataContentId;
-            }
-            if (AdditionalDataId.HasValue)
-            {
-                var repo = AdditionalDataViewModel.GetRepository(UowInfo);
-                AdditionalData = await repo.GetSingleAsync(AdditionalDataId.Value);
+                await module.LoadAdditionalDataAsync(runtimeDbContextService);
             }
         }
 
