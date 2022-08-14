@@ -38,6 +38,7 @@ namespace Mix.Lib.ViewModels
         {
             MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
             await LoadAliasAsync();
+            await base.ExpandView();
         }
 
         private async Task LoadAliasAsync()
