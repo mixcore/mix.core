@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
+using Mix.Heart.Helpers;
 using Mix.Lib.Services;
+using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -15,6 +17,7 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
         private readonly RuntimeDbContextService _runtimeDbContextService;
+        private readonly MixRepoDbRepository _repoDbRepository;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
@@ -24,7 +27,8 @@ namespace Mixcore.Controllers
             DatabaseService databaseService,
             MixCmsContext context,
             MixCacheService cacheService,
-            RuntimeDbContextService runtimeDbContextService)
+            RuntimeDbContextService runtimeDbContextService,
+            MixRepoDbRepository repoDbRepository)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
             _context = context;
@@ -34,6 +38,7 @@ namespace Mixcore.Controllers
             _databaseService = databaseService;
             _context = context;
             _runtimeDbContextService = runtimeDbContextService;
+            _repoDbRepository = repoDbRepository;
         }
 
         protected override void ValidateRequest()
@@ -85,8 +90,12 @@ namespace Mixcore.Controllers
             }
             if (post.AdditionalData == null)
             {
-                await post.LoadAdditionalDataAsync(_runtimeDbContextService);
-                await postRepo.CacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), postRepo.CacheFilename);
+                _repoDbRepository.Init(post.MixDatabaseName);
+                post.AdditionalData = ReflectionHelper.ParseObject(await _repoDbRepository.GetSingleByParentAsync(post.Id));
+                if (post.AdditionalData!=null)
+                {
+                    await postRepo.CacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), postRepo.CacheFilename);
+                }
             }
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

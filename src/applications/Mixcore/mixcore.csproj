@@ -18,7 +18,7 @@
 		<Using Include="Newtonsoft.Json" />
 		<Using Include="Mix.Lib.Base" />
 		<Using Include="Mix.Lib.ViewModels" />
-		
+
 		<Using Include="Mix.Database.Entities.Cms" />
 		<Using Include="Mix.Heart.ViewModel" />
 		<Using Include="Mix.Heart.Models" />
@@ -26,7 +26,7 @@
 		<Using Include="Mix.Heart.UnitOfWork" />
 		<Using Include="Mix.Heart.Services" />
 		<Using Include="Mix.Lib.Attributes" />
-		
+
 		<Using Include="Mix.Lib.Helpers" />
 		<Using Include="Mix.Identity.Constants" />
 		<Using Include="Mix.Queue.Interfaces" />
@@ -50,26 +50,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
+		<!--<PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />-->
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
 		<PackageReference Include="Ocelot" Version="18.0.0" />
+		<!--<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0" />-->
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
-			<PrivateAssets>all</PrivateAssets>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8" />
+		<!--<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
+		</PackageReference>-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8" />
-		<!--<PrivateAssets>all</PrivateAssets>
-		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>-->
 	</ItemGroup>
 
 	<ItemGroup>
@@ -94,14 +89,14 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Remove="wwwroot\mix-content\**" />
-	  <EmbeddedResource Remove="..\..\shared\MixContent\**" />
-	  <EmbeddedResource Remove="wwwroot\mix-content\**" />
-	  <None Remove="wwwroot\mix-content\**" />
+		<Content Remove="wwwroot\mix-content\**" />
+		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
+		<EmbeddedResource Remove="wwwroot\mix-content\**" />
+		<None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Update="wwwroot\mix-app\css\swagger.css">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Content>
+		<Content Update="wwwroot\mix-app\css\swagger.css">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 </Project>
