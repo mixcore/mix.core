@@ -11,7 +11,6 @@ using RepoDb.Interfaces;
 using Mix.Database.Services;
 using Mix.Shared.Services;
 using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Runtime;
 
 namespace Mix.Portal.Controllers
 {
@@ -26,7 +25,6 @@ namespace Mix.Portal.Controllers
         private readonly MixCmsContext _context;
         private string _tableName;
         private static string _associationTableName = nameof(MixDatabaseAssociation);
-        private RuntimeDbContextService _runtimeDbContextService;
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -40,8 +38,7 @@ namespace Mix.Portal.Controllers
             MixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             ICache cache,
-            DatabaseService databaseService,
-            RuntimeDbContextService runtimeDbContextService)
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
@@ -50,7 +47,6 @@ namespace Mix.Portal.Controllers
             _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
-            _runtimeDbContextService = runtimeDbContextService;
         }
 
         #region Overrides

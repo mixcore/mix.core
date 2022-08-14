@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Runtime;
+using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -45,10 +46,10 @@ namespace Mixcore.Domain.ViewModels
 
         #region Private Methods
 
-        public async Task LoadAdditionalDataAsync(RuntimeDbContextService runtimeDbContextService)
+        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            var repo = runtimeDbContextService.GetRepository(MixDatabaseName);
-            var obj = await repo.GetSingleByParent(Id);
+            mixRepoDbRepository.Init(MixDatabaseName);
+            var obj = await mixRepoDbRepository.GetSingleByParentAsync(Id);
             AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }
 

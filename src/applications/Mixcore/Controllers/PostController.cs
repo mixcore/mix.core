@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Entities.Runtime;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Lib.Services;
@@ -16,7 +15,6 @@ namespace Mixcore.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
-        private readonly RuntimeDbContextService _runtimeDbContextService;
         private readonly MixRepoDbRepository _repoDbRepository;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
@@ -26,8 +24,6 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
-            MixCacheService cacheService,
-            RuntimeDbContextService runtimeDbContextService,
             MixRepoDbRepository repoDbRepository)
             : base(httpContextAccessor, mixService, ipSecurityConfigService)
         {
@@ -37,7 +33,6 @@ namespace Mixcore.Controllers
             _translator = translator;
             _databaseService = databaseService;
             _context = context;
-            _runtimeDbContextService = runtimeDbContextService;
             _repoDbRepository = repoDbRepository;
         }
 

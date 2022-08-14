@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
 
-namespace Mix.Database.Entities.Runtime
+namespace Mix.Database.Repositories
 {
     public class RuntimeDbRepository
     {
