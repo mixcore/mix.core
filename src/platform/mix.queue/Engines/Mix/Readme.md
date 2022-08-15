@@ -1,9 +1,9 @@
 ** Note: Cannot Use Mix Queue for microservices  because Mix using memory queue message. 
 TODO: update Mix queue using Database or host to seperate microservice then it can be used in microservices architechture
 
-- Create Publisher for model to create topic on google if not exist
+- Create Publisher for SampleEntity to create topic
 ```
-public class PageContentPublisherService : PublisherServiceBase
+public class SampleEntityPublisherService : PublisherServiceBase
 {
     static string topicId = typeof(SampleEntity).FullName;
     public PageContentPublisherService(
@@ -16,9 +16,9 @@ public class PageContentPublisherService : PublisherServiceBase
 }
 
 ```
-- Create Subscriber for each module
+- Create Subscriber for SampleEntity
 ```
-public class TenantSubscriber : SubscriberBase
+public class SampleEntitySubscriber : SubscriberBase
 {
     private UnitOfWorkInfo _uow;
     static string topicId = typeof(SampleEntity).FullName;
