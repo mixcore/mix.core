@@ -86,8 +86,9 @@ namespace Mixcore.Controllers
             if (post.AdditionalData == null)
             {
                 _repoDbRepository.Init(post.MixDatabaseName);
-                post.AdditionalData = ReflectionHelper.ParseObject(await _repoDbRepository.GetSingleByParentAsync(post.Id));
-                if (post.AdditionalData!=null)
+                var data = await _repoDbRepository.GetSingleByParentAsync(post.Id);
+                post.AdditionalData = data != null ? ReflectionHelper.ParseObject(data) : null;
+                if (post.AdditionalData != null)
                 {
                     await postRepo.CacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), postRepo.CacheFilename);
                 }
