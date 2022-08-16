@@ -83,7 +83,8 @@ namespace Mixcore.Controllers
             if (page.AdditionalData == null)
             {
                 _repoDbRepository.Init(page.MixDatabaseName);
-                page.AdditionalData = ReflectionHelper.ParseObject(await _repoDbRepository.GetSingleByParentAsync(page.Id));
+                var data = await _repoDbRepository.GetSingleByParentAsync(page.Id);
+                page.AdditionalData = data != null ? ReflectionHelper.ParseObject(data) : null;
                 if (page.AdditionalData != null)
                 {
                     await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PageContentViewModel).FullName}", page, typeof(MixPageContent), pageRepo.CacheFilename);
