@@ -46,7 +46,6 @@ namespace Mix.RepoDb.Services
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
             if (database != null && database.Columns.Count > 0)
             {
-                await BackupToLocal(database);
                 await Migrate(database, _databaseService.DatabaseProvider, _runtimeDbContextService.GetMixDatabaseDbContext());
                 await RestoreFromLocal(database);
                 return true;
