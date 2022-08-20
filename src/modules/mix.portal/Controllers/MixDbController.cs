@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.RepoDb.Dtos;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using RepoDb;
@@ -11,6 +10,8 @@ using RepoDb.Interfaces;
 using Mix.Database.Services;
 using Mix.Shared.Services;
 using Microsoft.EntityFrameworkCore;
+using Mix.Database.Repositories;
+using Mix.Heart.Helpers;
 
 namespace Mix.Portal.Controllers
 {
@@ -19,6 +20,8 @@ namespace Mix.Portal.Controllers
     public class MixDbController : MixApiControllerBase
     {
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly RuntimeDbContextService _runtimeDbContextService;
+        private RuntimeDbRepository _runtimeRepository;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
         private readonly MixRepoDbRepository _associationRepository;
@@ -38,7 +41,8 @@ namespace Mix.Portal.Controllers
             MixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             ICache cache,
-            DatabaseService databaseService)
+            DatabaseService databaseService,
+            RuntimeDbContextService runtimeDbContextService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _context = context;
@@ -47,6 +51,8 @@ namespace Mix.Portal.Controllers
             _associationRepository.Init(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
+            _runtimeDbContextService = runtimeDbContextService;
+            
         }
 
         #region Overrides
@@ -55,7 +61,7 @@ namespace Mix.Portal.Controllers
         {
             _tableName = RouteData?.Values["name"].ToString();
             _repository.Init(_tableName);
-
+            _runtimeRepository = new(_runtimeDbContextService.GetMixDatabaseDbContext(), _tableName);
             base.OnActionExecuting(context);
         }
 
@@ -73,6 +79,8 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
+            return await _runtimeRepository.GetSingleAsync(id);
+
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {

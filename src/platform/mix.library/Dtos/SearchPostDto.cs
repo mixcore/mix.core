@@ -13,7 +13,7 @@ namespace Mix.Lib.Dtos
             ReflectionHelper.MapObject(req, this);
             Categories = request.Query[MixRequestQueryKeywords.Categories];
             Tags = request.Query[MixRequestQueryKeywords.Tag];
-            if (Enum.TryParse(request.Query["compareKind"], out MixCompareOperatorKind compareKind))
+            if (Enum.TryParse(request.Query["compareKind"], out MixCompareOperator compareKind))
             {
                 CompareKind = compareKind;
             }
@@ -25,7 +25,7 @@ namespace Mix.Lib.Dtos
         }
         public string Categories { get; set; }
         public string Tags { get; set; }
-        public MixCompareOperatorKind CompareKind { get; set; }
+        public MixCompareOperator CompareKind { get; set; }
         public JObject Fields { get; set; }
 
     }
