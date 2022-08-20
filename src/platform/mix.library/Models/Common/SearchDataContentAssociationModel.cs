@@ -34,7 +34,7 @@ namespace Mix.Lib.Models.Common
             {
                 IsGroup = isGroup;
             }
-            if (Enum.TryParse(httpRequest.Query["compareKind"], out MixCompareOperatorKind compareKind))
+            if (Enum.TryParse(httpRequest.Query["compareKind"], out MixCompareOperator compareKind))
             {
                 CompareKind = compareKind;
             }
@@ -48,7 +48,7 @@ namespace Mix.Lib.Models.Common
         public Guid? GuidParentId { get; set; }
         public int MixDatabaseId { get; set; }
         public string MixDatabaseName { get; set; }
-        public MixCompareOperatorKind CompareKind { get; set; }
+        public MixCompareOperator CompareKind { get; set; }
         public bool IsGroup { get; set; }
         public JObject Fields { get; set; }
 

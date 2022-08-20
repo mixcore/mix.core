@@ -1,8 +1,9 @@
 ﻿namespace Mix.Constant.Enums
 {
-    public enum MixCompareOperatorKind
+    public enum MixCompareOperator
     {
         Equal,
+        Like,
         NotEqual,
         Contain,
         NotContain,

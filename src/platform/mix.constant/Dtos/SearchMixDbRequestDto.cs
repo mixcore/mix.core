@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.RepoDb.Dtos
+namespace Mix.Constant.Dtos
 {
     public class SearchMixDbRequestDto : SearchRequestDto
     {

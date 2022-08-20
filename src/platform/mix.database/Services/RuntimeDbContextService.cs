@@ -122,11 +122,13 @@ namespace Mix.Database.Services
                 //ModelNamespace = "TypedDataContext.Models",
                 SuppressConnectionStringWarning = true
             };
-
+            
             var scaffoldedModelSources = scaffolder.ScaffoldModel(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION), dbOpts, modelOpts, codeGenOpts);
-            var sourceFiles = new List<string> { scaffoldedModelSources.ContextFile.Code };
-            sourceFiles.AddRange(scaffoldedModelSources.AdditionalFiles?.Select(f => f.Code));
-
+            var sourceFiles = new List<string> { scaffoldedModelSources.ContextFile.Code };            
+            foreach (var item in scaffoldedModelSources.AdditionalFiles)
+            {
+                sourceFiles.Add(item.Code.Replace("byte[] CreatedDateTime", "DateTime CreatedDateTime"));
+            }
             return sourceFiles;
         }
 
