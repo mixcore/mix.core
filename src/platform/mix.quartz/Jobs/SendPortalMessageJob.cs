@@ -26,21 +26,8 @@ namespace Mix.MixQuartz.Jobs
             if (context.Trigger.JobDataMap.TryGetValue("data", out object obj))
             {
                 var msg = JObject.Parse(obj.ToString()).ToObject<SignalRMessageModel>();
+                msg.From = new(GetType().Name);
                 await _portalHub.SendMessageAsync(msg);
-            }
-        }
-
-        private MessageType GetHubMessageType(JObject obj)
-        {
-            var status = obj.Value<string>("status");
-            switch (status)
-            {
-                case "success":
-                    return MessageType.Success;
-                case "error":
-                    return MessageType.Error;
-                default:
-                    return MessageType.Info;
             }
         }
     }

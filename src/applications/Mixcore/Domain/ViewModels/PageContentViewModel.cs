@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;
+using Mix.Shared.Models;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -28,6 +30,8 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Properties
+        public int? PageSize { get; set; }
+        public MixPageType Type { get; set; }
 
         public string ClassName { get; set; }
 
@@ -36,21 +40,33 @@ namespace Mixcore.Domain.ViewModels
         public Guid? AdditionalDataId { get; set; }
 
         public List<ModuleContentViewModel> Modules { get; set; }
+        public PagingResponseModel<MixPagePostAssociationViewModel> Posts { get; set; }
         public JObject AdditionalData { get; set; }
         #endregion
 
         #region Overrides
         public override async Task ExpandView()
         {
-            await LoadModulesAsync();
             await base.ExpandView();
+            await LoadModulesAsync();
         }
-
-
 
         #endregion
 
         #region Public Method
+
+        public async Task LoadPostsAsync(PagingRequestModel pagingModel)
+        {
+            Posts = await MixPagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
+            List<Task> tasks = new();
+            foreach (var item in Posts.Items)
+            {
+                item.SetUowInfo(UowInfo);
+                tasks.Add(item.LoadPost());
+            }
+            await Task.WhenAll(tasks);
+        }
+
         public ModuleContentViewModel GetModule(string moduleName)
         {
             return Modules.FirstOrDefault(m => m.SystemName == moduleName);
