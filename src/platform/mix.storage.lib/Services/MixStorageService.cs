@@ -1,52 +1,43 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Mix.Storage.Lib.Engines.Base;
+using Mix.Storage.Lib.Engines.CloudFlare;
+using Mix.Storage.Lib.Engines.Mix;
 using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Lib.Services
 {
     public class MixStorageService
     {
-        private UnitOfWorkInfo _cmsUOW;
-        private string? _tenantName;
-        private int _tenantId;
-
-        public MixStorageService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        private IMixUploader _uploader;
+        private readonly IConfiguration _configuration;
+        private readonly HttpService _httpService;
+        public MixStorageService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW, IConfiguration configuration, HttpService httpService)
         {
-            _cmsUOW = cmsUOW;
-            if (httpContext.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
+            _configuration = configuration;
+            _httpService = httpService;
+            _uploader = CreateUploader(httpContext, cmsUOW);
+        }
+
+        private IMixUploader CreateUploader(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        {
+            var providerSetting = _configuration["StorageSetting:Provider"];
+            var provider = Enum.Parse<MixStorageProvider>(providerSetting);
+            switch (provider)
             {
-                _tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId)!.Value;
+                case MixStorageProvider.CLOUDFLARE:
+                    return new CloudFlareUploader(httpContext, _configuration, cmsUOW, _httpService);
+                case MixStorageProvider.MIX:
+                default:
+                    return new MixUploader(httpContext, _configuration, cmsUOW);
             }
-            _tenantName = httpContext.HttpContext?.Session.GetString(MixRequestQueryKeywords.TenantName);
         }
         #region Methods
 
         public async Task<string?> UploadFile(IFormFile file, string? themeName, string? createdBy)
         {
-            var folder = $"{MixFolders.StaticFiles}/{_tenantName}/{themeName}/{MixFolders.UploadsFolder}/{DateTime.Now.ToString("yyyy-MMM")}";
-            var result = MixFileHelper.SaveFile(file, folder);
-            if (!string.IsNullOrEmpty(result))
-            {
-                await CreateMedia(folder, result, _tenantId, createdBy);
-                return $"{GlobalConfigService.Instance.Domain}/{folder}/{result}";
-            }
-            return default;
+            return await _uploader.UploadFile(file, themeName, createdBy);
         }
-
-        public async Task CreateMedia(string folder, string result, int tenantId, string? createdBy)
-        {
-            var media = new MixMediaViewModel(_cmsUOW)
-            {
-                Id = Guid.NewGuid(),
-                DisplayName = result,
-                FileFolder = folder,
-                FileName = result,
-                CreatedBy = createdBy,
-                MixTenantId = tenantId,
-                CreatedDateTime = DateTime.UtcNow
-            };
-            await media.SaveAsync();
-        }
-
         #endregion
     }
 }
