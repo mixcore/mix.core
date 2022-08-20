@@ -4,6 +4,7 @@
         : AssociationViewModelBase<MixCmsContext, MixPagePostAssociation, int, MixPagePostAssociationViewModel>
     {
         #region Properties
+        public MixPostContentViewModel Post { get; set; }
         #endregion
 
         #region Constructors
@@ -30,6 +31,10 @@
 
         #region Expands
 
+        public async Task LoadPost()
+        {
+            Post = await MixPostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
+        }
         #endregion
     }
 }

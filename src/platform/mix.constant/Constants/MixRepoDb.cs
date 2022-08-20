@@ -3,5 +3,7 @@
     public class MixRepoDbQueueAction
     {
         public const string Backup = "Backup";
+        public const string Restore = "Restore";
+        public const string Migrate = "Migrate";
     }
 }
