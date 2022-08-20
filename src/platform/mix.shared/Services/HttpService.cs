@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Mix.Heart.Enums;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http.Headers;
@@ -113,6 +116,19 @@ namespace Mix.Shared.Services
         {
             switch (contentType)
             {
+                case "multipart/form-data":
+                    try { 
+                        var formfile = content as IFormFile;
+                        var multipartFormContent = new MultipartFormDataContent();
+                        //Load the file and set the file's Content-Type header
+                        var fileStreamContent = new StreamContent(formfile.OpenReadStream());
+                        multipartFormContent.Add(fileStreamContent, name: "file", fileName: formfile.FileName);
+                        return multipartFormContent;
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new MixException(MixErrorStatus.Badrequest, ex);
+                    }
                 case "application/x-www-form-urlencoded":
                     var formData = content.GetType()
      .GetProperties(BindingFlags.Instance | BindingFlags.Public)
