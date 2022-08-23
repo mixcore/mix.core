@@ -43,7 +43,7 @@ namespace Mix.Database.Repositories
         public RuntimeDbRepository(DbContext dbContext, string tableName) : base(dbContext)
         {
             _dbContext = dbContext;
-            _entityName = tableName.ToTitleCase();
+            _entityName = tableName.ToLower().ToTitleCase();
             _entityType = _dbContext.Model.FindEntityType(_entityName).ClrType;
             CacheService = new();
             Table = _dbContext.Query(_entityName);
