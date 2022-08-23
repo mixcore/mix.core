@@ -111,7 +111,7 @@ namespace Mix.Database.Services
         {
             using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
-            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName).ToList();
+            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
             var dbOpts = new DatabaseModelFactoryOptions(databaseNames);
             var modelOpts = new ModelReverseEngineerOptions();
             var codeGenOpts = new ModelCodeGenerationOptions()
@@ -123,12 +123,28 @@ namespace Mix.Database.Services
                 SuppressConnectionStringWarning = true
             };
             
-            var scaffoldedModelSources = scaffolder.ScaffoldModel(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION), dbOpts, modelOpts, codeGenOpts);
-            var sourceFiles = new List<string> { scaffoldedModelSources.ContextFile.Code };            
+            var scaffoldedModelSources = scaffolder.ScaffoldModel(
+                _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION), 
+                dbOpts, 
+                modelOpts, 
+                codeGenOpts);
+            var sourceFiles = new List<string>();            
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
+                if (_databaseService.DatabaseProvider == MixDatabaseProvider.MySQL)
+                {
+                    string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+                    if (!databaseNames.Contains(name) && item.Path.EndsWith("um.cs"))
+                    {
+                        string newName = name.Substring(0, name.LastIndexOf("um")) + "a";
+                        scaffoldedModelSources.ContextFile.Code = scaffoldedModelSources.ContextFile.Code.Replace(name, newName);
+                        item.Path = item.Path.Replace(name, newName);
+                        item.Code = item.Code.Replace(name, newName);                            
+                    }
+                }
                 sourceFiles.Add(item.Code.Replace("byte[] CreatedDateTime", "DateTime CreatedDateTime"));
             }
+            sourceFiles.Add(scaffoldedModelSources.ContextFile.Code);
             return sourceFiles;
         }
 
@@ -238,7 +254,7 @@ namespace Mix.Database.Services
 
         public void Dispose()
         {
-            _assemblyLoadContext.Unload();
+            _assemblyLoadContext?.Unload();
         }
 
         #endregion

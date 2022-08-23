@@ -143,16 +143,16 @@ namespace Mix.RepoDb.Services
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
         {
             List<string> colSqls = new List<string>();
+            string tableName = database.SystemName.ToLower();
             foreach (var col in database.Columns)
             {
                 colSqls.Add(GenerateColumnSql(col));
             }
 
-            var commandText = GetMigrateTableSql(database.SystemName, databaseProvider, colSqls);
-
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await ctx.Database.ExecuteSqlRawAsync($"DROP TABLE IF EXISTS {database.SystemName};");
+                await ctx.Database.ExecuteSqlRawAsync($"DROP TABLE IF EXISTS {tableName};");
                 var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
                 return result >= 0;
             }
