@@ -150,7 +150,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(contentRootPath, MixFolders.StaticFiles)),
-                RequestPath = ""
+                RequestPath = $"/{MixFolders.StaticFiles}"
             });
 
             return app;

@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Database.EntityConfigurations;
+using Mix.Database.EntityConfigurations.MYSQL;
+using Mix.Database.EntityConfigurations.POSTGRES;
+using Mix.Database.EntityConfigurations.SQLITE;
+using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.UnitOfWork;
@@ -15,6 +20,7 @@ namespace Mix.RepoDb.Services
 {
     public class MixDbService
     {
+        private IDatabaseConstants _dbConstants;
         private MixRepoDbRepository _repository;
         private MixRepoDbRepository _backupRepository;
 
@@ -36,6 +42,14 @@ namespace Mix.RepoDb.Services
             _repository = repository;
             _backupRepository = new(cache, databaseService);
             _runtimeDbContextService = runtimeDbContextService;
+            _dbConstants = _databaseService.DatabaseProvider switch
+            {
+                MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
+                MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
+                MixDatabaseProvider.PostgreSQL => new PostgresDatabaseConstants(),
+                MixDatabaseProvider.SQLITE => new SqliteDatabaseConstants(),
+                _ => throw new NotImplementedException()
+            };
         }
 
         #region Methods
@@ -193,22 +207,16 @@ namespace Mix.RepoDb.Services
                 case MixDataType.DateTime:
                 case MixDataType.Date:
                 case MixDataType.Time:
-                    return _databaseService.DatabaseProvider switch
-                    {
-                        MixDatabaseProvider.PostgreSQL => "timestamp without time zone",
-                        _ => "datetime"
-                    };
+                    return _dbConstants.DateTime;
                 case MixDataType.Double:
                     return "float";
                 case MixDataType.Reference:
                 case MixDataType.Integer:
-                    return "int";
+                    return _dbConstants.Integer;
+                case MixDataType.Guid:
+                    return _dbConstants.Guid;
                 case MixDataType.Html:
-                    return _databaseService.DatabaseProvider switch
-                    {
-                        MixDatabaseProvider.SQLSERVER => "ntext",
-                        _ => "text"
-                    };
+                    return _dbConstants.Text;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:
@@ -228,7 +236,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.TuiEditor:
                 case MixDataType.QRCode:
                 default:
-                    return $"varchar({maxLength ?? 250})";
+                    return $"{_dbConstants.NString}({maxLength ?? 250})";
             }
         }
         #endregion
