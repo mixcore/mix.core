@@ -90,6 +90,7 @@
         VideoYoutube,
         TuiEditor,
         Integer,
+        Guid,
         Reference,
         QRCode,
         Tag,

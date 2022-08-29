@@ -4,8 +4,7 @@
     {
         System,
         Service,
-        PostType,
-        PageType,
-        ModuleType
+        AdditionalData,
+        GuidAdditionalData
     }
 }

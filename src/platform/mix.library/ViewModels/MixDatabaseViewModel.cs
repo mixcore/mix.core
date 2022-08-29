@@ -48,17 +48,17 @@ namespace Mix.Lib.ViewModels
         {
             if (Columns != null)
             {
-                if ((Type == MixDatabaseType.PageType || Type == MixDatabaseType.PostType || Type == MixDatabaseType.ModuleType)
+                if ((Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData)
                     && !Columns.Any(m => m.SystemName == "parentId"))
                 {
                     Columns.Add(new()
                     {
                         DisplayName = "Parent Id",
                         SystemName = "parentId",
-                        DataType = MixDataType.Reference
+                        DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
                     });
                 }
-                
+
                 foreach (var item in Columns)
                 {
                     item.SetUowInfo(UowInfo);

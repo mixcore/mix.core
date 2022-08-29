@@ -122,26 +122,30 @@ namespace Mix.Database.Services
                 //ModelNamespace = "TypedDataContext.Models",
                 SuppressConnectionStringWarning = true
             };
-            
+
             var scaffoldedModelSources = scaffolder.ScaffoldModel(
-                _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION), 
-                dbOpts, 
-                modelOpts, 
+                _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION),
+                dbOpts,
+                modelOpts,
                 codeGenOpts);
-            var sourceFiles = new List<string>();            
+            var sourceFiles = new List<string>();
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
-                if (_databaseService.DatabaseProvider == MixDatabaseProvider.MySQL)
+
+                string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+                string newName = name.ToLower();
+                if (!databaseNames.Contains(name) && item.Path.EndsWith("um.cs"))
                 {
-                    string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
-                    if (!databaseNames.Contains(name) && item.Path.EndsWith("um.cs"))
-                    {
-                        string newName = name.Substring(0, name.LastIndexOf("um")) + "a";
-                        scaffoldedModelSources.ContextFile.Code = scaffoldedModelSources.ContextFile.Code.Replace(name, newName);
-                        item.Path = item.Path.Replace(name, newName);
-                        item.Code = item.Code.Replace(name, newName);                            
-                    }
+                    newName = newName.Substring(0, name.LastIndexOf("um")) + "a";
                 }
+
+                scaffoldedModelSources.ContextFile.Code = scaffoldedModelSources.ContextFile.Code
+                    .Replace($"Entity<{name}>", $"Entity<{newName}>")
+                    .Replace($"DbSet<{name}>", $"DbSet<{newName}>");
+                
+                item.Path = item.Path.Replace(name, newName);
+                item.Code = item.Code.Replace($"class {name}", $"class {newName}");
+                
                 sourceFiles.Add(item.Code.Replace("byte[] CreatedDateTime", "DateTime CreatedDateTime"));
             }
             sourceFiles.Add(scaffoldedModelSources.ContextFile.Code);
