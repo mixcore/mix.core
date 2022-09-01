@@ -9,7 +9,7 @@
         public const string ThemePackage = "MixContent/Temp/Themes";
         public const string MixContentFolder = "MixContent";
         public const string AppConfigFolder = "MixContent/AppConfigs";
-        public const string JsonDataFolder = "MixContent/Data";
+        public const string JsonDataFolder = "MixContent/Shared/Json";
         public const string MixCacheFolder = "MixContent/cache";
         public const string MixLogsFolder = "MixContent/logs";
         public const string ExportFolder = "mix-content/exports";

@@ -12,6 +12,7 @@ using Mix.Shared.Services;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Repositories;
 using Mix.Heart.Helpers;
+using Mix.Lib.Attributes;
 
 namespace Mix.Portal.Controllers
 {
@@ -147,7 +148,7 @@ namespace Mix.Portal.Controllers
             //throw new MixException(MixErrorStatus.NotFound, id);
         }
 
-
+        [PreventDuplicateFormSubmission]
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject obj)
         {
