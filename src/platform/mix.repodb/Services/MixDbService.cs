@@ -111,7 +111,7 @@ namespace Mix.RepoDb.Services
 
         private void InitBackupRepository(string databaseName)
         {
-            string cnn = $"Data Source=MixContent/backup/backup_{databaseName}.db";
+            string cnn = $"Data Source=MixContent/Backup/backup_{databaseName}.db";
             using var ctx = new BackupDbContext(cnn);
             ctx.Database.EnsureCreated();
 

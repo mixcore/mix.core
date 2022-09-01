@@ -40,14 +40,14 @@ namespace Mix.Lib.Helpers
                    config
                        .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
                        .AddJsonFile("appsettings.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/azure.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/ocelot.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/storage.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/queue.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/mix_heart.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/authentication.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/google_firebase.json", true, true)
-                       .AddJsonFile("MixContent/AppConfigs/smtp.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/azure.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/ocelot.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/storage.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
                        .AddEnvironmentVariables();
                })
                 .ConfigureWebHostDefaults(webBuilder =>

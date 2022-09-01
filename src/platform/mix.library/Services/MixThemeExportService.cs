@@ -42,8 +42,8 @@ namespace Mix.Lib.Services
             _siteData.ThemeSystemName = _exporTheme.SystemName;
             fileName = $"{_exporTheme.SystemName}-{Guid.NewGuid()}";
             webPath = $"{MixFolders.StaticFiles}/Themes/{_exporTheme.SystemName}";
-            tempPath = $"{MixFolders.StaticFiles}/{webPath}/temp";
-            outputPath = $"{MixFolders.StaticFiles}/{webPath}";
+            tempPath = $"{webPath}/temp";
+            outputPath = webPath;
 
             await ExportSelectedItemsAsync();
 
