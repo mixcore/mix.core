@@ -12,7 +12,7 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Services;
-
+using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
@@ -31,7 +31,7 @@ namespace Mix.Account.Controllers
         private readonly EmailService _emailService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
-        private readonly MixDataService _mixDataService;
+        private readonly MixRepoDbRepository _repoDbRepository;
         protected UnitOfWorkInfo _accUOW;
         protected UnitOfWorkInfo _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
@@ -46,7 +46,7 @@ namespace Mix.Account.Controllers
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixDataService mixDataService, EmailService emailService)
+            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, EmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -65,7 +65,7 @@ namespace Mix.Account.Controllers
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
-            _mixDataService = mixDataService;
+            _repoDbRepository = repoDbRepository;
             _emailService = emailService;
         }
 
@@ -192,7 +192,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(MixTenantId, _mixDataService);
+                //await result.LoadUserDataAsync(MixTenantId, _repoDbRepository);
                 return Ok(result);
             }
             return BadRequest();
@@ -208,7 +208,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(MixTenantId, _mixDataService);
+                await result.LoadUserDataAsync(MixTenantId, _repoDbRepository);
                 return Ok(result);
             }
             return BadRequest();
