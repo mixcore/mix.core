@@ -53,7 +53,7 @@ namespace Mix.Portal.Controllers
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
             _runtimeDbContextService = runtimeDbContextService;
-            
+
         }
 
         #region Overrides
@@ -80,8 +80,6 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
-            return await _runtimeRepository.GetSingleAsync(id);
-
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
@@ -112,9 +110,9 @@ namespace Mix.Portal.Controllers
             }
             throw new MixException(MixErrorStatus.NotFound, id);
         }
-        
+
         [HttpGet("get-by-parent/{parentId}")]
-        public async Task<ActionResult<JObject>> GetSingleByParent(int parentId, [FromQuery] bool loadNestedData)
+        public async Task<ActionResult<JObject>> GetSingleByParent(string parentId, [FromQuery] bool loadNestedData)
         {
             dynamic obj = await _repository.GetSingleByParentAsync(parentId);
             if (obj != null)
@@ -191,14 +189,7 @@ namespace Mix.Portal.Controllers
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
-                List<QueryField> associationQueries = GetAssociatoinQueries(
-                    parentDatabaseName: request.ParentName, parentId: request.ParentId.Value);
-                var associations = await _associationRepository.GetListByAsync(associationQueries);
-                if (associations.Count > 0)
-                {
-                    var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
-                    queries.Add(new("id", Operation.In, nestedIds));
-                }
+                queries.Add(new("parentId", request.ParentId));
             }
             return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }

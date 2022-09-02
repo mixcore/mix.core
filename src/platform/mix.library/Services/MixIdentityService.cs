@@ -11,6 +11,7 @@ using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
+using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,7 +32,7 @@ namespace Mix.Lib.Services
         protected readonly AuthConfigService _authConfigService;
         protected readonly FirebaseService _firebaseService;
         protected readonly MixService _mixService;
-        protected readonly MixDataService _mixDataService;
+        protected readonly MixRepoDbRepository _repoDbRepository;
         protected readonly MixCmsContext _cmsContext;
         protected readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
@@ -46,7 +47,8 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             MixCacheService cacheService,
-            FirebaseService firebaseService, MixDataService mixDataService, MixService mixService)
+            FirebaseService firebaseService, MixRepoDbRepository repoDbRepository, 
+            MixService mixService)
         {
             _cmsUow = cmsUOW;
             _cmsContext = cmsUOW.DbContext;
@@ -64,8 +66,7 @@ namespace Mix.Lib.Services
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
-            _mixDataService = mixDataService;
-            _mixDataService.SetUnitOfWork(_cmsUow);
+            _repoDbRepository = repoDbRepository;
             _mixService = mixService;
         }
 
@@ -75,7 +76,7 @@ namespace Mix.Lib.Services
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, _cmsUow);
-                await userInfo.LoadUserDataAsync(_mixService.MixTenantId, _mixDataService);
+                await userInfo.LoadUserDataAsync(_mixService.MixTenantId, _repoDbRepository);
                 return userInfo;
             }
             return null;
@@ -128,7 +129,7 @@ namespace Mix.Lib.Services
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
             var userInfo = new MixUserViewModel(user, _cmsUow);
-            await userInfo.LoadUserDataAsync(tenantId, _mixDataService);
+            await userInfo.LoadUserDataAsync(tenantId, _repoDbRepository);
             var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
             if (token != null)
             {
@@ -203,9 +204,7 @@ namespace Mix.Lib.Services
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 var vm = new MixUserViewModel(user, _cmsUOW);
-                await vm.LoadUserDataAsync(MixTenantId, _mixDataService);
-
-                vm.UserData = await vm.CreateDefaultUserData(MixTenantId, model.Data);
+                await vm.LoadUserDataAsync(MixTenantId, _repoDbRepository);
 
                 return await GetAuthData(_cmsContext, user, true, tenantId);
             }
@@ -451,7 +450,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.UserData?.Property<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info.UserData?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString())

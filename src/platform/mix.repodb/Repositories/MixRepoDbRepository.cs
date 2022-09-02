@@ -50,7 +50,7 @@ namespace Mix.RepoDb.Repositories
         #region Methods
         public void Init(string tableName)
         {
-            _tableName = tableName;
+            _tableName = tableName.ToLower();
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
         }
@@ -131,7 +131,7 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<dynamic?> GetSingleByParentAsync(int parentId)
+        public async Task<dynamic?> GetSingleByParentAsync(object parentId)
         {
             using (var connection = CreateConnection())
             {
@@ -165,7 +165,7 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                object obj = entity.ToObject<Dictionary<string, object>>()!;
+                var obj = entity.ToObject<Dictionary<string, object>>()!;
                 var result = await connection.InsertAsync(
                         _tableName,
                         entity: obj,

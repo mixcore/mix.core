@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Enums;
+using Mix.Lib.Repositories;
 
 namespace Mix.Portal.Controllers
 {
@@ -39,6 +40,7 @@ namespace Mix.Portal.Controllers
             data.CloneCulture(_culture);
             var tenantId = await base.CreateHandlerAsync(data);
 
+            MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(_uow).GetAllAsync(m => true);
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
@@ -54,7 +56,7 @@ namespace Mix.Portal.Controllers
             }
 
             await base.DeleteHandler(data);
-
+            MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(_uow).GetAllAsync(m => true);
             // Complete and close cms context transaction (signalr cannot open parallel context)
             await _uow.CompleteAsync();
 
