@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Extensions;
 
 namespace Mix.Lib.Middlewares
 {
@@ -36,9 +37,8 @@ namespace Mix.Lib.Middlewares
                     context.Session.SetInt32(
                         MixRequestQueryKeywords.TenantId,
                         currentTenant.Id);
-                    context.Session.SetString(
-                        MixRequestQueryKeywords.TenantName,
-                        currentTenant.SystemName);
+                    context.Session.Put(MixRequestQueryKeywords.TenantName, currentTenant.SystemName);
+                    context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                 }
                 await next.Invoke(context);
             }
