@@ -233,7 +233,7 @@ namespace Mix.Lib.Services
                     {
                         Content = x.Content,
                         Extension = x.Extension,
-                        FileFolder = String.Format(@"{0}/{1}/{2}", MixFolders.TemplatesFolder, x.MixThemeName, x.FolderType), //x.FileFolder,
+                        FileFolder = String.Format(@"{0}/{1}/{2}/{3}", MixFolders.TemplatesFolder, _currentTenant.SystemName, x.MixThemeName, x.FolderType), //x.FileFolder,
                         Filename = x.FileName
                     }); ;
                 });

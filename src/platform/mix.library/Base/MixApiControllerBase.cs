@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -9,6 +10,7 @@ namespace Mix.Lib.Base
     public abstract class MixApiControllerBase : Controller
     {
         protected int MixTenantId { get; set; }
+        protected MixTenantSystemViewModel _currentTenant{ get; set; }
         protected string _lang;
         protected MixCulture _culture;
         protected readonly IQueueService<MessageQueueModel> _queueService;
@@ -35,6 +37,7 @@ namespace Mix.Lib.Base
             if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
             {
                 MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
+                _currentTenant = httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
             }
         }
 
