@@ -618,9 +618,9 @@
           "controller": "ThemeController"
         },
         {
-          "path": "/admin/theme/import",
-          "templatePath": "/mix-app/views/app-portal/pages/theme/import.html",
-          "controller": "ThemeController"
+          "path": "/admin/theme/import/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/theme-import/import.html",
+          "controller": "ThemeImportController"
         }
       ]
     },

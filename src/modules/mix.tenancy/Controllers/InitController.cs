@@ -160,7 +160,7 @@ namespace Mix.Tenancy.Controllers
             return Ok(data);
         }
 
-        [MixAuthorize(roles: MixRoles.SuperAdmin)]
+        [MixAuthorize(roles: $"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
         [HttpPost("import-theme")]
         public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
         {
