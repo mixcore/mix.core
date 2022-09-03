@@ -64,8 +64,6 @@ namespace Mix.Lib.ViewModels
                 CreatedDateTime = DateTime.UtcNow;
                 MixThemeName = Context.MixTheme.First(m => m.Id == MixThemeId).SystemName;
             }
-
-            FileFolder = $"{MixFolders.TemplatesFolder}/{MixThemeName}/{FolderType}";
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
