@@ -353,7 +353,6 @@ namespace Mix.Lib.Services
                 {
                     item.SystemName = $"{item.SystemName}_1";
                 }
-                item.MixTenantId = _currentTenant.Id;
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
@@ -367,7 +366,6 @@ namespace Mix.Lib.Services
         {
             foreach (var item in _siteData.MixDatabaseRelationships)
             {
-                item.MixTenantId = _currentTenant.Id;
                 item.Id = 0;
                 item.ParentId = dicMixDatabaseIds[item.ParentId];
                 item.ChildId= dicMixDatabaseIds[item.ChildId];
@@ -391,7 +389,6 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
-                item.MixTenantId = _currentTenant.Id;
                 item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
                 item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
                 _context.MixDatabaseColumn.Add(item);

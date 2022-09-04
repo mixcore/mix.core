@@ -16,7 +16,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.4");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
@@ -55,7 +55,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -141,7 +141,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
@@ -210,7 +210,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -277,7 +277,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("varchar(50)")
@@ -331,7 +331,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -379,14 +379,14 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int?>("MixTenantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ReadPermissions")
                         .HasColumnType("varchar(250)")
@@ -463,7 +463,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -525,14 +525,11 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .UseCollation("NOCASE")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ReferenceId")
                         .HasColumnType("INTEGER");
@@ -606,7 +603,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -702,9 +699,6 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
 
@@ -712,7 +706,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("SourceDatabaseName")
                         .IsRequired()
@@ -782,7 +776,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("INTEGER");
@@ -806,7 +800,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
@@ -846,7 +840,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
@@ -921,7 +915,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("TEXT");
@@ -1029,7 +1023,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .HasColumnType("TEXT");
@@ -1101,7 +1095,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1160,7 +1154,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1212,7 +1206,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1298,7 +1292,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Specificulture")
                         .IsRequired()
@@ -1391,7 +1385,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Source")
                         .HasColumnType("varchar(250)")
@@ -1463,7 +1457,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1536,7 +1530,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("INTEGER");
@@ -1563,7 +1557,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
@@ -1610,7 +1604,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
@@ -1819,7 +1813,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1883,7 +1877,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("INTEGER");
@@ -1910,7 +1904,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
@@ -1950,7 +1944,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
@@ -2098,7 +2092,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2160,7 +2154,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("datetime");
 
                     b.Property<int?>("LayoutId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("MixCultureId")
                         .HasColumnType("INTEGER");
@@ -2187,7 +2181,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("PublishedDateTime")
                         .HasColumnType("datetime");
@@ -2227,7 +2221,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .HasColumnType("varchar(250)")
@@ -2353,7 +2347,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Scripts")
                         .IsRequired()
@@ -2420,7 +2414,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2487,7 +2481,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -2547,7 +2541,7 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .HasColumnType("varchar(250)");
 
                     b.Property<int>("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("SourceContentGuidId")
                         .HasColumnType("TEXT");
@@ -2627,13 +2621,9 @@ namespace Mix.Database.Migrations.SqliteMixCms
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", null)
                         .WithMany("MixDatabases")
-                        .HasForeignKey("MixTenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTenant");
+                        .HasForeignKey("MixTenantId");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>

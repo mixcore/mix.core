@@ -3,9 +3,11 @@
 namespace Mix.Lib.ViewModels
 {
     public class MixDatabaseRelationshipViewModel
-        : AssociationViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
+        : ViewModelBase<MixCmsContext, MixDatabaseRelationship, int, MixDatabaseRelationshipViewModel>
     {
         #region Properties
+        public int ParentId { get; set; }
+        public int ChildId { get; set; }
         public string DisplayName { get; set; }
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }
@@ -31,15 +33,31 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-
         public override async Task Validate()
         {
             await base.Validate();
+
+            if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
+            {
+                IsValid = false;
+                Errors.Add(new ValidationResult("Entity Existed"));
+            }
+            if (MixHelper.IsDefaultId(ParentId))
+            {
+                IsValid = false;
+                Errors.Add(new("Parent Id cannot be null"));
+            }
+            if (MixHelper.IsDefaultId(ChildId))
+            {
+                IsValid = false;
+                Errors.Add(new("Child Id cannot be null"));
+            }
             if (ParentId == 0 || ChildId == 0)
             {
                 IsValid = false;
-                Errors.Add(new($"Ivalid relationship: leftId = {ParentId} - rightId = {ChildId} - Type = {Type}"));
+                Errors.Add(new($"Ivalid relationship: parent Id = {ParentId} - child Id = {ChildId} - Type = {Type}"));
             }
+
         }
 
         protected override async Task DeleteHandlerAsync()
