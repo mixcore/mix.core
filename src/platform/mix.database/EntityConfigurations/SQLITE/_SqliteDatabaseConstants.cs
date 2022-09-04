@@ -16,7 +16,7 @@
 
         string IDatabaseConstants.Guid => "uniqueidentifier";
 
-        string IDatabaseConstants.Integer => "int";
+        string IDatabaseConstants.Integer => "integer";
 
         string IDatabaseConstants.String => "varchar";
 

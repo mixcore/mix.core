@@ -66,7 +66,7 @@ namespace Mix.RepoDb.Services
             }
             return false;
         }
-        
+
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> RestoreFromLocal(string name)
         {
@@ -176,7 +176,7 @@ namespace Mix.RepoDb.Services
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
         {
             return $"CREATE TABLE {tableName} " +
-                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, tenantId {GetColumnType(MixDataType.Integer)} NULL," +
                 $" {string.Join(",", colSqls.ToArray())})";
         }
 
@@ -184,10 +184,10 @@ namespace Mix.RepoDb.Services
         {
             return databaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => "int IDENTITY(1,1) PRIMARY KEY",
-                MixDatabaseProvider.SQLITE => "INTEGER PRIMARY KEY AUTOINCREMENT",
+                MixDatabaseProvider.SQLSERVER => $"{GetColumnType(MixDataType.Integer)} IDENTITY(1,1) PRIMARY KEY",
+                MixDatabaseProvider.SQLITE => $"{GetColumnType(MixDataType.Integer)} PRIMARY KEY AUTOINCREMENT",
                 MixDatabaseProvider.PostgreSQL => "SERIAL PRIMARY KEY",
-                MixDatabaseProvider.MySQL => "int NOT NULL AUTO_INCREMENT PRIMARY KEY",
+                MixDatabaseProvider.MySQL => $"{GetColumnType(MixDataType.Integer)} NOT NULL AUTO_INCREMENT PRIMARY KEY",
                 _ => string.Empty
             };
         }

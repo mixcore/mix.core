@@ -154,6 +154,10 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty("createdDateTime", DateTime.UtcNow));
             }
+            if (!obj.ContainsKey("tenantId"))
+            {
+                obj.Add(new JProperty("tenantId", _currentTenant.Id));
+            }
             var data = await _repository.InsertAsync(obj);
 
             return data > 0 ? Ok(await _repository.GetSingleAsync(data)) : BadRequest();
@@ -196,7 +200,10 @@ namespace Mix.Portal.Controllers
 
         private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)
         {
-            var queries = new List<QueryField>();
+            var queries = new List<QueryField>()
+            {
+                new QueryField("tenantId", _currentTenant.Id)
+            };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
                 var searchColumns = req.SearchColumns.Replace(" ", string.Empty).Split(',');
