@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.EntityConfigurations.Base.Cms
 {
-    public class MixDatabaseRelationshipConfiguration<TConfig> : AssociationBaseConfiguration<MixDatabaseRelationship, int, TConfig>
+    public class MixDatabaseRelationshipConfiguration<TConfig> : EntityBaseConfiguration<MixDatabaseRelationship, int, TConfig>
         where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<MixDatabaseRelationship> builder)

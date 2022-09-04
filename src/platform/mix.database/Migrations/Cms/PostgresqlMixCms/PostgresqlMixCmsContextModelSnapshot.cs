@@ -17,7 +17,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
@@ -389,7 +389,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int?>("MixTenantId")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
@@ -535,9 +535,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(250)")
                         .UseCollation("und-x-icu")
                         .HasAnnotation("MySql:CharSet", "utf8");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -716,9 +713,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -2666,13 +2660,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", null)
                         .WithMany("MixDatabases")
-                        .HasForeignKey("MixTenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTenant");
+                        .HasForeignKey("MixTenantId");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>

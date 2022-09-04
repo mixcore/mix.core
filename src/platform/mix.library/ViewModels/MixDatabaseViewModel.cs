@@ -73,7 +73,6 @@ namespace Mix.Lib.ViewModels
                 foreach (var item in Relationships)
                 {
                     item.SetUowInfo(UowInfo);
-                    item.MixTenantId = MixTenantId;
                     item.ParentId = parentEntity.Id;
                     item.SourceDatabaseName = parentEntity.SystemName;
                     await item.SaveAsync();

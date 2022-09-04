@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixDatabaseRelationship : AssociationBase<int>
+    public class MixDatabaseRelationship : EntityBase<int>
     {
+        public int ParentId { get; set; }
+        public int ChildId { get; set; }
         public string DisplayName { get; set; }
         public string SourceDatabaseName { get; set; }
         public string DestinateDatabaseName { get; set; }

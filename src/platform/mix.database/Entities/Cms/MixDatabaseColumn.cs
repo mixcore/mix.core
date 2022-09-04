@@ -4,7 +4,6 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixDatabaseColumn : EntityBase<int>
     {
-        public int MixTenantId { get; set; }
         public string SystemName { get; set; }
         public string DisplayName { get; set; }
         public string MixDatabaseName { get; set; }
