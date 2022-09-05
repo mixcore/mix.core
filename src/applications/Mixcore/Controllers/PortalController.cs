@@ -20,16 +20,7 @@ namespace Mixcore.Controllers
         }
 
         [HttpGet]
-        [Route("admin")]
-        [Route("admin/page/{type}")]
-        [Route("admin/post/{type}")]
-        [Route("admin/{pageName}")]
-        [Route("admin/{pageName}/{type}")]
-        [Route("admin/{pageName}/{type}/{param}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
-        [Route("admin/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
+        [Route("admin/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
         public IActionResult Index()
         {
             if (isValid)
@@ -42,19 +33,20 @@ namespace Mixcore.Controllers
             }
         }
 
-        [Route("portal")]
-        [Route("portal/page/{type}")]
-        [Route("portal/post/{type}")]
-        [Route("portal/{pageName}")]
-        [Route("portal/{pageName}/{type}")]
-        [Route("portal/{pageName}/{type}/{param}")]
-        [Route("portal/{pageName}/{type}/{param}/{param1}")]
-        [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}")]
-        [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}")]
-        [Route("portal/{pageName}/{type}/{param}/{param1}/{param2}/{param3}/{param4}")]
-        public IActionResult Spa()
+        [Route("portal/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
+        [Route("portal-apps/{appFolder}/{param1?}/{param2?}/{param3?}/{param4?}")]
+        public IActionResult Spa(string appFolder, string param1, string param2, string param3, string param4)
         {
-            return Redirect("/mix-portal");
+            string subPath = string.Empty;
+            foreach (var item in Request.RouteValues)
+            {
+                if (item.Key.Contains("param"))
+                {
+                    subPath += $"/{item.Value}";
+                }
+            }
+            appFolder ??= "mix-portal";
+            return Redirect($"/portal-apps/{appFolder}?path={subPath}");
         }
 
         #region overrides

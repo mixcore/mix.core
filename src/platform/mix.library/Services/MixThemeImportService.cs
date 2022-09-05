@@ -34,6 +34,7 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicTemplateIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicPageContentIds = new Dictionary<int, int>();
         private Dictionary<int, int> dicMixDatabaseIds = new Dictionary<int, int>();
+        private Dictionary<string, string> dicMixDatabaseNames = new Dictionary<string, string>();
         private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
         public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService)
@@ -183,7 +184,6 @@ namespace Mix.Lib.Services
             await ImportDatabaseContextsAsync();
             await ImportDatabasesAsync();
             await ImportDatabaseRelationshipsAsync();
-            await ImportDatabaseColumnsAsync();
             await MigrateMixDatabaseAsync();
             await ImportAssociationDataAsync(_siteData.DatabaseContextDatabaseAssociations, dicMixDatabaseContextIds, dicMixDatabaseIds);
         }
@@ -192,7 +192,10 @@ namespace Mix.Lib.Services
         {
             foreach (var item in _siteData.MixDatabases)
             {
-                await _mixDbService.MigrateDatabase(item.SystemName);
+                if (dicMixDatabaseNames.ContainsKey(item.SystemName))
+                {
+                    await _mixDbService.MigrateDatabase(dicMixDatabaseNames[item.SystemName]);
+                }
             }
             _runtimeDbContextService.Reload();
         }
@@ -348,40 +351,33 @@ namespace Mix.Lib.Services
             foreach (var item in _siteData.MixDatabases)
             {
                 var oldId = item.Id;
-
-                while (_context.MixDatabase.Any(m => m.SystemName == item.SystemName))
+                var oldName = item.SystemName;
+                var currentDb = _context.MixDatabase.SingleOrDefault(m => m.SystemName == item.SystemName);
+                if (currentDb == null)
                 {
-                    item.SystemName = $"{item.SystemName}_1";
+                    item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                    dicMixDatabaseIds.Add(oldId, item.Id);
+                    dicMixDatabaseNames.Add(oldName, item.SystemName);
+                    await ImportDatabaseColumnsAsync(item, _siteData.MixDatabaseColumns.Where(m => m.MixDatabaseId == oldId));
                 }
-                item.Id = 0;
-                item.CreatedBy = _siteData.CreatedBy;
-                item.CreatedDateTime = DateTime.UtcNow;
-                _context.Entry(item).State = EntityState.Added;
-                await _context.SaveChangesAsync(_cts.Token);
-                dicMixDatabaseIds.Add(oldId, item.Id);
-            }
-        }
-        
-        private async Task ImportDatabaseRelationshipsAsync()
-        {
-            foreach (var item in _siteData.MixDatabaseRelationships)
-            {
-                item.Id = 0;
-                item.ParentId = dicMixDatabaseIds[item.ParentId];
-                item.ChildId= dicMixDatabaseIds[item.ChildId];
-                item.CreatedBy = _siteData.CreatedBy;
-                item.CreatedDateTime = DateTime.UtcNow;
-                _context.Entry(item).State = EntityState.Added;
-                await _context.SaveChangesAsync(_cts.Token);
+                else
+                {
+                    dicMixDatabaseIds.Add(oldId, currentDb.Id);
+                    dicMixDatabaseNames.Add(oldName, currentDb.SystemName);
+                }
             }
         }
 
-        private async Task ImportDatabaseColumnsAsync()
+        private async Task ImportDatabaseColumnsAsync(MixDatabase database, IEnumerable<MixDatabaseColumn> cols)
         {
-            foreach (var item in _siteData.MixDatabaseColumns)
+            foreach (var item in cols)
             {
                 var table = _context.MixDatabaseColumn.AsNoTracking();
-                if (table.Any(m => m.MixDatabaseId == item.MixDatabaseId && m.SystemName == item.SystemName))
+                if (table.Any(m => m.MixDatabaseId == dicMixDatabaseIds[item.MixDatabaseId] && m.SystemName == item.SystemName))
                 {
                     continue;
                 }
@@ -389,13 +385,31 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
-                item.MixDatabaseId = dicMixDatabaseIds[item.MixDatabaseId];
-                item.MixDatabaseName = _siteData.MixDatabases.First(m => m.Id == item.MixDatabaseId).SystemName;
+                item.MixDatabaseId = database.Id;
+                item.MixDatabaseName = database.SystemName;
                 _context.MixDatabaseColumn.Add(item);
                 await _context.SaveChangesAsync(_cts.Token);
                 dicColumnIds.Add(oldId, item.Id);
             }
         }
+
+        private async Task ImportDatabaseRelationshipsAsync()
+        {
+            foreach (var item in _siteData.MixDatabaseRelationships)
+            {
+                if (dicMixDatabaseIds.ContainsKey(item.ParentId) && dicMixDatabaseIds.ContainsKey(item.ChildId))
+                {
+                    item.Id = 0;
+                    item.ParentId = dicMixDatabaseIds[item.ParentId];
+                    item.ChildId = dicMixDatabaseIds[item.ChildId];
+                    item.CreatedBy = _siteData.CreatedBy;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                }
+            }
+        }
+
         public async Task ImportMixDbDataAsync()
         {
             foreach (var database in _siteData.MixDbModels)
@@ -417,12 +431,13 @@ namespace Mix.Lib.Services
 
         private string GetInsertQuery(MixDbModel database)
         {
-            List<string> columns = new List<string> { "id", "createdDateTime" };
+            List<string> columns = new List<string> { "id", "createdDateTime", "tenantId" };
             columns.AddRange(_siteData.MixDatabaseColumns.Where(c => c.MixDatabaseName == database.DatabaseName).Select(c => c.SystemName).ToList());
             List<string> sqls = new();
             foreach (JObject item in database.Data)
             {
                 List<string> values = new();
+                item["tenantId"] = _currentTenant.Id;
                 foreach (var col in columns)
                 {
                     values.Add($"'{item.Value<string>(col)}'");
@@ -430,14 +445,6 @@ namespace Mix.Lib.Services
                 sqls.Add($"Insert into {database.DatabaseName} ({string.Join(',', columns)}) Values ({string.Join(',', values)})");
             }
             return string.Join(';', sqls);
-        }
-
-        private async Task ImportDatabaseDataAsync()
-        {
-            await ImportGuidDatasAsync(_siteData.Datas);
-            await ImportGuidDatasAsync(_siteData.DataContents);
-            await ImportGuidDatasAsync(_siteData.DataContentValues);
-            await ImportGuidDatasAsync(_siteData.DataContentAssociations);
         }
 
         #endregion Import Module
