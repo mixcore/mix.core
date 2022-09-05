@@ -46,7 +46,7 @@ namespace Mix.Portal.Controllers
             var result = await _mixDbService.MigrateDatabase(name);
             
             // TODO: Check repodb not load latest database schema when modified column, reload application to let repodb load latest schema
-            _applicationLifetime.StopApplication();
+            //_applicationLifetime.StopApplication();
             return result ? Ok() : BadRequest();
         }
 

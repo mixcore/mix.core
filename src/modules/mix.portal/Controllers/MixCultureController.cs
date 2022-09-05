@@ -32,6 +32,7 @@ namespace Mix.Portal.Controllers
         #region Routes
 
         #endregion
+
         #region Overrides
 
         protected override async Task<int> CreateHandlerAsync(MixCultureViewModel data)
@@ -52,7 +53,5 @@ namespace Mix.Portal.Controllers
         }
 
         #endregion
-
-
     }
 }

@@ -20,6 +20,11 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
+        private const string createdDateFieldName = "createdDateTime";
+        private const string idFieldName = "id";
+        private const string parentIdFieldName = "parentId";
+        private const string childIdFieldName = "ChildId";
+        private const string tenantIdFieldName = "tenantId";
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly RuntimeDbContextService _runtimeDbContextService;
         private RuntimeDbRepository _runtimeRepository;
@@ -94,9 +99,9 @@ namespace Mix.Portal.Controllers
                         var associations = await _associationRepository.GetListByAsync(queries);
                         if (associations.Count > 0)
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
                             _repository.Init(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new("id", Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
                         }
@@ -128,9 +133,9 @@ namespace Mix.Portal.Controllers
                         var associations = await _associationRepository.GetListByAsync(queries);
                         if (associations.Count > 0)
                         {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>("ChildId")).ToList();
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
                             _repository.Init(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new("id", Operation.In, nestedIds) };
+                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
                         }
@@ -150,22 +155,27 @@ namespace Mix.Portal.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Create(JObject obj)
         {
-            if (!obj.ContainsKey("createdDateTime"))
+            if (!obj.ContainsKey(createdDateFieldName))
             {
-                obj.Add(new JProperty("createdDateTime", DateTime.UtcNow));
+                obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
             }
-            if (!obj.ContainsKey("tenantId"))
+            if (!obj.ContainsKey(tenantIdFieldName))
             {
-                obj.Add(new JProperty("tenantId", _currentTenant.Id));
+                obj.Add(new JProperty(tenantIdFieldName, _currentTenant.Id));
             }
             var data = await _repository.InsertAsync(obj);
 
             return data > 0 ? Ok(await _repository.GetSingleAsync(data)) : BadRequest();
         }
 
+        [PreventDuplicateFormSubmission]
         [HttpPut("{id}")]
         public async Task<ActionResult<object>> Update(int id, [FromBody] JObject obj)
         {
+            if (!obj.ContainsKey(tenantIdFieldName))
+            {
+                obj.Add(new JProperty(tenantIdFieldName, _currentTenant.Id));
+            }
             var data = await _repository.UpdateAsync(obj);
             return data != null ? Ok(await _repository.GetSingleAsync(id)) : BadRequest();
         }
@@ -193,7 +203,7 @@ namespace Mix.Portal.Controllers
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
-                queries.Add(new("parentId", request.ParentId));
+                queries.Add(new(parentIdFieldName, request.ParentId));
             }
             return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }
@@ -202,7 +212,7 @@ namespace Mix.Portal.Controllers
         {
             var queries = new List<QueryField>()
             {
-                new QueryField("tenantId", _currentTenant.Id)
+                new QueryField(parentIdFieldName, _currentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
@@ -268,11 +278,11 @@ namespace Mix.Portal.Controllers
             }
             if (parentId.HasValue)
             {
-                queries.Add(new QueryField("ParentId", parentId));
+                queries.Add(new QueryField(parentIdFieldName, parentId));
             }
             if (childId.HasValue)
             {
-                queries.Add(new QueryField("ChildId", parentId));
+                queries.Add(new QueryField(childIdFieldName, parentId));
             }
             return queries;
         }
