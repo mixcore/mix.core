@@ -34,21 +34,11 @@ namespace Mixcore.Controllers
         }
 
         [Route("portal/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
-        [Route("portal-apps/{appFolder}/{param1?}/{param2?}/{param3?}/{param4?}")]
+        [Route("portal-apps/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
         public IActionResult Spa(string appFolder, string param1, string param2, string param3, string param4)
         {
-            string subPath = string.Empty;
-            foreach (var item in Request.RouteValues)
-            {
-                if (item.Key.Contains("param"))
-                {
-                    subPath += $"/{item.Value}";
-                }
-            }
-            appFolder ??= "mix-portal";
-            return Redirect($"/portal-apps/{appFolder}?path={subPath}");
+            return Redirect($"/portal-apps/{appFolder}?baseHref=portal-apps/{appFolder}");
         }
-
         #region overrides
 
         protected override void ValidateRequest()
