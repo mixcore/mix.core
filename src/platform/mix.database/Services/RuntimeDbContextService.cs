@@ -66,8 +66,8 @@ namespace Mix.Database.Services
         {
             if (!string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION)))
             {
-                using var peStream = new MemoryStream();
                 var sourceFiles = CreateDynamicDbContext();
+                using var peStream = new MemoryStream();
                 var enableLazyLoading = false;
                 var result = GenerateCode(sourceFiles, enableLazyLoading).Emit(peStream);
 
@@ -95,14 +95,18 @@ namespace Mix.Database.Services
                 {
                     LoadDbContextAssembly();
                 }
-                _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
-                _ = _dbContextType ?? throw new Exception("DataContext type not found");
+                if (_assembly != null)
+                {
 
-                var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
-                _ = constr ?? throw new Exception("DataContext ctor not found");
-                var ctx = (DbContext)constr.Invoke(null);
-                ctx.Database.EnsureCreated();
-                return ctx;
+                    _dbContextType = _assembly.GetType("TypedDataContext.Context.DataContext");
+                    _ = _dbContextType ?? throw new Exception("DataContext type not found");
+
+                    var constr = _dbContextType.GetConstructor(Type.EmptyTypes);
+                    _ = constr ?? throw new Exception("DataContext ctor not found");
+                    var ctx = (DbContext)constr.Invoke(null);
+                    ctx.Database.EnsureCreated();
+                    return ctx;
+                }
             }
             return default;
         }
@@ -111,7 +115,7 @@ namespace Mix.Database.Services
         {
             using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
-            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
+            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName).ToList();
             var dbOpts = new DatabaseModelFactoryOptions(databaseNames);
             var modelOpts = new ModelReverseEngineerOptions();
             var codeGenOpts = new ModelCodeGenerationOptions()
@@ -129,27 +133,43 @@ namespace Mix.Database.Services
                 modelOpts,
                 codeGenOpts);
             var sourceFiles = new List<string>();
+
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
 
-                string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
-                string newName = name.ToLower();
-                if (!databaseNames.Contains(name) && item.Path.EndsWith("um.cs"))
+                if (_databaseService.DatabaseProvider == MixDatabaseProvider.SQLITE)
+                {
+                    ReplaceSqliteNaming(databaseNames, item, scaffoldedModelSources.ContextFile.Code);
+                }
+
+                sourceFiles.Add(item.Code);
+            }
+
+            sourceFiles.Add(scaffoldedModelSources.ContextFile.Code);
+            return sourceFiles;
+        }
+
+        private void ReplaceSqliteNaming(List<string> databaseNames, ScaffoldedFile item, string contextFileCode)
+        {
+            string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+            string newName = name;
+            if (!databaseNames.Contains(name))
+            {
+                if (name.EndsWith("um"))
                 {
                     newName = newName.Substring(0, name.LastIndexOf("um")) + "a";
                 }
-
-                scaffoldedModelSources.ContextFile.Code = scaffoldedModelSources.ContextFile.Code
-                    .Replace($"Entity<{name}>", $"Entity<{newName}>")
-                    .Replace($"DbSet<{name}>", $"DbSet<{newName}>");
-                
-                item.Path = item.Path.Replace(name, newName);
-                item.Code = item.Code.Replace($"class {name}", $"class {newName}");
-                
-                sourceFiles.Add(item.Code.Replace("byte[] CreatedDateTime", "DateTime CreatedDateTime"));
             }
-            sourceFiles.Add(scaffoldedModelSources.ContextFile.Code);
-            return sourceFiles;
+
+
+            contextFileCode = contextFileCode.Replace($"Entity<{name}>", $"Entity<{newName}>")
+                .Replace($"DbSet<{name}>", $"DbSet<{newName}>");
+
+            item.Path = item.Path.Replace(name, newName);
+            item.Code = item.Code
+                .Replace($"public {name}", $"public {newName}")
+                .Replace($"class {name}", $"class {newName}")
+                .Replace("byte[] CreatedDateTime", "DateTime CreatedDateTime");
         }
 
         [SuppressMessage("Usage", "EF1001:Internal EF Core API usage.", Justification = "We need it")]
