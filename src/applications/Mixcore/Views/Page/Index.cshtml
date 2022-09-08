@@ -10,7 +10,6 @@
 {
     try
     {
-        <h1>@Model.Template.FilePath</h1>
         <partial name="@Model.Template.FilePath" model="@Model" />
     }
     catch (System.InvalidOperationException invalidOperationException)

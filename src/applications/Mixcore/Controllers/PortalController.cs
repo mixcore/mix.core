@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
+using System.Text.RegularExpressions;
 
 namespace Mixcore.Controllers
 {
@@ -37,7 +38,31 @@ namespace Mixcore.Controllers
         [Route("portal-apps/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
         public IActionResult Spa(string appFolder, string param1, string param2, string param3, string param4)
         {
-            return Redirect($"/portal-apps/{appFolder}?baseHref=portal-apps/{appFolder}");
+            string folder = $"portal-apps/{appFolder}";
+            var baseHref = Request.Query["baseHref"].ToString();
+            if (string.IsNullOrEmpty(baseHref))
+            {
+                string subPath = string.Join(
+                "/",
+                Request.RouteValues
+                .Where(m => m.Key.Contains("param"))
+                .Select(m => m.Value).ToArray());
+                appFolder ??= "mix-portal";
+                
+                string url = $"/portal-apps/{appFolder}/{subPath}?baseHref=portal-apps/{appFolder}";
+                return Redirect(url);
+            }
+
+            var indexFile = MixFileHelper.GetFileByFullName($"{MixFolders.WebRootPath}/{folder}/index.html");
+            Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
+
+            if (indexFile.Content!= null && regex.IsMatch(indexFile.Content))
+            {
+                indexFile.Content = regex.Replace(indexFile.Content, $"/{folder}/$3$4");
+            }
+
+            return View(indexFile);
+            
         }
         #region overrides
 
