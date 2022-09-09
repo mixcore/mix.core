@@ -112,6 +112,7 @@ namespace Mix.Lib.Services
                 await ImportData();
 
                 await _uow.CompleteAsync();
+                _runtimeDbContextService.Reload();
                 return _siteData;
             }
             catch (Exception ex)

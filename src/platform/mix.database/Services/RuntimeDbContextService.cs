@@ -113,11 +113,22 @@ namespace Mix.Database.Services
 
         public List<string> CreateDynamicDbContext()
         {
+            var sourceFiles = new List<string>();
             using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
-            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName).ToList();
+            var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
+
+            if (databaseNames.Count == 0)
+            {
+                // Add not existed table to load empty dbcontext
+                databaseNames.Add("EmptyTable");
+            }
+
             var dbOpts = new DatabaseModelFactoryOptions(databaseNames);
-            var modelOpts = new ModelReverseEngineerOptions();
+            var modelOpts = new ModelReverseEngineerOptions()
+            {
+                NoPluralize = true
+            };
             var codeGenOpts = new ModelCodeGenerationOptions()
             {
                 RootNamespace = "TypedDataContext",
@@ -132,16 +143,14 @@ namespace Mix.Database.Services
                 dbOpts,
                 modelOpts,
                 codeGenOpts);
-            var sourceFiles = new List<string>();
             string contextFileCode = scaffoldedModelSources.ContextFile.Code;
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
-
-                if (_databaseService.DatabaseProvider == MixDatabaseProvider.SQLITE)
+                string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
+                if (databaseNames.Any(m => string.Equals(m, name, StringComparison.OrdinalIgnoreCase)))
                 {
                     ReplaceSqliteNaming(databaseNames, item, ref contextFileCode);
                 }
-
                 sourceFiles.Add(item.Code);
             }
             sourceFiles.Add(contextFileCode);
@@ -151,16 +160,7 @@ namespace Mix.Database.Services
         private void ReplaceSqliteNaming(List<string> databaseNames, ScaffoldedFile item, ref string contextFileCode)
         {
             string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
-            string newName = name;
-            if (!databaseNames.Contains(name))
-            {
-                if (name.EndsWith("um"))
-                {
-                    newName = newName.Substring(0, name.LastIndexOf("um")) + "a";
-                }
-            }
-
-
+            string newName = name.ToLower();
             contextFileCode = contextFileCode.Replace($"Entity<{name}>", $"Entity<{newName}>")
                 .Replace($"DbSet<{name}>", $"DbSet<{newName}>");
 
