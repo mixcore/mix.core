@@ -133,23 +133,22 @@ namespace Mix.Database.Services
                 modelOpts,
                 codeGenOpts);
             var sourceFiles = new List<string>();
-
+            string contextFileCode = scaffoldedModelSources.ContextFile.Code;
             foreach (var item in scaffoldedModelSources.AdditionalFiles)
             {
 
                 if (_databaseService.DatabaseProvider == MixDatabaseProvider.SQLITE)
                 {
-                    ReplaceSqliteNaming(databaseNames, item, scaffoldedModelSources.ContextFile.Code);
+                    ReplaceSqliteNaming(databaseNames, item, ref contextFileCode);
                 }
 
                 sourceFiles.Add(item.Code);
             }
-
-            sourceFiles.Add(scaffoldedModelSources.ContextFile.Code);
+            sourceFiles.Add(contextFileCode);
             return sourceFiles;
         }
 
-        private void ReplaceSqliteNaming(List<string> databaseNames, ScaffoldedFile item, string contextFileCode)
+        private void ReplaceSqliteNaming(List<string> databaseNames, ScaffoldedFile item, ref string contextFileCode)
         {
             string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
             string newName = name;
