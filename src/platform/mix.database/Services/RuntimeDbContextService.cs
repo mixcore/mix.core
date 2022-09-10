@@ -120,7 +120,7 @@ namespace Mix.Database.Services
 
             if (databaseNames.Count == 0)
             {
-                // Add not existed table to load empty dbcontext
+                // To load an empty dbcontext, add a table that does not exist. 
                 databaseNames.Add("EmptyTable");
             }
 

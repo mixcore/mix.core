@@ -44,7 +44,7 @@ namespace Mix.Lib.Base
                 ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
                 {
                     PropertyName = MixRequestQueryKeywords.TenantId,
-                    PropertyValue = MixTenantId
+                    PropertyValue = _currentTenant?.Id
                 });
             }
             var result = await CreateHandlerAsync(data);

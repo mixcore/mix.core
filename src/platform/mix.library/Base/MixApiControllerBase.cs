@@ -9,7 +9,6 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
-        protected int MixTenantId { get; set; }
         protected MixTenantSystemViewModel _currentTenant{ get; set; }
         protected string _lang;
         protected MixCulture _culture;
@@ -34,9 +33,8 @@ namespace Mix.Lib.Base
             _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
             _queueService = queueService;
-            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
+            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.Tenant).HasValue)
             {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
                 _currentTenant = httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
             }
         }
