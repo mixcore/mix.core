@@ -29,7 +29,7 @@ namespace Mix.Portal.Controllers
         protected override Task<int> CreateHandlerAsync(MixPostPostAssociationViewModel data)
         {
             if (_cmsUOW.DbContext.MixPostPostAssociation.Any(
-                m => m.MixTenantId == MixTenantId
+                m => m.MixTenantId == _currentTenant.Id
                 && m.ParentId == data.ParentId
                 && m.ChildId == data.ChildId))
             {

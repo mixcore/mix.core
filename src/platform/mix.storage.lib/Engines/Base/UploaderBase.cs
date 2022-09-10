@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Extensions;
 using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Lib.Engines.Base
@@ -8,18 +9,17 @@ namespace Mix.Storage.Lib.Engines.Base
     {
         protected readonly IConfiguration _configuration;
         protected UnitOfWorkInfo _cmsUOW;
-        protected string? _tenantName;
-        protected int _tenantId;
+        protected MixTenantSystemViewModel _currentTenant;
 
         public UploaderBase(IHttpContextAccessor httpContext, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             _cmsUOW = cmsUOW;
             _configuration = configuration;
-            if (httpContext.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
+            
+            if (httpContext.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.Tenant).HasValue)
             {
-                _tenantId = httpContext.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId)!.Value;
+                _currentTenant = httpContext.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
             }
-            _tenantName = httpContext.HttpContext?.Session.GetString(MixRequestQueryKeywords.TenantName);
         }
 
         public async Task CreateMedia(string filePath, int tenantId, string? createdBy)
@@ -42,7 +42,7 @@ namespace Mix.Storage.Lib.Engines.Base
             var result = await Upload(file, themeName, createdBy);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(result, _tenantId, createdBy);
+                await CreateMedia(result, _currentTenant.Id, createdBy);
             }
             return result;
         }

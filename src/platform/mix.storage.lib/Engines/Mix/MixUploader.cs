@@ -18,7 +18,7 @@ namespace Mix.Storage.Lib.Engines.Mix
 
         public override async Task<string?> Upload(IFormFile file, string? themeName, string? createdBy)
         {
-            var folder = $"{MixFolders.StaticFiles}/{_tenantName}/{themeName}/{MixFolders.UploadsFolder}/{DateTime.Now.ToString("yyyy-MMM")}";
+            var folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{themeName}/{MixFolders.UploadsFolder}/{DateTime.Now.ToString("yyyy-MMM")}";
             var result = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(result))
             {
