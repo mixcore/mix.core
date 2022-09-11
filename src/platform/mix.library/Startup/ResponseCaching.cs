@@ -8,7 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         // Must call after use cors
         private static void UseMixResponseCaching(this IApplicationBuilder app)
         {
-            int responseCache = GlobalConfigService.Instance.GetConfig(MixConfigurations.REPONSE_CACHE, 5);
+            int responseCache = GlobalConfigService.Instance.ResponseCache;
             app.UseResponseCaching();
             app.Use(async (context, next) =>
             {

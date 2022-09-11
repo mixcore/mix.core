@@ -1,14 +1,15 @@
 {
-  "isInit": true,
-  "isEncryptApi": false,
-  "enableOcelot": false,
-  "portalThemeSettings": null,
-  "isMaintenance": false,
-  "isHttps": false,
-  "maxPageSize": 100,
-  "initStatus": "Blank",
-  "defaultCulture": "en-us",
-  "domain": "",
-  "apiEncryptKey": "NElUempOSmx4QVlXRFRmSys5Z0lpZz09LERBSENTUUlZWEVNYVRJRlErc256bE9Ibmo1Z0wwcm5PRm9iMDlXSEJSM0U9",
-  "lastUpdateConfiguration": null
+  "IsInit": true,
+  "IsEncryptApi": false,
+  "EnableOcelot": false,
+  "PortalThemeSettings": null,
+  "IsMaintenance": false,
+  "IsHttps": false,
+  "MaxPageSize": 100,
+  "ResponseCache": 5,
+  "InitStatus": "Blank",
+  "DefaultCulture": "en-us",
+  "Domain": "",
+  "ApiEncryptKey": "NElUempOSmx4QVlXRFRmSys5Z0lpZz09LERBSENTUUlZWEVNYVRJRlErc256bE9Ibmo1Z0wwcm5PRm9iMDlXSEJSM0U9",
+  "LastUpdateConfiguration": null
 }

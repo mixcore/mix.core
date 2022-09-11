@@ -38,5 +38,6 @@
         public const string LastUpdateConfiguration = "LastUpdateConfiguration";
 
         public const string ClearDbPool = "ClearDbPool";
+        public const string ResponseCache = "ResponseCache";
     }
 }

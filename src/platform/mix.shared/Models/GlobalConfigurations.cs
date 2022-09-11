@@ -18,6 +18,7 @@ namespace Mix.Shared.Models
         public InitStep InitStatus { get; set; }
         public string DefaultCulture { get; set; }
         public string Domain { get; set; }
+        public int ResponseCache { get; set; }
         public string ApiEncryptKey { get; set; }
 
         public SmtpConfiguration Smtp { get; set; }
