@@ -57,7 +57,7 @@ namespace Mix.Shared.Services
             if (settings != null)
             {
                 settings.Content = AppSettings.ToString();
-                return MixFileHelper.SaveFile(settings);
+                return !string.IsNullOrEmpty(MixFileHelper.SaveFile(settings));
             }
             else
             {

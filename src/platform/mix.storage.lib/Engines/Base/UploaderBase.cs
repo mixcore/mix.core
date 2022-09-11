@@ -37,15 +37,28 @@ namespace Mix.Storage.Lib.Engines.Base
         }
 
 
-        public async Task<string?> UploadFile(IFormFile file, string? themeName, string? createdBy)
+        public async Task<string?> UploadFile(IFormFile file, string? folder, string? createdBy)
         {
-            var result = await Upload(file, themeName, createdBy);
+            var result = await Upload(file, folder, createdBy);
             if (!string.IsNullOrEmpty(result))
             {
                 await CreateMedia(result, _currentTenant.Id, createdBy);
             }
             return result;
         }
+        public async Task<string?> UploadFileStream(FileModel file, string? createdBy)
+        {
+            var result = await UploadStream(file, createdBy);
+            if (!string.IsNullOrEmpty(result))
+            {
+                await CreateMedia(result, _currentTenant.Id, createdBy);
+            }
+            return result;
+        }
+
         public abstract Task<string?> Upload(IFormFile file, string? themeName, string? createdBy);
+        public abstract Task<string?> UploadStream(FileModel file, string? createdBy);
+
+        
     }
 }

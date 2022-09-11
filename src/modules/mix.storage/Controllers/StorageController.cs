@@ -36,12 +36,25 @@ namespace Mix.Storage.Controllers
             }
             return BadRequest();
         }
+
+        [Authorize]
+        [Route("upload-file-stream")]
+        [HttpPost]
+        public async Task<ActionResult> UploadFileStream(FileModel file)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _storageService.UploadStream(file, User?.Identity?.Name);
+                return Ok(result);
+            }
+            return BadRequest();
+        }
+
+
         #endregion
 
         #region Overrides
 
         #endregion
-
-
     }
 }

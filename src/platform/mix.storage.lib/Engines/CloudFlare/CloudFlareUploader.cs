@@ -32,5 +32,10 @@ namespace Mix.Storage.Lib.Engines.CloudFlare
             var result = await _httpService.PostAsync<CloudFlareResponse, IFormFile>(_endpoint, file, settings.ApiToken, contentType: "multipart/form-data");
             return result.Result.Variants[0];
         }
+
+        public override Task<string?> UploadStream(FileModel file, string? createdBy)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
