@@ -2,6 +2,7 @@
 {
     public enum MixContentType
     {
+        User,
         Post,
         Page,
         Module,

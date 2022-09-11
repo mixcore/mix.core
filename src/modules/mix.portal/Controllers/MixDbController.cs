@@ -116,10 +116,10 @@ namespace Mix.Portal.Controllers
             throw new MixException(MixErrorStatus.NotFound, id);
         }
 
-        [HttpGet("get-by-parent/{parentId}")]
-        public async Task<ActionResult<JObject>> GetSingleByParent(string parentId, [FromQuery] bool loadNestedData)
+        [HttpGet("get-by-parent/{parentType}/{parentId}")]
+        public async Task<ActionResult<JObject>> GetSingleByParent(MixContentType parentType, string parentId, [FromQuery] bool loadNestedData)
         {
-            dynamic obj = await _repository.GetSingleByParentAsync(parentId);
+            dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (obj != null)
             {
                 var data = JObject.FromObject(obj);

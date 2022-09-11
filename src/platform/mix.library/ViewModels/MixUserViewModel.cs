@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Mix.Constant.Enums;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
@@ -76,7 +77,7 @@ namespace Mix.Lib.ViewModels
             if (!GlobalConfigService.Instance.IsInit)
             {
                 repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
-                UserData = await repoDbRepository.GetSingleByParentAsync(Id);
+                UserData = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
                 using var context = new MixCmsAccountContext();
                 var roles = from ur in context.AspNetUserRoles
                             join r in context.MixRoles
