@@ -176,7 +176,9 @@ namespace Mix.RepoDb.Services
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
         {
             return $"CREATE TABLE {tableName} " +
-                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, createdDateTime {GetColumnType(MixDataType.DateTime)}, tenantId {GetColumnType(MixDataType.Integer)} NULL," +
+                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
+                $"createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $"tenantId {GetColumnType(MixDataType.Integer)} NULL, " +
                 $" {string.Join(",", colSqls.ToArray())})";
         }
 

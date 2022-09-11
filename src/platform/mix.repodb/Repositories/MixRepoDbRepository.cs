@@ -1,12 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Mix.Constant.Constants;
+using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Models;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Models;
+using Mix.Service.Services;
 using Mix.Shared.Models;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
@@ -131,15 +133,26 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<dynamic?> GetSingleByParentAsync(object parentId)
+        public async Task<dynamic?> GetSingleByParentAsync(MixContentType parentType, object parentId)
         {
             using (var connection = CreateConnection())
             {
-                return (await connection.QueryAsync<dynamic>(
-                    _tableName,
-                    new QueryField("parentId", parentId),
-                    commandTimeout: _settings.CommandTimeout,
-                    trace: Trace))?.SingleOrDefault();
+                try
+                {
+                    return (await connection.QueryAsync<dynamic>(
+                        _tableName,
+                        new List<QueryField>() {
+                    new QueryField("parentType", parentType.ToString()),
+                    new QueryField("parentId", parentId)
+                        },
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace))?.SingleOrDefault();
+                }
+                catch(Exception ex)
+                {
+                    MixService.LogException(ex);
+                    return default;
+                }
             }
         }
 

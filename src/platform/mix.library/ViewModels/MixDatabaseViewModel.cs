@@ -48,15 +48,31 @@ namespace Mix.Lib.ViewModels
         {
             if (Columns != null)
             {
-                if ((Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData)
-                    && !Columns.Any(m => m.SystemName == "parentId"))
+                if ((Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData))
                 {
-                    Columns.Add(new()
+                    if (!Columns.Any(m => m.SystemName == "parentId"))
                     {
-                        DisplayName = "Parent Id",
-                        SystemName = "parentId",
-                        DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
-                    });
+
+                        Columns.Add(new()
+                        {
+                            DisplayName = "Parent Id",
+                            SystemName = "parentId",
+                            DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
+                        });
+                    }
+                    if (!Columns.Any(m => m.SystemName == "parentType"))
+                    {
+                        Columns.Add(new()
+                        {
+                            DisplayName = "Parent Type",
+                            SystemName = "parentType",
+                            DataType = MixDataType.Text,
+                            ColumnConfigurations = new()
+                            {
+                                MaxLength = 20
+                            }
+                        });
+                    }
                 }
 
                 foreach (var item in Columns)

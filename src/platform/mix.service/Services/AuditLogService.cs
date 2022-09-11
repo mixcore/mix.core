@@ -89,7 +89,14 @@ namespace Mix.Service.Services
             using (StreamReader reader
                       = new StreamReader(request.BodyReader.AsStream(), Encoding.UTF8, true, 1024, true))
             {
-                bodyStr = reader.ReadToEndAsync().GetAwaiter().GetResult();
+                try
+                {
+                    bodyStr = reader.ReadToEndAsync().GetAwaiter().GetResult();
+                }
+                catch
+                {
+                    Console.WriteLine($"{GetType()}: Cannot read body request");
+                }
             }
 
             return bodyStr;
