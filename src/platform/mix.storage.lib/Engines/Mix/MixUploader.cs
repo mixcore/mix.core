@@ -16,15 +16,42 @@ namespace Mix.Storage.Lib.Engines.Mix
         {
         }
 
-        public override async Task<string?> Upload(IFormFile file, string? themeName, string? createdBy)
+        public override Task<string?> UploadStream(FileModel file, string? createdBy)
         {
-            var folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{themeName}/{MixFolders.UploadsFolder}/{DateTime.Now.ToString("yyyy-MMM")}";
-            var result = MixFileHelper.SaveFile(file, folder);
-            if (!string.IsNullOrEmpty(result))
+            string? result = null;
+            file.FileFolder = GetUploadFolder(file.FolderName, createdBy);
+            var fileName = MixFileHelper.SaveFile(file);
+            if (!string.IsNullOrEmpty(fileName))
             {
-                return $"{GlobalConfigService.Instance.Domain}/{folder}/{result}";
+                result = $"{GlobalConfigService.Instance.Domain}/{file.FileFolder}/{fileName}";
             }
-            return default;
+            return Task.FromResult(result);
+        }
+        
+        public override Task<string?> Upload(IFormFile file, string? fileFolder, string? createdBy)
+        {
+            string? result = null;
+            string folder = GetUploadFolder(fileFolder, createdBy);
+            var fileName = MixFileHelper.SaveFile(file, folder);
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                result = $"{GlobalConfigService.Instance.Domain}/{folder}/{fileName}";
+            }
+            return Task.FromResult(result);
+        }
+
+        private string GetUploadFolder(string? fileFolder, string? createdBy)
+        {
+            string folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{MixFolders.UploadsFolder}";
+            if (!string.IsNullOrEmpty(fileFolder))
+            {
+                folder = $"{folder}/{fileFolder}";
+            }
+            if (!string.IsNullOrEmpty(createdBy))
+            {
+                folder = $"{folder}/{createdBy}";
+            }
+            return $"{folder}/{DateTime.Now.ToString("yyyy-MMM")}";
         }
     }
 }

@@ -89,7 +89,7 @@ namespace Mix.Lib.Services
                     $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.UploadFolder}",
+                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixThemePackageConstants.UploadFolder}",
                     $"{tempPath}/{MixThemePackageConstants.UploadFolder}");
             }
         }

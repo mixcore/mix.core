@@ -78,6 +78,7 @@ namespace Mix.Common.Controllers
         }
 
         [HttpGet]
+        [MixAuthorize(roles: $"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
         [Route("stop-application")]
         public ActionResult StopApplication()
         {
@@ -176,6 +177,7 @@ namespace Mix.Common.Controllers
         public ActionResult GetSettings([FromBody] GlobalConfigurations settings)
         {
             GlobalConfigService.Instance.AppSettings = settings;
+            GlobalConfigService.Instance.AppSettings.Domain = GlobalConfigService.Instance.AppSettings.Domain.TrimEnd('/');
             GlobalConfigService.Instance.SaveSettings();
             return Ok(GlobalConfigService.Instance.AppSettings);
         }
