@@ -54,6 +54,7 @@ namespace Mix.Shared.Services
         public bool IsEncryptApi => AppSettings.IsEncryptApi;
         public string DefaultCulture => AppSettings.DefaultCulture;
         public string Domain => AppSettings.Domain;
+        public int ResponseCache => AppSettings.ResponseCache;
         public InitStep InitStatus => AppSettings.InitStatus;
     }
 }
