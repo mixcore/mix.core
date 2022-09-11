@@ -51,7 +51,7 @@ namespace Mix.Portal.Controllers
         protected override async Task<MixTemplateViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            result.FileFolder = $"{MixFolders.TemplatesFolder}/{_currentTenant.SystemName}/{result.MixThemeName}/{result.FolderType}";
+            result.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{result.MixThemeName}/{result.FolderType}";
             return result;
         }
         protected override SearchQueryModel<MixTemplate, int> BuildSearchRequest(SearchRequestDto req)

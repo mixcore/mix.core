@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Quartz.Services;
@@ -76,7 +77,11 @@ namespace Mix.Tenancy.Controllers
                     await _initCmsService.InitDbContext(model);
                     await _initCmsService.InitTenantAsync(model);
                     await _quartzService.LoadScheduler();
-                    return NoContent();
+                    var uow = new UnitOfWorkInfo(new MixCmsContext());
+                    await MixTenantRepository.Instance.Reload(uow);
+                    _session.Put(MixRequestQueryKeywords.Tenant, MixTenantRepository.Instance.AllTenants.First());
+                    await uow.CompleteAsync();
+                    return Ok();
                 }
                 catch (Exception ex)
                 {

@@ -6,7 +6,7 @@ using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
-using Mixcore.Domain.ViewModels;
+using Mix.Common.Domain.ViewModels;
 
 namespace Mix.Common.Controllers
 {
@@ -25,7 +25,8 @@ namespace Mix.Common.Controllers
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository)
+            MixRepoDbRepository mixRepoDbRepository,
+            MixCacheService cacheService)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
@@ -34,7 +35,11 @@ namespace Mix.Common.Controllers
         protected override async Task<PostContentViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            await result.LoadAdditionalDataAsync(_mixRepoDbRepository);
+            if (result.AdditionalData == null)
+            {
+                await result.LoadAdditionalDataAsync(_mixRepoDbRepository);
+                await _cacheService.SetAsync($"{id}/{typeof(PostContentViewModel).FullName}", result, typeof(MixPostContent), "full");
+            }
             return result;
         }
 
@@ -44,7 +49,12 @@ namespace Mix.Common.Controllers
             List<Task> tasks = new();
             foreach (var post in result.Items)
             {
-                tasks.Add(post.LoadAdditionalDataAsync(_mixRepoDbRepository));
+                if (post.AdditionalData == null)
+                {
+                    tasks.Add(
+                        post.LoadAdditionalDataAsync(_mixRepoDbRepository)
+                        .ContinueWith(r => _cacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), "full")));
+                }
             }
             await Task.WhenAll(tasks);
             return result;

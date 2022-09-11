@@ -9,7 +9,19 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
-        protected MixTenantSystemViewModel _currentTenant{ get; set; }
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         protected string _lang;
         protected MixCulture _culture;
         protected readonly IQueueService<MessageQueueModel> _queueService;
@@ -27,16 +39,13 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService) : base()
         {
+            _session = httpContextAccessor.HttpContext.Session;
             _configuration = configuration;
             _mixService = mixService;
             _translator = translator;
             _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
             _queueService = queueService;
-            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.Tenant).HasValue)
-            {
-                _currentTenant = httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-            }
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

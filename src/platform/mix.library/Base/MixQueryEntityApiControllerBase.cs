@@ -136,7 +136,7 @@ namespace Mix.Lib.Base
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
             {
                 andPredicate = ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.TenantId, _currentTenant.Id, ExpressionMethod.Equal);
+                        MixRequestQueryKeywords.TenantId, CurrentTenant.Id, ExpressionMethod.Equal);
             }
 
             return andPredicate;

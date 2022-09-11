@@ -58,7 +58,7 @@ namespace Mixcore.Controllers
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
             var page = await pageRepo.GetFirstAsync(
-                    p => p.MixTenantId == MixTenantId
+                    p => p.MixTenantId == CurrentTenant.Id
                     && p.Specificulture == Culture
                     && p.Type == MixPageType.Home);
 

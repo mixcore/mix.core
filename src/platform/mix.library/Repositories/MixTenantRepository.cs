@@ -34,7 +34,10 @@
 
         #endregion
         public List<MixTenantSystemViewModel> AllTenants { get; set; }
-
+        public async Task Reload(UnitOfWorkInfo uow)
+        {
+            AllTenants = await MixTenantSystemViewModel.GetRepository(uow).GetAllAsync(m => true);
+        }
         public MixTenantSystemViewModel GetCurrentTenant(string host)
         {
             return AllTenants.FirstOrDefault(m => m.Domains.Any(d => d.Host == host)) ?? AllTenants.First();

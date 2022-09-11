@@ -29,15 +29,11 @@ namespace Mix.Lib.Middlewares
                 if (MixTenantRepository.Instance.AllTenants == null)
                 {
                     var uow = new UnitOfWorkInfo(cmsContext);
-                    MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(uow).GetAllAsync(m => true);
+                    await MixTenantRepository.Instance.Reload(uow);
                 }
-                if (!context.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
+                if (context.Session.Get(MixRequestQueryKeywords.Tenant) == null)
                 {
                     var currentTenant = MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host);
-                    context.Session.SetInt32(
-                        MixRequestQueryKeywords.TenantId,
-                        currentTenant.Id);
-                    context.Session.Put(MixRequestQueryKeywords.TenantName, currentTenant.SystemName);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                 }
                 await next.Invoke(context);

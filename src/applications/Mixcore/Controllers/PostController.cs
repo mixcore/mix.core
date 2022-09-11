@@ -78,7 +78,7 @@ namespace Mixcore.Controllers
         {
             // Home Post
             var postRepo = PostContentViewModel.GetRepository(_uow);
-            var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == MixTenantId);
+            var post = await postRepo.GetSingleAsync(m => m.Id == postId && m.MixTenantId == CurrentTenant.Id);
             if (post == null)
             {
                 return NotFound();
