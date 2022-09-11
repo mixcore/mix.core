@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
+using Mix.Lib.Extensions;
 using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;
 
@@ -18,13 +19,24 @@ namespace Mix.Lib.Services
         private string outputPath;
         private string webPath;
         private string fileName;
-        private string _tenantName;
-
+        private ISession _session;
+        public MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
+        private MixTenantSystemViewModel _currentTenant;
         public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository)
         {
+            _session = httpContext.HttpContext.Session;
             _context = context;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
-            _tenantName = httpContext.HttpContext.Session.GetString(MixRequestQueryKeywords.TenantName);
             _repository = repository;
         }
 
@@ -73,11 +85,11 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.AssetFolder}",
+                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.AssetFolder}",
                     $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.StaticFiles}/{_tenantName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.UploadFolder}",
+                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.UploadFolder}",
                     $"{tempPath}/{MixThemePackageConstants.UploadFolder}");
             }
         }
@@ -88,7 +100,7 @@ namespace Mix.Lib.Services
             string content = MixHelper.SerializeObject(siteData);
             content = content
                 .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]")
-                .Replace($"/{_tenantName}", "/[TENANT_NAME]");
+                .Replace($"/{CurrentTenant.SystemName}", "/[TENANT_NAME]");
             if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
             {
                 content = content.Replace(GlobalConfigService.Instance.AppSettings.Domain, string.Empty);

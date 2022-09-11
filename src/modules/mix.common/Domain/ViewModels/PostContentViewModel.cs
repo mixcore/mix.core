@@ -4,9 +4,8 @@ using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 
-namespace Mixcore.Domain.ViewModels
+namespace Mix.Common.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true)]
     public class PostContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPostContent, int, PostContentViewModel>

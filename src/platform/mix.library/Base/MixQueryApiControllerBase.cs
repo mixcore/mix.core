@@ -123,7 +123,7 @@ namespace Mix.Lib.Base
                 req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
             }
 
-            return new SearchQueryModel<TEntity, TPrimaryKey>(_currentTenant.Id, req, Request);
+            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, Request);
         }
 
         protected virtual async Task<TView> GetById(TPrimaryKey id)

@@ -161,7 +161,7 @@ namespace Mix.Portal.Controllers
             }
             if (!obj.ContainsKey(tenantIdFieldName))
             {
-                obj.Add(new JProperty(tenantIdFieldName, _currentTenant.Id));
+                obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
             }
             var data = await _repository.InsertAsync(obj);
 
@@ -174,7 +174,7 @@ namespace Mix.Portal.Controllers
         {
             if (!obj.ContainsKey(tenantIdFieldName))
             {
-                obj.Add(new JProperty(tenantIdFieldName, _currentTenant.Id));
+                obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
             }
             var data = await _repository.UpdateAsync(obj);
             return data != null ? Ok(await _repository.GetSingleAsync(id)) : BadRequest();
@@ -212,7 +212,7 @@ namespace Mix.Portal.Controllers
         {
             var queries = new List<QueryField>()
             {
-                new QueryField(parentIdFieldName, _currentTenant.Id)
+                new QueryField(parentIdFieldName, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {

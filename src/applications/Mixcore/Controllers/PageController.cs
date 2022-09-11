@@ -77,7 +77,7 @@ namespace Mixcore.Controllers
         {
             // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == MixTenantId);
+            var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
             

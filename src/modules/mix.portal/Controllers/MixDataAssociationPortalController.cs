@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
 
         protected override SearchQueryModel<MixDataContentAssociation, Guid> BuildSearchRequest(SearchRequestDto req)
         {
-            return new SearchDataContentAssociationModel(_currentTenant.Id, req, Request);
+            return new SearchDataContentAssociationModel(CurrentTenant.Id, req, Request);
         }
     }
 }
