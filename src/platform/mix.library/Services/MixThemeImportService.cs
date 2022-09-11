@@ -140,7 +140,7 @@ namespace Mix.Lib.Services
             // Copy theme's upload files
             string srcUpload = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.UploadFolder}";
             //string destUpload = $"{MixFolders.WebRootPath}/{MixFolders.UploadsFolder}";
-            string destUpload = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/uploads";
+            string destUpload = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/uploads";
             MixFileHelper.CopyFolder(srcUpload, destUpload);
         }
 
