@@ -8,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
         // Must call after use cors
         private static void UseMixResponseCaching(this IApplicationBuilder app)
         {
-            int responseCache = GlobalConfigService.Instance.ResponseCache;
             app.UseResponseCaching();
             app.Use(async (context, next) =>
             {
@@ -17,8 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         Public = true,
                         NoCache = false,
-                        SharedMaxAge = TimeSpan.FromSeconds(responseCache),
-                        MaxAge = TimeSpan.FromSeconds(responseCache),
+                        SharedMaxAge = TimeSpan.FromSeconds(GlobalConfigService.Instance.ResponseCache),
+                        MaxAge = TimeSpan.FromSeconds(GlobalConfigService.Instance.ResponseCache),
 
                     };
                 context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
