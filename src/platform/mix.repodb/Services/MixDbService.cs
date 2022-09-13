@@ -187,7 +187,7 @@ namespace Mix.RepoDb.Services
             return databaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => $"{GetColumnType(MixDataType.Integer)} IDENTITY(1,1) PRIMARY KEY",
-                MixDatabaseProvider.SQLITE => $"{GetColumnType(MixDataType.Integer)} PRIMARY KEY AUTOINCREMENT",
+                MixDatabaseProvider.SQLITE => $"integer PRIMARY KEY AUTOINCREMENT",
                 MixDatabaseProvider.PostgreSQL => "SERIAL PRIMARY KEY",
                 MixDatabaseProvider.MySQL => $"{GetColumnType(MixDataType.Integer)} NOT NULL AUTO_INCREMENT PRIMARY KEY",
                 _ => string.Empty

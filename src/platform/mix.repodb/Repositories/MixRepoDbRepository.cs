@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Mix.Constant.Constants;
+using Mix.Constant.Dtos;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
@@ -16,6 +17,7 @@ using Npgsql;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Mix.RepoDb.Repositories
@@ -97,6 +99,22 @@ namespace Mix.RepoDb.Repositories
                     }
                 };
             }
+        }
+
+        public Task<List<dynamic>?> GetListByAsync(IEnumerable<SearchQueryField> searchQueryFields)
+        {
+            List<QueryField> queries = ParseSearchQuery(searchQueryFields);
+            return GetListByAsync(queries);
+        }
+
+        private List<QueryField> ParseSearchQuery(IEnumerable<SearchQueryField> searchQueryFields)
+        {
+            List<QueryField> queries = new();
+            foreach (var item in searchQueryFields)
+            {
+                queries.Add(new QueryField(item.FieldName, item.Value));
+            }
+            return queries;
         }
 
         public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields)

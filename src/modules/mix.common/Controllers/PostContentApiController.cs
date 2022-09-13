@@ -7,6 +7,8 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
 using Mix.Common.Domain.ViewModels;
+using Mix.Lib.Models.Common;
+using Mix.Heart.Extensions;
 
 namespace Mix.Common.Controllers
 {
@@ -32,6 +34,14 @@ namespace Mix.Common.Controllers
             _mixRepoDbRepository = mixRepoDbRepository;
         }
 
+
+        [HttpPost("filter")]
+        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] SearchRequestDto req)
+        {
+            var result = await SearchHandler(req);
+            return ParseSearchResult(req, result);
+        }
+
         protected override async Task<PostContentViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
@@ -45,7 +55,24 @@ namespace Mix.Common.Controllers
 
         protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req)
         {
-            var result = await base.SearchHandler(req);
+            var searchRequest = BuildSearchRequest(req);
+            if (req.Queries.Count > 0)
+            {
+                var dbNameQuery = req.Queries.Find(q => q.FieldName == "type");
+                if (dbNameQuery != null)
+                {
+                    _mixRepoDbRepository.Init(dbNameQuery.Value);
+                    var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries.Where(q => q.FieldName != "type"));
+                    List<int> allowIds = new();
+                    foreach (var data in listData)
+                    {
+                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
+                    }
+                    searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(allowIds.Count > 0, m => allowIds.Contains(m.Id));
+                }
+            }
+            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+
             List<Task> tasks = new();
             foreach (var post in result.Items)
             {
@@ -59,5 +86,6 @@ namespace Mix.Common.Controllers
             await Task.WhenAll(tasks);
             return result;
         }
+
     }
 }

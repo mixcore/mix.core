@@ -56,7 +56,6 @@ namespace Mix.Lib.Base
         public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchRequestDto req)
         {
             var result = await SearchHandler(req);
-
             return ParseSearchResult(req, result);
         }
 

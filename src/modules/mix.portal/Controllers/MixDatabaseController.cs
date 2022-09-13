@@ -7,7 +7,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-database")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+    [MixAuthorize($"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
     public class MixDatabaseController
         : MixRestApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
