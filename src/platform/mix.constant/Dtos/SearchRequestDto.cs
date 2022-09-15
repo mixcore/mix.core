@@ -16,6 +16,6 @@ namespace Mix.Constant.Dtos
         public ExpressionMethod? SearchMethod { get; set; } = ExpressionMethod.Equal;
         public string? Columns { get; set; }
         public string? SearchColumns { get; set; }
-        public List<SearchQueryField>? Queries { get; set; }
+        
     }
 }

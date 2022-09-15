@@ -101,10 +101,10 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public Task<List<dynamic>?> GetListByAsync(IEnumerable<SearchQueryField> searchQueryFields)
+        public Task<List<dynamic>?> GetListByAsync(IEnumerable<SearchQueryField> searchQueryFields, string? fields = null)
         {
             List<QueryField> queries = ParseSearchQuery(searchQueryFields);
-            return GetListByAsync(queries);
+            return GetListByAsync(queries, fields);
         }
 
         private List<QueryField> ParseSearchQuery(IEnumerable<SearchQueryField> searchQueryFields)
@@ -117,13 +117,22 @@ namespace Mix.RepoDb.Repositories
             return queries;
         }
 
-        public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields)
+        public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null)
         {
             using (var connection = CreateConnection())
             {
                 try
                 {
-                    var data = await connection.QueryAsync(_tableName, queryFields);
+                    List<Field> selectedFields = new();
+                    if (!string.IsNullOrEmpty(fields))
+                    {
+                        var arrField = fields.Split(',', StringSplitOptions.TrimEntries);
+                        foreach (var item in arrField)
+                        {
+                            selectedFields.Add(new Field(item));
+                        }
+                    }
+                    var data = await connection.QueryAsync(_tableName, queryFields, selectedFields);
                     return data.ToList();
                 }
                 catch (Exception ex)
@@ -166,7 +175,7 @@ namespace Mix.RepoDb.Repositories
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace))?.SingleOrDefault();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MixService.LogException(ex);
                     return default;
@@ -250,7 +259,7 @@ namespace Mix.RepoDb.Repositories
                 return 0;
             }
         }
-        
+
         public async Task<int> DeleteAsync(List<QueryField> queries)
         {
             using (var connection = CreateConnection())

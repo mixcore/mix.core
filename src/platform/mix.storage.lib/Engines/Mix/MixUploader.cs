@@ -19,7 +19,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         public override Task<string?> UploadStream(FileModel file, string? createdBy)
         {
             string? result = null;
-            file.FileFolder = GetUploadFolder(file.FolderName, createdBy);
+            file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
             var fileName = MixFileHelper.SaveFile(file);
             if (!string.IsNullOrEmpty(fileName))
             {
@@ -31,7 +31,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         public override Task<string?> Upload(IFormFile file, string? fileFolder, string? createdBy)
         {
             string? result = null;
-            string folder = GetUploadFolder(fileFolder, createdBy);
+            string folder = GetUploadFolder(file.FileName, fileFolder, createdBy);
             var fileName = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(fileName))
             {
@@ -40,9 +40,10 @@ namespace Mix.Storage.Lib.Engines.Mix
             return Task.FromResult(result);
         }
 
-        private string GetUploadFolder(string? fileFolder, string? createdBy)
+        private string GetUploadFolder(string filename, string? fileFolder, string? createdBy)
         {
-            string folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{MixFolders.UploadsFolder}";
+            string ext = filename.Split('.')[1].ToLower();
+            string folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext}";
             if (!string.IsNullOrEmpty(fileFolder))
             {
                 folder = $"{folder}/{fileFolder}";
