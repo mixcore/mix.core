@@ -56,21 +56,6 @@ namespace Mix.Common.Controllers
         protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-            if (req.Queries.Count > 0)
-            {
-                var dbNameQuery = req.Queries.Find(q => q.FieldName == "type");
-                if (dbNameQuery != null)
-                {
-                    _mixRepoDbRepository.Init(dbNameQuery.Value);
-                    var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries.Where(q => q.FieldName != "type"));
-                    List<int> allowIds = new();
-                    foreach (var data in listData)
-                    {
-                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
-                    }
-                    searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(allowIds.Count > 0, m => allowIds.Contains(m.Id));
-                }
-            }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
 
             List<Task> tasks = new();
