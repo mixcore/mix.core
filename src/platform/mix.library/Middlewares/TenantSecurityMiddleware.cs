@@ -31,9 +31,10 @@ namespace Mix.Lib.Middlewares
                     var uow = new UnitOfWorkInfo(cmsContext);
                     await MixTenantRepository.Instance.Reload(uow);
                 }
-                if (context.Session.Get(MixRequestQueryKeywords.Tenant) == null)
+                var currentTenant = context.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                if (currentTenant == null || !currentTenant.Domains.Any(m => m.Host == context.Request.Headers.Host))
                 {
-                    var currentTenant = MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host);
+                    currentTenant = MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                 }
                 await next.Invoke(context);
