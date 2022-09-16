@@ -68,6 +68,7 @@ namespace Mixcore.Controllers
             }
 
             await page.ExpandView();
+            ViewData["Tenant"] = CurrentTenant;
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
             ViewData["Keywords"] = page.SeoKeywords;
