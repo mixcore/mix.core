@@ -1,4 +1,5 @@
-﻿using Mix.Database.EntityConfigurations.SQLITE.Quartz;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.EntityConfigurations.SQLITE.Quartz;
 using Mix.Database.Services;
 
 
@@ -6,7 +7,8 @@ namespace Mix.Database.Entities.Quartz
 {
     public partial class SQLiteQuartzDbContext : QuartzDbContext
     {
-        public SQLiteQuartzDbContext(DatabaseService databaseService)
+        public SQLiteQuartzDbContext(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService)
+            : base(httpContextAccessor)
         {
             DbProvider = MixDatabaseProvider.SQLITE;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);

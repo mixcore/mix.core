@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.EntityConfigurations.POSTGRES;
 using Mix.Database.EntityConfigurations.SQLITE;
@@ -11,6 +12,7 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixCmsContext : DbContext
     {
+        public IHttpContextAccessor _httpContextAccessor;
         // For Unit Test
         public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider)
         {
@@ -19,15 +21,17 @@ namespace Mix.Database.Entities.Cms
         }
 
         // For Unit Test
-        public MixCmsContext()
+        public MixCmsContext(IHttpContextAccessor httpContextAccessor)
         {
-            _databaseService = new();
+            _httpContextAccessor = httpContextAccessor;
+            _databaseService = new(httpContextAccessor);
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             _databaseProvider = _databaseService.DatabaseProvider;
         }
 
-        public MixCmsContext(DatabaseService databaseService)
+        public MixCmsContext(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService)
         {
+            _httpContextAccessor = httpContextAccessor;
             _databaseService = databaseService;
             _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
             _databaseProvider = _databaseService.DatabaseProvider;

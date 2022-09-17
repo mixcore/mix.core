@@ -1,12 +1,12 @@
-﻿using Mix.Database.EntityConfigurations.SQLITE;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.Services;
 
 namespace Mix.Database.Entities
 {
     public class SqliteMixCmsContext : MixCmsContext
     {
-        public SqliteMixCmsContext(DatabaseService databaseService)
-            : base(databaseService)
+        public SqliteMixCmsContext(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService) : base(httpContextAccessor, databaseService)
         {
         }
 

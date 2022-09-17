@@ -77,7 +77,7 @@ namespace Mix.Tenancy.Controllers
                     await _initCmsService.InitDbContext(model);
                     await _initCmsService.InitTenantAsync(model);
                     await _quartzService.LoadScheduler();
-                    var uow = new UnitOfWorkInfo(new MixCmsContext());
+                    var uow = new UnitOfWorkInfo(new MixCmsContext(_httpContextAccessor));
                     await MixTenantRepository.Instance.Reload(uow);
                     _session.Put(MixRequestQueryKeywords.Tenant, MixTenantRepository.Instance.AllTenants.First());
                     await uow.CompleteAsync();

@@ -9,11 +9,12 @@ namespace Mixcore.Domain.Subscribers
         private UnitOfWorkInfo _uow;
         static string topicId = typeof(MixTenantSystemViewModel).FullName;
         public TenantSubscriber(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService)
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
-            _uow = new(new MixCmsContext());
+            _uow = new(new MixCmsContext(httpContextAccessor));
         }
 
         public override async Task Handler(MessageQueueModel data)

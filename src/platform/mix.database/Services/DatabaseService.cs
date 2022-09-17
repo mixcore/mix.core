@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis;
 using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
@@ -17,10 +18,11 @@ namespace Mix.Database.Services
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
         public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
-
-        public DatabaseService()
+        protected IHttpContextAccessor _httpContextAccessor;
+        public DatabaseService(IHttpContextAccessor httpContextAccessor)
             : base(MixAppConfigFilePaths.Database, true)
         {
+            _httpContextAccessor = httpContextAccessor;
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
         }
 
@@ -70,10 +72,10 @@ namespace Mix.Database.Services
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this),
-                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this),
-                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this),
-                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this),
+                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(_httpContextAccessor, this),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(_httpContextAccessor, this),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(_httpContextAccessor, this),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(_httpContextAccessor, this),
                 _ => null,
             };
         }
@@ -94,10 +96,10 @@ namespace Mix.Database.Services
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(this),
-                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(this),
-                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(this),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(this),
+                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(_httpContextAccessor, this),
+                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(_httpContextAccessor, this),
+                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(_httpContextAccessor, this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(_httpContextAccessor, this),
                 _ => null,
             };
         }

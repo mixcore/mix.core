@@ -20,6 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixServices(this IServiceCollection services, Assembly executingAssembly, IConfiguration configuration)
         {
             services.AddMvc().AddSessionStateTempDataProvider();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
