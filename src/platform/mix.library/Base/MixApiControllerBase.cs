@@ -9,6 +9,7 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
+        protected IHttpContextAccessor _httpContextAccessor;
         protected ISession _session;
         private MixTenantSystemViewModel _currentTenant;
         protected MixTenantSystemViewModel CurrentTenant
@@ -39,6 +40,7 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService) : base()
         {
+            _httpContextAccessor = httpContextAccessor;
             _session = httpContextAccessor.HttpContext.Session;
             _configuration = configuration;
             _mixService = mixService;

@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.MixQuartz.Extensions;
 using Mix.Quartz.Constants;
@@ -17,16 +18,17 @@ namespace Mix.Quartz.Services
     public class QuartzService
     {
         public IScheduler Scheduler;
-
-        public QuartzService(IJobFactory jobFactory)
+        protected IHttpContextAccessor _httpContextAccessor;
+        public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             LoadScheduler().GetAwaiter().GetResult();
             Scheduler.JobFactory = jobFactory;
         }
 
         public async Task LoadScheduler()
         {
-            DatabaseService databaseService = new();
+            DatabaseService databaseService = new(_httpContextAccessor);
             string cnn = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
 
             if (string.IsNullOrEmpty(cnn))

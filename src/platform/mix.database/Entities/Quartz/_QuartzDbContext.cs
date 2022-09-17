@@ -1,13 +1,16 @@
-﻿using Mix.Database.Services;
+﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.Services;
 
 
 namespace Mix.Database.Entities.Quartz
 {
     public abstract class QuartzDbContext : DbContext
     {
-        public QuartzDbContext()
+        protected IHttpContextAccessor _httpContextAccessor;
+        public QuartzDbContext(IHttpContextAccessor httpContextAccessor)
         {
-            var databaseService = new DatabaseService();
+            _httpContextAccessor = httpContextAccessor;
+            var databaseService = new DatabaseService(_httpContextAccessor);
             DbProvider = databaseService.DatabaseProvider;
             ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
         }

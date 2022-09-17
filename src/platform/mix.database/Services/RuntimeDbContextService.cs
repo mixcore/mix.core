@@ -31,18 +31,21 @@ using Pomelo.EntityFrameworkCore.MySql.Storage.Internal;
 using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 using Mix.Shared.Services;
 using Mix.Database.Repositories;
+using Microsoft.AspNetCore.Http;
 
 // Ref: https://medium.com/@zaikinsr/roslyn-ef-core-runtime-dbcontext-constructing-285a9d67bc87
 namespace Mix.Database.Services
 {
     public class RuntimeDbContextService : IDisposable
     {
+        protected IHttpContextAccessor _httpContextAccessor;
         private AssemblyLoadContext _assemblyLoadContext;
         private Assembly _assembly;
         private Type _dbContextType;
         private readonly DatabaseService _databaseService;
-        public RuntimeDbContextService(DatabaseService databaseService)
+        public RuntimeDbContextService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService)
         {
+            _httpContextAccessor = httpContextAccessor;
             _databaseService = databaseService;
             LoadDbContextAssembly();
         }
@@ -114,7 +117,7 @@ namespace Mix.Database.Services
         public List<string> CreateDynamicDbContext()
         {
             var sourceFiles = new List<string>();
-            using var _cmsContext = new MixCmsContext(_databaseService);
+            using var _cmsContext = new MixCmsContext(_httpContextAccessor, _databaseService);
             var scaffolder = CreateScaffolder();
             var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
 

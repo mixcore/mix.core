@@ -12,9 +12,10 @@ namespace Mixcore.Domain.Services
         private readonly CultureService _cultureService;
 
         public MixSEORouteTransformer(
+            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration, CultureService cultureService)
         {
-            _databaseService = new();
+            _databaseService = new(httpContextAccessor);
             _cultureService = cultureService;
         }
 

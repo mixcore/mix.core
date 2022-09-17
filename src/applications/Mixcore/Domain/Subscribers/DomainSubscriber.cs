@@ -7,13 +7,16 @@ namespace Mixcore.Domain.Subscribers
     public class DomainSubscriber : SubscriberBase
     {
         private UnitOfWorkInfo _uow;
+        protected IHttpContextAccessor _httpContextAccessor;
         static string topicId = typeof(MixDomainViewModel).FullName;
         public DomainSubscriber(
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            IHttpContextAccessor httpContextAccessor)
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
-            _uow = new(new MixCmsContext());
+            _httpContextAccessor = httpContextAccessor;
+            _uow = new(new MixCmsContext(_httpContextAccessor));
         }
 
         public override async Task Handler(MessageQueueModel data)
