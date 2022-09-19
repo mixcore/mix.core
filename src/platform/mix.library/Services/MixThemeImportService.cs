@@ -22,13 +22,15 @@ namespace Mix.Lib.Services
         {
             get
             {
-                if (_currentTenant == null) {
+                if (_currentTenant == null)
+                {
                     _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
         }
         private MixTenantSystemViewModel _currentTenant;
+        private MixCulture _currentCulture;
         #region Dictionaries
 
         private Dictionary<int, int> dicAliasIds = new Dictionary<int, int>();
@@ -257,6 +259,9 @@ namespace Mix.Lib.Services
         {
             string strContent = JObject.FromObject(siteData).ToString();
             var obj = JObject.Parse(ReplaceContent(strContent, siteData.ThemeSystemName));
+            _currentCulture = _context.MixCulture.First(m =>
+                m.MixTenantId == CurrentTenant.Id
+                && (!string.IsNullOrEmpty(siteData.Specificulture) || m.Specificulture == siteData.Specificulture));
             return obj.ToObject<SiteDataViewModel>();
         }
 
@@ -297,6 +302,8 @@ namespace Mix.Lib.Services
                 item.Id = 0;
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
+                item.MixCultureId = _currentCulture.Id;
+                item.Specificulture = _currentCulture.Specificulture;
                 item.MixTenantId = CurrentTenant.Id;
                 item.ParentId = dicPageIds[item.ParentId];
                 item.Specificulture = _siteData.Specificulture;
@@ -529,7 +536,8 @@ namespace Mix.Lib.Services
                     item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = CurrentTenant.Id;
                     item.ParentId = parentDic[item.ParentId];
-                    item.Specificulture = _siteData.Specificulture;
+                    item.MixCultureId = _currentCulture.Id;
+                    item.Specificulture = _currentCulture.Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
                     _context.Entry(item).State = EntityState.Added;
                     await _context.SaveChangesAsync(_cts.Token);
