@@ -55,6 +55,7 @@ namespace Mix.Lib.Base
             _mixService = mixService;
             _session = httpContextAccessor.HttpContext.Session;
             _ipSecurityConfigService = ipSecurityConfigService;
+            ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
         }
 
         private void LoadCulture()

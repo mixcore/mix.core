@@ -41,12 +41,15 @@ namespace Mix.Portal.Controllers
             {
                 _mixRepoDbRepository.Init(req.MixDatabaseName);
                 var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "id, parentId");
-                List<int> allowIds = new();
-                foreach (var data in listData)
+                if (listData != null)
                 {
-                    allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
+                    List<int> allowIds = new();
+                    foreach (var data in listData)
+                    {
+                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
+                    }
+                    searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
                 }
-                searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
             }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             return ParseSearchResult(req, result);
