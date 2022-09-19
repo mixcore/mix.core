@@ -42,7 +42,7 @@ namespace Mix.Storage.Lib.Engines.Base
             var result = await Upload(file, folder, createdBy);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(result, _currentTenant.Id, createdBy);
+                await CreateMedia(result.Substring(result.LastIndexOf('/')), _currentTenant.Id, createdBy);
             }
             return result;
         }

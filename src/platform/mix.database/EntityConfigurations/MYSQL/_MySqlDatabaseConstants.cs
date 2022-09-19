@@ -14,7 +14,7 @@
 
         string IDatabaseConstants.DateTime => "datetime";
 
-        string IDatabaseConstants.Guid => "uuid";
+        string IDatabaseConstants.Guid => "varchar(255)";
 
         string IDatabaseConstants.Integer => "int";
 

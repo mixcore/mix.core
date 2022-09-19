@@ -59,11 +59,6 @@ namespace Mix.Lib.ViewModels
                         : new();
         }
 
-        protected override async Task DeleteHandlerAsync()
-        {
-            await MixDataContentValueViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseColumnId == Id);
-            await base.DeleteHandlerAsync();
-        }
         #endregion
     }
 }
