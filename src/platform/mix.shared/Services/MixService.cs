@@ -10,7 +10,7 @@ namespace Mix.Service.Services
     {
         public readonly SmtpConfigService _smtpConfigService;
         public readonly MixConfigurationService _configService;
-        public readonly int MixTenantId;
+
         public MixService(
             MixConfigurationService configService,
             SmtpConfigService smtpConfigService,
@@ -18,13 +18,6 @@ namespace Mix.Service.Services
         {
             _configService = configService;
             _smtpConfigService = smtpConfigService;
-            if (httpContextAccessor != null && httpContextAccessor.HttpContext != null)
-            {
-                if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
-                {
-                    MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId)!.Value;
-                }
-            }
         }
 
         public string GetAssetFolder(string culture = null)

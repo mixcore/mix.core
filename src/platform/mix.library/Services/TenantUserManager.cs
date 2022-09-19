@@ -4,12 +4,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mix.Database.Entities.Account;
+using Mix.Lib.Extensions;
 
 namespace Mix.Lib.Services
 {
     public class TenantUserManager : UserManager<MixUser>
     {
-        protected int MixTenantId { get; set; } = 1;
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         public TenantUserManager(
             IHttpContextAccessor httpContextAccessor,
             IUserStore<MixUser> store,
@@ -21,11 +34,8 @@ namespace Mix.Lib.Services
             IServiceProvider services, ILogger<TenantUserManager> logger,
             MixCmsAccountContext context) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
+            _session = httpContextAccessor.HttpContext.Session;
             Context = context;
-            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
-            {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
-            }
         }
 
         public MixCmsAccountContext Context { get; }
@@ -39,13 +49,13 @@ namespace Mix.Lib.Services
         {
             var result = new IdentityResult();
             var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName.ToString());
-            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == MixTenantId))
+            if (!Context.AspNetUserRoles.Any(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == CurrentTenant.Id))
             {
                 Context.AspNetUserRoles.Add(new AspNetUserRoles()
                 {
                     UserId = user.Id,
                     RoleId = role.Id,
-                    MixTenantId = MixTenantId
+                    MixTenantId = CurrentTenant.Id
                 });
                 await Context.SaveChangesAsync();
             }
@@ -94,7 +104,7 @@ namespace Mix.Lib.Services
         public override Task<bool> IsInRoleAsync(MixUser user, string roleName)
         {
             var role = Context.MixRoles.SingleOrDefault(x => x.Name == roleName);
-            return Context.AspNetUserRoles.AnyAsync(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == MixTenantId);
+            return Context.AspNetUserRoles.AnyAsync(m => m.UserId == user.Id && m.RoleId == role.Id && m.MixTenantId == CurrentTenant.Id);
         }
 
         public override async Task<IList<string>> GetRolesAsync(MixUser user)
@@ -102,7 +112,7 @@ namespace Mix.Lib.Services
             var roles = from ur in Context.AspNetUserRoles
                         join r in Context.MixRoles
                         on ur.RoleId equals r.Id
-                        where ur.UserId == user.Id && ur.MixTenantId == MixTenantId
+                        where ur.UserId == user.Id && ur.MixTenantId == CurrentTenant.Id
                         select r.Name;
             return await roles.ToListAsync();
         }
@@ -112,7 +122,7 @@ namespace Mix.Lib.Services
             var roles = from ur in Context.AspNetUserRoles
                         join r in Context.MixRoles
                         on ur.RoleId equals r.Id
-                        where ur.UserId == user.Id && ur.MixTenantId == MixTenantId
+                        where ur.UserId == user.Id && ur.MixTenantId == CurrentTenant.Id
                         select r;
             return await roles.ToListAsync();
         }
