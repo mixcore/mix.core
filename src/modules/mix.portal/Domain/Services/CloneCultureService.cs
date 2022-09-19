@@ -1,16 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Base;
+using Mix.Lib.Extensions;
 using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
 {
     public class CloneCultureService
     {
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private MixService _mixService;
         private MixCulture _destCulture;
         private MixCulture _srcCulture;
-        private int _tenantId;
         private Dictionary<int, int> configurationIds = new();
         private Dictionary<int, int> languageIds = new();
         private Dictionary<int, int> pageIds = new();
@@ -18,11 +31,11 @@ namespace Mix.Portal.Domain.Services
         private Dictionary<int, int> moduleIds = new();
         private Dictionary<Guid, Guid> dataIds = new();
         private Dictionary<Guid, Guid> valueIds = new();
-        public CloneCultureService(UnitOfWorkInfo<MixCmsContext> cmsUOW, MixService mixService)
+        public CloneCultureService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, MixService mixService)
         {
+            _session = httpContextAccessor.HttpContext.Session;
             _cmsUOW = cmsUOW;
             _mixService = mixService;
-            _tenantId = mixService.MixTenantId;
         }
 
         #region Methods
@@ -31,8 +44,8 @@ namespace Mix.Portal.Domain.Services
         {
             try
             {
-                _destCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == destCulture && m.MixTenantId == _tenantId);
-                _srcCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == srcCulture && m.MixTenantId == _tenantId);
+                _destCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == destCulture && m.MixTenantId == CurrentTenant.Id);
+                _srcCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == srcCulture && m.MixTenantId == CurrentTenant.Id);
 
                 if (_destCulture == null || srcCulture == null)
                 {
@@ -65,7 +78,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneIntegerData<T>(Dictionary<int, int> dictionaryIds)
             where T : MultilingualContentBase<int>
         {
-            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -87,7 +100,7 @@ namespace Mix.Portal.Domain.Services
 
         private async Task CloneModuleData()
         {
-            var contents = _cmsUOW.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+            var contents = _cmsUOW.DbContext.MixModuleData.Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -110,7 +123,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneGuidData<T>(Dictionary<Guid, Guid> dictionaryIds)
             where T : MultilingualContentBase<Guid>
         {
-            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -132,7 +145,7 @@ namespace Mix.Portal.Domain.Services
         private async Task CloneDataValues<T>(Dictionary<Guid, Guid> dictionaryIds)
             where T : MultilingualContentBase<Guid>
         {
-            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == _tenantId)
+            var contents = _cmsUOW.DbContext.Set<T>().Where(m => m.MixCultureId == _srcCulture.Id && m.MixTenantId == CurrentTenant.Id)
                  .AsNoTracking()
                  .ToList();
             if (contents.Any())
@@ -160,7 +173,7 @@ namespace Mix.Portal.Domain.Services
                    Dictionary<int, int> rightDic)
                    where T : AssociationBase<int>
         {
-            var data = _cmsUOW.DbContext.Set<T>().Where(m => m.MixTenantId == _tenantId && leftDic.Keys.Contains(m.ParentId))
+            var data = _cmsUOW.DbContext.Set<T>().Where(m => m.MixTenantId == CurrentTenant.Id && leftDic.Keys.Contains(m.ParentId))
                 .AsNoTracking()
                 .ToList();
             if (data.Count > 0)
@@ -182,7 +195,7 @@ namespace Mix.Portal.Domain.Services
             predicate = predicate.OrIf(pageIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId.HasValue && pageIds.Keys.Contains(m.IntParentId.Value));
             predicate = predicate.OrIf(moduleIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId.HasValue && moduleIds.Keys.Contains(m.IntParentId.Value));
             predicate = predicate.OrIf(dataIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId.HasValue && dataIds.Keys.Contains(m.GuidParentId.Value));
-            predicate = predicate.AndAlso(m => m.MixTenantId == _tenantId && m.Specificulture == _srcCulture.Specificulture);
+            predicate = predicate.AndAlso(m => m.MixTenantId == CurrentTenant.Id && m.Specificulture == _srcCulture.Specificulture);
             var data = _cmsUOW.DbContext.MixDataContentAssociation
                 .Where(predicate)
                 .AsNoTracking()

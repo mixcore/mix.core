@@ -11,6 +11,7 @@ using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
@@ -38,7 +39,20 @@ namespace Mix.Account.Controllers
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
 
-        protected int MixTenantId { get; set; }
+        protected IHttpContextAccessor _httpContextAccessor;
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         public MixUserController(
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
@@ -48,6 +62,7 @@ namespace Mix.Account.Controllers
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, EmailService emailService)
         {
+            _session = httpContextAccessor.HttpContext.Session;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -61,10 +76,7 @@ namespace Mix.Account.Controllers
             _cmsContext = cmsContext;
             _accContext = accContext;
 
-            if (httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
-            {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
-            }
+           
             _repoDbRepository = repoDbRepository;
             _emailService = emailService;
         }
@@ -105,7 +117,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            var result = await _idService.Register(model, MixTenantId, _cmsUOW);
+            var result = await _idService.Register(model, CurrentTenant.Id, _cmsUOW);
             if (result != null)
             {
                 return Ok(result);
@@ -208,7 +220,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(MixTenantId, _repoDbRepository);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
                 return Ok(result);
             }
             return BadRequest();
@@ -263,7 +275,7 @@ namespace Mix.Account.Controllers
                 }
                 else if (!await (_userManager.IsInRoleAsync(appUser, role.Name)))
                 {
-                    await _userManager.AddToRoleAsync(appUser, role.Name, MixTenantId);
+                    await _userManager.AddToRoleAsync(appUser, role.Name, CurrentTenant.Id);
                     return Ok();
                 }
             }
@@ -276,7 +288,7 @@ namespace Mix.Account.Controllers
                     errors.Add($"User: {model.UserId} does not exists");
                 }
 
-                var removeResult = _userManager.RemoveFromRoleAsync(appUser, role.Name, MixTenantId);
+                var removeResult = _userManager.RemoveFromRoleAsync(appUser, role.Name, CurrentTenant.Id);
                 return Ok();
             }
             return BadRequest(errors);

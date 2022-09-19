@@ -9,6 +9,7 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
+using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
@@ -37,7 +38,19 @@ namespace Mix.Lib.Services
         protected readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
-        protected int MixTenantId { get; set; } = 1;
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         public MixIdentityService(
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
@@ -50,6 +63,7 @@ namespace Mix.Lib.Services
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository, 
             MixService mixService)
         {
+            _session = httpContextAccessor.HttpContext.Session;
             _cmsUow = cmsUOW;
             _cmsContext = cmsUOW.DbContext;
             _cacheService = cacheService;
@@ -61,11 +75,6 @@ namespace Mix.Lib.Services
             _roleRepo = RoleViewModel.GetRepository(_accountUow);
             _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_accountUow);
             _firebaseService = firebaseService;
-
-            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
-            {
-                MixTenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
-            }
             _repoDbRepository = repoDbRepository;
             _mixService = mixService;
         }
@@ -76,7 +85,7 @@ namespace Mix.Lib.Services
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, _cmsUow);
-                await userInfo.LoadUserDataAsync(_mixService.MixTenantId, _repoDbRepository);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
                 return userInfo;
             }
             return null;
@@ -114,7 +123,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(_cmsContext, user, model.RememberMe, MixTenantId);
+                return await GetAuthData(_cmsContext, user, model.RememberMe, CurrentTenant.Id);
             }
             else
             {
@@ -168,7 +177,7 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(_cmsContext, user, true, MixTenantId);
+                return await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
             }
             return default;
         }
@@ -204,7 +213,7 @@ namespace Mix.Lib.Services
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 var vm = new MixUserViewModel(user, _cmsUOW);
-                await vm.LoadUserDataAsync(MixTenantId, _repoDbRepository);
+                await vm.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
 
                 return await GetAuthData(_cmsContext, user, true, tenantId);
             }
@@ -277,7 +286,7 @@ namespace Mix.Lib.Services
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(_cmsContext, user, true, MixTenantId);
+                    return await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
                 }
                 // register new account
                 else
@@ -294,7 +303,7 @@ namespace Mix.Lib.Services
                             Provider = model.Provider,
                             ProviderKey = verifiedAccessToken.user_id,
                             Data = model.Data
-                        }, MixTenantId, _cmsUow);
+                        }, CurrentTenant.Id, _cmsUow);
                     }
                     else
                     {
@@ -320,7 +329,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(_cmsContext, user, true, MixTenantId);
+                        var token = await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();
