@@ -56,6 +56,17 @@ namespace Mix.Common.Controllers
                 }
             }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            List<Task> tasks = new();
+            foreach (var post in result.Items)
+            {
+                if (post.AdditionalData == null)
+                {
+                    tasks.Add(
+                        post.LoadAdditionalDataAsync(_mixRepoDbRepository)
+                        .ContinueWith(r => _cacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), "full")));
+                }
+            }
+            await Task.WhenAll(tasks);
             return ParseSearchResult(req, result);
         }
 
@@ -69,6 +80,7 @@ namespace Mix.Common.Controllers
             }
             return result;
         }
+
 
         protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req)
         {
