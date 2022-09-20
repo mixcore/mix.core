@@ -36,9 +36,26 @@ namespace Mix.Common.Controllers
 
 
         [HttpPost("filter")]
-        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] SearchRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] SearchPostRequestDto req)
         {
-            var result = await SearchHandler(req);
+            var searchRequest = BuildSearchRequest(req);
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
+            if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
+            {
+                _mixRepoDbRepository.Init(req.MixDatabaseName);
+                var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "id, parentId");
+                if (listData != null)
+                {
+                    List<int> allowIds = new();
+                    foreach (var data in listData)
+                    {
+                        allowIds.Add(ReflectionHelper.ParseObject(data).Value<int>("parentId"));
+                    }
+                    searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
+                }
+            }
+            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             return ParseSearchResult(req, result);
         }
 

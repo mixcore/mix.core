@@ -40,6 +40,10 @@ namespace Mix.Common.Domain.ViewModels
         public override async Task ExpandView()
         {
             await base.ExpandView();
+            if (!Image.StartsWith("http") && !string.IsNullOrEmpty(GlobalConfigService.Instance.Domain))
+            {
+                Image = $"{GlobalConfigService.Instance.Domain}{Image}";
+            }
         }
 
 
