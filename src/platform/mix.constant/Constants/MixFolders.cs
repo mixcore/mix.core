@@ -7,7 +7,7 @@
         public const string TemplatesFolder = "MixContent/Templates";//"Views/Shared/Templates"
         public const string TempFolder = "MixContent/Temp";
         public const string ThemePackage = "MixContent/Temp/Themes";
-        public const string PortalApps = "wwwroot/portal-apps";
+        public const string PortalApps = "portal-apps";
         public const string MixContentFolder = "MixContent";
         public const string AppConfigFolder = "MixContent/Shared/AppConfigs";
         public const string JsonDataFolder = "MixContent/Shared/Json";
