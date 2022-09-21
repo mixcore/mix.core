@@ -67,7 +67,7 @@ namespace Mix.Lib.Services
         public async Task DownloadThemeAsync(
             JObject theme, IProgress<int> progress, HttpService httpService, string folder = MixFolders.ThemePackage)
         {
-            string name = theme.Value<string>("name");
+            string name = theme.Value<string>("title");
             MixFileHelper.EmptyFolder(MixFolders.ThemePackage);
             var cancellationToken = new CancellationToken();
             string filePath = $"{MixFolders.ThemePackage}/{name}{MixFileExtensions.Zip}";

@@ -35,7 +35,7 @@ namespace Mixcore.Controllers
         }
 
         [Route("portal/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
-        [Route("portal-apps/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
+        //[Route("portal-apps/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
         public IActionResult Spa(string appFolder, string param1, string param2, string param3, string param4)
         {
             string folder = $"portal-apps/{appFolder}";
@@ -53,15 +53,7 @@ namespace Mixcore.Controllers
                 return Redirect(url);
             }
 
-            var indexFile = MixFileHelper.GetFileByFullName($"{MixFolders.WebRootPath}/{folder}/index.html");
-            Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
-
-            if (indexFile.Content!= null && regex.IsMatch(indexFile.Content))
-            {
-                indexFile.Content = regex.Replace(indexFile.Content, $"/{folder}/$3$4");
-            }
-
-            return View(indexFile);
+            return View();
             
         }
         #region overrides

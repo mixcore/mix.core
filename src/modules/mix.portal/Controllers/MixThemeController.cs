@@ -117,17 +117,20 @@ namespace Mix.Portal.Controllers
             };
 
             string name = SeoHelper.GetSEOString(theme.Value<string>("title"));
-            string folder = $"{MixFolders.PortalApps}/{name}";
+            string folder = $"{MixFolders.WebRootPath}/{MixFolders.PortalApps}/{name}";
+            string appfolder = $"{MixFolders.PortalApps}/{name}";
             await _importService.DownloadThemeAsync(theme, progress, _httpService, folder);
             var indexFile = MixFileHelper.GetFileByFullName($"{folder}/index.html");
             Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
 
             if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
             {
-                indexFile.Content = regex.Replace(indexFile.Content, $"/{folder}/$3$4");
+                indexFile.Content = regex.Replace(indexFile.Content, $"/{appfolder}/$3$4")
+                    .Replace("options['baseHref']", $"'{appfolder}'");
+
             }
             MixFileHelper.SaveFile(indexFile);
-            return Ok($"/portal-apps/{name}");
+            return Ok(appfolder);
         }
 
         #region Helpers
