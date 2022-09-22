@@ -1,0 +1,17 @@
+{
+  "StorageSetting": {
+    "Provider": "MIX",
+    "CloudFlareSetting": {
+      "EndpointTemplate": "https://api.cloudflare.com/client/v4/accounts/{0}/images/v1",
+      "ApiToken": "",
+      "ApiKey": {
+        "GlobalKey": "",
+        "OriginKey": ""
+      },
+      "ZoneId": "",
+      "AccountId": ""
+    },
+    "MixSetting": {
+    }
+  }
+}

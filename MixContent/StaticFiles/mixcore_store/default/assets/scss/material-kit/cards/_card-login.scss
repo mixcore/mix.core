@@ -1,0 +1,67 @@
+.card-login{
+    .card-header{
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: -40px;
+        padding: 20px 0;
+        margin-bottom: 15px;
+    }
+    .text-divider{
+        margin-top: 30px;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+    .card-body{
+        padding: 0px 30px 0px 10px;
+    }
+
+    .form-check{
+        padding-top: 27px;
+
+        label{
+            margin-left: 18px;
+        }
+        .form-check-sign{
+            padding-right: 27px;
+        }
+
+    }
+
+    .input-group {
+      padding-bottom: 7px;
+      margin: 27px 0 0 0;
+    }
+
+    .form {
+      min-height: 420px;
+    }
+
+
+    .social-line{
+        margin-top: $bmd-label-top-margin-base;
+        text-align: center;
+        padding: 0;
+
+        .btn{
+            color: $white-color;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+}
+
+.login-page {
+  .footer {
+    position: absolute;
+    width: 100%;
+    background: transparent;
+    bottom: 0;
+    color: $white-color;
+    z-index: 2;
+
+    .copyright a{
+      color: $white-color;
+    }
+  }
+
+}

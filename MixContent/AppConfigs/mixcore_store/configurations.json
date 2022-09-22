@@ -1,0 +1,11 @@
+{
+  "portalThemeSettings": null,
+  "isMaintenance": false,
+  "isEncryptApi": false,
+  "maxPageSize": 100,
+  "defaultCulture": "en-us",
+  "domain": "https://market.mixcore.net",
+  "apiEncryptKey": "YVE3d2thM0h0QVg2Vk4zcms5VzloZz09LGJTSVN4ajltWktpV3JqcEtLRnJ6UXFBdTl0dGt4c2gydnhoOVpROWRIUUk9",
+  "smtp": null,
+  "lastUpdateConfiguration": null
+}
