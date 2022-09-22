@@ -45,7 +45,7 @@ namespace Mix.Storage.Lib.Engines.Mix
         private string GetUploadFolder(string filename, string? fileFolder, string? createdBy)
         {
             string ext = filename.Split('.')[1].ToLower();
-            string folder = $"{MixFolders.StaticFiles}/{_currentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext}";
+            string folder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixFolders.UploadsFolder}/{ext}";
             if (!string.IsNullOrEmpty(fileFolder))
             {
                 folder = $"{folder}/{fileFolder}";
