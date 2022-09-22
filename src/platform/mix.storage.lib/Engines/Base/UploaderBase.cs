@@ -7,7 +7,7 @@ namespace Mix.Storage.Lib.Engines.Base
 {
     public abstract class UploaderBase : IMixUploader
     {
-        protected ISession _session;
+        protected ISession? _session;
         protected readonly IConfiguration _configuration;
         protected UnitOfWorkInfo _cmsUOW;
         protected MixTenantSystemViewModel _currentTenant;
@@ -26,16 +26,21 @@ namespace Mix.Storage.Lib.Engines.Base
         {
             _cmsUOW = cmsUOW;
             _configuration = configuration;
-            _session = httpContextAccessor.HttpContext.Session;
+            _session = httpContextAccessor?.HttpContext?.Session;
         }
 
-        public async Task CreateMedia(string filePath, int tenantId, string? createdBy)
+        public async Task CreateMedia(string fullname, int tenantId, string? createdBy)
         {
+            string filePath = fullname.Substring(0, fullname.LastIndexOf('/'));
+            string fileName = fullname.Substring(fullname.LastIndexOf('/') + 1);
             var media = new MixMediaViewModel(_cmsUOW)
             {
                 Id = Guid.NewGuid(),
-                DisplayName = filePath,
-                FileName = filePath,
+                DisplayName = fileName,
+                Status = MixContentStatus.Published,
+                FileFolder = filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty),
+                FileName = fileName.Substring(0, fileName.LastIndexOf('.')),
+                Extension = fileName.Substring(fileName.LastIndexOf('.')),
                 CreatedBy = createdBy,
                 MixTenantId = tenantId,
                 CreatedDateTime = DateTime.UtcNow
@@ -49,7 +54,7 @@ namespace Mix.Storage.Lib.Engines.Base
             var result = await Upload(file, folder, createdBy);
             if (!string.IsNullOrEmpty(result))
             {
-                await CreateMedia(result.Substring(result.LastIndexOf('/')), _currentTenant.Id, createdBy);
+                await CreateMedia(result, _currentTenant.Id, createdBy);
             }
             return result;
         }
@@ -66,6 +71,6 @@ namespace Mix.Storage.Lib.Engines.Base
         public abstract Task<string?> Upload(IFormFile file, string? themeName, string? createdBy);
         public abstract Task<string?> UploadStream(FileModel file, string? createdBy);
 
-        
+
     }
 }
