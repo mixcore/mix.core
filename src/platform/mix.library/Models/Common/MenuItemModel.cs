@@ -4,8 +4,7 @@
     {
         public MenuItemModel()
         {
-            var domain = GlobalConfigService.Instance.AppSettings.Domain;
-            Href = Uri != null && Uri.Contains(domain) ? Uri : $"{domain}{Uri}";
+            Href = Uri;
         }
 
         public JObject Obj { get; set; }

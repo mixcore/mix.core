@@ -73,7 +73,7 @@ namespace Mix.Portal.Controllers
             if (ModelState.IsValid)
             {
                 siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-                siteData.Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
+                siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 return Ok(result);
             }

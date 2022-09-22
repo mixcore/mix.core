@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
+using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
 using Mix.Lib.Repositories;
+using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -41,11 +43,24 @@ namespace Mix.Portal.Controllers
             var tenantId = await base.CreateHandlerAsync(data);
 
             MixTenantRepository.Instance.AllTenants = await MixTenantSystemViewModel.GetRepository(_uow).GetAllAsync(m => true);
+            await ReloadTenantConfiguration(data);
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
+
+            
             return tenantId;
+        }
+
+        private async Task ReloadTenantConfiguration(MixTenantViewModel data)
+        {
+            var tenantConfigService = new TenantConfigService(data.SystemName);
+            tenantConfigService.AppSettings.DefaultCulture = data.Culture.Specificulture;
+            tenantConfigService.AppSettings.Domain = data.PrimaryDomain.TrimEnd('/');
+            tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
+            tenantConfigService.SaveSettings();
+            await MixTenantRepository.Instance.Reload(_uow);
         }
 
         protected override async Task DeleteHandler(MixTenantViewModel data)

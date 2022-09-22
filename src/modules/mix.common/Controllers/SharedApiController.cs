@@ -11,7 +11,7 @@ using Mix.Identity.Constants;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
@@ -177,7 +177,6 @@ namespace Mix.Common.Controllers
         public ActionResult GetSettings([FromBody] GlobalConfigurations settings)
         {
             GlobalConfigService.Instance.AppSettings = settings;
-            GlobalConfigService.Instance.AppSettings.Domain = GlobalConfigService.Instance.AppSettings.Domain.TrimEnd('/');
             GlobalConfigService.Instance.SaveSettings();
             return Ok(GlobalConfigService.Instance.AppSettings);
         }
@@ -200,7 +199,7 @@ namespace Mix.Common.Controllers
         [Route("get-global-settings")]
         public ActionResult<GlobalSettings> GetSharedSettings()
         {
-            var settings = CommonHelper.GetAppSettings(_authConfigurations);
+            var settings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant);
             return Ok(settings);
         }
 
@@ -225,7 +224,7 @@ namespace Mix.Common.Controllers
         [Route("check-config/{lastSync}")]
         public ActionResult<JObject> checkConfig(DateTime lastSync)
         {
-            var lastUpdate = GlobalConfigService.Instance.AppSettings.LastUpdateConfiguration;
+            var lastUpdate = CurrentTenant.Configurations.LastUpdateConfiguration;
             if (lastSync.ToUniversalTime() < lastUpdate)
             {
                 return Ok(GetAllSettingsAsync());
@@ -261,7 +260,7 @@ namespace Mix.Common.Controllers
         {
             return new AllSettingModel()
             {
-                GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations),
+                GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant),
                 MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };

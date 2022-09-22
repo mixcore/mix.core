@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Mix.Lib.Extensions;
 using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
 
@@ -6,10 +8,24 @@ namespace Mix.Lib.Services
 {
     public class MixPostService : IDisposable
     {
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         private UnitOfWorkInfo _uow;
-        public MixPostService(UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        public MixPostService(UnitOfWorkInfo<MixCmsContext> cmsUOW, IHttpContextAccessor httpContextAccessor)
         {
             _uow = cmsUOW;
+            _session = httpContextAccessor.HttpContext.Session;
         }
 
         public void SetUnitOfWork(UnitOfWorkInfo uow)
@@ -32,7 +48,7 @@ namespace Mix.Lib.Services
                 var _postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(_uow);
 
                 var tasks = new List<Task<TView>>();
-                culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
+                culture ??= CurrentTenant.Configurations.DefaultCulture;
                 Expression<Func<MixPostContent, bool>> andPredicate = m => m.Specificulture == culture;
 
                 // Get all post data query

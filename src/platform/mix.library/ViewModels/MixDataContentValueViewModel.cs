@@ -125,12 +125,7 @@ namespace Mix.Lib.ViewModels
                     return (new JProperty(MixDatabaseColumnName, new JArray()));
 
                 case MixDataType.Upload:
-                    string url = !string.IsNullOrEmpty(StringValue)
-                   ? !StringValue.Contains(GlobalConfigService.Instance.AppSettings.Domain)
-                        ? $"{GlobalConfigService.Instance.AppSettings.Domain.TrimEnd('/')}/{StringValue.TrimStart('/')}"
-                        : StringValue
-                   : null;
-                    return (new JProperty(MixDatabaseColumnName, url));
+                    return (new JProperty(MixDatabaseColumnName, StringValue));
                 case MixDataType.Tag:
                     try
                     {

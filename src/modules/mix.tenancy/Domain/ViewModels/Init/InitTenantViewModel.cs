@@ -75,6 +75,12 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
         protected override async Task<MixTenant> SaveHandlerAsync()
         {
             var entity = await base.SaveHandlerAsync();
+            var tenantConfigService = new TenantConfigService(SystemName);
+            tenantConfigService.AppSettings.DefaultCulture = Culture.Specificulture;
+            tenantConfigService.AppSettings.Domain = PrimaryDomain.TrimEnd('/');
+            tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
+            tenantConfigService.SaveSettings();
+            await MixTenantRepository.Instance.Reload(UowInfo);
             return entity;
         }
 

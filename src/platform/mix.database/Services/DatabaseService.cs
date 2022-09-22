@@ -6,7 +6,7 @@ using Mix.Database.Entities.Quartz;
 using Mix.Heart.Constants;
 using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 using System.IO;
 using System.Linq;

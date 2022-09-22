@@ -1,6 +1,4 @@
-﻿
-
-using Mix.Shared.Models;
+﻿using Mix.Shared.Models.Configurations;
 
 namespace Mix.Shared.Services
 {
@@ -42,19 +40,13 @@ namespace Mix.Shared.Services
             : base(MixAppConfigFilePaths.Global)
         {
         }
-
         public new string AesKey
         {
             get { return Instance.AppSettings.ApiEncryptKey; }
             set { Instance.AppSettings.ApiEncryptKey = value; }
         }
-
-
-        public bool IsInit => AppSettings.IsInit;
-        public bool IsEncryptApi => AppSettings.IsEncryptApi;
-        public string DefaultCulture => AppSettings.DefaultCulture;
-        public string Domain => AppSettings.Domain;
         public int ResponseCache => AppSettings.ResponseCache;
+        public bool IsInit => AppSettings.IsInit;
         public InitStep InitStatus => AppSettings.InitStatus;
     }
 }

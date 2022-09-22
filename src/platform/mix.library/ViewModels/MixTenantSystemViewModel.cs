@@ -1,4 +1,6 @@
-﻿namespace Mix.Lib.ViewModels
+﻿using Mix.Lib.Models.Configurations;
+
+namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
     public class MixTenantSystemViewModel
@@ -12,6 +14,8 @@
         public string Description { get; set; }
 
         public List<MixDomainViewModel> Domains { get; set; } = new();
+
+        public TenantConfigurationModel Configurations { get; set; }
         #endregion
 
         #region Constructors
@@ -37,6 +41,8 @@
         public override async Task ExpandView()
         {
             Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
+            var srv = new TenantConfigService(SystemName);
+            Configurations = srv.AppSettings;
         }
 
 

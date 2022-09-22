@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 
 namespace Mix.Shared.Services
 {

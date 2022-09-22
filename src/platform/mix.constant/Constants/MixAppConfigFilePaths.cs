@@ -3,6 +3,7 @@
     public class MixAppConfigFilePaths
     {
         public const string Authentication = "MixContent/Shared/AppConfigs/authentication";
+        public const string AppConfigs = "MixContent/AppConfigs";
         public const string Shared = "MixContent/Shared";
         public const string Database = "MixContent/Shared/AppConfigs/database";
         public const string Global = "MixContent/Shared/AppConfigs/global";

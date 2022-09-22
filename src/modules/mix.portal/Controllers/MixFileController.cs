@@ -70,7 +70,7 @@ namespace Mix.Portal.Controllers
                 var result = MixFileHelper.SaveFile(file, webPath);
                 if (!string.IsNullOrEmpty(result))
                 {
-                    return Ok($"{GlobalConfigService.Instance.Domain}/{folder}/{result}");
+                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");
                 }
             }
             return BadRequest();

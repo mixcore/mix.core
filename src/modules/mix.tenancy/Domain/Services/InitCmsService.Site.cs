@@ -20,9 +20,10 @@ namespace Mix.Tenancy.Domain.Services
         {
             InitTenantViewModel vm = new(_context, model);
             await vm.SaveAsync();
-            GlobalConfigService.Instance.AppSettings.DefaultCulture = model.Culture.Specificulture;
+            
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;
             GlobalConfigService.Instance.SaveSettings();
+           
         }
     }
 }

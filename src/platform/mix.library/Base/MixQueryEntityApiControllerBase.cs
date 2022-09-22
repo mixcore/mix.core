@@ -115,7 +115,7 @@ namespace Mix.Lib.Base
         {
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
+                req.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
             Expression<Func<TEntity, bool>> andPredicate = BuildAndPredicate(req);

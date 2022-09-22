@@ -172,7 +172,7 @@ namespace Mix.Tenancy.Controllers
             if (ModelState.IsValid)
             {
                 siteData.CreatedBy = User.Identity.Name;
-                siteData.Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
+                siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
                 GlobalConfigService.Instance.AppSettings.IsInit = false;

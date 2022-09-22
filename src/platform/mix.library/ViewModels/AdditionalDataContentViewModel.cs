@@ -83,8 +83,6 @@
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Specificulture ??= GlobalConfigService.Instance.DefaultCulture;
-
             var result = await base.SaveHandlerAsync();
 
             var assoRepo = new Repository<MixCmsContext, MixDataContentAssociation, Guid, MixDataContentAssociationViewModel>(UowInfo);

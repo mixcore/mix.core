@@ -1,23 +1,23 @@
 ﻿using Mix.Common.Models;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 
 namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations)
+        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations, Lib.ViewModels.MixTenantSystemViewModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
             //var culture = _cultureService.LoadCulture(lang);
             // Get Settings
             return new()
             {
-                Domain = GlobalConfigService.Instance.AppSettings.Domain,
-                DefaultCulture = GlobalConfigService.Instance.AppSettings.DefaultCulture,
+                Domain = currentTenant.Configurations.Domain,
+                DefaultCulture = currentTenant.Configurations.DefaultCulture,
                 PortalThemeSettings = PortalConfigService.Instance.AppSettings,
                 ApiEncryptKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey,
-                IsEncryptApi = GlobalConfigService.Instance.AppSettings.IsEncryptApi,
+                IsEncryptApi = currentTenant.Configurations.IsEncryptApi,
                 //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
@@ -32,7 +32,7 @@ namespace Mix.Common.Domain.Helpers
                     new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
                     new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
                 },
-                LastUpdateConfiguration = GlobalConfigService.Instance.AppSettings.LastUpdateConfiguration
+                LastUpdateConfiguration = currentTenant.Configurations.LastUpdateConfiguration
 
             };
         }

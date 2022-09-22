@@ -13,7 +13,7 @@ using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -143,7 +143,7 @@ namespace Mix.Lib.Services
             if (token != null)
             {
                 var data = ReflectionHelper.ParseObject(token);
-                if (GlobalConfigService.Instance.IsEncryptApi)
+                if (CurrentTenant.Configurations.IsEncryptApi)
                 {
                     var encryptedInfo = AesEncryptionHelper.EncryptString(data.ToString(Formatting.None), aesKey);
 
@@ -262,7 +262,7 @@ namespace Mix.Lib.Services
                     ExpiresIn = _authConfigService.AppSettings.AccessTokenExpiration,
                     Issued = dtIssued,
                     Expires = dtExpired,
-                    LastUpdateConfiguration = GlobalConfigService.Instance.AppSettings.LastUpdateConfiguration
+                    LastUpdateConfiguration = CurrentTenant.Configurations.LastUpdateConfiguration
                 };
                 return token;
             }

@@ -6,7 +6,7 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Models;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using System.Security.Claims;
 
 namespace Mix.Lib.Interfaces
