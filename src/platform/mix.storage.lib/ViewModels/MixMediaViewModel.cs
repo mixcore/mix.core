@@ -29,7 +29,7 @@
         public string Source { get; set; }
         public string TargetUrl { get; set; }
 
-        public string FullPath => $"{FileFolder}/{FileName}";
+        public string FullPath => $"{FileFolder}/{FileName}{Extension}";
         #endregion
     }
 }
