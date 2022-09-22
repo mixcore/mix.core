@@ -90,7 +90,7 @@ namespace Mix.Portal.Controllers
                     }
                     else
                     {
-                        data.Add(new JProperty($"{item.DisplayName}Url", $"{GlobalConfigService.Instance.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
+                        data.Add(new JProperty($"{item.DisplayName}Url", $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
                     }
                 }
                 return Ok(data);

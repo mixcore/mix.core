@@ -68,7 +68,7 @@ namespace Mix.Lib.Base
             //{
             //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             //}
-            Culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
+            Culture ??= CurrentTenant.Configurations.DefaultCulture;
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);
@@ -98,7 +98,7 @@ namespace Mix.Lib.Base
             ViewBag.culture = Culture;
             if (!string.IsNullOrEmpty(Culture))
             {
-                ViewBag.assetFolder = _mixService.GetAssetFolder(Culture);
+                ViewBag.assetFolder = _mixService.GetAssetFolder(Culture, CurrentTenant.PrimaryDomain);
             }
             domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (_ipSecurityConfigService.GetConfig<bool>(MixAppSettingKeywords.IsRetrictIp))
@@ -132,7 +132,7 @@ namespace Mix.Lib.Base
             }
 
             // If mode Maintenance enabled in appsettings
-            if (GlobalConfigService.Instance.AppSettings.IsMaintenance
+            if (!GlobalConfigService.Instance.IsInit && CurrentTenant.Configurations.IsMaintenance
                     && Request.RouteValues["seoName"].ToString() != "maintenance")
             {
                 isValid = false;

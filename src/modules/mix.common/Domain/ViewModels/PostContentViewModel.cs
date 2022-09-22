@@ -31,7 +31,7 @@ namespace Mix.Common.Domain.ViewModels
 
         public string ClassName { get; set; }
 
-        public string DetailUrl => $"{GlobalConfigService.Instance.Domain}/post/{Id}/{SeoName}";
+        public string DetailUrl => $"/post/{Id}/{SeoName}";
 
         public JObject AdditionalData { get; set; }
         #endregion
@@ -40,10 +40,6 @@ namespace Mix.Common.Domain.ViewModels
         public override async Task ExpandView()
         {
             await base.ExpandView();
-            if (!Image.StartsWith("http") && !string.IsNullOrEmpty(GlobalConfigService.Instance.Domain))
-            {
-                Image = $"{GlobalConfigService.Instance.Domain}{Image}";
-            }
         }
 
 

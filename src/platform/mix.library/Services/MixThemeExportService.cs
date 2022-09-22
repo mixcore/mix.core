@@ -101,9 +101,9 @@ namespace Mix.Lib.Services
             content = content
                 .Replace($"/{siteData.ThemeName}", "/[THEME_NAME]")
                 .Replace($"/{CurrentTenant.SystemName}", "/[TENANT_NAME]");
-            if (!string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.Domain))
+            if (!string.IsNullOrEmpty(CurrentTenant.Configurations.Domain))
             {
-                content = content.Replace(GlobalConfigService.Instance.AppSettings.Domain, string.Empty);
+                content = content.Replace(CurrentTenant.Configurations.Domain, string.Empty);
             }
             FileModel schema = new()
             {

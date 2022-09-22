@@ -233,7 +233,6 @@ namespace Mix.Lib.Helpers
             string specificulture = null)
             where T : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, T>
         {
-            specificulture ??= GlobalConfigService.Instance.DefaultCulture;
             T result = null;
             var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, T>(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);

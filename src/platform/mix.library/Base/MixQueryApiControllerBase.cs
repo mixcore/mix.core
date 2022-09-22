@@ -119,7 +119,7 @@ namespace Mix.Lib.Base
         {
             if (!req.PageSize.HasValue)
             {
-                req.PageSize = GlobalConfigService.Instance.AppSettings.MaxPageSize;
+                req.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
             return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, Request);

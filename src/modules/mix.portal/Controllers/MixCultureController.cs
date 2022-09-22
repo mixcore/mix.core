@@ -40,7 +40,7 @@ namespace Mix.Portal.Controllers
             var result = await base.CreateHandlerAsync(data);
             if (result > 0)
             {
-                await _cloneCultureService.CloneDefaultCulture(GlobalConfigService.Instance.DefaultCulture, data.Specificulture);
+                await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Configurations.DefaultCulture, data.Specificulture);
                 _cultureService.LoadCultures((MixCmsContext)_uow.ActiveDbContext);
             }
             return result;

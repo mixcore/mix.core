@@ -32,7 +32,7 @@ namespace Mixcore.Domain.ViewModels
 
         public string ClassName { get; set; }
 
-        public string DetailUrl => $"{GlobalConfigService.Instance.Domain}/post/{Id}/{SeoName}";
+        public string DetailUrl => $"/post/{Id}/{SeoName}";
 
         public JObject AdditionalData { get; set; }
         #endregion

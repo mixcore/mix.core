@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Mix.Lib.Extensions;
 using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
 
@@ -6,12 +8,26 @@ namespace Mix.Lib.Services
 {
     public class MixDataService : IDisposable
     {
+        private ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        public MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         private readonly MixCmsContext _dbContext;
         private UnitOfWorkInfo _uow;
-        public MixDataService(UnitOfWorkInfo<MixCmsContext> uow)
+        public MixDataService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> uow)
         {
             _uow = uow;
             _dbContext = uow.DbContext;
+            _session = httpContext.HttpContext.Session;
         }
 
         public void SetUnitOfWork(UnitOfWorkInfo uow)
@@ -54,7 +70,7 @@ namespace Mix.Lib.Services
                 var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
 
                 var tasks = new List<Task<TView>>();
-                culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
+                culture ??= CurrentTenant.Configurations.DefaultCulture;
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == searchRequest.MixDatabaseId
                             || m.MixDatabaseName == searchRequest.MixDatabaseName).ToListAsync();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
-using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 
 namespace Mix.Identity.Extensions
 {

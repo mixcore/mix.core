@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Lib.Extensions;
 using Mix.Storage.Lib.Engines.Base;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,9 @@ namespace Mix.Storage.Lib.Engines.Mix
 {
     public class MixUploader : UploaderBase
     {
-        public MixUploader(IHttpContextAccessor httpContext, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW) 
-            : base(httpContext, configuration, cmsUOW)
+       
+        public MixUploader(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW) 
+            : base(httpContextAccessor, configuration, cmsUOW)
         {
         }
 
@@ -23,7 +25,7 @@ namespace Mix.Storage.Lib.Engines.Mix
             var fileName = MixFileHelper.SaveFile(file);
             if (!string.IsNullOrEmpty(fileName))
             {
-                result = $"{GlobalConfigService.Instance.Domain}/{file.FileFolder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileName}";
             }
             return Task.FromResult(result);
         }
@@ -35,7 +37,7 @@ namespace Mix.Storage.Lib.Engines.Mix
             var fileName = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(fileName))
             {
-                result = $"{GlobalConfigService.Instance.Domain}/{folder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileName}";
             }
             return Task.FromResult(result);
         }

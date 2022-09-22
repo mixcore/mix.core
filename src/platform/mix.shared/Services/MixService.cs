@@ -20,17 +20,15 @@ namespace Mix.Service.Services
             _smtpConfigService = smtpConfigService;
         }
 
-        public string GetAssetFolder(string culture = null)
+        public string GetAssetFolder(string culture, string domain)
         {
-            culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
-            return $"{GlobalConfigService.Instance.AppSettings.Domain}/" +
+            return $"{domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
         }
 
         public string GetUploadFolder(string culture = null)
         {
-            culture ??= GlobalConfigService.Instance.AppSettings.DefaultCulture;
             return $"{MixFolders.SiteContentAssetsFolder}/" +
                 $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
                 $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";

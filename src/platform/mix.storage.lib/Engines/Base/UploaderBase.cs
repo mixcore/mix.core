@@ -7,19 +7,26 @@ namespace Mix.Storage.Lib.Engines.Base
 {
     public abstract class UploaderBase : IMixUploader
     {
+        protected ISession _session;
         protected readonly IConfiguration _configuration;
         protected UnitOfWorkInfo _cmsUOW;
         protected MixTenantSystemViewModel _currentTenant;
-
-        public UploaderBase(IHttpContextAccessor httpContext, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
+        public UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             _cmsUOW = cmsUOW;
             _configuration = configuration;
-            
-            if (httpContext.HttpContext!.Session.GetInt32(MixRequestQueryKeywords.Tenant).HasValue)
-            {
-                _currentTenant = httpContext.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-            }
+            _session = httpContextAccessor.HttpContext.Session;
         }
 
         public async Task CreateMedia(string filePath, int tenantId, string? createdBy)

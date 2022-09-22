@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
+using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -8,6 +10,20 @@ namespace Mix.Lib.Base
     [MixAuthorize]
     public abstract class MixAuthorizedApiControllerBase : Controller
     {
+        protected IHttpContextAccessor _httpContextAccessor;
+        protected ISession _session;
+        private MixTenantSystemViewModel _currentTenant;
+        protected MixTenantSystemViewModel CurrentTenant
+        {
+            get
+            {
+                if (_currentTenant == null)
+                {
+                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                }
+                return _currentTenant;
+            }
+        }
         protected string _lang;
         protected MixCulture _culture;
         protected UnitOfWorkInfo _uow;
@@ -23,7 +39,8 @@ namespace Mix.Lib.Base
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             MixCmsContext context
-            ) : base()
+,
+            IHttpContextAccessor httpContextAccessor) : base()
         {
             _uow = new UnitOfWorkInfo(context);
             _logger = logger;
@@ -31,6 +48,8 @@ namespace Mix.Lib.Base
             _translator = translator;
             _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
+            _httpContextAccessor = httpContextAccessor;
+            _session = httpContextAccessor.HttpContext.Session;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -40,7 +59,7 @@ namespace Mix.Lib.Base
             {
                 _lang = RouteData?.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()
-                    : GlobalConfigService.Instance.AppSettings.DefaultCulture;
+                    : CurrentTenant.Configurations.DefaultCulture;
                 _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
             }
         }
