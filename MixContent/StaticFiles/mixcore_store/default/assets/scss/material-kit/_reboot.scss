@@ -1,0 +1,14 @@
+body {
+  background-color: $white;
+}
+
+a {
+  &:focus {
+    outline: none; // remove the terrible @include tab-focus();
+  }
+}
+
+button:focus {
+  outline: none;
+
+}

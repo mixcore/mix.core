@@ -1,0 +1,9 @@
+@{
+    var latestBlogPost = Model.GetModule("latestBlogPosts");
+
+}
+
+<partial name="../Layouts/MainNavigation.cshtml"/>
+<partial name="../Widgets/PageHeroBanner.cshtml"/>
+<partial name="../Widgets/LatestBlogPosts.cshtml" model="latestBlogPost"/>
+<partial name="../Layouts/Footer.cshtml"/>

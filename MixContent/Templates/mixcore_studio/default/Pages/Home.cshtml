@@ -1,0 +1,31 @@
+@{
+    var highlighMdl = Model.GetModule("productHighlight");
+    var ourTeamMdl = Model.GetModule("ourTeam");
+    var contactUsMdl = Model.GetModule("workWithUs");
+    var latestBlogPost = Model.GetModule("latestBlogPosts");
+
+}
+
+<partial name="../Layouts/MainNavigation.cshtml"/>
+<partial name="../Widgets/PageHeroBanner.cshtml"/>
+  
+<div class="main main-raised">
+    <div class="section section-basic">
+        <div class="container">
+            <h1>@Model.Title</h1>
+            @if(highlighMdl != null){
+                <partial name="@highlighMdl.Template.FilePath" model="highlighMdl"/>
+            }
+            @if(ourTeamMdl != null){
+                <partial name="@ourTeamMdl.Template.FilePath" model="ourTeamMdl"/>
+            }
+            @if(contactUsMdl != null){
+                <partial name="@contactUsMdl.Template.FilePath" model="contactUsMdl"/>
+            }
+            <!-- @Html.Raw(Model.Content) -->
+        </div>
+    </div>
+</div>
+
+<partial name="../Widgets/LatestBlogPosts.cshtml" model="latestBlogPost"/>
+<partial name="../Layouts/Footer.cshtml"/>
