@@ -17,7 +17,7 @@ namespace Mix.Lib.Attributes
 
     public class AuthorizeActionFilter : IAuthorizationFilter
     {
-        public string[] Roles { get; set; }
+        public string[] AllowedRoles { get; set; }
         protected readonly MixIdentityService _idService;
         private readonly TenantUserManager _userManager;
         private ClaimsPrincipal userPrinciple;
@@ -26,7 +26,7 @@ namespace Mix.Lib.Attributes
             MixIdentityService idService,
             TenantUserManager userManager)
         {
-            Roles = roles.Replace(" ", string.Empty).Split(',');
+            AllowedRoles = roles.Replace(" ", string.Empty).Split(',');
             _idService = idService;
             _userManager = userManager;
         }
@@ -70,7 +70,7 @@ namespace Mix.Lib.Attributes
 
         private bool IsInRoles()
         {
-            if (Roles.Count() == 0)
+            if (AllowedRoles.Count() == 0)
             {
                 return true;
             }
@@ -80,14 +80,7 @@ namespace Mix.Lib.Attributes
             {
                 return true;
             }
-            foreach (var role in userRoles)
-            {
-                if (Roles.Contains(role))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return AllowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
         }
 
         #endregion
