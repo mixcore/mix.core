@@ -40,7 +40,7 @@ namespace Mix.Lib.Services
         public List<RoleViewModel> Roles { get; set; }
         protected ISession _session;
         private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
+        public MixTenantSystemViewModel CurrentTenant
         {
             get
             {
@@ -60,7 +60,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             MixCacheService cacheService,
-            FirebaseService firebaseService, MixRepoDbRepository repoDbRepository, 
+            FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
             MixService mixService)
         {
             _session = httpContextAccessor.HttpContext.Session;
@@ -486,7 +486,8 @@ namespace Mix.Lib.Services
 
             foreach (var userRole in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, userRole.Name));
+                var roleName = userRole.Name == MixRoles.SuperAdmin ? userRole.Name : $"{userRole.Name}-{CurrentTenant.Id}";
+                claims.Add(new Claim(ClaimTypes.Role, roleName));
                 var role = await _roleManager.FindByNameAsync(userRole.Name);
                 if (role != null)
                 {
