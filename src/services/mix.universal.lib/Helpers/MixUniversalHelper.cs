@@ -11,7 +11,7 @@ namespace Mix.Universal.Lib.Helpers
         {
             RegisterViewModel result = new();
             ReflectionHelper.Mapping(dto, result);
-            result.Data = JObject.FromObject(dto.Information);
+            result.Data = ReflectionHelper.ParseObject(dto.Information);
             return result;
         }
     }
