@@ -1,0 +1,51 @@
+@inject MixNavigationService navService
+@{
+    string culture = ViewBag.culture;
+    var topNavi = await navService.GetNavigationAsync("top", ViewBag.culture, Url);
+}
+
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+      <div class="navbar-translate">
+        <a class="navbar-brand" href="/">
+          Mixcore Material Kit </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+          @if (topNavi != null)
+          {
+              @foreach (var menuItem in topNavi.MenuItems)
+              {
+                  string activedClass = menuItem.IsActive ? "active" : string.Empty;
+                  <li class="nav-item @activedClass">
+                    <a class="nav-link d-flex" href="@menuItem.Uri">
+                      <i class="@menuItem.Icon"></i> @menuItem.Title
+                    </a>
+                  </li>
+              }
+          }
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://github.com/mixcore/mix.core" target="_blank" data-original-title="Follow us on Github" rel="nofollow">
+              <i class="fa fa-github"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://fb.com/mixcore.org" target="_blank" data-original-title="Like us on Facebook" rel="nofollow">
+              <i class="fa fa-facebook-square"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="https://www.youtube.com/channel/UChqzh6JnC8HBUSQ9AWIcZAw" target="_blank" data-original-title="Follow us on Youtube" rel="nofollow">
+              <i class="fa fa-youtube"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
