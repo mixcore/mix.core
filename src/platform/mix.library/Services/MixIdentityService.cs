@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
@@ -212,12 +213,82 @@ namespace Mix.Lib.Services
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                var vm = new MixUserViewModel(user, _cmsUOW);
-                await vm.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
-
+                await CreateUserData(user, model.Data);
                 return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
+        }
+
+        public virtual async Task CreateUserData(MixUser user, JObject obj)
+        {
+            try
+            {
+                MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
+                    .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
+                var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => c.SystemName == m.Name)));
+                int userDataId = await CreateUserInfomation(user, data);
+                foreach (var relation in database.Relationships)
+                {
+                    if (obj.ContainsKey(relation.DisplayName))
+                    {
+                        var nestedData = obj.Value<JArray>(relation.DisplayName);
+                        await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+            }
+        }
+
+        private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId)
+        {
+            _repoDbRepository.Init(databaseName);
+            foreach (JObject data in nestedData)
+            {
+                if (!data.ContainsKey("tenantId"))
+                {
+                    data.Add(new JProperty("tenantId", CurrentTenant.Id));
+                }
+                if (!data.ContainsKey("createdDateTime"))
+                {
+                    data.Add(new JProperty("createdDateTime", DateTime.UtcNow));
+                }
+
+                var id = await _repoDbRepository.InsertAsync(data);
+                MixDatabaseAssociationViewModel association = new(_cmsUow)
+                {
+                    MixTenantId = CurrentTenant.Id,
+                    ParentDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
+                    ChildDatabaseName = databaseName,
+                    ParentId = userDataId,
+                    ChildId = id,
+                };
+                await association.SaveAsync();
+            }
+        }
+
+        private async Task<int> CreateUserInfomation(MixUser user, JObject data)
+        {
+            _repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
+            if (!data.ContainsKey("tenantId"))
+            {
+                data.Add(new JProperty("tenantId", CurrentTenant.Id));
+            }
+            if (!data.ContainsKey("createdDateTime"))
+            {
+                data.Add(new JProperty("createdDateTime", DateTime.UtcNow));
+            }
+            if (!data.ContainsKey("parentId"))
+            {
+                data.Add(new JProperty("parentId", user.Id));
+            }
+            if (!data.ContainsKey("parentType"))
+            {
+                data.Add(new JProperty("parentType", MixContentType.User.ToString()));
+            }
+            return await _repoDbRepository.InsertAsync(data);
         }
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
