@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\**" />
+    <EmbeddedResource Remove="Dtos\**" />
+    <None Remove="Dtos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="RepoDb" Version="1.12.10" />
     <PackageReference Include="RepoDb.MySql" Version="1.1.6" />
     <PackageReference Include="RepoDb.PostgreSql" Version="1.1.5" />
@@ -19,10 +25,6 @@
     <ProjectReference Include="..\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\" />
   </ItemGroup>
 
 </Project>

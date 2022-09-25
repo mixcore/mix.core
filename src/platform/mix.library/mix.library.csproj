@@ -48,6 +48,7 @@
 		<Compile Remove="Entities\EntityConfigurations\**" />
 		<Compile Remove="Entities\Messenger\**" />
 		<Compile Remove="Enums\**" />
+		<Compile Remove="UnitOfWorks\**" />
 		<Compile Remove="ViewModels\Account\**" />
 		<Compile Remove="ViewModels\Cms\**" />
 		<EmbeddedResource Remove="Constants\**" />
@@ -55,6 +56,7 @@
 		<EmbeddedResource Remove="Entities\EntityConfigurations\**" />
 		<EmbeddedResource Remove="Entities\Messenger\**" />
 		<EmbeddedResource Remove="Enums\**" />
+		<EmbeddedResource Remove="UnitOfWorks\**" />
 		<EmbeddedResource Remove="ViewModels\Account\**" />
 		<EmbeddedResource Remove="ViewModels\Cms\**" />
 		<None Remove="Constants\**" />
@@ -62,6 +64,7 @@
 		<None Remove="Entities\EntityConfigurations\**" />
 		<None Remove="Entities\Messenger\**" />
 		<None Remove="Enums\**" />
+		<None Remove="UnitOfWorks\**" />
 		<None Remove="ViewModels\Account\**" />
 		<None Remove="ViewModels\Cms\**" />
 	</ItemGroup>
@@ -89,10 +92,6 @@
 
 	<ItemGroup>
 	  <None Include="..\..\..\.editorconfig" Link=".editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="UnitOfWorks\" />
 	</ItemGroup>
 
 </Project>

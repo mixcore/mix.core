@@ -75,7 +75,8 @@ namespace Mix.Lib.Attributes
                 return true;
             }
 
-            var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',');
+            var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(r => r.Trim()).ToArray();
             if (userRoles.Any(r => r == MixRoles.SuperAdmin))
             {
                 return true;

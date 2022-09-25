@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>aspnet-mix.universal-63E399CE-15B6-4F12-BC3F-DC2AF6D44251</UserSecretsId>
+		<RootNamespace>Mix.Universal</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="Mix.Lib.Base" />
+		<Using Include="Mix.Database.Entities.Cms" />
+		<Using Include="Mix.Heart.ViewModel" />
+		<Using Include="Mix.Heart.Enums" />
+		<Using Include="Mix.Heart.Exceptions" />
+		<Using Include="Mix.Heart.UnitOfWork" />
+		<Using Include="Mix.Heart.Services" />
+		<Using Include="Mix.Heart.Repository" />
+		<Using Include="Mix.Heart.Helpers" />
+		<Using Include="Mix.Lib.Attributes" />
+		<Using Include="Mix.Lib.Helpers" />
+		<Using Include="Mix.Lib.ViewModels" />
+		<Using Include="Mix.Identity.Constants" />
+		<Using Include="Mix.Constant.Constants" />
+		<Using Include="Mix.Constant.Enums" />
+		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Universal.Lib" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\mix.universal.lib\mix.universal.lib.csproj" />
+	</ItemGroup>
+
+</Project>
