@@ -1,3 +1,4 @@
+using FirebaseAdmin.Auth.Multitenancy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +7,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Heart.Repository;
 using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
+using Mix.Identity.Interfaces;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -13,6 +15,7 @@ using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.RepoDb.Repositories;
 using Mix.Service.Services;
 using Mix.Universal.Lib.Dtos;
 using Mix.Universal.Lib.Entities;
@@ -24,11 +27,12 @@ namespace Mix.Universal.Controllers
     [Route("api/v2/rest/mix-universal/account")]
     public class AccountController : MixApiControllerBase
     {
+        private readonly MixRepoDbRepository _repository;
         private readonly MixUniversalDbContext _context;
         private readonly TenantUserManager _userManager;
         private readonly MixIdentityService _idService;
         private readonly ILogger<AccountController> _logger;
-        protected UnitOfWorkInfo _cmsUOW;
+        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         public AccountController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -39,13 +43,14 @@ namespace Mix.Universal.Controllers
             MixIdentityService idService,
             MixCmsContext cmsContext,
             TenantUserManager userManager,
-            ILogger<AccountController> logger, MixUniversalDbContext context) : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            ILogger<AccountController> logger, MixUniversalDbContext context, MixRepoDbRepository repository) : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
             _idService = idService;
             _cmsUOW = new(cmsContext);
             _userManager = userManager;
             _logger = logger;
             _context = context;
+            _repository = repository;
         }
 
 

@@ -17,7 +17,7 @@ namespace Mix.Universal.Lib.Dtos
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public MixExternalLoginProviders? Provider { get; set; }
-        public string ProviderKey { get; set; }
+        public string? ProviderKey { get; set; }
         public string Password { get; set; }
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
@@ -27,8 +27,8 @@ namespace Mix.Universal.Lib.Dtos
 
     public class UserInformationDto
     {
-        public int Avatar { get; set; }
-        public UserOrganizationDto Organization { get; set; }
+        public string? Avatar { get; set; }
+        public List<UserOrganizationDto> Organizations { get; set; }
     }
 
     public class UserOrganizationDto
