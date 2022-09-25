@@ -123,9 +123,10 @@ namespace Mix.RepoDb.Repositories
             {
                 try
                 {
-                    List<Field> selectedFields = new();
+                    List<Field> selectedFields = null;
                     if (!string.IsNullOrEmpty(fields))
                     {
+                        selectedFields = new();
                         var arrField = fields.Split(',', StringSplitOptions.TrimEntries);
                         foreach (var item in arrField)
                         {
@@ -174,6 +175,28 @@ namespace Mix.RepoDb.Repositories
                         },
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace))?.SingleOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    MixService.LogException(ex);
+                    return default;
+                }
+            }
+        }
+        public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
+        {
+            using (var connection = CreateConnection())
+            {
+                try
+                {
+                    return (await connection.QueryAsync<dynamic>(
+                        _tableName,
+                        new List<QueryField>() {
+                    new QueryField("parentType", parentType.ToString()),
+                    new QueryField("parentId", parentId)
+                        },
+                        commandTimeout: _settings.CommandTimeout,
+                        trace: Trace))?.ToList();
                 }
                 catch (Exception ex)
                 {

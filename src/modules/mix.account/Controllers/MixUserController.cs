@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
+using RepoDb;
 using System.Linq.Expressions;
 
 namespace Mix.Account.Controllers
@@ -34,7 +36,7 @@ namespace Mix.Account.Controllers
         protected readonly MixIdentityService _mixIdentityService;
         private readonly MixRepoDbRepository _repoDbRepository;
         protected UnitOfWorkInfo _accUOW;
-        protected UnitOfWorkInfo _cmsUOW;
+        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
@@ -76,7 +78,7 @@ namespace Mix.Account.Controllers
             _cmsContext = cmsContext;
             _accContext = accContext;
 
-           
+
             _repoDbRepository = repoDbRepository;
             _emailService = emailService;
         }
@@ -117,7 +119,9 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            var result = await _idService.Register(model, CurrentTenant.Id, _cmsUOW);
+            await _idService.Register(model, CurrentTenant.Id, _cmsUOW);
+            var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+            var result = _idService.GetAuthData(_cmsUOW.DbContext, user, true, CurrentTenant.Id);
             if (result != null)
             {
                 return Ok(result);
@@ -246,7 +250,12 @@ namespace Mix.Account.Controllers
                 var idRresult = await _userManager.DeleteAsync(user);
                 if (idRresult.Succeeded)
                 {
-
+                    _repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
+                    await _repoDbRepository.DeleteAsync(new List<QueryField>()
+                    {
+                        new QueryField("parentId", user.Id),
+                        new QueryField("parentType", MixContentType.User)
+                    });
                     return Ok();
                 }
             }
