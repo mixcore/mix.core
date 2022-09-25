@@ -1,0 +1,57 @@
+@inject MixCmsContext context
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+@using Mix.Lib.ViewModels
+@using Mix.Lib.Extensions
+@{
+  var currentTenant = httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+  var postRepo = PostContentViewModel.GetRootRepository(context);
+   var posts = await postRepo.GetPagingAsync(m=> m.MixTenantId == currentTenant.Id, new PagingModel()
+    {
+        SortBy = "CreatedDateTime",
+        SortDirection = SortDirection.Desc,
+        PageSize = 3,
+        PageIndex = 0
+    });
+
+}
+<div class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="title text-center">Latest Blog Posts</h2>
+          <br>
+          <div class="row">
+            <!-- @@foreach(var item in Model.Posts.Items.Take(4)){ -->
+            @foreach(var item in posts.Items){
+            <div class="col-md-4">
+              <div class="card card-blog">
+                <div class="card-header card-header-image">
+                  <a href="/post/@item.Id/@(item.SeoName)">
+                    <img class="img img-raised" src="@item.Image">
+                  </a>
+                </div>
+                <div class="card-body">
+                  <h6 class="category text-info">
+                        @*@foreach(var cat in item.ListCategory){
+                          @cat
+                        }*@
+                    </h6>  
+                  <h4 class="card-title">
+                    <a href="/post/@item.Id/@(item.SeoName)">@item.Title</a> 
+                  </h4>
+                  <p class="card-description">
+                    @if (!string.IsNullOrEmpty(item.Excerpt))
+                      @(item.Excerpt.Length > 160 ? item.Excerpt.Substring(0,160) + "..." : item.Excerpt)
+                      <a href="/post/@item.Id/@(item.SeoName)"> Read More </a>
+                    
+                  </p>
+                </div>
+              </div>
+            </div>
+            }
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
