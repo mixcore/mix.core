@@ -26,9 +26,9 @@ namespace Mix.Lib.Attributes
             MixIdentityService idService,
             TenantUserManager userManager)
         {
-            AllowedRoles = roles.Replace(" ", string.Empty).Split(',');
             _idService = idService;
             _userManager = userManager;
+            AllowedRoles = roles.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(r => r.Trim()).ToArray();
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)

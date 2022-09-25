@@ -33,6 +33,7 @@ namespace Mix.Portal.Controllers
         private readonly MixRepoDbRepository _associationRepository;
         private readonly MixCmsContext _context;
         private string _tableName;
+        private MixDatabaseViewModel _database;
         private static string _associationTableName = nameof(MixDatabaseAssociation);
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
@@ -203,7 +204,18 @@ namespace Mix.Portal.Controllers
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
-                queries.Add(new(parentIdFieldName, request.ParentId));
+                _database = await MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
+                if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
+                {
+                    queries.Add(new(parentIdFieldName, request.ParentId));
+                }
+                else
+                {
+                    var allowsIds = _cmsUOW.DbContext.MixDatabaseAssociation
+                            .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
+                            .Select(m => m.ChildId).ToList();
+                    queries.Add(new(idFieldName, Operation.In, allowsIds));
+                }
             }
             return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
         }
@@ -212,7 +224,7 @@ namespace Mix.Portal.Controllers
         {
             var queries = new List<QueryField>()
             {
-                new QueryField(parentIdFieldName, CurrentTenant.Id)
+                new QueryField(tenantIdFieldName, CurrentTenant.Id)
             };
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword))
             {
