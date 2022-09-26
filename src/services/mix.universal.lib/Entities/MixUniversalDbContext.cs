@@ -19,7 +19,8 @@ namespace Mix.Universal.Lib.Entities
 {
     public class MixUniversalDbContext: DbContext
     {
-        public virtual DbSet<Organization> Organizations { get; set; }
+        public virtual DbSet<Organization> Organization { get; set; }
+        public virtual DbSet<PortalApp> PortalApp { get; set; }
 
         private static DatabaseService _databaseService;
         public MixUniversalDbContext(
@@ -31,7 +32,7 @@ namespace Mix.Universal.Lib.Entities
         protected override void OnConfiguring(
            DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             if (!string.IsNullOrEmpty(cnn))
             {
                 switch (_databaseService.DatabaseProvider)

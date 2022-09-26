@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Mix.Universal.Lib.Entities
 {
-    public class Organization: EntityBase<int>
+    public class PortalApp : EntityBase<int>
     {
         public string Title { get; set; }
-        public string Description { get; set; }
-        public string Endpoint { get; set; }
+        public string Path { get; set; }
+        public string MixcoreVersion { get; set; }
+        public int OrganizationId { get; set; }
         public int? TenantId { get; set; }
     }
 }
