@@ -1,15 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Account;
+using Microsoft.Extensions.DependencyInjection;
+using Mix.Heart.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using Mix.Database.Entities.AuditLog;
+using System;
 
 namespace Mix.Lib.Middlewares
 {
     public class UnitOfWorkMiddleware
     {
         private readonly RequestDelegate next;
-        public UnitOfWorkMiddleware(RequestDelegate next)
+        private static List<Type> UowInfos = new List<Type>();
+        public UnitOfWorkMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
         {
             this.next = next;
+        }
+
+        public static void AddUnitOfWork<T>()
+            where T : IUnitOfWorkInfo
+        {
+            UowInfos.Add(typeof(T));
         }
 
         public async Task Invoke(HttpContext context,
@@ -26,14 +38,19 @@ namespace Mix.Lib.Middlewares
             {
                 await next.Invoke(context);
 
+
                 await CompleteUOW(cmsUOW, context.Response.StatusCode);
                 await CompleteUOW(accountUOW, context.Response.StatusCode);
                 await CompleteUOW(cacheUOW, context.Response.StatusCode);
-
+                foreach (var uowType in UowInfos)
+                {
+                    IUnitOfWorkInfo srv = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
+                    await CompleteUOW(srv, context.Response.StatusCode);
+                }
             }
         }
 
-        private async Task CompleteUOW(UnitOfWorkInfo _cmsUOW, int statusCode)
+        private async Task CompleteUOW(IUnitOfWorkInfo _cmsUOW, int statusCode)
         {
             if (_cmsUOW.ActiveTransaction != null)
             {
