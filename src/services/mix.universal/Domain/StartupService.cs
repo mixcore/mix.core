@@ -2,7 +2,6 @@
 using Mix.Lib.Middlewares;
 using Mix.Shared.Interfaces;
 using Mix.Universal.Lib.Entities;
-using Mix.Universal.Lib.Middlewares;
 
 namespace Mix.Universal.Domain
 {
@@ -12,11 +11,11 @@ namespace Mix.Universal.Domain
         {
             services.AddDbContext<MixUniversalDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixUniversalDbContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixUniversalDbContext>>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            app.UseMiddleware<MixUniversalUnitOfWorkMiddleware>();
         }
     }
 }
