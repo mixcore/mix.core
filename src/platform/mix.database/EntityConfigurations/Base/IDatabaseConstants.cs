@@ -12,6 +12,7 @@
         public string Integer { get; }
         public string String { get; }
         public string NString { get; }
+        public string Boolean { get; }
         public string Text { get; }
         public string GenerateUUID { get; }
     }

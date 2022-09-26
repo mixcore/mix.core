@@ -25,5 +25,6 @@
         string IDatabaseConstants.Text => "text";
 
         string IDatabaseConstants.GenerateUUID => "gen_random_uuid()";
+        string IDatabaseConstants.Boolean => "boolean";
     }
 }

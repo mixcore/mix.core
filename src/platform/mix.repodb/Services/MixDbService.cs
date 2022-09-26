@@ -8,6 +8,7 @@ using Mix.Database.EntityConfigurations.SQLITE;
 using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
+using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
@@ -176,9 +177,15 @@ namespace Mix.RepoDb.Services
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
         {
             return $"CREATE TABLE {tableName} " +
-                $"(id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
-                $"createdDateTime {GetColumnType(MixDataType.DateTime)}, " +
-                $"tenantId {GetColumnType(MixDataType.Integer)} NULL, " +
+                $"(Id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
+                $"CreatedDateTime {GetColumnType(MixDataType.DateTime)}, " +
+                $"LastModified {GetColumnType(MixDataType.DateTime)} NULL, " +
+                $"MixTenantId {GetColumnType(MixDataType.Integer)} NULL, " +
+                $"CreatedBy {GetColumnType(MixDataType.Text)} NULL, " +
+                $"ModifiedBy {GetColumnType(MixDataType.Text)} NULL, " +
+                $"Priority {GetColumnType(MixDataType.Integer)}, " +
+                $"Status {GetColumnType(MixDataType.Text)} NULL, " +
+                $"IsDeleted {GetColumnType(MixDataType.Boolean)} NULL, " +
                 $" {string.Join(",", colSqls.ToArray())})";
         }
 
@@ -199,7 +206,7 @@ namespace Mix.RepoDb.Services
 
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
-            return $"{col.SystemName} {colType} {nullable}";
+            return $"{col.SystemName.ToTitleCase()} {colType} {nullable}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)
@@ -219,6 +226,8 @@ namespace Mix.RepoDb.Services
                     return _dbConstants.Guid;
                 case MixDataType.Html:
                     return _dbConstants.Text;
+                case MixDataType.Boolean:
+                    return _dbConstants.Boolean;
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:
@@ -232,7 +241,6 @@ namespace Mix.RepoDb.Services
                 case MixDataType.PostalCode:
                 case MixDataType.Upload:
                 case MixDataType.Color:
-                case MixDataType.Boolean:
                 case MixDataType.Icon:
                 case MixDataType.VideoYoutube:
                 case MixDataType.TuiEditor:
