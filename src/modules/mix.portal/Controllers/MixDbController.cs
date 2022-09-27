@@ -24,7 +24,7 @@ namespace Mix.Portal.Controllers
         private const string idFieldName = "id";
         private const string parentIdFieldName = "parentId";
         private const string childIdFieldName = "ChildId";
-        private const string tenantIdFieldName = "tenantId";
+        private const string tenantIdFieldName = "MixTenantId";
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly RuntimeDbContextService _runtimeDbContextService;
         private RuntimeDbRepository _runtimeRepository;
