@@ -25,6 +25,7 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService : IMixIdentityService
     {
+        private const string tenantIdFieldName = "MixTenantId";
         protected readonly UnitOfWorkInfo _accountUow;
         protected readonly UnitOfWorkInfo _cmsUow;
         protected readonly MixCacheService _cacheService;
@@ -247,9 +248,9 @@ namespace Mix.Lib.Services
             _repoDbRepository.Init(databaseName);
             foreach (JObject data in nestedData)
             {
-                if (!data.ContainsKey("tenantId"))
+                if (!data.ContainsKey(tenantIdFieldName))
                 {
-                    data.Add(new JProperty("tenantId", CurrentTenant.Id));
+                    data.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
                 }
                 if (!data.ContainsKey("createdDateTime"))
                 {
@@ -272,9 +273,9 @@ namespace Mix.Lib.Services
         private async Task<int> CreateUserInfomation(MixUser user, JObject data)
         {
             _repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
-            if (!data.ContainsKey("tenantId"))
+            if (!data.ContainsKey(tenantIdFieldName))
             {
-                data.Add(new JProperty("tenantId", CurrentTenant.Id));
+                data.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
             }
             if (!data.ContainsKey("createdDateTime"))
             {

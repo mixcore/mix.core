@@ -447,13 +447,13 @@ namespace Mix.Lib.Services
 
         private string GetInsertQuery(MixDbModel database)
         {
-            List<string> columns = new List<string> { "id", "createdDateTime", "tenantId" };
+            List<string> columns = new List<string> { "Id", "CreatedDateTime", "MixTenantId" };
             columns.AddRange(_siteData.MixDatabaseColumns.Where(c => c.MixDatabaseName == database.DatabaseName).Select(c => c.SystemName).ToList());
             List<string> sqls = new();
             foreach (JObject item in database.Data)
             {
                 List<string> values = new();
-                item["tenantId"] = CurrentTenant.Id;
+                item["MixTenantId"] = CurrentTenant.Id;
                 foreach (var col in columns)
                 {
                     values.Add($"'{item.Value<string>(col)}'");
