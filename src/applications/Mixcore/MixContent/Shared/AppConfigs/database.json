@@ -1,9 +1,8 @@
 {
-  "connectionStrings": {
-    "mixAccountConnection": "Server=mixcore.net;port=3306;Database=mixcore.net;User=mixcore.net;Password=mixcore.net#P@ssw0rd;",
-    "mixCmsConnection": "Server=mixcore.net;port=3306;Database=mixcore.net;User=mixcore.net;Password=mixcore.net#P@ssw0rd;",
-    "mixDbConnection": "Server=mixcore.net;port=3306;Database=mixcore.net;User=mixcore.net;Password=mixcore.net#P@ssw0rd;"
+  "ConnectionStrings": {
+    "MixAccountConnection": null,
+    "MixCmsConnection": null
   },
-  "clearDbPool": false,
-  "databaseProvider": "MySQL"
+  "ClearDbPool": false,
+  "DatabaseProvider": "SQLITE"
 }

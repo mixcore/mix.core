@@ -11,6 +11,5 @@
   "Store": "https://store.mixcore.org",
   "UniversalPortal": "https://universal.mixcore.net",
   "UniversalPortalDev": "https://mix-portal-angular.vercel.app",
-  "LocalPortalDev": "http://localhost:4200",
-  "LocalPortal": "https://localhost:5010",
+  "LocalPortalDev": "http://localhost:4200"
 }

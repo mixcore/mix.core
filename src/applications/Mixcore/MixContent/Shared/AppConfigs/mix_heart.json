@@ -1,1 +1,7 @@
-{"cacheConnection":"Server=localhost;port=3306;Database=mixcore.net;User=mixcore.net;Password=mixcore.net#P@ssw0rd;","isCache":true,"cacheMode":"JSON","databaseProvider":"MySQL","cacheFolder":"MixContent/cache"}
+﻿{
+  "isCache": true,
+  "connectionString": "Data Source=MixContent\\mix-cms.db",
+  "databaseProvider": "SQLITE",
+  "cacheMode": "JSON",
+  "cacheFolder": "MixContent/cache"
+}

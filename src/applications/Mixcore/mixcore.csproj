@@ -75,7 +75,6 @@
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
-		<ProjectReference Include="..\..\services\mix.universal\mix.universal.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Views\_ViewImports.cshtml">

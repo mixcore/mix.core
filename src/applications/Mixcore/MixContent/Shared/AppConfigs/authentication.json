@@ -9,7 +9,7 @@
     "TokenType": "Bearer",
     "Audience": "mix-core",
     "ClientId": "00000000-0000-0000-0000-000000000000",
-    "SecretKey": "a982a665a1344341bb6681ffdf180fb5",
+    "SecretKey": "346e9a69acb64ec788446be149850234",
     "Issuer": "mix-core",
     "Issuers": "mix-core",
     "Audiences": "mix-core",

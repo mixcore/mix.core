@@ -1,8 +1,1 @@
-{
-  "isInit": false,
-  "enableOcelot": false,
-  "isHttps": false,
-  "initStatus": "InitTheme",
-  "responseCache": 5,
-  "apiEncryptKey": "YVE3d2thM0h0QVg2Vk4zcms5VzloZz09LGJTSVN4ajltWktpV3JqcEtLRnJ6UXFBdTl0dGt4c2gydnhoOVpROWRIUUk9"
-}
+{"isInit":true,"isHttps":false,"responseCache":5,"apiEncryptKey":"cXhrV1pTL1VQSEdHL1B2YlQybFYxZz09LHR6U1plMldzQUlTOGJSMFNyNnRKZm5JWnBhWXd4STBhNzhzL0psenBDaUE9","enableOcelot":false,"initStatus":"Blank"}
