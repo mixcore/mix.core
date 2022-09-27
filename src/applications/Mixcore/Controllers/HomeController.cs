@@ -3,6 +3,9 @@ using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
+using System;
+using System.Linq.Expressions;
+using Mix.Heart.Extensions;
 
 namespace Mixcore.Controllers
 {
@@ -44,42 +47,41 @@ namespace Mixcore.Controllers
         }
 
         [Route("")]
-        public async Task<IActionResult> Index(string seoName, string keyword)
+        public async Task<IActionResult> Index([FromRoute] string seoName)
         {
             if (!isValid)
             {
                 return Redirect(_redirectUrl);
             }
-            return await Home();
+            var home = await LoadPage(seoName);
+            return View(home);
         }
 
-        protected async Task<IActionResult> Home()
+        private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
-            // Home Page
             var pageRepo = PageContentViewModel.GetRepository(_uow);
-            var page = await pageRepo.GetFirstAsync(
-                    p => p.MixTenantId == CurrentTenant.Id
-                    && p.Specificulture == Culture
-                    && p.Type == MixPageType.Home);
+            Expression<Func<MixPageContent, bool>> predicate = p => p.MixTenantId == CurrentTenant.Id
+                    && p.Specificulture == Culture;
+            predicate = predicate.AndAlsoIf(string.IsNullOrEmpty(seoName), m => m.Type == MixPageType.Home);
+            predicate = predicate.AndAlsoIf(!string.IsNullOrEmpty(seoName), m => m.SeoName == seoName);
+            var page = await pageRepo.GetFirstAsync(predicate);
 
-            if (page == null)
+            if (page != null)
             {
-                return NotFound();
+                await page.ExpandView();
+                ViewData["Tenant"] = CurrentTenant;
+                ViewData["Title"] = page.SeoTitle;
+                ViewData["Description"] = page.SeoDescription;
+                ViewData["Keywords"] = page.SeoKeywords;
+                ViewData["Image"] = page.Image;
+                ViewData["Layout"] = page.Layout?.FilePath;
+                ViewData["BodyClass"] = page.ClassName;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
+                ViewData["Keyword"] = page.SeoKeywords;
+
+                ViewBag.viewMode = MixMvcViewMode.Page;
             }
-
-            await page.ExpandView();
-            ViewData["Tenant"] = CurrentTenant;
-            ViewData["Title"] = page.SeoTitle;
-            ViewData["Description"] = page.SeoDescription;
-            ViewData["Keywords"] = page.SeoKeywords;
-            ViewData["Image"] = page.Image;
-            ViewData["Layout"] = page.Layout?.FilePath;
-            ViewData["BodyClass"] = page.ClassName;
-            ViewData["ViewMode"] = MixMvcViewMode.Page;
-            ViewData["Keyword"] = page.SeoKeywords;
-
-            ViewBag.viewMode = MixMvcViewMode.Page;
-            return View(page);
+            return page;
         }
     }
 }
