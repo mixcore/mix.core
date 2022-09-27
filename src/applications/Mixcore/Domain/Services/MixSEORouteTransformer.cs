@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
 using Mix.Database.Services;
-using Mix.Lib.Services;
 using Mix.Shared.Services;
 
 namespace Mixcore.Domain.Services
@@ -9,14 +8,10 @@ namespace Mixcore.Domain.Services
     public class MixSEORouteTransformer : DynamicRouteValueTransformer
     {
         private readonly DatabaseService _databaseService;
-        private readonly CultureService _cultureService;
-
         public MixSEORouteTransformer(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration, CultureService cultureService)
+            IHttpContextAccessor httpContextAccessor)
         {
             _databaseService = new(httpContextAccessor);
-            _cultureService = cultureService;
         }
 
         public override ValueTask<RouteValueDictionary> TransformAsync(
@@ -29,36 +24,20 @@ namespace Mixcore.Domain.Services
 
             RouteValueDictionary result = values;
 
-            var keys = values.Keys.ToList();
+            var keys = values.Keys.ToArray();
 
             var language = (string)values[keys[0]];
-            var keyIndex = 1;
-            if (_cultureService.CheckValidCulture(language))
+            string seoName = string.Empty;
+            if (keys.Count() > 1)
             {
-                keyIndex -= 1;
-                result["controller"] = "home";
-                result["culture"] = language;
-                result["action"] = "Index";
-                result["keyword"] = "aaa";
-                result["seoName"] = "test";
+                seoName = string.Join('/', values.Values.Skip(1));
             }
+            result["controller"] = "home";
+            result["culture"] = language;
+            result["action"] = "Index";
+            result["seoName"] = seoName.TrimStart('/');
 
             return ValueTask.FromResult(result);
-        }
-
-        private string GetRouteValue(RouteValueDictionary values, List<string> keys, ref int keyIndex)
-        {
-            string value = keys.Count > keyIndex
-               ? values[keys[keyIndex]]?.ToString()
-               : string.Empty;
-            keyIndex += 1;
-            return value;
-        }
-
-        private bool IsValidController(string controller)
-        {
-            string[] controllers = { "post", "page", "module", "data" };
-            return controllers.Contains(controller?.ToLower());
         }
     }
 }
