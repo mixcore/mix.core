@@ -26,7 +26,6 @@ namespace Mix.Common.Controllers
         protected readonly MixCmsContext _context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
-        protected readonly CultureService _cultureService;
         private readonly AuthConfigService _authConfigService;
         private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
@@ -38,7 +37,6 @@ namespace Mix.Common.Controllers
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService, AuthConfigService authConfigService,
-            CultureService cultureService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
             : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
         {
@@ -49,7 +47,6 @@ namespace Mix.Common.Controllers
             _langRepo = MixLanguageContentViewModel.GetRepository(_uow);
             _routeProvider = routeProvider;
             _authConfigService = authConfigService;
-            _cultureService = cultureService;
             _applicationLifetime = applicationLifetime;
         }
 
