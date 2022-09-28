@@ -8,7 +8,7 @@ namespace Mix.Lib.Controllers
 {
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class MixAutoGenerateRestApiController<TView, TDbContext, TEntity, TPrimaryKey>
-        : MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
+        : MixRestfulApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
@@ -19,12 +19,11 @@ namespace Mix.Lib.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
         {
         }
     }

@@ -29,11 +29,10 @@ namespace Mix.Lib.Base
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TDbContext context,
             IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _context = context;
             _uow = new(_context);

@@ -9,7 +9,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize($"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
     public class MixDatabaseController
-        : MixRestApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
+        : MixRestfulApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
         private readonly ApplicationLifetime _applicationLifetime;
         private MixDbService _mixDbService;
@@ -18,12 +18,11 @@ namespace Mix.Portal.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService, ApplicationLifetime applicationLifetime)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _mixDbService = mixDbService;
             _applicationLifetime = applicationLifetime;

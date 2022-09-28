@@ -5,7 +5,7 @@ namespace Mix.Storage.Controllers
 {
     [Route("api/v2/rest/mix-storage")]
     [ApiController]
-    public class StorageController : MixRestApiControllerBase<MixMediaViewModel, MixCmsContext, MixMedia, Guid>
+    public class StorageController : MixRestfulApiControllerBase<MixMediaViewModel, MixCmsContext, MixMedia, Guid>
     {
         private MixStorageService _storageService;
 
@@ -14,11 +14,10 @@ namespace Mix.Storage.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
+            IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
         {
             _storageService = storageService;
         }

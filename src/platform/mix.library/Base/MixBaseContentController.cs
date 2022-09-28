@@ -8,7 +8,7 @@ namespace Mix.Portal.Controllers
 {
     [MixAuthorize]
     public abstract class MixBaseContentController<TView, TEntity, TPrimaryKey>
-        : MixRestApiControllerBase<TView, MixCmsContext, TEntity, TPrimaryKey>
+        : MixRestfulApiControllerBase<TView, MixCmsContext, TEntity, TPrimaryKey>
         where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : MultilingualContentViewModelBase<MixCmsContext, TEntity, TPrimaryKey, TView>
@@ -26,12 +26,11 @@ namespace Mix.Portal.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _contentType = contentType;
             _cmsUOW = cmsUOW;

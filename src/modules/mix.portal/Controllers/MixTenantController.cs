@@ -13,7 +13,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize]
     public class MixTenantController
-        : MixRestApiControllerBase<MixTenantViewModel, MixCmsContext, MixTenant, int>
+        : MixRestfulApiControllerBase<MixTenantViewModel, MixCmsContext, MixTenant, int>
     {
         private readonly TenantUserManager _userManager;
         private readonly MixCmsAccountContext _accContext;
@@ -22,14 +22,13 @@ namespace Mix.Portal.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             TenantUserManager userManager,
             MixCmsAccountContext accContext,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;
