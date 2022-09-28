@@ -254,6 +254,5 @@ src/applications/Mixcore/MixContent/*.db
 src/applications/Mixcore/MixContent/*.db-shm
 src/applications/Mixcore/MixContent/*.db-wal
 src/applications/Mixcore/logs/
-src/Mixcore.sln
 
 src/applications/Mixcore/MixContent/
