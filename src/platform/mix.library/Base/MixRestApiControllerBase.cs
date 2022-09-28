@@ -4,40 +4,52 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
 using Mix.Lib.Dtos;
+using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using System.Reflection;
 
 namespace Mix.Lib.Base
 {
-    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
-    public class MixRestApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
-        : MixQueryApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
+    public class MixRestHandlerApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
+        : MixApiControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
+        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
+        protected readonly TDbContext _context;
+        protected bool _forbidden;
+        protected UnitOfWorkInfo _uow;
+        protected UnitOfWorkInfo _cacheUOW;
+        protected MixCacheDbContext _cacheDbContext;
+        protected MixCacheService _cacheService;
 
-        public MixRestApiControllerBase(
-            IHttpContextAccessor httpContextAccessor,
+        protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
+
+        public MixRestHandlerApiControllerBase(
+             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
+            _context = (TDbContext)uow.ActiveDbContext;
+            _uow = uow;
+
+            _cacheDbContext = (MixCacheDbContext)cacheUOW.ActiveDbContext;
+            _cacheUOW = cacheUOW;
+            _cacheService = new();
+            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
 
+        #region Command Handlers
 
-        #region Routes
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<TView>> Create([FromBody] TView data)
+        protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
             if (data == null)
             {
@@ -52,114 +64,6 @@ namespace Mix.Lib.Base
                 });
             }
             data.SetUowInfo(_uow);
-            var id = await CreateHandlerAsync(data);
-            var result = await GetById(id);
-            return Ok(result);
-        }
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(TPrimaryKey id, [FromBody] TView data)
-        {
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
-            if (id.ToString() != currentId)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
-            }
-            data.SetUowInfo(_uow);
-            await UpdateHandler(id, data);
-            var result = await GetById(id);
-            return Ok(result);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(TPrimaryKey id)
-        {
-            var data = await _repository.GetSingleAsync(id);
-            if (data != null)
-            {
-                data.SetUowInfo(_uow);
-                await DeleteHandler(data);
-                return Ok(id);
-            }
-            throw new MixException(MixErrorStatus.NotFound, "Not Found");
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
-        {
-            var data = await _repository.GetSingleAsync(id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-            data.SetUowInfo(_uow);
-            await PatchHandler(id, data, properties);
-            var result = await GetById(id);
-            return Ok(result);
-        }
-
-
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost("save-many")]
-        public async Task<ActionResult> SaveMany([FromBody] List<TView> data)
-        {
-            if (data == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Null Object");
-            }
-            foreach (var item in data)
-            {
-                item.SetUowInfo(_uow);
-            }
-            await SaveManyHandler(data);
-            return Ok();
-        }
-
-
-        [HttpPut("update-priority/{id}")]
-        public async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
-        {
-            var data = await _repository.GetSingleAsync(dto.Id);
-            if (data == null)
-            {
-                return NotFound();
-            }
-
-            var min = Math.Min(data.Priority, dto.Priority);
-            var max = Math.Max(data.Priority, dto.Priority);
-            var query = await _repository.GetListAsync(m => !m.Id.Equals(dto.Id) && m.Priority >= min & m.Priority <= max);
-            int start = min;
-            if (dto.Priority == min)
-            {
-                data.Priority = dto.Priority;
-                start++;
-            }
-            foreach (var item in query.OrderBy(m => m.Priority))
-            {
-                item.Priority = start;
-                await item.SaveAsync();
-                start++;
-            }
-            if (dto.Priority == max)
-            {
-                data.Priority = start;
-            }
-            await data.SaveAsync();
-            return Ok();
-        }
-
-
-
-
-        #endregion Routes
-
-        #region Handlers
-
-        protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
-        {
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
             var id = await data.SaveAsync();
@@ -169,6 +73,12 @@ namespace Mix.Lib.Base
 
         protected virtual async Task UpdateHandler(TPrimaryKey id, TView data)
         {
+            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
+            if (id.ToString() != currentId)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
+            }
+            data.SetUowInfo(_uow);
             await data.SaveAsync();
             await _cacheService.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
@@ -195,6 +105,57 @@ namespace Mix.Lib.Base
             {
                 await item.SaveAsync();
             }
+        }
+
+        #endregion
+
+        #region Query Handlers
+        protected virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        {
+            var searchRequest = BuildSearchRequest(req);
+            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+        }
+
+        protected virtual ActionResult<PagingResponseModel<TView>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
+        {
+            if (!string.IsNullOrEmpty(req.Columns))
+            {
+                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
+            }
+
+            if (!string.IsNullOrEmpty(req.Columns))
+            {
+                List<object> objects = new List<object>();
+                foreach (var item in result.Items)
+                {
+                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
+                }
+                return Ok(new PagingResponseModel<object>()
+                {
+                    Items = objects,
+                    PagingData = result.PagingData
+                });
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
+        {
+            if (!req.PageSize.HasValue)
+            {
+                req.PageSize = CurrentTenant.Configurations.MaxPageSize;
+            }
+
+            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, Request);
+        }
+
+        protected virtual async Task<TView> GetById(TPrimaryKey id)
+        {
+            return await _repository.GetSingleAsync(id);
         }
 
         #endregion

@@ -36,7 +36,6 @@ namespace Mix.Lib.Base
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService) : base()
         {
@@ -45,7 +44,6 @@ namespace Mix.Lib.Base
             _configuration = configuration;
             _mixService = mixService;
             _translator = translator;
-            _cultureRepository = cultureRepository;
             _mixIdentityService = mixIdentityService;
             _queueService = queueService;
         }

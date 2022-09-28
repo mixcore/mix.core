@@ -33,7 +33,6 @@ namespace Mix.Tenancy.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             InitCmsService initCmsService,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
@@ -42,7 +41,7 @@ namespace Mix.Tenancy.Controllers
             QuartzService quartzService,
             HttpService httpService, IHubContext<MixThemeHub> hubContext = null
             )
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
 
             _initCmsService = initCmsService;

@@ -8,8 +8,9 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
     public class MixCultureController
-        : MixRestApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
+        : MixRestfulApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
     {
+        private CultureService _cultureService;
         private CloneCultureService _cloneCultureService;
         public MixCultureController(
             CloneCultureService cloneCultureService,
@@ -17,14 +18,14 @@ namespace Mix.Portal.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            IQueueService<MessageQueueModel> queueService, CultureService cultureService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
             _cloneCultureService = cloneCultureService;
+            _cultureService = cultureService;
         }
 
         #region Routes
@@ -39,8 +40,15 @@ namespace Mix.Portal.Controllers
             if (result > 0)
             {
                 await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Configurations.DefaultCulture, data.Specificulture);
+                _cultureService.LoadCultures((MixCmsContext)_uow.ActiveDbContext);
             }
             return result;
+        }
+
+        protected override async Task DeleteHandler(MixCultureViewModel data)
+        {
+            await base.DeleteHandler(data);
+            _cultureService.LoadCultures((MixCmsContext)_uow.ActiveDbContext);
         }
 
         #endregion

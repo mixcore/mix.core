@@ -22,14 +22,13 @@ namespace Mix.Common.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository,
             MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }

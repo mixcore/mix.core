@@ -6,19 +6,18 @@ namespace Mix.Portal.Controllers
     [ApiController]
     [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
     public class MixTemplateController
-        : MixRestApiControllerBase<MixTemplateViewModel, MixCmsContext, MixTemplate, int>
+        : MixRestfulApiControllerBase<MixTemplateViewModel, MixCmsContext, MixTemplate, int>
     {
         public MixTemplateController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
 
         }

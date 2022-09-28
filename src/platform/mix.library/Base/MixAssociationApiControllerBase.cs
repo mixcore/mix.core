@@ -9,7 +9,7 @@ using Mix.Lib.Services;
 namespace Mix.Lib.Base
 {
     public class MixAssociationApiControllerBase<TView, TDbContext, TEntity>
-        : MixRestApiControllerBase<TView, TDbContext, TEntity, int>
+        : MixRestfulApiControllerBase<TView, TDbContext, TEntity, int>
         where TDbContext : DbContext
         where TEntity : AssociationBase<int>
         where TView : AssociationViewModelBase<TDbContext, TEntity, int, TView>
@@ -19,12 +19,11 @@ namespace Mix.Lib.Base
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, cultureRepository, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
         {
         }
 
