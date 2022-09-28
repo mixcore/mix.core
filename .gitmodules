@@ -1,4 +1,4 @@
-[submodule "src/framework/mix-heart"]
-	path = src/framework/mix-heart
+[submodule "src/platform/core/mix-heart"]
+	path = src/platform/core/mix-heart
 	url = https://github.com/mixcore/mix.heart.git
 	branch = develop/v2
