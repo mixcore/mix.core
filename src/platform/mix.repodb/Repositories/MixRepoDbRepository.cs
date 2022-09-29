@@ -123,7 +123,7 @@ namespace Mix.RepoDb.Repositories
             {
                 try
                 {
-                    List<Field> selectedFields = null;
+                    List<Field>? selectedFields = null;
                     if (!string.IsNullOrEmpty(fields))
                     {
                         selectedFields = new();

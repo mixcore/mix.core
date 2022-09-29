@@ -121,7 +121,7 @@ namespace Mix.Account.Controllers
         {
             await _idService.Register(model, CurrentTenant.Id, _cmsUOW);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-            var result = _idService.GetAuthData(_cmsUOW.DbContext, user, true, CurrentTenant.Id);
+            var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
             if (result != null)
             {
                 return Ok(result);

@@ -5,6 +5,7 @@
         System,
         Service,
         AdditionalData,
-        GuidAdditionalData
+        GuidAdditionalData,
+        Association
     }
 }

@@ -20,11 +20,11 @@ namespace Mix.Lib.Interfaces
         Task<JObject> ExternalLogin(RegisterExternalBindingModel model);
         Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, MixUserViewModel info, bool isRemember, string aesKey, string rsaPublicKey);
         Task<string> GenerateTokenAsync(MixUser user, MixUserViewModel info, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey, MixAuthenticationConfigurations appConfigs);
-        Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe, int tenantId);
+        Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId);
         string GetClaim(ClaimsPrincipal User, string claimType);
         Task<JObject> GetToken(GetTokenModel model);
         Task<JObject> Login(LoginViewModel model);
-        Task<JObject> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW);
+        Task<MixUser> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW);
         Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto);
         Task<ParsedExternalAccessToken> VerifyExternalAccessToken(MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs);
     }

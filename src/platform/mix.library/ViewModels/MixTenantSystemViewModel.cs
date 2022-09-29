@@ -1,4 +1,5 @@
-﻿using Mix.Lib.Models.Configurations;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Lib.Models.Configurations;
 
 namespace Mix.Lib.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Mix.Lib.ViewModels
         public string Description { get; set; }
 
         public List<MixDomainViewModel> Domains { get; set; } = new();
+        public List<MixCulture> Cultures{ get; set; } = new();
 
         public TenantConfigurationModel Configurations { get; set; }
         #endregion
@@ -41,6 +43,7 @@ namespace Mix.Lib.ViewModels
         public override async Task ExpandView()
         {
             Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
+            Cultures = await Context.MixCulture.Where(m => m.MixTenantId == Id).ToListAsync();
             var srv = new TenantConfigService(SystemName);
             Configurations = srv.AppSettings;
         }
