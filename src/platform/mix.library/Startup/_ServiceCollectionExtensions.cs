@@ -137,9 +137,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IApplicationBuilder UseMixStaticFiles(this IApplicationBuilder app, string contentRootPath)
         {
-            var provider = new FileExtensionContentTypeProvider();
-            app.UseStaticFiles();
             app.UseDefaultFiles();
+            var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".vue"] = "application/text";
 
             app.UseStaticFiles(new StaticFileOptions
@@ -147,6 +146,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 ContentTypeProvider = provider
             });
 
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(contentRootPath, MixFolders.StaticFiles)),
+                RequestPath = "/mix-app"
+            });
             
             app.UseStaticFiles(new StaticFileOptions
             {

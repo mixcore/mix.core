@@ -56,7 +56,6 @@ namespace Mix.Lib.Base
                 _lang = RouteData?.Values[MixRequestQueryKeywords.Specificulture] != null
                     ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
                     : CurrentTenant.Configurations.DefaultCulture;
-                _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
             }
         }
     }

@@ -84,7 +84,7 @@ namespace Mixcore.Controllers
             {
                 string email = info.Principal.FindFirstValue(ClaimTypes.Email);
                 var user = await _userManager.FindByEmailAsync(email);
-                var token = await _idService.GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                 return View(new ExternalLoginResultModel()
                 {
                     Token = token.ToString(Formatting.None),
@@ -104,7 +104,7 @@ namespace Mixcore.Controllers
                 {
                     await _userManager.AddLoginAsync(user, info);
                     await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                    var token = await _idService.GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                    var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                     return View(new ExternalLoginResultModel()
                     {
                         Token = token.ToString(Formatting.None),
@@ -127,7 +127,7 @@ namespace Mixcore.Controllers
                         {
                             _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
                             await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
-                            var token = await _idService.GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                            var token = await _idService.GetAuthData(user, true, CurrentTenant.Id);
                             return View(new ExternalLoginResultModel()
                             {
                                 Token = token.ToString(Formatting.None),

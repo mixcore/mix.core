@@ -68,7 +68,10 @@ namespace Mix.Lib.Base
             //{
             //    Culture = GlobalConfigService.Instance.AppSettings.DefaultCulture;
             //}
-            Culture ??= CurrentTenant.Configurations.DefaultCulture;
+            if (!CurrentTenant.Cultures.Any(m => m.Specificulture == Culture))
+            {
+                Culture = CurrentTenant.Configurations.DefaultCulture;
+            }
 
             // Set CultureInfo
             var cultureInfo = new CultureInfo(Culture);

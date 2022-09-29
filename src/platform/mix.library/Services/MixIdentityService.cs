@@ -81,7 +81,7 @@ namespace Mix.Lib.Services
             _mixService = mixService;
         }
 
-        public async Task<MixUserViewModel> GetUserAsync(Guid userId)
+        public virtual async Task<MixUserViewModel> GetUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user != null)
@@ -92,7 +92,7 @@ namespace Mix.Lib.Services
             }
             return null;
         }
-        public async Task<JObject> Login(LoginViewModel model)
+        public virtual async Task<JObject> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -125,7 +125,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(_cmsContext, user, model.RememberMe, CurrentTenant.Id);
+                return await GetAuthData(user, model.RememberMe, CurrentTenant.Id);
             }
             else
             {
@@ -134,7 +134,7 @@ namespace Mix.Lib.Services
 
         }
 
-        public async Task<JObject> GetAuthData(MixCmsContext context, MixUser user, bool rememberMe, int tenantId)
+        public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
@@ -165,7 +165,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public async Task<JObject> GetToken(GetTokenModel model)
+        public virtual async Task<JObject> GetToken(GetTokenModel model)
         {
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
@@ -179,12 +179,12 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                return await GetAuthData(user, true, CurrentTenant.Id);
             }
             return default;
         }
 
-        public async Task<JObject> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW)
+        public virtual async Task<MixUser> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW)
         {
             var user = new MixUser
             {
@@ -215,7 +215,8 @@ namespace Mix.Lib.Services
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 await CreateUserData(user, model.Data);
-                return await GetAuthData(_cmsContext, user, true, tenantId);
+                return user;
+                //return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
@@ -224,16 +225,19 @@ namespace Mix.Lib.Services
         {
             try
             {
-                MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
-                    .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
-                var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => c.SystemName == m.Name)));
-                int userDataId = await CreateUserInfomation(user, data);
-                foreach (var relation in database.Relationships)
+                if (obj != null)
                 {
-                    if (obj.ContainsKey(relation.DisplayName))
+                    MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
+                        .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
+                    var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => c.SystemName == m.Name)));
+                    int userDataId = await CreateUserInfomation(user, data);
+                    foreach (var relation in database.Relationships)
                     {
-                        var nestedData = obj.Value<JArray>(relation.DisplayName);
-                        await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId);
+                        if (obj.ContainsKey(relation.DisplayName))
+                        {
+                            var nestedData = obj.Value<JArray>(relation.DisplayName);
+                            await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId);
+                        }
                     }
                 }
             }
@@ -358,7 +362,7 @@ namespace Mix.Lib.Services
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                    return await GetAuthData(user, true, CurrentTenant.Id);
                 }
                 // register new account
                 else
@@ -367,7 +371,7 @@ namespace Mix.Lib.Services
 
                     if (!string.IsNullOrEmpty(userName))
                     {
-                        return await Register(new RegisterViewModel()
+                        user = await Register(new RegisterViewModel()
                         {
                             Email = model.Email,
                             PhoneNumber = model.PhoneNumber,
@@ -376,6 +380,8 @@ namespace Mix.Lib.Services
                             ProviderKey = verifiedAccessToken.user_id,
                             Data = model.Data
                         }, CurrentTenant.Id, _cmsUow);
+
+                        return await GetAuthData(user, true, CurrentTenant.Id);
                     }
                     else
                     {
@@ -401,7 +407,7 @@ namespace Mix.Lib.Services
                         var user = await _userManager.FindByEmailAsync(oldToken.Email);
                         await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(_cmsContext, user, true, CurrentTenant.Id);
+                        var token = await GetAuthData(user, true, CurrentTenant.Id);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync();
