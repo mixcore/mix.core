@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-/* Sun Oct 02 2022 12:15:00 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
-=======
-/* Tue Oct 04 2022 11:09:47 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
->>>>>>> Stashed changes
+/* Thu Oct 06 2022 10:56:23 GMT+0700 (Indochina Time) */qr-code .qr-output canvas {
   max-width: 100%; }
 
 fb-login {
@@ -119,6 +115,10 @@ div[dnd-list] .dnd-item.selected {
   background-color: #dff0d8;
   color: #3c763d; }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 hub-messages .nav-link {
   position: relative; }
   hub-messages .nav-link .new-msg-count {
@@ -161,10 +161,6 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-lg,
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
-
-.table-data td.preview {
-  max-width: 120px;
-  overflow: hidden; }
 
 .content {
   width: 100%;
