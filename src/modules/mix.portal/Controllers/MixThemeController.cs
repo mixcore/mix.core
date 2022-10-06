@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Mix.Heart.Constants;
+using Mix.Portal.Domain.Services;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
@@ -101,7 +103,7 @@ namespace Mix.Portal.Controllers
 
         [HttpPost]
         [Route("install-portal")]
-        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme)
+        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme, [FromServices] ThemeService themeService)
         {
             var progress = new Progress<int>();
             var percent = 0;
@@ -119,6 +121,7 @@ namespace Mix.Portal.Controllers
             string folder = $"{MixFolders.WebRootPath}/{MixFolders.PortalApps}/{name}";
             string appfolder = $"{MixFolders.PortalApps}/{name}";
             await _importService.DownloadThemeAsync(theme, progress, _httpService, folder);
+            Thread.Sleep(300);
             var indexFile = MixFileHelper.GetFileByFullName($"{folder}/index.html");
             Regex regex = new("((?<=src=\")|(?<=href=\"))(?!(http[^\\s]+))(.+?)(\\.+?)");
 
@@ -127,7 +130,22 @@ namespace Mix.Portal.Controllers
                 indexFile.Content = regex.Replace(indexFile.Content, $"/{appfolder}/$3$4")
                     .Replace("options['baseHref']", $"'{appfolder}'");
 
+                var activeTheme = await themeService.GetActiveTheme();
+                MixTemplateViewModel template = new(_uow)
+                {
+                    MixThemeId = activeTheme.Id,
+                    FileName = name,
+                    FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{activeTheme.SystemName}/{MixTemplateFolderType.Pages}",
+                    FolderType = MixTemplateFolderType.Pages,
+                    Extension = MixFileExtensions.CsHtml,
+                    Content = "@{Layout = null;}" + indexFile.Content.Replace("@", "@@"),
+                    MixTenantId = CurrentTenant.Id,
+                    Scripts = string.Empty,
+                    Styles = string.Empty
+                };
+                await template.SaveAsync();
             }
+
             MixFileHelper.SaveFile(indexFile);
             return Ok(appfolder);
         }
