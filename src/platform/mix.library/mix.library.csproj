@@ -38,7 +38,7 @@
 		<Using Include="Newtonsoft.Json.Linq" />
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
-		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Service.Services" />
 
 	</ItemGroup>
