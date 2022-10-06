@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -11,6 +12,124 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
         {
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
+
+            migrationBuilder.CreateTable(
+                name: "MixContributor",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsOwner = table.Column<bool>(type: "boolean", nullable: false),
+                    IntContentId = table.Column<int>(type: "integer", nullable: true),
+                    GuidContentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ContentType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixContributor", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixDatabaseAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
+                    ParentDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    ChildDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixDatabaseAssociation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixDatabaseContextDatabaseAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixDatabaseContextDatabaseAssociation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixDiscussion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
+                    ParentId = table.Column<int>(type: "integer", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    IntContentId = table.Column<int>(type: "integer", nullable: true),
+                    GuidContentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ContentType = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixDiscussion", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixPostPostAssociation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixPostPostAssociation", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "MixTenant",
@@ -102,7 +221,46 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     Type = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ReadPermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    WritePermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    MixDatabaseContextDatabaseAssociationId = table.Column<int>(type: "integer", nullable: true),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixDatabase", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MixDatabase_MixDatabaseContextDatabaseAssociation_MixDataba~",
+                        column: x => x.MixDatabaseContextDatabaseAssociationId,
+                        principalTable: "MixDatabaseContextDatabaseAssociation",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MixDatabase_MixTenant_MixTenantId",
+                        column: x => x.MixTenantId,
+                        principalTable: "MixTenant",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixDatabaseContext",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DatabaseProvider = table.Column<string>(type: "varchar(50)", nullable: false),
+                    ConnectionString = table.Column<string>(type: "varchar(250)", nullable: false),
+                    MixDatabaseContextDatabaseAssociationId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
@@ -117,9 +275,14 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MixDatabase", x => x.Id);
+                    table.PrimaryKey("PK_MixDatabaseContext", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MixDatabase_MixTenant_MixTenantId",
+                        name: "FK_MixDatabaseContext_MixDatabaseContextDatabaseAssociation_Mi~",
+                        column: x => x.MixDatabaseContextDatabaseAssociationId,
+                        principalTable: "MixDatabaseContextDatabaseAssociation",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MixDatabaseContext_MixTenant_MixTenantId",
                         column: x => x.MixTenantId,
                         principalTable: "MixTenant",
                         principalColumn: "Id",
@@ -178,6 +341,43 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     table.PrimaryKey("PK_MixLanguage", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MixLanguage_MixTenant_MixTenantId",
+                        column: x => x.MixTenantId,
+                        principalTable: "MixTenant",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MixMedia",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
+                    Extension = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    FileFolder = table.Column<string>(type: "varchar(250)", nullable: true),
+                    FileName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    FileProperties = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    FileSize = table.Column<long>(type: "bigint", nullable: false),
+                    FileType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Tags = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    TargetUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixMedia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MixMedia_MixTenant_MixTenantId",
                         column: x => x.MixTenantId,
                         principalTable: "MixTenant",
                         principalColumn: "Id",
@@ -291,6 +491,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
@@ -334,6 +536,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "text", nullable: true),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -381,7 +585,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     SystemName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
                     MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
@@ -410,6 +613,43 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "MixDatabaseRelationship",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false),
+                    DisplayName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    SourceDatabaseName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    DestinateDatabaseName = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Type = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixDatabaseRelationship", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MixDatabaseRelationship_MixDatabase_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "MixDatabase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MixDatabaseRelationship_MixDatabase_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "MixDatabase",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MixLanguageContent",
                 columns: table => new
                 {
@@ -426,6 +666,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
@@ -466,6 +708,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -498,6 +742,48 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 });
 
             migrationBuilder.CreateTable(
+                name: "MixApplication",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    BaseHref = table.Column<string>(type: "text", nullable: true),
+                    BaseRoute = table.Column<string>(type: "text", nullable: true),
+                    Domain = table.Column<string>(type: "text", nullable: true),
+                    BaseApiUrl = table.Column<string>(type: "text", nullable: true),
+                    TemplateId = table.Column<int>(type: "integer", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    MixDatabaseName = table.Column<string>(type: "text", nullable: true),
+                    MixDataContentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DisplayName = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    MixTenantId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MixApplication", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MixApplication_MixDataContent_MixDataContentId",
+                        column: x => x.MixDataContentId,
+                        principalTable: "MixDataContent",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MixApplication_MixTenant_MixTenantId",
+                        column: x => x.MixTenantId,
+                        principalTable: "MixTenant",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "MixDataContentValue",
                 columns: table => new
                 {
@@ -525,6 +811,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "text", nullable: true),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<Guid>(type: "uuid", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -570,6 +858,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -626,6 +916,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -711,31 +1003,33 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SimpleDataColumns = table.Column<string>(type: "varchar(4000)", nullable: true),
-                    Value = table.Column<string>(type: "varchar(4000)", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    SimpleDataColumns = table.Column<string>(type: "text", nullable: true),
+                    Value = table.Column<string>(type: "text", nullable: true),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
-                    Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Specificulture = table.Column<string>(type: "text", nullable: true),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
-                    Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Excerpt = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
-                    Content = table.Column<string>(type: "text", nullable: true, collation: "und-x-icu"),
-                    LayoutId = table.Column<int>(type: "int", nullable: true),
-                    TemplateId = table.Column<int>(type: "int", nullable: true),
-                    Image = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Source = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    SeoDescription = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
-                    SeoKeywords = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
-                    SeoName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Excerpt = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    LayoutId = table.Column<int>(type: "integer", nullable: true),
+                    TemplateId = table.Column<int>(type: "integer", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    Source = table.Column<string>(type: "text", nullable: true),
+                    SeoDescription = table.Column<string>(type: "text", nullable: true),
+                    SeoKeywords = table.Column<string>(type: "text", nullable: true),
+                    SeoName = table.Column<string>(type: "text", nullable: true),
                     SeoTitle = table.Column<string>(type: "text", nullable: true),
                     PublishedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
                 },
@@ -760,18 +1054,18 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
-                    LeftId = table.Column<int>(type: "integer", nullable: false),
-                    RightId = table.Column<int>(type: "integer", nullable: false)
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -871,6 +1165,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
                     Specificulture = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Icon = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     MixCultureId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -914,18 +1210,18 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
-                    LeftId = table.Column<int>(type: "integer", nullable: false),
-                    RightId = table.Column<int>(type: "integer", nullable: false)
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -942,18 +1238,18 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false),
-                    LeftId = table.Column<int>(type: "integer", nullable: false),
-                    RightId = table.Column<int>(type: "integer", nullable: false)
+                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ChildId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -964,6 +1260,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         principalTable: "MixPageContent",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixApplication_MixDataContentId",
+                table: "MixApplication",
+                column: "MixDataContentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixApplication_MixTenantId",
+                table: "MixApplication",
+                column: "MixTenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixConfiguration_MixTenantId",
@@ -991,6 +1297,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 column: "MixDatabaseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MixDatabase_MixDatabaseContextDatabaseAssociationId",
+                table: "MixDatabase",
+                column: "MixDatabaseContextDatabaseAssociationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MixDatabase_MixTenantId",
                 table: "MixDatabase",
                 column: "MixTenantId");
@@ -999,6 +1310,26 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 name: "IX_MixDatabaseColumn_MixDatabaseId",
                 table: "MixDatabaseColumn",
                 column: "MixDatabaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixDatabaseContext_MixDatabaseContextDatabaseAssociationId",
+                table: "MixDatabaseContext",
+                column: "MixDatabaseContextDatabaseAssociationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixDatabaseContext_MixTenantId",
+                table: "MixDatabaseContext",
+                column: "MixTenantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixDatabaseRelationship_ChildId",
+                table: "MixDatabaseRelationship",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixDatabaseRelationship_ParentId",
+                table: "MixDatabaseRelationship",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixDataContent_MixCultureId",
@@ -1049,6 +1380,11 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 name: "IX_MixLanguageContent_MixLanguageId",
                 table: "MixLanguageContent",
                 column: "MixLanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MixMedia_MixTenantId",
+                table: "MixMedia",
+                column: "MixTenantId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MixModule_MixTenantId",
@@ -1169,7 +1505,22 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "MixApplication");
+
+            migrationBuilder.DropTable(
                 name: "MixConfigurationContent");
+
+            migrationBuilder.DropTable(
+                name: "MixContributor");
+
+            migrationBuilder.DropTable(
+                name: "MixDatabaseAssociation");
+
+            migrationBuilder.DropTable(
+                name: "MixDatabaseContext");
+
+            migrationBuilder.DropTable(
+                name: "MixDatabaseRelationship");
 
             migrationBuilder.DropTable(
                 name: "MixDataContentAssociation");
@@ -1178,10 +1529,16 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 name: "MixDataContentValue");
 
             migrationBuilder.DropTable(
+                name: "MixDiscussion");
+
+            migrationBuilder.DropTable(
                 name: "MixDomain");
 
             migrationBuilder.DropTable(
                 name: "MixLanguageContent");
+
+            migrationBuilder.DropTable(
+                name: "MixMedia");
 
             migrationBuilder.DropTable(
                 name: "MixModuleData");
@@ -1194,6 +1551,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             migrationBuilder.DropTable(
                 name: "MixPagePostAssociation");
+
+            migrationBuilder.DropTable(
+                name: "MixPostPostAssociation");
 
             migrationBuilder.DropTable(
                 name: "MixUrlAlias");
@@ -1242,6 +1602,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
             migrationBuilder.DropTable(
                 name: "MixDatabase");
+
+            migrationBuilder.DropTable(
+                name: "MixDatabaseContextDatabaseAssociation");
 
             migrationBuilder.DropTable(
                 name: "MixTenant");

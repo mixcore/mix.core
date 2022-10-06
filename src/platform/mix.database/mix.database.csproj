@@ -48,6 +48,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\Cms\PostgresqlMixCms\" />
     <Folder Include="Migrations\Quartz\" />
     <Folder Include="Migrations\Cms\SqliteMixCms\" />
     <Folder Include="Migrations\Cms\SqlServerMixCms\" />
