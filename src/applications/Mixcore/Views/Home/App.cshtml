@@ -1,0 +1,46 @@
+﻿@model ApplicationViewModel
+@{
+    Layout = null;
+}
+
+<input type="hidden" id="view-type" value="Page" />
+<input type="hidden" id="view-id" value="@Model.Id" />
+@if (!string.IsNullOrEmpty(Model.Template?.FilePath))
+{
+    try
+    {
+        <partial name="@Model.Template.FilePath" model="@Model" />
+    }
+    catch (System.InvalidOperationException invalidOperationException)
+    {
+        <p class="danger text-center has-error">Unable load template @Model.Template.FilePath with Exception detail below:</p>
+        <code>
+            @invalidOperationException
+        </code>
+    }
+    catch (Exception ex)
+    {
+        <p class="danger text-center has-error">Unable load template @Model.Template.FilePath with Exception detail below:</p>
+        <code>
+            @ex
+        </code>
+    }
+}
+else
+{
+    <section class="container">
+        <h1>Please choose template</h1>
+    </section>
+}
+@section Seo{
+<title>@Model.Title</title>
+<meta property="og:type" content="post" />
+<!--points to the regular HTML version of the AMP HTML document or to itself if no such HTML version exists-->
+}
+@section Styles{
+    @Html.Raw(Model.Template?.Styles)
+}
+@section Scripts{
+    <!-- end master scripts -->
+    @Html.Raw(Model.Template?.Scripts)
+}

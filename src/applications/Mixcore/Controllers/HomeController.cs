@@ -6,6 +6,7 @@ using Mixcore.Domain.Bases;
 using System;
 using System.Linq.Expressions;
 using Mix.Heart.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Mixcore.Controllers
 {
@@ -49,14 +50,18 @@ namespace Mixcore.Controllers
         [Route("{seoName?}")]
         public async Task<IActionResult> Index([FromRoute] string seoName)
         {
-            
+
             if (!isValid)
             {
                 return Redirect(_redirectUrl);
             }
             var page = await LoadPage(seoName);
-            return page != null ? View(page) : NotFound();
+            if (page != null) {
+                return View(page); 
+            }
+            return await LoadAlias(seoName);
         }
+
 
         private async Task<PageContentViewModel> LoadPage(string seoName = null)
         {
@@ -83,6 +88,50 @@ namespace Mixcore.Controllers
                 ViewBag.viewMode = MixMvcViewMode.Page;
             }
             return page;
+        }
+        private async Task<IActionResult> LoadAlias(string seoName)
+        {
+            var alias = await MixUrlAliasViewModel.GetRepository(_uow).GetSingleAsync(m => m.Alias == seoName);
+            if (alias != null)
+            {
+                switch (alias.Type)
+                {
+                    case MixUrlAliasType.Page:
+                        var page = await PageContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        if (page != null)
+                        {
+                            await page.ExpandView();
+                            ViewData["Tenant"] = CurrentTenant;
+                            ViewData["Title"] = page.SeoTitle;
+                            ViewData["Description"] = page.SeoDescription;
+                            ViewData["Keywords"] = page.SeoKeywords;
+                            ViewData["Image"] = page.Image;
+                            ViewData["Layout"] = page.Layout?.FilePath;
+                            ViewData["BodyClass"] = page.ClassName;
+                            ViewData["ViewMode"] = MixMvcViewMode.Page;
+                            ViewData["Keyword"] = page.SeoKeywords;
+
+                            ViewBag.viewMode = MixMvcViewMode.Page;
+                            return View("Page", page);
+                        }
+                        break;
+                    case MixUrlAliasType.Post:
+                        var post = await PostContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        if (post != null)
+                            return View("Post", post);
+                        break;
+                    case MixUrlAliasType.Module:
+                        break;
+                    case MixUrlAliasType.ModuleData:
+                        break;
+                    case MixUrlAliasType.MixApplication:
+                        var app = await ApplicationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
+                        if (app != null)
+                            return View("App", app);
+                        break;
+                }
+            }
+            return NotFound();
         }
     }
 }

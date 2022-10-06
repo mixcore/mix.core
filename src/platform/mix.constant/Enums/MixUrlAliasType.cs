@@ -5,6 +5,7 @@
         Page,
         Post,
         Module,
-        ModuleData
+        ModuleData,
+        MixApplication
     }
 }

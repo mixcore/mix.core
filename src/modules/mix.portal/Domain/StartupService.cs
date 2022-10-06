@@ -12,6 +12,7 @@ namespace Mix.Portal
             services.AddScoped<MixThemeImportService>();
             services.TryAddScoped<CloneCultureService>();
             services.TryAddScoped<ThemeService>();
+            services.TryAddScoped<MixApplicationService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

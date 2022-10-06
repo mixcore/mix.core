@@ -4,6 +4,7 @@
     {
         Post,
         Page,
-        Module
+        Module,
+        Application
     }
 }

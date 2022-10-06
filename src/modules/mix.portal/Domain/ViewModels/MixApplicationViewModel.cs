@@ -1,4 +1,6 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace Mix.Portal.Domain.ViewModels
 {
     public class MixApplicationViewModel
         : TenantDataViewModelBase<MixCmsContext, MixApplication, int, MixApplicationViewModel>
@@ -37,6 +39,16 @@
         #endregion
 
         #region Overrides
+
+        public override async Task Validate()
+        {
+            await base.Validate();
+            if (!Context.MixApplication.Any(m => m.BaseRoute == BaseRoute && m.MixTenantId == MixTenantId && m.Id != Id))
+            {
+                IsValid = false;
+                Errors.Add(new("BaseRoute existed"));
+            }
+        }
 
         #endregion
     }
