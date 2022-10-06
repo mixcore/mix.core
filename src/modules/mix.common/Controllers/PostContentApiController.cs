@@ -35,7 +35,7 @@ namespace Mix.Common.Controllers
 
 
         [HttpPost("filter")]
-        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] SearchPostRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(

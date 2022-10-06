@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Constant.Constants;
-using Mix.Constant.Dtos;
+using Mix.Shared.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.Constant.Dtos
+namespace Mix.Shared.Dtos
 {
     public class SearchMixDbRequestDto : SearchRequestDto
     {

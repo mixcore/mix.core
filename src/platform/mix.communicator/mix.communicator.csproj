@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
-		<Using Include="Mix.Constant.Dtos" />
+		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />

@@ -12,7 +12,6 @@
 		<Using Include="Mix.Heart.Exceptions" />
 		<Using Include="Mix.Constant.Constants" />
 		<Using Include="Mix.Constant.Enums" />
-		<Using Include="Mix.Constant.Dtos" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
