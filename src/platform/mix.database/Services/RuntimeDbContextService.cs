@@ -32,7 +32,7 @@ using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 using Mix.Shared.Services;
 using Mix.Database.Repositories;
 using Microsoft.AspNetCore.Http;
-
+using Mix.Service.Services;
 // Ref: https://medium.com/@zaikinsr/roslyn-ef-core-runtime-dbcontext-constructing-285a9d67bc87
 namespace Mix.Database.Services
 {
@@ -81,7 +81,8 @@ namespace Mix.Database.Services
                                              diagnostic.Severity == DiagnosticSeverity.Error);
 
                     var error = failures.FirstOrDefault();
-                    throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+                    //throw new Exception($"{error?.Id}: {error?.GetMessage()}");
+                    MixService.LogException(new Exception($"{error?.Id}: {error?.GetMessage()}"));
                 }
                 _assemblyLoadContext = new AssemblyLoadContext("DataContext", isCollectible: true);
 
@@ -155,6 +156,10 @@ namespace Mix.Database.Services
                     ReplaceEntityNaming(databaseNames, item, ref contextFileCode);
                 }
                 sourceFiles.Add(item.Code);
+            }
+            if (_databaseService.DatabaseProvider == MixDatabaseProvider.PostgreSQL)
+            {
+                contextFileCode = $"using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;{contextFileCode}";
             }
             sourceFiles.Add(contextFileCode);
             return sourceFiles;
