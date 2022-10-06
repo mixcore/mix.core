@@ -18,6 +18,78 @@ namespace Mix.Database.Migrations.SqliteMixCms
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BaseApiUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BaseHref")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BaseRoute")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Domain")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("MixDataContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MixDatabaseName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixDataContentId");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixApplication");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
@@ -2563,6 +2635,23 @@ namespace Mix.Database.Migrations.SqliteMixCms
                     b.HasIndex("MixTenantId");
 
                     b.ToTable("MixUrlAlias");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
+                        .WithMany()
+                        .HasForeignKey("MixDataContentId");
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDataContent");
+
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>

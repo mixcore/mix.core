@@ -23,6 +23,80 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BaseApiUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BaseHref")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BaseRoute")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Domain")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("MixDataContentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MixDatabaseName")
+                        .HasColumnType("text");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixDataContentId");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixApplication");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.Property<int>("Id")
@@ -2602,6 +2676,23 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     b.HasIndex("MixTenantId");
 
                     b.ToTable("MixUrlAlias");
+                });
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
+                        .WithMany()
+                        .HasForeignKey("MixDataContentId");
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDataContent");
+
+                    b.Navigation("MixTenant");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
