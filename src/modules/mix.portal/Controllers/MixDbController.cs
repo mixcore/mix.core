@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Repositories;
 using Mix.Heart.Helpers;
 using Mix.Lib.Attributes;
+using Humanizer;
 
 namespace Mix.Portal.Controllers
 {
@@ -20,9 +21,9 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixApiControllerBase
     {
-        private const string createdDateFieldName = "createdDateTime";
-        private const string idFieldName = "id";
-        private const string parentIdFieldName = "parentId";
+        private const string createdDateFieldName = "CreatedDateTime";
+        private const string idFieldName = "Id";
+        private const string parentIdFieldName = "ParentId";
         private const string childIdFieldName = "ChildId";
         private const string tenantIdFieldName = "MixTenantId";
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
@@ -122,7 +123,7 @@ namespace Mix.Portal.Controllers
             dynamic obj = await _repository.GetSingleByParentAsync(parentType, parentId);
             if (obj != null)
             {
-                var data = JObject.FromObject(obj);
+                var data = ReflectionHelper.ParseObject(obj);
                 var database = await GetMixDatabase();
                 foreach (var item in database.Relationships)
                 {
@@ -153,8 +154,13 @@ namespace Mix.Portal.Controllers
 
         [PreventDuplicateFormSubmission]
         [HttpPost]
-        public async Task<ActionResult<object>> Create(JObject obj)
+        public async Task<ActionResult<object>> Create(JObject dto)
         {
+            JObject obj = new JObject();
+            foreach (var pr in dto.Properties())
+            {
+                obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+            }
             if (!obj.ContainsKey(createdDateFieldName))
             {
                 obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
@@ -165,13 +171,23 @@ namespace Mix.Portal.Controllers
             }
             var data = await _repository.InsertAsync(obj);
 
-            return data > 0 ? Ok(await _repository.GetSingleAsync(data)) : BadRequest();
+            if (data > 0)
+            {
+                var result = await _repository.GetSingleAsync(data);
+                return Ok(ReflectionHelper.ParseObject(result));
+            }
+            return BadRequest();
         }
 
         [PreventDuplicateFormSubmission]
         [HttpPut("{id}")]
-        public async Task<ActionResult<object>> Update(int id, [FromBody] JObject obj)
+        public async Task<ActionResult<object>> Update(int id, [FromBody] JObject dto)
         {
+            JObject obj = new JObject();
+            foreach (var pr in dto.Properties())
+            {
+                obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+            }
             if (!obj.ContainsKey(tenantIdFieldName))
             {
                 obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));

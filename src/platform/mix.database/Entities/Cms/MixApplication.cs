@@ -5,7 +5,6 @@ namespace Mix.Database.Entities.Cms
 {
     public class MixApplication : TenantEntityBase<int>
     {
-        public string Title { get; set; }
         public string BaseHref { get; set; }
         public string BaseRoute { get; set; }
         public string Domain { get; set; }

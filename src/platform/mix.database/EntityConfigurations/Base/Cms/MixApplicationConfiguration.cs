@@ -6,7 +6,7 @@
         public override void Configure(EntityTypeBuilder<MixApplication> builder)
         {
             base.Configure(builder);
-            builder.Property(e => e.Title)
+            builder.Property(e => e.DisplayName)
                 .HasColumnType($"{Config.String}{Config.MediumLength}")
                 .HasCharSet(Config.CharSet);
             builder.Property(e => e.BaseHref)

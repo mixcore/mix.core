@@ -19,6 +19,7 @@ using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Collections.Generic;
 using System.Data;
+using Mix.Heart.Extensions;
 
 namespace Mix.RepoDb.Repositories
 {
@@ -81,7 +82,7 @@ namespace Mix.RepoDb.Repositories
             using (var connection = CreateConnection())
             {
                 List<OrderField> orderFields = new List<OrderField>() {
-                    new OrderField(pagingRequest.SortBy ?? "id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
+                    new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
                 };
                 var count = (int)connection.Count(_tableName, queryFields);
                 int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
@@ -216,7 +217,7 @@ namespace Mix.RepoDb.Repositories
                     _tableName,
                     new
                     {
-                        id = id
+                        Id = id
                     },
                     commandTimeout: _settings.CommandTimeout,
                     trace: Trace))?.SingleOrDefault();
@@ -228,10 +229,11 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                var obj = entity.ToObject<Dictionary<string, object>>()!;
+                var obj = entity.ToObject<Dictionary<string, object>>();
                 var result = await connection.InsertAsync(
                         _tableName,
                         entity: obj,
+                        fields: null,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
 
@@ -258,7 +260,7 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                if (connection.Exists(_tableName, new { id = entity.Value<int>("id") }))
+                if (connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }))
                 {
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
                     return await connection.UpdateAsync(_tableName, obj,
@@ -273,7 +275,7 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                if (connection.Exists(_tableName, new { id = id }))
+                if (connection.Exists(_tableName, new { Id = id }))
                 {
                     return await connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,

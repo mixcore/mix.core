@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Constants;
 using Mix.Identity.Interfaces;
@@ -12,28 +13,31 @@ namespace Mix.Portal.Domain.Services
 {
     public class MixApplicationService : TenantServiceBase
     {
+        protected readonly IQueueService<MessageQueueModel> _queueService;
         private readonly ThemeService _themeService;
         protected MixIdentityService _mixIdentityService;
         protected readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
         private readonly MixThemeImportService _importService;
-        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService) : base(httpContextAccessor, cmsUOW)
+        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, cmsUOW)
         {
             _hubContext = hubContext;
             _httpService = httpService;
             _importService = importService;
             _mixIdentityService = mixIdentityService;
             _themeService = themeService;
+            _queueService = queueService;
         }
         public async Task<MixApplicationViewModel> Install(MixApplicationViewModel app)
         {
-            string name = SeoHelper.GetSEOString(app.Title);
+            string name = SeoHelper.GetSEOString(app.DisplayName);
             string appFolder = await DownloadPackage(name, app.PackateFilePath);
 
             var template = await CreateTemplate(name, appFolder, app.BaseRoute);
             if (template != null)
             {
                 app.SetUowInfo(_cmsUOW);
+                app.BaseRoute ??= name;
                 app.BaseHref = appFolder;
                 app.MixTenantId = CurrentTenant.Id;
                 app.TemplateId = template.Id;
@@ -54,7 +58,7 @@ namespace Mix.Portal.Domain.Services
                 if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
                 {
                     indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4")
-                        .Replace("options['baseRoute']", $"'{baseRoute}'")
+                        .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
                         .Replace("options['baseHref']", $"'{appFolder}'");
 
                     var activeTheme = await _themeService.GetActiveTheme();
@@ -72,6 +76,7 @@ namespace Mix.Portal.Domain.Services
                         CreatedBy = _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext.User, MixClaims.Username)
                     };
                     await template.SaveAsync();
+                    _queueService.PushMessage(template, MixRestAction.Post.ToString(), true);
                     MixFileHelper.SaveFile(indexFile);
 
                     return template;
