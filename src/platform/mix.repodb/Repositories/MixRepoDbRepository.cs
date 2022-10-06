@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Mix.Constant.Constants;
-using Mix.Constant.Dtos;
+using Mix.Shared.Dtos;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;

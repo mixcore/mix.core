@@ -152,7 +152,7 @@ namespace Mix.Database.Services
                 string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
                 if (databaseNames.Any(m => string.Equals(m, name, StringComparison.OrdinalIgnoreCase)))
                 {
-                    ReplaceSqliteNaming(databaseNames, item, ref contextFileCode);
+                    ReplaceEntityNaming(databaseNames, item, ref contextFileCode);
                 }
                 sourceFiles.Add(item.Code);
             }
@@ -160,7 +160,7 @@ namespace Mix.Database.Services
             return sourceFiles;
         }
 
-        private void ReplaceSqliteNaming(List<string> databaseNames, ScaffoldedFile item, ref string contextFileCode)
+        private void ReplaceEntityNaming(List<string> databaseNames, ScaffoldedFile item, ref string contextFileCode)
         {
             string name = item.Path.Substring(0, item.Path.LastIndexOf('.'));
             string newName = name.ToLower();

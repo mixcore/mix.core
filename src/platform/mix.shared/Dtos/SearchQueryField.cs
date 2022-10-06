@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mix.Constant.Dtos
+namespace Mix.Shared.Dtos
 {
     public class SearchQueryField
     {
