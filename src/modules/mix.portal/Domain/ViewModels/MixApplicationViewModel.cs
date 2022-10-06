@@ -7,7 +7,6 @@ namespace Mix.Portal.Domain.ViewModels
     {
         #region Properties
 
-        public string Title { get; set; }
         public string BaseHref { get; set; }
         public string BaseRoute { get; set; }
         public string Domain { get; set; }
@@ -16,6 +15,7 @@ namespace Mix.Portal.Domain.ViewModels
         public string MixDatabaseName { get; set; }
         public Guid? MixDataContentId { get; set; }
 
+        public string DetailUrl => $"/app/{BaseRoute}";
         public string PackateFilePath { get; set; }
         #endregion
 
@@ -43,7 +43,7 @@ namespace Mix.Portal.Domain.ViewModels
         public override async Task Validate()
         {
             await base.Validate();
-            if (!Context.MixApplication.Any(m => m.BaseRoute == BaseRoute && m.MixTenantId == MixTenantId && m.Id != Id))
+            if (Context.MixApplication.Any(m => m.BaseRoute == BaseRoute && m.MixTenantId == MixTenantId && m.Id != Id))
             {
                 IsValid = false;
                 Errors.Add(new("BaseRoute existed"));
