@@ -51,11 +51,13 @@ namespace Mix.Lib.Base
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
+
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 _lang = RouteData?.Values[MixRequestQueryKeywords.Specificulture] != null
                     ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
                     : CurrentTenant.Configurations.DefaultCulture;
+                _culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == _lang) ?? CurrentTenant.Cultures.FirstOrDefault();
             }
         }
     }

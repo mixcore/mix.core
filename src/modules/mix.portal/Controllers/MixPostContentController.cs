@@ -31,7 +31,7 @@ namespace Mix.Portal.Controllers
         #region Routes
 
         [HttpPost("filter")]
-        public async Task<ActionResult<PagingResponseModel<MixPostContentViewModel>>> Filter([FromBody] SearchPostRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<MixPostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(

@@ -1,6 +1,6 @@
 ﻿using Mix.Heart.Enums;
 
-namespace Mix.Constant.Dtos
+namespace Mix.Shared.Dtos
 {
     public class SearchRequestDto
     {

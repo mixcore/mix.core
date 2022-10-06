@@ -53,8 +53,8 @@ namespace Mixcore.Controllers
             {
                 return Redirect(_redirectUrl);
             }
-            var home = await LoadPage(seoName);
-            return home != null ? View(home) : NotFound();
+            var page = await LoadPage(seoName);
+            return page != null ? View(page) : NotFound();
         }
 
         private async Task<PageContentViewModel> LoadPage(string seoName = null)
