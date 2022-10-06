@@ -5,23 +5,8 @@ using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
 {
-    public class CloneCultureService
+    public class CloneCultureService: TenantServiceBase
     {
-        protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
-        {
-            get
-            {
-                if (_currentTenant == null)
-                {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-                }
-                return _currentTenant;
-            }
-        }
-        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private MixService _mixService;
         private MixCulture _destCulture;
         private MixCulture _srcCulture;
         private Dictionary<int, int> configurationIds = new();
@@ -31,11 +16,9 @@ namespace Mix.Portal.Domain.Services
         private Dictionary<int, int> moduleIds = new();
         private Dictionary<Guid, Guid> dataIds = new();
         private Dictionary<Guid, Guid> valueIds = new();
-        public CloneCultureService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, MixService mixService)
+        public CloneCultureService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+            : base(httpContextAccessor, cmsUOW)
         {
-            _session = httpContextAccessor.HttpContext.Session;
-            _cmsUOW = cmsUOW;
-            _mixService = mixService;
         }
 
         #region Methods

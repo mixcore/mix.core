@@ -57,7 +57,7 @@ namespace Mixcore.Controllers
         }
 
         #region Routes
-        [Route("{id}")]
+        [Route("{id}/{keyword?}")]
         public async Task<IActionResult> Index(int id, string keyword)
         {
             if (isValid)

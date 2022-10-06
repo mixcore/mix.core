@@ -46,9 +46,10 @@ namespace Mixcore.Controllers
             }
         }
 
-        [Route("")]
+        [Route("{seoName?}")]
         public async Task<IActionResult> Index([FromRoute] string seoName)
         {
+            
             if (!isValid)
             {
                 return Redirect(_redirectUrl);

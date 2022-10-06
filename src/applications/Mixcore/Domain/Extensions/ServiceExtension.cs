@@ -53,15 +53,15 @@ namespace Microsoft.Extensions.DependencyInjection
                 //    pattern: "portal-apps/{appFolder:" + urlPathPattern + "}/{param1?}/{param2?}/{param3?}/{param4?}");
                 routes.MapFallbackToFile("/index.html");
             });
-            app.MapWhen(
-               context =>
-               {
-                   var path = context.Request.Path.Value.ToLower();
-                   return
-                       path.StartsWith("/mix-app") ||
-                       path.StartsWith("/mix-content");
-               },
-               config => config.UseStaticFiles());
+            //app.MapWhen(
+            //   context =>
+            //   {
+            //       var path = context.Request.Path.Value.ToLower();
+            //       return
+            //           path.StartsWith("/mix-app") ||
+            //           path.StartsWith("/mix-content");
+            //   },
+            //   config => config.UseStaticFiles());
 
             return app;
         }
