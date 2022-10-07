@@ -747,7 +747,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Title = table.Column<string>(type: "text", nullable: true),
                     BaseHref = table.Column<string>(type: "text", nullable: true),
                     BaseRoute = table.Column<string>(type: "text", nullable: true),
                     Domain = table.Column<string>(type: "text", nullable: true),

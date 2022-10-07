@@ -80,9 +80,6 @@ namespace Mix.Database.Migrations
                     b.Property<int?>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MixDataContentId");
