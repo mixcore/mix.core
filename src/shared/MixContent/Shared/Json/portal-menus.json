@@ -38,6 +38,24 @@
       ]
     },
     {
+      "title": "Applications",
+      "path": "#",
+      "icon": "mi mi-ReadingList",
+      "svg": "tabler-icon-notebook.svg",
+      "subMenus": [
+        {
+          "title": "Create Applications",
+          "icon": "mi mi-Add",
+          "path": "/admin/mix-application/create"
+        },
+        {
+          "path": "/admin/mix-application/list",
+          "title": "List Applications",
+          "icon": "mi mi-List"
+        }
+      ]
+    },
+    {
       "title": "Posts",
       "path": "#",
       "icon": "mi mi-ReadingList",
@@ -456,6 +474,26 @@
           "path": "/admin/tenant/details/:id",
           "templatePath": "/mix-app/views/app-portal/pages/tenant/details.html",
           "controller": "TenantController"
+        }
+      ]
+    },
+    {
+      "cate": "application",
+      "items": [
+        {
+          "path": "/admin/mix-application/create",
+          "templatePath": "/mix-app/views/app-portal/pages/application/details.html",
+          "controller": "MixApplicationController"
+        },
+        {
+          "path": "/admin/mix-application/list",
+          "templatePath": "/mix-app/views/app-portal/pages/application/list.html",
+          "controller": "MixApplicationController"
+        },
+        {
+          "path": "/admin/mix-application/details/:id",
+          "templatePath": "/mix-app/views/app-portal/pages/application/details.html",
+          "controller": "MixApplicationController"
         }
       ]
     },
