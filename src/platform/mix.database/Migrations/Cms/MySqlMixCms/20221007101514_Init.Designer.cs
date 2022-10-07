@@ -12,15 +12,84 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mix.Database.Migrations
 {
     [DbContext(typeof(MySqlMixCmsContext))]
-    [Migration("20220806045447_AddMixDatabaseAssociation")]
-    partial class AddMixDatabaseAssociation
+    [Migration("20221007101514_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("BaseApiUrl")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BaseHref")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("BaseRoute")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Domain")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("MixDataContentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("MixDatabaseName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("MixTenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MixDataContentId");
+
+                    b.HasIndex("MixTenantId");
+
+                    b.ToTable("MixApplication");
+                });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
@@ -408,7 +477,7 @@ namespace Mix.Database.Migrations
                     b.Property<int?>("MixDatabaseContextDatabaseAssociationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MixTenantId")
+                    b.Property<int?>("MixTenantId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -566,9 +635,6 @@ namespace Mix.Database.Migrations
                         .UseCollation("utf8_unicode_ci");
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("MixDatabaseName"), "utf8");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -753,9 +819,6 @@ namespace Mix.Database.Migrations
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("MixTenantId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(250)");
@@ -2747,6 +2810,23 @@ namespace Mix.Database.Migrations
                     b.ToTable("MixUrlAlias");
                 });
 
+            modelBuilder.Entity("Mix.Database.Entities.Cms.MixApplication", b =>
+                {
+                    b.HasOne("Mix.Database.Entities.Cms.MixDataContent", "MixDataContent")
+                        .WithMany()
+                        .HasForeignKey("MixDataContentId");
+
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                        .WithMany()
+                        .HasForeignKey("MixTenantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MixDataContent");
+
+                    b.Navigation("MixTenant");
+                });
+
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixConfiguration", b =>
                 {
                     b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
@@ -2803,13 +2883,9 @@ namespace Mix.Database.Migrations
                         .WithMany("MixDatabases")
                         .HasForeignKey("MixDatabaseContextDatabaseAssociationId");
 
-                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", "MixTenant")
+                    b.HasOne("Mix.Database.Entities.Cms.MixTenant", null)
                         .WithMany("MixDatabases")
-                        .HasForeignKey("MixTenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MixTenant");
+                        .HasForeignKey("MixTenantId");
                 });
 
             modelBuilder.Entity("Mix.Database.Entities.Cms.MixDatabaseColumn", b =>

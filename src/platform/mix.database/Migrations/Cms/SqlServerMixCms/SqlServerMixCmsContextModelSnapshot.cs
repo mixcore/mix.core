@@ -85,9 +85,6 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<int?>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MixDataContentId");
