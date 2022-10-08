@@ -61,11 +61,6 @@ namespace Mixcore
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
             
-            //app.UseStaticFiles(new StaticFileOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, MixFolders.WebRootPath, "portal-apps"))
-            //});
-
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
             {
                 app.UseMixOcelot(Configuration, env.IsDevelopment());
