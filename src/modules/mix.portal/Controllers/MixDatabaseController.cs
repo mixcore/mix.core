@@ -43,7 +43,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult> Migrate(string name)
         {
             var result = await _mixDbService.MigrateDatabase(name);
-            
+
             // TODO: Check repodb not load latest database schema when modified column, reload application to let repodb load latest schema
             //_applicationLifetime.StopApplication();
             return result ? Ok() : BadRequest();
@@ -56,7 +56,7 @@ namespace Mix.Portal.Controllers
             _queueService.PushQueue(msg);
             return Ok();
         }
-        
+
         [HttpGet("restore/{name}")]
         public async Task<ActionResult> RestoreAsync(string name)
         {
@@ -69,8 +69,15 @@ namespace Mix.Portal.Controllers
         #region Overrides
         protected override async Task UpdateHandler(int id, MixDatabaseViewModel data)
         {
-            await _mixDbService.BackupDatabase(data.SystemName);
-            await base.UpdateHandler(id, data);
+            try
+            {
+                await _mixDbService.BackupDatabase(data.SystemName);
+                await base.UpdateHandler(id, data);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
         }
         protected override Task DeleteHandler(Lib.ViewModels.MixDatabaseViewModel data)
         {

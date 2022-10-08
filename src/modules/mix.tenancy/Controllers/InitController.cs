@@ -142,6 +142,7 @@ namespace Mix.Tenancy.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("extract-theme")]
+        [DisableRequestSizeLimit]
         public ActionResult<bool> ExtractThemeAsync([FromForm] IFormFile theme = null)
         {
             _importService.ExtractTheme(theme);

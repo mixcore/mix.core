@@ -102,7 +102,7 @@ namespace Mix.RepoDb.Services
                 await Migrate(database, _backupRepository.DatabaseProvider, new BackupDbContext(_backupRepository.ConnectionString));
                 foreach (var item in data)
                 {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName));
+                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
                 }
                 var result = await _backupRepository.InsertManyAsync(data);
                 return result > 0;
@@ -142,7 +142,7 @@ namespace Mix.RepoDb.Services
             var result = obj.ToList();
             foreach (KeyValuePair<string, object> kvp in result)
             {
-                if (kvp.Key != "id" && kvp.Key != "createdDateTime" && !selectMembers.Any(m => m == kvp.Key))
+                if (kvp.Key != "Id" && kvp.Key != "CreatedDateTime" && !selectMembers.Any(m => m == kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }
