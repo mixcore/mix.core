@@ -140,13 +140,16 @@ namespace Mix.Common.Controllers
                 MixAppConfigEnums.Portal => MixAppConfigFilePaths.Portal,
                 MixAppConfigEnums.Authentication => MixAppConfigFilePaths.Authentication,
                 MixAppConfigEnums.Quartz => MixAppConfigFilePaths.Quartz,
-                MixAppConfigEnums.Cloudflare => MixAppConfigFilePaths.Cloudflare,
                 MixAppConfigEnums.IPSecurity => MixAppConfigFilePaths.IPSecurity,
                 MixAppConfigEnums.EPPlus => MixAppConfigFilePaths.EPPlus,
                 MixAppConfigEnums.MixHeart => MixAppConfigFilePaths.MixHeart,
                 MixAppConfigEnums.Smtp => MixAppConfigFilePaths.Smtp,
                 MixAppConfigEnums.Endpoint => MixAppConfigFilePaths.Endpoint,
                 MixAppConfigEnums.Global => MixAppConfigFilePaths.Global,
+                MixAppConfigEnums.Azure => MixAppConfigFilePaths.Azure,
+                MixAppConfigEnums.Ocelot => MixAppConfigFilePaths.Ocelot,
+                MixAppConfigEnums.Queue => MixAppConfigFilePaths.Queue,
+                MixAppConfigEnums.Storage => MixAppConfigFilePaths.Storage,
                 _ => string.Empty
             };
         }
