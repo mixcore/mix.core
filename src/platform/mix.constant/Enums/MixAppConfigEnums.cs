@@ -8,14 +8,17 @@ namespace Mix.Constant.Enums
 {
     public enum MixAppConfigEnums
     {
-        Authentication,
         Global,
+        Authentication,
         Portal,
-        Cloudflare,
         EPPlus,
         IPSecurity,
         MixHeart,
         Quartz,
+        Azure,
+        Ocelot,
+        Queue,
+        Storage,
         Smtp,
         Endpoint
     }

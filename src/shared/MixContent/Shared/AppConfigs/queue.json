@@ -2,8 +2,8 @@
   "MessageQueueSetting": {
     "Provider": "MIX",
     "GoogleQueueSetting": {
-      "CredentialFile": "MixContent/Credentials/google_credential.json",
-      "ProjectId": "mixcore-225013"
+      "CredentialFile": "",
+      "ProjectId": ""
     },
     "AzureServiceBus": {
       "ConnectionString": "",
