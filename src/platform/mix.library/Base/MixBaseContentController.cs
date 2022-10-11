@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Services;
@@ -37,6 +38,24 @@ namespace Mix.Portal.Controllers
             _userManager = userManager;
             _identityService = identityService;
         }
+
+        #region Routes
+
+        [HttpGet("duplicate/{id}")]
+        public async Task<ActionResult<TView>> Duplicate(TPrimaryKey id)
+        {
+            var data = await GetById(id);
+            if (data != null)
+            {
+                data.Id = default;
+                data.ParentId = default;
+                var newId = await CreateHandlerAsync(data);
+                var result = await GetById(newId);
+                return Ok(result);
+            }
+            throw new MixException(MixErrorStatus.NotFound, id);
+        }
+        #endregion
 
         #region Overrides
         protected override async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
