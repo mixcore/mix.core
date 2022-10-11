@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Lib.Models.Common
 {
-    public class SearchEntityModel<TEntity, TPrimaryKey>
+    public sealed class SearchEntityModel<TEntity, TPrimaryKey>
          where TPrimaryKey : IComparable
         where TEntity : IEntity<TPrimaryKey>
     {

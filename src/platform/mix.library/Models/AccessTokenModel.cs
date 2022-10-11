@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models
 {
-    public class AccessTokenViewModel
+    public sealed class AccessTokenViewModel
     {
         public string AccessToken { get; set; }
 

@@ -4,7 +4,7 @@ using Mix.Lib.Models.Configurations;
 namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
-    public class MixTenantSystemViewModel
+    public sealed class MixTenantSystemViewModel
         : ViewModelBase<MixCmsContext, MixTenant, int, MixTenantSystemViewModel>
     {
         #region Properties

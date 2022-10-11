@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class DataValueModel
+    public sealed class DataValueModel
     {
         public MixDataType DataType { get; set; } = MixDataType.Text;
 

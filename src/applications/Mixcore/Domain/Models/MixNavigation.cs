@@ -1,6 +1,6 @@
 ﻿namespace Mixcore.Domain.Models
 {
-    public class MixNavigation
+    public sealed class MixNavigation
     {
         public string Id { get; set; }
 

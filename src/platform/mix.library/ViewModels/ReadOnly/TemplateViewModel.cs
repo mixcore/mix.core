@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.ViewModels.ReadOnly
 {
-    public class TemplateViewModel
+    public sealed class TemplateViewModel
         : ViewModelBase<MixCmsContext, MixTemplate, int, TemplateViewModel>
     {
         #region Properties

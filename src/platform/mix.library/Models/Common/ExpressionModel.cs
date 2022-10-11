@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class ExpressionModel
+    public sealed class ExpressionModel
     {
         public MixLogicalOperatorKind ExpressionType { get; set; }
 

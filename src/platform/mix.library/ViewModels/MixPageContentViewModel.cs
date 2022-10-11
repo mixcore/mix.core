@@ -2,7 +2,7 @@
 namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
-    public class MixPageContentViewModel
+    public sealed class MixPageContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {

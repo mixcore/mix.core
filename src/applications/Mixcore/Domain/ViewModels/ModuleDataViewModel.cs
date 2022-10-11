@@ -1,6 +1,6 @@
 ﻿namespace Mixcore.Domain.ViewModels
 {
-    public class ModuleDataViewModel
+    public sealed class ModuleDataViewModel
         : MultilingualSEOContentViewModelBase
             <MixCmsContext, MixModuleData, int, ModuleDataViewModel>
     {

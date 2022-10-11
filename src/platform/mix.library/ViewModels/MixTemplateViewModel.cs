@@ -3,7 +3,7 @@
 namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
-    public class MixTemplateViewModel
+    public sealed class MixTemplateViewModel
         : ViewModelBase<MixCmsContext, MixTemplate, int, MixTemplateViewModel>
     {
         #region Properties

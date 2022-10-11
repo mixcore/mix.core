@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class SearchContentValueModel
+    public sealed class SearchContentValueModel
     {
         public string ColumnName { get; set; }
         public object Value { get; set; }

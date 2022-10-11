@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixContributorViewModel
+    public sealed class MixContributorViewModel
         : ViewModelBase<MixCmsContext, MixContributor, int, MixContributorViewModel>
     {
         #region Properties

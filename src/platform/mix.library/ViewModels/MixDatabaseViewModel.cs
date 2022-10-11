@@ -3,12 +3,12 @@
 namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
-    public class MixDatabaseViewModel
+    public sealed class MixDatabaseViewModel
         : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]
-        public virtual string SystemName { get; set; }
+        public string SystemName { get; set; }
 
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
 

@@ -3,7 +3,7 @@ using Mix.Lib.Services;
 
 namespace Mix.Lib.Filters
 {
-    public class AuditLogFilter : IResourceFilter
+    public sealed class AuditLogFilter : IResourceFilter
     {
         public AuditLogFilter()
         {

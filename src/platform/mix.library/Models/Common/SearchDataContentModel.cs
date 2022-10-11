@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.Models.Common
 {
-    public class SearchDataContentModel : SearchQueryModel<MixDataContent, Guid>
+    public sealed class SearchDataContentModel : SearchQueryModel<MixDataContent, Guid>
     {
         public SearchDataContentModel(int tenantId) :
             base(tenantId)

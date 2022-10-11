@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixDataContentValueViewModel
+    public sealed class MixDataContentValueViewModel
         : MultilingualContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties

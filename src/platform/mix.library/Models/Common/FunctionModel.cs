@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class FunctionModel
+    public sealed class FunctionModel
     {
         public string FieldName { get; set; }
 

@@ -1,6 +1,6 @@
 namespace Mixcore.Domain.Models
 {
-    public class MenuItem
+    public sealed class MenuItem
     {
         public JObject Obj { get; set; }
 

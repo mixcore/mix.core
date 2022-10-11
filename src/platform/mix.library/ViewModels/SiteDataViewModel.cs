@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    public class SiteDataViewModel
+    public sealed class SiteDataViewModel
     {
         public string CreatedBy { get; set; }
 
@@ -72,7 +72,7 @@
         }
     }
 
-    public class MixDbModel
+    public sealed class MixDbModel
     {
         public string DatabaseName { get; set; }
         public JArray Data { get; set; }

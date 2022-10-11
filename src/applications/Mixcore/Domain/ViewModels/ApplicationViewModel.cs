@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace Mixcore.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
-    public class ApplicationViewModel
+    public sealed class ApplicationViewModel
         : TenantDataViewModelBase
             <MixCmsContext, MixApplication, int, ApplicationViewModel>
     {

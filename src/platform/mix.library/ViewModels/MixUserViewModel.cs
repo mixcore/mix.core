@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixUserViewModel
+    public sealed class MixUserViewModel
     {
         public Guid Id { get; set; }
         public string UserName { get; set; }

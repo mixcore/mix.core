@@ -5,7 +5,7 @@ using Mix.Shared.Services;
 namespace Mixcore.Domain.Services
 {
     // Ref: https://www.strathweb.com/2019/08/dynamic-controller-routing-in-asp-net-core-3-0/
-    public class MixSEORouteTransformer : DynamicRouteValueTransformer
+    public sealed class MixSEORouteTransformer : DynamicRouteValueTransformer
     {
         private readonly DatabaseService _databaseService;
         public MixSEORouteTransformer(

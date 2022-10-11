@@ -1,6 +1,6 @@
 ﻿namespace Mixcore.Domain.Constants
 {
-    public class InitRoutePath
+    public sealed class InitRoutePath
     {
         public const string Default = "/init";
         public const string Step2 = "/init/step2";
