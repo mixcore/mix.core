@@ -5,6 +5,7 @@ namespace Mix.Shared.Models.Configurations
     public class GlobalConfigurations
     {
         public bool IsInit { get; set; }
+        public bool AllowAnyOrigin { get; set; }
         public bool IsHttps { get; set; }
         public int ResponseCache { get; set; }
         public string ApiEncryptKey { get; set; }
