@@ -15,14 +15,15 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    if (origins.Count() > 0)
+                    builder.SetIsOriginAllowedToAllowWildcardSubdomains();
+                    if (GlobalConfigService.Instance.AllowAnyOrigin)
+                    {
+                        builder.AllowAnyOrigin();
+                    }
+                    else if(origins.Count() > 0)
                     {
                         builder.WithOrigins(origins);
                         builder.AllowCredentials();
-                    }
-                    else
-                    {
-                        builder.AllowAnyOrigin();
                     }
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
@@ -35,14 +36,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             app.UseCors(builder =>
             {
-                if (origins.Count() > 0)
+                builder.SetIsOriginAllowedToAllowWildcardSubdomains();
+                if (GlobalConfigService.Instance.AllowAnyOrigin)
+                {
+                    builder.AllowAnyOrigin();
+                }
+                else if (origins.Count() > 0)
                 {
                     builder.WithOrigins(origins);
                     builder.AllowCredentials();
-                }
-                else
-                {
-                    builder.AllowAnyOrigin();
                 }
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();

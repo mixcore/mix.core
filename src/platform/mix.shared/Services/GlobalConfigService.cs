@@ -47,6 +47,7 @@ namespace Mix.Shared.Services
         }
         public int ResponseCache => AppSettings.ResponseCache;
         public bool IsInit => AppSettings.IsInit;
+        public bool AllowAnyOrigin => AppSettings.AllowAnyOrigin;
         public InitStep InitStatus => AppSettings.InitStatus;
     }
 }
