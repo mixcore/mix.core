@@ -5,7 +5,7 @@ using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
 {
-    public class ModuleContentViewModel
+    public sealed class ModuleContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixModuleContent, int, ModuleContentViewModel>
     {

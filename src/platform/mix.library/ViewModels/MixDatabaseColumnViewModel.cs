@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixDatabaseColumnViewModel
+    public sealed class MixDatabaseColumnViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseColumn, int, MixDatabaseColumnViewModel>
     {
         #region Properties

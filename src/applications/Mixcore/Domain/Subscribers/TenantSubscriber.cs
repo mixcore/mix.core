@@ -4,7 +4,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class TenantSubscriber : SubscriberBase
+    public sealed class TenantSubscriber : SubscriberBase
     {
         private UnitOfWorkInfo _uow;
         static string topicId = typeof(MixTenantSystemViewModel).FullName;

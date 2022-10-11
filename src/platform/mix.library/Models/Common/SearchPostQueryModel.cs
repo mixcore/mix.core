@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Lib.Models.Common
 {
-    public class SearchPostQueryModel : SearchQueryModel<MixPostContent, int>
+    public sealed class SearchPostQueryModel : SearchQueryModel<MixPostContent, int>
     {
         public SearchPostQueryModel(int tenantId) : base(tenantId)
         {

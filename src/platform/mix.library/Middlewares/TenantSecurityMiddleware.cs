@@ -4,7 +4,7 @@ using Mix.Lib.Extensions;
 
 namespace Mix.Lib.Middlewares
 {
-    public class TenantSecurityMiddleware
+    public sealed class TenantSecurityMiddleware
     {
         private readonly RequestDelegate next;
         protected readonly IQueueService<MessageQueueModel> _queueService;

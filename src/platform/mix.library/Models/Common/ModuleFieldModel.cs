@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class ModuleFieldModel
+    public sealed class ModuleFieldModel
     {
         public string Name { get; set; }
 

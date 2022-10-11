@@ -88,6 +88,7 @@
 		<ProjectReference Include="..\mix.communicator\mix.communicator.csproj" />
 		<ProjectReference Include="..\mix.repodb\mix.repodb.csproj" />
 		<ProjectReference Include="..\mix.service\mix.service.csproj" />
+		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

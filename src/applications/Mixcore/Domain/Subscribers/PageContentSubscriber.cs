@@ -3,7 +3,7 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mixcore.Domain.Subscribers
 {
-    public class PageContentSubscriber : SubscriberBase
+    public sealed class PageContentSubscriber : SubscriberBase
     {
         static string topicId = typeof(MixPageContentViewModel).FullName;
         private readonly ILogger<PageContentSubscriber> logger;

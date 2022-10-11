@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.Models.Common
 {
-    public class TemplateModel
+    public sealed class TemplateModel
     {
         public string FileFolder { get; set; }
 

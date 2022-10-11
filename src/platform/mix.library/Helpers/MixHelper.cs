@@ -10,7 +10,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Mix.Lib.Helpers
 {
-    public class MixHelper
+    public sealed class MixHelper
     {
         public class Options
         {

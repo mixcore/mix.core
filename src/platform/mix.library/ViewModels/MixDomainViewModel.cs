@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
-    public class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
+    public sealed class MixDomainViewModel : TenantDataViewModelBase<MixCmsContext, MixDomain, int, MixDomainViewModel>
     {
         #region Constructors
 

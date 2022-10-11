@@ -2,7 +2,7 @@
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixDatabaseAssociationViewModel
+    public sealed class MixDatabaseAssociationViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
     {
         #region Properties

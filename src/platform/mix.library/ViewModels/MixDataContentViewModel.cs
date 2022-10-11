@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Lib.ViewModels
 {
-    public class MixDataContentViewModel
+    public sealed class MixDataContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, MixDataContentViewModel>
     {
         #region Constructors

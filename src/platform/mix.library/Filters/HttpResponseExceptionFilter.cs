@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mix.Lib.Filters
 {
-    public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
+    public sealed class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
     {
         public int Order { get; } = int.MaxValue - 10;
 

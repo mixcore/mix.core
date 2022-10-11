@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class MenuItemModel
+    public sealed class MenuItemModel
     {
         public MenuItemModel()
         {

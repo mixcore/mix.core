@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.ViewModels
 {
-    public class MixDataViewModel
+    public sealed class MixDataViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel
             , MixDataContent, MixDataContentViewModel>
     {

@@ -1,6 +1,6 @@
 ﻿namespace Mix.Lib.Models.Common
 {
-    public class MixNavigationModel
+    public sealed class MixNavigationModel
     {
         public string Id { get; set; }
 
