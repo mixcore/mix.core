@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixDataContentValueViewModel
+    public sealed class MixDataContentValueViewModel
         : MultilingualContentViewModelBase<MixCmsContext, MixDataContentValue, Guid, MixDataContentValueViewModel>
     {
         #region Properties

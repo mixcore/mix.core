@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Mix.Portal.Domain.Services
 {
-    public class CloneCultureService: TenantServiceBase
+    public sealed class CloneCultureService: TenantServiceBase
     {
         private MixCulture _destCulture;
         private MixCulture _srcCulture;

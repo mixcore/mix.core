@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.Models
 {
-    public class DashboardModel
+    public sealed class DashboardModel
     {
         public int TotalPage { get; set; }
 

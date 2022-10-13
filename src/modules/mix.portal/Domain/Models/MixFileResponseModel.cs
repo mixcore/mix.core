@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.Models
 {
-    public class MixFileResponseModel
+    public sealed class MixFileResponseModel
     {
         public List<FileModel> Files { get; set; }
 

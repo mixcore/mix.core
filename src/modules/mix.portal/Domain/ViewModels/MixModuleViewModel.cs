@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixModuleViewModel
+    public sealed class MixModuleViewModel
         : SiteDataWithContentViewModelBase<MixCmsContext, MixModule, int, MixModuleViewModel, MixModuleContent, MixModuleContentViewModel>
     {
         #region Constructors
@@ -27,7 +27,7 @@
         [Required]
         public string SystemName { get; set; }
 
-        public virtual MixModuleType Type { get; set; }
+        public MixModuleType Type { get; set; }
 
         #endregion
 

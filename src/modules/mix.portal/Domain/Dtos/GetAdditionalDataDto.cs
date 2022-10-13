@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.Dtos
 {
-    public class GetAdditionalDataDto
+    public sealed class GetAdditionalDataDto
     {
         public string Specificulture { get; set; }
         public string ParentId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Mix.Portal.Domain.Models
 {
-    public class ModuleColumnModel
+    public sealed class ModuleColumnModel
     {
         public string SystemName { get; set; }
         public string DisplayName { get; set; }

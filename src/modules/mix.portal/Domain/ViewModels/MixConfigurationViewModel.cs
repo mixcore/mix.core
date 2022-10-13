@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController(Route = "api/v2/rest/portal/mix-configuration", Name = "Mix Configuration")]
-    public class MixConfigurationViewModel
+    public sealed class MixConfigurationViewModel
         : SiteDataWithContentViewModelBase
             <MixCmsContext, MixConfiguration, int, MixConfigurationViewModel,
             MixConfigurationContent, MixConfigurationContentViewModel>

@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GenerateRestApiController]
-    public class MixModuleContentViewModel
+    public sealed class MixModuleContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixModuleContent, int, MixModuleContentViewModel>
     {
         #region Constructors

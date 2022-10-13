@@ -2,7 +2,7 @@
 
 namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixApplicationViewModel
+    public sealed class MixApplicationViewModel
         : TenantDataViewModelBase<MixCmsContext, MixApplication, int, MixApplicationViewModel>
     {
         #region Properties

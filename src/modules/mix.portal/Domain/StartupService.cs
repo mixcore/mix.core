@@ -4,7 +4,7 @@ using Mix.Shared.Interfaces;
 
 namespace Mix.Portal
 {
-    public class StartupService : IStartupService
+    public sealed class StartupService : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
