@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Domain.Services
 {
-    public class MixApplicationService : TenantServiceBase
+    public sealed class MixApplicationService : TenantServiceBase
     {
         protected readonly IQueueService<MessageQueueModel> _queueService;
         private readonly ThemeService _themeService;
@@ -118,7 +118,7 @@ namespace Mix.Portal.Domain.Services
         }
 
         #region Helpers
-        public virtual async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
+        public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
         {
             var address = _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
             if (string.IsNullOrEmpty(address))

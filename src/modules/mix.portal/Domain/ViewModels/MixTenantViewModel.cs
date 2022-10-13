@@ -1,7 +1,7 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GeneratePublisher]
-    public class MixTenantViewModel
+    public sealed class MixTenantViewModel
         : ViewModelBase<MixCmsContext, MixTenant, int, MixTenantViewModel>
     {
         #region Properties

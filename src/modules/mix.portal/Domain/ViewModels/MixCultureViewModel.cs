@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixCultureViewModel
+    public sealed class MixCultureViewModel
         : TenantDataViewModelBase<MixCmsContext, MixCulture, int, MixCultureViewModel>
     {
         #region Properties

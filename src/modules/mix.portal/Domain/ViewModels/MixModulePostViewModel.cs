@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixModulePostAssociationViewModel
+    public sealed class MixModulePostAssociationViewModel
         : AssociationViewModelBase<MixCmsContext, MixModulePostAssociation, int, MixModulePostAssociationViewModel>
     {
         #region Properties

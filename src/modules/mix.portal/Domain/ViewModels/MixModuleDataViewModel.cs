@@ -1,6 +1,6 @@
 ﻿namespace Mix.Portal.Domain.ViewModels
 {
-    public class MixModuleDataViewModel
+    public sealed class MixModuleDataViewModel
         : MultilingualSEOContentViewModelBase
             <MixCmsContext, MixModuleData, int, MixModuleDataViewModel>
     {
