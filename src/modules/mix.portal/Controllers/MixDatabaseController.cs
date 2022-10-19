@@ -58,7 +58,7 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpGet("restore/{name}")]
-        public async Task<ActionResult> RestoreAsync(string name)
+        public ActionResult RestoreAsync(string name)
         {
             var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
             _queueService.PushQueue(msg);

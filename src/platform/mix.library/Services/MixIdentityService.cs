@@ -37,7 +37,7 @@ namespace Mix.Lib.Services
         protected readonly MixService _mixService;
         protected readonly MixRepoDbRepository _repoDbRepository;
         protected readonly MixCmsContext _cmsContext;
-        protected readonly Repository<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel> _roleRepo;
+        protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> _roleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
         public List<RoleViewModel> Roles { get; set; }
         protected ISession _session;
