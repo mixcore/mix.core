@@ -390,31 +390,9 @@ namespace Mix.Lib.Services
 
         #region Generic
 
-        private async Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
+        private Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
         {
-            // TODO: Export Data from single datatable
-
-            //var associations = await _context.MixDataContentAssociation
-            //    .Where(m =>
-            //        m.IntParentId.HasValue
-            //        && m.ParentType == type
-            //        && parentIds.Any(p => p == m.IntParentId.Value))
-            //    .AsNoTracking()
-            //    .ToListAsync();
-            //var dataIds = associations.Select(x => x.ParentId).ToList();
-            //var contentIds = associations.Select(x => x.DataContentId).ToList();
-            //var datas = await _context.MixData
-            //    .Where(m => dataIds.Contains(m.Id))
-            //    .AsNoTracking()
-            //    .ToListAsync();
-            //var dataContents = await _context.MixDataContent
-            //    .Where(m => contentIds.Contains(m.Id))
-            //    .AsNoTracking()
-            //    .ToListAsync();
-
-            //_siteData.Datas = _siteData.Datas.Union(datas).ToList();
-            //_siteData.DataContents = _siteData.DataContents.Union(dataContents).ToList();
-            //_siteData.DataContentAssociations = _siteData.DataContentAssociations.Union(associations).ToList();
+            throw new MixException(MixErrorStatus.ServerError, $"Unhandled: {GetType().FullName} line 395");
         }
 
 

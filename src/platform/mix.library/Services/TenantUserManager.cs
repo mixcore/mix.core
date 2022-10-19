@@ -10,7 +10,7 @@ namespace Mix.Lib.Services
 {
     public class TenantUserManager : UserManager<MixUser>
     {
-        protected ISession _session;
+        protected IHttpContextAccessor _httpContextAccessor;
         private MixTenantSystemViewModel _currentTenant;
         protected MixTenantSystemViewModel CurrentTenant
         {
@@ -18,7 +18,7 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
@@ -34,7 +34,7 @@ namespace Mix.Lib.Services
             IServiceProvider services, ILogger<TenantUserManager> logger,
             MixCmsAccountContext context) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
-            _session = httpContextAccessor.HttpContext.Session;
+            _httpContextAccessor = httpContextAccessor;
             Context = context;
         }
 

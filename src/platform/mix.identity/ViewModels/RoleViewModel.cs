@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Identity.ViewModels
 {
-    public class RoleViewModel : ViewModelBase<MixCmsAccountContext, AspNetRoles, Guid, RoleViewModel>
+    public class RoleViewModel : ViewModelBase<MixCmsAccountContext, MixRole, Guid, RoleViewModel>
     {
         #region Constructors
         public RoleViewModel()
@@ -12,7 +12,7 @@ namespace Mix.Identity.ViewModels
         }
 
         public RoleViewModel(
-            AspNetRoles entity,
+            MixRole entity,
 
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
@@ -40,7 +40,7 @@ namespace Mix.Identity.ViewModels
         #endregion Properties
 
         #region Overrides
-        public override Task<AspNetRoles> ParseEntity()
+        public override Task<MixRole> ParseEntity()
         {
             if (Id == Guid.Empty)
             {

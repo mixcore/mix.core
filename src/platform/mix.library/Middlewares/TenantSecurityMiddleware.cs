@@ -7,7 +7,7 @@ namespace Mix.Lib.Middlewares
     public sealed class TenantSecurityMiddleware
     {
         private readonly RequestDelegate next;
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly IQueueService<MessageQueueModel> _queueService;
         public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService)
         {
             this.next = next;

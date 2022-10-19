@@ -16,8 +16,8 @@ namespace Mix.Lib.Models.Common
         public PagingRequestModel PagingData { get; set; }
         public Expression<Func<TEntity, bool>> Predicate { get; set; }
 
-        protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
-        protected Expression<Func<TEntity, bool>> OrPredicate { get; set; }
+        private Expression<Func<TEntity, bool>> AndPredicate { get; set; }
+        private Expression<Func<TEntity, bool>> OrPredicate { get; set; }
 
         public SearchEntityModel()
         {
