@@ -1,0 +1,20 @@
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
+using Mix.Constant.Constants;
+using Mix.Database.Base;
+using Mix.Database.Services;
+
+namespace Mix.Servives.Permission.Domain.Entities
+{
+    public class PermissionDbContext : BaseDbContext
+    {
+        public PermissionDbContext(DatabaseService databaseService) 
+            : base(databaseService, MixConstants.CONST_MIXDB_CONNECTION)
+        {
+            _dbContextType = GetType();
+        }
+
+        public DbSet<MixPermission> Permission { get; set; }
+        public DbSet<PermissionEndpoint> PermissionEndpoint { get; set; }
+    }
+}
