@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Services;
+using Mix.Heart.UnitOfWork;
+using Mix.Lib.Middlewares;
 using Mix.Servives.Permission.Domain.Entities;
 using Mix.Shared.Interfaces;
+using Mix.Shared.Services;
 using Org.BouncyCastle.Crypto.Signers;
 
 namespace Mix.Servives.Permission.Domain
@@ -11,10 +14,9 @@ namespace Mix.Servives.Permission.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            var dbService = services.GetService<DatabaseService>();
-            services.AddDbContext<PermissionDbContext>();
-            var ct = new PermissionDbContext(dbService);
-            var migrateions = ct.Database.GetPendingMigrations();
+            services.TryAddScoped<PermissionDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<PermissionDbContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<PermissionDbContext>>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

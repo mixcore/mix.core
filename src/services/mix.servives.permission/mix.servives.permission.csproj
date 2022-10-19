@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Domain\ViewModels\" />
   </ItemGroup>
 
 </Project>

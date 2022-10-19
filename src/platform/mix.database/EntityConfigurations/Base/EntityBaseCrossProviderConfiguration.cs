@@ -18,11 +18,11 @@ namespace Mix.Database.EntityConfigurations.Base
         protected EntityBaseConfiguration(DatabaseService databaseService)
         {
             _databaseService = databaseService;
+            Config = GetConfig();
         }
 
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            Config = GetConfig();
             string key = $"PK_{typeof(T).Name}";
             builder.HasKey(e => new { e.Id })
                    .HasName(key);

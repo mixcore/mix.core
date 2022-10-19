@@ -15,6 +15,6 @@ namespace Mix.Servives.Permission.Domain.Entities
         }
 
         public DbSet<MixPermission> Permission { get; set; }
-        public DbSet<PermissionEndpoint> PermissionEndpoint { get; set; }
+        public DbSet<MixPermissionEndpoint> PermissionEndpoint { get; set; }
     }
 }
