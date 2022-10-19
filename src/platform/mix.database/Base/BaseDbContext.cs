@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mix.Database.Base
 {
-    public abstract class BaseDbContext: DbContext
+    public abstract class BaseDbContext : DbContext
     {
         protected static DatabaseService _databaseService;
         protected readonly string _connectionStringName;
@@ -54,7 +54,7 @@ namespace Mix.Database.Base
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyAllConfigurations(_databaseService, _dbContextType.Assembly, _dbContextType.Namespace);
+            modelBuilder.ApplyAllConfigurations(_databaseService, _dbContextType.Assembly, $"{_dbContextType.Namespace}.EntityConfigurations");
         }
     }
 }
