@@ -3,12 +3,12 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Database.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
-using Mix.Servives.Permission.Domain.Entities;
+using Mix.Services.Permission.Domain.Entities;
 using Mix.Shared.Interfaces;
 using Mix.Shared.Services;
 using Org.BouncyCastle.Crypto.Signers;
 
-namespace Mix.Servives.Permission.Domain
+namespace Mix.Services.Permission.Domain
 {
     public class StartupService : IStartupService
     {

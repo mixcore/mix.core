@@ -1,4 +1,4 @@
-using Mix.Servives.Permission;
+using Mix.Services.Permission;
 
 public class Program
 {

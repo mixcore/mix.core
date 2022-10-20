@@ -33,6 +33,8 @@ namespace Mix.RepoDb.Services
         private UnitOfWorkInfo<MixCmsContext> _uow;
         private DatabaseService _databaseService;
         private RuntimeDbContextService _runtimeDbContextService;
+
+        static string[] _defaultProperties = { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
         #endregion
 
         public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
@@ -61,6 +63,7 @@ namespace Mix.RepoDb.Services
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
             if (database != null && database.Columns.Count > 0)
             {
+                await BackupDatabase(database.SystemName);
                 await Migrate(database, _databaseService.DatabaseProvider, _runtimeDbContextService.GetMixDatabaseDbContext());
                 await RestoreFromLocal(database);
                 return true;
@@ -128,7 +131,7 @@ namespace Mix.RepoDb.Services
             {
                 foreach (var item in data)
                 {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName));
+                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
                 }
                 _repository.Init(database.SystemName);
                 var result = await _repository.InsertManyAsync(data);
@@ -142,7 +145,7 @@ namespace Mix.RepoDb.Services
             var result = obj.ToList();
             foreach (KeyValuePair<string, object> kvp in result)
             {
-                if (kvp.Key != "Id" && kvp.Key != "CreatedDateTime" && !selectMembers.Any(m => m == kvp.Key))
+                if (!_defaultProperties.Any(m => m == kvp.Key) && !selectMembers.Any(m => m == kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }

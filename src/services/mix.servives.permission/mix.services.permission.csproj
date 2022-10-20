@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>Mix.Servives.Permission</RootNamespace>
+    <RootNamespace>Mix.Services.Permission</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

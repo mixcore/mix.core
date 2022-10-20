@@ -4,9 +4,9 @@ using Mix.Constant.Constants;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.EntityConfigurations.MYSQL;
 using Mix.Database.Services;
-using Mix.Servives.Permission.Domain.Entities;
+using Mix.Services.Permission.Domain.Entities;
 
-namespace Mix.Servives.Permission.Domain.Entities.EntityConfigurations
+namespace Mix.Services.Permission.Domain.Entities.EntityConfigurations
 {
     public class PermissionEndpointConfiguration : EntityBaseConfiguration<MixPermissionEndpoint, int>
     {
