@@ -4,7 +4,7 @@ using Mix.Constant.Constants;
 using Mix.Database.Base;
 using Mix.Database.Services;
 
-namespace Mix.Servives.Permission.Domain.Entities
+namespace Mix.Services.Permission.Domain.Entities
 {
     public class PermissionDbContext : BaseDbContext
     {

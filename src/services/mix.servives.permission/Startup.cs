@@ -3,7 +3,7 @@ using Mix.Database.Entities.Account;
 using Mix.Heart.Services;
 using System.Reflection;
 
-namespace Mix.Servives.Permission
+namespace Mix.Services.Permission
 {
     public class Startup
     {

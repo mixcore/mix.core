@@ -1,13 +1,22 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
-using Mix.Servives.Permission.Domain.Entities;
+using Mix.Services.Permission.Domain.Entities;
 
-namespace Mix.Servives.Permission.Domain.ViewModels
+namespace Mix.Services.Permission.Domain.ViewModels
 {
-    [GenerateRestApiController(Route ="api/v2/permission")]
+    [GenerateRestApiController(Route = "api/v2/rest/mix-services/permission")]
     public class MixPermissionViewModel : ViewModelBase<PermissionDbContext, MixPermission, int, MixPermissionViewModel>
     {
+        #region Properties
+
+        public string Title { get; set; }
+        public string Type { get; set; }
+        public string Icon { get; set; }
+        public int MixTenantId { get; set; }
+        public List<MixPermissionEndpointViewModel> Endpoints { get; set; }
+        #endregion
+        #region Contructors
         public MixPermissionViewModel()
         {
         }
@@ -23,5 +32,29 @@ namespace Mix.Servives.Permission.Domain.ViewModels
         public MixPermissionViewModel(MixPermission entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
+        #endregion
+        #region Overrides
+
+        public override async Task ExpandView()
+        {
+            Endpoints = await MixPermissionEndpointViewModel.GetRepository(UowInfo)
+                        .GetAllAsync(m => m.SysPermissionId == Id && m.MixTenantId == MixTenantId);
+        }
+
+        protected override async Task SaveEntityRelationshipAsync(MixPermission parentEntity)
+        {
+            if (Endpoints!= null && Endpoints.Count() > 0)
+            {
+                foreach (var ep in Endpoints)
+                {
+                    ep.SetUowInfo(UowInfo);
+                    ep.SysPermissionId = parentEntity.Id;
+                    ep.MixTenantId = parentEntity.MixTenantId;
+                    await ep.SaveAsync();
+                }
+            }
+        }
+
+        #endregion
     }
 }
