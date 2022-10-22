@@ -17,6 +17,7 @@ using Humanizer;
 
 namespace Mix.Portal.Controllers
 {
+    [MixDatabaseAuthorize]
     [Route("api/v2/rest/mix-portal/mix-db/{name}")]
     [ApiController]
     public class MixDbController : MixApiControllerBase
