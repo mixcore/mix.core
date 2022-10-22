@@ -4,7 +4,7 @@ namespace Mix.Portal.Domain.Services
 {
     public sealed class ThemeService : TenantServiceBase
     {
-        public ThemeService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor, cmsUOW)
+        public ThemeService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor)
         {
         }
         public Task<MixTheme> GetActiveTheme()

@@ -19,7 +19,8 @@ namespace Mix.Portal.Domain.Services
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
         private readonly MixThemeImportService _importService;
-        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, cmsUOW)
+        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService) 
+            : base(httpContextAccessor)
         {
             _hubContext = hubContext;
             _httpService = httpService;

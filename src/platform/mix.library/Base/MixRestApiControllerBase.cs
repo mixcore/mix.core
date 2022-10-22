@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Identity.Constants;
 using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
+using MySqlX.XDevAPI.Common;
 using System.Reflection;
 
 namespace Mix.Lib.Base
@@ -24,7 +26,7 @@ namespace Mix.Lib.Base
         protected UnitOfWorkInfo _cacheUOW;
         protected MixCacheDbContext _cacheDbContext;
         protected MixCacheService _cacheService;
-
+        protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> _restApiService;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
         public MixRestHandlerApiControllerBase(
@@ -42,6 +44,7 @@ namespace Mix.Lib.Base
             _uow = uow;
 
             _cacheDbContext = (MixCacheDbContext)cacheUOW.ActiveDbContext;
+            _restApiService = new(httpContextAccessor, mixIdentityService, uow, cacheUOW, queueService);
             _cacheUOW = cacheUOW;
             _cacheService = new();
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
@@ -51,92 +54,41 @@ namespace Mix.Lib.Base
 
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
-            if (data == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Null Object");
-            }
-            if (ReflectionHelper.HasProperty(typeof(TView), MixRequestQueryKeywords.TenantId))
-            {
-                ReflectionHelper.SetPropertyValue(data, new EntityPropertyModel()
-                {
-                    PropertyName = MixRequestQueryKeywords.TenantId,
-                    PropertyValue = CurrentTenant?.Id
-                });
-            }
-            data.SetUowInfo(_uow);
-            data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
-            var id = await data.SaveAsync();
-            _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
-            return id;
+            return await _restApiService.CreateHandlerAsync(data); ;
         }
 
-        protected virtual async Task UpdateHandler(TPrimaryKey id, TView data)
+        protected virtual Task UpdateHandler(TPrimaryKey id, TView data)
         {
-            var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
-            if (id.ToString() != currentId)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
-            }
-            data.SetUowInfo(_uow);
-            await data.SaveAsync();
-            await _cacheService.RemoveCacheAsync(id, typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
+            return _restApiService.UpdateHandler(id, data);
         }
 
-        protected virtual async Task DeleteHandler(TView data)
+        protected virtual Task DeleteHandler(TView data)
         {
-            await data.DeleteAsync();
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
+            return _restApiService.DeleteHandler(data);
         }
 
 
-        protected virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
+        protected virtual Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
-            await data.SaveFieldsAsync(properties);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
+            return _restApiService.PatchHandler(id, data, properties);
         }
 
-        protected virtual async Task SaveManyHandler(List<TView> data)
+        protected virtual Task SaveManyHandler(List<TView> data)
         {
-            foreach (var item in data)
-            {
-                await item.SaveAsync();
-            }
+            return _restApiService.SaveManyHandler(data);
         }
 
         #endregion
 
         #region Query Handlers
-        protected virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
         {
-            var searchRequest = BuildSearchRequest(req);
-            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            return _restApiService.SearchHandler(req);
         }
 
         protected virtual ActionResult<PagingResponseModel<TView>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
         {
-            if (!string.IsNullOrEmpty(req.Columns))
-            {
-                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
-            }
-
-            if (!string.IsNullOrEmpty(req.Columns))
-            {
-                List<object> objects = new List<object>();
-                foreach (var item in result.Items)
-                {
-                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
-                }
-                return Ok(new PagingResponseModel<object>()
-                {
-                    Items = objects,
-                    PagingData = result.PagingData
-                });
-            }
-            return result;
+            return _restApiService.ParseSearchResult(req, result);
         }
 
         #endregion
@@ -145,17 +97,12 @@ namespace Mix.Lib.Base
 
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
-            if (!req.PageSize.HasValue)
-            {
-                req.PageSize = CurrentTenant.Configurations.MaxPageSize;
-            }
-
-            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, Request);
+            return _restApiService.BuildSearchRequest(req);
         }
 
-        protected virtual async Task<TView> GetById(TPrimaryKey id)
+        protected virtual Task<TView> GetById(TPrimaryKey id)
         {
-            return await _repository.GetSingleAsync(id);
+            return _restApiService.GetById(id);
         }
 
         #endregion

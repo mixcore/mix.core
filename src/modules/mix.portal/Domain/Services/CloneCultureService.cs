@@ -17,7 +17,7 @@ namespace Mix.Portal.Domain.Services
         private Dictionary<Guid, Guid> dataIds = new();
         private Dictionary<Guid, Guid> valueIds = new();
         public CloneCultureService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW)
-            : base(httpContextAccessor, cmsUOW)
+            : base(httpContextAccessor)
         {
         }
 

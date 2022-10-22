@@ -25,7 +25,7 @@ namespace Mix.Services.Permission.Domain.Services
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             UnitOfWorkInfo<PermissionDbContext> uow,
             MixIdentityService identityService)
-            : base(httpContextAccessor, cmsUOW)
+            : base(httpContextAccessor)
         {
             _uow = uow;
             _permissionDbContext = _uow.DbContext;
@@ -42,7 +42,7 @@ namespace Mix.Services.Permission.Domain.Services
             return result;
         }
 
-        public async Task AddUserPermission(AddUserPermissionDto dto)
+        public async Task AddUserPermission(CreateUserPermissionDto dto)
         {
             if (!await _identityService.Any(dto.UserId))
             {
