@@ -65,6 +65,7 @@ namespace Mix.Lib.Services
             data.SetUowInfo(_uow);
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext!.User, MixClaims.Username);
+            data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync();
             _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
             return id;
