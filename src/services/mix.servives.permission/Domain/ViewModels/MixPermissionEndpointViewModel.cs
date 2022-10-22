@@ -5,7 +5,6 @@ using Mix.Services.Permission.Domain.Entities;
 
 namespace Mix.Services.Permission.Domain.ViewModels
 {
-    [GenerateRestApiController(Route ="api/v2/rest/mix-services/permission-endpoint")]
     public class MixPermissionEndpointViewModel : ViewModelBase<PermissionDbContext, MixPermissionEndpoint, int, MixPermissionEndpointViewModel>
     {
         #region Properties
