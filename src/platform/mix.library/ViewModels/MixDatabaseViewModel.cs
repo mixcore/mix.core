@@ -11,6 +11,8 @@ namespace Mix.Lib.ViewModels
         public string SystemName { get; set; }
 
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
+        public string ReadPermissions { get; set; }
+        public string WritePermissions { get; set; }
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
         public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();

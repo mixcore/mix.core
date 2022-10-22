@@ -50,17 +50,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<!--<PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />-->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8" />
 		<PackageReference Include="Ocelot" Version="18.0.0" />
-		<!--<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0" />-->
 	</ItemGroup>
 
 	<ItemGroup>
-		<!--<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>-->
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8" />
