@@ -392,7 +392,8 @@ namespace Mix.Lib.Services
 
         private Task ExportAdditionalData(List<int> parentIds, MixDatabaseParentType type)
         {
-            throw new MixException(MixErrorStatus.ServerError, $"Unhandled: {GetType().FullName} line 395");
+            return Task.CompletedTask;
+            //throw new MixException(MixErrorStatus.ServerError, $"Unhandled: {GetType().FullName} line 395");
         }
 
 

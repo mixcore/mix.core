@@ -81,6 +81,12 @@ namespace Mix.Lib.Services
             _mixService = mixService;
         }
 
+        public virtual async Task<bool> Any(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            return user != null;
+        }
+
         public virtual async Task<MixUserViewModel> GetUserAsync(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -92,6 +98,7 @@ namespace Mix.Lib.Services
             }
             return null;
         }
+
         public virtual async Task<JObject> Login(LoginViewModel model)
         {
             // This doesn't count login failures towards account lockout
