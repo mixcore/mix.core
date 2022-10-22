@@ -17,6 +17,8 @@ namespace Mix.Services.Permission.Domain.Entities.EntityConfigurations
         {
             builder.ToTable(MixDatabaseNames.SYSTEM_USER_PERMISSION);
             base.Configure(builder);
+            builder.Property(p => p.Description)
+               .IsRequired(false);
         }
     }
 }

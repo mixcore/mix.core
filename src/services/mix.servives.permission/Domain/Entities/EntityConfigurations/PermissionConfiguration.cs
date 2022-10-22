@@ -15,8 +15,14 @@ namespace Mix.Services.Permission.Domain.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixPermission> builder)
         {
-            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
             base.Configure(builder);
+            builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
+            builder.Property(p => p.Title)
+                .IsRequired(false);
+            builder.Property(p => p.Type)
+                .IsRequired(false);
+            builder.Property(p => p.Icon)
+                .IsRequired(false);
         }
     }
 }

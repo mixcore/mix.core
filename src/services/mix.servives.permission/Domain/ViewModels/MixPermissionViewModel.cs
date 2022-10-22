@@ -48,6 +48,8 @@ namespace Mix.Services.Permission.Domain.ViewModels
                 {
                     ep.SetUowInfo(UowInfo);
                     ep.SysPermissionId = parentEntity.Id;
+                    ep.CreatedBy = ModifiedBy;
+                    ep.ModifiedBy = ModifiedBy;
                     ep.MixTenantId = parentEntity.MixTenantId;
                     await ep.SaveAsync();
                 }
