@@ -13,10 +13,9 @@ namespace Mix.Lib.Base
         protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         protected IHttpContextAccessor _httpContextAccessor;
 
-        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        protected TenantServiceBase(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-            _cmsUOW = cmsUOW;
         }
 
         private MixTenantSystemViewModel _currentTenant;

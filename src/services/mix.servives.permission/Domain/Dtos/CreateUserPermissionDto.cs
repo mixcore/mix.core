@@ -1,6 +1,6 @@
 ﻿namespace Mix.Services.Permission.Domain.Dtos
 {
-    public class AddUserPermissionDto
+    public class CreateUserPermissionDto
     {
         public Guid UserId { get; set; }
         public int PermissionId { get; set; }

@@ -46,7 +46,7 @@ namespace Mix.Services.Permission.Controllers
 
         [MixAuthorize(roles: $"{MixRoles.Owner},{MixRoles.Administrators}")]
         [HttpPost("add-user-permission")]
-        public async Task<ActionResult> AddUserPermission(AddUserPermissionDto dto)
+        public async Task<ActionResult> AddUserPermission(CreateUserPermissionDto dto)
         {
             await _permissionService.AddUserPermission(dto);
             return Ok();
