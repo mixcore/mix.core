@@ -434,11 +434,19 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CreatePermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DeletePermissions")
+                        .HasColumnType("varchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(4000)")
@@ -473,6 +481,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<bool>("SelfManaged")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -489,7 +500,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         .HasColumnType("varchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("WritePermissions")
+                    b.Property<string>("UpdatePermissions")
                         .HasColumnType("varchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 

@@ -18,8 +18,6 @@ namespace Mix.Lib.Attributes
     public class DatabaseAuthorizeActionFilter : IAuthorizationFilter
     {
         private readonly MixCmsContext _cmsContext;
-        public string[] AllowedReadRoles { get; set; }
-        public string[] AllowedWriteRoles { get; set; }
         protected readonly MixIdentityService _idService;
         private ClaimsPrincipal userPrinciple;
         public DatabaseAuthorizeActionFilter(
@@ -40,11 +38,10 @@ namespace Mix.Lib.Attributes
                 context.Result = new BadRequestResult();
                 return;
             }
-            AllowedReadRoles = JArray.Parse(database.ReadPermissions).Values<string>("text").ToArray();
-            AllowedWriteRoles = JArray.Parse(database.WritePermissions).Values<string>("text").ToArray();
+            
             if (ValidToken())
             {
-                if (!IsInRoles(context.HttpContext.Request.Method))
+                if (!IsInRoles(context.HttpContext.Request.Method, database))
                 {
                     if (!ValidEnpointPermission(context))
                     {
@@ -75,28 +72,27 @@ namespace Mix.Lib.Attributes
                     && DateTime.UtcNow < expireAt;
         }
 
-        private bool IsInRoles(string method)
+        private bool IsInRoles(string method, MixDatabase database)
         {
-            if (method == "GET" && AllowedReadRoles.Count() == 0)
-            {
-                return true;
-            }
-            if (method != "GET" && AllowedWriteRoles.Count() == 0)
-            {
-                return true;
-            }
-
             var userRoles = _idService.GetClaim(userPrinciple, MixClaims.Role).Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(r => r.Trim()).ToArray();
-            if (userRoles.Any(r => r == MixRoles.SuperAdmin))
+            switch (method)
             {
-                return true;
+                case "GET": return CheckUserInRoles(database.ReadPermissions, userRoles);
+                case "POST": return CheckUserInRoles(database.CreatePermissions, userRoles);
+                case "PATCH": 
+                case "PUT": return CheckUserInRoles(database.ModifiedBy, userRoles);
+                case "DELETE": return CheckUserInRoles(database.DeletePermissions, userRoles);
+                default:
+                    return false;
             }
-            if (method == "GET")
-            {
-                return AllowedReadRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
-            }
-            return AllowedWriteRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
+        }
+
+        private bool CheckUserInRoles(string roles, string[] userRoles)
+        {
+            var allowedRoles = JArray.Parse(roles).Values<string>().ToArray();
+            return allowedRoles.Count() == 0 
+                || allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
         }
 
         #endregion

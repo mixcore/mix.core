@@ -439,11 +439,19 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CreatePermissions")
+                        .HasColumnType("nvarchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DeletePermissions")
+                        .HasColumnType("nvarchar(250)")
+                        .HasAnnotation("MySql:CharSet", "utf8");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(4000)")
@@ -478,6 +486,9 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("nvarchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
+                    b.Property<bool>("SelfManaged")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
@@ -494,7 +505,7 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         .HasColumnType("nvarchar(50)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
-                    b.Property<string>("WritePermissions")
+                    b.Property<string>("UpdatePermissions")
                         .HasColumnType("nvarchar(250)")
                         .HasAnnotation("MySql:CharSet", "utf8");
 
