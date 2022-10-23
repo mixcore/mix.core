@@ -21,9 +21,8 @@ namespace Mix.Lib.Base
             MixService mixService, 
             TranslatorService translator, 
             MixIdentityService mixIdentityService, 
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW, 
             UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) 
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
         }
 
@@ -52,7 +51,7 @@ namespace Mix.Lib.Base
 
         [HttpGet("default")]
         [HttpGet($"default/{MixRequestQueryKeywords.Specificulture}")]
-        public ActionResult<TView> GetDefault(string culture = null)
+        public ActionResult<TView> GetDefault()
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
             result.InitDefaultValues(_culture?.Specificulture, _culture?.Id);

@@ -17,20 +17,20 @@ namespace Mix.Common.Controllers
     public class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {
         private readonly MixRepoDbRepository _mixRepoDbRepository;
+        protected MixCacheService _cacheService;
         public PostContentApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> uow,
             IQueueService<MessageQueueModel> queueService,
-            MixRepoDbRepository mixRepoDbRepository,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
+            MixRepoDbRepository mixRepoDbRepository)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
+            _cacheService = new();
         }
 
 
@@ -38,6 +38,7 @@ namespace Mix.Common.Controllers
         public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
+            
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)

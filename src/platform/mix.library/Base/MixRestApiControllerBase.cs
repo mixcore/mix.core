@@ -23,9 +23,6 @@ namespace Mix.Lib.Base
         protected readonly TDbContext _context;
         protected bool _forbidden;
         protected UnitOfWorkInfo _uow;
-        protected UnitOfWorkInfo _cacheUOW;
-        protected MixCacheDbContext _cacheDbContext;
-        protected MixCacheService _cacheService;
         protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> _restApiService;
         protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
 
@@ -35,18 +32,13 @@ namespace Mix.Lib.Base
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<TDbContext> uow,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _context = (TDbContext)uow.ActiveDbContext;
+            _restApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
             _uow = uow;
-
-            _cacheDbContext = (MixCacheDbContext)cacheUOW.ActiveDbContext;
-            _restApiService = new(httpContextAccessor, mixIdentityService, uow, cacheUOW, queueService);
-            _cacheUOW = cacheUOW;
-            _cacheService = new();
             _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
         }
 

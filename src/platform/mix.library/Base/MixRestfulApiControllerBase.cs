@@ -16,7 +16,8 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCacheDbContext> cacheUOW, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
+        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCacheDbContext> cacheUOW, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) 
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
         }
 
