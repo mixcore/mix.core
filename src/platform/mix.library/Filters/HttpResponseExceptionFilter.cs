@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Mix.Lib.Filters
@@ -41,7 +42,7 @@ namespace Mix.Lib.Filters
                 };
                 context.ExceptionHandled = true;
             }
-            else if (context.Exception is Exception)
+            else if (context.Exception != null)
             {
                 context.Result = new ObjectResult(context.Exception.Message?.Split('\n'));
             }

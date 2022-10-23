@@ -16,9 +16,11 @@ namespace Mix.Portal.Domain.Services
         private Dictionary<int, int> moduleIds = new();
         private Dictionary<Guid, Guid> dataIds = new();
         private Dictionary<Guid, Guid> valueIds = new();
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         public CloneCultureService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW)
-            : base(httpContextAccessor)
+            : base(httpContextAccessor) 
         {
+            _cmsUOW = cmsUOW;
         }
 
         #region Methods
