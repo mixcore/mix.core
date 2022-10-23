@@ -10,7 +10,6 @@ namespace Mix.Lib.Base
 {
     public abstract class TenantServiceBase
     {
-        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         protected IHttpContextAccessor _httpContextAccessor;
 
         protected TenantServiceBase(IHttpContextAccessor httpContextAccessor)

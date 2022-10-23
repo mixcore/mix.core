@@ -19,9 +19,11 @@ namespace Mix.Portal.Domain.Services
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
         private readonly MixThemeImportService _importService;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService) 
             : base(httpContextAccessor)
         {
+            _cmsUOW = cmsUOW;
             _hubContext = hubContext;
             _httpService = httpService;
             _importService = importService;
@@ -59,6 +61,8 @@ namespace Mix.Portal.Domain.Services
                 if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
                 {
                     indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4")
+                        .Replace("[baseRoute]", $"'/app/{baseRoute}'")
+                        //.Replace("[baseHref]", appFolder)
                         .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
                         .Replace("options['baseHref']", $"'{appFolder}'");
 

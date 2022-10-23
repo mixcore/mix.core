@@ -8,7 +8,7 @@ using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
 {
-    [Route("{controller}")]
+    [Route("app")]
     public class AppController : MixControllerBase
     {
         protected UnitOfWorkInfo _uow;
