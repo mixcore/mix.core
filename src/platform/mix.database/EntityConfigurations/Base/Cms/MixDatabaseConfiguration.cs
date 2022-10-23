@@ -36,13 +36,21 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
 
             builder.Property(e => e.ReadPermissions)
                .IsRequired(false)
-               //.HasConversion(new StringToJArrayConverter())
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
 
-            builder.Property(e => e.WritePermissions)
+            builder.Property(e => e.CreatePermissions)
                .IsRequired(false)
-               //.HasConversion(new StringToJArrayConverter())
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet);
+            
+            builder.Property(e => e.UpdatePermissions)
+               .IsRequired(false)
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet);
+            
+            builder.Property(e => e.DeletePermissions)
+               .IsRequired(false)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
         }
