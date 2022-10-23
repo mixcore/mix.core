@@ -38,23 +38,34 @@ namespace Mix.Lib.Attributes
                 context.Result = new BadRequestResult();
                 return;
             }
-            
-            if (ValidToken())
+
+            if (!CheckByPassAuthenticate(context.HttpContext.Request.Method, database))
             {
-                if (!IsInRoles(context.HttpContext.Request.Method, database))
+                if (ValidToken())
                 {
-                    if (!ValidEnpointPermission(context))
+                    if (!IsInRoles(context.HttpContext.Request.Method, database))
                     {
-                        context.Result = new ForbidResult();
-                        return;
+                        if (!ValidEnpointPermission(context))
+                        {
+                            context.Result = new ForbidResult();
+                            return;
+                        }
                     }
                 }
+                else
+                {
+                    context.Result = new UnauthorizedResult();
+                    return;
+                }
             }
-            else
-            {
-                context.Result = new UnauthorizedResult();
-                return;
-            }
+        }
+
+        private bool CheckByPassAuthenticate(string method, MixDatabase database)
+        {
+            return (method == "GET" && (string.IsNullOrEmpty(database.ReadPermissions) || JArray.Parse(database.ReadPermissions).Count > 0))
+                || (method == "POST" && (string.IsNullOrEmpty(database.CreatePermissions) || JArray.Parse(database.CreatePermissions).Count > 0))
+                || ((method == "PUT" || method == "PATCH") && (string.IsNullOrEmpty(database.UpdatePermissions) || JArray.Parse(database.UpdatePermissions).Count > 0))
+                || (method == "DELETE" && (string.IsNullOrEmpty(database.DeletePermissions) || JArray.Parse(database.DeletePermissions).Count > 0));
         }
 
         #region Privates
@@ -80,7 +91,7 @@ namespace Mix.Lib.Attributes
             {
                 case "GET": return CheckUserInRoles(database.ReadPermissions, userRoles);
                 case "POST": return CheckUserInRoles(database.CreatePermissions, userRoles);
-                case "PATCH": 
+                case "PATCH":
                 case "PUT": return CheckUserInRoles(database.ModifiedBy, userRoles);
                 case "DELETE": return CheckUserInRoles(database.DeletePermissions, userRoles);
                 default:
@@ -91,8 +102,7 @@ namespace Mix.Lib.Attributes
         private bool CheckUserInRoles(string roles, string[] userRoles)
         {
             var allowedRoles = JArray.Parse(roles).Values<string>().ToArray();
-            return allowedRoles.Count() == 0 
-                || allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
+            return allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
         }
 
         #endregion

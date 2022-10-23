@@ -23,7 +23,6 @@ namespace Mix.Lib.Services
         protected readonly IQueueService<MessageQueueModel> _queueService;
         protected UnitOfWorkInfo _uow;
         protected UnitOfWorkInfo _cacheUOW;
-        protected MixCacheDbContext _cacheDbContext;
         protected MixCacheService _cacheService;
         protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
         protected readonly TDbContext _context;
@@ -32,14 +31,11 @@ namespace Mix.Lib.Services
             IHttpContextAccessor httpContextAccessor,
             MixIdentityService identityService,
             UnitOfWorkInfo<TDbContext> uow,
-            UnitOfWorkInfo cacheUOW,
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor)
         {
             _mixIdentityService = identityService;
             _uow = uow;
-            _cacheUOW = cacheUOW;
-            _cacheDbContext = (MixCacheDbContext)cacheUOW.ActiveDbContext;
             _cacheService = new();
             _queueService = queueService;
             _context = (TDbContext)uow.ActiveDbContext;
