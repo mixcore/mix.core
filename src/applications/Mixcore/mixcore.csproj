@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<RootNamespace>Mixcore</RootNamespace>
 		<UserSecretsId>18e7166c-3aa3-4569-98f0-d319f894743d</UserSecretsId>
-		<ServerGarbageCollection>true</ServerGarbageCollection>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
 		<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<ApplicationIcon>mixcore.ico</ApplicationIcon>
