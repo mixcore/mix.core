@@ -25,6 +25,7 @@
 
 <body ng-app="MixPortal" ng-init="init()" ng-controller="AppPortalController" class="w-100 overflow-auto">
     <div class="w-100" ng-if="isInit">
+        <high-frequency-messages></high-frequency-messages>
         <style>
             :root {
                 --primary-color-hue: {{portalThemeSettings.primaryColorHue}};
