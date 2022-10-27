@@ -51,27 +51,52 @@ namespace Mix.SignalR.Hubs
 
         public virtual async Task SendPrivateMessage(SignalRMessageModel message, string connectionId, bool selfReceive)
         {
-            LogMessage(message);
-            await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
-            if (selfReceive)
+            try
             {
-                await SendMessageToCaller(message);
+                LogMessage(message);
+                await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
+                if (selfReceive)
+                {
+                    await SendMessageToCaller(message);
+                }
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+            }
+            
         }
 
         public virtual Task SendMessageToCaller(SignalRMessageModel message)
         {
-            LogMessage(message);
-            return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
+            try
+            {
+                LogMessage(message);
+                return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
+            }
+            catch(Exception ex)
+            {
+                MixService.LogException(ex);
+                return Task.CompletedTask;
+            }
         }
 
         public virtual Task SendGroupMessage(SignalRMessageModel message, string groupName, bool exceptCaller = true)
         {
-            LogMessage(message);
-            message.From ??= GetCurrentUser();
-            return exceptCaller
-                ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
-                : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
+            try
+            {
+                LogMessage(message);
+                message.From ??= GetCurrentUser();
+                return exceptCaller
+                    ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
+                    : Clients.Group(groupName).SendAsync(HubMethods.ReceiveMethod, message);
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return Task.CompletedTask;
+            }
+            
         }
 
         #region Private
@@ -96,7 +121,7 @@ namespace Mix.SignalR.Hubs
         }
 
 
-        private HubUserModel GetCurrentUser()
+        protected HubUserModel GetCurrentUser()
         {
             return new()
             {

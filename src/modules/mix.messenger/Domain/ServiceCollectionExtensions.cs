@@ -13,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 endpoints.MapHub<PortalHub>(HubEndpoints.PortalHub);
                 endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
                 endpoints.MapHub<MixThemeHub>(HubEndpoints.MixThemeHub);
+                endpoints.MapHub<HighFrequencyHub>(HubEndpoints.HighFrequencyHub);
             });
             return app;
         }
