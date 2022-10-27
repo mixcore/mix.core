@@ -22,7 +22,6 @@ namespace Mix.Services.Permission.Domain.Services
 
         public MixPermissionService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
             UnitOfWorkInfo<PermissionDbContext> uow,
             MixIdentityService identityService)
             : base(httpContextAccessor)
