@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Mix.Signalr.Hub.Hubs;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 
@@ -14,6 +15,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 endpoints.MapHub<EditFileHub>(HubEndpoints.EditFileHub);
                 endpoints.MapHub<MixThemeHub>(HubEndpoints.MixThemeHub);
                 endpoints.MapHub<HighFrequencyHub>(HubEndpoints.HighFrequencyHub);
+                endpoints.MapHub<VideoCallHub>(HubEndpoints.VideoCallHub);
+                endpoints.MapHub<AuthHub>("/hubs/auth");
+                endpoints.MapHub<SignalingHub>("/hubs/signaling");
             });
             return app;
         }

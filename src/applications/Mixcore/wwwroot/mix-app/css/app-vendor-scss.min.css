@@ -170,6 +170,10 @@ mix-database-nav-values mix-column-preview .rowx {
   #modal-content-filter .modal-xl {
     max-width: 80vw; } }
 
+.table-data td.preview {
+  max-width: 120px;
+  overflow: hidden; }
+
 .content {
   width: 100%;
   display: flex;

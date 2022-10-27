@@ -126,7 +126,7 @@ namespace Mix.SignalR.Hubs
             return new()
             {
                 ConnectionId = Context.ConnectionId,
-                Username = Context.User?.Identity?.Name,
+                Username = Context.User?.Identity?.Name ?? "Annonymous",
                 Avatar = Context.User?.Claims.FirstOrDefault(m => m.Type == MixClaims.Avatar)?.Value ?? MixConstants.CONST_DEFAULT_EXTENSIONS_FILE_PATH,
             };
         }
