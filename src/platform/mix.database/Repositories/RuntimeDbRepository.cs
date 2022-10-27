@@ -44,7 +44,7 @@ namespace Mix.Database.Repositories
         {
             _dbContext = dbContext;
             _entityName = tableName.ToLower();
-            _entityType = _dbContext.Model.FindEntityType(_entityName).ClrType;
+            _entityType = _dbContext.Model.FindEntityType(_entityName)?.ClrType;
             CacheService = new();
             Table = _dbContext.Query(_entityName);
             SelectedMembers = FilterSelectedFields();
@@ -397,7 +397,7 @@ namespace Mix.Database.Repositories
             {
                 MixCompareOperator.Contain => query.Where($"{field.FieldName}.Contains(@0)", field.Value),
                 MixCompareOperator.Equal => query.Where($"{field.FieldName} = @0", field.Value),
-                MixCompareOperator.Like => field.Value!=null && field.FieldName!=null ? query.Where($"{field.FieldName}.Contains(@0)", field.Value): query,
+                MixCompareOperator.Like => field.Value != null && field.FieldName != null ? query.Where($"{field.FieldName}.Contains(@0)", field.Value) : query,
                 MixCompareOperator.NotEqual => query.Where($"{field.FieldName} <> @0", field.Value),
                 MixCompareOperator.NotContain => query.Where($"{field.FieldName} = @0", field.Value),
                 MixCompareOperator.GreaterThanOrEqual => query.Where($"{field.FieldName} >= @0", field.Value),

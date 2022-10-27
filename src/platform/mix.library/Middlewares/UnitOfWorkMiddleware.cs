@@ -38,7 +38,6 @@ namespace Mix.Lib.Middlewares
             {
                 await next.Invoke(context);
 
-
                 await CompleteUOW(cmsUOW, context.Response.StatusCode);
                 await CompleteUOW(accountUOW, context.Response.StatusCode);
                 await CompleteUOW(cacheUOW, context.Response.StatusCode);
@@ -63,7 +62,7 @@ namespace Mix.Lib.Middlewares
                     await _cmsUOW.CompleteAsync();
                 }
             }
-            _ = _cmsUOW.ActiveDbContext?.DisposeAsync();
+            _ = _cmsUOW.DisposeAsync();
         }
     }
 }
