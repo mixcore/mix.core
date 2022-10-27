@@ -105,8 +105,6 @@ namespace Mix.Queue.Engines
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var providerSetting = _configuration["MessageQueueSetting:Provider"];
-            var provider = Enum.Parse<MixQueueProvider>(providerSetting);
             _publishers = CreatePublisher(_topicId, _queue, stoppingToken);
             return StartMixQueueEngine(stoppingToken);
         }
