@@ -61,7 +61,7 @@ namespace Mix.Portal.Domain.Services
                 if (indexFile.Content != null && regex.IsMatch(indexFile.Content))
                 {
                     indexFile.Content = regex.Replace(indexFile.Content, $"/{appFolder}/$3$4")
-                        .Replace("[baseRoute]", $"'/app/{baseRoute}'")
+                        .Replace("[baseRoute]", $"/app/{baseRoute}")
                         //.Replace("[baseHref]", appFolder)
                         .Replace("options['baseRoute']", $"'/app/{baseRoute}'")
                         .Replace("options['baseHref']", $"'{appFolder}'");
