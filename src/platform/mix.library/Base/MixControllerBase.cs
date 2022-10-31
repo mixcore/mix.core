@@ -98,10 +98,10 @@ namespace Mix.Lib.Base
             {
                 LoadCulture();
             }
-            ViewBag.culture = Culture;
             if (!string.IsNullOrEmpty(Culture))
             {
-                ViewBag.assetFolder = _mixService.GetAssetFolder(Culture, CurrentTenant.PrimaryDomain);
+                ViewData["Culture"] = Culture;
+                ViewData["AssetFolder"] = _mixService.GetAssetFolder(Culture, CurrentTenant.PrimaryDomain);
             }
             domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (_ipSecurityConfigService.GetConfig<bool>(MixAppSettingKeywords.IsRetrictIp))

@@ -85,7 +85,7 @@ namespace Mixcore.Controllers
             ViewData["Image"] = page.Image;
             ViewData["ViewMode"] = MixMvcViewMode.Application;
 
-            ViewBag.viewMode = MixMvcViewMode.Application;
+            ViewData["ViewMode"] = MixMvcViewMode.Application;
             return View(page);
         }
     }

@@ -85,7 +85,7 @@ namespace Mixcore.Controllers
                 ViewData["ViewMode"] = MixMvcViewMode.Page;
                 ViewData["Keyword"] = page.SeoKeywords;
 
-                ViewBag.viewMode = MixMvcViewMode.Page;
+                ViewData["ViewMode"] = MixMvcViewMode.Page;
             }
             return page;
         }
@@ -111,7 +111,7 @@ namespace Mixcore.Controllers
                             ViewData["ViewMode"] = MixMvcViewMode.Page;
                             ViewData["Keyword"] = page.SeoKeywords;
 
-                            ViewBag.viewMode = MixMvcViewMode.Page;
+                            ViewData["ViewMode"] = MixMvcViewMode.Page;
                             return View("Page", page);
                         }
                         break;

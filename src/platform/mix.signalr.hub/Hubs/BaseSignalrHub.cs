@@ -27,7 +27,6 @@ namespace Mix.SignalR.Hubs
 
         public virtual async Task SendMessage(SignalRMessageModel message)
         {
-            LogMessage(message);
             await Clients.All.SendAsync(HubMethods.ReceiveMethod, message);
         }
 
@@ -53,7 +52,6 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
-                LogMessage(message);
                 await Clients.Client(connectionId).SendAsync(HubMethods.ReceiveMethod, message);
                 if (selfReceive)
                 {
@@ -71,7 +69,6 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
-                LogMessage(message);
                 return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
             }
             catch(Exception ex)
@@ -85,7 +82,6 @@ namespace Mix.SignalR.Hubs
         {
             try
             {
-                LogMessage(message);
                 message.From ??= GetCurrentUser();
                 return exceptCaller
                     ? Clients.GroupExcept(groupName, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, message)
