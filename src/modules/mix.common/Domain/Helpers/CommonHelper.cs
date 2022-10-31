@@ -13,11 +13,12 @@ namespace Mix.Common.Domain.Helpers
             // Get Settings
             return new()
             {
-                Domain = currentTenant.Configurations.Domain,
-                DefaultCulture = currentTenant.Configurations.DefaultCulture,
+                Domain = currentTenant?.Configurations.Domain,
+                DefaultCulture = currentTenant?.Configurations.DefaultCulture,
+                IsEncryptApi = currentTenant?.Configurations.IsEncryptApi ?? false,
+                LastUpdateConfiguration = currentTenant?.Configurations.LastUpdateConfiguration,
                 PortalThemeSettings = PortalConfigService.Instance.AppSettings,
                 ApiEncryptKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey,
-                IsEncryptApi = currentTenant.Configurations.IsEncryptApi,
                 //Cultures = cultures,
                 PageTypes = Enum.GetNames(typeof(MixPageType)),
                 ModuleTypes = Enum.GetNames(typeof(MixModuleType)),
@@ -31,9 +32,7 @@ namespace Mix.Common.Domain.Helpers
                     new JProperty("Google", _authConfigurations.Google?.AppId),
                     new JProperty("Twitter", _authConfigurations.Twitter?.AppId),
                     new JProperty("Microsoft", _authConfigurations.Microsoft?.AppId),
-                },
-                LastUpdateConfiguration = currentTenant.Configurations.LastUpdateConfiguration
-
+                }
             };
         }
     }

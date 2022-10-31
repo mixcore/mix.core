@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using Mix.Lib.Services;
 
 namespace Mix.Lib.Middlewares
 {
@@ -8,10 +9,12 @@ namespace Mix.Lib.Middlewares
     {
         private readonly RequestDelegate next;
         private readonly IQueueService<MessageQueueModel> _queueService;
-        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService)
+        private readonly MixTenantService _mixTenantService;
+        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService, MixTenantService mixTenantService)
         {
             this.next = next;
             _queueService = queueService;
+            _mixTenantService = mixTenantService;
         }
 
         public async Task Invoke(
@@ -26,15 +29,14 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
-                if (MixTenantRepository.Instance.AllTenants == null)
+                if (_mixTenantService.AllTenants == null)
                 {
-                    var uow = new UnitOfWorkInfo(cmsContext);
-                    await MixTenantRepository.Instance.Reload(uow);
+                    await _mixTenantService.Reload();
                 }
                 var currentTenant = context.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
                 if (currentTenant == null || !currentTenant.Domains.Any(m => m.Host == context.Request.Headers.Host))
                 {
-                    currentTenant = MixTenantRepository.Instance.GetCurrentTenant(context.Request.Headers.Host);
+                    currentTenant = _mixTenantService.GetCurrentTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                 }
                 await next.Invoke(context);

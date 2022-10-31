@@ -23,8 +23,11 @@ namespace Mix.Tenancy.Domain
 
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
-                GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
-                GlobalConfigService.Instance.SaveSettings();
+                if (string.IsNullOrEmpty(GlobalConfigService.Instance.AppSettings.ApiEncryptKey))
+                {
+                    GlobalConfigService.Instance.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
+                    GlobalConfigService.Instance.SaveSettings();
+                }
             }
         }
 

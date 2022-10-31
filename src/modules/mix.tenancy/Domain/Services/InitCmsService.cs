@@ -7,6 +7,7 @@ namespace Mix.Tenancy.Domain.Services
 {
     public partial class InitCmsService
     {
+        private readonly MixTenantService _mixTenantService;
         private readonly MixIdentityService _identityService;
         private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
@@ -23,7 +24,7 @@ namespace Mix.Tenancy.Domain.Services
             DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
             IConfiguration configuration,
-            MixCmsContext context, MixDataService mixDataService)
+            MixCmsContext context, MixDataService mixDataService, MixTenantService mixTenantService)
         {
             _configuration = configuration;
             _userManager = userManager;
@@ -38,6 +39,7 @@ namespace Mix.Tenancy.Domain.Services
             {
                 tenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
             }
+            _mixTenantService = mixTenantService;
         }
 
     }

@@ -22,6 +22,7 @@ namespace Mix.Tenancy.Controllers
     [ApiController]
     public class InitController : MixApiControllerBase
     {
+        private readonly MixTenantService _mixTenantService;
         private readonly InitCmsService _initCmsService;
         private readonly QuartzService _quartzService;
         private readonly MixThemeImportService _importService;
@@ -40,7 +41,7 @@ namespace Mix.Tenancy.Controllers
             IHostApplicationLifetime appLifetime,
             QuartzService quartzService,
             HttpService httpService, IHubContext<MixThemeHub> hubContext = null
-            )
+, MixTenantService mixTenantService = null)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
 
@@ -50,6 +51,7 @@ namespace Mix.Tenancy.Controllers
             _hubContext = hubContext;
             _appLifetime = appLifetime;
             _quartzService = quartzService;
+            _mixTenantService = mixTenantService;
         }
 
 
@@ -77,8 +79,8 @@ namespace Mix.Tenancy.Controllers
                     await _initCmsService.InitTenantAsync(model);
                     await _quartzService.LoadScheduler();
                     var uow = new UnitOfWorkInfo(new MixCmsContext(_httpContextAccessor));
-                    await MixTenantRepository.Instance.Reload(uow);
-                    _session.Put(MixRequestQueryKeywords.Tenant, MixTenantRepository.Instance.AllTenants.First());
+                    await _mixTenantService.Reload(uow);
+                    _session.Put(MixRequestQueryKeywords.Tenant, _mixTenantService.AllTenants.First());
                     await uow.CompleteAsync();
                     return Ok();
                 }
