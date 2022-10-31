@@ -47,7 +47,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         private void InitDomain(InitCmsDto model)
         {
-            Domain = new()
+            Domain = new(UowInfo)
             {
                 DisplayName = model.PrimaryDomain,
                 Host = model.PrimaryDomain,
@@ -57,7 +57,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         private void InitCulture(InitCmsDto model)
         {
-            Culture = new InitCultureViewModel()
+            Culture = new InitCultureViewModel(UowInfo)
             {
                 Title = model.Culture.FullName,
                 Specificulture = model.Culture.Specificulture,
@@ -80,7 +80,6 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             tenantConfigService.AppSettings.Domain = PrimaryDomain.TrimEnd('/');
             tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
             tenantConfigService.SaveSettings();
-            await MixTenantRepository.Instance.Reload(UowInfo);
             return entity;
         }
 

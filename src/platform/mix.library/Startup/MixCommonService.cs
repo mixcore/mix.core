@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Communicator.Services;
 using Mix.Database.Services;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
@@ -24,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<MixEndpointService>();
             services.TryAddScoped<IPSecurityConfigService>();
+
             services.TryAddScoped<MixPostService>();
             services.TryAddScoped<MixDataService>();
 

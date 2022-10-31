@@ -1,4 +1,7 @@
-﻿using Mix.Lib.Repositories;
+﻿using Grpc.Core;
+using Microsoft.AspNetCore.Http;
+using Mix.Lib.Repositories;
+using Mix.Lib.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 
@@ -6,21 +9,24 @@ namespace Mixcore.Domain.Subscribers
 {
     public sealed class TenantSubscriber : SubscriberBase
     {
-        private UnitOfWorkInfo _uow;
         static string topicId = typeof(MixTenantSystemViewModel).FullName;
+        private MixTenantService _mixTenantService;
+        public IHttpContextAccessor _httpContextAccessor { get; }
+
         public TenantSubscriber(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            MixTenantService mixTenantService)
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
-            _uow = new(new MixCmsContext(httpContextAccessor));
+            _httpContextAccessor = httpContextAccessor;
+            _mixTenantService = mixTenantService;
         }
 
         public override async Task Handler(MessageQueueModel data)
         {
-            var _repository = MixTenantSystemViewModel.GetRepository(_uow);
-            var post = data.ParseData<MixTenantSystemViewModel>();
+            UnitOfWorkInfo<MixCmsContext> _uow = new(new MixCmsContext(_httpContextAccessor));
             switch (data.Action)
             {
                 case "Get":
@@ -29,12 +35,12 @@ namespace Mixcore.Domain.Subscribers
                 case "Put":
                 case "Patch":
                 case "Delete":
-                    MixTenantRepository.Instance.AllTenants = await _repository.GetAllAsync(m => true);
+                    await _mixTenantService.Reload(_uow);
                     break;
                 default:
                     break;
             }
-            await _uow.CompleteAsync();
+            _ = _uow.DisposeAsync();
         }
     }
 }
