@@ -102,7 +102,7 @@ namespace Mixcore.Controllers
             ViewData["ViewMode"] = MixMvcViewMode.Post;
             ViewData["Keyword"] = keyword;
 
-            ViewBag.viewMode = MixMvcViewMode.Post;
+            ViewData["ViewMode"] = MixMvcViewMode.Post;
             return View(post);
         }
     }

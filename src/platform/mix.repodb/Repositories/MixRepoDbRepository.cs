@@ -171,8 +171,8 @@ namespace Mix.RepoDb.Repositories
                     return (await connection.QueryAsync<dynamic>(
                         _tableName,
                         new List<QueryField>() {
-                    new QueryField("parentType", parentType.ToString()),
-                    new QueryField("parentId", parentId)
+                    new QueryField("ParentType", parentType.ToString()),
+                    new QueryField("ParentId", parentId.ToString())
                         },
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace))?.SingleOrDefault();

@@ -80,10 +80,10 @@ namespace Mix.Lib.ViewModels
             {
                 try
                 {
-                    MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
+                    var database = await MixDatabaseViewModel.GetRepository(_cmsUow)
                         .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
                     repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
-                    var data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
+                    dynamic data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
                     if (data != null)
                     {
 

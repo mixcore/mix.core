@@ -59,7 +59,7 @@ namespace Mixcore.Domain.Bases
             ViewData["ViewMode"] = MixMvcViewMode.Page;
             ViewData["Keyword"] = keyword;
 
-            ViewBag.viewMode = MixMvcViewMode.Page;
+            ViewData["ViewMode"] = MixMvcViewMode.Page;
             return View(page);
         }
         #endregion
