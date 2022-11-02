@@ -188,7 +188,7 @@ namespace Mix.Common.Controllers
         [Route("ping")]
         public ActionResult Ping()
         {
-            return Ok(DateTime.UtcNow);
+            return Ok(DateTime.UtcNow.ToString());
         }
 
         [HttpGet]
