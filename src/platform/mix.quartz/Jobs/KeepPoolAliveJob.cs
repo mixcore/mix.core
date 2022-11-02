@@ -29,9 +29,17 @@ namespace Mix.MixQuartz.Jobs
             string domain = context.Trigger.JobDataMap.GetString("domain");
             if (!string.IsNullOrEmpty(domain))
             {
-                var now = DateTime.UtcNow;
-                var ping = await _httpService.GetAsync<DateTime>($"{domain.TrimEnd('/')}/api/v2/rest/shared/ping");
-                Console.WriteLine($"Ping at {now}: {(ping - now).TotalMilliseconds}");
+                try
+                {
+                    var now = DateTime.UtcNow;
+                    var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}/api/v2/rest/shared/ping");
+                    
+                    Console.WriteLine($"Ping at {now}: {(DateTime.Parse(ping) - now).TotalMilliseconds}");
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Cannot Ping: " + ex.Message);
+                }
             }
             Console.WriteLine(DateTime.UtcNow);
         }
