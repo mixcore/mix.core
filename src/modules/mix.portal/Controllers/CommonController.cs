@@ -4,7 +4,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/common")]
     [ApiController]
-    public class CommonController : MixApiControllerBase
+    public class CommonController : MixTenantApiControllerBase
     {
         private readonly MixCmsContext _context;
         public CommonController(

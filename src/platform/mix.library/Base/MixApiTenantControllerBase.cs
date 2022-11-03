@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
 {
-    [MixAuthorize]
-    public abstract class MixAuthorizedApiControllerBase : Controller
+    public abstract class MixTenantApiControllerBase : Controller
     {
         protected IHttpContextAccessor _httpContextAccessor;
         protected ISession _session;
@@ -26,41 +25,39 @@ namespace Mix.Lib.Base
         }
         protected string _lang;
         protected MixCulture _culture;
-        protected UnitOfWorkInfo _uow;
-        protected readonly ILogger<MixTenantApiControllerBase> _logger;
+        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly IConfiguration _configuration;
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
         protected readonly TranslatorService _translator;
         protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
-        public MixAuthorizedApiControllerBase(
-            ILogger<MixTenantApiControllerBase> logger,
+        public MixTenantApiControllerBase(
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCmsContext context
-,
-            IHttpContextAccessor httpContextAccessor) : base()
+            IQueueService<MessageQueueModel> queueService) : base()
         {
-            _uow = new UnitOfWorkInfo(context);
-            _logger = logger;
-            _mixService = mixService;
-            _translator = translator;
-            _cultureRepository = cultureRepository;
-            _mixIdentityService = mixIdentityService;
             _httpContextAccessor = httpContextAccessor;
             _session = httpContextAccessor.HttpContext.Session;
+            _configuration = configuration;
+            _mixService = mixService;
+            _translator = translator;
+            _mixIdentityService = mixIdentityService;
+            _queueService = queueService;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             base.OnActionExecuting(context);
+
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                _lang = RouteData?.Values["lang"] != null
-                    ? RouteData.Values["lang"].ToString()
+                _lang = RouteData?.Values[MixRequestQueryKeywords.Specificulture] != null
+                    ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
                     : CurrentTenant.Configurations.DefaultCulture;
-                _culture = _cultureRepository.GetFirst(c => c.Specificulture == _lang);
+                _culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == _lang) ?? CurrentTenant.Cultures.FirstOrDefault();
             }
         }
     }

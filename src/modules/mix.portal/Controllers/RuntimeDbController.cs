@@ -13,7 +13,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/runtime-db/{name}")]
     [ApiController]
-    public class RuntimeDbController : MixApiControllerBase
+    public class RuntimeDbController : MixTenantApiControllerBase
     {
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly RuntimeDbContextService _runtimeDbContextService;
