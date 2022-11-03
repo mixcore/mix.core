@@ -20,7 +20,7 @@ namespace Mix.Tenancy.Controllers
 {
     [Route("api/v2/rest/mix-tenancy/setup")]
     [ApiController]
-    public class InitController : MixApiControllerBase
+    public class InitController : MixTenantApiControllerBase
     {
         private readonly MixTenantService _mixTenantService;
         private readonly InitCmsService _initCmsService;

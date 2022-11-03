@@ -5,7 +5,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-file")]
     [ApiController]
-    public class MixFileController : MixApiControllerBase
+    public class MixFileController : MixTenantApiControllerBase
     {
         private readonly MixCmsContext _context;
         public MixFileController(

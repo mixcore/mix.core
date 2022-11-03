@@ -22,7 +22,7 @@ namespace Mix.Common.Controllers
     [Route("api/v2/rest/settings")]
     [ApiController]
     [MixAuthorize(roles: MixRoles.Owner)]
-    public class SettingApiController : MixApiControllerBase
+    public class SettingApiController : MixTenantApiControllerBase
     {
         private ConfigurationServiceBase<JObject> _settingService;
         private readonly ApplicationLifetime _applicationLifetime;

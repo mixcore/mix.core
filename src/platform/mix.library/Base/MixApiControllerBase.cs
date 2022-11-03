@@ -9,22 +9,6 @@ namespace Mix.Lib.Base
 {
     public abstract class MixApiControllerBase : Controller
     {
-        protected IHttpContextAccessor _httpContextAccessor;
-        protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
-        {
-            get
-            {
-                if (_currentTenant == null)
-                {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-                }
-                return _currentTenant;
-            }
-        }
-        protected string _lang;
-        protected MixCulture _culture;
         protected readonly IQueueService<MessageQueueModel> _queueService;
         protected readonly IConfiguration _configuration;
         protected readonly MixIdentityService _mixIdentityService;
@@ -39,26 +23,11 @@ namespace Mix.Lib.Base
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService) : base()
         {
-            _httpContextAccessor = httpContextAccessor;
-            _session = httpContextAccessor.HttpContext.Session;
             _configuration = configuration;
             _mixService = mixService;
             _translator = translator;
             _mixIdentityService = mixIdentityService;
             _queueService = queueService;
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            base.OnActionExecuting(context);
-
-            if (!GlobalConfigService.Instance.AppSettings.IsInit)
-            {
-                _lang = RouteData?.Values[MixRequestQueryKeywords.Specificulture] != null
-                    ? RouteData.Values[MixRequestQueryKeywords.Specificulture].ToString()
-                    : CurrentTenant.Configurations.DefaultCulture;
-                _culture = CurrentTenant.Cultures.FirstOrDefault(c => c.Specificulture == _lang) ?? CurrentTenant.Cultures.FirstOrDefault();
-            }
         }
     }
 }

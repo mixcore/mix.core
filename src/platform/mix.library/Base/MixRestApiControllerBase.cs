@@ -13,7 +13,7 @@ using System.Reflection;
 namespace Mix.Lib.Base
 {
     public class MixRestHandlerApiControllerBase<TView, TDbContext, TEntity, TPrimaryKey>
-        : MixApiControllerBase
+        : MixTenantApiControllerBase
         where TPrimaryKey : IComparable
         where TDbContext : DbContext
         where TEntity : EntityBase<TPrimaryKey>

@@ -11,7 +11,7 @@ using System.Reflection;
 namespace Mix.Lib.Base
 {
     public class MixQueryEntityApiControllerBase<TDbContext, TEntity, TPrimaryKey>
-        : MixApiControllerBase
+        : MixTenantApiControllerBase
         where TPrimaryKey : IComparable
         where TEntity : class, IEntity<TPrimaryKey>
         where TDbContext : DbContext

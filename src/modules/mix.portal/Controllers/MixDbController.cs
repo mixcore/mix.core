@@ -20,7 +20,7 @@ namespace Mix.Portal.Controllers
     [MixDatabaseAuthorize]
     [Route("api/v2/rest/mix-portal/mix-db/{name}")]
     [ApiController]
-    public class MixDbController : MixApiControllerBase
+    public class MixDbController : MixTenantApiControllerBase
     {
         private const string createdDateFieldName = "CreatedDateTime";
         private const string idFieldName = "Id";

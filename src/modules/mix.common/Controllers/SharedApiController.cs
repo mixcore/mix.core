@@ -26,8 +26,6 @@ namespace Mix.Common.Controllers
         protected readonly MixCmsContext _context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
-        private readonly AuthConfigService _authConfigService;
-        private readonly MixAuthenticationConfigurations _authConfigurations;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
         public SharedApiController(
             IHttpContextAccessor httpContextAccessor,
@@ -35,17 +33,15 @@ namespace Mix.Common.Controllers
             MixService mixService,
             TranslatorService translator,
             IActionDescriptorCollectionProvider routeProvider,
-            MixIdentityService mixIdentityService, AuthConfigService authConfigService,
+            MixIdentityService mixIdentityService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _authConfigurations = authConfigService.AppSettings;
             _context = context;
             _uow = new(_context);
             _configRepo = MixConfigurationContentViewModel.GetRepository(_uow);
             _langRepo = MixLanguageContentViewModel.GetRepository(_uow);
             _routeProvider = routeProvider;
-            _authConfigService = authConfigService;
             _applicationLifetime = applicationLifetime;
         }
 
@@ -191,46 +187,7 @@ namespace Mix.Common.Controllers
             return Ok(DateTime.UtcNow.ToString());
         }
 
-        [HttpGet]
-        [Route("get-global-settings")]
-        public ActionResult<GlobalSettings> GetSharedSettings()
-        {
-            var settings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant);
-            return Ok(settings);
-        }
-
-        [HttpGet]
-        [Route("get-all-settings")]
-        public async Task<ActionResult<AllSettingModel>> GetAllSettingsAsync()
-        {
-            var settings = await GetSettingsAsync();
-            return Ok(settings);
-        }
-
-        [HttpGet]
-        [Route("get-shared-settings/{culture}")]
-        public async Task<ActionResult<AllSettingModel>> GetSharedSettingsAsync(string culture)
-        {
-            var settings = await GetSettingsAsync(culture);
-            return Ok(settings);
-        }
-
-        // GET api/v1/portal/check-config
-        [HttpGet]
-        [Route("check-config/{lastSync}")]
-        public ActionResult<JObject> checkConfig(DateTime lastSync)
-        {
-            var lastUpdate = CurrentTenant.Configurations.LastUpdateConfiguration;
-            if (lastSync.ToUniversalTime() < lastUpdate)
-            {
-                return Ok(GetAllSettingsAsync());
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
+       
         [AllowAnonymous]
         [HttpGet]
         [Route("json-data/{name}")]
@@ -251,15 +208,5 @@ namespace Mix.Common.Controllers
         }
 
         #endregion
-
-        private async Task<AllSettingModel> GetSettingsAsync(string lang = null)
-        {
-            return new AllSettingModel()
-            {
-                GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant),
-                MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
-                Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
-            };
-        }
     }
 }
