@@ -23,9 +23,10 @@ namespace Mix.MixQuartz.Jobs
 
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
-            if (context.Trigger.JobDataMap.TryGetValue("data", out object obj))
+            var obj = context.Trigger.JobDataMap.GetString("data");
+            if (!string.IsNullOrWhiteSpace(obj))
             {
-                var msg = JObject.Parse(obj.ToString()).ToObject<SignalRMessageModel>();
+                var msg = JObject.Parse(obj).ToObject<SignalRMessageModel>();
                 msg.From = new(GetType().Name);
                 await _portalHub.SendMessageAsync(msg);
             }

@@ -54,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<AuditLogService>();
             services.TryAddSingleton<MixMemoryCacheService>();
-            services.AddSingleton<PortalHubClientService>();
+            services.TryAddSingleton<PortalHubClientService>();
 
             services.AddMixRepoDb();
             return services;
@@ -97,7 +97,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<AuditLogService>();
             services.TryAddSingleton<MixMemoryCacheService>();
-            services.AddSingleton<PortalHubClientService>();
+            services.TryAddSingleton<PortalHubClientService>();
             services.AddMixRepoDb();
             return services;
         }

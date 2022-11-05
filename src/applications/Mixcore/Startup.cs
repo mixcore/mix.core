@@ -25,9 +25,9 @@ namespace Mixcore
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
 
-            services.AddMixCors();
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixCors();
             services.AddScoped<MixNavigationService>();
 
             // Queue Subscribers

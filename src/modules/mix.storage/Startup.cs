@@ -16,9 +16,9 @@ namespace Mix.Storage
         {
             MixFileHelper.CopyFolder(MixFolders.MixCoreConfigurationFolder, MixFolders.MixContentFolder);
 
-            services.AddMixCors();
 
             services.AddMixServices(Assembly.GetExecutingAssembly(), Configuration);
+            services.AddMixCors();
 
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixAuthorize<MixCmsAccountContext>();

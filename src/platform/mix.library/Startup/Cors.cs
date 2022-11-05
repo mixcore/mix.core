@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Mix.Shared.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        static string[] origins = MixEndpointService.Instance.Endpoints
-            .Where(e => !string.IsNullOrEmpty(e))
-            .Distinct()
-            .ToArray();
+        static string[] origins;
 
         public static IServiceCollection AddMixCors(this IServiceCollection services)
         {
+            var _mixEndpointService = services.GetService<MixEndpointService>();
+            origins = _mixEndpointService.Endpoints
+            .Where(e => !string.IsNullOrEmpty(e))
+            .Distinct()
+            .ToArray();
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
