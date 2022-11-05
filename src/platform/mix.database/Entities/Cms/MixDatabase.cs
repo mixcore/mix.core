@@ -1,6 +1,7 @@
 ﻿using Mix.Database.Entities.Base;
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mix.Database.Entities.Cms
 {
@@ -17,7 +18,9 @@ namespace Mix.Database.Entities.Cms
         public bool SelfManaged { get; set; }
 
         public virtual ICollection<MixDatabaseColumn> MixDatabaseColumns { get; set; }
+        [NotMapped]
         public virtual ICollection<MixDatabaseRelationship> SourceRelationships { get; set; }
+        [NotMapped]
         public virtual ICollection<MixDatabaseRelationship> DestinateRelationships { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Database.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace Mix.Lib.Services
     {
 
         public List<MixTenantSystemViewModel> AllTenants { get; set; }
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly DatabaseService _databaseService;
 
-        public MixTenantService(IHttpContextAccessor httpContextAccessor)
+        public MixTenantService(DatabaseService databaseService)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _databaseService = databaseService;
         }
 
         public async Task Reload(UnitOfWorkInfo uow = null)
@@ -28,7 +29,7 @@ namespace Mix.Lib.Services
                 }
                 else
                 {
-                    uow = new(new MixCmsContext(_httpContextAccessor));
+                    uow = new(new MixCmsContext(_databaseService));
                     AllTenants = await MixTenantSystemViewModel.GetRepository(uow).GetAllAsync(m => true);
                     await uow.DisposeAsync();
                 }

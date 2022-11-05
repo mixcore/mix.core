@@ -59,7 +59,10 @@ namespace Mix.Lib.Services
             _databaseService = databaseService;
             _mixDbService = mixDbService;
             _runtimeDbContextService = runtimeDbContextService;
-            _runtimeDbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
+            if (!GlobalConfigService.Instance.IsInit)
+            {
+                _runtimeDbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
+            }
         }
 
         #region Import

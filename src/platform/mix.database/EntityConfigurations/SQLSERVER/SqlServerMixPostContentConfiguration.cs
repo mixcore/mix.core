@@ -1,4 +1,5 @@
-﻿using Mix.Database.EntityConfigurations.SQLSERVER.Base;
+﻿using Mix.Database.Base;
+using Mix.Database.EntityConfigurations.SQLSERVER.Base;
 
 namespace Mix.Database.EntityConfigurations.SQLSERVER
 {

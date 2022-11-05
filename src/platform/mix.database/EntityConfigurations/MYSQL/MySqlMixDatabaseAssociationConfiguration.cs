@@ -1,4 +1,6 @@
-﻿namespace Mix.Database.EntityConfigurations.MYSQL
+﻿using Mix.Database.Base;
+
+namespace Mix.Database.EntityConfigurations.MYSQL
 {
     public class MySqlMixDatabaseAssociationConfiguration : MixDatabaseAssociationConfiguration<MySqlDatabaseConstants>
     {

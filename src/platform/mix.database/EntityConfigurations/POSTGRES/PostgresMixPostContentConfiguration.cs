@@ -1,4 +1,5 @@
-﻿using Mix.Database.EntityConfigurations.POSTGRES.Base;
+﻿using Mix.Database.Base;
+using Mix.Database.EntityConfigurations.POSTGRES.Base;
 
 namespace Mix.Database.EntityConfigurations.POSTGRES
 {

@@ -1,4 +1,5 @@
-﻿using Mix.Database.EntityConfigurations.Base;
+﻿using Mix.Database.Base;
+using Mix.Database.EntityConfigurations.Base;
 
 namespace Mix.Database.EntityConfigurations.MYSQL.Base
 {

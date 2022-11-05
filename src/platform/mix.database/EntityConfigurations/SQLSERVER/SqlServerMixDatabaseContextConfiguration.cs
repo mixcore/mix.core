@@ -1,4 +1,6 @@
-﻿namespace Mix.Database.EntityConfigurations.SQLSERVER
+﻿using Mix.Database.Base;
+
+namespace Mix.Database.EntityConfigurations.SQLSERVER
 {
     public class SqlServerMixDatabaseContextConfiguration : MixDatabaseContextConfiguration<SqlServerDatabaseConstants>
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Mix.Database.Services;
 using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Extensions;
@@ -22,6 +23,7 @@ namespace Mix.Tenancy.Controllers
     [ApiController]
     public class InitController : MixTenantApiControllerBase
     {
+        private readonly DatabaseService _databaseService;
         private readonly MixEndpointService _mixEndpointService;
         private readonly MixTenantService _mixTenantService;
         private readonly InitCmsService _initCmsService;
@@ -42,7 +44,7 @@ namespace Mix.Tenancy.Controllers
             IHostApplicationLifetime appLifetime,
             QuartzService quartzService,
             HttpService httpService, IHubContext<MixThemeHub> hubContext = null
-, MixTenantService mixTenantService = null, MixEndpointService mixEndpointService = null)
+, MixTenantService mixTenantService = null, MixEndpointService mixEndpointService = null, DatabaseService databaseService = null)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
 
@@ -54,6 +56,7 @@ namespace Mix.Tenancy.Controllers
             _quartzService = quartzService;
             _mixTenantService = mixTenantService;
             _mixEndpointService = mixEndpointService;
+            _databaseService = databaseService;
         }
 
 
@@ -80,7 +83,7 @@ namespace Mix.Tenancy.Controllers
                     await _initCmsService.InitDbContext(model);
                     await _initCmsService.InitTenantAsync(model);
                     await _quartzService.LoadScheduler();
-                    var uow = new UnitOfWorkInfo(new MixCmsContext(_httpContextAccessor));
+                    var uow = new UnitOfWorkInfo(new MixCmsContext(_databaseService));
                     await _mixTenantService.Reload(uow);
                     _session.Put(MixRequestQueryKeywords.Tenant, _mixTenantService.AllTenants.First());
                     _mixEndpointService.SetDefaultDomain($"//{model.PrimaryDomain}");
