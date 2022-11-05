@@ -1,6 +1,4 @@
-﻿using Mix.Database.Entities.Base;
-
-namespace Mix.Database.EntityConfigurations.Base
+﻿namespace Mix.Database.EntityConfigurations.Base
 {
     public abstract class MultilingualContentBaseConfiguration<T, TPrimaryKey, TConfig> : EntityBaseConfiguration<T, TPrimaryKey, TConfig>
         where TPrimaryKey : IComparable

@@ -13,7 +13,7 @@ using MySqlConnector;
 
 namespace Mix.Database.Entities.Account
 {
-    public partial class MixCmsAccountContext : DbContext
+    public partial class MixCmsAccountContext : BaseDbContext
     {
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
         //public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
@@ -27,51 +27,19 @@ namespace Mix.Database.Entities.Account
         public virtual DbSet<MixUserTenant> MixUserTenants { get; set; }
         public virtual DbSet<MixRole> MixRoles { get; set; }
 
-        private static DatabaseService _databaseService;
 
-        public MixCmsAccountContext()
-        {
-
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
         public MixCmsAccountContext(
             DatabaseService databaseService)
-                    : base()
+                    : base(databaseService, MixConstants.CONST_ACCOUNT_CONNECTION)
         {
             _databaseService = databaseService;
         }
-
-        protected override void OnConfiguring(
-            DbContextOptionsBuilder optionsBuilder)
+        public MixCmsAccountContext(string connectionString, MixDatabaseProvider databaseProvider) : base(connectionString, databaseProvider)
         {
-            string cnn = _databaseService.GetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION);
-            if (!string.IsNullOrEmpty(cnn))
-            {
-                switch (_databaseService.DatabaseProvider)
-                {
-                    case MixDatabaseProvider.SQLSERVER:
-                        optionsBuilder.UseSqlServer(cnn);
-                        break;
-
-                    case MixDatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
-                        break;
-
-                    case MixDatabaseProvider.SQLITE:
-                        optionsBuilder.UseSqlite(cnn);
-                        break;
-
-                    case MixDatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(cnn);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
         }
 
         //Ref https://github.com/dotnet/efcore/issues/10169
@@ -94,30 +62,5 @@ namespace Mix.Database.Entities.Account
             base.Dispose();
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            string ns = _databaseService.DatabaseProvider switch
-            {
-                MixDatabaseProvider.SQLSERVER
-                     => typeof(SqlServerDatabaseConstants).Namespace,
-
-                MixDatabaseProvider.MySQL
-                    => typeof(MySqlDatabaseConstants).Namespace,
-
-                MixDatabaseProvider.SQLITE
-                    => typeof(SqliteDatabaseConstants).Namespace,
-
-                MixDatabaseProvider.PostgreSQL
-                    => typeof(PostgresDatabaseConstants).Namespace,
-                _ => string.Empty
-            };
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                this.GetType().Assembly,
-                m => m.Namespace == $"{ns}.Account");
-            OnModelCreatingPartial(modelBuilder);
-        }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -45,6 +45,9 @@
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Database.EntityConfigurations.Base.Cms" />
 		<Using Include="Mix.Database.Entities.Base" />
+		
+		<Using Include="Mix.Database.Base" />
+		<Using Include="Mix.Database.Base.Cms" />
 	</ItemGroup>
 
   <ItemGroup>
