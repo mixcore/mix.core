@@ -16,16 +16,5 @@ namespace Mix.Database.Entities.Account
                     : base(databaseService)
         {
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                this.GetType().Assembly,
-                m => m.Namespace == "Mix.Database.EntityConfigurations.POSTGRES.Account");
-            OnModelCreatingPartial(modelBuilder);
-        }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -109,13 +109,13 @@ namespace Mix.Lib.ViewModels
                             }
                         }
                     }
-                    using var context = new MixCmsAccountContext();
-                    var roles = from ur in context.AspNetUserRoles
-                                join r in context.MixRoles
-                                on ur.RoleId equals r.Id
-                                where ur.UserId == Id && ur.MixTenantId == tenantId
-                                select ur;
-                    Roles = await roles.ToListAsync();
+                    //using var context = new MixCmsAccountContext(databaseService);
+                    //var roles = from ur in context.AspNetUserRoles
+                    //            join r in context.MixRoles
+                    //            on ur.RoleId equals r.Id
+                    //            where ur.UserId == Id && ur.MixTenantId == tenantId
+                    //            select ur;
+                    //Roles = await roles.ToListAsync();
 
 
                 }

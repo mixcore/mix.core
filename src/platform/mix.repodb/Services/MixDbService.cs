@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
+using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
 using Mix.Database.EntityConfigurations;
 using Mix.Database.EntityConfigurations.MYSQL;

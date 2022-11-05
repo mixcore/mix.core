@@ -1,6 +1,4 @@
-﻿using Mix.Database.Entities.Base;
-
-namespace Mix.Database.EntityConfigurations.Base
+﻿namespace Mix.Database.EntityConfigurations.Base
 {
     public abstract class ExtraColumnMultilingualSEOContentBaseConfiguration<T, TPrimaryKey, TConfig>
         : MultilingualSEOContentBaseConfiguration<T, TPrimaryKey, TConfig>
