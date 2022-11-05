@@ -1,27 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Shared.Services;
+using Mix.Storage.Lib.Models;
+using Mix.Storage.Lib.ViewModels;
 
-namespace Mix.Portal.Controllers
+namespace Mix.Storage.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-file")]
+    [Route("api/v2/rest/mix-storage/file-system")]
     [ApiController]
-    public class MixFileController : MixTenantApiControllerBase
+    [MixAuthorize(roles: MixRoles.Owner)]
+    public class FileSystemController : MixTenantApiControllerBase
     {
-        private readonly MixCmsContext _context;
-        public MixFileController(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixCmsContext context,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService)
+        private MixStorageService _storageService;
+
+        public FileSystemController(
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, 
+            MixService mixService, 
+            TranslatorService translator, 
+            MixIdentityService mixIdentityService, 
+            IQueueService<MessageQueueModel> queueService, 
+            MixStorageService storageService) 
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = context;
+            _storageService = storageService;
         }
 
-        #region Post
+        #region Routes
+
+        [HttpGet]
+        public ActionResult<MixFileResponseModel> GetList([FromQuery] SearchFileRequestDto request)
+        {
+            var files = MixFileHelper.GetTopFiles(request.Folder);
+            var directories = MixFileHelper.GetTopDirectories(request.Folder);
+            var result = new MixFileResponseModel()
+            {
+                Files = files,
+                Directories = directories
+            };
+            return Ok(result);
+        }
+
 
         // Post api/files/id
         [HttpGet]
@@ -41,7 +58,7 @@ namespace Mix.Portal.Controllers
         }
 
         // GET api/files/id
-        [HttpGet]
+        [HttpDelete]
         [Route("delete")]
         public ActionResult<bool> Delete()
         {
@@ -88,25 +105,10 @@ namespace Mix.Portal.Controllers
             return BadRequest(model);
         }
 
-        // GET api/files
-        [HttpGet]
-        [Route("")]
-        public ActionResult<MixFileResponseModel> GetList([FromQuery] SearchFileRequestDto request)
-        {
-            if (!request.Folder.StartsWith(MixFolders.WebRootPath))
-            {
-                return BadRequest(request.Folder);
-            }
-            var files = MixFileHelper.GetTopFiles(request.Folder);
-            var directories = MixFileHelper.GetTopDirectories(request.Folder);
-            var result = new MixFileResponseModel()
-            {
-                Files = files,
-                Directories = directories
-            };
-            return Ok(result);
-        }
+        #endregion
 
-        #endregion Post
+        #region Overrides
+
+        #endregion
     }
 }
