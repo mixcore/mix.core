@@ -72,10 +72,10 @@ namespace Mix.Database.Services
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(_httpContextAccessor, this),
-                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(_httpContextAccessor, this),
-                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(_httpContextAccessor, this),
-                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(_httpContextAccessor, this),
+                MixDatabaseProvider.SQLSERVER => new SqlServerMixCmsContext(this),
+                MixDatabaseProvider.MySQL => new MySqlMixCmsContext(this),
+                MixDatabaseProvider.SQLITE => new SqliteMixCmsContext(this),
+                MixDatabaseProvider.PostgreSQL => new PostgresqlMixCmsContext(this),
                 _ => null,
             };
         }

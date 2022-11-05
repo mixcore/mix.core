@@ -118,7 +118,7 @@ namespace Mix.Database.Services
         public List<string> CreateDynamicDbContext()
         {
             var sourceFiles = new List<string>();
-            using var _cmsContext = new MixCmsContext(_httpContextAccessor, _databaseService);
+            using var _cmsContext = new MixCmsContext(_databaseService);
             var scaffolder = CreateScaffolder();
             var databaseNames = _cmsContext.MixDatabase.Select(m => m.SystemName.ToLower()).ToList();
 

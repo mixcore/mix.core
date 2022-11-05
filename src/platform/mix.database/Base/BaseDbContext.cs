@@ -1,6 +1,8 @@
-﻿using Mix.Database.Extensions;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Mix.Database.Extensions;
 using Mix.Database.Services;
 using Mix.Heart.EntityFrameworkCore.Extensions;
+using Mix.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,8 @@ namespace Mix.Database.Base
 {
     public abstract class BaseDbContext : DbContext
     {
+        protected static string _connectionString;
+        protected static MixDatabaseProvider? _databaseProvider;
         protected static DatabaseService _databaseService;
         protected readonly string _connectionStringName;
         protected Type _dbContextType;
@@ -20,15 +24,23 @@ namespace Mix.Database.Base
         {
             _databaseService = databaseService;
             _connectionStringName = connectionStringName;
+            _dbContextType = GetType();
+        }
+        public BaseDbContext(string connectionString, MixDatabaseProvider databaseProvider)
+        {
+            _connectionString = connectionString;
+            _databaseProvider = databaseProvider;
+            _dbContextType = GetType();
         }
 
         protected override void OnConfiguring(
            DbContextOptionsBuilder optionsBuilder)
         {
-            string cnn = _databaseService.GetConnectionString(_connectionStringName);
+            string cnn = _connectionString ?? _databaseService.GetConnectionString(_connectionStringName);
+            var databaseProvider = _databaseProvider ?? _databaseService.DatabaseProvider;
             if (!string.IsNullOrEmpty(cnn))
             {
-                switch (_databaseService.DatabaseProvider)
+                switch (databaseProvider)
                 {
                     case MixDatabaseProvider.SQLSERVER:
                         optionsBuilder.UseSqlServer(cnn);
@@ -53,7 +65,6 @@ namespace Mix.Database.Base
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyAllConfigurations(_databaseService, _dbContextType.Assembly, $"{_dbContextType.Namespace}.EntityConfigurations");
         }
     }

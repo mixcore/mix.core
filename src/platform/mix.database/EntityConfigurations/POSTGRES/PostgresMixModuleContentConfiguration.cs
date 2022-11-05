@@ -1,4 +1,6 @@
-﻿namespace Mix.Database.EntityConfigurations.POSTGRES
+﻿using Mix.Database.Base;
+
+namespace Mix.Database.EntityConfigurations.POSTGRES
 {
     public class PostgresMixModuleContentConfiguration : MixModuleContentConfiguration<PostgresDatabaseConstants>
     {

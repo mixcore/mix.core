@@ -111,7 +111,6 @@ namespace Mix.Database.Entities.Account
                     => typeof(PostgresDatabaseConstants).Namespace,
                 _ => string.Empty
             };
-            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 this.GetType().Assembly,
                 m => m.Namespace == $"{ns}.Account");

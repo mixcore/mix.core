@@ -1,95 +1,79 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using Mix.Database.EntityConfigurations.MYSQL;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.EntityConfigurations.SQLITE;
-using Mix.Database.EntityConfigurations.SQLSERVER;
+using Mix.Database.Base;
 using Mix.Database.Services;
 
 using MySqlConnector;
 
 namespace Mix.Database.Entities.Cms
 {
-    public class MixCmsContext : DbContext
+    public class MixCmsContext : BaseDbContext
     {
         public IHttpContextAccessor _httpContextAccessor;
         // For Unit Test
-        public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider)
+        public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider): base(connectionString, databaseProvider)
         {
-            _connectionString = connectionString;
-            _databaseProvider = databaseProvider;
+            _dbContextType = GetType();
         }
 
-        // For Unit Test
-        public MixCmsContext(IHttpContextAccessor httpContextAccessor)
+        public MixCmsContext(DatabaseService databaseService) : base(databaseService, MixConstants.CONST_CMS_CONNECTION)
         {
-            _httpContextAccessor = httpContextAccessor;
-            _databaseService = new(httpContextAccessor);
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
         }
 
-        public MixCmsContext(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService)
-        {
-            _httpContextAccessor = httpContextAccessor;
-            _databaseService = databaseService;
-            _connectionString = _databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
-            _databaseProvider = _databaseService.DatabaseProvider;
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!string.IsNullOrEmpty(_connectionString))
+        //    {
+        //        switch (_databaseProvider)
+        //        {
+        //            case MixDatabaseProvider.SQLSERVER:
+        //                optionsBuilder.UseSqlServer(_connectionString);
+        //                break;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!string.IsNullOrEmpty(_connectionString))
-            {
-                switch (_databaseProvider)
-                {
-                    case MixDatabaseProvider.SQLSERVER:
-                        optionsBuilder.UseSqlServer(_connectionString);
-                        break;
+        //            case MixDatabaseProvider.MySQL:
+        //                optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
+        //                break;
 
-                    case MixDatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(_connectionString, ServerVersion.AutoDetect(_connectionString));
-                        break;
+        //            case MixDatabaseProvider.SQLITE:
+        //                optionsBuilder.UseSqlite(_connectionString);
+        //                break;
 
-                    case MixDatabaseProvider.SQLITE:
-                        optionsBuilder.UseSqlite(_connectionString);
-                        break;
+        //            case MixDatabaseProvider.PostgreSQL:
+        //                optionsBuilder.UseNpgsql(_connectionString);
+        //                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        //                AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        //                break;
 
-                    case MixDatabaseProvider.PostgreSQL:
-                        optionsBuilder.UseNpgsql(_connectionString);
-                        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-                        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-                        break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //}
 
-                    default:
-                        break;
-                }
-            }
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    string ns = _databaseProvider switch
+        //    {
+        //        MixDatabaseProvider.SQLSERVER
+        //             => typeof(SqlServerDatabaseConstants).Namespace,
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            string ns = _databaseProvider switch
-            {
-                MixDatabaseProvider.SQLSERVER
-                     => typeof(SqlServerDatabaseConstants).Namespace,
+        //        MixDatabaseProvider.MySQL
+        //            => typeof(MySqlDatabaseConstants).Namespace,
 
-                MixDatabaseProvider.MySQL
-                    => typeof(MySqlDatabaseConstants).Namespace,
+        //        MixDatabaseProvider.SQLITE
+        //            => typeof(SqliteDatabaseConstants).Namespace,
 
-                MixDatabaseProvider.SQLITE
-                    => typeof(SqliteDatabaseConstants).Namespace,
+        //        MixDatabaseProvider.PostgreSQL
+        //            => typeof(PostgresDatabaseConstants).Namespace,
+        //        _ => string.Empty
+        //    };
+        //    base.OnModelCreating(modelBuilder);
+        //    modelBuilder.Entity<MixDataContentValue>().HasOne(m => m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
+        //    modelBuilder.ApplyConfigurationsFromAssembly(
+        //        this.GetType().Assembly,
+        //        m => m.Namespace == ns);
+        //}
 
-                MixDatabaseProvider.PostgreSQL
-                    => typeof(PostgresDatabaseConstants).Namespace,
-                _ => string.Empty
-            };
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<MixDataContentValue>().HasOne(m => m.MixDatabaseColumn).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                this.GetType().Assembly,
-                m => m.Namespace == ns);
-        }
         public override void Dispose()
         {
             switch (_databaseProvider)
@@ -142,8 +126,5 @@ namespace Mix.Database.Entities.Cms
         public virtual DbSet<MixModulePostAssociation> MixModulePostAssociation { get; set; }
         public virtual DbSet<MixContributor> MixContributor { get; set; }
 
-        private static string _connectionString;
-        private static MixDatabaseProvider _databaseProvider;
-        private readonly DatabaseService _databaseService;
     }
 }

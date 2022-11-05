@@ -6,15 +6,8 @@ namespace Mix.Database.Entities
 {
     public class MySqlMixCmsContext : MixCmsContext
     {
-        public MySqlMixCmsContext(IHttpContextAccessor httpContextAccessor,DatabaseService databaseService) : base(httpContextAccessor, databaseService)
+        public MySqlMixCmsContext(DatabaseService databaseService) : base(databaseService)
         {
-        }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(
-                this.GetType().Assembly,
-                m => m.Namespace == typeof(MySqlDatabaseConstants).Namespace);
         }
     }
 }
