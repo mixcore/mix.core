@@ -229,10 +229,15 @@ namespace Mix.RepoDb.Repositories
         {
             using (var connection = CreateConnection())
             {
-                var obj = entity.ToObject<Dictionary<string, object>>();
+                JObject obj = new JObject();
+                foreach (var pr in entity.Properties())
+                {
+                    obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+                }
+                var dicObj = obj.ToObject<Dictionary<string, object>>();
                 var result = await connection.InsertAsync(
                         _tableName,
-                        entity: obj,
+                        entity: dicObj,
                         fields: null,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
