@@ -17,13 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<RuntimeDbContextService>();
             services.TryAddSingleton<AuditLogService>();
+            services.TryAddSingleton<MixEndpointService>();
             services.AddHostedService<MixBackgrouTaskPublisher>();
             services.AddHostedService<MixBackgrouTaskSubscriber>();
 
             services.TryAddScoped<MixHeartConfigService>();
             services.TryAddScoped<AuthConfigService>();
             services.TryAddScoped<SmtpConfigService>();
-            services.TryAddScoped<MixEndpointService>();
             services.TryAddScoped<IPSecurityConfigService>();
 
             services.TryAddScoped<MixPostService>();

@@ -2,26 +2,25 @@
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
 using Mix.Lib.Services;
+using Mix.Shared.Services;
 
 namespace Mix.Lib.Middlewares
 {
     public sealed class TenantSecurityMiddleware
     {
+        private readonly MixEndpointService _mixEndpointService;
         private readonly RequestDelegate next;
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly MixTenantService _mixTenantService;
-        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService, MixTenantService mixTenantService)
+        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService, MixTenantService mixTenantService, MixEndpointService mixEndpointService)
         {
             this.next = next;
             _queueService = queueService;
             _mixTenantService = mixTenantService;
+            _mixEndpointService = mixEndpointService;
         }
 
-        public async Task Invoke(
-            HttpContext context,
-            IConfiguration configuration,
-            IHttpContextAccessor httpContextAccessor,
-            MixCmsContext cmsContext)
+        public async Task Invoke(HttpContext context)
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
@@ -38,6 +37,7 @@ namespace Mix.Lib.Middlewares
                 {
                     currentTenant = _mixTenantService.GetCurrentTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
+                    _mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
                 }
                 await next.Invoke(context);
             }

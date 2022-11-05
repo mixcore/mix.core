@@ -1,42 +1,19 @@
 ﻿
 
+using Microsoft.AspNetCore.Http;
+
 namespace Mix.Shared.Services
 {
-    public class MixEndpointService : JsonConfigurationServiceBase
+    public sealed class MixEndpointService : JsonConfigurationServiceBase
     {
-        #region Instance
-        /// <summary>
-        /// The synchronize root
-        /// </summary>
-        protected static readonly object syncRoot = new object();
-
-        /// <summary>
-        /// The instance
-        /// </summary>
-        private static MixEndpointService instance;
-
-        public static MixEndpointService Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (syncRoot)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new();
-                        }
-                    }
-                }
-
-                return instance;
-            }
-        }
-        #endregion
-
+        private string _defaultDomain;
         public MixEndpointService() : base(MixAppConfigFilePaths.Endpoint)
         {
+        }
+
+        public void SetDefaultDomain(string domain)
+        {
+            _defaultDomain = domain;
         }
 
         protected override void LoadAppSettings()
@@ -48,49 +25,49 @@ namespace Mix.Shared.Services
         public string[] Endpoints;
         public string Account
         {
-            get => GetConfig<string>(MixModuleNames.Account);
+            get => GetConfig<string>(MixModuleNames.Account) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Account, value);
         }
 
         public string Common
         {
-            get => GetConfig<string>(MixModuleNames.Common);
+            get => GetConfig<string>(MixModuleNames.Common) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Common, value);
         }
 
         public string Portal
         {
-            get => GetConfig<string>(MixModuleNames.Portal);
+            get => GetConfig<string>(MixModuleNames.Portal) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Portal, value);
         }
 
         public string Theme
         {
-            get => GetConfig<string>(MixModuleNames.Theme);
+            get => GetConfig<string>(MixModuleNames.Theme) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Theme, value);
         }
 
         public string Mixcore
         {
-            get => GetConfig<string>(MixModuleNames.Mixcore);
+            get => GetConfig<string>(MixModuleNames.Mixcore) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Mixcore, value);
         }
 
         public string Messenger
         {
-            get => GetConfig<string>(MixModuleNames.Messenger) ?? string.Empty;
+            get => GetConfig<string>(MixModuleNames.Messenger) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Messenger, value);
         }
 
         public string Scheduler
         {
-            get => GetConfig<string>(MixModuleNames.Scheduler);
+            get => GetConfig<string>(MixModuleNames.Scheduler) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Scheduler, value);
         }
 
         public string Grpc
         {
-            get => GetConfig<string>(MixModuleNames.Grpc);
+            get => GetConfig<string>(MixModuleNames.Grpc) ?? _defaultDomain;
             set => SetConfig(MixModuleNames.Grpc, value);
         }
     }
