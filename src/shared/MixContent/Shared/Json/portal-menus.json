@@ -234,7 +234,7 @@
           "icon": "mi mi-List"
         },
         {
-          "path": "/admin/file/list?folder=MixContent/logs",
+          "path": "/admin/file/list?folder=logs",
           "title": "Logs",
           "icon": "mi mi-Error"
         }
@@ -389,7 +389,7 @@
           "icon": "mi mi-FileExplorer"
         },
         {
-          "path": "/admin/file/list?folder=MixContent/logs",
+          "path": "/admin/file/list?folder=logs",
           "title": "Logs",
           "icon": "mi mi-Error"
         }
