@@ -235,7 +235,7 @@ namespace Mix.Lib.Services
                 {
                     MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
                         .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
-                    var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => c.SystemName == m.Name)));
+                    var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => string.Equals(c.SystemName, m.Name, StringComparison.OrdinalIgnoreCase))));
                     int userDataId = await CreateUserInfomation(user, data);
                     foreach (var relation in database.Relationships)
                     {

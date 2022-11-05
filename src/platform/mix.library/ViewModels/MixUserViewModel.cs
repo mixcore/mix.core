@@ -87,7 +87,7 @@ namespace Mix.Lib.ViewModels
                     if (data != null)
                     {
 
-                        UserData = data != null ? JObject.FromObject(data) : null;
+                        UserData = data != null ? ReflectionHelper.ParseObject(data) : null;
                         foreach (var relation in database.Relationships)
                         {
                             var associations = await MixDatabaseAssociationViewModel.GetRepository(_cmsUow)
