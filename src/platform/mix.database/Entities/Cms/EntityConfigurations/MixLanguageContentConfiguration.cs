@@ -3,7 +3,7 @@
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixLanguageContentConfiguration : MultilingualUniqueNameContentBaseConfiguration<MixLanguageContent, int>
-        
+
     {
         public MixLanguageContentConfiguration(DatabaseService databaseService) : base(databaseService)
         {

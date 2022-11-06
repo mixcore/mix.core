@@ -1,6 +1,5 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Database.EntityConfigurations.SQLSERVER;
-using Mix.Database.Services;
+﻿using Mix.Database.Services;
 
 namespace Mix.Database.Entities
 {

@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Azure.Amqp.Framing;
-using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Constants;
-using Mix.Identity.Interfaces;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Domain.Services
@@ -20,7 +16,7 @@ namespace Mix.Portal.Domain.Services
         private readonly HttpService _httpService;
         private readonly MixThemeImportService _importService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService) 
+        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor)
         {
             _cmsUOW = cmsUOW;

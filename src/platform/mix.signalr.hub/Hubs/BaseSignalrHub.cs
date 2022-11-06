@@ -62,7 +62,7 @@ namespace Mix.SignalR.Hubs
             {
                 MixService.LogException(ex);
             }
-            
+
         }
 
         public virtual Task SendMessageToCaller(SignalRMessageModel message)
@@ -71,7 +71,7 @@ namespace Mix.SignalR.Hubs
             {
                 return Clients.Caller.SendAsync(HubMethods.ReceiveMethod, message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MixService.LogException(ex);
                 return Task.CompletedTask;
@@ -92,7 +92,7 @@ namespace Mix.SignalR.Hubs
                 MixService.LogException(ex);
                 return Task.CompletedTask;
             }
-            
+
         }
 
         #region Private

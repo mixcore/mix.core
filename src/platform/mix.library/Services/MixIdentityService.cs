@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Amqp.Framing;
 using Microsoft.IdentityModel.Tokens;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services;
 using Mix.Identity.Constants;
 using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
@@ -39,6 +39,7 @@ namespace Mix.Lib.Services
         protected readonly MixCmsContext _cmsContext;
         protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> _roleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
+        protected readonly DatabaseService _databaseService;
         public List<RoleViewModel> Roles { get; set; }
         protected ISession _session;
         private MixTenantSystemViewModel _currentTenant;
@@ -63,7 +64,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService)
+            MixService mixService, DatabaseService databaseService)
         {
             _session = httpContextAccessor.HttpContext.Session;
             _cmsUow = cmsUOW;
@@ -79,6 +80,7 @@ namespace Mix.Lib.Services
             _firebaseService = firebaseService;
             _repoDbRepository = repoDbRepository;
             _mixService = mixService;
+            _databaseService = databaseService;
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -93,7 +95,7 @@ namespace Mix.Lib.Services
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, _cmsUow);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _databaseService);
                 return userInfo;
             }
             return null;

@@ -1,16 +1,8 @@
-﻿using Google.Api;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using Mix.Service.Services;
 using Mix.Signalr.Hub.Models;
-using Mix.Database.Entities.Account;
-using Mix.Identity.Interfaces;
 using Mix.SignalR.Hubs;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mix.Service.Services;
 
 namespace Mix.Signalr.Hub.Hubs
 {

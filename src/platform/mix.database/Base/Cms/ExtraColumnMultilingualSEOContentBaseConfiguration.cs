@@ -6,7 +6,7 @@ namespace Mix.Database.Base.Cms
         : MultilingualSEOContentBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : ExtraColumnMultilingualSEOContentBase<TPrimaryKey>
-        
+
     {
         protected ExtraColumnMultilingualSEOContentBaseConfiguration(DatabaseService databaseService) : base(databaseService)
         {

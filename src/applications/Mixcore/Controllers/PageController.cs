@@ -80,7 +80,7 @@ namespace Mixcore.Controllers
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
-            
+
             if (page.Type == MixPageType.ListPost)
             {
                 await page.LoadPostsAsync(new(Request));

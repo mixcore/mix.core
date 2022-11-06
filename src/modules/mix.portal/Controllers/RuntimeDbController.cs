@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Shared.Models;
-using Mix.Heart.Extensions;
-using System.Linq.Expressions;
-using Mix.Database.Services;
-using Mix.Shared.Services;
-using Microsoft.EntityFrameworkCore;
 using Mix.Database.Repositories;
-using Mix.Heart.Helpers;
+using Mix.Database.Services;
+using Mix.Shared.Models;
 
 namespace Mix.Portal.Controllers
 {

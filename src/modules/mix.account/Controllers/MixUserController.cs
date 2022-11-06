@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services;
 using Mix.Heart.Models;
 using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
@@ -217,14 +217,14 @@ namespace Mix.Account.Controllers
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
         [Route("details/{id}")]
-        public async Task<ActionResult> Details(string id = null)
+        public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id = null)
         {
             MixUser user = await _userManager.FindByIdAsync(id); ;
 
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, databaseService);
                 return Ok(result);
             }
             return BadRequest();

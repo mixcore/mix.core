@@ -1,7 +1,6 @@
 ﻿
 
 using Mix.Lib.Models.Configurations;
-using Mix.Shared.Models;
 
 namespace Mix.Shared.Services
 {

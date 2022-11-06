@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.CodeAnalysis;
 using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
@@ -8,9 +7,6 @@ using Mix.Heart.Entities.Cache;
 using Mix.Heart.Services;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
-using System.IO;
-using System.Linq;
-using System.Runtime.Loader;
 using System.Threading.Tasks;
 
 namespace Mix.Database.Services
@@ -66,7 +62,7 @@ namespace Mix.Database.Services
             SaveSettings();
         }
 
-        
+
 
         public MixCmsContext GetDbContext()
         {

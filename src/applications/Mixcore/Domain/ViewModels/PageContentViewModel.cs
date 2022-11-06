@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;

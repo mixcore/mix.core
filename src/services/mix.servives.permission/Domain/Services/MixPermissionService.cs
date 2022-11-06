@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.Cms;
-using Mix.Heart.Exceptions;
+﻿using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
@@ -34,8 +31,8 @@ namespace Mix.Services.Permission.Domain.Services
         public async Task<List<MixPermissionViewModel>> GetPermissionAsyncs(Guid userId)
         {
             var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
-            Expression<Func<MixPermission, bool>> predicate = 
-                m => m.MixTenantId == CurrentTenant.Id 
+            Expression<Func<MixPermission, bool>> predicate =
+                m => m.MixTenantId == CurrentTenant.Id
                 && permissions.Any(p => p.PermissionId == m.Id);
             var result = await MixPermissionViewModel.GetRepository(_uow).GetAllAsync(predicate);
             return result;

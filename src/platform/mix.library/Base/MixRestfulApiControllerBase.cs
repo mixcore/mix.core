@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Identity.Constants;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
 
@@ -16,7 +15,7 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCacheDbContext> cacheUOW, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) 
+        public MixRestfulApiControllerBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, MixService mixService, TranslatorService translator, MixIdentityService mixIdentityService, UnitOfWorkInfo<MixCacheDbContext> cacheUOW, UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
         }
@@ -49,7 +48,6 @@ namespace Mix.Lib.Base
             var data = await _repository.GetSingleAsync(id);
             if (data != null)
             {
-                data.SetUowInfo(_uow);
                 await DeleteHandler(data);
                 return Ok(id);
             }
@@ -64,7 +62,6 @@ namespace Mix.Lib.Base
             {
                 return NotFound();
             }
-            data.SetUowInfo(_uow);
             await PatchHandler(id, data, properties);
             var result = await GetById(id);
             return Ok(result);
@@ -79,10 +76,6 @@ namespace Mix.Lib.Base
             if (data == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Null Object");
-            }
-            foreach (var item in data)
-            {
-                item.SetUowInfo(_uow);
             }
             await SaveManyHandler(data);
             return Ok();

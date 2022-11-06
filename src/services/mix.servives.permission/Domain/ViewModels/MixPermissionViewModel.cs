@@ -1,6 +1,5 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Attributes;
 using Mix.Services.Permission.Domain.Entities;
 
 namespace Mix.Services.Permission.Domain.ViewModels
@@ -42,7 +41,7 @@ namespace Mix.Services.Permission.Domain.ViewModels
 
         protected override async Task SaveEntityRelationshipAsync(MixPermission parentEntity)
         {
-            if (Endpoints!= null && Endpoints.Count() > 0)
+            if (Endpoints != null && Endpoints.Count() > 0)
             {
                 foreach (var ep in Endpoints)
                 {

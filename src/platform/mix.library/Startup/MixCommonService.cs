@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Communicator.Services;
 using Mix.Database.Services;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;

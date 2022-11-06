@@ -60,7 +60,7 @@ namespace Mixcore
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, MixFolders.TemplatesFolder))
             });
-            
+
             if (GlobalConfigService.Instance.AppSettings.EnableOcelot)
             {
                 app.UseMixOcelot(Configuration, env.IsDevelopment());

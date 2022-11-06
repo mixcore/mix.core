@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Mix.Storage.Lib.Engines.Base;
 using Mix.Storage.Lib.Engines.CloudFlare;
 using Mix.Storage.Lib.Engines.Mix;
-using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Lib.Services
 {
@@ -38,7 +37,7 @@ namespace Mix.Storage.Lib.Services
         {
             return await _uploader.UploadFile(file, themeName, createdBy);
         }
-        
+
         public async Task<string?> UploadStream(FileModel file, string? createdBy)
         {
             return await _uploader.UploadFileStream(file, createdBy);

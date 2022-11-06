@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Extensions;
 using Mix.Storage.Lib.Engines.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Storage.Lib.Engines.Mix
 {
     public class MixUploader : UploaderBase
     {
-       
-        public MixUploader(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW) 
+
+        public MixUploader(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
             : base(httpContextAccessor, configuration, cmsUOW)
         {
         }
@@ -29,7 +23,7 @@ namespace Mix.Storage.Lib.Engines.Mix
             }
             return Task.FromResult(result);
         }
-        
+
         public override Task<string?> Upload(IFormFile file, string? fileFolder, string? createdBy)
         {
             string? result = null;

@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Storage.Lib.Engines.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Storage.Lib.Engines.CloudFlare
 {
@@ -15,8 +10,8 @@ namespace Mix.Storage.Lib.Engines.CloudFlare
         private HttpService _httpService;
         private CloudFlareSettings settings;
         public CloudFlareUploader(
-            IHttpContextAccessor httpContext, 
-            IConfiguration configuration, 
+            IHttpContextAccessor httpContext,
+            IConfiguration configuration,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             HttpService httpService)
             : base(httpContext, configuration, cmsUOW)

@@ -3,10 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.Data.SqlClient;
-using Mix.Database.EntityConfigurations.MYSQL;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.EntityConfigurations.SQLITE;
-using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 
 using MySqlConnector;

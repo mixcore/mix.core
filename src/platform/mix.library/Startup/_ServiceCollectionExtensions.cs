@@ -146,14 +146,14 @@ namespace Microsoft.Extensions.DependencyInjection
                 ContentTypeProvider = provider
             });
 
-            
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(contentRootPath, MixFolders.StaticFiles)),
                 RequestPath = "/mix-app"
             });
-            
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using Mix.Database.Base;
 using Mix.Database.Services;
 
 using MySqlConnector;
@@ -11,7 +10,7 @@ namespace Mix.Database.Entities.Cms
     {
         public IHttpContextAccessor _httpContextAccessor;
         // For Unit Test
-        public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider): base(connectionString, databaseProvider)
+        public MixCmsContext(string connectionString, MixDatabaseProvider databaseProvider) : base(connectionString, databaseProvider)
         {
             _dbContextType = GetType();
         }

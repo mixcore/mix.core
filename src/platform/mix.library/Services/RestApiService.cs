@@ -1,15 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mix.Identity.Constants;
-using Mix.Identity.Interfaces;
-using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Lib.Services
 {
@@ -82,6 +74,7 @@ namespace Mix.Lib.Services
 
         public virtual async Task DeleteHandler(TView data)
         {
+            data.SetUowInfo(_uow);
             await data.DeleteAsync();
             await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
@@ -90,6 +83,7 @@ namespace Mix.Lib.Services
 
         public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
+            data.SetUowInfo(_uow);
             await data.SaveFieldsAsync(properties);
             await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
@@ -99,6 +93,7 @@ namespace Mix.Lib.Services
         {
             foreach (var item in data)
             {
+                item.SetUowInfo(_uow);
                 await item.SaveAsync();
             }
         }

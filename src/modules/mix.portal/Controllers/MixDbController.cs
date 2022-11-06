@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.Database.Repositories;
+using Mix.Database.Services;
+using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using RepoDb;
 using RepoDb.Enumerations;
-using Mix.Heart.Extensions;
-using System.Linq.Expressions;
 using RepoDb.Interfaces;
-using Mix.Database.Services;
-using Mix.Shared.Services;
-using Microsoft.EntityFrameworkCore;
-using Mix.Database.Repositories;
-using Mix.Heart.Helpers;
-using Mix.Lib.Attributes;
-using Humanizer;
 
 namespace Mix.Portal.Controllers
 {
@@ -90,7 +84,7 @@ namespace Mix.Portal.Controllers
             var obj = await _repository.GetSingleAsync(id);
             if (obj != null)
             {
-                var data = JObject.FromObject(obj);
+                var data = ReflectionHelper.ParseObject(obj);
                 var database = await GetMixDatabase();
                 foreach (var item in database.Relationships)
                 {
@@ -215,7 +209,7 @@ namespace Mix.Portal.Controllers
 
         #region Handler
 
-        private async Task<PagingResponseModel<dynamic>> SearchHandler(SearchMixDbRequestDto request)
+        private async Task<PagingResponseModel<JObject>> SearchHandler(SearchMixDbRequestDto request)
         {
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
@@ -233,7 +227,13 @@ namespace Mix.Portal.Controllers
                     queries.Add(new(idFieldName, Operation.In, allowsIds));
                 }
             }
-            return await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
+            var result = await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
+            var items = new List<JObject>();
+            foreach (var item in result.Items)
+            {
+                items.Add(ReflectionHelper.ParseObject(item));
+            }
+            return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
         }
 
         private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)

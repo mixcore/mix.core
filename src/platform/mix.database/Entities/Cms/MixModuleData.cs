@@ -1,6 +1,4 @@
-﻿using Mix.Database.Entities.Base;
-
-namespace Mix.Database.Entities.Cms
+﻿namespace Mix.Database.Entities.Cms
 {
     public class MixModuleData : MultilingualSEOContentBase<int>
     {

@@ -4,7 +4,7 @@ using Mix.Database.Services;
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixDataContentAssociationConfiguration : EntityBaseConfiguration<MixDataContentAssociation, Guid>
-        
+
     {
         public MixDataContentAssociationConfiguration(DatabaseService databaseService) : base(databaseService)
         {

@@ -1,13 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Constant.Enums;
 using Mix.Database.Entities.Account;
+using Mix.Database.Services;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
-using Mix.Lib.Models.Common;
-using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using RepoDb;
-using RepoDb.Enumerations;
 using System.Text.Json.Serialization;
 
 namespace Mix.Lib.ViewModels
@@ -74,7 +71,7 @@ namespace Mix.Lib.ViewModels
             return data;
         }
 
-        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository)
+        public async Task LoadUserDataAsync(int tenantId, MixRepoDbRepository repoDbRepository, DatabaseService databaseService)
         {
             if (!GlobalConfigService.Instance.IsInit)
             {
@@ -109,13 +106,13 @@ namespace Mix.Lib.ViewModels
                             }
                         }
                     }
-                    //using var context = new MixCmsAccountContext(databaseService);
-                    //var roles = from ur in context.AspNetUserRoles
-                    //            join r in context.MixRoles
-                    //            on ur.RoleId equals r.Id
-                    //            where ur.UserId == Id && ur.MixTenantId == tenantId
-                    //            select ur;
-                    //Roles = await roles.ToListAsync();
+                    using var context = new MixCmsAccountContext(databaseService);
+                    var roles = from ur in context.AspNetUserRoles
+                                join r in context.MixRoles
+                                on ur.RoleId equals r.Id
+                                where ur.UserId == Id && ur.MixTenantId == tenantId
+                                select ur;
+                    Roles = await roles.ToListAsync();
 
 
                 }

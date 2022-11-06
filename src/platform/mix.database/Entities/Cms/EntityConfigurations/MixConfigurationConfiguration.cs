@@ -3,7 +3,7 @@
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixConfigurationConfiguration : TenantEntityUniqueNameBaseConfiguration<MixConfiguration, int>
-         
+
     {
         public MixConfigurationConfiguration(DatabaseService databaseService) : base(databaseService)
         {

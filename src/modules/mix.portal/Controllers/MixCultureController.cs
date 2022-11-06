@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Portal.Domain.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {

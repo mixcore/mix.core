@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.EntityConfigurations;
-using Mix.Database.EntityConfigurations.MYSQL;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.EntityConfigurations.SQLITE;
-using Mix.Database.EntityConfigurations.SQLSERVER;
-using Mix.Database.Services;
+﻿using Mix.Database.Services;
 
 namespace Mix.Database.Base
 {
@@ -23,7 +17,7 @@ namespace Mix.Database.Base
 
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            
+
         }
 
         private IDatabaseConstants GetConfig()

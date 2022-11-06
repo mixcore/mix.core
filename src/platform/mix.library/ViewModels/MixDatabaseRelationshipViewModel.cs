@@ -63,7 +63,7 @@ namespace Mix.Lib.ViewModels
         protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity)
         {
             string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
-            if (!Context.MixDatabaseColumn.Any(m=>m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
+            if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
             {
                 var srcDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == SourceDatabaseName);
                 var destDb = Context.MixDatabase.FirstOrDefault(m => m.SystemName == DestinateDatabaseName);

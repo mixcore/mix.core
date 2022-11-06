@@ -3,7 +3,7 @@
 namespace Mix.Database.EntityConfigurations.Base.Cms
 {
     public class MixViewTemplateContentConfiguration<TConfig> : EntityBaseConfiguration<MixTemplate, int, TConfig>
-        where TConfig: IDatabaseConstants
+        where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<MixTemplate> builder)
         {

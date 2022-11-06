@@ -6,7 +6,7 @@ namespace Mix.Database.Base.Cms
         : MultilingualContentBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : MultilingualUniqueNameContentBase<TPrimaryKey>
-        
+
     {
         protected MultilingualUniqueNameContentBaseConfiguration(DatabaseService databaseService) : base(databaseService)
         {

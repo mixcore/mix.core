@@ -5,7 +5,7 @@ namespace Mix.Database.Base.Cms
     public abstract class MultilingualContentBaseConfiguration<T, TPrimaryKey> : EntityBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : MultilingualContentBase<TPrimaryKey>
-         
+
     {
         protected MultilingualContentBaseConfiguration(DatabaseService databaseService) : base(databaseService)
         {

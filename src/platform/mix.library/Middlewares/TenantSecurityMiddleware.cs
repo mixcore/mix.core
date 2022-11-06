@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
 using Mix.Lib.Services;
-using Mix.Shared.Services;
 
 namespace Mix.Lib.Middlewares
 {

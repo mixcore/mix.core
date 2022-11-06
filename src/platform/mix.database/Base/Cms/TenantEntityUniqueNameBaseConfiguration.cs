@@ -5,7 +5,7 @@ namespace Mix.Database.Base.Cms
     public abstract class TenantEntityUniqueNameBaseConfiguration<T, TPrimaryKey> : TenantEntityBaseConfiguration<T, TPrimaryKey>
         where TPrimaryKey : IComparable
         where T : TenantEntityUniqueNameBase<TPrimaryKey>
-        
+
     {
         protected TenantEntityUniqueNameBaseConfiguration(DatabaseService databaseService) : base(databaseService)
         {

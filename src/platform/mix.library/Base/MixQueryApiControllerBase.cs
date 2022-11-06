@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using System.Reflection;
 
 namespace Mix.Lib.Base
 {
@@ -16,12 +14,12 @@ namespace Mix.Lib.Base
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         public MixQueryApiControllerBase(
-            IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, 
-            MixService mixService, 
-            TranslatorService translator, 
-            MixIdentityService mixIdentityService, 
-            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService) 
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixService mixService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            UnitOfWorkInfo<TDbContext> uow, IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
         }
@@ -61,6 +59,6 @@ namespace Mix.Lib.Base
 
         #endregion Routes
 
-       
+
     }
 }

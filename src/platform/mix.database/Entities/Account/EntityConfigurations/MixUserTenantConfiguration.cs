@@ -1,10 +1,9 @@
-﻿using Mix.Database.Entities.Account;
-using Mix.Database.Services;
+﻿using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Account.EntityConfigurations
 {
     internal class MixUserTenantConfiguration : AccountEntityBaseConfiguration<MixUserTenant>
-         
+
     {
         public MixUserTenantConfiguration(DatabaseService databaseService) : base(databaseService)
         {
