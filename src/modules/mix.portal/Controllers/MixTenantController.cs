@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
-using Mix.Lib.Repositories;
 using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
@@ -51,7 +50,7 @@ namespace Mix.Portal.Controllers
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
 
-            
+
             return tenantId;
         }
 

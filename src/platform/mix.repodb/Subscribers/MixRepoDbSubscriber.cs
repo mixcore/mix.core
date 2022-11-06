@@ -17,8 +17,8 @@ namespace Mix.RepoDb.Sbuscribers
         private IServiceProvider _servicesProvider;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService, 
-            IServiceProvider servicesProvider, 
+            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            IServiceProvider servicesProvider,
             PortalHubClientService portalHub)
             : base(MixQueueTopics.MixRepoDb, string.Empty, configuration, queueService)
         {

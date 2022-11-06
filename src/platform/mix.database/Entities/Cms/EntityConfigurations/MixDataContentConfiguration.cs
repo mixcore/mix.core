@@ -3,7 +3,7 @@
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixDataContentConfiguration : MultilingualSEOContentBaseConfiguration<MixDataContent, Guid>
-        
+
     {
         public MixDataContentConfiguration(DatabaseService databaseService) : base(databaseService)
         {

@@ -1,11 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Mix.Heart.Constants;
 using Mix.Portal.Domain.Services;
-using Mix.Shared.Services;
-using Mix.SignalR.Constants;
-using Mix.SignalR.Hubs;
-using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Controllers
 {

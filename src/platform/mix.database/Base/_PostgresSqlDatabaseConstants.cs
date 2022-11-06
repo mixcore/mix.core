@@ -1,6 +1,4 @@
-﻿using Mix.Database.EntityConfigurations;
-
-namespace Mix.Database.Base
+﻿namespace Mix.Database.Base
 {
     public class PostgresDatabaseConstants : IDatabaseConstants
     {

@@ -2,7 +2,7 @@
 
 namespace Mix.Services.Permission.Domain.Entities
 {
-    public class MixPermissionEndpoint: EntityBase<int>
+    public class MixPermissionEndpoint : EntityBase<int>
     {
         public string Title { get; set; }
         public string Path { get; set; }

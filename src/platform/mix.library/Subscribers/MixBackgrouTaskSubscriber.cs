@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Mix.Lib.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 

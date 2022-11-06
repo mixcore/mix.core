@@ -1,6 +1,4 @@
-﻿
-using Mix.Lib.Services;
-using Mix.Tenancy.Domain.Dtos;
+﻿using Mix.Tenancy.Domain.Dtos;
 using Mix.Tenancy.Domain.ViewModels.Init;
 
 namespace Mix.Tenancy.Domain.Services
@@ -24,7 +22,7 @@ namespace Mix.Tenancy.Domain.Services
             await _mixTenantService.Reload(_cmsUow);
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;
             GlobalConfigService.Instance.SaveSettings();
-           
+
         }
     }
 }

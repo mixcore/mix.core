@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Storage.Lib.Models;
-using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Controllers
 {
@@ -12,13 +11,13 @@ namespace Mix.Storage.Controllers
         private MixStorageService _storageService;
 
         public FileSystemController(
-            IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, 
-            MixService mixService, 
-            TranslatorService translator, 
-            MixIdentityService mixIdentityService, 
-            IQueueService<MessageQueueModel> queueService, 
-            MixStorageService storageService) 
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixService mixService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService,
+            MixStorageService storageService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _storageService = storageService;
@@ -81,9 +80,8 @@ namespace Mix.Storage.Controllers
             if (ModelState.IsValid)
             {
                 folder ??= DateTime.Now.ToString("yyyy-MMM");
-                folder = $"{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
-                string webPath = $"{MixFolders.WebRootPath}/{folder}";
-                var result = MixFileHelper.SaveFile(file, webPath);
+                folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                var result = MixFileHelper.SaveFile(file, folder);
                 if (!string.IsNullOrEmpty(result))
                 {
                     return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");

@@ -1,7 +1,7 @@
 ﻿namespace Mix.Database.EntityConfigurations.Base.Cms
 {
     public class MixPostContentConfiguration<TConfig> : MultilingualSEOContentBaseConfiguration<MixPostContent, int, TConfig>
-        where TConfig: IDatabaseConstants
+        where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<MixPostContent> builder)
         {

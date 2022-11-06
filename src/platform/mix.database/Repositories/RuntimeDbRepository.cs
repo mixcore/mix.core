@@ -1,21 +1,17 @@
-﻿using Mix.Heart.Extensions;
-using System;
+﻿using Microsoft.EntityFrameworkCore.DynamicLinq;
+using Mix.Heart.Exceptions;
+using Mix.Heart.Helpers;
+using Mix.Heart.Infrastructure.Exceptions;
+using Mix.Heart.Models;
+using Mix.Heart.Repository;
+using Mix.Heart.Services;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
-using Microsoft.EntityFrameworkCore.DynamicLinq;
-using Mix.Heart.Services;
-using Mix.Heart.Helpers;
-using Mix.Heart.Repository;
-using Mix.Heart.UnitOfWork;
 using System.Linq.Expressions;
-using Mix.Heart.Models;
-using Mix.Heart.Exceptions;
-using Newtonsoft.Json.Linq;
-using Mix.Heart.Infrastructure.Exceptions;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Mix.Database.Repositories
 {

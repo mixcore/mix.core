@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Services;
 using Mix.Shared.Services;
-using System.Text.RegularExpressions;
 
 namespace Mixcore.Controllers
 {
@@ -48,13 +46,13 @@ namespace Mixcore.Controllers
                 .Where(m => m.Key.Contains("param"))
                 .Select(m => m.Value).ToArray());
                 appFolder ??= "mix-portal";
-                
+
                 string url = $"/portal-apps/{appFolder}/{subPath}?baseHref=portal-apps/{appFolder}";
                 return Redirect(url);
             }
 
             return View();
-            
+
         }
         #region overrides
 

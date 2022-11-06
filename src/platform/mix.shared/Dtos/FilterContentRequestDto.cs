@@ -1,14 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Constant.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace Mix.Shared.Dtos
+﻿namespace Mix.Shared.Dtos
 {
     public class FilterContentRequestDto : SearchRequestDto
     {

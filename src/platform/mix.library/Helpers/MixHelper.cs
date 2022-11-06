@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -71,9 +70,9 @@ namespace Mix.Lib.Helpers
                        {
                            Console.WriteLine($"Clean Arguments: -c {o.Clean}");
 
-                            // Delete existing MixContent folder
-                            Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
-                            string isClean = Console.ReadLine().ToLower();
+                           // Delete existing MixContent folder
+                           Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
+                           string isClean = Console.ReadLine().ToLower();
 
                            if (mixContentFolder.Exists)
                            {
@@ -117,7 +116,7 @@ namespace Mix.Lib.Helpers
         }
 
 
-            public static bool CopyFolder(string srcPath, string desPath)
+        public static bool CopyFolder(string srcPath, string desPath)
         {
             if (srcPath.ToLower() != desPath.ToLower() && Directory.Exists(srcPath))
             {

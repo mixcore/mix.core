@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Mix.Heart.Entities.Cache;
+﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Common.Domain.ViewModels;
+using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
-using Mix.Common.Domain.ViewModels;
-using Mix.Lib.Models.Common;
-using Mix.Heart.Extensions;
 
 namespace Mix.Common.Controllers
 {
@@ -38,7 +35,7 @@ namespace Mix.Common.Controllers
         public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-            
+
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)

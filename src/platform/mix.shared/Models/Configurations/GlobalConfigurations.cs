@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace Mix.Shared.Models.Configurations
+﻿namespace Mix.Shared.Models.Configurations
 {
     public class GlobalConfigurations
     {

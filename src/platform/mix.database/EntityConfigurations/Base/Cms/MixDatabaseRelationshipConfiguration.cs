@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.EntityConfigurations.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.EntityConfigurations.Base.Cms
 {
@@ -15,12 +13,12 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
                .IsRequired()
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.DisplayName)
                .IsRequired()
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.DestinateDatabaseName)
                .IsRequired()
                .HasColumnType($"{Config.String}{Config.SmallLength}")
@@ -29,7 +27,7 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
             builder.HasOne(e => e.SourceDatabase)
                 .WithMany(e => e.SourceRelationships)
                 .HasForeignKey(e => e.ParentId);
-            
+
             builder.HasOne(e => e.DestinateDatabase)
                 .WithMany(e => e.DestinateRelationships)
                 .HasForeignKey(e => e.ChildId);

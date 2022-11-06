@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mix.Lib.Attributes
+﻿namespace Mix.Lib.Attributes
 {
-    using System;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Filters;
     using Mix.Lib.Extensions;
+    using System;
+    using System.Threading.Tasks;
 
     // This class provides an attribute for controller actions that flags duplicate form submissions
     // by adding a model error if the request's verification token has already been seen on a prior

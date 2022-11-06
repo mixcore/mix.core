@@ -11,8 +11,8 @@
         public const string SYSTEM_TAG = "sysTag";
         public const string SYSTEM_USER_DATA = "sysUserData";
         public const string SYSTEM_ENDPOINT = "sysEndpoint";
-        public const string SYSTEM_PERMISSION= "sysPermission";
+        public const string SYSTEM_PERMISSION = "sysPermission";
         public const string SYSTEM_PERMISSION_ENDPOINT = "sysPermissionEndpoint";
-        public const string SYSTEM_USER_PERMISSION= "sysUserPermission";
+        public const string SYSTEM_USER_PERMISSION = "sysUserPermission";
     }
 }

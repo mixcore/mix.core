@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Account;
-using Microsoft.Extensions.DependencyInjection;
-using Mix.Heart.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using Mix.Database.Entities.AuditLog;
-using System;
 
 namespace Mix.Lib.Middlewares
 {

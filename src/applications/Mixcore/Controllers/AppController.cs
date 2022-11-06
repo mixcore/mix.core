@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Heart.Helpers;
 using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 
@@ -81,7 +79,7 @@ namespace Mixcore.Controllers
             var page = await pageRepo.GetSingleAsync(m => m.BaseRoute == baseRoute && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
-            
+
             ViewData["Image"] = page.Image;
             ViewData["ViewMode"] = MixMvcViewMode.Application;
 

@@ -11,7 +11,7 @@
         public const string MixConfigurations = "MixContent/Shared/AppConfigs/authentication";
         public const string Translator = "MixContent/Shared/AppConfigs/translator";
         public const string Configration = "MixContent/Shared/AppConfigs/configuration";
-        
+
         public const string Global = "MixContent/Shared/AppConfigs/global";
         public const string Portal = "MixContent/Shared/AppConfigs/portal";
         public const string EPPlus = "MixContent/Shared/AppConfigs/epplus";

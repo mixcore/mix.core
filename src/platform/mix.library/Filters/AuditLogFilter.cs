@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Lib.Services;
 
 namespace Mix.Lib.Filters
 {

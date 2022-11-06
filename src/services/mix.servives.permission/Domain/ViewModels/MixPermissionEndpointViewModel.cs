@@ -1,6 +1,5 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Attributes;
 using Mix.Services.Permission.Domain.Entities;
 
 namespace Mix.Services.Permission.Domain.ViewModels

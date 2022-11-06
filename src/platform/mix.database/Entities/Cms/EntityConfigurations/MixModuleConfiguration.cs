@@ -4,7 +4,7 @@ using Mix.Database.Services;
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixModuleConfiguration : TenantEntityUniqueNameBaseConfiguration<MixModule, int>
-        
+
     {
         public MixModuleConfiguration(DatabaseService databaseService) : base(databaseService)
         {

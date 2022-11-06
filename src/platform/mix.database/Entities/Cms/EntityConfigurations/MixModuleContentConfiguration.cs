@@ -4,7 +4,7 @@ using Mix.Database.Services;
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixModuleContentConfiguration : MultilingualSEOContentBaseConfiguration<MixModuleContent, int>
-        
+
     {
         public MixModuleContentConfiguration(DatabaseService databaseService) : base(databaseService)
         {

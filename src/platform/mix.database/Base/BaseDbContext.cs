@@ -1,14 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Database.Extensions;
+﻿using Mix.Database.Extensions;
 using Mix.Database.Services;
-using Mix.Heart.EntityFrameworkCore.Extensions;
-using Mix.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Database.Base
 {

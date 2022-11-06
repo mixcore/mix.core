@@ -3,7 +3,7 @@
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixMediaConfiguration : TenantEntityBaseConfiguration<MixMedia, Guid>
-        
+
     {
         public MixMediaConfiguration(DatabaseService databaseService) : base(databaseService)
         {

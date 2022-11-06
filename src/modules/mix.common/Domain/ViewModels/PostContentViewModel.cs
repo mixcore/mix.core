@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Database.Services;
-using Mix.Heart.Helpers;
-using Mix.RepoDb.Repositories;
-using Mix.Shared.Services;
+﻿using Mix.RepoDb.Repositories;
 
 namespace Mix.Common.Domain.ViewModels
 {

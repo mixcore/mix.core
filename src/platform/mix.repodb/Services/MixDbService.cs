@@ -2,11 +2,6 @@
 using Mix.Constant.Enums;
 using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
-using Mix.Database.EntityConfigurations;
-using Mix.Database.EntityConfigurations.MYSQL;
-using Mix.Database.EntityConfigurations.POSTGRES;
-using Mix.Database.EntityConfigurations.SQLITE;
-using Mix.Database.EntityConfigurations.SQLSERVER;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
@@ -14,7 +9,6 @@ using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
-using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using System.Dynamic;
 

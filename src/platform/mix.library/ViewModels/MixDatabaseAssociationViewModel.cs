@@ -1,6 +1,4 @@
-﻿using Mix.Lib.Services;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public sealed class MixDatabaseAssociationViewModel
         : ViewModelBase<MixCmsContext, MixDatabaseAssociation, Guid, MixDatabaseAssociationViewModel>
@@ -36,7 +34,7 @@ namespace Mix.Lib.ViewModels
         public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             base.InitDefaultValues(language, cultureId);
-            if(Id == default)
+            if (Id == default)
             {
                 Id = Guid.NewGuid();
             }

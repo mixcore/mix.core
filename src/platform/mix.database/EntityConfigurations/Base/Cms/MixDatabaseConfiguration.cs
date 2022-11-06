@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Database.EntityConfigurations.Converters;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Database.EntityConfigurations.Base.Cms
 {
@@ -43,12 +41,12 @@ namespace Mix.Database.EntityConfigurations.Base.Cms
                .IsRequired(false)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.UpdatePermissions)
                .IsRequired(false)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")
                .HasCharSet(Config.CharSet);
-            
+
             builder.Property(e => e.DeletePermissions)
                .IsRequired(false)
                .HasColumnType($"{Config.NString}{Config.MediumLength}")

@@ -4,7 +4,7 @@ using Mix.Database.Services;
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixDatabaseColumnConfiguration : EntityBaseConfiguration<MixDatabaseColumn, int>
-        
+
     {
         public MixDatabaseColumnConfiguration(DatabaseService databaseService) : base(databaseService)
         {

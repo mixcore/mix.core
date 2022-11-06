@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Mix.Heart.Enums;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -85,7 +84,7 @@ namespace Mix.Shared.Services
                 : requestUrl;
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
-        
+
         public Task<string> GetStringAsync(
             string requestUrl,
             List<KeyValuePair<string, string>> queryParams = null,

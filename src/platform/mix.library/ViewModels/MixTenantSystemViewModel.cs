@@ -15,7 +15,7 @@ namespace Mix.Lib.ViewModels
         public string Description { get; set; }
 
         public List<MixDomainViewModel> Domains { get; set; } = new();
-        public List<MixCulture> Cultures{ get; set; } = new();
+        public List<MixCulture> Cultures { get; set; } = new();
 
         public TenantConfigurationModel Configurations { get; set; }
         #endregion

@@ -33,10 +33,10 @@ namespace Mix.MixQuartz.Jobs
                 {
                     var now = DateTime.UtcNow;
                     var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}/api/v2/rest/shared/ping");
-                    
+
                     Console.WriteLine($"Ping at {now}: {(DateTime.Parse(ping) - now).TotalMilliseconds}");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine("Cannot Ping: " + ex.Message);
                 }

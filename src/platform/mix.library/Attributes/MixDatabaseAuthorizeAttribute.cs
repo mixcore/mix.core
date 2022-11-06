@@ -1,5 +1,4 @@
-﻿using Google.Api;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
@@ -102,7 +101,7 @@ namespace Mix.Lib.Attributes
         private bool CheckUserInRoles(string roles, string[] userRoles)
         {
             var allowedRoles = JArray.Parse(roles).Values<string>().ToArray();
-            return allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
+            return allowedRoles.Length == 0 || allowedRoles.Any(r => userRoles.Any(ur => ur == $"{r}-{_idService.CurrentTenant.Id}"));
         }
 
         #endregion

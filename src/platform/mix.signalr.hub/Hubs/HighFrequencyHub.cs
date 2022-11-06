@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Azure.ServiceBus;
-using Mix.Heart.Helpers;
 using Mix.Service.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Models;
 using Newtonsoft.Json.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Mix.SignalR.Hubs
 {
@@ -24,7 +21,7 @@ namespace Mix.SignalR.Hubs
                     msg.From ??= GetCurrentUser();
                     _ = Clients.GroupExcept(room, Context.ConnectionId).SendAsync(HubMethods.ReceiveMethod, msg.ToString());
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }

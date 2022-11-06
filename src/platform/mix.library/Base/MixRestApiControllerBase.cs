@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Amqp.Framing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Mix.Identity.Constants;
-using Mix.Lib.Dtos;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using MySqlX.XDevAPI.Common;
 using System.Reflection;
 
 namespace Mix.Lib.Base

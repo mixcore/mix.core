@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
-using System;
 using System.Linq.Expressions;
-using Mix.Heart.Extensions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Mixcore.Controllers
 {
@@ -56,8 +54,9 @@ namespace Mixcore.Controllers
                 return Redirect(_redirectUrl);
             }
             var page = await LoadPage(seoName);
-            if (page != null) {
-                return View(page); 
+            if (page != null)
+            {
+                return View(page);
             }
             return await LoadAlias(seoName);
         }

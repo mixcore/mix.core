@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Mix.Database.EntityConfigurations.Base.Cms
 {
     public class MixPageContentConfiguration<TConfig> : MultilingualSEOContentBaseConfiguration<MixPageContent, int, TConfig>
-        where TConfig: IDatabaseConstants
+        where TConfig : IDatabaseConstants
     {
         public override void Configure(EntityTypeBuilder<MixPageContent> builder)
         {

@@ -1,6 +1,5 @@
 ﻿using Mix.Database.Entities.Account;
 using Mix.Database.Entities.AuditLog;
-using Mix.Shared.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<MixCmsContext>();
             services.AddDbContext<MixCmsAccountContext>();
             services.AddDbContext<AuditLogDbContext>();
-            
+
             return services;
         }
     }

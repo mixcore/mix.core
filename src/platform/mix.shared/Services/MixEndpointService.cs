@@ -1,8 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Http;
-
-namespace Mix.Shared.Services
+﻿namespace Mix.Shared.Services
 {
     public sealed class MixEndpointService : JsonConfigurationServiceBase
     {

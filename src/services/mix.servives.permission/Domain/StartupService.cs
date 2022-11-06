@@ -1,13 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Database.Services;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
 using Mix.Services.Permission.Domain.Entities;
 using Mix.Services.Permission.Domain.Services;
 using Mix.Shared.Interfaces;
-using Mix.Shared.Services;
-using Org.BouncyCastle.Crypto.Signers;
 
 namespace Mix.Services.Permission.Domain
 {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Mix.Shared.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -23,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         builder.AllowAnyOrigin();
                     }
-                    else if(origins.Count() > 0)
+                    else if (origins.Count() > 0)
                     {
                         builder.WithOrigins(origins);
                         builder.AllowCredentials();

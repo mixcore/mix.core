@@ -3,7 +3,7 @@
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
     public class MixDataConfiguration : EntityBaseConfiguration<MixData, Guid>
-        
+
     {
         public MixDataConfiguration(DatabaseService databaseService) : base(databaseService)
         {
