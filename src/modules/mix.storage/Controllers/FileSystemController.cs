@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Heart.Constants;
 using Mix.Storage.Lib.Models;
 
 namespace Mix.Storage.Controllers
@@ -79,9 +80,40 @@ namespace Mix.Storage.Controllers
         {
             if (ModelState.IsValid)
             {
-                folder ??= DateTime.Now.ToString("yyyy-MMM");
-                folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                if (string.IsNullOrEmpty(folder))
+                {
+                    folder = DateTime.Now.ToString("yyyy-MMM");
+                    folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                }
                 var result = MixFileHelper.SaveFile(file, folder);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");
+                }
+            }
+            return BadRequest();
+        }
+        
+        // POST api/values
+        /// <summary>
+        /// Uploads the image.
+        /// </summary>
+        /// <param name="image">The img information.</param>
+        /// <param name="file"></param> Ex: { "base64": "", "fileFolder":"" }
+        /// <returns></returns>
+        [Route("extract-file")]
+        [HttpPost]
+        public IActionResult Extract([FromForm] string folder, [FromForm] IFormFile file)
+        {
+            if (file.FileName.EndsWith(MixFileExtensions.Zip))
+            {
+                if (string.IsNullOrEmpty(folder))
+                {
+                    folder = DateTime.Now.ToString("yyyy-MMM");
+                    folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
+                }
+                var result = MixFileHelper.SaveFile(file, folder);
+                MixFileHelper.UnZipFile($"{folder}/{result}", folder);
                 if (!string.IsNullOrEmpty(result))
                 {
                     return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");
