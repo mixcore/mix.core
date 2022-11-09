@@ -24,10 +24,14 @@ namespace Mix.Storage.Lib.Engines.Mix
             return Task.FromResult(result);
         }
 
-        public override Task<string?> Upload(IFormFile file, string? fileFolder, string? createdBy)
+        public override Task<string?> Upload(IFormFile file, string? folder, string? createdBy)
         {
             string? result = null;
-            string folder = GetUploadFolder(file.FileName, fileFolder, createdBy);
+            if (string.IsNullOrEmpty(folder))
+            {
+                folder = GetUploadFolder(file.FileName, folder, createdBy);
+            }
+            
             var fileName = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(fileName))
             {

@@ -545,7 +545,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.UserData?.Value<string>("Avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info.UserData?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString())
