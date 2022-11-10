@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>Mixcore</RootNamespace>
 		<UserSecretsId>18e7166c-3aa3-4569-98f0-d319f894743d</UserSecretsId>
 		<ServerGarbageCollection>false</ServerGarbageCollection>
