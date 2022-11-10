@@ -17,7 +17,7 @@
     },
     "Mixcore": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5010;http://localhost:5011;https://v2.dev.mixcore.org/",
       "environmentVariables": {

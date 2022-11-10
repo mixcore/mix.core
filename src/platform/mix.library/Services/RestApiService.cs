@@ -101,9 +101,8 @@ namespace Mix.Lib.Services
         #endregion
 
         #region Query Handlers
-        public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest)
         {
-            var searchRequest = BuildSearchRequest(req);
             return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 

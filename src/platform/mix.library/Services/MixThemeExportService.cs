@@ -85,7 +85,7 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileHelper.CopyFolder(
-                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/{MixThemePackageConstants.AssetFolder}",
+                    _exporTheme.AssetFolder,
                     $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileHelper.CopyFolder(
@@ -329,11 +329,14 @@ namespace Mix.Lib.Services
 
         private async Task ExportTemplates()
         {
-            _siteData.Templates = await _context.MixViewTemplate
-                .Where(m => m.MixThemeId == _dto.ThemeId)
-                .AsNoTracking()
-                .ToListAsync();
-            _siteData.Templates.ForEach(m => m.Content = m.Content.Replace($"/{_siteData.ThemeName}", "/[THEME_NAME]"));
+            if (_dto.IsIncludeTemplates)
+            {
+                _siteData.Templates = await _context.MixViewTemplate
+                    .Where(m => m.MixThemeId == _dto.ThemeId)
+                    .AsNoTracking()
+                    .ToListAsync();
+                _siteData.Templates.ForEach(m => m.Content = m.Content.Replace($"/{_siteData.ThemeName}", "/[THEME_NAME]"));
+            }
         }
 
         private async Task ExportPages()

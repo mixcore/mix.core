@@ -6,12 +6,13 @@ using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using System.Text.RegularExpressions;
+using static Mix.Constant.Constants.MixConstants;
 
 namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-theme")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+    [MixAuthorize(MixRoles.Owner)]
     public class MixThemeController
         : MixRestfulApiControllerBase<MixThemeViewModel, MixCmsContext, MixTheme, int>
     {
@@ -41,6 +42,8 @@ namespace Mix.Portal.Controllers
             _httpService = httpService;
             _hubContext = hubContext;
         }
+
+        #region Routes
 
         // POST api/theme
         [HttpPost]
@@ -149,6 +152,26 @@ namespace Mix.Portal.Controllers
             MixFileHelper.SaveFile(indexFile);
             return Ok(appfolder);
         }
+
+        #endregion
+
+        #region Overrides
+
+        protected override Task<int> CreateHandlerAsync(MixThemeViewModel data)
+        {
+            data.AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{data.SystemName}";
+            data.TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.SystemName}";
+            return base.CreateHandlerAsync(data);
+        }
+
+        protected override Task UpdateHandler(int id, MixThemeViewModel data)
+        {
+            data.AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{data.SystemName}";
+            data.TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.SystemName}";
+            return base.UpdateHandler(id, data);
+        }
+
+        #endregion
 
         #region Helpers
         public virtual async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)

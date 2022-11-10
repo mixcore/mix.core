@@ -13,13 +13,14 @@ namespace Mix.Database.Services
 {
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
+        public MixDatabaseProvider DatabaseProvider { get; set; }
         protected IHttpContextAccessor _httpContextAccessor;
         public DatabaseService(IHttpContextAccessor httpContextAccessor)
             : base(MixAppConfigFilePaths.Database, true)
         {
             _httpContextAccessor = httpContextAccessor;
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
+            DatabaseProvider = AppSettings.DatabaseProvider;
         }
 
         protected override void LoadAppSettings()
@@ -113,8 +114,7 @@ namespace Mix.Database.Services
         }
 
         public void InitConnectionStrings(string connectionString,
-            MixDatabaseProvider databaseProvider,
-            string defaultCulture)
+            MixDatabaseProvider databaseProvider)
         {
             SetConnectionString(MixConstants.CONST_CMS_CONNECTION, connectionString);
             // TODO: Seperate Account db. Current Store account to same database

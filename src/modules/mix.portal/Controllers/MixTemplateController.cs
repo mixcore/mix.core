@@ -22,6 +22,8 @@ namespace Mix.Portal.Controllers
 
         }
 
+        #region Routes
+
 
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<MixTemplateViewModel>> Copy(int id)
@@ -44,6 +46,7 @@ namespace Mix.Portal.Controllers
                 return NotFound();
             }
         }
+        #endregion
 
         #region Overrides
 

@@ -112,6 +112,7 @@ namespace Mix.Lib.Services
             {
                 _uow.Begin();
                 _siteData = ParseSiteData(siteData);
+
                 if (_siteData.ThemeId == 0)
                 {
                     _siteData.ThemeId = await CreateTheme();
@@ -135,7 +136,7 @@ namespace Mix.Lib.Services
             // Copy theme's assets
             string srcAssets = $"{MixFolders.ThemePackage}/{MixThemePackageConstants.AssetFolder}";
             //string destAssets = $"{MixFolders.WebRootPath}/{MixFolders.SiteContentAssetsFolder}/{_siteData.ThemeSystemName}";
-            string destAssets = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}/assets";
+            string destAssets = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}";
             MixFileHelper.CopyFolder(srcAssets, destAssets);
 
             // Copy theme's upload files
@@ -154,6 +155,8 @@ namespace Mix.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 DisplayName = _siteData.ThemeName,
                 SystemName = _siteData.ThemeSystemName,
+                AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}",
+                TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{_siteData.ThemeSystemName}",
                 CreatedBy = _siteData.CreatedBy,
                 CreatedDateTime = DateTime.UtcNow,
                 Status = MixContentStatus.Published
