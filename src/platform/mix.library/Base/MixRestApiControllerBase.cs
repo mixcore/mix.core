@@ -71,7 +71,8 @@ namespace Mix.Lib.Base
         #region Query Handlers
         protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
         {
-            return _restApiService.SearchHandler(req);
+            var searchRequest = BuildSearchRequest(req);
+            return _restApiService.SearchHandler(req, searchRequest);
         }
 
         protected virtual ActionResult<PagingResponseModel<TView>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)

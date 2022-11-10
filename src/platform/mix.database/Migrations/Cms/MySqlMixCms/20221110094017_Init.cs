@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Mix.Database.Migrations
+namespace Mix.Database.Migrations.MySqlMixCms
 {
     public partial class Init : Migration
     {
@@ -278,8 +279,13 @@ namespace Mix.Database.Migrations
                         .Annotation("MySql:CharSet", "utf8"),
                     ReadPermissions = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8"),
-                    WritePermissions = table.Column<string>(type: "varchar(250)", nullable: true)
+                    CreatePermissions = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8"),
+                    UpdatePermissions = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    DeletePermissions = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    SelfManaged = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     MixDatabaseContextDatabaseAssociationId = table.Column<int>(type: "int", nullable: true),
                     MixTenantId = table.Column<int>(type: "int", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -932,33 +938,34 @@ namespace Mix.Database.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    BaseHref = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BaseRoute = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Domain = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    BaseApiUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    BaseHref = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    BaseRoute = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Domain = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
+                    BaseApiUrl = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
                     TemplateId = table.Column<int>(type: "int", nullable: true),
                     Image = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8"),
                     MixDataContentId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "longtext", nullable: true)
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime", nullable: true),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ModifiedBy = table.Column<string>(type: "longtext", nullable: true)
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8"),
                     IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    DisplayName = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Description = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -1036,7 +1043,8 @@ namespace Mix.Database.Migrations
                         name: "FK_MixDataContentValue_MixDatabaseColumn_MixDatabaseColumnId",
                         column: x => x.MixDatabaseColumnId,
                         principalTable: "MixDatabaseColumn",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MixDataContentValue_MixDataContent_MixDataContentId",
                         column: x => x.MixDataContentId,
@@ -1212,7 +1220,13 @@ namespace Mix.Database.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ImageUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
                     PreviewUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    AssetFolder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    TemplateFolder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "utf8_unicode_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     MixDatabaseName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),

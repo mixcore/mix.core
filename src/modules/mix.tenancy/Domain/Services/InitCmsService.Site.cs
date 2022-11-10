@@ -9,8 +9,7 @@ namespace Mix.Tenancy.Domain.Services
         {
             _databaseService.InitConnectionStrings(
                 model.ConnectionString,
-                model.DatabaseProvider,
-                model.Culture.Specificulture);
+                model.DatabaseProvider);
 
             await _databaseService.UpdateMixCmsContextAsync();
         }

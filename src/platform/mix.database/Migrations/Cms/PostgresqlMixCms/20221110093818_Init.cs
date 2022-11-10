@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -9,9 +10,6 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
-
             migrationBuilder.CreateTable(
                 name: "MixContributor",
                 columns: table => new
@@ -65,9 +63,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
@@ -113,9 +111,9 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
@@ -225,7 +223,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     Type = table.Column<string>(type: "varchar(50)", nullable: false),
                     ReadPermissions = table.Column<string>(type: "varchar(250)", nullable: true),
-                    WritePermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    CreatePermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    UpdatePermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    DeletePermissions = table.Column<string>(type: "varchar(250)", nullable: true),
+                    SelfManaged = table.Column<bool>(type: "boolean", nullable: false),
                     MixDatabaseContextDatabaseAssociationId = table.Column<int>(type: "integer", nullable: true),
                     MixTenantId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -745,24 +746,24 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    BaseHref = table.Column<string>(type: "text", nullable: true),
-                    BaseRoute = table.Column<string>(type: "text", nullable: true),
-                    Domain = table.Column<string>(type: "text", nullable: true),
-                    BaseApiUrl = table.Column<string>(type: "text", nullable: true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BaseHref = table.Column<string>(type: "varchar(250)", nullable: true),
+                    BaseRoute = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Domain = table.Column<string>(type: "varchar(250)", nullable: true),
+                    BaseApiUrl = table.Column<string>(type: "varchar(250)", nullable: true),
                     TemplateId = table.Column<int>(type: "integer", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
-                    MixDatabaseName = table.Column<string>(type: "text", nullable: true),
+                    MixDatabaseName = table.Column<string>(type: "varchar(250)", nullable: true),
                     MixDataContentId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    CreatedBy = table.Column<string>(type: "text", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "text", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "varchar(50)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DisplayName = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    DisplayName = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Description = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     MixTenantId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -827,7 +828,8 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                         name: "FK_MixDataContentValue_MixDatabaseColumn_MixDatabaseColumnId",
                         column: x => x.MixDatabaseColumnId,
                         principalTable: "MixDatabaseColumn",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MixDataContentValue_MixDataContent_MixDataContentId",
                         column: x => x.MixDataContentId,
@@ -965,7 +967,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ImageUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     PreviewUrl = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    AssetFolder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    TemplateFolder = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     MixDatabaseName = table.Column<string>(type: "text", nullable: true),
                     MixDataContentId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -1001,12 +1006,12 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SimpleDataColumns = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<string>(type: "text", nullable: true),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
@@ -1029,7 +1034,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                     SeoKeywords = table.Column<string>(type: "text", nullable: true),
                     SeoName = table.Column<string>(type: "text", nullable: true),
                     SeoTitle = table.Column<string>(type: "text", nullable: true),
-                    PublishedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                    PublishedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1052,10 +1057,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixModuleContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
@@ -1208,10 +1213,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),
@@ -1236,10 +1241,10 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MixPageContentId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     ModifiedBy = table.Column<string>(type: "text", nullable: true),
                     Priority = table.Column<int>(type: "integer", nullable: false),

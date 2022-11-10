@@ -7,32 +7,11 @@
         #region Properties
         public string SystemName { get; set; }
         public string PreviewUrl { get; set; }
+        public string ImageUrl { get; set; }
         public string MixDatabaseName { get; set; }
         public Guid? MixDataContentId { get; set; }
-
-        public string AssetFolder
-        {
-            get
-            {
-                return MixThemePackageConstants.AssetFolder;
-            }
-        }
-
-        public string UploadsFolder
-        {
-            get
-            {
-                return MixThemePackageConstants.UploadFolder;
-            }
-        }
-
-        public string TemplateFolder
-        {
-            get
-            {
-                return $"{MixFolders.TemplatesFolder}/{SystemName}";
-            }
-        }
+        public string AssetFolder { get; set; }
+        public string TemplateFolder { get; set; }
         #endregion
 
         #region Constructors
