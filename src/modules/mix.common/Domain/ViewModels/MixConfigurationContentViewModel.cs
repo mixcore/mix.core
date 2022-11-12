@@ -2,19 +2,13 @@
 {
     [GenerateRestApiController(QueryOnly = true)]
     public class MixConfigurationContentViewModel
-        : ViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>
+        : MultilingualUniqueNameContentViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>
     {
         #region Properties
 
-        public string Specificulture { get; set; }
-        public string DisplayName { get; set; }
-        public string SystemName { get; set; }
-        public string Description { get; set; }
-        public string Content { get; set; }
-        public int MixCultureId { get; set; }
         public string DefaultContent { get; set; }
-        public int MixConfigurationId { get; set; }
-        public int MixTenantId { get; set; }
+        public string Category { get; set; }
+        public MixDataType DataType { get; set; }
 
         #endregion
 

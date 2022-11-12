@@ -1,20 +1,16 @@
-﻿namespace Mix.Common.Domain.ViewModels
+﻿using Mix.Database.Entities.Base;
+
+namespace Mix.Common.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
     public class MixLanguageContentViewModel
-        : ViewModelBase<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel>
+        : MultilingualUniqueNameContentViewModelBase<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel>
     {
         #region Properties
 
-        public string Specificulture { get; set; }
-        public string DisplayName { get; set; }
-        public string SystemName { get; set; }
-        public string Description { get; set; }
-        public string Content { get; set; }
-        public int MixCultureId { get; set; }
         public string DefaultContent { get; set; }
-        public int MixLanguageId { get; set; }
-        public int MixTenantId { get; set; }
+        public string Category { get; set; }
+        public MixDataType DataType { get; set; }   
 
         #endregion
 

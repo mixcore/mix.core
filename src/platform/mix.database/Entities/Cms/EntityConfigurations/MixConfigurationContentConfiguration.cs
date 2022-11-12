@@ -1,4 +1,5 @@
-﻿using Mix.Database.Services;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Database.Services;
 
 namespace Mix.Database.Entities.Cms.EntityConfigurations
 {
@@ -14,10 +15,23 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
             base.Configure(builder);
 
             builder.Property(e => e.DefaultContent)
-                .IsRequired()
-                .HasColumnType($"{Config.NString}{Config.MaxLength}")
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation);
+               .IsRequired(false)
+               .HasColumnType($"{Config.NString}{Config.MaxLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
+
+            builder.Property(e => e.Category)
+               .IsRequired(false)
+               .HasColumnType($"{Config.NString}{Config.MediumLength}")
+               .HasCharSet(Config.CharSet)
+               .UseCollation(Config.DatabaseCollation);
+
+            builder.Property(e => e.DataType)
+             .IsRequired()
+             .HasConversion(new EnumToStringConverter<MixDataType>())
+             .HasColumnType($"{Config.String}{Config.SmallLength}")
+             .HasCharSet(Config.CharSet)
+             .UseCollation(Config.DatabaseCollation);
         }
     }
 }
