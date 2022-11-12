@@ -1,4 +1,6 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿using Mix.Lib.Services;
+
+namespace Mix.Portal.Domain.ViewModels
 {
     public sealed class MixPostContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPostContent, int, MixPostContentViewModel>

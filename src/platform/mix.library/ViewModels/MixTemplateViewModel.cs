@@ -10,7 +10,7 @@ namespace Mix.Lib.ViewModels
         public int MixTenantId { get; set; }
         public string Content { get; set; }
         public string Extension { get; set; }
-        public string FileFolder { get; set; }
+        public string? FileFolder { get; set; }
         public string FileName { get; set; }
         public MixTemplateFolderType FolderType { get; set; }
         public string Scripts { get; set; }
