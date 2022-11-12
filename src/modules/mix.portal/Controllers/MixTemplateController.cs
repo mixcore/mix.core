@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MySqlX.XDevAPI.Common;
 
 namespace Mix.Portal.Controllers
 {
@@ -19,7 +20,6 @@ namespace Mix.Portal.Controllers
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
         {
-
         }
 
         #region Routes
@@ -55,6 +55,18 @@ namespace Mix.Portal.Controllers
             var result = await base.GetById(id);
             result.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{result.MixThemeName}/{result.FolderType}";
             return result;
+        }
+
+        protected override Task<int> CreateHandlerAsync(MixTemplateViewModel data)
+        {
+            data.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.MixThemeName}/{data.FolderType}";
+            return base.CreateHandlerAsync(data);
+        }
+
+        protected override Task UpdateHandler(int id, MixTemplateViewModel data)
+        {
+            data.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.MixThemeName}/{data.FolderType}";
+            return base.UpdateHandler(id, data);
         }
         protected override SearchQueryModel<MixTemplate, int> BuildSearchRequest(SearchRequestDto req)
         {

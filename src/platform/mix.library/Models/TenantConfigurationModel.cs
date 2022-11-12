@@ -1,7 +1,7 @@
 ﻿using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Mix.Lib.Models.Configurations
+namespace Mix.Lib.Models
 {
     public class TenantConfigurationModel
     {
@@ -15,6 +15,7 @@ namespace Mix.Lib.Models.Configurations
         public string ApiEncryptKey { get; set; }
 
         public SmtpConfiguration Smtp { get; set; }
+
         public DateTime? LastUpdateConfiguration { get; set; }
     }
 }
