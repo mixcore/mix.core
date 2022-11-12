@@ -8,29 +8,10 @@ namespace Mix.Service.Services
     public class MixService
     {
         public readonly SmtpConfigService _smtpConfigService;
-        public readonly MixConfigurationService _configService;
 
-        public MixService(
-            MixConfigurationService configService,
-            SmtpConfigService smtpConfigService,
-            IHttpContextAccessor httpContextAccessor)
+        public MixService(SmtpConfigService smtpConfigService)
         {
-            _configService = configService;
             _smtpConfigService = smtpConfigService;
-        }
-
-        public string GetAssetFolder(string culture, string domain)
-        {
-            return $"{domain}/" +
-                $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/assets";
-        }
-
-        public string GetUploadFolder(string culture = null)
-        {
-            return $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{_configService.GetConfig<string>(MixAppSettingKeywords.ThemeFolder, culture)}/uploads/" +
-                $"{DateTime.UtcNow.ToString(MixConstants.CONST_UPLOAD_FOLDER_DATE_FORMAT)}";
         }
 
         public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)

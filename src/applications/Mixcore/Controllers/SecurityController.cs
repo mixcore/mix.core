@@ -20,14 +20,14 @@ namespace Mixcore.Controllers
         public SecurityController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            IPSecurityConfigService ipSecurityConfigService,
-            MixCacheService cacheService,
+            MixCmsService mixCmsService,
+            IPSecurityConfigService ipSecurityConfigService,            
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
             MixIdentityService idService,
             TenantUserManager userManager,
             MixCmsContext cmsContext)
-            : base(httpContextAccessor, mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService,  mixCmsService, ipSecurityConfigService)
         {
             _signInManager = signInManager;
             _logger = logger;

@@ -177,6 +177,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(4000)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -188,8 +193,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DefaultContent")
+                    b.Property<string>("DataType")
                         .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DefaultContent")
                         .HasColumnType("nvarchar(4000)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");
@@ -1361,6 +1371,11 @@ namespace Mix.Database.Migrations.SqlServerMixCms
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(250)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(4000)")
                         .UseCollation("Vietnamese_CI_AS")
@@ -1372,8 +1387,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DefaultContent")
+                    b.Property<string>("DataType")
                         .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("Vietnamese_CI_AS")
+                        .HasAnnotation("MySql:CharSet", "utf8");
+
+                    b.Property<string>("DefaultContent")
                         .HasColumnType("nvarchar(4000)")
                         .UseCollation("Vietnamese_CI_AS")
                         .HasAnnotation("MySql:CharSet", "utf8");

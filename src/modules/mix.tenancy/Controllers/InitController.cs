@@ -29,8 +29,10 @@ namespace Mix.Tenancy.Controllers
         private readonly InitCmsService _initCmsService;
         private readonly QuartzService _quartzService;
         private readonly MixThemeImportService _importService;
+        private readonly MixConfigurationService _configService;
         private readonly HttpService _httpService;
         protected readonly IHubContext<MixThemeHub> _hubContext;
+        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         IHostApplicationLifetime _appLifetime;
         public InitController(
             IHttpContextAccessor httpContextAccessor,
@@ -43,8 +45,8 @@ namespace Mix.Tenancy.Controllers
             MixThemeImportService importService,
             IHostApplicationLifetime appLifetime,
             QuartzService quartzService,
-            HttpService httpService, IHubContext<MixThemeHub> hubContext = null
-, MixTenantService mixTenantService = null, MixEndpointService mixEndpointService = null, DatabaseService databaseService = null)
+            HttpService httpService, IHubContext<MixThemeHub> hubContext = null,
+            MixTenantService mixTenantService = null, MixEndpointService mixEndpointService = null, DatabaseService databaseService = null, MixConfigurationService configService = null, UnitOfWorkInfo<MixCmsContext> uow = null)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
 
@@ -57,6 +59,8 @@ namespace Mix.Tenancy.Controllers
             _mixTenantService = mixTenantService;
             _mixEndpointService = mixEndpointService;
             _databaseService = databaseService;
+            _configService = configService;
+            _uow = uow;
         }
 
 
@@ -177,11 +181,27 @@ namespace Mix.Tenancy.Controllers
         [HttpPost("import-theme")]
         public async Task<ActionResult<SiteDataViewModel>> ImportThemeAsync([FromBody] SiteDataViewModel siteData)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && GlobalConfigService.Instance.IsInit)
             {
                 siteData.CreatedBy = User.Identity.Name;
                 siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
+
+                await _configService.CreateConfiguration(
+                    MixConfigurationNames.ThemeFolder,
+                    $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{siteData.ThemeSystemName}", 
+                    CurrentTenant.Cultures.First().Specificulture, 
+                    CurrentTenant.Cultures.First().Id, 
+                    _uow);
+                
+                await _configService.CreateConfiguration(
+                    MixConfigurationNames.DefaultDomain, 
+                    CurrentTenant.PrimaryDomain, 
+                    CurrentTenant.Cultures.First().Specificulture, 
+                    CurrentTenant.Cultures.First().Id, 
+                    _uow);
+                await _configService.Reload(_uow);
+
                 GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTheme;
                 GlobalConfigService.Instance.AppSettings.IsInit = false;
                 GlobalConfigService.Instance.SaveSettings();

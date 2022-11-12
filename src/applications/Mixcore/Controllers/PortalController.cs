@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.Lib.Services;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -11,9 +12,9 @@ namespace Mixcore.Controllers
         public PortalController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            DatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService,
-            MixCacheService cacheService)
-            : base(httpContextAccessor, mixService, ipSecurityConfigService)
+            MixCmsService mixCmsService,
+            DatabaseService databaseService, IPSecurityConfigService ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _databaseService = databaseService;
         }

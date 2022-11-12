@@ -35,7 +35,6 @@ namespace Mix.Portal.Domain.ViewModels
 
         public override async Task ExpandView()
         {
-            MixDatabaseName ??= MixDatabaseNames.POST_COLUMN;
             await LoadAliasAsync();
             await base.ExpandView();
         }

@@ -29,8 +29,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<MixDataService>();
 
             services.TryAddScoped<MixService>();
+            services.TryAddSingleton<MixConfigurationService>();
+            services.TryAddScoped<MixCmsService>();
             services.TryAddScoped<TranslatorService>();
-            services.TryAddScoped<MixConfigurationService>();
             return services;
         }
     }

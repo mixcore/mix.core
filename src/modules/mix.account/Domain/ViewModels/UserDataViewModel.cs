@@ -3,7 +3,7 @@
 namespace Mix.Account.Domain.ViewModels
 {
     public class UserDataViewModel
-        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, UserDataViewModel>
+        : HaveParentSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, UserDataViewModel>
     {
         #region Constructors
 
