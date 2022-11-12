@@ -1,7 +1,7 @@
 ﻿namespace Mixcore.Domain.ViewModels
 {
     public sealed class AdditionalDataViewModel
-        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataViewModel>
+        : HaveParentSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataViewModel>
     {
         #region Constructors
 

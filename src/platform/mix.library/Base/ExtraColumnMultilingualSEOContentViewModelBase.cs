@@ -2,7 +2,7 @@
 {
     public abstract class ExtraColumnMultilingualSEOContentViewModelBase
         <TDbContext, TEntity, TPrimaryKey, TView>
-        : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : HaveParentSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>

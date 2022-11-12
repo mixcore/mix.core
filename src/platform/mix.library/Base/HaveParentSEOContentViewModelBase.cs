@@ -1,24 +1,24 @@
 ﻿namespace Mix.Lib.Base
 {
-    public abstract class HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-        : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+    public abstract class HaveParentSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        : MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
          where TDbContext : MixCmsContext
          where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
-        where TView : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
+        where TView : HaveParentSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Constructors
 
-        public HaveParentContentViewModelBase()
+        public HaveParentSEOContentViewModelBase()
         {
 
         }
 
-        protected HaveParentContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected HaveParentSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        protected HaveParentContentViewModelBase(TEntity entity,
+        protected HaveParentSEOContentViewModelBase(TEntity entity,
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }

@@ -15,8 +15,8 @@ namespace Mix.Tenancy.Domain.Services
         private readonly IConfiguration _configuration;
         private readonly MixCmsContext _context;
         private readonly MixDataService _mixDataService;
-        private readonly UnitOfWorkInfo _cmsUow;
-        public readonly int tenantId = 1;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
+        private readonly MixConfigurationService _configsService;
         public InitCmsService(
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
@@ -24,22 +24,19 @@ namespace Mix.Tenancy.Domain.Services
             DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
             IConfiguration configuration,
-            MixCmsContext context, MixDataService mixDataService, MixTenantService mixTenantService)
+            UnitOfWorkInfo<MixCmsContext> cmsUow, MixDataService mixDataService, MixTenantService mixTenantService, MixConfigurationService configsService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _identityService = identityService;
             _roleManager = roleManager;
-            _context = context;
             _mixDataService = mixDataService;
-            _cmsUow = new(context);
+            _cmsUow = cmsUow;
+            _context = cmsUow.DbContext;
             _databaseService = databaseService;
             _mixDataService.SetUnitOfWork(_cmsUow);
-            if (httpContextAccessor.HttpContext != null && httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).HasValue)
-            {
-                tenantId = httpContextAccessor.HttpContext.Session.GetInt32(MixRequestQueryKeywords.TenantId).Value;
-            }
             _mixTenantService = mixTenantService;
+            _configsService = configsService;
         }
 
     }

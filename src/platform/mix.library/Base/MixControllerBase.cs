@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using Mix.Lib.Services;
 using System.Globalization;
 
 namespace Mix.Lib.Base
@@ -29,6 +30,7 @@ namespace Mix.Lib.Base
         protected bool isValid = true;
         protected string _redirectUrl;
         protected readonly IPSecurityConfigService _ipSecurityConfigService;
+        protected readonly MixCmsService _mixCmsService;
         protected readonly MixService _mixService;
         protected bool ForbiddenPortal
         {
@@ -49,12 +51,14 @@ namespace Mix.Lib.Base
         public MixControllerBase(
              IHttpContextAccessor httpContextAccessor,
             MixService mixService,
+            MixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService)
         {
             _mixService = mixService;
             _session = httpContextAccessor.HttpContext.Session;
             _ipSecurityConfigService = ipSecurityConfigService;
             ViewData[MixRequestQueryKeywords.Tenant] = CurrentTenant;
+            _mixCmsService = mixCmsService;
         }
 
         private void LoadCulture()
@@ -100,7 +104,7 @@ namespace Mix.Lib.Base
             if (!string.IsNullOrEmpty(Culture))
             {
                 ViewData["Culture"] = Culture;
-                ViewData["AssetFolder"] = _mixService.GetAssetFolder(Culture, CurrentTenant.PrimaryDomain);
+                ViewData["AssetFolder"] = _mixCmsService.GetAssetFolder(Culture, CurrentTenant.PrimaryDomain);
             }
             domain = string.Format("{0}://{1}", Request.Scheme, Request.Host);
             if (_ipSecurityConfigService.GetConfig<bool>(MixAppSettingKeywords.IsRetrictIp))

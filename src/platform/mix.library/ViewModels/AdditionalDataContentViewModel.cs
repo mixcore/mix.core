@@ -1,7 +1,7 @@
 ﻿namespace Mix.Lib.ViewModels
 {
     public sealed class AdditionalDataContentViewModel
-        : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
+        : HaveParentSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, AdditionalDataContentViewModel>
     {
         #region Constructors
 

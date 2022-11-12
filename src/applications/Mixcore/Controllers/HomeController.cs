@@ -17,10 +17,11 @@ namespace Mixcore.Controllers
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
+            MixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow)
-            : base(httpContextAccessor, ipSecurityConfigService, mixService, translator, databaseService, uow)
+            : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
         {
             _logger = logger;
         }

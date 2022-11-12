@@ -180,6 +180,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Category")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
+
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("utf8_unicode_ci");
@@ -192,8 +198,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DefaultContent")
+                    b.Property<string>("DataType")
                         .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
+
+                    b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("utf8_unicode_ci");
 
@@ -1423,6 +1435,12 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         .HasColumnType("int")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Category")
+                        .HasColumnType("varchar(250)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Category"), "utf8");
+
                     b.Property<string>("Content")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("utf8_unicode_ci");
@@ -1435,8 +1453,14 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DefaultContent")
+                    b.Property<string>("DataType")
                         .IsRequired()
+                        .HasColumnType("varchar(50)")
+                        .UseCollation("utf8_unicode_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DataType"), "utf8");
+
+                    b.Property<string>("DefaultContent")
                         .HasColumnType("varchar(4000)")
                         .UseCollation("utf8_unicode_ci");
 

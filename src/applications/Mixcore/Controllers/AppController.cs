@@ -20,11 +20,12 @@ namespace Mixcore.Controllers
             ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
+            MixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
             MixRepoDbRepository repoDbRepository)
-            : base(httpContextAccessor, mixService, ipSecurityConfigService)
+            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _context = context;
             _uow = new(_context);

@@ -231,7 +231,7 @@ namespace Mix.Lib.Helpers
             Guid? guidParentId = null,
             int? intParentId = null,
             string specificulture = null)
-            where T : HaveParentContentViewModelBase<MixCmsContext, MixDataContent, Guid, T>
+            where T : HaveParentSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, T>
         {
             T result = null;
             var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, T>(uow);
