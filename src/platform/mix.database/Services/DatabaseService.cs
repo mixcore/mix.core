@@ -13,14 +13,13 @@ namespace Mix.Database.Services
 {
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider { get; set; }
+        public MixDatabaseProvider DatabaseProvider { get => AppSettings.DatabaseProvider; }
         protected IHttpContextAccessor _httpContextAccessor;
         public DatabaseService(IHttpContextAccessor httpContextAccessor)
             : base(MixAppConfigFilePaths.Database, true)
         {
             _httpContextAccessor = httpContextAccessor;
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
-            DatabaseProvider = AppSettings.DatabaseProvider;
         }
 
         protected override void LoadAppSettings()

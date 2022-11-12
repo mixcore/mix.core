@@ -18,7 +18,6 @@ namespace Mix.Portal
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)
         {
-            app.UseMixSignalRApp();
         }
     }
 }
