@@ -33,7 +33,8 @@ namespace Mix.Lib.Services
                 SystemName = SeoHelper.GetSEOString(name),
                 Content = content,
                 Specificulture = culture,
-                MixCultureId = cultureId
+                MixCultureId = cultureId,
+                MixTenantId = CurrentTenant.Id
             };
             await config.SaveAsync();
         }
