@@ -75,7 +75,7 @@ namespace Mix.Lib.Base
             return _restApiService.SearchHandler(req, searchRequest);
         }
 
-        protected virtual ActionResult<PagingResponseModel<TView>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
+        protected virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
         {
             return _restApiService.ParseSearchResult(req, result);
         }

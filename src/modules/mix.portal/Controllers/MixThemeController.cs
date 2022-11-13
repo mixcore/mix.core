@@ -20,6 +20,7 @@ namespace Mix.Portal.Controllers
         private readonly HttpService _httpService;
         private readonly MixThemeExportService _exportService;
         private readonly MixThemeImportService _importService;
+        private readonly MixConfigurationService _configService;
 
         public MixThemeController(
             IHttpContextAccessor httpContextAccessor,
@@ -29,18 +30,19 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             MixThemeImportService importService,
             MixThemeExportService exportService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService,
             HttpService httpService,
-            IHubContext<MixThemeHub> hubContext)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            IHubContext<MixThemeHub> hubContext,
+            MixConfigurationService configService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
 
             _exportService = exportService;
             _importService = importService;
             _httpService = httpService;
             _hubContext = hubContext;
+            _configService = configService;
         }
 
         #region Routes
@@ -169,6 +171,21 @@ namespace Mix.Portal.Controllers
             data.AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{data.SystemName}";
             data.TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.SystemName}";
             return base.UpdateHandler(id, data);
+        }
+
+        protected override PagingResponseModel<MixThemeViewModel> ParseSearchResult(SearchRequestDto req, PagingResponseModel<MixThemeViewModel> result)
+        {
+            var data = base.ParseSearchResult(req, result);
+            var activeId = _configService.GetConfig<int>(MixConfigurationNames.ActiveThemeId, _culture.Specificulture);
+            foreach (var item in data.Items)
+            {
+                if (activeId == item.Id)
+                {
+                    item.IsActive = true;
+                    break;
+                }
+            }
+            return data;
         }
 
         #endregion

@@ -11,32 +11,52 @@ namespace Mix.Lib.Services
 {
     public sealed class MixConfigurationService : TenantServiceBase
     {
+        private readonly DatabaseService _databaseService;
         public List<MixConfigurationContentViewModel> Configs { get; private set; }
 
-        public MixConfigurationService(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public MixConfigurationService(IHttpContextAccessor httpContextAccessor, DatabaseService databaseService) : base(httpContextAccessor)
         {
+            _databaseService = databaseService;
         }
 
-        public async Task Reload(UnitOfWorkInfo<MixCmsContext> uow)
+        public async Task Reload(UnitOfWorkInfo<MixCmsContext> uow = null)
         {
             if (GlobalConfigService.Instance.InitStatus != InitStep.Blank)
             {
-                Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                if (uow != null)
+                {
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                }
+                else
+                {
+                    uow = new(new MixCmsContext(_databaseService));
+                    Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
+                    await uow.DisposeAsync();
+                }
             }
         }
 
-        public async Task CreateConfiguration(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow)
+        public async Task Set(string name, string content, string culture, int cultureId, UnitOfWorkInfo<MixCmsContext> uow)
         {
-            MixConfigurationContentViewModel config = new MixConfigurationContentViewModel(uow)
+            var currentConfig = await uow.DbContext.MixConfigurationContent.FirstOrDefaultAsync(c => c.SystemName == name && c.MixCultureId == cultureId);
+            if (currentConfig != null)
             {
-                DisplayName = name,
-                SystemName = SeoHelper.GetSEOString(name),
-                Content = content,
-                Specificulture = culture,
-                MixCultureId = cultureId,
-                MixTenantId = CurrentTenant.Id
-            };
-            await config.SaveAsync();
+                currentConfig.Content = content;
+                await uow.DbContext.SaveChangesAsync();
+            }
+            else
+            {
+                MixConfigurationContentViewModel config = new MixConfigurationContentViewModel(uow)
+                {
+                    DisplayName = name,
+                    SystemName = SeoHelper.GetSEOString(name),
+                    Content = content,
+                    Specificulture = culture,
+                    MixCultureId = cultureId,
+                    MixTenantId = CurrentTenant.Id
+                };
+                await config.SaveAsync();
+            }
         }
 
         public T GetConfig<T>(string name, string culture, T defaultValue = default)

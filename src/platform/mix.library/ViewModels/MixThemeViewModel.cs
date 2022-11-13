@@ -12,6 +12,8 @@
         public Guid? MixDataContentId { get; set; }
         public string AssetFolder { get; set; }
         public string TemplateFolder { get; set; }
+
+        public bool IsActive { get; set; }
         #endregion
 
         #region Constructors

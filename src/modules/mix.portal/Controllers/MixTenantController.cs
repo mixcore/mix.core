@@ -25,11 +25,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             TenantUserManager userManager,
             MixCmsAccountContext accContext,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService,
             MixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;

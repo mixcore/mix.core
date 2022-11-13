@@ -19,11 +19,11 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository)
-            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator, 
+                  mixIdentityService, cmsUOW, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }
@@ -51,7 +51,7 @@ namespace Mix.Portal.Controllers
                 }
             }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            return ParseSearchResult(req, result);
+            return Ok(ParseSearchResult(req, result));
         }
 
         #endregion

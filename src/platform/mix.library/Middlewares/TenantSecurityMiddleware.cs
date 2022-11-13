@@ -8,15 +8,22 @@ namespace Mix.Lib.Middlewares
     public sealed class TenantSecurityMiddleware
     {
         private readonly MixEndpointService _mixEndpointService;
+        private readonly MixConfigurationService _configService;
         private readonly RequestDelegate next;
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly MixTenantService _mixTenantService;
-        public TenantSecurityMiddleware(RequestDelegate next, IQueueService<MessageQueueModel> queueService, MixTenantService mixTenantService, MixEndpointService mixEndpointService)
+        public TenantSecurityMiddleware(
+            RequestDelegate next, 
+            IQueueService<MessageQueueModel> queueService, 
+            MixTenantService mixTenantService, 
+            MixEndpointService mixEndpointService, 
+            MixConfigurationService configService)
         {
             this.next = next;
             _queueService = queueService;
             _mixTenantService = mixTenantService;
             _mixEndpointService = mixEndpointService;
+            _configService = configService;
         }
 
         public async Task Invoke(HttpContext context)
@@ -27,6 +34,7 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
+                
                 if (_mixTenantService.AllTenants == null)
                 {
                     await _mixTenantService.Reload();
@@ -37,6 +45,10 @@ namespace Mix.Lib.Middlewares
                     currentTenant = _mixTenantService.GetCurrentTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                     _mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
+                }
+                if (_configService.Configs == null)
+                {
+                    await _configService.Reload();
                 }
                 await next.Invoke(context);
             }

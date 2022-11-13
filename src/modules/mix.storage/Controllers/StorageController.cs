@@ -15,9 +15,9 @@ namespace Mix.Storage.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> uow,
-            IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
+            IQueueService<MessageQueueModel> queueService) : base(httpContextAccessor, configuration, mixService, translator, 
+                mixIdentityService, uow, queueService)
         {
             _storageService = storageService;
         }

@@ -19,10 +19,9 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService, ApplicationLifetime applicationLifetime)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _mixDbService = mixDbService;
             _applicationLifetime = applicationLifetime;

@@ -64,7 +64,7 @@ namespace Mix.Common.Controllers
                 }
             }
             await Task.WhenAll(tasks);
-            return ParseSearchResult(req, result);
+            return Ok(ParseSearchResult(req, result));
         }
 
         protected override async Task<PostContentViewModel> GetById(int id)
