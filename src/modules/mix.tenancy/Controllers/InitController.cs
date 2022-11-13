@@ -187,14 +187,14 @@ namespace Mix.Tenancy.Controllers
                 siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
 
-                await _configService.CreateConfiguration(
+                await _configService.Set(
                     MixConfigurationNames.ThemeFolder,
                     $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{siteData.ThemeSystemName}", 
                     CurrentTenant.Cultures.First().Specificulture, 
                     CurrentTenant.Cultures.First().Id, 
                     _uow);
                 
-                await _configService.CreateConfiguration(
+                await _configService.Set(
                     MixConfigurationNames.DefaultDomain, 
                     CurrentTenant.PrimaryDomain, 
                     CurrentTenant.Cultures.First().Specificulture, 

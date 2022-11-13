@@ -26,9 +26,8 @@ namespace Mix.Services.Permission.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<PermissionDbContext> uow, IQueueService<MessageQueueModel> queueService, MixPermissionService permissionService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, uow, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _permissionService = permissionService;
         }

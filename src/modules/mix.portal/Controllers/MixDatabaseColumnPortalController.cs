@@ -21,10 +21,9 @@ namespace Mix.Portal.Controllers
             MixDataService mixDataService,
             MixIdentityService mixIdentityService,
             MixEndpointService endpointService,
-            UnitOfWorkInfo<MixCacheDbContext> cacheUOW,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cacheUOW, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _mixDataService = mixDataService;
             _endpointService = endpointService;
