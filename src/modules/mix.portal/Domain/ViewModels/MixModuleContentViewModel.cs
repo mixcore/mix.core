@@ -41,7 +41,7 @@
             return base.ParseEntity();
         }
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
@@ -53,7 +53,7 @@
                 Columns = new List<ModuleColumnModel>();
             }
 
-            return base.ExpandView();
+            return base.ExpandView(cancellationToken);
         }
 
         public override async Task<int> CreateParentAsync()
@@ -68,7 +68,7 @@
             return await parent.SaveAsync();
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken)
         {
             Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ChildId == Id));
             Context.MixModuleData.RemoveRange(Context.MixModuleData.Where(m => m.ParentId == Id));
@@ -79,12 +79,12 @@
             {
                 var mdlRepo = MixModuleViewModel.GetRepository(UowInfo);
 
-                await Repository.DeleteAsync(Id);
-                await mdlRepo.DeleteAsync(ParentId);
+                await Repository.DeleteAsync(Id, cancellationToken);
+                await mdlRepo.DeleteAsync(ParentId, cancellationToken);
             }
             else
             {
-                await base.DeleteHandlerAsync();
+                await base.DeleteHandlerAsync(cancellationToken);
             }
         }
     }

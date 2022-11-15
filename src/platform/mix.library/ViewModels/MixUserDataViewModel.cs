@@ -33,7 +33,7 @@
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             if (Data == null)
             {

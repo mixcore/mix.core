@@ -3,8 +3,7 @@ namespace Mix.Lib.ViewModels
 {
     [GeneratePublisher]
     public sealed class MixPageContentViewModel
-        : ExtraColumnMultilingualSEOContentViewModelBase
-            <MixCmsContext, MixPageContent, int, MixPageContentViewModel>
+        : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
         #region Constructors
 
@@ -12,9 +11,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixPageContentViewModel(MixPageContent entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixPageContentViewModel(MixPageContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -34,20 +31,18 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
             await LoadAliasAsync();
-            await base.ExpandView();
+            await base.ExpandView(cancellationToken);
         }
 
-        private async Task LoadAliasAsync()
+        private async Task LoadAliasAsync(CancellationToken cancellationToken = default)
         {
             var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
-            UrlAliases = await aliasRepo.GetListAsync(
-                m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id);
-            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
-                : $"/page/{Id}";
+            UrlAliases = await aliasRepo.GetListAsync(m => m.Type == MixUrlAliasType.Page && m.SourceContentId == Id, cancellationToken);
+            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias : $"/page/{Id}";
         }
 
         public override async Task<int> CreateParentAsync()
@@ -61,7 +56,7 @@ namespace Mix.Lib.ViewModels
             return await parent.SaveAsync();
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken)
         {
             Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ParentId == Id));
             Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.ParentId == Id));
@@ -71,16 +66,15 @@ namespace Mix.Lib.ViewModels
             {
                 var pageRepo = MixPageViewModel.GetRepository(UowInfo);
 
-                await Repository.DeleteAsync(Id);
-                await pageRepo.DeleteAsync(ParentId);
+                await Repository.DeleteAsync(Id, cancellationToken);
+                await pageRepo.DeleteAsync(ParentId, cancellationToken);
             }
             else
             {
-                await base.DeleteHandlerAsync();
+                await base.DeleteHandlerAsync(cancellationToken);
             }
 
         }
         #endregion
-
     }
 }

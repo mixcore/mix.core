@@ -57,16 +57,16 @@ namespace Mix.Lib.Base
             return base.ParseEntity();
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var templateRepo = TemplateViewModel.GetRepository(UowInfo);
             if (Template == null && TemplateId.HasValue)
             {
-                Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId);
+                Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId, cancellationToken);
             }
             if (Layout == null && LayoutId.HasValue)
             {
-                Layout = await templateRepo.GetSingleAsync(m => m.Id == LayoutId);
+                Layout = await templateRepo.GetSingleAsync(m => m.Id == LayoutId, cancellationToken);
             }
         }
 

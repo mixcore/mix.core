@@ -356,8 +356,7 @@ namespace Mix.Account.Controllers
                         // Remove other token if change password success
                         if (Guid.TryParse(_idService.GetClaim(User, MixClaims.RefreshToken), out var refreshTokenId))
                         {
-                            await _refreshTokenRepo.DeleteManyAsync(
-                                m => m.Username == user.UserName && m.Id != refreshTokenId);
+                            await _refreshTokenRepo.DeleteManyAsync(m => m.Username == user.UserName && m.Id != refreshTokenId);
                         }
                     }
                 }

@@ -12,9 +12,7 @@ namespace Mix.Common.Domain.ViewModels
         {
         }
 
-        public PostContentViewModel(MixPostContent entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public PostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -33,12 +31,10 @@ namespace Mix.Common.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            await base.ExpandView();
+            await base.ExpandView(cancellationToken);
         }
-
-
 
         #endregion
 

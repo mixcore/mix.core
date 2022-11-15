@@ -42,7 +42,7 @@ namespace Mix.Queue.Engines.MixQueue
         /// Process message queue
         /// </summary>
         /// <returns></returns>
-        public Task ProcessQueue(CancellationToken cancellationToken)
+        public Task ProcessQueue(CancellationToken cancellationToken = default)
         {
             Task.Run(async () =>
             {

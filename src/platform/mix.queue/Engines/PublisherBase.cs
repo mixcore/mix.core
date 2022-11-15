@@ -36,7 +36,7 @@ namespace Mix.Queue.Engines
 
 
         private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName,
-            MixMemoryMessageQueue<MessageQueueModel> queue, CancellationToken cancellationToken)
+            MixMemoryMessageQueue<MessageQueueModel> queue, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Mix.Queue.Engines
             }
         }
 
-        private Task StartMixQueueEngine(CancellationToken cancellationToken)
+        private Task StartMixQueueEngine(CancellationToken cancellationToken = default)
         {
             return Task.Run(async () =>
             {

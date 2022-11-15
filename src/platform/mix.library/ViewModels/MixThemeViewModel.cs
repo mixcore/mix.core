@@ -22,9 +22,7 @@
         {
         }
 
-        public MixThemeViewModel(MixTheme entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixThemeViewModel(MixTheme entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -46,12 +44,12 @@
             return base.ParseEntity();
         }
 
-        protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity)
+        protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity, CancellationToken cancellationToken = default)
         {
             // Create default extra data
             MixDataContentViewModel extraData = new();
 
-            return base.SaveEntityRelationshipAsync(parentEntity);
+            return base.SaveEntityRelationshipAsync(parentEntity, cancellationToken);
         }
 
         #endregion

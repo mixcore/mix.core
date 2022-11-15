@@ -5,8 +5,7 @@ namespace Mixcore.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
     public sealed class PostContentViewModel
-        : ExtraColumnMultilingualSEOContentViewModelBase
-            <MixCmsContext, MixPostContent, int, PostContentViewModel>
+        : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPostContent, int, PostContentViewModel>
     {
         #region Constructors
 
@@ -14,9 +13,7 @@ namespace Mixcore.Domain.ViewModels
         {
         }
 
-        public PostContentViewModel(MixPostContent entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public PostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -35,12 +32,10 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            await base.ExpandView();
+            await base.ExpandView(cancellationToken);
         }
-
-
 
         #endregion
 
