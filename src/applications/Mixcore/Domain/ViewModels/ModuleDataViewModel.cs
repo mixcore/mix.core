@@ -29,13 +29,13 @@
 
         #region Overrides
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(Value))
             {
                 Data = JObject.Parse(Value);
             }
-            return base.ExpandView();
+            return base.ExpandView(cancellationToken);
         }
 
         #endregion

@@ -37,9 +37,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDataContentValueViewModel(MixDataContentValue entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentValueViewModel(MixDataContentValue entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -62,16 +60,18 @@ namespace Mix.Lib.ViewModels
             return base.ParseEntity();
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);
+            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId, cancellationToken);
             if (MixDatabaseColumnId > 0)
             {
-                Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId);
+                Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId, cancellationToken);
                 MixDatabaseName = Column.MixDatabaseName;
             }
-            else // additional field for page / post / module => id = 0
+
+            // additional field for page / post / module => id = 0
+            else
             {
                 Column = new()
                 {

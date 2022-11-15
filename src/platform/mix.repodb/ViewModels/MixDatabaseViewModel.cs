@@ -29,21 +29,20 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null)
-            : base(entity, uowInfo)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
         {
         }
 
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)
+        protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
             if (Columns != null)
             {
@@ -52,7 +51,7 @@ namespace Mix.RepoDb.ViewModels
                     item.SetUowInfo(UowInfo);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
-                    await item.SaveAsync();
+                    await item.SaveAsync(cancellationToken);
                 }
             }
         }

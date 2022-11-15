@@ -37,10 +37,10 @@
 
         #region Overrides
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             MixDatabaseName ??= MixDatabaseNames.MODULE_COLUMN;
-            return base.ExpandView();
+            return base.ExpandView(cancellationToken);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

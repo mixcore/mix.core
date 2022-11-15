@@ -7,14 +7,14 @@ namespace Mix.Services.Permission.Domain.ViewModels
     public class MixPermissionViewModel : ViewModelBase<PermissionDbContext, MixPermission, int, MixPermissionViewModel>
     {
         #region Properties
-
         public string Title { get; set; }
         public string Type { get; set; }
         public string Icon { get; set; }
         public int MixTenantId { get; set; }
         public List<MixPermissionEndpointViewModel> Endpoints { get; set; }
         #endregion
-        #region Contructors
+
+        #region Constructors
         public MixPermissionViewModel()
         {
         }
@@ -31,26 +31,26 @@ namespace Mix.Services.Permission.Domain.ViewModels
         {
         }
         #endregion
+
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Endpoints = await MixPermissionEndpointViewModel.GetRepository(UowInfo)
-                        .GetAllAsync(m => m.SysPermissionId == Id && m.MixTenantId == MixTenantId);
+            Endpoints = await MixPermissionEndpointViewModel.GetRepository(UowInfo).GetAllAsync(m => m.SysPermissionId == Id && m.MixTenantId == MixTenantId, cancellationToken);
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixPermission parentEntity)
+        protected override async Task SaveEntityRelationshipAsync(MixPermission parentEntity, CancellationToken cancellationToken = default)
         {
             if (Endpoints != null && Endpoints.Count() > 0)
             {
-                foreach (var ep in Endpoints)
+                foreach (var endpoint in Endpoints)
                 {
-                    ep.SetUowInfo(UowInfo);
-                    ep.SysPermissionId = parentEntity.Id;
-                    ep.CreatedBy = ModifiedBy;
-                    ep.ModifiedBy = ModifiedBy;
-                    ep.MixTenantId = parentEntity.MixTenantId;
-                    await ep.SaveAsync();
+                    endpoint.SetUowInfo(UowInfo);
+                    endpoint.SysPermissionId = parentEntity.Id;
+                    endpoint.CreatedBy = ModifiedBy;
+                    endpoint.ModifiedBy = ModifiedBy;
+                    endpoint.MixTenantId = parentEntity.MixTenantId;
+                    await endpoint.SaveAsync(cancellationToken);
                 }
             }
         }

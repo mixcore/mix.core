@@ -19,7 +19,7 @@ namespace Mix.Quartz.Services
         }
 
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
 
             foreach (var jobSchedule in _jobSchedules)
@@ -34,7 +34,7 @@ namespace Mix.Quartz.Services
             await _service.Start(cancellationToken);
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             await _service.Shutdown(cancellationToken);
         }

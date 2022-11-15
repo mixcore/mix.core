@@ -10,10 +10,8 @@
         public MixTemplateFolderType FolderType { get; set; }
         public string Scripts { get; set; }
         public string Styles { get; set; }
-
         public string MixThemeName { get; set; }
         public int MixThemeId { get; set; }
-
         public string FilePath { get; set; }
         #endregion
 
@@ -38,12 +36,11 @@
 
         #region Overrides
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             FilePath = $"/{FileFolder}/{FileName}{Extension}";
-            return base.ExpandView();
+            return base.ExpandView(cancellationToken);
         }
-
         #endregion
     }
 }
