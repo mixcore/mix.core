@@ -11,15 +11,15 @@
 
         public HaveParentSEOContentViewModelBase()
         {
-
         }
 
-        protected HaveParentSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected HaveParentSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo)
+            : base(unitOfWorkInfo)
         {
         }
 
-        protected HaveParentSEOContentViewModelBase(TEntity entity,
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        protected HaveParentSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
@@ -27,18 +27,18 @@
 
         #region Overrides
 
-        protected override async Task<TEntity> SaveHandlerAsync()
+        protected override async Task<TEntity> SaveHandlerAsync(CancellationToken cancellationToken = default)
         {
             if (IsDefaultId(ParentId))
             {
-                ParentId = await CreateParentAsync();
+                ParentId = await CreateParentAsync(cancellationToken);
             }
-            return await base.SaveHandlerAsync();
+            return await base.SaveHandlerAsync(cancellationToken);
         }
 
         #endregion
 
-        public virtual Task<TPrimaryKey> CreateParentAsync()
+        public virtual Task<TPrimaryKey> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             throw new MixException($"Not implemented CreateParentAsync: {typeof(TView).FullName}");
         }

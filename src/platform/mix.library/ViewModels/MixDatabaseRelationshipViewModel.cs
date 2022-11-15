@@ -60,7 +60,7 @@ namespace Mix.Lib.ViewModels
 
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity)
+        protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)
         {
             string parentColIdName = $"{SourceDatabaseName.ToTitleCase()}Id";
             if (!Context.MixDatabaseColumn.Any(m => m.MixDatabaseName == DestinateDatabaseName && m.SystemName == parentColIdName))
@@ -76,20 +76,24 @@ namespace Mix.Lib.ViewModels
                     DisplayName = parentColIdName.ToTitleCase(),
                     SystemName = parentColIdName
                 };
-                await refCol.SaveAsync();
+
+                await refCol.SaveAsync(cancellationToken);
             }
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             var leftDb = Context.MixDatabase.Find(ParentId);
             string leftColName = $"{leftDb.SystemName}Id";
             var rightDb = Context.MixDatabase.Find(ChildId);
             string rightColName = $"{rightDb.SystemName}Id";
-            await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(
-                m => (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
-                    || (m.MixDatabaseId == ChildId && m.SystemName == leftColName));
-            await base.DeleteHandlerAsync();
+            await MixDatabaseColumnViewModel.GetRepository(UowInfo)
+                .DeleteManyAsync(m =>
+                (m.MixDatabaseId == ParentId && m.SystemName == rightColName)
+                || (m.MixDatabaseId == ChildId && m.SystemName == leftColName),
+                cancellationToken);
+
+            await base.DeleteHandlerAsync(cancellationToken);
         }
 
         #endregion

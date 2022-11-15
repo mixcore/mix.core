@@ -6,13 +6,15 @@ namespace Mix.Storage.Lib.Engines.Mix
 {
     public class MixUploader : UploaderBase
     {
-
-        public MixUploader(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        public MixUploader(
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            UnitOfWorkInfo<MixCmsContext> cmsUOW)
             : base(httpContextAccessor, configuration, cmsUOW)
         {
         }
 
-        public override Task<string?> UploadStream(FileModel file, string? createdBy)
+        public override Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default)
         {
             string? result = null;
             file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
@@ -21,22 +23,24 @@ namespace Mix.Storage.Lib.Engines.Mix
             {
                 result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileName}";
             }
+
             return Task.FromResult(result);
         }
 
-        public override Task<string?> Upload(IFormFile file, string? folder, string? createdBy)
+        public override Task<string?> Upload(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken = default)
         {
             string? result = null;
             if (string.IsNullOrEmpty(folder))
             {
                 folder = GetUploadFolder(file.FileName, folder, createdBy);
             }
-            
+
             var fileName = MixFileHelper.SaveFile(file, folder);
             if (!string.IsNullOrEmpty(fileName))
             {
                 result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileName}";
             }
+
             return Task.FromResult(result);
         }
 
@@ -52,6 +56,7 @@ namespace Mix.Storage.Lib.Engines.Mix
             {
                 folder = $"{folder}/{createdBy}";
             }
+
             return $"{folder}/{DateTime.Now.ToString("yyyy-MMM")}";
         }
     }

@@ -101,7 +101,7 @@ namespace Mix.Lib.Services
             return null;
         }
 
-        public virtual async Task<JObject> Login(LoginViewModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<JObject> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -172,7 +172,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public virtual async Task<JObject> GetToken(GetTokenModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<JObject> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default)
         {
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
@@ -191,7 +191,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public virtual async Task<MixUser> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default)
+        public virtual async Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default)
         {
             var user = new MixUser
             {
@@ -381,7 +381,7 @@ namespace Mix.Lib.Services
 
                     if (!string.IsNullOrEmpty(userName))
                     {
-                        user = await Register(new RegisterViewModel()
+                        user = await RegisterAsync(new RegisterViewModel()
                         {
                             Email = model.Email,
                             PhoneNumber = model.PhoneNumber,

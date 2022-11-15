@@ -35,13 +35,14 @@
 
         #region Overrides
 
-        public override Task<MixTheme> ParseEntity()
+        public override Task<MixTheme> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(SystemName))
             {
                 SystemName = SeoHelper.GetSEOString(DisplayName);
             }
-            return base.ParseEntity();
+
+            return base.ParseEntity(cancellationToken);
         }
 
         protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity, CancellationToken cancellationToken = default)

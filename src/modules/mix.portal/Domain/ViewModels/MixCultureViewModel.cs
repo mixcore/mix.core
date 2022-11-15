@@ -31,13 +31,13 @@
 
         #region Overrides
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            await base.DeleteHandlerAsync();
-            await MixPageContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
-            await MixModuleContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
-            await MixPostContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
-            await MixDataContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture);
+            await base.DeleteHandlerAsync(cancellationToken);
+            await MixPageContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixModuleContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixPostContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
+            await MixDataContentViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.Specificulture == Specificulture, cancellationToken);
             Context.MixDataContent.RemoveRange(Context.MixDataContent.Where(m => m.Specificulture == Specificulture));
             Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.Specificulture == Specificulture));
             Context.MixDataContentValue.RemoveRange(Context.MixDataContentValue.Where(m => m.Specificulture == Specificulture));

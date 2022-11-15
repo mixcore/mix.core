@@ -37,7 +37,7 @@ namespace Mix.Portal.Domain.ViewModels
             await base.ExpandView(cancellationToken);
         }
 
-        public override async Task<int> CreateParentAsync()
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixPostViewModel parent = new()
             {
@@ -45,8 +45,9 @@ namespace Mix.Portal.Domain.ViewModels
                 Description = Excerpt,
                 MixTenantId = MixTenantId
             };
+
             parent.SetUowInfo(UowInfo);
-            return await parent.SaveAsync();
+            return await parent.SaveAsync(cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)

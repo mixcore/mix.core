@@ -45,7 +45,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity()
+        public override Task<MixDataContentValue> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (IsDefaultId(Id))
             {
@@ -57,7 +57,7 @@ namespace Mix.Lib.ViewModels
 
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)

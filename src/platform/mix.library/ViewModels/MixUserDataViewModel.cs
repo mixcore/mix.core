@@ -50,7 +50,7 @@
             }
         }
 
-        public override async Task<Guid> CreateParentAsync()
+        public override async Task<Guid> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixDataViewModel parent = new(UowInfo)
             {
@@ -63,7 +63,8 @@
                 DisplayName = Title,
                 Description = Excerpt
             };
-            return await parent.SaveAsync();
+
+            return await parent.SaveAsync(cancellationToken);
         }
         #endregion
     }

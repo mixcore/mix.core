@@ -53,7 +53,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
@@ -66,7 +66,7 @@ namespace Mix.Lib.ViewModels
             await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
         }
 
-        public override async Task<MixDataContent> ParseEntity()
+        public override async Task<MixDataContent> ParseEntity(CancellationToken cancellationToken = default)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
@@ -93,12 +93,12 @@ namespace Mix.Lib.ViewModels
 
             Title = Id.ToString();
             Content = MixDataHelper.ParseData(Id, UowInfo).ToString(Newtonsoft.Json.Formatting.None);
-            return await base.ParseEntity();
+            return await base.ParseEntity(cancellationToken);
         }
 
-        protected override async Task<MixDataContent> SaveHandlerAsync()
+        protected override async Task<MixDataContent> SaveHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var result = await base.SaveHandlerAsync();
+            var result = await base.SaveHandlerAsync(cancellationToken);
 
             var assoRepo = MixDataContentAssociationViewModel.GetRepository(UowInfo);
 
@@ -109,7 +109,7 @@ namespace Mix.Lib.ViewModels
                     && m.Specificulture == Specificulture;
                 predicate = predicate.AndAlsoIf(GuidParentId.HasValue, m => m.GuidParentId == GuidParentId);
                 predicate = predicate.AndAlsoIf(IntParentId.HasValue, m => m.IntParentId == IntParentId);
-                var getNav = await assoRepo.CheckIsExistsAsync(predicate);
+                var getNav = await assoRepo.CheckIsExistsAsync(predicate, cancellationToken);
                 if (!getNav)
                 {
                     var nav = new MixDataContentAssociationViewModel(UowInfo)
@@ -125,13 +125,13 @@ namespace Mix.Lib.ViewModels
                         IntParentId = IntParentId,
                         Status = MixContentStatus.Published
                     };
-                    var saveResult = await nav.SaveAsync();
+                    var saveResult = await nav.SaveAsync(cancellationToken);
                 }
             }
             Data = MixDataHelper.ParseData(Id, UowInfo);
             return result;
         }
-        protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity)
+        protected override async Task SaveEntityRelationshipAsync(MixDataContent parentEntity, CancellationToken cancellationToken = default)
         {
             if (Values != null)
             {
@@ -142,12 +142,12 @@ namespace Mix.Lib.ViewModels
                     item.Specificulture = Specificulture;
                     item.ParentId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.MixDatabaseName;
-                    await item.SaveAsync();
+                    await item.SaveAsync(cancellationToken);
                 }
             }
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             Context.MixDataContentValue.RemoveRange(Context.MixDataContentValue.Where(m => m.ParentId == Id));
             Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId == Id));
@@ -156,17 +156,18 @@ namespace Mix.Lib.ViewModels
             {
                 var dataRepo = MixDataViewModel.GetRepository(UowInfo);
 
-                await Repository.DeleteAsync(Id);
-                await dataRepo.DeleteAsync(ParentId);
+                await Repository.DeleteAsync(Id, cancellationToken);
+                await dataRepo.DeleteAsync(ParentId, cancellationToken);
             }
-            await base.DeleteHandlerAsync();
+            await base.DeleteHandlerAsync(cancellationToken);
         }
         #endregion
 
         #region Helper
 
-        public void ToModelValue(MixDataContentValueViewModel item,
-           JToken property)
+        public void ToModelValue(
+            MixDataContentValueViewModel item,
+            JToken property)
         {
             if (property == null)
             {
@@ -342,7 +343,7 @@ namespace Mix.Lib.ViewModels
             return Data.Property(fieldName).Value<T>();
         }
 
-        public override async Task<Guid> CreateParentAsync()
+        public override async Task<Guid> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixDataViewModel parent = new(UowInfo)
             {

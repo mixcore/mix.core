@@ -26,7 +26,7 @@
         #region Overrides
 
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var repo = MixPageContentViewModel.GetRepository(UowInfo);
             Contents = await repo.GetListAsync(m => m.ParentId == Id);

@@ -22,6 +22,7 @@ namespace Mix.Storage.Lib.Engines.Base
                 return _currentTenant;
             }
         }
+
         public UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             _cmsUOW = cmsUOW;
@@ -45,33 +46,33 @@ namespace Mix.Storage.Lib.Engines.Base
                 MixTenantId = tenantId,
                 CreatedDateTime = DateTime.UtcNow
             };
+
             await media.SaveAsync(cancellationToken);
         }
 
-
         public async Task<string?> UploadFile(IFormFile file, string? folder, string? createdBy, CancellationToken cancellationToken)
         {
-            var result = await Upload(file, folder, createdBy);
+            var result = await Upload(file, folder, createdBy, cancellationToken);
             if (!string.IsNullOrEmpty(result))
             {
                 await CreateMedia(result, _currentTenant.Id, createdBy, cancellationToken);
             }
+
             return result;
         }
 
         public async Task<string?> UploadFileStream(FileModel file, string? createdBy, CancellationToken cancellationToken)
         {
-            var result = await UploadStream(file, createdBy);
+            var result = await UploadStream(file, createdBy, cancellationToken);
             if (!string.IsNullOrEmpty(result))
             {
                 await CreateMedia(result, _currentTenant.Id, createdBy, cancellationToken);
             }
+
             return result;
         }
 
-        public abstract Task<string?> Upload(IFormFile file, string? themeName, string? createdBy);
-        public abstract Task<string?> UploadStream(FileModel file, string? createdBy);
-
-
+        public abstract Task<string?> Upload(IFormFile file, string? themeName, string? createdBy, CancellationToken cancellationToken = default);
+        public abstract Task<string?> UploadStream(FileModel file, string? createdBy, CancellationToken cancellationToken = default);
     }
 }
