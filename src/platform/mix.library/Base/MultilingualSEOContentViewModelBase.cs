@@ -16,11 +16,13 @@ namespace Mix.Lib.Base
 
         }
 
-        protected MultilingualSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilingualSEOContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo)
+            : base(unitOfWorkInfo)
         {
         }
 
-        protected MultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        protected MultilingualSEOContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
@@ -52,9 +54,9 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-        public override Task<TEntity> ParseEntity()
+        public override Task<TEntity> ParseEntity(CancellationToken cancellationToken = default)
         {
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)

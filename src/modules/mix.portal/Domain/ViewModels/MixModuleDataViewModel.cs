@@ -30,12 +30,13 @@
 
         #region Overrides
 
-        public override Task<MixModuleData> ParseEntity()
+        public override Task<MixModuleData> ParseEntity(CancellationToken cancellationToken = default)
         {
             Value = JsonConvert.SerializeObject(Data);
             SimpleDataColumns = JsonConvert.SerializeObject(Columns);
             LastModified = DateTime.Now;
-            return base.ParseEntity();
+
+            return base.ParseEntity(cancellationToken);
         }
 
         public override Task ExpandView(CancellationToken cancellationToken = default)

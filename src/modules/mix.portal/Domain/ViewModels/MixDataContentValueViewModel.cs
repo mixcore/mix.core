@@ -46,17 +46,17 @@
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity()
+        public override Task<MixDataContentValue> ParseEntity(CancellationToken cancellationToken = default)
         {
             Priority = Column?.Priority ?? Priority;
             DataType = Column?.DataType ?? DataType;
 
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);

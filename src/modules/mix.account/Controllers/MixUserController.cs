@@ -102,7 +102,6 @@ namespace Mix.Account.Controllers
 
         #endregion
 
-
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
         [Route("my-tenants")]
         [HttpGet]
@@ -119,7 +118,7 @@ namespace Mix.Account.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Register([FromBody] RegisterViewModel model)
         {
-            await _idService.Register(model, CurrentTenant.Id, _cmsUOW);
+            await _idService.RegisterAsync(model, CurrentTenant.Id, _cmsUOW);
             var user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
             var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
             if (result != null)
@@ -149,7 +148,7 @@ namespace Mix.Account.Controllers
             string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<GetTokenModel>(decryptMsg);
-            var loginResult = await _idService.GetToken(model);
+            var loginResult = await _idService.GetTokenAsync(model);
             if (loginResult != null)
             {
                 return Ok(loginResult);
@@ -165,7 +164,7 @@ namespace Mix.Account.Controllers
             string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
-            var loginResult = await _idService.Login(model);
+            var loginResult = await _idService.LoginAsync(model);
             return Ok(loginResult);
         }
 

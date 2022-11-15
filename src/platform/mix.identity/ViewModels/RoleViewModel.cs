@@ -1,5 +1,6 @@
 using Mix.Database.Entities.Account;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Identity.ViewModels
@@ -11,10 +12,8 @@ namespace Mix.Identity.ViewModels
         {
         }
 
-        public RoleViewModel(
-            MixRole entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public RoleViewModel(MixRole entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
@@ -40,13 +39,13 @@ namespace Mix.Identity.ViewModels
         #endregion Properties
 
         #region Overrides
-        public override Task<MixRole> ParseEntity()
+        public override Task<MixRole> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (Id == Guid.Empty)
             {
                 Id = Guid.NewGuid();
             }
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

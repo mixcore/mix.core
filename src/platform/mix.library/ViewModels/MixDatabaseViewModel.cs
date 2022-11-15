@@ -40,7 +40,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
@@ -49,7 +49,7 @@ namespace Mix.Lib.ViewModels
             Relationships = await relationshipRepo.GetListAsync(c => c.ParentId == Id);
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity)
+        protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
             if (Columns != null)
             {
@@ -85,7 +85,7 @@ namespace Mix.Lib.ViewModels
                     item.SetUowInfo(UowInfo);
                     item.MixDatabaseId = parentEntity.Id;
                     item.MixDatabaseName = parentEntity.SystemName;
-                    await item.SaveAsync();
+                    await item.SaveAsync(cancellationToken);
                 }
             }
 
@@ -96,14 +96,13 @@ namespace Mix.Lib.ViewModels
                     item.SetUowInfo(UowInfo);
                     item.ParentId = parentEntity.Id;
                     item.SourceDatabaseName = parentEntity.SystemName;
-                    await item.SaveAsync();
+                    await item.SaveAsync(cancellationToken);
                 }
             }
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-
             // Exception: This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse when delete nested entity using Repository
             //await MixDataContentValueViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
             //await MixDataViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
@@ -111,9 +110,10 @@ namespace Mix.Lib.ViewModels
             foreach (var col in Columns)
             {
                 col.SetUowInfo(UowInfo);
-                await col.DeleteAsync();
+                await col.DeleteAsync(cancellationToken);
             }
-            await base.DeleteHandlerAsync();
+
+            await base.DeleteHandlerAsync(cancellationToken);
         }
 
         #endregion

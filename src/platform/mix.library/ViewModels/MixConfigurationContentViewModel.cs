@@ -21,14 +21,14 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixConfigurationContentViewModel(MixConfigurationContent entity,
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixConfigurationContentViewModel(MixConfigurationContent entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
         #region Overrides
 
-        public override async Task<int> CreateParentAsync()
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixConfigurationViewModel parent = new(UowInfo)
             {
@@ -37,7 +37,7 @@ namespace Mix.Lib.ViewModels
                 Description = Description,
                 MixTenantId = MixTenantId
             };
-            return await parent.SaveAsync();
+            return await parent.SaveAsync(cancellationToken);
         }
 
         #endregion

@@ -42,7 +42,7 @@
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);

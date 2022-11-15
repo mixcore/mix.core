@@ -45,7 +45,7 @@ namespace Mix.Lib.ViewModels
             DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias : $"/page/{Id}";
         }
 
-        public override async Task<int> CreateParentAsync()
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixPageViewModel parent = new(UowInfo)
             {

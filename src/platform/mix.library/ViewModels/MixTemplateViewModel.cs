@@ -27,9 +27,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixTemplateViewModel(MixTemplate entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixTemplateViewModel(MixTemplate entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -42,7 +40,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(FileName))
             {
@@ -52,22 +50,26 @@ namespace Mix.Lib.ViewModels
                     Content = file.Content;
                 }
             }
+
             Scripts ??= "<script>\r\n\r\n</script>";
             Styles ??= "<style>\r\n\r\n</style>";
+
             return Task.CompletedTask;
         }
 
-        public override async Task<MixTemplate> ParseEntity()
+        public override async Task<MixTemplate> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (Id == 0)
             {
                 CreatedDateTime = DateTime.UtcNow;
                 MixThemeName = Context.MixTheme.First(m => m.Id == MixThemeId).SystemName;
             }
+
             Content = Content?.Trim();
             Scripts = Scripts?.Trim();
             Styles = Styles?.Trim();
-            return await base.ParseEntity();
+
+            return await base.ParseEntity(cancellationToken);
         }
 
         public override async Task Validate()

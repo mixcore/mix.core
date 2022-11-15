@@ -30,19 +30,22 @@
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo);
             var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id).Select(m => m.ChildId);
             Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id));
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id);
+            var associations = Context.MixDatabaseContextDatabaseAssociation
+                .Where(m => m.ParentId == Id);
+
             Context.MixDatabaseContextDatabaseAssociation.RemoveRange(associations);
-            await Context.SaveChangesAsync();
-            await base.DeleteHandlerAsync();
+
+            await Context.SaveChangesAsync(cancellationToken);
+            await base.DeleteHandlerAsync(cancellationToken);
         }
 
         #endregion
