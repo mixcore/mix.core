@@ -31,10 +31,6 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MaxLength}");
 
-            builder.HasOne(d => d.MixUser)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
-
         }
     }
 }

@@ -81,30 +81,6 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
                 .UseCollation(Config.DatabaseCollation)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
 
-            builder.Property(e => e.FirstName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.LastName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.NickName)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.Gender)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.SmallLength}");
-
-            builder.Property(e => e.Avatar)
-                .HasCharSet(Config.CharSet)
-                .UseCollation(Config.DatabaseCollation)
-                .HasColumnType($"{Config.String}{Config.MediumLength}");
         }
     }
 }
