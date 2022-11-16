@@ -6,12 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="6.0.8" />
-    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.18.1" />
+    <!--<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />-->
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.19.0" />
   </ItemGroup>
 
   <ItemGroup>

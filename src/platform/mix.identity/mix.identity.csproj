@@ -14,14 +14,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

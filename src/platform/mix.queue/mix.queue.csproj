@@ -11,12 +11,11 @@
 		<Using Include="Mix.Shared.Dtos" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.10.0" />
-		<PackageReference Include="Google.Api.Gax" Version="4.0.0" />
-		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.1.0" />
-		<PackageReference Include="Microsoft.Azure.Management.ServiceBus" Version="4.0.0" />
-		<PackageReference Include="Microsoft.Azure.ServiceBus" Version="5.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.11.1" />
+		<PackageReference Include="Azure.ResourceManager.ServiceBus" Version="1.0.0" />
+		<PackageReference Include="Google.Api.Gax" Version="4.2.0" />
+		<PackageReference Include="Google.Cloud.PubSub.V1" Version="3.2.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
