@@ -50,7 +50,7 @@ namespace Mix.RepoDb.Repositories
         }
 
         #region Methods
-        public void Init(string tableName)
+        public void InitTableName(string tableName)
         {
             _tableName = tableName.ToLower();
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);

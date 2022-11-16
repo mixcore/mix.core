@@ -51,7 +51,7 @@ namespace Mixcore.Domain.ViewModels
 
         public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            mixRepoDbRepository.Init(MixDatabaseName);
+            mixRepoDbRepository.InitTableName(MixDatabaseName);
             var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
             AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
         }

@@ -259,7 +259,7 @@ namespace Mix.Lib.Services
 
         private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId, CancellationToken cancellationToken = default)
         {
-            _repoDbRepository.Init(databaseName);
+            _repoDbRepository.InitTableName(databaseName);
             foreach (JObject data in nestedData)
             {
                 if (!data.ContainsKey(tenantIdFieldName))
@@ -286,7 +286,7 @@ namespace Mix.Lib.Services
 
         private async Task<int> CreateUserInfomation(MixUser user, JObject data)
         {
-            _repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
+            _repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
             if (!data.ContainsKey(tenantIdFieldName))
             {
                 data.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));

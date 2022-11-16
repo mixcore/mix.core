@@ -38,7 +38,7 @@ namespace Mix.Portal.Controllers
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
             {
-                _mixRepoDbRepository.Init(req.MixDatabaseName);
+                _mixRepoDbRepository.InitTableName(req.MixDatabaseName);
                 var listData = await _mixRepoDbRepository.GetListByAsync(req.Queries, "id, parentId");
                 if (listData != null)
                 {
