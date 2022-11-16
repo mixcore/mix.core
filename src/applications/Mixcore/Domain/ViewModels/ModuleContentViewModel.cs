@@ -37,9 +37,9 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            await base.ExpandView();
+            await base.ExpandView(cancellationToken);
         }
 
         #region Private Methods

@@ -73,9 +73,9 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             };
         }
 
-        protected override async Task<MixTenant> SaveHandlerAsync()
+        protected override async Task<MixTenant> SaveHandlerAsync(CancellationToken cancellationToken = default)
         {
-            var entity = await base.SaveHandlerAsync();
+            var entity = await base.SaveHandlerAsync(cancellationToken);
             var tenantConfigService = new TenantConfigService(SystemName);
             tenantConfigService.AppSettings.DefaultCulture = Culture.Specificulture;
             tenantConfigService.AppSettings.Domain = PrimaryDomain.TrimEnd('/');
@@ -84,11 +84,11 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             return entity;
         }
 
-        protected override async Task SaveEntityRelationshipAsync(MixTenant parent)
+        protected override async Task SaveEntityRelationshipAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             if (Culture != null)
             {
-                await SaveCultureAsync(parent);
+                await SaveCultureAsync(parent, cancellationToken);
             }
 
             if (Domain != null)
@@ -97,11 +97,11 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             }
         }
 
-        private async Task SaveCultureAsync(MixTenant parent)
+        private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             Culture.MixTenantId = parent.Id;
             Culture.SetUowInfo(UowInfo);
-            await Culture.SaveAsync();
+            await Culture.SaveAsync(cancellationToken);
         }
 
         private async Task SaveDomainAsync(MixTenant parent)

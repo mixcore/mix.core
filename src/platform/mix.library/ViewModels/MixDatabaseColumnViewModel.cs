@@ -40,15 +40,17 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task<MixDatabaseColumn> ParseEntity()
+        public override Task<MixDatabaseColumn> ParseEntity(CancellationToken cancellationToken = default)
         {
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
-                    ColumnConfigurations, new JsonSerializerSettings
-                    {
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
-            return base.ParseEntity();
+                ColumnConfigurations,
+                new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+
+            return base.ParseEntity(cancellationToken);
         }
 
         public override void ParseView<TSource>(TSource sourceObject)

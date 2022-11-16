@@ -33,7 +33,7 @@ namespace Mix.Services.Permission.Domain.ViewModels
         #endregion
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             Permission = await MixPermissionViewModel.GetRepository(UowInfo)
                         .GetSingleAsync(m => m.Id == PermissionId && m.MixTenantId == MixTenantId);

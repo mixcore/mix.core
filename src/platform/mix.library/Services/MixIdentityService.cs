@@ -101,11 +101,10 @@ namespace Mix.Lib.Services
             return null;
         }
 
-        public virtual async Task<JObject> Login(LoginViewModel model)
+        public virtual async Task<JObject> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
             {
@@ -134,7 +133,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(user, model.RememberMe, CurrentTenant.Id);
+                return await GetAuthData(user, model.RememberMe, CurrentTenant.Id, cancellationToken);
             }
             else
             {
@@ -143,13 +142,13 @@ namespace Mix.Lib.Services
 
         }
 
-        public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId)
+        public virtual async Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default)
         {
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
             var userInfo = await GetUserAsync(user.Id);
-            var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY]);
+            var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
             if (token != null)
             {
                 var data = ReflectionHelper.ParseObject(token);
@@ -173,7 +172,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public virtual async Task<JObject> GetToken(GetTokenModel model)
+        public virtual async Task<JObject> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default)
         {
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
@@ -187,12 +186,12 @@ namespace Mix.Lib.Services
 
             if (user != null)
             {
-                return await GetAuthData(user, true, CurrentTenant.Id);
+                return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
             }
             return default;
         }
 
-        public virtual async Task<MixUser> Register(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW)
+        public virtual async Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default)
         {
             var user = new MixUser
             {
@@ -218,25 +217,28 @@ namespace Mix.Lib.Services
                         throw new MixException(MixErrorStatus.Badrequest, createLoginResult.Errors.First().Description);
                     }
                 }
+
                 await _userManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
                 await _userManager.AddToTenant(user, tenantId);
 
                 user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                await CreateUserData(user, model.Data);
+                await CreateUserData(user, model.Data, cancellationToken);
                 return user;
                 //return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public virtual async Task CreateUserData(MixUser user, JObject obj)
+        public virtual async Task CreateUserData(MixUser user, JObject obj, CancellationToken cancellationToken = default)
         {
             try
             {
                 if (obj != null)
                 {
-                    MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_cmsUow)
-                        .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
+                    MixDatabaseViewModel database = await MixDatabaseViewModel
+                        .GetRepository(_cmsUow)
+                        .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA, cancellationToken);
+
                     var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => string.Equals(c.SystemName, m.Name, StringComparison.OrdinalIgnoreCase))));
                     int userDataId = await CreateUserInfomation(user, data);
                     foreach (var relation in database.Relationships)
@@ -244,7 +246,7 @@ namespace Mix.Lib.Services
                         if (obj.ContainsKey(relation.DisplayName))
                         {
                             var nestedData = obj.Value<JArray>(relation.DisplayName);
-                            await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId);
+                            await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId, cancellationToken);
                         }
                     }
                 }
@@ -255,7 +257,7 @@ namespace Mix.Lib.Services
             }
         }
 
-        private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId)
+        private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId, CancellationToken cancellationToken = default)
         {
             _repoDbRepository.Init(databaseName);
             foreach (JObject data in nestedData)
@@ -278,7 +280,7 @@ namespace Mix.Lib.Services
                     ParentId = userDataId,
                     ChildId = id,
                 };
-                await association.SaveAsync();
+                await association.SaveAsync(cancellationToken);
             }
         }
 
@@ -309,7 +311,8 @@ namespace Mix.Lib.Services
             MixUserViewModel info,
             bool isRemember,
             string aesKey,
-            string rsaPublicKey)
+            string rsaPublicKey,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -321,22 +324,22 @@ namespace Mix.Lib.Services
                 if (isRemember)
                 {
                     refreshToken = Guid.NewGuid();
-                    RefreshTokenViewModel vmRefreshToken = new(
-                                new RefreshTokens()
-                                {
-                                    Id = refreshToken,
-                                    Email = user.Email,
-                                    IssuedUtc = dtIssued,
-                                    ClientId = _authConfigService.AppSettings.ClientId,
-                                    Username = user.UserName,
-                                    ExpiresUtc = dtRefreshTokenExpired
-                                }, _accountUow);
+                    var vmRefreshToken = new RefreshTokenViewModel(
+                        new RefreshTokens()
+                        {
+                            Id = refreshToken,
+                            Email = user.Email,
+                            IssuedUtc = dtIssued,
+                            ClientId = _authConfigService.AppSettings.ClientId,
+                            Username = user.UserName,
+                            ExpiresUtc = dtRefreshTokenExpired
+                        }, _accountUow);
 
-                    var saveRefreshTokenResult = await vmRefreshToken.SaveAsync();
+                    var saveRefreshTokenResult = await vmRefreshToken.SaveAsync(cancellationToken);
                     refreshTokenId = saveRefreshTokenResult;
                 }
 
-                AccessTokenViewModel token = new()
+                var token = new AccessTokenViewModel()
                 {
                     Info = info,
                     AccessToken = await GenerateTokenAsync(
@@ -357,21 +360,20 @@ namespace Mix.Lib.Services
             }
         }
 
-        public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model)
+        public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default)
         {
-            var verifiedAccessToken = await VerifyExternalAccessToken(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
-
+            var verifiedAccessToken = await VerifyExternalAccessTokenAsync(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
             if (verifiedAccessToken != null)
             {
 
-                MixUser user = await _userManager.FindByLoginAsync(
-                    model.Provider.ToString(),
-                    verifiedAccessToken.user_id);
+                var user = await _userManager.FindByLoginAsync(model.Provider.ToString(), verifiedAccessToken.user_id);
+
                 // return local token if already register
                 if (user != null)
                 {
-                    return await GetAuthData(user, true, CurrentTenant.Id);
+                    return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
                 }
+
                 // register new account
                 else
                 {
@@ -379,7 +381,7 @@ namespace Mix.Lib.Services
 
                     if (!string.IsNullOrEmpty(userName))
                     {
-                        user = await Register(new RegisterViewModel()
+                        user = await RegisterAsync(new RegisterViewModel()
                         {
                             Email = model.Email,
                             PhoneNumber = model.PhoneNumber,
@@ -387,9 +389,10 @@ namespace Mix.Lib.Services
                             Provider = model.Provider,
                             ProviderKey = verifiedAccessToken.user_id,
                             Data = model.Data
-                        }, CurrentTenant.Id, _cmsUow);
+                        }, CurrentTenant.Id, _cmsUow,
+                        cancellationToken);
 
-                        return await GetAuthData(user, true, CurrentTenant.Id);
+                        return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
                     }
                     else
                     {
@@ -400,10 +403,10 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto)
+        public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
         {
             JObject result = new();
-            var oldToken = await _refreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken);
+            var oldToken = await _refreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken, cancellationToken);
             if (oldToken != null)
             {
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
@@ -418,7 +421,7 @@ namespace Mix.Lib.Services
                         var token = await GetAuthData(user, true, CurrentTenant.Id);
                         if (token != null)
                         {
-                            await oldToken.DeleteAsync();
+                            await oldToken.DeleteAsync(cancellationToken);
                             result = token;
                         }
                     }
@@ -431,7 +434,7 @@ namespace Mix.Lib.Services
                 }
                 else
                 {
-                    await oldToken.DeleteAsync();
+                    await oldToken.DeleteAsync(cancellationToken);
                     throw new MixException(MixErrorStatus.Badrequest, "Token expired");
                 }
             }
@@ -452,20 +455,18 @@ namespace Mix.Lib.Services
                     e => new Regex(e.ToLower()).Match(currentEndpoint).Success);
         }
 
-        public async Task<ParsedExternalAccessToken> VerifyExternalAccessToken(
+        public async Task<ParsedExternalAccessToken> VerifyExternalAccessTokenAsync(
             MixExternalLoginProviders provider,
             string accessToken,
             MixAuthenticationConfigurations appConfigs)
         {
             ParsedExternalAccessToken parsedToken = null;
-            string verifyTokenEndPoint = string.Empty;
-
+            string verifyTokenEndPoint;
             switch (provider)
             {
+                // You can get it from here: https://developers.facebook.com/tools/accesstoken/
+                // More about debug_tokn here: http://stackoverflow.com/questions/16641083/how-does-one-get-the-app-access-token-for-debug-token-inspection-on-facebook
                 case MixExternalLoginProviders.Facebook:
-                    //You can get it from here: https://developers.facebook.com/tools/accesstoken/
-                    //More about debug_tokn here: http://stackoverflow.com/questions/16641083/how-does-one-get-the-app-access-token-for-debug-token-inspection-on-facebook
-
                     var appToken = $"{appConfigs.Facebook.AppId}|{appConfigs.Facebook.AppSecret}";
                     verifyTokenEndPoint = string.Format("https://graph.facebook.com/debug_token?input_token={0}&access_token={1}", accessToken, appToken);
                     break;

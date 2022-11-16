@@ -480,7 +480,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DefaultContent = table.Column<string>(type: "varchar(4000)", nullable: false, collation: "und-x-icu"),
+                    DefaultContent = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     MixConfigurationId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
@@ -655,7 +655,7 @@ namespace Mix.Database.Migrations.PostgresqlMixCms
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DefaultContent = table.Column<string>(type: "varchar(4000)", nullable: false, collation: "und-x-icu"),
+                    DefaultContent = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu"),
                     MixLanguageId = table.Column<int>(type: "integer", nullable: true),
                     CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),

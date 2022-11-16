@@ -22,7 +22,6 @@
         }
 
         public MixTenantViewModel(MixTenant entity,
-
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -35,9 +34,9 @@
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
+            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
         }
 
         public override async Task Validate()
@@ -53,33 +52,34 @@
                 }
             }
         }
-        protected override async Task SaveEntityRelationshipAsync(MixTenant parent)
+
+        protected override async Task SaveEntityRelationshipAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             if (Culture != null)
             {
-                await SaveCultureAsync(parent);
+                await SaveCultureAsync(parent, cancellationToken);
             }
 
             if (Domains != null)
             {
-                await SaveDomainAsync(parent);
+                await SaveDomainAsync(parent, cancellationToken);
             }
         }
 
-        private async Task SaveCultureAsync(MixTenant parent)
+        private async Task SaveCultureAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             Culture.MixTenantId = parent.Id;
             Culture.SetUowInfo(UowInfo);
-            await Culture.SaveAsync();
+            await Culture.SaveAsync(cancellationToken);
         }
 
-        private async Task SaveDomainAsync(MixTenant parent)
+        private async Task SaveDomainAsync(MixTenant parent, CancellationToken cancellationToken = default)
         {
             foreach (var domain in Domains)
             {
                 domain.MixTenantId = parent.Id;
                 domain.SetUowInfo(UowInfo);
-                await domain.SaveAsync();
+                await domain.SaveAsync(cancellationToken);
             }
         }
         #endregion

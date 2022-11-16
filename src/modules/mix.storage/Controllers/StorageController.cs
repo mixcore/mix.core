@@ -7,7 +7,7 @@ namespace Mix.Storage.Controllers
     [ApiController]
     public class StorageController : MixRestfulApiControllerBase<MixMediaViewModel, MixCmsContext, MixMedia, Guid>
     {
-        private MixStorageService _storageService;
+        private readonly MixStorageService _storageService;
 
         public StorageController(MixStorageService storageService,
             IHttpContextAccessor httpContextAccessor,

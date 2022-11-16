@@ -22,9 +22,7 @@
         {
         }
 
-        public MixThemeViewModel(MixTheme entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixThemeViewModel(MixTheme entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -37,21 +35,22 @@
 
         #region Overrides
 
-        public override Task<MixTheme> ParseEntity()
+        public override Task<MixTheme> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(SystemName))
             {
                 SystemName = SeoHelper.GetSEOString(DisplayName);
             }
-            return base.ParseEntity();
+
+            return base.ParseEntity(cancellationToken);
         }
 
-        protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity)
+        protected override Task SaveEntityRelationshipAsync(MixTheme parentEntity, CancellationToken cancellationToken = default)
         {
             // Create default extra data
             MixDataContentViewModel extraData = new();
 
-            return base.SaveEntityRelationshipAsync(parentEntity);
+            return base.SaveEntityRelationshipAsync(parentEntity, cancellationToken);
         }
 
         #endregion

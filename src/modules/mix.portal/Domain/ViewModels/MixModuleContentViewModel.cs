@@ -32,16 +32,22 @@
 
         #endregion
 
-        public override Task<MixModuleContent> ParseEntity()
+        public override Task<MixModuleContent> ParseEntity(CancellationToken cancellationToken = default)
         {
-            var arrField = Columns != null ? JArray.Parse(
-               JsonConvert.SerializeObject(Columns.OrderBy(c => c.Priority).Where(
-                   c => !string.IsNullOrEmpty(c.SystemName)))) : new JArray();
+            var columns = Columns
+                .OrderBy(c => c.Priority)
+                .Where(c => !string.IsNullOrEmpty(c.SystemName));
+
+            var arrField = Columns != null ?
+                JArray.Parse(JsonConvert.SerializeObject(columns))
+                : new JArray();
+
             SimpleDataColumns = arrField.ToString(Formatting.None);
-            return base.ParseEntity();
+
+            return base.ParseEntity(cancellationToken);
         }
 
-        public override Task ExpandView()
+        public override Task ExpandView(CancellationToken cancellationToken = default)
         {
             if (!string.IsNullOrEmpty(SimpleDataColumns))
             {
@@ -53,10 +59,10 @@
                 Columns = new List<ModuleColumnModel>();
             }
 
-            return base.ExpandView();
+            return base.ExpandView(cancellationToken);
         }
 
-        public override async Task<int> CreateParentAsync()
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixModuleViewModel parent = new(UowInfo)
             {
@@ -68,7 +74,7 @@
             return await parent.SaveAsync();
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ChildId == Id));
             Context.MixModuleData.RemoveRange(Context.MixModuleData.Where(m => m.ParentId == Id));
@@ -79,12 +85,12 @@
             {
                 var mdlRepo = MixModuleViewModel.GetRepository(UowInfo);
 
-                await Repository.DeleteAsync(Id);
-                await mdlRepo.DeleteAsync(ParentId);
+                await Repository.DeleteAsync(Id, cancellationToken);
+                await mdlRepo.DeleteAsync(ParentId, cancellationToken);
             }
             else
             {
-                await base.DeleteHandlerAsync();
+                await base.DeleteHandlerAsync(cancellationToken);
             }
         }
     }

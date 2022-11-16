@@ -35,17 +35,17 @@
 
         #region Overrides
 
-        public override Task<MixDataContentAssociation> ParseEntity()
+        public override Task<MixDataContentAssociation> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (IsDefaultId(Id))
             {
                 Id = Guid.NewGuid();
                 CreatedDateTime = DateTime.UtcNow;
             }
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var contentRepo = MixDataContentViewModel.GetRepository(UowInfo);
             ChildDataContent = await contentRepo.GetSingleAsync(DataContentId);
