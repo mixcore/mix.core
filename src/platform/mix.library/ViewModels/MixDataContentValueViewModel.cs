@@ -37,9 +37,7 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDataContentValueViewModel(MixDataContentValue entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentValueViewModel(MixDataContentValue entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -47,7 +45,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override Task<MixDataContentValue> ParseEntity()
+        public override Task<MixDataContentValue> ParseEntity(CancellationToken cancellationToken = default)
         {
             if (IsDefaultId(Id))
             {
@@ -59,19 +57,21 @@ namespace Mix.Lib.ViewModels
 
             MixDatabaseColumnName = Column?.SystemName;
             MixDatabaseColumnId = Column?.Id ?? 0;
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId);
+            Column = await colRepo.GetSingleAsync(MixDatabaseColumnId, cancellationToken);
             if (MixDatabaseColumnId > 0)
             {
-                Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId);
+                Column ??= await colRepo.GetSingleAsync(MixDatabaseColumnId, cancellationToken);
                 MixDatabaseName = Column.MixDatabaseName;
             }
-            else // additional field for page / post / module => id = 0
+
+            // additional field for page / post / module => id = 0
+            else
             {
                 Column = new()
                 {

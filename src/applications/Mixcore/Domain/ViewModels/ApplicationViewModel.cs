@@ -41,12 +41,12 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var templateRepo = TemplateViewModel.GetRepository(UowInfo);
             if (Template == null && TemplateId.HasValue)
             {
-                Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId);
+                Template = await templateRepo.GetSingleAsync(m => m.Id == TemplateId, cancellationToken);
             }
         }
 

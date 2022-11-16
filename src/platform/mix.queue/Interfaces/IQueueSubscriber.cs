@@ -5,6 +5,6 @@ namespace Mix.Queue.Interfaces
 {
     public interface IQueueSubscriber
     {
-        Task ProcessQueue(CancellationToken cancellationToken);
+        Task ProcessQueue(CancellationToken cancellationToken = default);
     }
 }

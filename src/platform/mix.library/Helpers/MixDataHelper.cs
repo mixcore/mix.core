@@ -97,7 +97,8 @@ namespace Mix.Lib.Helpers
             Guid dataContentId,
             string mixDatabaseName,
             UnitOfWorkInfo uowInfo,
-            List<MixDatabaseColumn> refColumns = null)
+            List<MixDatabaseColumn> refColumns = null,
+            CancellationToken cancellationToken = default)
         {
             var context = (MixCmsContext)uowInfo.ActiveDbContext;
             refColumns ??= context.MixDatabaseColumn.Where(
@@ -106,7 +107,7 @@ namespace Mix.Lib.Helpers
 
             foreach (var item in refColumns.Where(p => p.DataType == MixDataType.Reference))
             {
-                JArray arr = await GetRelatedDataAsync(item.ReferenceId.Value, dataContentId, uowInfo);
+                JArray arr = await GetRelatedDataAsync(item.ReferenceId.Value, dataContentId, uowInfo, cancellationToken);
 
                 if (obj.ContainsKey(item.SystemName))
                 {
@@ -208,13 +209,15 @@ namespace Mix.Lib.Helpers
             }
         }
 
-        private static async Task<JArray> GetRelatedDataAsync(int referenceId, Guid dataContentId, UnitOfWorkInfo uowInfo)
+        private static async Task<JArray> GetRelatedDataAsync(int referenceId, Guid dataContentId, UnitOfWorkInfo uowInfo, CancellationToken cancellationToken = default)
         {
             using var assoRepo = MixDataContentAssociationViewModel.GetRepository(uowInfo);
             Expression<Func<MixDataContentAssociation, bool>> predicate = model =>
-                    (model.MixDatabaseId == referenceId)
-                    && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
-            var relatedContents = await assoRepo.GetListAsync(predicate);
+                    model.MixDatabaseId == referenceId
+                    && model.GuidParentId == dataContentId
+                    && model.ParentType == MixDatabaseParentType.Set;
+
+            var relatedContents = await assoRepo.GetListAsync(predicate, cancellationToken);
 
             JArray arr = new JArray();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
@@ -230,17 +233,17 @@ namespace Mix.Lib.Helpers
             string databaseName,
             Guid? guidParentId = null,
             int? intParentId = null,
-            string specificulture = null)
+            string specificulture = null,
+            CancellationToken cancellationToken = default)
             where T : HaveParentSEOContentViewModelBase<MixCmsContext, MixDataContent, Guid, T>
         {
             T result = null;
             var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, T>(uow);
             var mixDbRepo = MixDatabaseViewModel.GetRepository(uow);
             var context = (MixCmsContext)uow.ActiveDbContext;
-            Expression<Func<MixDataContentAssociation, bool>> predicate =
-                m => m.MixDatabaseName == databaseName
-                    && m.ParentType == parentType;
-            var mixDb = await mixDbRepo.GetSingleAsync(m => m.SystemName == databaseName);
+
+            Expression<Func<MixDataContentAssociation, bool>> predicate = m => m.MixDatabaseName == databaseName && m.ParentType == parentType;
+            var mixDb = await mixDbRepo.GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
             if (mixDb != null)
             {
 
@@ -251,8 +254,7 @@ namespace Mix.Lib.Helpers
                 var dataId = (await context.MixDataContentAssociation.FirstOrDefaultAsync(predicate))?.DataContentId;
                 if (dataId != null)
                 {
-                    result = await contentRepo.GetSingleAsync(
-                        m => m.Id == dataId);
+                    result = await contentRepo.GetSingleAsync(m => m.Id == dataId, cancellationToken);
 
                 }
                 //result ??= new()

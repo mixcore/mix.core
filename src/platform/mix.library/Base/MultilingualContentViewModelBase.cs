@@ -18,12 +18,13 @@ namespace Mix.Lib.Base
 
         }
 
-        protected MultilingualContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        protected MultilingualContentViewModelBase(UnitOfWorkInfo unitOfWorkInfo)
+            : base(unitOfWorkInfo)
         {
         }
 
-        protected MultilingualContentViewModelBase(TEntity entity,
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        protected MultilingualContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) 
+            : base(entity, uowInfo)
         {
         }
 
@@ -42,10 +43,10 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-        public override Task<TEntity> ParseEntity()
+        public override Task<TEntity> ParseEntity(CancellationToken cancellationToken = default)
         {
             MixCultureId = MixCultureId == 0 ? 1 : MixCultureId;
-            return base.ParseEntity();
+            return base.ParseEntity(cancellationToken);
         }
 
         public override void InitDefaultValues(string language = null, int? cultureId = null)

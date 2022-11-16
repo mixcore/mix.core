@@ -146,12 +146,12 @@ namespace Mix.Quartz.Services
                 .Build();
         }
 
-        public Task Start(CancellationToken cancellationToken)
+        public Task Start(CancellationToken cancellationToken = default)
         {
             return Scheduler.Start(cancellationToken);
         }
 
-        public Task Shutdown(CancellationToken cancellationToken)
+        public Task Shutdown(CancellationToken cancellationToken = default)
         {
             return Scheduler?.Shutdown(cancellationToken);
         }

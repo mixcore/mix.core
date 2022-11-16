@@ -13,10 +13,7 @@
         {
         }
 
-        public MixPostPostAssociationViewModel(MixPostPostAssociation entity,
-
-            UnitOfWorkInfo uowInfo = null)
-            : base(entity, uowInfo)
+        public MixPostPostAssociationViewModel(MixPostPostAssociation entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 

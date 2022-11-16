@@ -30,7 +30,7 @@ namespace Mix.Queue.Engines
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken = default)
         {
             Task.Run(async () =>
             {
@@ -43,7 +43,7 @@ namespace Mix.Queue.Engines
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }

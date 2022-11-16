@@ -11,9 +11,7 @@ namespace Mix.Portal.Domain.ViewModels
         {
         }
 
-        public MixPostContentViewModel(MixPostContent entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixPostContentViewModel(MixPostContent entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -33,13 +31,13 @@ namespace Mix.Portal.Domain.ViewModels
 
         #region Overrides
 
-        public override async Task ExpandView()
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            await LoadAliasAsync();
-            await base.ExpandView();
+            await LoadAliasAsync(cancellationToken);
+            await base.ExpandView(cancellationToken);
         }
 
-        public override async Task<int> CreateParentAsync()
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixPostViewModel parent = new()
             {
@@ -47,11 +45,12 @@ namespace Mix.Portal.Domain.ViewModels
                 Description = Excerpt,
                 MixTenantId = MixTenantId
             };
+
             parent.SetUowInfo(UowInfo);
-            return await parent.SaveAsync();
+            return await parent.SaveAsync(cancellationToken);
         }
 
-        protected override async Task DeleteHandlerAsync()
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.ChildId == Id));
             Context.MixModulePostAssociation.RemoveRange(Context.MixModulePostAssociation.Where(m => m.ChildId == Id));
@@ -60,32 +59,29 @@ namespace Mix.Portal.Domain.ViewModels
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {
                 var postRepo = MixPostViewModel.GetRepository(UowInfo);
-                await Repository.DeleteAsync(Id);
-                await postRepo.DeleteAsync(ParentId);
+                await Repository.DeleteAsync(Id, cancellationToken);
+                await postRepo.DeleteAsync(ParentId, cancellationToken);
             }
             else
             {
-                await base.DeleteHandlerAsync();
+                await base.DeleteHandlerAsync(cancellationToken);
             }
         }
 
-        public async Task LoadContributorsAsync(MixIdentityService identityService)
+        public async Task LoadContributorsAsync(MixIdentityService identityService, CancellationToken cancellationToken = default)
         {
-            Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(
-                m => m.ContentType == MixContentType.Post && m.IntContentId == Id);
+            Contributors = await MixContributorViewModel.GetRepository(UowInfo).GetAllAsync(m => m.ContentType == MixContentType.Post && m.IntContentId == Id, cancellationToken);
             foreach (var item in Contributors)
             {
                 await item.LoadUserDataAsync(identityService);
             }
         }
 
-        private async Task LoadAliasAsync()
+        private async Task LoadAliasAsync(CancellationToken cancellationToken = default)
         {
             var aliasRepo = MixUrlAliasViewModel.GetRepository(UowInfo);
-            UrlAliases = await aliasRepo.GetListAsync(
-                m => m.Type == MixUrlAliasType.Post && m.SourceContentId == Id);
-            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias
-                : $"/post/{Id}/{SeoName}";
+            UrlAliases = await aliasRepo.GetListAsync(m => m.Type == MixUrlAliasType.Post && m.SourceContentId == Id, cancellationToken);
+            DetailUrl = UrlAliases.Count > 0 ? UrlAliases[0].Alias : $"/post/{Id}/{SeoName}";
         }
         #endregion
     }
