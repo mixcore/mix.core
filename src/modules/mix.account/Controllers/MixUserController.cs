@@ -249,7 +249,7 @@ namespace Mix.Account.Controllers
                 var idRresult = await _userManager.DeleteAsync(user);
                 if (idRresult.Succeeded)
                 {
-                    _repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
+                    _repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
                     await _repoDbRepository.DeleteAsync(new List<QueryField>()
                     {
                         new QueryField("parentId", user.Id),

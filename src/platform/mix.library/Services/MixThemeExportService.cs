@@ -228,7 +228,7 @@ namespace Mix.Lib.Services
         {
             foreach (var database in _siteData.MixDatabases)
             {
-                _repository.Init(database.SystemName);
+                _repository.InitTableName(database.SystemName);
                 var data = await _repository.GetAllAsync();
                 if (data != null)
                 {

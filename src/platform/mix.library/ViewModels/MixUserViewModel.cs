@@ -79,7 +79,7 @@ namespace Mix.Lib.ViewModels
                 {
                     var database = await MixDatabaseViewModel.GetRepository(_cmsUow)
                         .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA);
-                    repoDbRepository.Init(MixDatabaseNames.SYSTEM_USER_DATA);
+                    repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
                     dynamic data = await repoDbRepository.GetSingleByParentAsync(MixContentType.User, Id);
                     if (data != null)
                     {
@@ -95,7 +95,7 @@ namespace Mix.Lib.ViewModels
                             {
                                 var ids = associations.Select(m => m.ChildId).ToList();
 
-                                repoDbRepository.Init(relation.DestinateDatabaseName);
+                                repoDbRepository.InitTableName(relation.DestinateDatabaseName);
                                 var nestedData = await repoDbRepository.GetListByAsync(new List<QueryField> {
                                     new("id", ids.First())
                                 });
