@@ -19,14 +19,9 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.4.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8" />
-		
 		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="7.2.23" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.8">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		
 	</ItemGroup>
 
 	<ItemGroup>
