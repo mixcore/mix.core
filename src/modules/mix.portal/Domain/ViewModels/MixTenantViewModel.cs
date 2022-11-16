@@ -22,7 +22,6 @@
         }
 
         public MixTenantViewModel(MixTenant entity,
-
             UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
@@ -37,7 +36,7 @@
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id);
+            Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
         }
 
         public override async Task Validate()
