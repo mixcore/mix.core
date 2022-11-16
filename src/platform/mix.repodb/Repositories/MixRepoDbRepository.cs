@@ -325,19 +325,19 @@ namespace Mix.RepoDb.Repositories
             switch (DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
-                    SqlServerBootstrap.Initialize();
+                    GlobalConfiguration.Setup().UseSqlServer();
                     break;
                 case MixDatabaseProvider.MySQL:
-                    MySqlBootstrap.Initialize();
+                    GlobalConfiguration.Setup().UseMySql();
                     break;
                 case MixDatabaseProvider.PostgreSQL:
-                    PostgreSqlBootstrap.Initialize();
+                    GlobalConfiguration.Setup().UsePostgreSql();
                     break;
                 case MixDatabaseProvider.SQLITE:
-                    SqLiteBootstrap.Initialize();
+                    GlobalConfiguration.Setup().UseSqlite();
                     break;
                 default:
-                    SqLiteBootstrap.Initialize();
+                    GlobalConfiguration.Setup().UseSqlite();
                     break;
             }
         }
