@@ -5,6 +5,5 @@
         public new Guid UserId { get; set; }
         public new Guid RoleId { get; set; }
         public int MixTenantId { get; set; }
-        public virtual MixUser MixUser { get; set; }
     }
 }
