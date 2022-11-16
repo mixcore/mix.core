@@ -44,3 +44,7 @@ Ex:
 
 **Make sure the enpoints in MixContent/AppConfigs/endpoints.json are correct (when deploy to from local to production, must change the localhost to real endpoints)**
 ## 5. Update Enpoints to production domain when golive (/MixContent/AppConfigs/enpoints.json)
+
+## 6.Add migration
+** Move to mix.database folder
+** dotnet ef --startup-project ../../applications/Mixcore migrations add Init --context PostgresqlmixcmsContext --output-dir Migrations/Cms/PostgresqlMixCms
