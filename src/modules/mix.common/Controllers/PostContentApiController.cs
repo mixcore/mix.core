@@ -3,6 +3,7 @@ using Mix.Common.Domain.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.Lib.Services;
+using Mix.Portal.Domain.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
@@ -32,10 +33,9 @@ namespace Mix.Common.Controllers
 
 
         [HttpPost("filter")]
-        public async Task<ActionResult<PagingResponseModel<PostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
+        public async Task<ActionResult<PagingResponseModel<MixPostContentViewModel>>> Filter([FromBody] FilterContentRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
                 !string.IsNullOrEmpty(req.MixDatabaseName), m => m.MixDatabaseName == req.MixDatabaseName);
             if (!string.IsNullOrEmpty(req.MixDatabaseName) && req.Queries.Count > 0)
@@ -53,17 +53,6 @@ namespace Mix.Common.Controllers
                 }
             }
             var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            List<Task> tasks = new();
-            foreach (var post in result.Items)
-            {
-                if (post.AdditionalData == null)
-                {
-                    tasks.Add(
-                        post.LoadAdditionalDataAsync(_mixRepoDbRepository)
-                        .ContinueWith(r => _cacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), "full")));
-                }
-            }
-            await Task.WhenAll(tasks);
             return Ok(ParseSearchResult(req, result));
         }
 
@@ -79,24 +68,24 @@ namespace Mix.Common.Controllers
         }
 
 
-        protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req)
-        {
-            var searchRequest = BuildSearchRequest(req);
-            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+        //protected override async Task<PagingResponseModel<PostContentViewModel>> SearchHandler(SearchRequestDto req)
+        //{
+        //    var searchRequest = BuildSearchRequest(req);
+        //    var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
 
-            List<Task> tasks = new();
-            foreach (var post in result.Items)
-            {
-                if (post.AdditionalData == null)
-                {
-                    tasks.Add(
-                        post.LoadAdditionalDataAsync(_mixRepoDbRepository)
-                        .ContinueWith(r => _cacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), "full")));
-                }
-            }
-            await Task.WhenAll(tasks);
-            return result;
-        }
+        //    List<Task> tasks = new();
+        //    foreach (var post in result.Items)
+        //    {
+        //        if (post.AdditionalData == null)
+        //        {
+        //            tasks.Add(
+        //                post.LoadAdditionalDataAsync(_mixRepoDbRepository)
+        //                .ContinueWith(r => _cacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), "full")));
+        //        }
+        //    }
+        //    await Task.WhenAll(tasks);
+        //    return result;
+        //}
 
     }
 }
