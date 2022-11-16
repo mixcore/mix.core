@@ -42,7 +42,7 @@ namespace Mix.Portal.Controllers
             data.CloneCulture(_culture);
             var tenantId = await base.CreateHandlerAsync(data);
 
-            await _mixTenantService.Reload();
+            await _mixTenantService.Reload(_uow);
             await ReloadTenantConfiguration(data);
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
