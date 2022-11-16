@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.PostgresqlMixCms
+namespace Mix.Database.Migrations.Cms.PostgresqlMixCms
 {
     [DbContext(typeof(PostgresqlMixCmsContext))]
     partial class PostgresqlMixCmsContextModelSnapshot : ModelSnapshot

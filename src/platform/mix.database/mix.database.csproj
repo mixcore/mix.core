@@ -50,6 +50,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\Cms\PostgresqlMixCms\" />
     <Folder Include="Migrations\Quartz\" />
   </ItemGroup>
 
