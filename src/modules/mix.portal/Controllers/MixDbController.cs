@@ -50,7 +50,7 @@ namespace Mix.Portal.Controllers
             _context = context;
             _repository = repository;
             _associationRepository = new(cache, databaseService);
-            _associationRepository.Init(_associationTableName);
+            _associationRepository.InitTableName(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
             _runtimeDbContextService = runtimeDbContextService;
@@ -62,7 +62,7 @@ namespace Mix.Portal.Controllers
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             _tableName = RouteData?.Values["name"].ToString();
-            _repository.Init(_tableName);
+            _repository.InitTableName(_tableName);
             _runtimeRepository = new(_runtimeDbContextService.GetMixDatabaseDbContext(), _tableName);
             base.OnActionExecuting(context);
         }
@@ -96,7 +96,7 @@ namespace Mix.Portal.Controllers
                         if (associations.Count > 0)
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
-                            _repository.Init(item.DestinateDatabaseName);
+                            _repository.InitTableName(item.DestinateDatabaseName);
                             List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
@@ -130,7 +130,7 @@ namespace Mix.Portal.Controllers
                         if (associations.Count > 0)
                         {
                             var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
-                            _repository.Init(item.DestinateDatabaseName);
+                            _repository.InitTableName(item.DestinateDatabaseName);
                             List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
                             data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
@@ -200,7 +200,7 @@ namespace Mix.Portal.Controllers
             //await _associationRepository.DeleteManyAsync(associationPredicate);
             var childAssociationsQueries = GetAssociatoinQueries(parentDatabaseName: _tableName, parentId: id);
             var parentAssociationsQueries = GetAssociatoinQueries(childDatabaseName: _tableName, childId: id);
-            _repository.Init(_associationTableName);
+            _repository.InitTableName(_associationTableName);
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             return data > 0 ? Ok() : NotFound();
