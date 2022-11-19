@@ -803,13 +803,13 @@ namespace Mix.Database.Migrations.MySqlMixCms
                         column: x => x.ChildId,
                         principalTable: "MixDatabase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MixDatabaseRelationship_MixDatabase_ParentId",
                         column: x => x.ParentId,
                         principalTable: "MixDatabase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

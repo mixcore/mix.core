@@ -27,5 +27,7 @@
         string IDatabaseConstants.GenerateUUID => "gen_random_uuid()";
 
         string IDatabaseConstants.Boolean => "boolean";
+        string IDatabaseConstants.BacktickOpen => "`";
+        string IDatabaseConstants.BacktickClose => "`";
     }
 }
