@@ -26,5 +26,7 @@
 
         string IDatabaseConstants.GenerateUUID => "newid()";
         string IDatabaseConstants.Boolean => "bit";
+        string IDatabaseConstants.BacktickOpen => "[";
+        string IDatabaseConstants.BacktickClose => "]";
     }
 }

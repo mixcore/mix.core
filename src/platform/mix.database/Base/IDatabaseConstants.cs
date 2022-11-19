@@ -15,5 +15,7 @@
         public string Boolean { get; }
         public string Text { get; }
         public string GenerateUUID { get; }
+        public string BacktickOpen { get; }
+        public string BacktickClose { get; }
     }
 }

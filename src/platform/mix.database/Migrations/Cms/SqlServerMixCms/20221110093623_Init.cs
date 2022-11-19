@@ -639,13 +639,13 @@ namespace Mix.Database.Migrations.SqlServerMixCms
                         column: x => x.ChildId,
                         principalTable: "MixDatabase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_MixDatabaseRelationship_MixDatabase_ParentId",
                         column: x => x.ParentId,
                         principalTable: "MixDatabase",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(

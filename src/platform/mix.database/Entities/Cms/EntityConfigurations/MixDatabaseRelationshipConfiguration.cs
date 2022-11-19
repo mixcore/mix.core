@@ -31,11 +31,13 @@ namespace Mix.Database.Entities.Cms.EntityConfigurations
 
             builder.HasOne(e => e.SourceDatabase)
                 .WithMany(e => e.SourceRelationships)
-                .HasForeignKey(e => e.ParentId);
+                .HasForeignKey(e => e.ParentId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(e => e.DestinateDatabase)
                 .WithMany(e => e.DestinateRelationships)
-                .HasForeignKey(e => e.ChildId);
+                .HasForeignKey(e => e.ChildId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(e => e.Type)
                .IsRequired()
