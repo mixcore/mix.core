@@ -2,8 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Constant.Constants;
 using Mix.Database.EntityConfigurations.Base;
+using Mix.Database.Extensions;
 using Mix.Database.Services;
+using Mix.Heart.Enums;
 using Mix.Service.Services;
+using System.Linq.Expressions;
 
 namespace Mix.Services.Permission.Domain.Entities.EntityConfigurations
 {
@@ -18,13 +21,7 @@ namespace Mix.Services.Permission.Domain.Entities.EntityConfigurations
             {
                 base.Configure(builder);
                 builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
-
-                builder.Property(p => p.Metadata).HasColumnType("json");
-
-                //builder.OwnsOne(p => p.Metadata, meta =>
-                //{
-                //    meta.ToJson();
-                //});
+                builder.ConfigueJsonColumn(p => p.Metadata, _databaseService);
             }
             catch(Exception ex)
             {
