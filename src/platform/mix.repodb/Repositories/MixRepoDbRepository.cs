@@ -11,6 +11,7 @@ using Mix.RepoDb.Models;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
+using Mix.Shared.Models.Configurations;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -53,7 +54,7 @@ namespace Mix.RepoDb.Repositories
         }
 
         #region Methods
-        public void Init(string tableName)
+        public void InitTableName(string tableName)
         {
             _tableName = tableName.ToLower();
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);

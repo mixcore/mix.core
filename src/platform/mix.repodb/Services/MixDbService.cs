@@ -27,19 +27,17 @@ namespace Mix.RepoDb.Services
         public ICache Cache { get; }
         private UnitOfWorkInfo<MixCmsContext> _uow;
         private DatabaseService _databaseService;
-        private RuntimeDbContextService _runtimeDbContextService;
 
         static string[] _defaultProperties = { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
         #endregion
 
         public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
-            ICache cache, RuntimeDbContextService runtimeDbContextService)
+            ICache cache)
         {
             _uow = uow;
             _databaseService = databaseService;
             _repository = repository;
             _backupRepository = new(cache, databaseService);
-            _runtimeDbContextService = runtimeDbContextService;
             _dbConstants = _databaseService.DatabaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
@@ -97,7 +95,7 @@ namespace Mix.RepoDb.Services
             if (data != null && data.Count > 0)
             {
                 InitBackupRepository(database.SystemName);
-                await Migrate(database, _backupRepository.DatabaseProvider, new BackupDbContext(_backupRepository.ConnectionString));
+                await Migrate(database, _backupRepository.DatabaseProvider, _backupRepository);
                 foreach (var item in data)
                 {
                     GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
@@ -128,7 +126,7 @@ namespace Mix.RepoDb.Services
                 {
                     GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
                 }
-                _repository.Init(database.SystemName);
+                _repository.InitTableName(database.SystemName);
                 var result = await _repository.InsertManyAsync(data);
                 return result >= 0;
             }
@@ -149,11 +147,11 @@ namespace Mix.RepoDb.Services
 
         private async Task<List<dynamic>?> GetCurrentData(string databaseName)
         {
-            _repository.Init(databaseName);
+            _repository.InitTableName(databaseName);
             return await _repository.GetAllAsync();
         }
 
-        private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, DbContext ctx)
+        private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, MixRepoDbRepository repo)
         {
             List<string> colSqls = new List<string>();
             string tableName = database.SystemName.ToLower();
@@ -165,8 +163,8 @@ namespace Mix.RepoDb.Services
             var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await ctx.Database.ExecuteSqlRawAsync($"DROP TABLE IF EXISTS {tableName};");
-                var result = await ctx.Database.ExecuteSqlRawAsync(commandText);
+                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {tableName};");
+                var result = await repo.ExecuteCommand(commandText);
                 return result >= 0;
             }
             return false;
