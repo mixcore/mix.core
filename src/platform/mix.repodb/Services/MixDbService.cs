@@ -58,9 +58,9 @@ namespace Mix.RepoDb.Services
             MixDatabaseViewModel database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == name);
             if (database != null && database.Columns.Count > 0)
             {
-                await BackupDatabase(database.SystemName);
-                await Migrate(database, _databaseService.DatabaseProvider, _runtimeDbContextService.GetMixDatabaseDbContext());
-                await RestoreFromLocal(database);
+                //await BackupDatabase(database.SystemName);
+                await Migrate(database, _databaseService.DatabaseProvider, _repository);
+                //await RestoreFromLocal(database);
                 return true;
             }
             return false;
@@ -181,7 +181,7 @@ namespace Mix.RepoDb.Services
                 $"MixTenantId {GetColumnType(MixDataType.Integer)} NULL, " +
                 $"CreatedBy {GetColumnType(MixDataType.Text)} NULL, " +
                 $"ModifiedBy {GetColumnType(MixDataType.Text)} NULL, " +
-                $"Priority {GetColumnType(MixDataType.Integer)}, " +
+                $"Priority {GetColumnType(MixDataType.Integer)} NOT NULL, " +
                 $"Status {GetColumnType(MixDataType.Text)} NULL, " +
                 $"IsDeleted {GetColumnType(MixDataType.Boolean)} NULL, " +
                 $" {string.Join(",", colSqls.ToArray())})";
@@ -204,7 +204,7 @@ namespace Mix.RepoDb.Services
 
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
-            return $"{col.SystemName.ToTitleCase()} {colType} {nullable}";
+            return $"{_dbConstants.BacktickOpen}{col.SystemName.ToTitleCase()}{_dbConstants.BacktickClose} {colType} {nullable}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)
@@ -226,6 +226,8 @@ namespace Mix.RepoDb.Services
                     return _dbConstants.Text;
                 case MixDataType.Boolean:
                     return _dbConstants.Boolean;
+                case MixDataType.Json:
+                    return $"{_dbConstants.NString}{_dbConstants.MaxLength}";
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:

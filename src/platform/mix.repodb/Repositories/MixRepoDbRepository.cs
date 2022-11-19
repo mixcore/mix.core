@@ -4,6 +4,7 @@ using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
+using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.RepoDb.Models;
@@ -17,13 +18,14 @@ using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Mix.RepoDb.Repositories
 {
-    public class MixRepoDbRepository
+    public class MixRepoDbRepository : IAsyncDisposable
     {
         #region Properties
-
+        private IDbConnection _connection;
         public ITrace Trace { get; }
 
         public ICache Cache { get; }
@@ -47,6 +49,7 @@ namespace Mix.RepoDb.Repositories
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
             InitializeRepoDb();
+            CreateConnection();
         }
 
         #region Methods
@@ -68,35 +71,41 @@ namespace Mix.RepoDb.Repositories
 
         public Task<int> ExecuteCommand(string commandSql)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                return connection.ExecuteNonQueryAsync(commandSql);
+                if (_connection.State == ConnectionState.Closed)
+                {
+                    _connection.Open();
+
+                }
+                return _connection.ExecuteNonQueryAsync(commandSql);
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
 
         public async Task<PagingResponseModel<dynamic>> GetPagingAsync(IEnumerable<QueryField> queryFields, PagingRequestModel pagingRequest)
         {
-            using (var connection = CreateConnection())
-            {
-                List<OrderField> orderFields = new List<OrderField>() {
+            List<OrderField> orderFields = new List<OrderField>() {
                     new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
                 };
-                var count = (int)connection.Count(_tableName, queryFields);
-                int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
-                var data = await connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
-                    pageSize, orderFields, queryFields, null, null, commandTimeout: _settings.CommandTimeout);
-                return new PagingResponseModel<dynamic>()
+            var count = (int)_connection.Count(_tableName, queryFields);
+            int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
+            var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
+                pageSize, orderFields, queryFields, null, null, commandTimeout: _settings.CommandTimeout);
+            return new PagingResponseModel<dynamic>()
+            {
+                Items = data.ToList(),
+                PagingData = new()
                 {
-                    Items = data.ToList(),
-                    PagingData = new()
-                    {
-                        PageIndex = pagingRequest.PageIndex,
-                        PageSize = pagingRequest.PageSize,
-                        Total = count,
-                        TotalPage = (int)Math.Ceiling((double)pagingRequest.Total / pageSize)
-                    }
-                };
-            }
+                    PageIndex = pagingRequest.PageIndex,
+                    PageSize = pagingRequest.PageSize,
+                    Total = count,
+                    TotalPage = (int)Math.Ceiling((double)pagingRequest.Total / pageSize)
+                }
+            };
         }
 
         public Task<List<dynamic>?> GetListByAsync(IEnumerable<SearchQueryField> searchQueryFields, string? fields = null)
@@ -117,90 +126,78 @@ namespace Mix.RepoDb.Repositories
 
         public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                try
+                List<Field>? selectedFields = null;
+                if (!string.IsNullOrEmpty(fields))
                 {
-                    List<Field>? selectedFields = null;
-                    if (!string.IsNullOrEmpty(fields))
+                    selectedFields = new();
+                    var arrField = fields.Split(',', StringSplitOptions.TrimEntries);
+                    foreach (var item in arrField)
                     {
-                        selectedFields = new();
-                        var arrField = fields.Split(',', StringSplitOptions.TrimEntries);
-                        foreach (var item in arrField)
-                        {
-                            selectedFields.Add(new Field(item));
-                        }
+                        selectedFields.Add(new Field(item));
                     }
-                    var data = await connection.QueryAsync(_tableName, queryFields, selectedFields);
-                    return data.ToList();
                 }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex.Message);
-                    return default;
-                }
+                var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields);
+                return data.ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return default;
             }
         }
 
         public async Task<List<dynamic>?> GetAllAsync()
         {
-            using (var connection = CreateConnection())
+            try
             {
-                try
-                {
-                    var data = await connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout);
-                    return data.ToList();
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex.Message);
-                    return default;
-                }
+                var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout);
+                return data.ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return default;
             }
         }
 
         public async Task<dynamic?> GetSingleByParentAsync(MixContentType parentType, object parentId)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                try
-                {
-                    return (await connection.QueryAsync<dynamic>(
-                        _tableName,
-                        new List<QueryField>() {
+                return (await _connection.QueryAsync<dynamic>(
+                    _tableName,
+                    new List<QueryField>() {
                     new QueryField("ParentType", parentType.ToString()),
                     new QueryField("ParentId", parentId.ToString())
-                        },
-                        commandTimeout: _settings.CommandTimeout,
-                        trace: Trace))?.SingleOrDefault();
-                }
-                catch (Exception ex)
-                {
-                    MixService.LogException(ex);
-                    return default;
-                }
+                    },
+                    commandTimeout: _settings.CommandTimeout,
+                    trace: Trace))?.SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
             }
         }
         public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                try
-                {
-                    return (await connection.QueryAsync<dynamic>(
-                        _tableName,
-                        new List<QueryField>() {
+                return (await _connection.QueryAsync<dynamic>(
+                    _tableName,
+                    new List<QueryField>() {
                     new QueryField("parentType", parentType.ToString()),
                     new QueryField("parentId", parentId)
-                        },
-                        commandTimeout: _settings.CommandTimeout,
-                        trace: Trace))?.ToList();
-                }
-                catch (Exception ex)
-                {
-                    MixService.LogException(ex);
-                    return default;
-                }
+                    },
+                    commandTimeout: _settings.CommandTimeout,
+                    trace: Trace))?.ToList();
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
             }
         }
 
@@ -208,9 +205,9 @@ namespace Mix.RepoDb.Repositories
 
         public async Task<dynamic?> GetSingleAsync(int id)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                return (await connection.QueryAsync<dynamic>(
+                return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new
                     {
@@ -219,12 +216,17 @@ namespace Mix.RepoDb.Repositories
                     commandTimeout: _settings.CommandTimeout,
                     trace: Trace))?.SingleOrDefault();
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
         }
 
         public async Task<int> InsertAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
-            using (var connection = CreateConnection())
+            try
             {
                 JObject obj = new JObject();
                 foreach (var pr in entity.Properties())
@@ -232,7 +234,7 @@ namespace Mix.RepoDb.Repositories
                     obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
                 }
                 var dicObj = obj.ToObject<Dictionary<string, object>>();
-                var result = await connection.InsertAsync(
+                var result = await _connection.InsertAsync(
                         _tableName,
                         entity: dicObj,
                         fields: null,
@@ -241,63 +243,88 @@ namespace Mix.RepoDb.Repositories
 
                 return int.Parse(result?.ToString() ?? "0");
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
         }
 
         public async Task<int?> InsertManyAsync(List<dynamic> entities,
             IDbTransaction? transaction = null)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                var result = await connection.InsertAllAsync(
+                var result = await _connection.InsertAllAsync(
                         _tableName,
                         entities: entities,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
                 return result;
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
         }
 
         public async Task<object?> UpdateAsync(JObject entity,
             IDbTransaction? transaction = null)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                if (connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }))
+                if (_connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }))
                 {
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
-                    return await connection.UpdateAsync(_tableName, obj,
+                    return await _connection.UpdateAsync(_tableName, obj,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
                 }
                 return null;
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
         }
 
         public async Task<int> DeleteAsync(int id)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                if (connection.Exists(_tableName, new { Id = id }))
+                if (_connection.Exists(_tableName, new { Id = id }))
                 {
-                    return await connection.DeleteAsync(_tableName, id,
+                    return await _connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
                 }
                 return 0;
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
         }
 
         public async Task<int> DeleteAsync(List<QueryField> queries)
         {
-            using (var connection = CreateConnection())
+            try
             {
-                if (connection.Exists(_tableName, queries))
+                if (_connection.Exists(_tableName, queries))
                 {
-                    return await connection.DeleteAsync(_tableName, queries,
+                    return await _connection.DeleteAsync(_tableName, queries,
                         commandTimeout: _settings.CommandTimeout,
                         trace: Trace);
                 }
                 return 0;
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
             }
         }
 
@@ -343,10 +370,14 @@ namespace Mix.RepoDb.Repositories
         }
         public IDbConnection CreateConnection()
         {
-            var connectionType = GetDbConnectionType(DatabaseProvider);
-            var connection = Activator.CreateInstance(connectionType) as IDbConnection;
-            connection!.ConnectionString = ConnectionString;
-            return connection;
+            if (_connection == null)
+            {
+                var connectionType = GetDbConnectionType(DatabaseProvider);
+                _connection = Activator.CreateInstance(connectionType) as IDbConnection;
+                _connection!.ConnectionString = ConnectionString;
+                _connection.Open();
+            }
+            return _connection;
         }
 
         static Type GetDbConnectionType(MixDatabaseProvider dbProvider)
@@ -367,5 +398,17 @@ namespace Mix.RepoDb.Repositories
         }
 
         #endregion
+
+
+        ValueTask IAsyncDisposable.DisposeAsync()
+        {
+            if (_connection != null)
+            {
+                _connection.Close();
+                Task.Run(() => _connection.Dispose()
+                );
+            }
+            return ValueTask.CompletedTask;
+        }
     }
 }
