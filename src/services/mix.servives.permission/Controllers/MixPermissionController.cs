@@ -4,6 +4,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
+using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -12,6 +13,10 @@ using Mix.Services.Permission.Domain.Dtos;
 using Mix.Services.Permission.Domain.Entities;
 using Mix.Services.Permission.Domain.Services;
 using Mix.Services.Permission.Domain.ViewModels;
+using Mix.Shared.Dtos;
+using Mix.Heart.Exceptions;
+using Mix.Heart.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Services.Permission.Controllers
 {
@@ -62,6 +67,19 @@ namespace Mix.Services.Permission.Controllers
             return BadRequest();
         }
 
+
+        #endregion
+
+        #region Overrides
+
+        protected override SearchQueryModel<MixPermission, int> BuildSearchRequest(SearchRequestDto req)
+        {
+            var searchRequest = base.BuildSearchRequest(req);
+            searchRequest.Predicate = searchRequest.Predicate
+                .AndAlsoIf(!string.IsNullOrEmpty(req.Keyword),
+                m => m.Metadata != null && EF.Functions.Like(m.Metadata.Description, $"%{req.Keyword}%"));
+            return searchRequest;
+        }
 
         #endregion
     }
