@@ -73,7 +73,7 @@ namespace Mix.Lib.Base
             //}
             if (!CurrentTenant.Cultures.Any(m => m.Specificulture == Culture))
             {
-                Culture = CurrentTenant.Configurations.DefaultCulture;
+                Culture = CurrentTenant.Cultures.First().Specificulture;
             }
 
             // Set CultureInfo
