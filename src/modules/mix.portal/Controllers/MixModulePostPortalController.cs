@@ -2,7 +2,7 @@
 
 namespace Mix.Portal.Controllers
 {
-    [Route("api/v2/rest/mix-portal/mix-module-post")]
+    [Route("api/v2/rest/mix-portal/module-post")]
     [ApiController]
     public class MixModulePostController
         : MixAssociationApiControllerBase<MixModulePostAssociationViewModel, MixCmsContext, MixModulePostAssociation>
