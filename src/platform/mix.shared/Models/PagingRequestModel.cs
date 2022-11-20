@@ -24,7 +24,7 @@ namespace Mix.Shared.Models
 
 
             SortBy = request.Query.TryGetValue(MixRequestQueryKeywords.OrderBy, out var orderBy)
-                ? orderBy.ToString().ToTitleCase() : "CreatedDateTime";
+                ? orderBy.ToString().ToTitleCase() : MixQueryColumnName.CreatedDateTime;
             SortDirection = request.Query.TryGetValue(MixRequestQueryKeywords.Direction, out var direction)
                 ? Enum.Parse<SortDirection>(direction) : SortDirection.Desc;
             Page = request.Query.TryGetValue(MixRequestQueryKeywords.Page, out var page)

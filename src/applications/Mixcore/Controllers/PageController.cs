@@ -82,21 +82,12 @@ namespace Mixcore.Controllers
             if (page == null)
                 return NotFound();
 
-            if (page.Type == MixPageType.ListPost)
+            await page.LoadDataAsync(_repoDbRepository, new(Request)
             {
-                await page.LoadPostsAsync(new(Request));
-            }
+                SortBy = MixQueryColumnName.Priority
+            });
 
-            if (page.AdditionalData == null)
-            {
-                _repoDbRepository.InitTableName(page.MixDatabaseName);
-                var data = await _repoDbRepository.GetSingleByParentAsync(MixContentType.Page, page.Id);
-                page.AdditionalData = data != null ? ReflectionHelper.ParseObject(data) : null;
-                if (page.AdditionalData != null)
-                {
-                    await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PageContentViewModel).FullName}", page, typeof(MixPageContent), pageRepo.CacheFilename);
-                }
-            }
+            
 
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;

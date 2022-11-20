@@ -1,4 +1,5 @@
 ﻿using Mix.Heart.Helpers;
+using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;
 
 namespace Mixcore.Domain.ViewModels
@@ -34,6 +35,7 @@ namespace Mixcore.Domain.ViewModels
 
         public JObject AdditionalData { get; set; }
         public PagingResponseModel<ModuleDataViewModel> Data { get; set; }
+        public PagingResponseModel<ModulePostAssociationViewModel> Posts{ get; set; }
         #endregion
 
         #region Overrides
@@ -64,11 +66,18 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadData(PagingModel pagingModel)
+        public async Task LoadData(PagingModel pagingModel, MixRepoDbRepository mixRepoDbRepository)
         {
             Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);
+            Posts = await ModulePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(
+                m => m.ParentId == Id,
+                pagingModel);
+            foreach (var item in Posts.Items)
+            {
+                await item.Post.LoadAdditionalDataAsync(mixRepoDbRepository);
+            }
         }
         #endregion
     }
