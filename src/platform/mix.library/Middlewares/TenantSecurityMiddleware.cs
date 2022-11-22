@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Middlewares
@@ -13,10 +14,10 @@ namespace Mix.Lib.Middlewares
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly MixTenantService _mixTenantService;
         public TenantSecurityMiddleware(
-            RequestDelegate next, 
-            IQueueService<MessageQueueModel> queueService, 
-            MixTenantService mixTenantService, 
-            MixEndpointService mixEndpointService, 
+            RequestDelegate next,
+            IQueueService<MessageQueueModel> queueService,
+            MixTenantService mixTenantService,
+            MixEndpointService mixEndpointService,
             MixConfigurationService configService)
         {
             this.next = next;
@@ -34,15 +35,16 @@ namespace Mix.Lib.Middlewares
             }
             else
             {
-                
+
                 if (_mixTenantService.AllTenants == null)
                 {
                     await _mixTenantService.Reload();
                 }
-                var currentTenant = context.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-                if (currentTenant == null || !currentTenant.Domains.Any(m => m.Host == context.Request.Headers.Host))
+
+                var currentTenant = context.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                if (currentTenant == null || currentTenant.Domains.All(m => m.Host != context.Request.Headers.Host))
                 {
-                    currentTenant = _mixTenantService.GetCurrentTenant(context.Request.Headers.Host);
+                    currentTenant = _mixTenantService.GetTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
                     _mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
                 }

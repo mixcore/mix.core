@@ -48,7 +48,7 @@ namespace Mix.Services.Permission.Domain.Services
             MixUserPermissionViewModel userPermission = new(_uow)
             {
                 MixTenantId = CurrentTenant.Id,
-                CreatedBy = _identityService.GetClaim(_httpContextAccessor.HttpContext!.User, MixClaims.Username)
+                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
             };
             ReflectionHelper.MapObject(dto, userPermission);
             await userPermission.SaveAsync();

@@ -52,7 +52,7 @@ namespace Mix.Lib.Services
             }
             data.SetUowInfo(_uow);
             data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext!.User, MixClaims.Username);
+            data.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync();
             _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
@@ -140,7 +140,7 @@ namespace Mix.Lib.Services
                 req.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
-            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, _httpContextAccessor.HttpContext!.Request);
+            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, HttpContextAccessor.HttpContext!.Request);
         }
 
         public virtual async Task<TView> GetById(TPrimaryKey id)
