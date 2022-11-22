@@ -1,4 +1,5 @@
 ﻿using Mix.Common.Models;
+using Mix.Lib.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 
@@ -6,7 +7,7 @@ namespace Mix.Common.Domain.Helpers
 {
     public class CommonHelper
     {
-        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations, Lib.ViewModels.MixTenantSystemViewModel currentTenant)
+        internal static GlobalSettings GetAppSettings(MixAuthenticationConfigurations _authConfigurations, MixTenantSystemModel currentTenant)
         {
             //var cultures = _cultureService.Cultures;
             //var culture = _cultureService.LoadCulture(lang);

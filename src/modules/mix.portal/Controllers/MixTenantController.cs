@@ -42,7 +42,7 @@ namespace Mix.Portal.Controllers
             data.CloneCulture(_culture);
             var tenantId = await base.CreateHandlerAsync(data);
 
-            await _mixTenantService.Reload(_uow);
+            await _mixTenantService.Reload();
             await ReloadTenantConfiguration(data);
             await _uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
@@ -60,7 +60,7 @@ namespace Mix.Portal.Controllers
             tenantConfigService.AppSettings.Domain = data.PrimaryDomain.TrimEnd('/');
             tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
             tenantConfigService.SaveSettings();
-            await _mixTenantService.Reload(_uow);
+            await _mixTenantService.Reload();
         }
 
         protected override async Task DeleteHandler(MixTenantViewModel data)
@@ -71,7 +71,7 @@ namespace Mix.Portal.Controllers
             }
 
             await base.DeleteHandler(data);
-            await _mixTenantService.Reload(_uow);
+            await _mixTenantService.Reload();
             // Complete and close cms context transaction (signalr cannot open parallel context)
             await _uow.CompleteAsync();
 
