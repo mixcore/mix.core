@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base
@@ -10,19 +11,7 @@ namespace Mix.Lib.Base
     public abstract class MixTenantApiControllerBase : Controller
     {
         protected IHttpContextAccessor _httpContextAccessor;
-        protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
-        {
-            get
-            {
-                if (_currentTenant == null)
-                {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-                }
-                return _currentTenant;
-            }
-        }
+        protected ISession Session;
         protected string _lang;
         protected MixCulture _culture;
         protected readonly IQueueService<MessageQueueModel> _queueService;
@@ -30,17 +19,17 @@ namespace Mix.Lib.Base
         protected readonly MixIdentityService _mixIdentityService;
         protected readonly MixService _mixService;
         protected readonly TranslatorService _translator;
-        protected readonly EntityRepository<MixCmsContext, MixCulture, int> _cultureRepository;
+        protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         public MixTenantApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService) : base()
+            IQueueService<MessageQueueModel> queueService)
         {
             _httpContextAccessor = httpContextAccessor;
-            _session = httpContextAccessor.HttpContext.Session;
+            Session = httpContextAccessor.HttpContext.Session;
             _configuration = configuration;
             _mixService = mixService;
             _translator = translator;

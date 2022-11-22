@@ -23,13 +23,13 @@ namespace Mixcore.Controllers
         [Route("admin/{appFolder?}/{param1?}/{param2?}/{param3?}/{param4?}")]
         public IActionResult Index()
         {
-            if (isValid)
+            if (IsValid)
             {
                 return View();
             }
             else
             {
-                return Redirect(_redirectUrl);
+                return Redirect(RedirectUrl);
             }
         }
 
@@ -62,8 +62,8 @@ namespace Mixcore.Controllers
             // If IP retricted in appsettings
             if (ForbiddenPortal)
             {
-                isValid = false;
-                _redirectUrl = "/403";
+                IsValid = false;
+                RedirectUrl = "/403";
             }
 
             base.ValidateRequest();
@@ -71,15 +71,15 @@ namespace Mixcore.Controllers
             // If this site has not been inited yet
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                isValid = false;
+                IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    _redirectUrl = "Init";
+                    RedirectUrl = "Init";
                 }
                 else
                 {
                     var status = GlobalConfigService.Instance.AppSettings.InitStatus;
-                    _redirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{status}";
                 }
             }
         }
