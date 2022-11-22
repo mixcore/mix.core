@@ -42,14 +42,14 @@ namespace Mix.Lib.Services
         protected readonly DatabaseService _databaseService;
         public List<RoleViewModel> Roles { get; set; }
         protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        public MixTenantSystemViewModel CurrentTenant
+        private MixTenantSystemModel _currentTenant;
+        public MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }

@@ -18,7 +18,7 @@ namespace Mix.Tenancy.Domain.Services
         {
             InitTenantViewModel vm = new(_context, model);
             await vm.SaveAsync();
-            await _mixTenantService.Reload(_cmsUow);
+            await _mixTenantService.Reload();
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;
             GlobalConfigService.Instance.SaveSettings();
 

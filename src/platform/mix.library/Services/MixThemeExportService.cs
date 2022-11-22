@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;
 
@@ -11,7 +12,7 @@ namespace Mix.Lib.Services
     {
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCmsContext _context;
-        private MixRepoDbRepository _repository;
+        private readonly MixRepoDbRepository _repository;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
         private MixThemeViewModel _exporTheme;
@@ -20,18 +21,18 @@ namespace Mix.Lib.Services
         private string webPath;
         private string fileName;
         private ISession _session;
-        public MixTenantSystemViewModel CurrentTenant
+        public MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
         }
-        private MixTenantSystemViewModel _currentTenant;
+        private MixTenantSystemModel _currentTenant;
         public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository)
         {
             _session = httpContext.HttpContext.Session;

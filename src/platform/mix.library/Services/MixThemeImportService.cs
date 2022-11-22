@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.RepoDb.Services;
 
 namespace Mix.Lib.Services
@@ -17,18 +18,18 @@ namespace Mix.Lib.Services
         private readonly DbContext _runtimeDbContext;
         private SiteDataViewModel _siteData;
         private ISession _session;
-        public MixTenantSystemViewModel CurrentTenant
+        public MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
         }
-        private MixTenantSystemViewModel _currentTenant;
+        private MixTenantSystemModel _currentTenant;
         private MixCulture _currentCulture;
         #region Dictionaries
 

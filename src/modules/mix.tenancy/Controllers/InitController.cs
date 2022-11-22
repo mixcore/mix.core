@@ -88,7 +88,7 @@ namespace Mix.Tenancy.Controllers
                     await _initCmsService.InitTenantAsync(model);
                     await _quartzService.LoadScheduler();
                     var uow = new UnitOfWorkInfo(new MixCmsContext(_databaseService));
-                    await _mixTenantService.Reload(uow);
+                    await _mixTenantService.Reload();
                     Session.Put(MixRequestQueryKeywords.Tenant, _mixTenantService.AllTenants.First());
                     _mixEndpointService.SetDefaultDomain($"//{model.PrimaryDomain}");
                     await uow.CompleteAsync();
