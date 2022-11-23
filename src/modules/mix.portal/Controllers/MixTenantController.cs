@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
-using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -25,10 +24,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             TenantUserManager userManager,
             MixCmsAccountContext accContext,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             MixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;
@@ -41,14 +40,13 @@ namespace Mix.Portal.Controllers
             data.InitDomain();
             data.CloneCulture(Culture);
             var tenantId = await base.CreateHandlerAsync(data);
-
-            await ReloadTenantConfiguration(data);
             await Uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(MixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
 
-            await _mixTenantService.Reload();
+            // Save setting and reload tenant
+            await ReloadTenantConfiguration(data);
 
             return tenantId;
         }
@@ -72,10 +70,12 @@ namespace Mix.Portal.Controllers
 
             await base.DeleteHandler(data);
 
-            // Complete and close cms context transaction (signalr cannot open parallel context)
+            // Complete and close CMS context transaction (SignalR cannot open parallel context).
             await Uow.CompleteAsync();
 
+            // Reload tenants after deleting the tenant.
             await _mixTenantService.Reload();
+
             await DeleteTenantAccount(data.Id);
         }
 
