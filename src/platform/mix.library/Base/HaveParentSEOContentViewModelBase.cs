@@ -2,14 +2,14 @@
 {
     public abstract class HaveParentSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-         where TDbContext : MixCmsContext
-         where TPrimaryKey : IComparable
+        where TDbContext : MixCmsContext
+        where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : HaveParentSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Constructors
 
-        public HaveParentSEOContentViewModelBase()
+        protected HaveParentSEOContentViewModelBase()
         {
         }
 
@@ -33,6 +33,7 @@
             {
                 ParentId = await CreateParentAsync(cancellationToken);
             }
+
             return await base.SaveHandlerAsync(cancellationToken);
         }
 

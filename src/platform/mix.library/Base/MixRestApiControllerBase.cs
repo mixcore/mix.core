@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
-using System.Reflection;
 
 namespace Mix.Lib.Base
 {
@@ -15,12 +13,10 @@ namespace Mix.Lib.Base
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
-        protected readonly TDbContext _context;
-        protected bool _forbidden;
-        protected UnitOfWorkInfo _uow;
-        protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> _restApiService;
-        protected ConstructorInfo classConstructor = typeof(TView).GetConstructor(new Type[] { typeof(TEntity) });
+        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository;
+        protected readonly TDbContext Context;
+        protected UnitOfWorkInfo Uow;
+        protected readonly RestApiService<TView, TDbContext, TEntity, TPrimaryKey> RestApiService;
 
         public MixRestHandlerApiControllerBase(
              IHttpContextAccessor httpContextAccessor,
@@ -32,38 +28,38 @@ namespace Mix.Lib.Base
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = (TDbContext)uow.ActiveDbContext;
-            _restApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
-            _uow = uow;
-            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
+            Context = (TDbContext)uow.ActiveDbContext;
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
+            Uow = uow;
+            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
         }
 
         #region Command Handlers
 
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
         {
-            return await _restApiService.CreateHandlerAsync(data); ;
+            return await RestApiService.CreateHandlerAsync(data);
         }
 
         protected virtual Task UpdateHandler(TPrimaryKey id, TView data)
         {
-            return _restApiService.UpdateHandler(id, data);
+            return RestApiService.UpdateHandler(id, data);
         }
 
         protected virtual Task DeleteHandler(TView data)
         {
-            return _restApiService.DeleteHandler(data);
+            return RestApiService.DeleteHandler(data);
         }
 
 
         protected virtual Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
         {
-            return _restApiService.PatchHandler(id, data, properties);
+            return RestApiService.PatchHandler(id, data, properties);
         }
 
         protected virtual Task SaveManyHandler(List<TView> data)
         {
-            return _restApiService.SaveManyHandler(data);
+            return RestApiService.SaveManyHandler(data);
         }
 
         #endregion
@@ -72,12 +68,12 @@ namespace Mix.Lib.Base
         protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-            return _restApiService.SearchHandler(req, searchRequest);
+            return RestApiService.SearchHandler(req, searchRequest);
         }
 
         protected virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
         {
-            return _restApiService.ParseSearchResult(req, result);
+            return RestApiService.ParseSearchResult(req, result);
         }
 
         #endregion
@@ -86,12 +82,12 @@ namespace Mix.Lib.Base
 
         protected virtual SearchQueryModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
-            return _restApiService.BuildSearchRequest(req);
+            return RestApiService.BuildSearchRequest(req);
         }
 
         protected virtual Task<TView> GetById(TPrimaryKey id)
         {
-            return _restApiService.GetById(id);
+            return RestApiService.GetById(id);
         }
 
         #endregion

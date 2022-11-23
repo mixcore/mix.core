@@ -39,16 +39,16 @@ namespace Mix.Portal.Controllers
         protected override async Task<int> CreateHandlerAsync(MixTenantViewModel data)
         {
             data.InitDomain();
-            data.CloneCulture(_culture);
+            data.CloneCulture(Culture);
             var tenantId = await base.CreateHandlerAsync(data);
 
-            await _mixTenantService.Reload();
             await ReloadTenantConfiguration(data);
-            await _uow.CompleteAsync();
-            var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
+            await Uow.CompleteAsync();
+            var user = await _userManager.FindByIdAsync(MixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
 
+            await _mixTenantService.Reload();
 
             return tenantId;
         }
@@ -71,10 +71,11 @@ namespace Mix.Portal.Controllers
             }
 
             await base.DeleteHandler(data);
-            await _mixTenantService.Reload();
-            // Complete and close cms context transaction (signalr cannot open parallel context)
-            await _uow.CompleteAsync();
 
+            // Complete and close cms context transaction (signalr cannot open parallel context)
+            await Uow.CompleteAsync();
+
+            await _mixTenantService.Reload();
             await DeleteTenantAccount(data.Id);
         }
 

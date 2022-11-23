@@ -128,7 +128,5 @@ namespace Mix.Lib.Base
                 RedirectUrl = "/maintenance";
             }
         }
-
-
     }
 }

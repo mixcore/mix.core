@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
 using Mix.Lib.Models;
 using Mix.Lib.Services;
@@ -8,51 +7,44 @@ namespace Mix.Lib.Middlewares
 {
     public sealed class TenantSecurityMiddleware
     {
-        private readonly MixEndpointService _mixEndpointService;
-        private readonly MixConfigurationService _configService;
-        private readonly RequestDelegate next;
-        private readonly IQueueService<MessageQueueModel> _queueService;
-        private readonly MixTenantService _mixTenantService;
-        public TenantSecurityMiddleware(
-            RequestDelegate next,
-            IQueueService<MessageQueueModel> queueService,
-            MixTenantService mixTenantService,
-            MixEndpointService mixEndpointService,
-            MixConfigurationService configService)
+        private readonly RequestDelegate _next;
+
+        public TenantSecurityMiddleware(RequestDelegate next)
         {
-            this.next = next;
-            _queueService = queueService;
-            _mixTenantService = mixTenantService;
-            _mixEndpointService = mixEndpointService;
-            _configService = configService;
+            _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(
+            HttpContext context,
+            MixTenantService mixTenantService,
+            MixConfigurationService configService,
+            MixEndpointService mixEndpointService)
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
-                await next.Invoke(context);
+                await _next.Invoke(context);
             }
             else
             {
 
-                if (_mixTenantService.AllTenants == null)
+                if (mixTenantService.AllTenants == null)
                 {
-                    await _mixTenantService.Reload();
+                    await mixTenantService.Reload();
                 }
 
                 var currentTenant = context.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 if (currentTenant == null || currentTenant.Domains.All(m => m.Host != context.Request.Headers.Host))
                 {
-                    currentTenant = _mixTenantService.GetTenant(context.Request.Headers.Host);
+                    currentTenant = mixTenantService.GetTenant(context.Request.Headers.Host);
                     context.Session.Put(MixRequestQueryKeywords.Tenant, currentTenant);
-                    _mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
+                    mixEndpointService.SetDefaultDomain($"https://{currentTenant.PrimaryDomain}");
                 }
-                if (_configService.Configs == null)
+                if (configService.Configs == null)
                 {
-                    await _configService.Reload();
+                    await configService.Reload();
                 }
-                await next.Invoke(context);
+
+                await _next.Invoke(context);
             }
         }
     }

@@ -20,25 +20,25 @@ namespace Mix.Common.Controllers
     public class SharedApiController : MixApiControllerBase
     {
         private readonly ApplicationLifetime _applicationLifetime;
-        protected UnitOfWorkInfo _uow;
-        protected readonly MixCmsContext _context;
+        protected UnitOfWorkInfo Uow;
+        protected readonly MixCmsContext Context;
         private readonly ViewQueryRepository<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel> _configRepo;
         private readonly ViewQueryRepository<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel> _langRepo;
         private readonly IActionDescriptorCollectionProvider _routeProvider;
+
         public SharedApiController(
-            IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             IActionDescriptorCollectionProvider routeProvider,
             MixIdentityService mixIdentityService,
             MixCmsContext context, IQueueService<MessageQueueModel> queueService, ApplicationLifetime applicationLifetime)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
+            : base(configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = context;
-            _uow = new(_context);
-            _configRepo = MixConfigurationContentViewModel.GetRepository(_uow);
-            _langRepo = MixLanguageContentViewModel.GetRepository(_uow);
+            Context = context;
+            Uow = new(Context);
+            _configRepo = MixConfigurationContentViewModel.GetRepository(Uow);
+            _langRepo = MixLanguageContentViewModel.GetRepository(Uow);
             _routeProvider = routeProvider;
             _applicationLifetime = applicationLifetime;
         }
@@ -52,7 +52,7 @@ namespace Mix.Common.Controllers
             string key = encryptMessage.Key
                         ?? GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string msg = encryptMessage.ObjectData != null
-                    ? encryptMessage.ObjectData.ToString(Newtonsoft.Json.Formatting.None)
+                    ? encryptMessage.ObjectData.ToString(Formatting.None)
                     : encryptMessage.StringData;
             var result = AesEncryptionHelper.EncryptString(msg, key);
             return Ok(result);
@@ -120,8 +120,7 @@ namespace Mix.Common.Controllers
         {
             try
             {
-                var data = MixFileHelper.GetFile(
-                    name, MixFileExtensions.Json, MixFolders.AppConfigFolder, false);
+                var data = MixFileHelper.GetFile(name, MixFileExtensions.Json, MixFolders.AppConfigFolder);
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);
             }
@@ -140,7 +139,7 @@ namespace Mix.Common.Controllers
             try
             {
                 var data = MixFileHelper.GetFile(
-                    name, MixFileExtensions.Json, MixFolders.AppConfigFolder, false);
+                    name, MixFileExtensions.Json, MixFolders.AppConfigFolder);
                 if (data != null)
                 {
                     data.Content = settings.ToString();
@@ -194,7 +193,7 @@ namespace Mix.Common.Controllers
             try
             {
                 var data = MixFileHelper.GetFile(
-                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder, false);
+                    name, MixFileExtensions.Json, MixFolders.JsonDataFolder);
                 var obj = JObject.Parse(data.Content);
                 return Ok(obj);
             }

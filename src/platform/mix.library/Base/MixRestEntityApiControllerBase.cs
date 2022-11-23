@@ -67,7 +67,7 @@ namespace Mix.Lib.Base
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
-            var data = await _repository.GetSingleAsync(id);
+            var data = await Repository.GetSingleAsync(id);
             await DeleteHandler(data);
             return Ok();
         }
@@ -75,7 +75,7 @@ namespace Mix.Lib.Base
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
-            var data = await _repository.GetSingleAsync(id);
+            var data = await Repository.GetSingleAsync(id);
             await PatchHandler(id, data, properties);
             return Ok();
         }
@@ -101,38 +101,38 @@ namespace Mix.Lib.Base
 
         protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TEntity data)
         {
-            await _repository.CreateAsync(data);
-            _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
+            await Repository.CreateAsync(data);
+            QueueService.PushMessage(data, MixRestAction.Post.ToString(), true);
             return data.Id;
         }
 
         protected virtual async Task UpdateHandler(string id, TEntity data)
         {
-            await _repository.UpdateAsync(data);
-            await _cacheService.RemoveCacheAsync(id, typeof(TEntity));
-            _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
+            await Repository.UpdateAsync(data);
+            await CacheService.RemoveCacheAsync(id, typeof(TEntity));
+            QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         protected virtual async Task DeleteHandler(TEntity data)
         {
-            await _repository.DeleteAsync(data);
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity));
-            _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
+            await Repository.DeleteAsync(data);
+            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TEntity));
+            QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
 
         protected virtual async Task PatchHandler(TPrimaryKey id, TEntity data, IEnumerable<EntityPropertyModel> properties)
         {
-            await _repository.SaveFieldsAsync(data, properties);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity));
-            _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
+            await Repository.SaveFieldsAsync(data, properties);
+            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TEntity));
+            QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
         protected virtual async Task SaveManyHandler(List<TEntity> data)
         {
             foreach (var item in data)
             {
-                await _repository.SaveAsync(item);
+                await Repository.SaveAsync(item);
             }
         }
 
