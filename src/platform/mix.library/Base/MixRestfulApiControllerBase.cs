@@ -50,7 +50,7 @@ namespace Mix.Lib.Base
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
-            var data = await _repository.GetSingleAsync(id);
+            var data = await Repository.GetSingleAsync(id);
             if (data != null)
             {
                 await DeleteHandler(data);
@@ -62,7 +62,7 @@ namespace Mix.Lib.Base
         [HttpPatch("{id}")]
         public async Task<IActionResult> Patch(TPrimaryKey id, [FromBody] IEnumerable<EntityPropertyModel> properties)
         {
-            var data = await _repository.GetSingleAsync(id);
+            var data = await Repository.GetSingleAsync(id);
             if (data == null)
             {
                 return NotFound();
@@ -90,7 +90,7 @@ namespace Mix.Lib.Base
         [HttpPut("update-priority/{id}")]
         public async Task<ActionResult> UpdatePriority(UpdatePriorityDto<TPrimaryKey> dto)
         {
-            var data = await _repository.GetSingleAsync(dto.Id);
+            var data = await Repository.GetSingleAsync(dto.Id);
             if (data == null)
             {
                 return NotFound();
@@ -98,7 +98,7 @@ namespace Mix.Lib.Base
 
             var min = Math.Min(data.Priority, dto.Priority);
             var max = Math.Max(data.Priority, dto.Priority);
-            var query = await _repository.GetListAsync(m => !m.Id.Equals(dto.Id) && m.Priority >= min & m.Priority <= max);
+            var query = await Repository.GetListAsync(m => !m.Id.Equals(dto.Id) && m.Priority >= min & m.Priority <= max);
             int start = min;
             if (dto.Priority == min)
             {

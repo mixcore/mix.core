@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace Mix.Lib.Base
 {
@@ -35,8 +34,5 @@ namespace Mix.Lib.Base
         #region Overrides
 
         #endregion
-
-
-
     }
 }

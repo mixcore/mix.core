@@ -29,9 +29,8 @@ namespace Mix.Lib.Base
             TranslatorService translator,
             EntityRepository<MixCmsContext, MixCulture, int> cultureRepository,
             MixIdentityService mixIdentityService,
-            MixCmsContext context
-,
-            IHttpContextAccessor httpContextAccessor) : base()
+            MixCmsContext context,
+            IHttpContextAccessor httpContextAccessor)
         {
             Uow = new UnitOfWorkInfo(context);
             Logger = logger;
@@ -40,7 +39,7 @@ namespace Mix.Lib.Base
             CultureRepository = cultureRepository;
             MixIdentityService = mixIdentityService;
             HttpContextAccessor = httpContextAccessor;
-            Session = httpContextAccessor.HttpContext.Session;
+            Session = httpContextAccessor.HttpContext?.Session;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -48,7 +47,7 @@ namespace Mix.Lib.Base
             base.OnActionExecuting(context);
             if (!GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                Lang = RouteData?.Values["lang"] != null
+                Lang = RouteData.Values["lang"] != null
                     ? RouteData.Values["lang"].ToString()
                     : CurrentTenant.Configurations.DefaultCulture;
                 Culture = CultureRepository.GetFirst(c => c.Specificulture == Lang);

@@ -53,7 +53,7 @@ namespace Mix.Services.Permission.Controllers
         [HttpGet("get-my-permissions")]
         public async Task<ActionResult<List<MixPermissionViewModel>>> GetMyPermissions()
         {
-            var userId = _mixIdentityService.GetClaim(User, MixClaims.Id);
+            var userId = MixIdentityService.GetClaim(User, MixClaims.Id);
             if (!string.IsNullOrEmpty(userId))
             {
                 var permissions = await _permissionService.GetPermissionAsyncs(Guid.Parse(userId));

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace Mix.Lib.Base
 {
@@ -16,14 +15,13 @@ namespace Mix.Lib.Base
         where TEntity : class, IEntity<TPrimaryKey>
         where TDbContext : DbContext
     {
-        protected readonly EntityRepository<TDbContext, TEntity, TPrimaryKey> _repository;
-        protected readonly TDbContext _context;
-        protected bool _forbidden;
-        protected UnitOfWorkInfo _uow;
-        protected UnitOfWorkInfo _cacheUOW;
-        protected MixCacheDbContext _cacheDbContext;
-        protected ConstructorInfo classConstructor = typeof(TEntity).GetConstructor(Array.Empty<Type>());
-        protected MixCacheService _cacheService;
+        protected readonly EntityRepository<TDbContext, TEntity, TPrimaryKey> Repository;
+        protected readonly TDbContext Context;
+        protected UnitOfWorkInfo Uow;
+        protected UnitOfWorkInfo CacheUow;
+        protected MixCacheDbContext CacheDbContext;
+        protected MixCacheService CacheService;
+
         public MixQueryEntityApiControllerBase(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -34,28 +32,28 @@ namespace Mix.Lib.Base
             IQueueService<MessageQueueModel> queueService, MixCacheDbContext cacheDbContext)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = context;
-            _uow = new(_context);
-            _repository = new(_uow);
-            _cacheDbContext = cacheDbContext;
-            _cacheUOW = new(_cacheDbContext);
-            _cacheService = new();
+            Context = context;
+            Uow = new(Context);
+            Repository = new(Uow);
+            CacheDbContext = cacheDbContext;
+            CacheUow = new(CacheDbContext);
+            CacheService = new();
         }
 
         #region Overrides
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (_uow.ActiveTransaction != null)
+            if (Uow.ActiveTransaction != null)
             {
-                _uow.Complete();
+                Uow.Complete();
             }
-            _context.Dispose();
+            Context.Dispose();
 
-            if (_cacheUOW.ActiveTransaction != null)
+            if (CacheUow.ActiveTransaction != null)
             {
-                _cacheUOW.Complete();
+                CacheUow.Complete();
             }
-            _cacheDbContext.Dispose();
+            CacheDbContext.Dispose();
             base.OnActionExecuted(context);
         }
         #endregion
@@ -68,15 +66,15 @@ namespace Mix.Lib.Base
             var searchRequest = BuildSearchRequest(req);
             if (!string.IsNullOrEmpty(req.Columns))
             {
-                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
+                Repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
-            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 List<object> objects = new();
                 foreach (var item in result.Items)
                 {
-                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers));
+                    objects.Add(ReflectionHelper.GetMembers(item, Repository.SelectedMembers));
                 }
                 return Ok(new PagingResponseModel<object>()
                 {
@@ -100,15 +98,13 @@ namespace Mix.Lib.Base
         [HttpGet("default")]
         public ActionResult<TEntity> GetDefault()
         {
-            var result = (TEntity)Activator.CreateInstance(typeof(TEntity), new[] { _uow });
+            var result = (TEntity)Activator.CreateInstance(typeof(TEntity), Uow);
             return Ok(result);
         }
 
         #endregion Routes
 
         #region Helpers
-
-
 
         protected virtual SearchEntityModel<TEntity, TPrimaryKey> BuildSearchRequest(SearchRequestDto req)
         {
@@ -117,7 +113,7 @@ namespace Mix.Lib.Base
                 req.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
-            Expression<Func<TEntity, bool>> andPredicate = BuildAndPredicate(req);
+            var andPredicate = BuildAndPredicate(req);
 
             return new SearchEntityModel<TEntity, TPrimaryKey>(req, andPredicate);
         }
@@ -129,7 +125,7 @@ namespace Mix.Lib.Base
             if (req.Culture != null)
             {
                 andPredicate = andPredicate.AndAlso(ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.Specificulture, req.Culture, Heart.Enums.ExpressionMethod.Equal));
+                        MixRequestQueryKeywords.Specificulture, req.Culture, ExpressionMethod.Equal));
             }
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
@@ -143,7 +139,7 @@ namespace Mix.Lib.Base
 
         protected virtual async Task<TEntity> GetById(TPrimaryKey id)
         {
-            return await _repository.GetSingleAsync(id);
+            return await Repository.GetSingleAsync(id);
         }
 
         #endregion

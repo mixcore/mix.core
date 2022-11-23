@@ -27,7 +27,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("copy/{id}")]
         public async Task<ActionResult<MixTemplateViewModel>> Copy(int id)
         {
-            var getData = await _repository.GetSingleAsync(id);
+            var getData = await Repository.GetSingleAsync(id);
             if (getData != null)
             {
                 var copyResult = await getData.CopyAsync();

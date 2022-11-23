@@ -7,9 +7,7 @@ namespace Mix.Tenancy.Domain.Services
     {
         public async Task InitDbContext(InitCmsDto model)
         {
-            _databaseService.InitConnectionStrings(
-                model.ConnectionString,
-                model.DatabaseProvider);
+            _databaseService.InitConnectionStrings(model.ConnectionString, model.DatabaseProvider);
 
             await _databaseService.UpdateMixCmsContextAsync();
         }
@@ -21,7 +19,6 @@ namespace Mix.Tenancy.Domain.Services
             await _mixTenantService.Reload();
             GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.InitTenant;
             GlobalConfigService.Instance.SaveSettings();
-
         }
     }
 }
