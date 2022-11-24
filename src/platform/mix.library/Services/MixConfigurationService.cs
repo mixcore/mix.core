@@ -26,7 +26,7 @@ namespace Mix.Lib.Services
                 {
                     uow = new(new MixCmsContext(_databaseService));
                     Configs = await MixConfigurationContentViewModel.GetRepository(uow).GetAllAsync(m => m.MixTenantId == CurrentTenant.Id);
-                    await uow.DisposeAsync();
+                    uow.Dispose();
                 }
             }
         }

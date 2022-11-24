@@ -37,6 +37,21 @@ namespace Mix.Lib.Base
 
         #endregion
 
+        protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)
+        {
+            var searchRequest = base.BuildSearchRequest(req);
+            
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                int.TryParse(Request.Query["parentId"], out int parentId),
+                m => m.ParentId == parentId);
+
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                int.TryParse(Request.Query["childId"], out int childId),
+                m => m.ChildId == childId);
+
+            return searchRequest;
+        }
+
         protected SearchQueryModel<TEntity, int> BuildSearchByParentRequest(SearchAssociationDto request)
         {
             var searchRequest = base.BuildSearchRequest(request);

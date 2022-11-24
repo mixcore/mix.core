@@ -10,11 +10,12 @@ using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
 using RepoDb.Interfaces;
+using System;
 using System.Dynamic;
 
 namespace Mix.RepoDb.Services
 {
-    public class MixDbService
+    public class MixDbService: IDisposable
     {
         private IDatabaseConstants _dbConstants;
         private MixRepoDbRepository _repository;
@@ -111,7 +112,7 @@ namespace Mix.RepoDb.Services
             string cnn = $"Data Source=MixContent/Backup/backup_{databaseName}.db";
             using var ctx = new BackupDbContext(cnn);
             ctx.Database.EnsureCreated();
-
+            ctx.Dispose();
             _backupRepository.Init(databaseName, MixDatabaseProvider.SQLITE, cnn);
 
         }
@@ -155,9 +156,13 @@ namespace Mix.RepoDb.Services
         {
             List<string> colSqls = new List<string>();
             string tableName = database.SystemName.ToLower();
+            string backtickOpen =
+                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "[";
+            string backtickClose =
+                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "]";
             foreach (var col in database.Columns)
             {
-                colSqls.Add(GenerateColumnSql(col));
+                colSqls.Add(GenerateColumnSql(col, backtickOpen, backtickClose));
             }
 
             var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls);
@@ -197,12 +202,12 @@ namespace Mix.RepoDb.Services
             };
         }
 
-        private string GenerateColumnSql(MixDatabaseColumnViewModel col)
+        private string GenerateColumnSql(MixDatabaseColumnViewModel col, string backtickOpen, string backtickClose)
         {
 
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
-            return $"{_dbConstants.BacktickOpen}{col.SystemName.ToTitleCase()}{_dbConstants.BacktickClose} {colType} {nullable}";
+            return $"{backtickOpen}{col.SystemName.ToTitleCase()}{backtickClose} {colType} {nullable}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)
@@ -246,6 +251,12 @@ namespace Mix.RepoDb.Services
                 default:
                     return $"{_dbConstants.NString}({maxLength ?? 250})";
             }
+        }
+
+        public void Dispose()
+        {
+            _repository.Dispose();
+            _backupRepository.Dispose();
         }
         #endregion
 

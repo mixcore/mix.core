@@ -50,9 +50,20 @@ namespace Mix.Common.Domain.ViewModels
 
         public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            mixRepoDbRepository.InitTableName(MixDatabaseName);
-            var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
-            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            if (AdditionalData == null)
+            {
+                mixRepoDbRepository.InitTableName(MixDatabaseName);
+                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
+                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName);
+                AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+                foreach (var item in relationships)
+                {
+                    mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
+                    var arr = await mixRepoDbRepository.GetListByParentAsync(MixContentType.Post, obj.Id);
+                    AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
+                }
+                
+            }
         }
         #endregion
 
