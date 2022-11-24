@@ -1,26 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 
 namespace Mix.Lib.Base
 {
     public abstract class TenantServiceBase
     {
-        protected IHttpContextAccessor _httpContextAccessor;
+        protected IHttpContextAccessor HttpContextAccessor;
 
         protected TenantServiceBase(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            HttpContextAccessor = httpContextAccessor;
         }
 
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
+        private MixTenantSystemModel _currentTenant;
+
+        protected MixTenantSystemModel CurrentTenant
         {
             get
             {
-                if (_currentTenant == null)
+                if (_currentTenant != null)
                 {
-                    _currentTenant = _httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    return _currentTenant;
                 }
+
+                var httpContext = HttpContextAccessor.HttpContext;
+                if (httpContext is not null)
+                {
+                    _currentTenant = httpContext.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                }
+
                 return _currentTenant;
             }
         }

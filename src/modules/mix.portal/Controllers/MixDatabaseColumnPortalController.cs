@@ -33,7 +33,7 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult<List<MixDatabaseColumnViewModel>>> Init(string mixDatabase)
         {
             int.TryParse(mixDatabase, out int mixDatabaseId);
-            var getData = await _repository.GetListAsync(
+            var getData = await Repository.GetListAsync(
                 f => f.MixDatabaseName == mixDatabase || f.MixDatabaseId == mixDatabaseId);
             return Ok(getData);
         }
