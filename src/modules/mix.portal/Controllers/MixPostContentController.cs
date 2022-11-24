@@ -50,7 +50,7 @@ namespace Mix.Portal.Controllers
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => allowIds.Contains(m.Id));
                 }
             }
-            var result = await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
             return Ok(ParseSearchResult(req, result));
         }
 

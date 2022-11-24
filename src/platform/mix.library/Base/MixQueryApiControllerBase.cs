@@ -51,8 +51,13 @@ namespace Mix.Lib.Base
         [HttpGet($"default/{MixRequestQueryKeywords.Specificulture}")]
         public ActionResult<TView> GetDefault()
         {
-            var result = (TView)Activator.CreateInstance(typeof(TView), new[] { _uow });
-            result.InitDefaultValues(_culture?.Specificulture, _culture?.Id);
+            var result = (TView)Activator.CreateInstance(typeof(TView), Uow);
+            if (result == null)
+            {
+                return BadRequest($"Cannot create {nameof(TView)} instance.");
+            }
+
+            result.InitDefaultValues(Culture?.Specificulture, Culture?.Id);
             result.ExpandView();
             return Ok(result);
         }

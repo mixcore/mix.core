@@ -40,7 +40,7 @@ namespace Mix.Portal.Domain.Services
                 app.BaseHref = appFolder;
                 app.MixTenantId = CurrentTenant.Id;
                 app.TemplateId = template.Id;
-                app.CreatedBy = _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext.User, MixClaims.Username);
+                app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username);
                 await app.SaveAsync();
                 return app;
             }
@@ -74,7 +74,7 @@ namespace Mix.Portal.Domain.Services
                         MixTenantId = CurrentTenant.Id,
                         Scripts = string.Empty,
                         Styles = string.Empty,
-                        CreatedBy = _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext.User, MixClaims.Username)
+                        CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)
                     };
                     await template.SaveAsync();
                     _queueService.PushMessage(template, MixRestAction.Post.ToString(), true);
@@ -121,19 +121,19 @@ namespace Mix.Portal.Domain.Services
         #region Helpers
         public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
         {
-            var address = _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
+            var address = HttpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
             if (string.IsNullOrEmpty(address))
             {
-                address = _httpContextAccessor.HttpContext.Request.Host.Value;
+                address = HttpContextAccessor.HttpContext.Request.Host.Value;
             }
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
-                    new JProperty("id",  _httpContextAccessor.HttpContext.Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("id",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
-                    new JProperty("ip_address",  _httpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", _mixIdentityService.GetClaim(_httpContextAccessor.HttpContext.User, MixClaims.Username)),
-                    new JProperty("request_url", _httpContextAccessor.HttpContext.Request.Path.Value),
+                    new JProperty("ip_address",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)),
+                    new JProperty("request_url", HttpContextAccessor.HttpContext.Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),
                     new JProperty("message", message)

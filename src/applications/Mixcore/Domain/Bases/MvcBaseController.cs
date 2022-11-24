@@ -32,15 +32,15 @@ namespace Mixcore.Domain.Bases
             // If this site has not been inited yet
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                isValid = false;
+                IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    _redirectUrl = "Init";
+                    RedirectUrl = "Init";
                 }
                 else
                 {
                     var status = GlobalConfigService.Instance.AppSettings.InitStatus;
-                    _redirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{status}";
                 }
             }
         }

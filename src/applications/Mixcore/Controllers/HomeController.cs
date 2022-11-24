@@ -2,6 +2,7 @@
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
+using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
 using System.Linq.Expressions;
@@ -10,7 +11,7 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
-
+        private readonly MixRepoDbRepository _repoDbRepository;
         private readonly ILogger<HomeController> _logger;
         public HomeController(
             IHttpContextAccessor httpContextAccessor,
@@ -20,10 +21,12 @@ namespace Mixcore.Controllers
             MixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
-            UnitOfWorkInfo<MixCmsContext> uow)
+            UnitOfWorkInfo<MixCmsContext> uow,
+            MixRepoDbRepository repoDbRepository)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
         {
             _logger = logger;
+            _repoDbRepository = repoDbRepository;
         }
 
         protected override void ValidateRequest()
@@ -33,15 +36,15 @@ namespace Mixcore.Controllers
             // If this site has not been inited yet
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                isValid = false;
+                IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    _redirectUrl = "Init";
+                    RedirectUrl = "Init";
                 }
                 else
                 {
                     var status = GlobalConfigService.Instance.AppSettings.InitStatus;
-                    _redirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{status}";
                 }
             }
         }
@@ -50,9 +53,9 @@ namespace Mixcore.Controllers
         public async Task<IActionResult> Index([FromRoute] string seoName)
         {
 
-            if (!isValid)
+            if (!IsValid)
             {
-                return Redirect(_redirectUrl);
+                return Redirect(RedirectUrl);
             }
             var page = await LoadPage(seoName);
             if (page != null)
@@ -74,7 +77,11 @@ namespace Mixcore.Controllers
 
             if (page != null)
             {
-                await page.ExpandView();
+                await page.LoadDataAsync(_repoDbRepository, new(Request)
+                {
+                    SortBy = MixQueryColumnName.Priority
+                });
+
                 ViewData["Tenant"] = CurrentTenant;
                 ViewData["Title"] = page.SeoTitle;
                 ViewData["Description"] = page.SeoDescription;

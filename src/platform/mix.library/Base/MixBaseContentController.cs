@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Mix.Database.Entities.Account;
 using Mix.Lib.Services;
 using System.Linq.Expressions;
 
@@ -14,12 +13,12 @@ namespace Mix.Portal.Controllers
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : MultilingualContentViewModelBase<MixCmsContext, TEntity, TPrimaryKey, TView>
     {
-        protected MixIdentityService _identityService;
-        protected MixContentType _contentType;
-        protected TenantUserManager _userManager;
-        protected MixUser _currentUser;
-        protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        public MixBaseContentController(
+        protected MixIdentityService IdentityService;
+        protected MixContentType ContentType;
+        protected TenantUserManager UserManager;
+        protected UnitOfWorkInfo<MixCmsContext> CmsUow;
+
+        protected MixBaseContentController(
             MixContentType contentType,
             MixIdentityService identityService,
             TenantUserManager userManager,
@@ -28,14 +27,14 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
-            _contentType = contentType;
-            _cmsUOW = cmsUOW;
-            _userManager = userManager;
-            _identityService = identityService;
+            ContentType = contentType;
+            CmsUow = cmsUow;
+            UserManager = userManager;
+            IdentityService = identityService;
         }
 
         #region Routes
@@ -62,7 +61,7 @@ namespace Mix.Portal.Controllers
             var result = await base.SearchHandler(req);
             foreach (var item in result.Items)
             {
-                await item.LoadContributorsAsync(_contentType, _identityService);
+                await item.LoadContributorsAsync(ContentType, IdentityService);
             }
             return result;
         }
@@ -81,18 +80,18 @@ namespace Mix.Portal.Controllers
 
         private async Task UpdateContributor(TPrimaryKey id, bool isCreated)
         {
-            Guid.TryParse(_userManager.GetUserId(HttpContext.User), out var userId);
-            Expression<Func<MixContributor, bool>> expression = m => m.UserId == userId && m.ContentType == _contentType;
+            Guid.TryParse(UserManager.GetUserId(HttpContext.User), out var userId);
+            Expression<Func<MixContributor, bool>> expression = m => m.UserId == userId && m.ContentType == ContentType;
             expression = expression.AndAlsoIf(Guid.TryParse(id.ToString(), out var guidId), m => m.GuidContentId == guidId);
             expression = expression.AndAlsoIf(int.TryParse(id.ToString(), out var integerId), m => m.IntContentId == integerId);
 
-            if (!_cmsUOW.DbContext.MixContributor.Any(expression))
+            if (!CmsUow.DbContext.MixContributor.Any(expression))
             {
-                await _cmsUOW.DbContext.MixContributor.AddAsync(new MixContributor()
+                await CmsUow.DbContext.MixContributor.AddAsync(new MixContributor()
                 {
                     UserId = userId,
                     IsOwner = isCreated,
-                    ContentType = _contentType,
+                    ContentType = ContentType,
                     GuidContentId = guidId,
                     IntContentId = integerId,
                     CreatedDateTime = DateTime.UtcNow,

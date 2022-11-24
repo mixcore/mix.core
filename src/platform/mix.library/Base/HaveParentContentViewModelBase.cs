@@ -2,14 +2,14 @@
 {
     public abstract class HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-         where TDbContext : MixCmsContext
-         where TPrimaryKey : IComparable
+        where TDbContext : MixCmsContext
+        where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : HaveParentContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Constructors
 
-        public HaveParentContentViewModelBase()
+        protected HaveParentContentViewModelBase()
         {
         }
 
@@ -27,7 +27,7 @@
 
         #region Overrides
 
-        protected override async Task<TEntity> SaveHandlerAsync(CancellationToken cancellationToken)
+        protected override async Task<TEntity> SaveHandlerAsync(CancellationToken cancellationToken = default)
         {
             if (IsDefaultId(ParentId))
             {

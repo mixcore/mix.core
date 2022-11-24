@@ -44,15 +44,15 @@ namespace Mixcore.Controllers
             // If this site has not been inited yet
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
-                isValid = false;
+                IsValid = false;
                 if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
-                    _redirectUrl = "Init";
+                    RedirectUrl = "Init";
                 }
                 else
                 {
                     var status = GlobalConfigService.Instance.AppSettings.InitStatus;
-                    _redirectUrl = $"/init/step{status}";
+                    RedirectUrl = $"/init/step{status}";
                 }
             }
         }
@@ -61,13 +61,13 @@ namespace Mixcore.Controllers
         [Route("{id}/{keyword?}")]
         public async Task<IActionResult> Index(int id, string keyword)
         {
-            if (isValid)
+            if (IsValid)
             {
                 return await Page(id, keyword);
             }
             else
             {
-                return Redirect(_redirectUrl);
+                return Redirect(RedirectUrl);
             }
         }
 
@@ -82,21 +82,12 @@ namespace Mixcore.Controllers
             if (page == null)
                 return NotFound();
 
-            if (page.Type == MixPageType.ListPost)
+            await page.LoadDataAsync(_repoDbRepository, new(Request)
             {
-                await page.LoadPostsAsync(new(Request));
-            }
-
-            if (page.AdditionalData == null)
-            {
-                _repoDbRepository.InitTableName(page.MixDatabaseName);
-                var data = await _repoDbRepository.GetSingleByParentAsync(MixContentType.Page, page.Id);
-                page.AdditionalData = data != null ? ReflectionHelper.ParseObject(data) : null;
-                if (page.AdditionalData != null)
-                {
-                    await pageRepo.CacheService.SetAsync($"{page.Id}/{typeof(PageContentViewModel).FullName}", page, typeof(MixPageContent), pageRepo.CacheFilename);
-                }
-            }
+                SortBy = MixQueryColumnName.Priority
+            });
+            page.Posts.Items.Take(2);
+            
 
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;
