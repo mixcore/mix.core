@@ -38,15 +38,6 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
-        {
-            base.InitDefaultValues(language, cultureId);
-        }
-
         #endregion
-
-
-
     }
 }

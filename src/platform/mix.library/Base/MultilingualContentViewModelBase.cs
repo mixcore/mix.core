@@ -6,14 +6,14 @@ namespace Mix.Lib.Base
 {
     public abstract class MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-         where TDbContext : DbContext
-         where TPrimaryKey : IComparable
+        where TDbContext : DbContext
+        where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Constructors
 
-        public MultilingualContentViewModelBase()
+        protected MultilingualContentViewModelBase()
         {
 
         }
@@ -23,7 +23,7 @@ namespace Mix.Lib.Base
         {
         }
 
-        protected MultilingualContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null) 
+        protected MultilingualContentViewModelBase(TEntity entity, UnitOfWorkInfo uowInfo = null)
             : base(entity, uowInfo)
         {
         }
@@ -73,6 +73,5 @@ namespace Mix.Lib.Base
         }
 
         #endregion
-
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
-using Mix.Shared.Services;
 
 namespace Mix.Portal.Controllers
 {
@@ -25,10 +24,10 @@ namespace Mix.Portal.Controllers
             MixIdentityService mixIdentityService,
             TenantUserManager userManager,
             MixCmsAccountContext accContext,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             MixTenantService mixTenantService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _userManager = userManager;
             _accContext = accContext;
@@ -39,16 +38,15 @@ namespace Mix.Portal.Controllers
         protected override async Task<int> CreateHandlerAsync(MixTenantViewModel data)
         {
             data.InitDomain();
-            data.CloneCulture(_culture);
+            data.CloneCulture(Culture);
             var tenantId = await base.CreateHandlerAsync(data);
-
-            await _mixTenantService.Reload(_uow);
-            await ReloadTenantConfiguration(data);
-            await _uow.CompleteAsync();
-            var user = await _userManager.FindByIdAsync(_mixIdentityService.GetClaim(User, MixClaims.Id));
+            await Uow.CompleteAsync();
+            var user = await _userManager.FindByIdAsync(MixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
 
+            // Save setting and reload tenant
+            await ReloadTenantConfiguration(data);
 
             return tenantId;
         }
@@ -60,7 +58,7 @@ namespace Mix.Portal.Controllers
             tenantConfigService.AppSettings.Domain = data.PrimaryDomain.TrimEnd('/');
             tenantConfigService.AppSettings.ApiEncryptKey = AesEncryptionHelper.GenerateCombinedKeys();
             tenantConfigService.SaveSettings();
-            await _mixTenantService.Reload(_uow);
+            await _mixTenantService.Reload();
         }
 
         protected override async Task DeleteHandler(MixTenantViewModel data)
@@ -71,9 +69,12 @@ namespace Mix.Portal.Controllers
             }
 
             await base.DeleteHandler(data);
-            await _mixTenantService.Reload(_uow);
-            // Complete and close cms context transaction (signalr cannot open parallel context)
-            await _uow.CompleteAsync();
+
+            // Complete and close CMS context transaction (SignalR cannot open parallel context).
+            await Uow.CompleteAsync();
+
+            // Reload tenants after deleting the tenant.
+            await _mixTenantService.Reload();
 
             await DeleteTenantAccount(data.Id);
         }

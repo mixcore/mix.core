@@ -40,13 +40,13 @@ namespace Mixcore.Controllers
         [Route("security/{page}")]
         public IActionResult Index(string page)
         {
-            if (isValid)
+            if (IsValid)
             {
                 return View();
             }
             else
             {
-                return Redirect(_redirectUrl);
+                return Redirect(RedirectUrl);
             }
         }
 

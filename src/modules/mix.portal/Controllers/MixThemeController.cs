@@ -52,8 +52,8 @@ namespace Mix.Portal.Controllers
         [Route("save")]
         public async Task<ActionResult<MixThemeViewModel>> Save(MixThemeViewModel data)
         {
-            data.SetUowInfo(_uow);
-            data.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+            data.SetUowInfo(Uow);
+            data.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
             await data.SaveAsync();
             return Ok(data);
         }
@@ -78,7 +78,7 @@ namespace Mix.Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                siteData.CreatedBy = _mixIdentityService.GetClaim(User, MixClaims.Username);
+                siteData.CreatedBy = MixIdentityService.GetClaim(User, MixClaims.Username);
                 siteData.Specificulture ??= CurrentTenant.Configurations.DefaultCulture;
                 var result = await _importService.ImportSelectedItemsAsync(siteData);
                 return Ok(result);
@@ -136,7 +136,7 @@ namespace Mix.Portal.Controllers
                     .Replace("options['baseHref']", $"'{appfolder}'");
 
                 var activeTheme = await themeService.GetActiveTheme();
-                MixTemplateViewModel template = new(_uow)
+                MixTemplateViewModel template = new(Uow)
                 {
                     MixThemeId = activeTheme.Id,
                     FileName = name,
@@ -176,7 +176,7 @@ namespace Mix.Portal.Controllers
         protected override PagingResponseModel<MixThemeViewModel> ParseSearchResult(SearchRequestDto req, PagingResponseModel<MixThemeViewModel> result)
         {
             var data = base.ParseSearchResult(req, result);
-            var activeId = _configService.GetConfig<int>(MixConfigurationNames.ActiveThemeId, _culture.Specificulture);
+            var activeId = _configService.GetConfig<int>(MixConfigurationNames.ActiveThemeId, Culture.Specificulture);
             foreach (var item in data.Items)
             {
                 if (activeId == item.Id)
@@ -204,7 +204,7 @@ namespace Mix.Portal.Controllers
                     new JProperty("id", Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address", Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    new JProperty("user", _mixIdentityService.GetClaim(User, MixClaims.Username)),
+                    new JProperty("user", MixIdentityService.GetClaim(User, MixClaims.Username)),
                     new JProperty("request_url", Request.Path.Value),
                     new JProperty("action", action),
                     new JProperty("status", status),

@@ -5,20 +5,21 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Mix.Database.Entities.Account;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 
 namespace Mix.Lib.Services
 {
     public class TenantUserManager : UserManager<MixUser>
     {
         protected IHttpContextAccessor _httpContextAccessor;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
+        private MixTenantSystemModel _currentTenant;
+        protected MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _httpContextAccessor.HttpContext.Session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _httpContextAccessor.HttpContext.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
