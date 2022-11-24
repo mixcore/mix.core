@@ -58,7 +58,7 @@ namespace Mix.Lib.Middlewares
                 }
             }
 
-            await cmsUow.DisposeAsync();
+            cmsUow.Dispose();
         }
     }
 }
