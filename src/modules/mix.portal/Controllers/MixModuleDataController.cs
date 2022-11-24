@@ -37,8 +37,8 @@ namespace Mix.Portal.Controllers
 
         protected override Task<int> CreateHandlerAsync(MixModuleDataViewModel data)
         {
-            data.Specificulture = _culture.Specificulture;
-            data.MixCultureId = _culture.Id;
+            data.Specificulture = Culture.Specificulture;
+            data.MixCultureId = Culture.Id;
             return base.CreateHandlerAsync(data);
         }
         #endregion
