@@ -34,6 +34,13 @@ namespace Mix.Portal.Controllers
 
             return searchRequest;
         }
+
+        protected override Task<int> CreateHandlerAsync(MixModuleDataViewModel data)
+        {
+            data.Specificulture = _culture.Specificulture;
+            data.MixCultureId = _culture.Id;
+            return base.CreateHandlerAsync(data);
+        }
         #endregion
 
         [HttpGet]

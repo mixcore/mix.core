@@ -86,7 +86,7 @@ namespace Mixcore.Controllers
             {
                 SortBy = MixQueryColumnName.Priority
             });
-
+            page.Posts.Items.Take(2);
             
 
             ViewData["Title"] = page.SeoTitle;

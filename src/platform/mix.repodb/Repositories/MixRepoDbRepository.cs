@@ -23,7 +23,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Mix.RepoDb.Repositories
 {
-    public class MixRepoDbRepository : IAsyncDisposable
+    public class MixRepoDbRepository : IDisposable
     {
         #region Properties
         private IDbConnection _connection;
@@ -66,7 +66,9 @@ namespace Mix.RepoDb.Repositories
             DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
             _tableName = tableName;
+            _connection?.Close();
             InitializeRepoDb();
+            CreateConnection();
         }
 
 
@@ -371,13 +373,10 @@ namespace Mix.RepoDb.Repositories
         }
         public IDbConnection CreateConnection()
         {
-            if (_connection == null)
-            {
-                var connectionType = GetDbConnectionType(DatabaseProvider);
-                _connection = Activator.CreateInstance(connectionType) as IDbConnection;
-                _connection!.ConnectionString = ConnectionString;
-                _connection.Open();
-            }
+            var connectionType = GetDbConnectionType(DatabaseProvider);
+            _connection = Activator.CreateInstance(connectionType) as IDbConnection;
+            _connection!.ConnectionString = ConnectionString;
+            _connection.Open();
             return _connection;
         }
 
@@ -398,10 +397,12 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
+
+
         #endregion
 
 
-        ValueTask IAsyncDisposable.DisposeAsync()
+        public ValueTask DisposeAsync()
         {
             if (_connection != null)
             {
@@ -410,6 +411,13 @@ namespace Mix.RepoDb.Repositories
                 );
             }
             return ValueTask.CompletedTask;
+        }
+        public void Dispose()
+        {
+            if (_connection != null)
+            {
+                _connection.Close();
+            }
         }
     }
 }
