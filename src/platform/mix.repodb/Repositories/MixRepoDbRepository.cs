@@ -53,11 +53,7 @@ namespace Mix.RepoDb.Repositories
             CreateConnection();
         }
 
-        public void SetDbConnection(IDbConnection connection)
-        {
-            _connection = connection;
-        }
-
+        
         #region Methods
         public void InitTableName(string tableName)
         {
@@ -174,6 +170,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
+                _connection.EnsureOpen();
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new List<QueryField>() {
@@ -188,6 +185,7 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
+            finally { _connection.Close(); }
         }
         public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
         {
@@ -376,6 +374,30 @@ namespace Mix.RepoDb.Repositories
                     break;
             }
         }
+
+        public void SetDbConnection(IDbConnection connection)
+        {
+            _connection = connection;
+            switch (DatabaseProvider)
+            {
+                case MixDatabaseProvider.SQLSERVER:
+                    SqlServerBootstrap.Initialize();
+                    break;
+                case MixDatabaseProvider.MySQL:
+                    MySqlConnectorBootstrap.Initialize();
+                    break;
+                case MixDatabaseProvider.PostgreSQL:
+                    PostgreSqlBootstrap.Initialize();
+                    break;
+                case MixDatabaseProvider.SQLITE:
+                    SqLiteBootstrap.Initialize();
+                    break;
+                default:
+                    SqLiteBootstrap.Initialize();
+                    break;
+            }
+        }
+
         public IDbConnection CreateConnection()
         {
             var connectionType = GetDbConnectionType(DatabaseProvider);
