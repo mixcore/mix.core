@@ -257,6 +257,7 @@ namespace Mix.RepoDb.Services
         {
             _repository.Dispose();
             _backupRepository.Dispose();
+            _uow.Dispose();
         }
         #endregion
 
