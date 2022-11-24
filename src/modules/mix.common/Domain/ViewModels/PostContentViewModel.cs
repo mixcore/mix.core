@@ -1,4 +1,8 @@
-﻿using Mix.RepoDb.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.RepoDb.Repositories;
+using RepoDb;
+using RepoDb.Enumerations;
+using System.Reflection.Emit;
 
 namespace Mix.Common.Domain.ViewModels
 {
@@ -52,14 +56,27 @@ namespace Mix.Common.Domain.ViewModels
         {
             if (AdditionalData == null)
             {
+                var connection = Context.Database.GetDbConnection();
+                mixRepoDbRepository.SetDbConnection(connection);
                 mixRepoDbRepository.InitTableName(MixDatabaseName);
                 var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+                
                 foreach (var item in relationships)
                 {
+                    
                     mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
-                    var arr = await mixRepoDbRepository.GetListByParentAsync(MixContentType.Post, obj.Id);
+                    var allowsIds = Context.MixDatabaseAssociation
+                            .Where(m => m.ParentDatabaseName == MixDatabaseName 
+                                        && m.ParentId == AdditionalData.Value<int>("id")
+                                        && m.ChildDatabaseName == item.DestinateDatabaseName)
+                            .Select(m => m.ChildId).ToList();
+                    var queries = new List<QueryField>()
+                    {
+                        new QueryField("Id", Operation.In, allowsIds)
+                    };
+                    var arr = await mixRepoDbRepository.GetListByAsync(queries);
                     AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
                 }
                 

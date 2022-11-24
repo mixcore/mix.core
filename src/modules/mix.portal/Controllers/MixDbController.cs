@@ -187,7 +187,11 @@ namespace Mix.Portal.Controllers
                 obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
             }
             var data = await _repository.UpdateAsync(obj);
-            return data != null ? Ok(await _repository.GetSingleAsync(id)) : BadRequest();
+            if (data != null)
+            {
+                return Ok(ReflectionHelper.ParseObject(await _repository.GetSingleAsync(id)));
+            }
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]

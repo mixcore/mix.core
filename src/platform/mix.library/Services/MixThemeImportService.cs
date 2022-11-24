@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
 using Mix.Lib.Extensions;
 using Mix.Lib.Models;
+using Mix.RepoDb.Repositories;
 using Mix.RepoDb.Services;
 
 namespace Mix.Lib.Services
