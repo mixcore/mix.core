@@ -53,6 +53,11 @@ namespace Mix.RepoDb.Repositories
             CreateConnection();
         }
 
+        public void SetDbConnection(IDbConnection connection)
+        {
+            _connection = connection;
+        }
+
         #region Methods
         public void InitTableName(string tableName)
         {
