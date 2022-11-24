@@ -34,13 +34,20 @@ namespace Mix.Portal.Controllers
 
             return searchRequest;
         }
+
+        protected override Task<int> CreateHandlerAsync(MixModuleDataViewModel data)
+        {
+            data.Specificulture = _culture.Specificulture;
+            data.MixCultureId = _culture.Id;
+            return base.CreateHandlerAsync(data);
+        }
         #endregion
 
         [HttpGet]
         [Route("init-form/{moduleId}")]
         public async Task<ActionResult<MixModuleDataViewModel>> InitByIdAsync(int moduleId)
         {
-            var getModule = await MixModuleContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == moduleId)
+            var getModule = await MixModuleContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == moduleId)
                 .ConfigureAwait(false);
             if (getModule != null)
             {

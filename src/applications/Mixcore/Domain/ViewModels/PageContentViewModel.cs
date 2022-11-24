@@ -39,7 +39,7 @@ namespace Mixcore.Domain.ViewModels
         public Guid? AdditionalDataId { get; set; }
 
         public List<ModuleContentViewModel> Modules { get; set; }
-        public PagingResponseModel<MixPagePostAssociationViewModel> Posts { get; set; }
+        public PagingResponseModel<PagePostAssociationViewModel> Posts { get; set; }
         public JObject AdditionalData { get; set; }
         #endregion
 
@@ -47,28 +47,23 @@ namespace Mixcore.Domain.ViewModels
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             await base.ExpandView(cancellationToken);
-            await LoadModulesAsync();
         }
 
         #endregion
 
         #region Public Method
 
-        public async Task LoadPostsAsync(PagingRequestModel pagingModel)
+        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, PagingRequestModel pagingModel)
         {
-            Posts = await MixPagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
-            List<Task> tasks = new();
-            foreach (var item in Posts.Items)
-            {
-                item.SetUowInfo(UowInfo);
-                tasks.Add(item.LoadPost());
-            }
-            await Task.WhenAll(tasks);
+            await LoadAdditionalDataAsync(mixRepoDbRepository);
+            await LoadModulesAsync(mixRepoDbRepository);
+            await LoadPostsAsync(pagingModel, mixRepoDbRepository);
         }
+
 
         public ModuleContentViewModel GetModule(string moduleName)
         {
-            return Modules.FirstOrDefault(m => m.SystemName == moduleName);
+            return Modules?.FirstOrDefault(m => m.SystemName == moduleName);
         }
         public T Property<T>(string fieldName)
         {
@@ -80,16 +75,17 @@ namespace Mixcore.Domain.ViewModels
         #endregion
 
         #region Private Methods
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        private async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            mixRepoDbRepository.InitTableName(MixDatabaseName);
-            var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
-            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            if (!string.IsNullOrEmpty(MixDatabaseName))
+            {
+                mixRepoDbRepository.InitTableName(MixDatabaseName);
+                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
+                AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            }
         }
-
-        private async Task LoadModulesAsync()
+        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            var tasks = new List<Task>();
             var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
                     .Where(p => p.ParentId == Id)
@@ -101,10 +97,20 @@ namespace Mixcore.Domain.ViewModels
             var paging = new PagingModel();
             foreach (var item in Modules)
             {
-                tasks.Add(item.LoadData(paging));
+                await item.LoadData(paging, mixRepoDbRepository);
             }
-            await Task.WhenAll(tasks);
         }
+        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository)
+        {
+            Posts = await PagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
+            foreach (var item in Posts.Items)
+            {
+                item.SetUowInfo(UowInfo);
+                await item.LoadPost(mixRepoDbRepository);
+            }
+        }
+
+
         #endregion
     }
 }

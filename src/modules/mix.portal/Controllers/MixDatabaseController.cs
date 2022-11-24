@@ -32,7 +32,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("get-by-name/{name}")]
         public async Task<ActionResult<MixDatabaseViewModel>> GetByName(string name)
         {
-            var result = await _repository.GetSingleAsync(m => m.SystemName == name);
+            var result = await Repository.GetSingleAsync(m => m.SystemName == name);
             if (result != null)
                 return Ok(result);
             return NotFound();
@@ -52,7 +52,7 @@ namespace Mix.Portal.Controllers
         public ActionResult Backup(string name)
         {
             var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Backup, name);
-            _queueService.PushQueue(msg);
+            QueueService.PushQueue(msg);
             return Ok();
         }
 
@@ -60,7 +60,7 @@ namespace Mix.Portal.Controllers
         public ActionResult RestoreAsync(string name)
         {
             var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
-            _queueService.PushQueue(msg);
+            QueueService.PushQueue(msg);
             return Ok();
         }
 

@@ -18,7 +18,7 @@ namespace Mix.Queue.Engines
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
-        public SubscriberBase(
+        protected SubscriberBase(
             string topicId,
             string moduleName,
             IConfiguration configuration,
@@ -62,20 +62,20 @@ namespace Mix.Queue.Engines
                         var azureSetting = new AzureQueueSetting();
                         azureSettingPath.Bind(azureSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, azureSetting, topicId, subscriptionId, MesageHandler, _queueService);
+                            provider, azureSetting, topicId, subscriptionId, MessageHandler, _queueService);
                     case MixQueueProvider.GOOGLE:
                         var googleSettingPath = _configuration.GetSection("MessageQueueSetting:GoogleQueueSetting");
                         var googleSetting = new GoogleQueueSetting();
                         googleSettingPath.Bind(googleSetting);
                         googleSetting.CredentialFile = googleSetting.CredentialFile;
                         return QueueEngineFactory.CreateSubscriber(
-                            provider, googleSetting, topicId, subscriptionId, MesageHandler, _queueService);
+                            provider, googleSetting, topicId, subscriptionId, MessageHandler, _queueService);
                     case MixQueueProvider.MIX:
                         var mixSettingPath = _configuration.GetSection("MessageQueueSetting:Mix");
                         var mixSetting = new MixQueueSetting();
                         mixSettingPath.Bind(mixSetting);
                         return QueueEngineFactory.CreateSubscriber(
-                           provider, mixSetting, topicId, subscriptionId, MesageHandler, _queueService);
+                           provider, mixSetting, topicId, subscriptionId, MessageHandler, _queueService);
                 }
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace Mix.Queue.Engines
             return default;
         }
 
-        public Task MesageHandler(MessageQueueModel data)
+        public Task MessageHandler(MessageQueueModel data)
         {
             try
             {
@@ -94,6 +94,7 @@ namespace Mix.Queue.Engines
                 {
                     return Task.CompletedTask;
                 }
+
                 return Handler(data);
             }
             catch (Exception ex)

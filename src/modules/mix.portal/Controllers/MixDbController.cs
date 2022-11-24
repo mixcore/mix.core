@@ -16,6 +16,7 @@ namespace Mix.Portal.Controllers
     public class MixDbController : MixTenantApiControllerBase
     {
         private const string createdDateFieldName = "CreatedDateTime";
+        private const string priorityFieldName = "Priority";
         private const string idFieldName = "Id";
         private const string parentIdFieldName = "ParentId";
         private const string childIdFieldName = "ChildId";
@@ -153,6 +154,10 @@ namespace Mix.Portal.Controllers
             if (!obj.ContainsKey(createdDateFieldName))
             {
                 obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
+            }
+            if (!obj.ContainsKey(priorityFieldName))
+            {
+                obj.Add(new JProperty(priorityFieldName, 0));
             }
             if (!obj.ContainsKey(tenantIdFieldName))
             {

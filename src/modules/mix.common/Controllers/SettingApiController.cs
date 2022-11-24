@@ -4,7 +4,6 @@ using Mix.Lib.Models;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Shared.Services;
 using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Common.Controllers
@@ -16,18 +15,15 @@ namespace Mix.Common.Controllers
     public class SettingApiController : MixTenantApiControllerBase
     {
         private ConfigurationServiceBase<JObject> _settingService;
-        private readonly ApplicationLifetime _applicationLifetime;
         public SettingApiController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
-            ApplicationLifetime applicationLifetime)
+            IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _applicationLifetime = applicationLifetime;
         }
 
         #region Routes
@@ -58,14 +54,13 @@ namespace Mix.Common.Controllers
         {
             try
             {
-                TenantConfigService service = new(CurrentTenant.SystemName);
-                if (service != null)
+                TenantConfigService service = new(CurrentTenant.SystemName)
                 {
-                    service.AppSettings = appSettings;
-                    service.SaveSettings();
-                    return Ok();
-                }
-                return BadRequest();
+                    AppSettings = appSettings
+                };
+
+                service.SaveSettings();
+                return Ok();
             }
             catch (Exception ex)
             {

@@ -23,14 +23,14 @@ namespace Mix.Portal.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _mixDataService = mixDataService;
-            _mixDataService.SetUnitOfWork(_uow);
+            _mixDataService.SetUnitOfWork(Uow);
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(cmsUOW.DbContext);
         }
         protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
             [FromQuery] SearchRequestDto req)
         {
             SearchDataContentModel searchReq = new SearchDataContentModel(CurrentTenant.Id, req, Request);
-            return await _mixDataService.Search<MixDataContentViewModel>(searchReq, _lang);
+            return await _mixDataService.Search<MixDataContentViewModel>(searchReq, Lang);
         }
 
         [HttpGet("additional-data")]
@@ -39,7 +39,7 @@ namespace Mix.Portal.Controllers
             if (dto.IsValid())
             {
                 var getData = await MixDataHelper.GetAdditionalDataAsync<AdditionalDataContentViewModel>(
-                    _uow,
+                    Uow,
                     dto.ParentType.Value,
                     dto.DatabaseName,
                     dto.GuidParentId,
@@ -53,8 +53,8 @@ namespace Mix.Portal.Controllers
         [HttpPost("{lang}/{databaseName}")]
         public async Task<ActionResult> CreateData([FromRoute] string databaseName, [FromBody] JObject data)
         {
-            var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, data);
-            mixData.SetUowInfo(_uow);
+            var mixData = new MixDataContentViewModel(Lang, Culture.Id, databaseName, data);
+            mixData.SetUowInfo(Uow);
             var result = await mixData.SaveAsync();
             return Ok(result);
         }
@@ -64,9 +64,9 @@ namespace Mix.Portal.Controllers
         public async Task<ActionResult> InitData([FromRoute] string databaseName)
         {
             int.TryParse(databaseName, out int id);
-            var dbRepo = MixDatabaseViewModel.GetRepository(_uow);
+            var dbRepo = MixDatabaseViewModel.GetRepository(Uow);
             var mixdb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName);
-            var mixData = new MixDataContentViewModel(_lang, _culture.Id, databaseName, new JObject())
+            var mixData = new MixDataContentViewModel(Lang, Culture.Id, databaseName, new JObject())
             {
                 Columns = mixdb.Columns,
                 MixDatabaseId = mixdb.Id,
@@ -78,11 +78,11 @@ namespace Mix.Portal.Controllers
         [HttpPut("update/{id}")]
         public async Task<ActionResult> UpdateData(Guid id, [FromBody] JObject data)
         {
-            var mixData = await _repository.GetSingleAsync(m => m.Id == id);
+            var mixData = await Repository.GetSingleAsync(m => m.Id == id);
             if (mixData != null)
             {
                 mixData.Data = data;
-                mixData.SetUowInfo(_uow);
+                mixData.SetUowInfo(Uow);
                 var result = await mixData.SaveAsync();
                 return Ok(result);
             }

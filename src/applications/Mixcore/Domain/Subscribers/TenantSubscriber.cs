@@ -1,5 +1,4 @@
-﻿using Mix.Database.Services;
-using Mix.Lib.Services;
+﻿using Mix.Lib.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 
@@ -8,26 +7,19 @@ namespace Mixcore.Domain.Subscribers
     public sealed class TenantSubscriber : SubscriberBase
     {
         static string topicId = typeof(MixTenantSystemViewModel).FullName;
-        private MixTenantService _mixTenantService;
-        private readonly DatabaseService _databaseService;
-        public IHttpContextAccessor _httpContextAccessor { get; }
+        private readonly MixTenantService _mixTenantService;
 
         public TenantSubscriber(
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService,
-            MixTenantService mixTenantService,
-            DatabaseService databaseService)
+            IConfiguration configuration, 
+            MixMemoryMessageQueue<MessageQueueModel> queueService, 
+            MixTenantService mixTenantService) 
             : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
         {
-            _httpContextAccessor = httpContextAccessor;
             _mixTenantService = mixTenantService;
-            _databaseService = databaseService;
         }
 
         public override async Task Handler(MessageQueueModel data)
         {
-            UnitOfWorkInfo<MixCmsContext> _uow = new(new MixCmsContext(_databaseService));
             switch (data.Action)
             {
                 case "Get":
@@ -36,12 +28,11 @@ namespace Mixcore.Domain.Subscribers
                 case "Put":
                 case "Patch":
                 case "Delete":
-                    await _mixTenantService.Reload(_uow);
+                    await _mixTenantService.Reload();
                     break;
                 default:
                     break;
             }
-            _ = _uow.DisposeAsync();
         }
     }
 }

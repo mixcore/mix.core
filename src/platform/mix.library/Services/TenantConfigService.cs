@@ -1,13 +1,9 @@
-﻿
-
-
-using Mix.Lib.Models;
+﻿using Mix.Lib.Models;
 
 namespace Mix.Lib.Services
 {
     public class TenantConfigService : ConfigurationServiceBase<TenantConfigurationModel>
     {
-
         public TenantConfigService(string tenantName)
             : base($"{MixAppConfigFilePaths.AppConfigs}/{tenantName}/configurations")
         {
@@ -16,10 +12,9 @@ namespace Mix.Lib.Services
 
         public new string AesKey
         {
-            get { return AppSettings.ApiEncryptKey; }
-            set { AppSettings.ApiEncryptKey = value; }
+            get => AppSettings.ApiEncryptKey;
+            set => AppSettings.ApiEncryptKey = value;
         }
-
 
         public bool IsEncryptApi => AppSettings.IsEncryptApi;
         public string DefaultCulture => AppSettings.DefaultCulture;

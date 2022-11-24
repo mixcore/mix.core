@@ -23,7 +23,7 @@ namespace Mix.Portal.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _mixDataService = mixDataService;
-            _mixDataService.SetUnitOfWork(_uow);
+            _mixDataService.SetUnitOfWork(Uow);
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(cmsUOW.DbContext);
         }
 

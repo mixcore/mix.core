@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.Storage.Lib.ViewModels;
 
 namespace Mix.Storage.Lib.Engines.Base
@@ -10,14 +11,14 @@ namespace Mix.Storage.Lib.Engines.Base
         protected ISession? _session;
         protected readonly IConfiguration _configuration;
         protected UnitOfWorkInfo _cmsUOW;
-        protected MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
+        protected MixTenantSystemModel _currentTenant;
+        protected MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }

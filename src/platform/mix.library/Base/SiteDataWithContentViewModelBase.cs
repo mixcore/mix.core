@@ -53,12 +53,7 @@ namespace Mix.Lib.Base
             }
         }
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
-        {
-            base.InitDefaultValues(language, cultureId);
-        }
-
-        protected override async Task SaveEntityRelationshipAsync(TEntity parentEntity, CancellationToken cancellationToken)
+        protected override async Task SaveEntityRelationshipAsync(TEntity parentEntity, CancellationToken cancellationToken = default)
         {
             if (Contents != null)
             {
@@ -71,12 +66,11 @@ namespace Mix.Lib.Base
             }
         }
 
-        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken)
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
-            using (var _contentRepository =
-               ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo))
+            using (var contentRepository = ViewModelBase<TDbContext, TContentEntity, TPrimaryKey, TContent>.GetRepository(UowInfo))
             {
-                await _contentRepository.DeleteManyAsync(m => m.ParentId.Equals(Id), cancellationToken);
+                await contentRepository.DeleteManyAsync(m => m.ParentId.Equals(Id), cancellationToken);
                 await base.DeleteHandlerAsync(cancellationToken);
             }
         }

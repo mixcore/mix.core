@@ -19,6 +19,7 @@ using Mix.Shared.Services;
 using Newtonsoft.Json;
 using RepoDb;
 using System.Linq.Expressions;
+using Mix.Lib.Models;
 
 namespace Mix.Account.Controllers
 {
@@ -41,20 +42,11 @@ namespace Mix.Account.Controllers
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
 
-        protected IHttpContextAccessor _httpContextAccessor;
-        protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
-        {
-            get
-            {
-                if (_currentTenant == null)
-                {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
-                }
-                return _currentTenant;
-            }
-        }
+        protected IHttpContextAccessor HttpContextAccessor;
+        protected ISession Session;
+
+        protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+
         public MixUserController(
             IHttpContextAccessor httpContextAccessor,
             TenantUserManager userManager,
@@ -64,7 +56,7 @@ namespace Mix.Account.Controllers
             MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
             MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, EmailService emailService)
         {
-            _session = httpContextAccessor.HttpContext.Session;
+            Session = httpContextAccessor.HttpContext.Session;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;

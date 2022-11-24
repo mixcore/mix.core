@@ -4,14 +4,14 @@ namespace Mix.Lib.Base
 {
     public abstract class MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
         : MultilingualContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
-         where TDbContext : MixCmsContext
-         where TPrimaryKey : IComparable
+        where TDbContext : MixCmsContext
+        where TPrimaryKey : IComparable
         where TEntity : MultilingualContentBase<TPrimaryKey>
         where TView : MultilingualSEOContentViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
         #region Constructors
 
-        public MultilingualSEOContentViewModelBase()
+        protected MultilingualSEOContentViewModelBase()
         {
 
         }
@@ -54,10 +54,6 @@ namespace Mix.Lib.Base
         #endregion
 
         #region Overrides
-        public override Task<TEntity> ParseEntity(CancellationToken cancellationToken = default)
-        {
-            return base.ParseEntity(cancellationToken);
-        }
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {

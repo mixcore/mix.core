@@ -32,15 +32,30 @@ namespace Mix.Lib.Base
         public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchAssociationDto req)
         {
             var searchRequest = BuildSearchByParentRequest(req);
-            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
         #endregion
 
+        protected override SearchQueryModel<TEntity, int> BuildSearchRequest(SearchRequestDto req)
+        {
+            var searchRequest = base.BuildSearchRequest(req);
+            
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                int.TryParse(Request.Query["parentId"], out int parentId),
+                m => m.ParentId == parentId);
+
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
+                int.TryParse(Request.Query["childId"], out int childId),
+                m => m.ChildId == childId);
+
+            return searchRequest;
+        }
+
         protected SearchQueryModel<TEntity, int> BuildSearchByParentRequest(SearchAssociationDto request)
         {
             var searchRequest = base.BuildSearchRequest(request);
-            int leftId = request.ParentId.HasValue ? request.ParentId.Value : 0;
+            int leftId = request.ParentId ?? 0;
             searchRequest.Predicate = searchRequest.Predicate.AndAlso(
                 m => m.ParentId == leftId);
 

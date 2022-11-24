@@ -6,58 +6,59 @@ namespace Mix.Lib.Middlewares
 {
     public class UnitOfWorkMiddleware
     {
-        private readonly RequestDelegate next;
-        private static List<Type> UowInfos = new List<Type>();
-        public UnitOfWorkMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
+        private readonly RequestDelegate _next;
+        private static readonly List<Type> UowInfos = new();
+        public UnitOfWorkMiddleware(RequestDelegate next)
         {
-            this.next = next;
+            _next = next;
         }
 
-        public static void AddUnitOfWork<T>()
-            where T : IUnitOfWorkInfo
+        public static void AddUnitOfWork<T>() where T : IUnitOfWorkInfo
         {
             UowInfos.Add(typeof(T));
         }
 
-        public async Task Invoke(HttpContext context,
-            [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            [FromServices] UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
-            [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUOW
-            )
+        public async Task InvokeAsync(
+            HttpContext context,
+            [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUow,
+            [FromServices] UnitOfWorkInfo<MixCmsAccountContext> accountUow,
+            [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUow)
         {
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
-                await next.Invoke(context);
+                await _next.Invoke(context);
             }
             else
             {
-                await next.Invoke(context);
+                await _next.Invoke(context);
 
-                await CompleteUOW(cmsUOW, context.Response.StatusCode);
-                await CompleteUOW(accountUOW, context.Response.StatusCode);
-                await CompleteUOW(cacheUOW, context.Response.StatusCode);
+                await CompleteUow(cmsUow, context.Response.StatusCode);
+                await CompleteUow(accountUow, context.Response.StatusCode);
+                await CompleteUow(cacheUow, context.Response.StatusCode);
+
                 foreach (var uowType in UowInfos)
                 {
-                    IUnitOfWorkInfo srv = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
-                    await CompleteUOW(srv, context.Response.StatusCode);
+                    var uowService = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
+                    await CompleteUow(uowService, context.Response.StatusCode);
                 }
             }
         }
 
-        private async Task CompleteUOW(IUnitOfWorkInfo _cmsUOW, int statusCode)
+        private async Task CompleteUow(IUnitOfWorkInfo cmsUow, int statusCode)
         {
-            if (_cmsUOW.ActiveTransaction != null)
+            if (cmsUow.ActiveTransaction != null)
             {
                 if (Enum.IsDefined(typeof(MixErrorStatus), statusCode))
                 {
-                    await _cmsUOW.RollbackAsync();
+                    await cmsUow.RollbackAsync();
                 }
                 else
                 {
-                    await _cmsUOW.CompleteAsync();
+                    await cmsUow.CompleteAsync();
                 }
             }
-            _ = _cmsUOW.DisposeAsync();
+
+            await cmsUow.DisposeAsync();
         }
     }
 }

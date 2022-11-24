@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Extensions;
+using Mix.Lib.Models;
 using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
 
@@ -9,14 +10,14 @@ namespace Mix.Lib.Services
     public class MixPostService : IDisposable
     {
         protected ISession _session;
-        private MixTenantSystemViewModel _currentTenant;
-        protected MixTenantSystemViewModel CurrentTenant
+        private MixTenantSystemModel _currentTenant;
+        protected MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemViewModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
