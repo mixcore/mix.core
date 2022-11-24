@@ -56,11 +56,11 @@ namespace Mix.Common.Domain.ViewModels
         {
             if (AdditionalData == null)
             {
+                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
                 var connection = Context.Database.GetDbConnection();
                 mixRepoDbRepository.SetDbConnection(connection);
                 mixRepoDbRepository.InitTableName(MixDatabaseName);
                 var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
-                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
                 
                 foreach (var item in relationships)

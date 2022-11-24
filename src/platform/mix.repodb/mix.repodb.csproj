@@ -16,6 +16,7 @@
   <ItemGroup>
     <PackageReference Include="RepoDb" Version="1.12.10" />
     <PackageReference Include="RepoDb.MySql" Version="1.1.6" />
+    <PackageReference Include="RepoDb.MySqlConnector" Version="1.1.5" />
     <PackageReference Include="RepoDb.PostgreSql" Version="1.1.5" />
     <PackageReference Include="RepoDb.SqLite" Version="1.1.4" />
     <PackageReference Include="RepoDb.SqlServer" Version="1.1.5" />
