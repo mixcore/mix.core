@@ -23,6 +23,7 @@ namespace Mix.Services.Payments.Onepay.Domain.ViewModels
         public string vpc_AdditionData { get; set; }
         public string vpc_SecureHash { get; set; }
         public OnepayPaymentStatus PaymentStatus { get; set; }
+        public int MixTenantId { get; set; }
 
         #endregion
 

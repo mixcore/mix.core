@@ -78,7 +78,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.permission", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "payments", "payments", "{FD4459B6-FFE7-4E8F-87E4-DAAD888F886C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.services.payments.onepay", "services\payments\mix.services.payments.onepay\mix.services.payments.onepay.csproj", "{D4E842BC-AE6F-4511-A087-74BB9EF1034A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.payments.onepay", "services\payments\mix.services.payments.onepay\mix.services.payments.onepay.csproj", "{D4E842BC-AE6F-4511-A087-74BB9EF1034A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce", "services\mix.services.ecommerce\mix.services.ecommerce.csproj", "{6FF56C52-A196-4059-90B0-23EBFDEFB9B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -190,6 +192,10 @@ Global
 		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FF56C52-A196-4059-90B0-23EBFDEFB9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FF56C52-A196-4059-90B0-23EBFDEFB9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FF56C52-A196-4059-90B0-23EBFDEFB9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FF56C52-A196-4059-90B0-23EBFDEFB9B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -229,6 +235,7 @@ Global
 		{98F9A860-A85F-4B5B-A86D-14883E0C640F} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{FD4459B6-FFE7-4E8F-87E4-DAAD888F886C} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{D4E842BC-AE6F-4511-A087-74BB9EF1034A} = {FD4459B6-FFE7-4E8F-87E4-DAAD888F886C}
+		{6FF56C52-A196-4059-90B0-23EBFDEFB9B3} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0143C230-7F40-44B2-8BA3-EF5B92D55848}

@@ -21,10 +21,10 @@ namespace Mix.Services.Payments.Onepay.Domain.Services
 {
     public sealed class OnepayService
     {
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly UnitOfWorkInfo<OnepayDbContext> _cmsUOW;
         private readonly HttpService _httpService;
         private MixOnepayConfigurations _settings { get; set; } = new MixOnepayConfigurations();
-        public OnepayService(HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        public OnepayService(HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUOW)
         {
             _httpService = httpService;
             _cmsUOW = cmsUOW;
