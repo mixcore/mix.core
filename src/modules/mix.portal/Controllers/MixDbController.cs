@@ -50,7 +50,7 @@ namespace Mix.Portal.Controllers
         {
             _context = context;
             _repository = repository;
-            _associationRepository = new(cache, databaseService);
+            _associationRepository = new(cache, databaseService, cmsUOW);
             _associationRepository.InitTableName(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
