@@ -38,7 +38,7 @@ namespace Mix.RepoDb.Services
             _uow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _backupRepository = new(cache, databaseService);
+            _backupRepository = new(cache, databaseService, uow);
             _dbConstants = _databaseService.DatabaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),

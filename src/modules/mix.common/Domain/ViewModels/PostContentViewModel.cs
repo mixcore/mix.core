@@ -57,18 +57,16 @@ namespace Mix.Common.Domain.ViewModels
             if (AdditionalData == null)
             {
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
-                var connection = Context.Database.GetDbConnection();
-                mixRepoDbRepository.SetDbConnection(connection);
                 mixRepoDbRepository.InitTableName(MixDatabaseName);
                 var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
-                
+
                 foreach (var item in relationships)
                 {
-                    
+
                     mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
                     var allowsIds = Context.MixDatabaseAssociation
-                            .Where(m => m.ParentDatabaseName == MixDatabaseName 
+                            .Where(m => m.ParentDatabaseName == MixDatabaseName
                                         && m.ParentId == AdditionalData.Value<int>("id")
                                         && m.ChildDatabaseName == item.DestinateDatabaseName)
                             .Select(m => m.ChildId).ToList();
@@ -76,10 +74,15 @@ namespace Mix.Common.Domain.ViewModels
                     {
                         new QueryField("Id", Operation.In, allowsIds)
                     };
-                    var arr = await mixRepoDbRepository.GetListByAsync(queries);
+                    var data = await mixRepoDbRepository.GetListByAsync(queries);
+                    var arr = new JArray();
+                    foreach (var dataItem in data)
+                    {
+                        arr.Add(ReflectionHelper.ParseObject(dataItem));
+                    }
                     AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
                 }
-                
+
             }
         }
         #endregion

@@ -1,12 +1,16 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Constant.Constants;
 using Mix.Constant.Enums;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
+using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Models;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
@@ -26,7 +30,9 @@ namespace Mix.RepoDb.Repositories
     public class MixRepoDbRepository : IDisposable
     {
         #region Properties
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private IDbConnection _connection;
+        private IDbTransaction _dbTransaction;
         public ITrace Trace { get; }
 
         public ICache Cache { get; }
@@ -38,7 +44,7 @@ namespace Mix.RepoDb.Repositories
         private string _tableName;
         #endregion
 
-        public MixRepoDbRepository(ICache cache, DatabaseService databaseService)
+        public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
             Cache = cache;
             _settings = new AppSetting()
@@ -47,13 +53,13 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
             _databaseService = databaseService;
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
-            DatabaseProvider = _databaseService.DatabaseProvider;
+            _cmsUOW = cmsUOW;
+            
             InitializeRepoDb();
             CreateConnection();
         }
 
-        
+
         #region Methods
         public void InitTableName(string tableName)
         {
@@ -67,7 +73,6 @@ namespace Mix.RepoDb.Repositories
             DatabaseProvider = databaseProvider;
             ConnectionString = connectionString;
             _tableName = tableName;
-            _connection?.Close();
             InitializeRepoDb();
             CreateConnection();
         }
@@ -142,7 +147,7 @@ namespace Mix.RepoDb.Repositories
                         selectedFields.Add(new Field(item));
                     }
                 }
-                var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields);
+                var data = await _connection.QueryAsync(_tableName, queryFields, selectedFields, transaction: _dbTransaction);
                 return data.ToList();
             }
             catch (Exception ex)
@@ -156,7 +161,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout);
+                var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
                 return data.ToList();
             }
             catch (Exception ex)
@@ -170,7 +175,10 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                _connection.EnsureOpen();
+                if (_connection.State != ConnectionState.Open)
+                {
+                    _connection.Open();
+                }
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new List<QueryField>() {
@@ -178,6 +186,7 @@ namespace Mix.RepoDb.Repositories
                     new QueryField("ParentId", parentId.ToString())
                     },
                     commandTimeout: _settings.CommandTimeout,
+                    transaction: _dbTransaction,
                     trace: Trace))?.SingleOrDefault();
             }
             catch (Exception ex)
@@ -185,7 +194,6 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
-            finally { _connection.Close(); }
         }
         public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
         {
@@ -198,6 +206,7 @@ namespace Mix.RepoDb.Repositories
                     new QueryField("parentId", parentId)
                     },
                     commandTimeout: _settings.CommandTimeout,
+                    transaction: _dbTransaction,
                     trace: Trace))?.ToList();
             }
             catch (Exception ex)
@@ -220,6 +229,7 @@ namespace Mix.RepoDb.Repositories
                         Id = id
                     },
                     commandTimeout: _settings.CommandTimeout,
+                    transaction: _dbTransaction,
                     trace: Trace))?.SingleOrDefault();
             }
             catch (Exception ex)
@@ -245,6 +255,7 @@ namespace Mix.RepoDb.Repositories
                         entity: dicObj,
                         fields: null,
                         commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
                         trace: Trace);
 
                 return int.Parse(result?.ToString() ?? "0");
@@ -265,6 +276,7 @@ namespace Mix.RepoDb.Repositories
                         _tableName,
                         entities: entities,
                         commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
                         trace: Trace);
                 return result;
             }
@@ -285,7 +297,8 @@ namespace Mix.RepoDb.Repositories
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
                     return await _connection.UpdateAsync(_tableName, obj,
                         commandTimeout: _settings.CommandTimeout,
-                        trace: Trace);
+                        trace: Trace,
+                        transaction: _dbTransaction);
                 }
                 return null;
             }
@@ -304,6 +317,7 @@ namespace Mix.RepoDb.Repositories
                 {
                     return await _connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
                         trace: Trace);
                 }
                 return 0;
@@ -323,6 +337,7 @@ namespace Mix.RepoDb.Repositories
                 {
                     return await _connection.DeleteAsync(_tableName, queries,
                         commandTimeout: _settings.CommandTimeout,
+                        transaction: _dbTransaction,
                         trace: Trace);
                 }
                 return 0;
@@ -375,9 +390,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public void SetDbConnection(IDbConnection connection)
+        private void SetDbConnection()
         {
-            _connection = connection;
+            _cmsUOW.Begin();
+            _connection = _cmsUOW.DbContext.Database.GetDbConnection();
+            _dbTransaction = _cmsUOW.ActiveTransaction.GetDbTransaction();
             switch (DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
@@ -400,10 +417,20 @@ namespace Mix.RepoDb.Repositories
 
         public IDbConnection CreateConnection()
         {
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
+            DatabaseProvider = _databaseService.DatabaseProvider;
             var connectionType = GetDbConnectionType(DatabaseProvider);
-            _connection = Activator.CreateInstance(connectionType) as IDbConnection;
-            _connection!.ConnectionString = ConnectionString;
-            _connection.Open();
+            
+            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
+            {
+                SetDbConnection();
+            }
+            else
+            {
+                _connection = Activator.CreateInstance(connectionType) as IDbConnection;
+                _connection!.ConnectionString = ConnectionString;
+                _connection.Open();
+            }
             return _connection;
         }
 
@@ -428,17 +455,6 @@ namespace Mix.RepoDb.Repositories
 
         #endregion
 
-
-        public ValueTask DisposeAsync()
-        {
-            if (_connection != null)
-            {
-                _connection.Close();
-                Task.Run(() => _connection.Dispose()
-                );
-            }
-            return ValueTask.CompletedTask;
-        }
         public void Dispose()
         {
             if (_connection != null)

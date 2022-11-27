@@ -86,13 +86,7 @@ namespace Mixcore.Controllers
             }
             if (post.AdditionalData == null)
             {
-                _repoDbRepository.InitTableName(post.MixDatabaseName);
-                var data = await _repoDbRepository.GetSingleByParentAsync(MixContentType.Post, post.Id);
-                post.AdditionalData = data != null ? ReflectionHelper.ParseObject(data) : null;
-                if (post.AdditionalData != null)
-                {
-                    await postRepo.CacheService.SetAsync($"{post.Id}/{typeof(PostContentViewModel).FullName}", post, typeof(MixPostContent), postRepo.CacheFilename);
-                }
+                await post.LoadAdditionalDataAsync(_repoDbRepository);
             }
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;

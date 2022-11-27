@@ -1,11 +1,15 @@
-﻿using Mix.Heart.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
+using RepoDb;
+using RepoDb.Enumerations;
 
 namespace Mixcore.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
-    public sealed class PostContentViewModel
-        : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPostContent, int, PostContentViewModel>
+    public class PostContentViewModel
+        : ExtraColumnMultilingualSEOContentViewModelBase
+            <MixCmsContext, MixPostContent, int, PostContentViewModel>
     {
         #region Constructors
 
@@ -51,9 +55,42 @@ namespace Mixcore.Domain.ViewModels
 
         public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
         {
-            mixRepoDbRepository.InitTableName(MixDatabaseName);
-            var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
-            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            if (AdditionalData == null)
+            {
+                var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
+                mixRepoDbRepository.InitTableName(MixDatabaseName);
+                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
+                if (obj != null)
+                {
+                    AdditionalData = ReflectionHelper.ParseObject(obj);
+
+                    foreach (var item in relationships)
+                    {
+
+                        mixRepoDbRepository.InitTableName(item.DestinateDatabaseName);
+                        var allowsIds = Context.MixDatabaseAssociation
+                                .Where(m => m.ParentDatabaseName == MixDatabaseName
+                                            && m.ParentId == AdditionalData.Value<int>("id")
+                                            && m.ChildDatabaseName == item.DestinateDatabaseName)
+                                .Select(m => m.ChildId).ToList();
+                        var queries = new List<QueryField>()
+                    {
+                        new QueryField("Id", Operation.In, allowsIds)
+                    };
+                        var data = await mixRepoDbRepository.GetListByAsync(queries);
+                        var arr = new JArray();
+                        if (data != null)
+                        {
+                            foreach (var dataItem in data)
+                            {
+                                arr.Add(ReflectionHelper.ParseObject(dataItem));
+                            }
+                        }
+                        AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
+                    }
+                }
+
+            }
         }
         #endregion
 

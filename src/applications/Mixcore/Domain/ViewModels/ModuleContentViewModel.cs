@@ -1,4 +1,5 @@
-﻿using Mix.Heart.Helpers;
+﻿using Microsoft.EntityFrameworkCore;
+using Mix.Heart.Helpers;
 using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;
 
@@ -46,13 +47,6 @@ namespace Mixcore.Domain.ViewModels
 
         #region Private Methods
 
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
-        {
-            mixRepoDbRepository.InitTableName(MixDatabaseName);
-            var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Module, Id);
-            AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
-        }
-
         #endregion
 
         #endregion
@@ -66,8 +60,19 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
+        private async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        {
+            if (!string.IsNullOrEmpty(MixDatabaseName))
+            {
+                mixRepoDbRepository.InitTableName(MixDatabaseName);
+                var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Page, Id);
+                AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
+            }
+        }
+
         public async Task LoadData(PagingModel pagingModel, MixRepoDbRepository mixRepoDbRepository)
         {
+            await LoadAdditionalDataAsync(mixRepoDbRepository);
             Data = await ModuleDataViewModel.GetRepository(UowInfo).GetPagingAsync(
                 m => m.ParentId == Id,
                 pagingModel);

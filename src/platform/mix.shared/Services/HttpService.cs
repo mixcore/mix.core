@@ -84,6 +84,21 @@ namespace Mix.Shared.Services
                 : requestUrl;
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
+        
+        public Task<T> GetAsync<T>(
+            string requestUrl,
+            Dictionary<string, string> queryParams = null,
+            string bearerToken = null,
+            List<KeyValuePair<string, string>> requestHeaders = null)
+        {
+            var urlQueryParamsPart = queryParams != null
+                ? string.Join("&", queryParams.Select(p => $"{p.Key}={WebUtility.UrlEncode(p.Value)}"))
+                : string.Empty;
+            var requestUrlWithQueryParams = !string.IsNullOrEmpty(urlQueryParamsPart)
+                ? (!requestUrl.Contains('?') ? $"{requestUrl}?{urlQueryParamsPart}" : $"{requestUrl}&{urlQueryParamsPart}")
+                : requestUrl;
+            return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
+        }
 
         public Task<string> GetStringAsync(
             string requestUrl,
