@@ -87,7 +87,7 @@ namespace Mix.RepoDb.Repositories
                     _connection.Open();
 
                 }
-                return _connection.ExecuteNonQueryAsync(commandSql);
+                return _connection.ExecuteNonQueryAsync(commandSql, transaction: _dbTransaction);
             }
             catch (Exception ex)
             {
@@ -100,10 +100,10 @@ namespace Mix.RepoDb.Repositories
             List<OrderField> orderFields = new List<OrderField>() {
                     new OrderField(pagingRequest.SortBy ?? "Id", pagingRequest.SortDirection == SortDirection.Asc ? Order.Ascending: Order.Descending)
                 };
-            var count = (int)_connection.Count(_tableName, queryFields);
+            var count = (int)_connection.Count(_tableName, queryFields, transaction: _dbTransaction);
             int pageSize = pagingRequest.PageSize.HasValue ? pagingRequest.PageSize.Value : 100;
             var data = await _connection.BatchQueryAsync(_tableName, pagingRequest.PageIndex,
-                pageSize, orderFields, queryFields, null, null, commandTimeout: _settings.CommandTimeout);
+                pageSize, orderFields, queryFields, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
             return new PagingResponseModel<dynamic>()
             {
                 Items = data.ToList(),
@@ -292,7 +292,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                if (_connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }))
+                if (_connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }, transaction: _dbTransaction))
                 {
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
                     return await _connection.UpdateAsync(_tableName, obj,
@@ -313,7 +313,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                if (_connection.Exists(_tableName, new { Id = id }))
+                if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
                 {
                     return await _connection.DeleteAsync(_tableName, id,
                         commandTimeout: _settings.CommandTimeout,
@@ -333,7 +333,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                if (_connection.Exists(_tableName, queries))
+                if (_connection.Exists(_tableName, queries, transaction: _dbTransaction))
                 {
                     return await _connection.DeleteAsync(_tableName, queries,
                         commandTimeout: _settings.CommandTimeout,

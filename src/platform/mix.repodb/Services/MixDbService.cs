@@ -168,7 +168,7 @@ namespace Mix.RepoDb.Services
             var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {tableName};");
+                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backtickOpen}{tableName}{backtickClose};");
                 var result = await repo.ExecuteCommand(commandText);
                 return result >= 0;
             }
@@ -177,7 +177,7 @@ namespace Mix.RepoDb.Services
 
         private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
         {
-            return $"CREATE TABLE {tableName} " +
+            return $"CREATE TABLE {_dbConstants.BacktickOpen}{tableName}{_dbConstants.BacktickClose} " +
                 $"(Id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
                 $"CreatedDateTime {GetColumnType(MixDataType.DateTime)}, " +
                 $"LastModified {GetColumnType(MixDataType.DateTime)} NULL, " +
