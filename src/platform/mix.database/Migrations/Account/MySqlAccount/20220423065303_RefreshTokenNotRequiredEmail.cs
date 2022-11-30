@@ -29,7 +29,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -41,7 +41,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -53,7 +53,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -65,7 +65,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -77,7 +77,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -89,7 +89,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -101,7 +101,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -113,7 +113,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -125,7 +125,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -137,7 +137,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
 
             migrationBuilder.AlterColumn<Guid>(
@@ -149,7 +149,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
-                oldDefaultValueSql: "'uuid()'")
+                oldDefaultValueSql: "UUID_TO_BIN(UUID())")
                 .OldAnnotation("Relational:Collation", "ascii_general_ci");
         }
 
@@ -180,7 +180,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "RefreshTokens",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -192,7 +192,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "MixUserTenants",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -204,7 +204,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "MixUsers",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -216,7 +216,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "MixRoles",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -228,7 +228,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetUserTokens",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -240,7 +240,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetUserRoles",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -252,7 +252,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetUserRoles",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -264,7 +264,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetUserLogins",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -276,7 +276,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetUserClaims",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -288,7 +288,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetRoles",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
@@ -300,7 +300,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 table: "AspNetRoleClaims",
                 type: "char(36)",
                 nullable: false,
-                defaultValueSql: "'uuid()'",
+                defaultValueSql: "UUID_TO_BIN(UUID())",
                 collation: "ascii_general_ci",
                 oldClrType: typeof(Guid),
                 oldType: "char(36)",
