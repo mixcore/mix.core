@@ -14,6 +14,7 @@ namespace mix.services.ecommerce.Domain.Entities.EntityConfigurations
         {
             builder.ToTable(EcommerceConstants.DataTableNameOrderItem);
             base.Configure(builder);
+            builder.Property(e => e.Currency).IsRequired(false);
         }
     }
 }

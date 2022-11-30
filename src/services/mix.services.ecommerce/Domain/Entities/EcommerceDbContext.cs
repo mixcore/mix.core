@@ -16,7 +16,6 @@ namespace mix.services.ecommerce.Domain.Entities
         {
         }
 
-        public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }
     }

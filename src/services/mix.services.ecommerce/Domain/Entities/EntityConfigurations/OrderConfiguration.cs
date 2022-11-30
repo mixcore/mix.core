@@ -17,6 +17,8 @@ namespace mix.services.ecommerce.Domain.Entities.EntityConfigurations
         {
             builder.ToTable(EcommerceConstants.DataTableNameOrder);
             base.Configure(builder);
+            builder.Property(e => e.Currency).IsRequired(false);
+            builder.Property(e => e.Description).IsRequired(false);
             builder.Property(e => e.OrderStatus)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<OrderStatus>())

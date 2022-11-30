@@ -2,8 +2,7 @@
 {
     public class EcommerceConstants
     {
-        public const string DataTableNameShoppingCart = "ShoppingCart";
-        public const string DataTableNameOrder = "Order";
+        public const string DataTableNameOrder = "OrderDetail";
         public const string DataTableNameOrderItem = "OrderItem";
     }
 }

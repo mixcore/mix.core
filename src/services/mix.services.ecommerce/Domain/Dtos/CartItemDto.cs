@@ -1,9 +1,6 @@
-﻿using mix.services.ecommerce.Domain.Enums;
-using Mix.Heart.Entities;
-
-namespace mix.services.ecommerce.Domain.Entities
+﻿namespace mix.services.ecommerce.Domain.Dtos
 {
-    public class OrderItem : EntityBase<int>
+    public class CartItemDto
     {
         public string Title { get; set; }
         public string Description { get; set; }
@@ -13,8 +10,5 @@ namespace mix.services.ecommerce.Domain.Entities
         public int PostId { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
-        public double Total { get; set; }
-        public int OrderId { get; set; }
-        public int MixTenantId { get; set; }
     }
 }
