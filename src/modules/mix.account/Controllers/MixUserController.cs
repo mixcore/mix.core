@@ -191,7 +191,7 @@ namespace Mix.Account.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         [Route("my-profile")]
-        public async Task<ActionResult<MixUserViewModel>> MyProfile()
+        public async Task<ActionResult<MixUserViewModel>> MyProfile([FromServices] DatabaseService databaseService)
         {
             var id = _idService.GetClaim(User, MixClaims.Id);
             var user = await _userManager.FindByIdAsync(id); ;
@@ -199,7 +199,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                //await result.LoadUserDataAsync(MixTenantId, _repoDbRepository);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, databaseService);
                 return Ok(result);
             }
             return BadRequest();

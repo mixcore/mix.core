@@ -29,8 +29,6 @@ namespace Mix.Lib.ViewModels
         public string Gender { get; set; }
         public DateTime? DOB { get; set; }
 
-        public FileModel MediaFile { get; set; } = new();
-
         public JObject UserData { get; set; }
 
         public List<AspNetUserRoles> Roles { get; set; }
