@@ -41,10 +41,9 @@ namespace Mix.Portal.Controllers
         [HttpGet("migrate/{name}")]
         public async Task<ActionResult> Migrate(string name)
         {
+            await _mixDbService.BackupDatabase(name);
             var result = await _mixDbService.MigrateDatabase(name);
-
-            // TODO: Check repodb not load latest database schema when modified column, reload application to let repodb load latest schema
-            //_applicationLifetime.StopApplication();
+            await _mixDbService.RestoreFromLocal(name);
             return result ? Ok() : BadRequest();
         }
 

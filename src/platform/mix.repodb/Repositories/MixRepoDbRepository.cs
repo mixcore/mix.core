@@ -42,6 +42,7 @@ namespace Mix.RepoDb.Repositories
         readonly DatabaseService _databaseService;
         private AppSetting _settings;
         private string _tableName;
+        private bool _isRoot;
         #endregion
 
         public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUOW)
@@ -54,7 +55,8 @@ namespace Mix.RepoDb.Repositories
             };
             _databaseService = databaseService;
             _cmsUOW = cmsUOW;
-            
+            DatabaseProvider = _databaseService.DatabaseProvider;
+            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             InitializeRepoDb();
             CreateConnection();
         }
@@ -66,6 +68,7 @@ namespace Mix.RepoDb.Repositories
             _tableName = tableName.ToLower();
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             DatabaseProvider = _databaseService.DatabaseProvider;
+            CreateConnection();
         }
 
         public void Init(string tableName, MixDatabaseProvider databaseProvider, string connectionString)
@@ -395,6 +398,7 @@ namespace Mix.RepoDb.Repositories
             _cmsUOW.Begin();
             _connection = _cmsUOW.DbContext.Database.GetDbConnection();
             _dbTransaction = _cmsUOW.ActiveTransaction.GetDbTransaction();
+            _isRoot = false;
             switch (DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
@@ -417,8 +421,6 @@ namespace Mix.RepoDb.Repositories
 
         public IDbConnection CreateConnection()
         {
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
-            DatabaseProvider = _databaseService.DatabaseProvider;
             var connectionType = GetDbConnectionType(DatabaseProvider);
             
             if (DatabaseProvider != MixDatabaseProvider.SQLITE)
@@ -427,9 +429,11 @@ namespace Mix.RepoDb.Repositories
             }
             else
             {
+                _isRoot = true;
                 _connection = Activator.CreateInstance(connectionType) as IDbConnection;
                 _connection!.ConnectionString = ConnectionString;
                 _connection.Open();
+                _dbTransaction = _connection.BeginTransaction();
             }
             return _connection;
         }
@@ -459,6 +463,10 @@ namespace Mix.RepoDb.Repositories
         {
             if (_connection != null)
             {
+                if (_isRoot)
+                {
+                    _dbTransaction.Commit();
+                }
                 _connection.Close();
             }
         }

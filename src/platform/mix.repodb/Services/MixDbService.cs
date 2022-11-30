@@ -15,7 +15,7 @@ using System.Dynamic;
 
 namespace Mix.RepoDb.Services
 {
-    public class MixDbService: IDisposable
+    public class MixDbService : IDisposable
     {
         private IDatabaseConstants _dbConstants;
         private MixRepoDbRepository _repository;
@@ -156,28 +156,25 @@ namespace Mix.RepoDb.Services
         {
             List<string> colSqls = new List<string>();
             string tableName = database.SystemName.ToLower();
-            string backtickOpen =
-                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "[";
-            string backtickClose =
-                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "]";
+            var backticks = GetBackticks(databaseProvider);
             foreach (var col in database.Columns)
             {
-                colSqls.Add(GenerateColumnSql(col, backtickOpen, backtickClose));
+                colSqls.Add(GenerateColumnSql(col, backticks.open, backticks.close));
             }
 
-            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls);
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls, backticks.open, backticks.close);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backtickOpen}{tableName}{backtickClose};");
+                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backticks.open}{tableName}{backticks.close};");
                 var result = await repo.ExecuteCommand(commandText);
                 return result >= 0;
             }
             return false;
         }
 
-        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls)
+        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls, string backtickOpen, string backtickClose)
         {
-            return $"CREATE TABLE {_dbConstants.BacktickOpen}{tableName}{_dbConstants.BacktickClose} " +
+            return $"CREATE TABLE {backtickOpen}{tableName}{backtickClose} " +
                 $"(Id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
                 $"CreatedDateTime {GetColumnType(MixDataType.DateTime)}, " +
                 $"LastModified {GetColumnType(MixDataType.DateTime)} NULL, " +
@@ -188,6 +185,15 @@ namespace Mix.RepoDb.Services
                 $"Status {GetColumnType(MixDataType.Text)} NULL, " +
                 $"IsDeleted {GetColumnType(MixDataType.Boolean)} NULL, " +
                 $" {string.Join(",", colSqls.ToArray())})";
+        }
+
+        private (string open, string close) GetBackticks(MixDatabaseProvider databaseProvider)
+        {
+            string backtickOpen =
+                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "[";
+            string backtickClose =
+                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "]";
+            return (backtickOpen, backtickClose);
         }
 
         private string GetAutoIncreaseIdSyntax(MixDatabaseProvider databaseProvider)
