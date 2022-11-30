@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\mix.services.payments.lib\mix.services.payments.lib.csproj" />
   </ItemGroup>
 
 </Project>
