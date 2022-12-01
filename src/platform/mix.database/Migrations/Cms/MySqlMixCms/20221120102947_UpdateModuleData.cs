@@ -27,7 +27,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
@@ -39,7 +39,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Status",
@@ -67,7 +67,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Source",
@@ -79,7 +79,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "SimpleDataColumns",
@@ -91,7 +91,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "SeoName",
@@ -103,7 +103,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "SeoKeywords",
@@ -115,7 +115,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "SeoDescription",
@@ -127,7 +127,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "PublishedDateTime",
@@ -146,8 +146,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldClrType: typeof(string),
                 oldType: "longtext",
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8")
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "LastModified",
@@ -168,7 +168,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Icon",
@@ -180,7 +180,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Excerpt",
@@ -192,7 +192,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreatedDateTime",
@@ -210,8 +210,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldClrType: typeof(string),
                 oldType: "longtext",
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8")
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Content",
@@ -223,7 +223,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true)
                 .Annotation("MySql:CharSet", "utf8")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MixDatabaseRelationship_MixDatabase_ChildId",
@@ -259,7 +259,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(4000)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -271,7 +271,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(250)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<int>(
@@ -291,7 +291,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldClrType: typeof(string),
                 oldType: "varchar(50)",
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -303,7 +303,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(250)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -315,7 +315,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(4000)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -327,7 +327,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(250)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -339,7 +339,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(4000)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -351,7 +351,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(4000)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
@@ -371,8 +371,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldClrType: typeof(string),
                 oldType: "varchar(250)",
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8")
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "LastModified",
@@ -392,7 +392,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(250)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -404,7 +404,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(50)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
@@ -416,7 +416,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "varchar(4000)",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<DateTime>(
@@ -435,8 +435,8 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldClrType: typeof(string),
                 oldType: "varchar(250)",
                 oldNullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                .Annotation("MySql:CharSet", "utf8")
+                .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Content",
@@ -447,7 +447,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                 oldType: "longtext",
                 oldNullable: true,
                 oldCollation: "utf8_unicode_ci")
-                .Annotation("MySql:CharSet", "utf8mb4")
+                .Annotation("MySql:CharSet", "utf8")
                 .OldAnnotation("MySql:CharSet", "utf8");
 
             migrationBuilder.AddForeignKey(

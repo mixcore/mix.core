@@ -430,7 +430,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -577,7 +577,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ChildDatabaseName")
                         .HasColumnType("varchar(250)");
@@ -909,7 +909,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("Content")
                         .HasColumnType("longtext")
@@ -1044,7 +1044,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");
@@ -1122,7 +1122,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<bool?>("BooleanValue")
                         .HasColumnType("tinyint(1)");
@@ -1549,7 +1549,7 @@ namespace Mix.Database.Migrations.MySqlMixCms
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(250)");

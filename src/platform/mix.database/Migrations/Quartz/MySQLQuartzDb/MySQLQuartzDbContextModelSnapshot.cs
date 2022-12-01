@@ -16,11 +16,11 @@ namespace Mix.Database.Migrations.MySQLQuartzDb
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseCollation("utf8mb4_general_ci")
+                .UseCollation("utf8_general_ci")
                 .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
+            MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8");
 
             modelBuilder.Entity("Mix.Database.Entities.Quartz.QrtzBlobTrigger", b =>
                 {
