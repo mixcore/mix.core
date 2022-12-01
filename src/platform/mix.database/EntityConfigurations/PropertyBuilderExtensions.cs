@@ -6,7 +6,9 @@
         {
             if (condition)
             {
-                builder.HasDefaultValueSql(method);
+                builder
+                    .ValueGeneratedOnAdd()
+                    .HasDefaultValueSql(method);
             }
             return builder;
         }

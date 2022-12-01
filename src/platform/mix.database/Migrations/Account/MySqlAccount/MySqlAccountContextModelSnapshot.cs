@@ -45,7 +45,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("Id");
 
@@ -63,7 +63,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
@@ -117,7 +117,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("Id");
 
@@ -151,7 +151,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.HasKey("LoginProvider", "ProviderKey")
                         .HasName("PK_AspNetUserLogins_1");
@@ -166,12 +166,12 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<Guid>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<int>("MixTenantId")
                         .HasColumnType("int");
@@ -198,7 +198,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(50)")
@@ -270,7 +270,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("varchar(250)")
@@ -304,7 +304,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -444,7 +444,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("MixUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<int>("TenantId")
                         .HasColumnType("int");
@@ -463,7 +463,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)")
-                        .HasDefaultValueSql("uuid()");
+                        .HasDefaultValueSql("(uuid())");
 
                     b.Property<string>("ClientId")
                         .IsRequired()

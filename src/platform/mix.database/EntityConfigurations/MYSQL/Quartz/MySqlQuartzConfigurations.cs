@@ -7,8 +7,8 @@ namespace Mix.Database.EntityConfigurations.MYSQL.Quartz
         public static void Config(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.UseCollation("utf8mb4_general_ci")
-                .HasCharSet("utf8mb4");
+            modelBuilder.UseCollation("utf8_general_ci")
+                .HasCharSet("utf8");
 
             modelBuilder.Entity<QrtzBlobTrigger>(entity =>
             {

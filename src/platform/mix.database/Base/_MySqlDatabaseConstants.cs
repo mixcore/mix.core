@@ -24,7 +24,7 @@
 
         string IDatabaseConstants.Text => "longtext";
 
-        string IDatabaseConstants.GenerateUUID => "UUID_TO_BIN(UUID())";
+        string IDatabaseConstants.GenerateUUID => "(uuid())";
         string IDatabaseConstants.Boolean => "boolean";
         string IDatabaseConstants.BacktickOpen => "`";
         string IDatabaseConstants.BacktickClose => "`";
