@@ -11,6 +11,7 @@ namespace Mix.Services.Permission.Domain.ViewModels
         public string Type { get; set; }
         public string Icon { get; set; }
         public int MixTenantId { get; set; }
+        public Metadata? Metadata { get; set; }
         public List<MixPermissionEndpointViewModel> Endpoints { get; set; }
         #endregion
 

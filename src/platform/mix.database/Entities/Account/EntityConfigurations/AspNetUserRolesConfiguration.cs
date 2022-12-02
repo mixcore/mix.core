@@ -24,10 +24,6 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
             builder.Property(e => e.MixTenantId)
                 .HasColumnType(Config.Integer);
 
-            builder.HasOne(d => d.MixUser)
-                    .WithMany(p => p.AspNetUserRolesUser)
-                    .HasForeignKey(d => d.UserId);
-
         }
     }
 }

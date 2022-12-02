@@ -10,13 +10,12 @@ namespace Mix.Lib.Services
 {
     public class MixThemeImportService
     {
+        private MixRepoDbRepository _repository;
         private UnitOfWorkInfo _uow;
         private CancellationTokenSource _cts;
-        private readonly RuntimeDbContextService _runtimeDbContextService;
         private DatabaseService _databaseService;
         private MixDbService _mixDbService;
         private readonly MixCmsContext _context;
-        private readonly DbContext _runtimeDbContext;
         private SiteDataViewModel _siteData;
         private ISession _session;
         public MixTenantSystemModel CurrentTenant
@@ -51,7 +50,8 @@ namespace Mix.Lib.Services
         private Dictionary<string, string> dicMixDatabaseNames = new Dictionary<string, string>();
         private Dictionary<int, int> dicMixDatabaseContextIds = new Dictionary<int, int>();
 
-        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService)
+        public MixThemeImportService(UnitOfWorkInfo<MixCmsContext> uow, IHttpContextAccessor httpContext, DatabaseService databaseService,
+            MixDbService mixDbService, MixRepoDbRepository repository)
         {
             _uow = uow;
             _context = uow.DbContext;
@@ -59,8 +59,7 @@ namespace Mix.Lib.Services
             _session = httpContext.HttpContext.Session;
             _databaseService = databaseService;
             _mixDbService = mixDbService;
-            _runtimeDbContextService = runtimeDbContextService;
-            _runtimeDbContext = _runtimeDbContextService.GetMixDatabaseDbContext();
+            _repository = repository;
         }
 
         #region Import
@@ -124,7 +123,6 @@ namespace Mix.Lib.Services
                 await ImportData();
 
                 await _uow.CompleteAsync();
-                _runtimeDbContextService.Reload();
                 return _siteData;
             }
             catch (Exception ex)
@@ -212,7 +210,6 @@ namespace Mix.Lib.Services
                     await _mixDbService.MigrateDatabase(dicMixDatabaseNames[item.SystemName]);
                 }
             }
-            _runtimeDbContextService.Reload();
         }
 
         private async Task ImportPosts()
@@ -439,7 +436,7 @@ namespace Mix.Lib.Services
                     if (database.Data != null && database.Data.Count > 0)
                     {
                         var sql = GetInsertQuery(database);
-                        await _runtimeDbContext.Database.ExecuteSqlRawAsync(sql);
+                        await _repository.ExecuteCommand(sql);
                     }
                 }
                 catch

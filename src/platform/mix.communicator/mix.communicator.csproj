@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>Mix.Communicator</RootNamespace>
@@ -14,7 +14,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="FirebaseAdmin" Version="2.3.0" />
-		<PackageReference Include="Google.Api.Gax.Rest" Version="4.0.0" />
+		<PackageReference Include="Google.Api.Gax.Rest" Version="4.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

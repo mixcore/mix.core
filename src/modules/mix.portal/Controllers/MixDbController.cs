@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Mix.Database.Repositories;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
@@ -23,8 +22,6 @@ namespace Mix.Portal.Controllers
         private const string childIdFieldName = "ChildId";
         private const string tenantIdFieldName = "MixTenantId";
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private readonly RuntimeDbContextService _runtimeDbContextService;
-        private RuntimeDbRepository _runtimeRepository;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
         private readonly MixRepoDbRepository _associationRepository;
@@ -44,8 +41,7 @@ namespace Mix.Portal.Controllers
             MixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             ICache cache,
-            DatabaseService databaseService,
-            RuntimeDbContextService runtimeDbContextService)
+            DatabaseService databaseService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _context = context;
@@ -54,7 +50,6 @@ namespace Mix.Portal.Controllers
             _associationRepository.InitTableName(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
-            _runtimeDbContextService = runtimeDbContextService;
 
         }
 
@@ -64,7 +59,6 @@ namespace Mix.Portal.Controllers
         {
             _tableName = RouteData?.Values["name"].ToString();
             _repository.InitTableName(_tableName);
-            _runtimeRepository = new(_runtimeDbContextService.GetMixDatabaseDbContext(), _tableName);
             base.OnActionExecuting(context);
         }
 
