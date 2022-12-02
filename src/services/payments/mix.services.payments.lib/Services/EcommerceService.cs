@@ -126,7 +126,7 @@ namespace Mix.Services.Payments.Lib.Services
 
             if (paymentService == null)
             {
-                throw new MixException(MixErrorStatus.ServerError, $"UnImplement {gateway} payment");
+                throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
             string returnUrl = $"{HttpContextAccessor.HttpContext.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
@@ -143,7 +143,7 @@ namespace Mix.Services.Payments.Lib.Services
 
             if (paymentService == null)
             {
-                throw new MixException(MixErrorStatus.ServerError, $"UnImplement {gateway} payment");
+                throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
             await paymentService.ProcessPaymentResponse(paymentResponse);
         }
