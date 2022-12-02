@@ -42,10 +42,10 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid?>("MixRoleId")
                     .HasColumnType("char(36)");
 
-                    b.Property<Guid>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+                b.Property<Guid>("RoleId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)")
+                    .HasDefaultValueSql("(uuid())");
 
                 b.HasKey("Id");
 
@@ -59,11 +59,11 @@ namespace Mix.Database.Migrations.MySqlAccount
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)")
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<string>("ConcurrencyStamp")
                     .HasColumnType("varchar(250)")
@@ -111,22 +111,15 @@ namespace Mix.Database.Migrations.MySqlAccount
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ClaimValue"), "utf8");
 
-                b.Property<Guid?>("MixUserId")
+                b.Property<Guid?>("MixUserId1")
                     .HasColumnType("char(36)");
-
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
 
                 b.Property<Guid>("UserId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.HasKey("Id");
-
-                b.HasIndex("MixUserId");
 
                 b.HasIndex("MixUserId1");
 
@@ -149,35 +142,19 @@ namespace Mix.Database.Migrations.MySqlAccount
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderKey"), "utf8");
 
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
-
-                b.Property<Guid?>("MixUserId1")
-                    .HasColumnType("char(36)");
-
                 b.Property<string>("ProviderDisplayName")
                     .HasColumnType("varchar(250)")
                     .UseCollation("utf8_unicode_ci");
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ProviderDisplayName"), "utf8");
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+                b.Property<Guid>("UserId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)")
+                    .HasDefaultValueSql("(uuid())");
 
-                    b.Property<Guid>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
-
-                b.HasIndex("MixUserId");
-
-                b.HasIndex("MixUserId1");
+                b.HasKey("LoginProvider", "ProviderKey")
+                    .HasName("PK_AspNetUserLogins_1");
 
                 b.HasIndex("UserId");
 
@@ -189,12 +166,12 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid>("UserId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<Guid>("RoleId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<int>("MixTenantId")
                     .HasColumnType("int");
@@ -202,17 +179,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid?>("AspNetRolesId")
                     .HasColumnType("char(36)");
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
-
-                b.Property<Guid?>("MixUserId")
-                    .HasColumnType("char(36)");
-
-                b.Property<Guid?>("MixUserId1")
+                b.Property<Guid?>("MixRoleId")
                     .HasColumnType("char(36)");
 
                 b.HasKey("UserId", "RoleId", "MixTenantId");
@@ -220,10 +187,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.HasIndex("AspNetRolesId");
 
                 b.HasIndex("MixRoleId");
-
-                b.HasIndex("MixUserId");
-
-                b.HasIndex("MixUserId1");
 
                 b.HasIndex("RoleId");
 
@@ -235,7 +198,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid>("UserId")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<string>("LoginProvider")
                     .HasColumnType("varchar(50)")
@@ -249,9 +212,6 @@ namespace Mix.Database.Migrations.MySqlAccount
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "utf8");
 
-                b.Property<Guid?>("MixUserId")
-                    .HasColumnType("char(36)");
-
                 b.Property<string>("Value")
                     .HasColumnType("varchar(4000)")
                     .UseCollation("utf8_unicode_ci");
@@ -259,8 +219,6 @@ namespace Mix.Database.Migrations.MySqlAccount
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Value"), "utf8");
 
                 b.HasKey("UserId", "LoginProvider", "Name");
-
-                b.HasIndex("MixUserId");
 
                 b.ToTable("AspNetUserTokens");
             });
@@ -271,12 +229,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                     .HasColumnType("varchar(50)")
                     .UseCollation("utf8_unicode_ci");
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.MixRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Id"), "utf8");
 
                 b.Property<bool>("Active")
                     .HasColumnType("tinyint(1)");
@@ -307,12 +260,7 @@ namespace Mix.Database.Migrations.MySqlAccount
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Secret"), "utf8");
 
-            modelBuilder.Entity("Mix.Database.Entities.Account.MixUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+                b.HasKey("Id");
 
                 b.ToTable("Clients");
             });
@@ -322,7 +270,7 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<string>("ConcurrencyStamp")
                     .HasColumnType("varchar(250)")
@@ -356,10 +304,16 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<Guid>("Id")
                     .ValueGeneratedOnAdd()
                     .HasColumnType("char(36)")
-                    .HasDefaultValueSql("uuid()");
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<int>("AccessFailedCount")
                     .HasColumnType("int");
+
+                b.Property<string>("Avatar")
+                    .HasColumnType("varchar(250)")
+                    .UseCollation("utf8_unicode_ci");
+
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Avatar"), "utf8");
 
                 b.Property<string>("ConcurrencyStamp")
                     .HasColumnType("varchar(250)")
@@ -370,6 +324,9 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<DateTime>("CreatedDateTime")
                     .HasColumnType("datetime");
 
+                b.Property<DateTime?>("DOB")
+                    .HasColumnType("datetime(6)");
+
                 b.Property<string>("Email")
                     .HasColumnType("varchar(250)")
                     .UseCollation("utf8_unicode_ci");
@@ -379,11 +336,29 @@ namespace Mix.Database.Migrations.MySqlAccount
                 b.Property<bool>("EmailConfirmed")
                     .HasColumnType("tinyint(1)");
 
+                b.Property<string>("FirstName")
+                    .HasColumnType("varchar(50)")
+                    .UseCollation("utf8_unicode_ci");
+
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("FirstName"), "utf8");
+
+                b.Property<string>("Gender")
+                    .HasColumnType("varchar(50)")
+                    .UseCollation("utf8_unicode_ci");
+
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Gender"), "utf8");
+
                 b.Property<bool>("IsActived")
                     .HasColumnType("tinyint(1)");
 
                 b.Property<DateTime?>("LastModified")
                     .HasColumnType("datetime");
+
+                b.Property<string>("LastName")
+                    .HasColumnType("varchar(50)")
+                    .UseCollation("utf8_unicode_ci");
+
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("LastName"), "utf8");
 
                 b.Property<bool>("LockoutEnabled")
                     .HasColumnType("tinyint(1)");
@@ -396,6 +371,12 @@ namespace Mix.Database.Migrations.MySqlAccount
                     .UseCollation("utf8_unicode_ci");
 
                 MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("ModifiedBy"), "utf8");
+
+                b.Property<string>("NickName")
+                    .HasColumnType("varchar(50)")
+                    .UseCollation("utf8_unicode_ci");
+
+                MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("NickName"), "utf8");
 
                 b.Property<string>("NormalizedEmail")
                     .HasColumnType("varchar(250)")
@@ -459,11 +440,11 @@ namespace Mix.Database.Migrations.MySqlAccount
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.MixUserTenant", b =>
-                {
-                    b.Property<Guid>("MixUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+            {
+                b.Property<Guid>("MixUserId")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)")
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<int>("TenantId")
                     .HasColumnType("int");
@@ -478,11 +459,11 @@ namespace Mix.Database.Migrations.MySqlAccount
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.RefreshTokens", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)")
-                        .HasDefaultValueSql("(uuid())");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("char(36)")
+                    .HasDefaultValueSql("(uuid())");
 
                 b.Property<string>("ClientId")
                     .IsRequired()
@@ -528,23 +509,27 @@ namespace Mix.Database.Migrations.MySqlAccount
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserClaims", b =>
             {
                 b.HasOne("Mix.Database.Entities.Account.MixUser", null)
-                    .WithMany("AspNetUserClaimsUser")
-                    .HasForeignKey("MixUserId");
-
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
                     .WithMany("Claims")
                     .HasForeignKey("MixUserId1");
+
+                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
+                    .WithMany("AspNetUserClaimsUser")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("MixUser");
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserLogins", b =>
             {
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
-                    .WithMany("AspNetUserLoginsApplicationUser")
-                    .HasForeignKey("MixUserId");
-
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
                     .WithMany("AspNetUserLoginsUser")
-                    .HasForeignKey("MixUserId1");
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("MixUser");
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserRoles", b =>
@@ -557,20 +542,24 @@ namespace Mix.Database.Migrations.MySqlAccount
                     .WithMany("AspNetUserRoles")
                     .HasForeignKey("MixRoleId");
 
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
-                    .WithMany("AspNetUserRolesApplicationUser")
-                    .HasForeignKey("MixUserId");
-
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
                     .WithMany("AspNetUserRolesUser")
-                    .HasForeignKey("MixUserId1");
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("MixUser");
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetUserTokens", b =>
             {
-                b.HasOne("Mix.Database.Entities.Account.MixUser", null)
+                b.HasOne("Mix.Database.Entities.Account.MixUser", "MixUser")
                     .WithMany("AspNetUserTokens")
-                    .HasForeignKey("MixUserId");
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("MixUser");
             });
 
             modelBuilder.Entity("Mix.Database.Entities.Account.AspNetRoles", b =>
@@ -591,11 +580,7 @@ namespace Mix.Database.Migrations.MySqlAccount
             {
                 b.Navigation("AspNetUserClaimsUser");
 
-                b.Navigation("AspNetUserLoginsApplicationUser");
-
                 b.Navigation("AspNetUserLoginsUser");
-
-                b.Navigation("AspNetUserRolesApplicationUser");
 
                 b.Navigation("AspNetUserRolesUser");
 

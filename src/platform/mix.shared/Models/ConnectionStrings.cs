@@ -4,6 +4,7 @@
     {
         public string MixAccountConnection { get; set; }
         public string MixCmsConnection { get; set; }
+        public string MixQuartzConnection { get; set; }
         public string MixDbConnection { get; set; }
     }
 }

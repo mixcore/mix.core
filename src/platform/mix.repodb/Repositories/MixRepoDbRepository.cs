@@ -16,6 +16,7 @@ using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
 using Mix.Shared.Models.Configurations;
+using Mix.Shared.Services;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -54,11 +55,15 @@ namespace Mix.RepoDb.Repositories
                 CommandTimeout = 1000
             };
             _databaseService = databaseService;
+
             _cmsUOW = cmsUOW;
             DatabaseProvider = _databaseService.DatabaseProvider;
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
-            InitializeRepoDb();
-            CreateConnection();
+            if (!string.IsNullOrEmpty(ConnectionString))
+            {
+                InitializeRepoDb();
+                CreateConnection();
+            }
         }
 
 
@@ -77,7 +82,7 @@ namespace Mix.RepoDb.Repositories
             ConnectionString = connectionString;
             _tableName = tableName;
             InitializeRepoDb();
-            CreateConnection();
+            CreateConnection(true);
         }
 
 
@@ -419,21 +424,21 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public IDbConnection CreateConnection()
+        public IDbConnection CreateConnection(bool isRoot = false)
         {
+            _isRoot = isRoot;
             var connectionType = GetDbConnectionType(DatabaseProvider);
-            
-            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
+
+            if (_isRoot)
             {
-                SetDbConnection();
-            }
-            else
-            {
-                _isRoot = true;
                 _connection = Activator.CreateInstance(connectionType) as IDbConnection;
                 _connection!.ConnectionString = ConnectionString;
                 _connection.Open();
                 _dbTransaction = _connection.BeginTransaction();
+            }
+            else
+            {
+                SetDbConnection();
             }
             return _connection;
         }
