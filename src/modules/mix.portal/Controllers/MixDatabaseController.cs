@@ -43,7 +43,7 @@ namespace Mix.Portal.Controllers
         {
             await _mixDbService.BackupDatabase(name);
             var result = await _mixDbService.MigrateDatabase(name);
-            await _mixDbService.RestoreFromLocal(name);
+            //await _mixDbService.RestoreFromLocal(name);
             return result ? Ok() : BadRequest();
         }
 
