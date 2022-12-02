@@ -38,6 +38,8 @@ namespace Mix.Database.Services
                     return AppSettings.ConnectionStrings?.MixAccountConnection;
                 case MixConstants.CONST_MIXDB_CONNECTION:
                     return AppSettings.ConnectionStrings?.MixDbConnection;
+                case MixConstants.CONST_QUARTZ_CONNECTION:
+                    return AppSettings.ConnectionStrings?.MixQuartzConnection;
                 default:
                     return string.Empty;
             }
@@ -47,6 +49,9 @@ namespace Mix.Database.Services
         {
             switch (name)
             {
+                case MixConstants.CONST_QUARTZ_CONNECTION:
+                    AppSettings.ConnectionStrings.MixQuartzConnection = value;
+                    break;
                 case MixConstants.CONST_CMS_CONNECTION:
                     AppSettings.ConnectionStrings.MixCmsConnection = value;
                     break;
@@ -119,11 +124,13 @@ namespace Mix.Database.Services
             // TODO: Seperate Account db. Current Store account to same database
             if (databaseProvider == MixDatabaseProvider.SQLITE)
             {
+                SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString.Replace(".db", "") + "-quartz.db");
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString.Replace(".db", "") + "-account.db");
                 SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString.Replace(".db", "") + "-mixdb.db");
             }
             else
             {
+                SetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION, connectionString);
                 SetConnectionString(MixConstants.CONST_ACCOUNT_CONNECTION, connectionString);
                 SetConnectionString(MixConstants.CONST_MIXDB_CONNECTION, connectionString);
             }

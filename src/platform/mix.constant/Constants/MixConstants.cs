@@ -4,7 +4,7 @@
     {
         public const string CONST_AUDIT_LOG_CONNECTION = "MixAuditLogConnection";
         public const string CONST_CMS_CONNECTION = "MixCmsConnection";
-        public const string CONST_QUARTZ_CONNECTION = "MixCmsConnection";
+        public const string CONST_QUARTZ_CONNECTION = "MixQuartzConnection";
         public const string CONST_ACCOUNT_CONNECTION = "MixAccountConnection";
         public const string CONST_MIXDB_CONNECTION = "MixDbConnection";
         public const string CONST_MESSENGER_CONNECTION = "MixMessengerConnection";

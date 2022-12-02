@@ -29,7 +29,7 @@ namespace Mix.Quartz.Services
         public async Task LoadScheduler()
         {
             DatabaseService databaseService = new(_httpContextAccessor);
-            string cnn = databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION);
+            string cnn = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
 
             if (string.IsNullOrEmpty(cnn))
             {
