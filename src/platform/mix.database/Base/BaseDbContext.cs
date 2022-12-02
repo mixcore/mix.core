@@ -38,7 +38,8 @@ namespace Mix.Database.Base
                         break;
 
                     case MixDatabaseProvider.MySQL:
-                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn));
+                        optionsBuilder.UseMySql(cnn, ServerVersion.AutoDetect(cnn),
+                            b => b.UseMicrosoftJson(MySqlCommonJsonChangeTrackingOptions.FullHierarchyOptimizedFast));
                         break;
 
                     case MixDatabaseProvider.SQLITE:

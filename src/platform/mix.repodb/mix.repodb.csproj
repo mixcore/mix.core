@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Mix.RepoDb</RootNamespace>
@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RepoDb" Version="1.12.10" />
-    <PackageReference Include="RepoDb.MySql" Version="1.1.6" />
-    <PackageReference Include="RepoDb.MySqlConnector" Version="1.1.5" />
-    <PackageReference Include="RepoDb.PostgreSql" Version="1.1.5" />
-    <PackageReference Include="RepoDb.SqLite" Version="1.1.4" />
-    <PackageReference Include="RepoDb.SqlServer" Version="1.1.5" />
+    <PackageReference Include="RepoDb" Version="1.13.0" />
+    <PackageReference Include="RepoDb.MySql" Version="1.13.0" />
+    <PackageReference Include="RepoDb.MySqlConnector" Version="1.13.0" />
+    <PackageReference Include="RepoDb.PostgreSql" Version="1.13.0" />
+    <PackageReference Include="RepoDb.Sqlite.Microsoft" Version="1.13.0" />
+    <PackageReference Include="RepoDb.SqlServer" Version="1.13.0" />
   </ItemGroup>
 
   <ItemGroup>

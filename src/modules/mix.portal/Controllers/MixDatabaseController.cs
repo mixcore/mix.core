@@ -20,7 +20,7 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, RuntimeDbContextService runtimeDbContextService, ApplicationLifetime applicationLifetime)
+            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, ApplicationLifetime applicationLifetime)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
         {
             _mixDbService = mixDbService;
