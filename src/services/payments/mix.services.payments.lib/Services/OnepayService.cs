@@ -35,12 +35,12 @@ namespace Mix.Services.Payments.Lib.Constants.Services
             session.Bind(_settings);
         }
 
-        public async Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl)
+        public async Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl, CancellationToken cancellationToken)
         {
-            return await ParseRequestUrlAsync(request, returnUrl);
+            return await ParseRequestUrlAsync(request, returnUrl, cancellationToken);
         }
 
-        private async Task<string?> ParseRequestUrlAsync(OrderViewModel order, string returnUrl)
+        private async Task<string?> ParseRequestUrlAsync(OrderViewModel order, string returnUrl, CancellationToken cancellationToken)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Mix.Services.Payments.Lib.Constants.Services
                 request.AgainLink = System.Net.WebUtility.UrlEncode(returnUrl);
                 request.vpc_ReturnURL = System.Net.WebUtility.UrlEncode(returnUrl);
 
-                await SaveRequest(request, PaymentStatus.PENDING);
+                await SaveRequest(request, PaymentStatus.PENDING, cancellationToken);
 
                 Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
                 parameters["vpc_SecureHash"] = CreateSHA256Signature(parameters);
@@ -103,14 +103,14 @@ namespace Mix.Services.Payments.Lib.Constants.Services
             return hexHash;
         }
 
-        private async Task SaveResponse(OnepayTransactionResponse response, PaymentStatus paymentStatus)
+        private async Task SaveResponse(OnepayTransactionResponse response, PaymentStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = new OnepayTransactionResponseViewModel(response, _cmsUOW);
             vm.PaymentStatus = paymentStatus;
-            await vm.SaveAsync();
+            await vm.SaveAsync(cancellationToken);
         }
 
-        private async Task SaveRequest(PaymentRequest request, PaymentStatus paymentStatus)
+        private async Task SaveRequest(PaymentRequest request, PaymentStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
             if (vm == null)
@@ -121,10 +121,10 @@ namespace Mix.Services.Payments.Lib.Constants.Services
             }
             vm.PaymentStatus = paymentStatus;
 
-            await vm.SaveAsync();
+            await vm.SaveAsync(cancellationToken);
         }
 
-        public async Task<PaymentQueryResponse> Query(PaymentQueryRequest request)
+        public async Task<PaymentQueryResponse> Query(PaymentQueryRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Mix.Services.Payments.Lib.Constants.Services
             }
         }
 
-        public async Task<PaymentStatus> ProcessPaymentResponse(JObject responseObj)
+        public async Task<PaymentStatus> ProcessPaymentResponse(JObject responseObj, CancellationToken cancellationToken)
         {
             var response = responseObj.ToObject<OnepayTransactionResponse>();
             var status = PaymentStatus.PENDING;
@@ -164,7 +164,7 @@ namespace Mix.Services.Payments.Lib.Constants.Services
                 status = PaymentStatus.INVALIDRESPONSE;
             }
             status = PaymentStatus.SUCCESS;
-            await SaveResponse(response, status);
+            await SaveResponse(response, status, cancellationToken);
             return status;
         }
 

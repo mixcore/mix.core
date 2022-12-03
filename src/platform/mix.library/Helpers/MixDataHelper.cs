@@ -215,7 +215,7 @@ namespace Mix.Lib.Helpers
             Expression<Func<MixDataContentAssociation, bool>> predicate = model =>
                     model.MixDatabaseId == referenceId
                     && model.GuidParentId == dataContentId
-                    && model.ParentType == MixDatabaseParentType.Set;
+                    && model.ParentType == MixDatabaseParentType.MixDatabse;
 
             var relatedContents = await assoRepo.GetListAsync(predicate, cancellationToken);
 

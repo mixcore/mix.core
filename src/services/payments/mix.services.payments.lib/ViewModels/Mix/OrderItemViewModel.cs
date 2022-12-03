@@ -6,7 +6,7 @@ using Mix.Services.Payments.Lib.Entities.Mix;
 namespace Mix.Services.Payments.Lib.ViewModels.Mix
 {
     [GenerateRestApiController]
-    public class OrderItemViewModel : ViewModelBase<EcommerceDbContext, OrderItem, int, OrderItemViewModel>
+    public class OrderItemViewModel : ViewModelBase<PaymentDbContext, OrderItem, int, OrderItemViewModel>
     {
         #region Properties
         public string Title { get; set; }
@@ -29,7 +29,7 @@ namespace Mix.Services.Payments.Lib.ViewModels.Mix
         {
         }
 
-        public OrderItemViewModel(EcommerceDbContext context) : base(context)
+        public OrderItemViewModel(PaymentDbContext context) : base(context)
         {
         }
 

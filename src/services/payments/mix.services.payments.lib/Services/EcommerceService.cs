@@ -20,10 +20,10 @@ namespace Mix.Services.Payments.Lib.Services
     {
         private IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
-        private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
+        private readonly UnitOfWorkInfo<PaymentDbContext> _uow;
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<EcommerceDbContext> uow,
+            UnitOfWorkInfo<PaymentDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider) : base(httpContextAccessor)
         {
@@ -130,7 +130,7 @@ namespace Mix.Services.Payments.Lib.Services
             }
 
             string returnUrl = $"{HttpContextAccessor.HttpContext.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
-            var url = await paymentService.GetPaymentUrl(cart, returnUrl) ;
+            var url = await paymentService.GetPaymentUrl(cart, returnUrl,  cancellationToken) ;
             return url;
         }
         
@@ -145,7 +145,7 @@ namespace Mix.Services.Payments.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
-            await paymentService.ProcessPaymentResponse(paymentResponse);
+            await paymentService.ProcessPaymentResponse(paymentResponse, cancellationToken);
         }
 
     }

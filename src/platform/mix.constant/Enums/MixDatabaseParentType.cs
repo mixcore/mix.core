@@ -2,7 +2,7 @@
 {
     public enum MixDatabaseParentType
     {
-        Set,
+        MixDatabse,
         Post,
         Page,
         Module,

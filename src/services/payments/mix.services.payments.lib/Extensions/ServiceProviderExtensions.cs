@@ -18,12 +18,12 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {
-        public static void AddMixEcommerce(this IServiceCollection services)
+        public static void AddMixPayment(this IServiceCollection services)
         {
-            services.TryAddScoped<EcommerceDbContext>();
-            services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
+            services.TryAddScoped<PaymentDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<PaymentDbContext>>();
             services.TryAddScoped<EcommerceService>();
-            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<EcommerceDbContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<PaymentDbContext>>();
         }
         
         public static void AddMixOnepay(this IServiceCollection services)
