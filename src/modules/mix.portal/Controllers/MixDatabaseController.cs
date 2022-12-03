@@ -41,7 +41,7 @@ namespace Mix.Portal.Controllers
         [HttpGet("migrate/{name}")]
         public async Task<ActionResult> Migrate(string name)
         {
-            await _mixDbService.BackupDatabase(name);
+            //await _mixDbService.BackupDatabase(name);
             var result = await _mixDbService.MigrateDatabase(name);
             //await _mixDbService.RestoreFromLocal(name);
             return result ? Ok() : BadRequest();

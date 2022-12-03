@@ -10,7 +10,8 @@ namespace Mix.Services.Payments.Lib.Entities.Mix
         public string ReferenceUrl { get; set; }
         public string? Currency { get; set; }
         public int PostId { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
+        public double? Percent { get; set; }
         public int Quantity { get; set; }
         public double Total { get; set; }
         public int OrderId { get; set; }

@@ -36,7 +36,6 @@ namespace Mix.Lib.Base
             Translator = translator;
             MixIdentityService = mixIdentityService;
             QueueService = queueService;
-            CancellationToken = new CancellationTokenSource().Token;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)

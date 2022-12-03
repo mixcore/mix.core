@@ -150,7 +150,7 @@ namespace Mix.Lib.ViewModels
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             Context.MixDataContentValue.RemoveRange(Context.MixDataContentValue.Where(m => m.ParentId == Id));
-            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId == Id));
+            Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.MixDatabse && m.GuidParentId == Id));
 
             if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
             {

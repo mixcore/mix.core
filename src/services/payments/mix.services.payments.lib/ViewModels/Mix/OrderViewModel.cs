@@ -5,7 +5,7 @@ using Mix.Services.Payments.Lib.Enums;
 
 namespace Mix.Services.Payments.Lib.ViewModels.Mix
 {
-    public class OrderViewModel : ViewModelBase<EcommerceDbContext, Order, int, OrderViewModel>
+    public class OrderViewModel : ViewModelBase<PaymentDbContext, Order, int, OrderViewModel>
     {
         #region Properties
 
@@ -27,7 +27,7 @@ namespace Mix.Services.Payments.Lib.ViewModels.Mix
         {
         }
 
-        public OrderViewModel(EcommerceDbContext context) : base(context)
+        public OrderViewModel(PaymentDbContext context) : base(context)
         {
         }
 

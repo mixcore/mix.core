@@ -51,6 +51,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Ocelot" Version="18.0.0" />
 	</ItemGroup>
 
@@ -63,8 +67,8 @@
 		<ProjectReference Include="..\..\modules\mix.scheduler\mix.scheduler.csproj" />
 		<ProjectReference Include="..\..\modules\mix.storage\mix.storage.csproj" />
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
-		<ProjectReference Include="..\..\services\mix.services.ecommerce\mix.services.ecommerce.csproj" />
-		<ProjectReference Include="..\..\services\mix.servives.permission\mix.services.permission.csproj" />
+		<ProjectReference Include="..\..\services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
+		<ProjectReference Include="..\..\services\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
 		<ProjectReference Include="..\..\services\payments\mix.services.payments.onepay\mix.services.payments.onepay.csproj" />
 	</ItemGroup>
 	<ItemGroup>
@@ -83,6 +87,12 @@
 		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
 		<EmbeddedResource Remove="wwwroot\mix-content\**" />
 		<None Remove="wwwroot\mix-content\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="MixContent\Shared\AppConfigs\databasenesto.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="MixContent\Shared\AppConfigs\databasenesto.json" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="wwwroot\mix-app\css\swagger.css">

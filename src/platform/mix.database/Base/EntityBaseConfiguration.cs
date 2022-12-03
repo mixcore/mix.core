@@ -10,7 +10,7 @@ namespace Mix.Database.Base
     {
         protected virtual IDatabaseConstants Config { get; set; }
 
-        private readonly DatabaseService _databaseService;
+        protected readonly DatabaseService _databaseService;
 
         protected EntityBaseConfiguration(DatabaseService databaseService)
         {

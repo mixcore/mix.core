@@ -178,7 +178,7 @@ namespace Mix.Portal.Domain.Services
             predicate = predicate.OrIf(postIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Post && m.IntParentId.HasValue && postIds.Keys.Contains(m.IntParentId.Value));
             predicate = predicate.OrIf(pageIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId.HasValue && pageIds.Keys.Contains(m.IntParentId.Value));
             predicate = predicate.OrIf(moduleIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Module && m.IntParentId.HasValue && moduleIds.Keys.Contains(m.IntParentId.Value));
-            predicate = predicate.OrIf(dataIds.Count > 0, m => m.ParentType == MixDatabaseParentType.Set && m.GuidParentId.HasValue && dataIds.Keys.Contains(m.GuidParentId.Value));
+            predicate = predicate.OrIf(dataIds.Count > 0, m => m.ParentType == MixDatabaseParentType.MixDatabse && m.GuidParentId.HasValue && dataIds.Keys.Contains(m.GuidParentId.Value));
             predicate = predicate.AndAlso(m => m.MixTenantId == CurrentTenant.Id && m.Specificulture == _srcCulture.Specificulture);
             var data = _cmsUOW.DbContext.MixDataContentAssociation
                 .Where(predicate)

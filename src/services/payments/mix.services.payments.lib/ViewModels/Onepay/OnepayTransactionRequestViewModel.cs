@@ -27,6 +27,7 @@ namespace Mix.Services.Payments.Lib.ViewModels.Onepay.Onepay
         public string vpc_Customer_Phone { get; set; }
         public string vpc_Customer_Email { get; set; }
         public string vpc_Customer_Id { get; set; }
+        public int? ResponseId { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public int MixTenantId { get; set; }
 

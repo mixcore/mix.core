@@ -11,9 +11,11 @@ namespace Mix.Shared.Models
 
         public bool IsRequire { get; set; }
         public bool IsEncrypt { get; set; }
+        public bool IsSelect { get; set; }
         public int? MaxLength { get; set; }
         public string BelongTo { get; set; }
         public string OptionsConfigurationName { get; set; }
+        public List<object> AllowedValues { get; set; }
         public UploadConfigurations Upload { get; set; } = new UploadConfigurations();
     }
 

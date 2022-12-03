@@ -9,8 +9,8 @@ namespace Mix.Services.Payments.Lib.Interface
     public interface IPaymentService
     {
         string CreateSHA256Signature(Dictionary<string, string> parameters);
-        Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl);
-        Task<PaymentStatus> ProcessPaymentResponse(JObject response);
-        Task<PaymentQueryResponse> Query(PaymentQueryRequest request);
+        Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl, CancellationToken cancellationToken);
+        Task<PaymentStatus> ProcessPaymentResponse(JObject response, CancellationToken cancellationToken);
+        Task<PaymentQueryResponse> Query(PaymentQueryRequest request, CancellationToken cancellationToken);
     }
 }

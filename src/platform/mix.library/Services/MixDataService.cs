@@ -130,7 +130,7 @@ namespace Mix.Lib.Services
                     var excludeIds = _dbContext.MixDataContentAssociation.Where(
                         m => (m.MixDatabaseId == searchRequest.MixDatabaseId || m.MixDatabaseName == searchRequest.MixDatabaseName)
                         && m.Specificulture == culture
-                        && m.ParentType == MixDatabaseParentType.Set
+                        && m.ParentType == MixDatabaseParentType.MixDatabse
                         && m.ParentId != Guid.Empty)
                         .Select(m => m.DataContentId);
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
@@ -180,7 +180,7 @@ namespace Mix.Lib.Services
 
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                     model => (model.MixDatabaseId == referenceId)
-                    && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.Set);
+                    && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.MixDatabse);
             var relatedContents = await _assoRepo.GetListAsync(predicate);
 
             JArray arr = new();
