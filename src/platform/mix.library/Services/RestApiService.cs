@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Identity.Constants;
 using Mix.Lib.Models.Common;
+using System.Threading;
 
 namespace Mix.Lib.Services
 {
@@ -36,8 +37,9 @@ namespace Mix.Lib.Services
 
         #region Command Handlers
 
-        public virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
+        public virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (data == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Null Object");
@@ -54,60 +56,66 @@ namespace Mix.Lib.Services
             data.CreatedDateTime = DateTime.UtcNow;
             data.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
-            var id = await data.SaveAsync();
+            var id = await data.SaveAsync(cancellationToken);
             _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
             return id;
         }
 
-        public virtual async Task UpdateHandler(TPrimaryKey id, TView data)
+        public virtual async Task UpdateHandler(TPrimaryKey id, TView data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var currentId = ReflectionHelper.GetPropertyValue(data, "id").ToString();
             if (id.ToString() != currentId)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
             }
             data.SetUowInfo(_uow);
-            await data.SaveAsync();
+            await data.SaveAsync(cancellationToken);
             await _cacheService.RemoveCacheAsync(id, typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
-        public virtual async Task DeleteHandler(TView data)
+        public virtual async Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(_uow);
             await data.DeleteAsync();
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView));
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView), cancellationToken);
             _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
 
-        public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
+        public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(_uow);
-            await data.SaveFieldsAsync(properties);
+            await data.SaveFieldsAsync(properties, cancellationToken);
             await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
             _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
-        public virtual async Task SaveManyHandler(List<TView> data)
+        public virtual async Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             foreach (var item in data)
             {
                 item.SetUowInfo(_uow);
-                await item.SaveAsync();
+                await item.SaveAsync(cancellationToken);
             }
         }
 
         #endregion
 
         #region Query Handlers
-        public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest)
+        public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
-        public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)
+        public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (!string.IsNullOrEmpty(req.Columns))
             {
                 _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));

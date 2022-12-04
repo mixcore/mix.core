@@ -23,13 +23,13 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task DeleteHandler(MixDomainViewModel data)
+        protected override Task DeleteHandler(MixDomainViewModel data, CancellationToken cancellationToken = default)
         {
             if (data.Id == 1)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Cannot delete root domain");
             }
-            return base.DeleteHandler(data);
+            return base.DeleteHandler(data, cancellationToken);
         }
 
         #endregion

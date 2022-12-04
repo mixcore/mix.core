@@ -27,21 +27,21 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override async Task<int> CreateHandlerAsync(MixConfigurationContentViewModel data)
+        protected override async Task<int> CreateHandlerAsync(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
-            var result = await base.CreateHandlerAsync(data);
+            var result = await base.CreateHandlerAsync(data, cancellationToken);
             await _configService.Reload(_cmsUOW);
             return result;
         }
-        protected override async Task UpdateHandler(int id, MixConfigurationContentViewModel data)
+        protected override async Task UpdateHandler(int id, MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
-            await base.UpdateHandler(id, data);
+            await base.UpdateHandler(id, data, cancellationToken);
             await _configService.Reload(_cmsUOW);
         }
 
-        protected override async Task DeleteHandler(MixConfigurationContentViewModel data)
+        protected override async Task DeleteHandler(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
-            await base.DeleteHandler(data);
+            await base.DeleteHandler(data, cancellationToken);
             await _configService.Reload(_cmsUOW);
         }
         #endregion

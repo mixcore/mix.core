@@ -36,39 +36,44 @@ namespace Mix.Lib.Base
 
         #region Command Handlers
 
-        protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data)
+        protected virtual async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)
         {
-            return await RestApiService.CreateHandlerAsync(data);
+            cancellationToken.ThrowIfCancellationRequested();
+            return await RestApiService.CreateHandlerAsync(data, cancellationToken);
         }
 
-        protected virtual Task UpdateHandler(TPrimaryKey id, TView data)
+        protected virtual Task UpdateHandler(TPrimaryKey id, TView data, CancellationToken cancellationToken = default)
         {
-            return RestApiService.UpdateHandler(id, data);
+            cancellationToken.ThrowIfCancellationRequested();
+            return RestApiService.UpdateHandler(id, data, cancellationToken);
         }
 
-        protected virtual Task DeleteHandler(TView data)
+        protected virtual Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
         {
-            return RestApiService.DeleteHandler(data);
+            cancellationToken.ThrowIfCancellationRequested();
+            return RestApiService.DeleteHandler(data, cancellationToken);
         }
 
 
-        protected virtual Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties)
+        protected virtual Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
         {
-            return RestApiService.PatchHandler(id, data, properties);
+            cancellationToken.ThrowIfCancellationRequested();
+            return RestApiService.PatchHandler(id, data, properties, cancellationToken);
         }
 
-        protected virtual Task SaveManyHandler(List<TView> data)
+        protected virtual Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)
         {
-            return RestApiService.SaveManyHandler(data);
+            cancellationToken.ThrowIfCancellationRequested();
+            return RestApiService.SaveManyHandler(data, cancellationToken);
         }
 
         #endregion
 
         #region Query Handlers
-        protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        protected virtual Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
         {
             var searchRequest = BuildSearchRequest(req);
-            return RestApiService.SearchHandler(req, searchRequest);
+            return RestApiService.SearchHandler(req, searchRequest, cancellationToken);
         }
 
         protected virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result)

@@ -53,16 +53,17 @@ namespace Mix.Portal.Controllers
             return result;
         }
 
-        protected override Task<int> CreateHandlerAsync(MixTemplateViewModel data)
+        protected override Task<int> CreateHandlerAsync(MixTemplateViewModel data, CancellationToken cancellationToken)
         {
             data.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.MixThemeName}/{data.FolderType}";
-            return base.CreateHandlerAsync(data);
+            return base.CreateHandlerAsync(data, cancellationToken);
         }
 
-        protected override Task UpdateHandler(int id, MixTemplateViewModel data)
+        protected override Task UpdateHandler(int id, MixTemplateViewModel data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             data.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.MixThemeName}/{data.FolderType}";
-            return base.UpdateHandler(id, data);
+            return base.UpdateHandler(id, data, cancellationToken);
         }
         protected override SearchQueryModel<MixTemplate, int> BuildSearchRequest(SearchRequestDto req)
         {

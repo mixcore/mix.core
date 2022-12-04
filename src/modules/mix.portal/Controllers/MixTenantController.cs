@@ -35,11 +35,11 @@ namespace Mix.Portal.Controllers
         }
 
         #region Overrides
-        protected override async Task<int> CreateHandlerAsync(MixTenantViewModel data)
+        protected override async Task<int> CreateHandlerAsync(MixTenantViewModel data, CancellationToken cancellationToken = default)
         {
             data.InitDomain();
             data.CloneCulture(Culture);
-            var tenantId = await base.CreateHandlerAsync(data);
+            var tenantId = await base.CreateHandlerAsync(data, cancellationToken);
             await Uow.CompleteAsync();
             var user = await _userManager.FindByIdAsync(MixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
@@ -61,14 +61,15 @@ namespace Mix.Portal.Controllers
             await _mixTenantService.Reload();
         }
 
-        protected override async Task DeleteHandler(MixTenantViewModel data)
+        protected override async Task DeleteHandler(MixTenantViewModel data, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             if (data.Id == 1)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Cannot delete root tenant");
             }
 
-            await base.DeleteHandler(data);
+            await base.DeleteHandler(data, cancellationToken);
 
             // Complete and close CMS context transaction (SignalR cannot open parallel context).
             await Uow.CompleteAsync();
@@ -76,11 +77,12 @@ namespace Mix.Portal.Controllers
             // Reload tenants after deleting the tenant.
             await _mixTenantService.Reload();
 
-            await DeleteTenantAccount(data.Id);
+            await DeleteTenantAccount(data.Id, cancellationToken);
         }
 
-        private async Task DeleteTenantAccount(int tenantId)
+        private async Task DeleteTenantAccount(int tenantId, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             foreach (var item in _accContext.AspNetUserRoles.Where(m => m.MixTenantId == tenantId))
             {
                 _accContext.Entry(item).State = EntityState.Deleted;

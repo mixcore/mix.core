@@ -27,14 +27,14 @@ namespace Mix.Portal.Controllers
             _colRepository = MixDatabaseColumnViewModel.GetRootRepository(cmsUOW.DbContext);
         }
         protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
-            [FromQuery] SearchRequestDto req)
+            [FromQuery] SearchRequestDto req, CancellationToken cancellationToken = default)
         {
             SearchDataContentModel searchReq = new SearchDataContentModel(CurrentTenant.Id, req, Request);
-            return await _mixDataService.Search<MixDataContentViewModel>(searchReq, Lang);
+            return await _mixDataService.Search<MixDataContentViewModel>(searchReq, Lang, cancellationToken);
         }
 
         [HttpGet("additional-data")]
-        public async Task<ActionResult<MixDataContentViewModel>> GetAdditionalData([FromQuery] GetAdditionalDataDto dto)
+        public async Task<ActionResult<MixDataContentViewModel>> GetAdditionalData([FromQuery] GetAdditionalDataDto dto, CancellationToken cancellationToken = default)
         {
             if (dto.IsValid())
             {
@@ -44,28 +44,29 @@ namespace Mix.Portal.Controllers
                     dto.DatabaseName,
                     dto.GuidParentId,
                     dto.IntParentId,
-                    dto.Specificulture);
+                    dto.Specificulture,
+                    cancellationToken);
                 return Ok(getData);
             }
             return BadRequest();
         }
 
         [HttpPost("{lang}/{databaseName}")]
-        public async Task<ActionResult> CreateData([FromRoute] string databaseName, [FromBody] JObject data)
+        public async Task<ActionResult> CreateData([FromRoute] string databaseName, [FromBody] JObject data, CancellationToken cancellationToken = default)
         {
             var mixData = new MixDataContentViewModel(Lang, Culture.Id, databaseName, data);
             mixData.SetUowInfo(Uow);
-            var result = await mixData.SaveAsync();
+            var result = await mixData.SaveAsync(cancellationToken);
             return Ok(result);
         }
 
         [HttpGet("init/{databaseName}")]
         [HttpGet("{lang}/init/{databaseName}")]
-        public async Task<ActionResult> InitData([FromRoute] string databaseName)
+        public async Task<ActionResult> InitData([FromRoute] string databaseName, CancellationToken cancellationToken = default)
         {
             int.TryParse(databaseName, out int id);
             var dbRepo = MixDatabaseViewModel.GetRepository(Uow);
-            var mixdb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName);
+            var mixdb = await dbRepo.GetSingleAsync(m => m.Id == id || m.SystemName == databaseName, cancellationToken);
             var mixData = new MixDataContentViewModel(Lang, Culture.Id, databaseName, new JObject())
             {
                 Columns = mixdb.Columns,
@@ -76,14 +77,14 @@ namespace Mix.Portal.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<ActionResult> UpdateData(Guid id, [FromBody] JObject data)
+        public async Task<ActionResult> UpdateData(Guid id, [FromBody] JObject data, CancellationToken cancellationToken = default)
         {
-            var mixData = await Repository.GetSingleAsync(m => m.Id == id);
+            var mixData = await Repository.GetSingleAsync(m => m.Id == id, cancellationToken);
             if (mixData != null)
             {
                 mixData.Data = data;
                 mixData.SetUowInfo(Uow);
-                var result = await mixData.SaveAsync();
+                var result = await mixData.SaveAsync(cancellationToken);
                 return Ok(result);
             }
             return NotFound(id);

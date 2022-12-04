@@ -45,10 +45,10 @@ namespace Mix.Services.Payments.Lib.ViewModels.Mix
 
         #region Overrides
 
-        public override void ParseView<TSource>(TSource sourceObject)
+        public override void ParseView<TSource>(TSource sourceObject, CancellationToken cancellationToken)
         {
             Total = Price * Quantity;
-            base.ParseView(sourceObject);
+            base.ParseView(sourceObject, cancellationToken);
         }
 
         #endregion

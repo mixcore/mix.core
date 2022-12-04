@@ -76,12 +76,12 @@ namespace Mix.RepoDb.Services
             return false;
         }
 
-        public async Task<bool> BackupDatabase(string databaseName)
+        public async Task<bool> BackupDatabase(string databaseName, CancellationToken cancellationToken = default)
         {
-            var database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == databaseName);
+            var database = await MixDatabaseViewModel.GetRepository(_uow).GetSingleAsync(m => m.SystemName == databaseName, cancellationToken);
             if (database != null)
             {
-                return await BackupToLocal(database);
+                return await BackupToLocal(database, cancellationToken);
             }
             return false;
         }
@@ -90,9 +90,9 @@ namespace Mix.RepoDb.Services
 
         #region Private
 
-        private async Task<bool> BackupToLocal(MixDatabaseViewModel database)
+        private async Task<bool> BackupToLocal(MixDatabaseViewModel database, CancellationToken cancellationToken = default)
         {
-            var data = await GetCurrentData(database.SystemName);
+            var data = await GetCurrentData(database.SystemName, cancellationToken);
             if (data != null && data.Count > 0)
             {
                 InitBackupRepository(database.SystemName);
@@ -146,10 +146,11 @@ namespace Mix.RepoDb.Services
             }
         }
 
-        private async Task<List<dynamic>?> GetCurrentData(string databaseName)
+        private async Task<List<dynamic>?> GetCurrentData(string databaseName, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _repository.InitTableName(databaseName);
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllAsync(cancellationToken);
         }
 
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, MixRepoDbRepository repo)

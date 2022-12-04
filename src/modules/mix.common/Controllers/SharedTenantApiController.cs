@@ -88,12 +88,12 @@ namespace Mix.Common.Controllers
 
         #endregion
 
-        private async Task<AllSettingModel> GetSettingsAsync(string lang = null)
+        private async Task<AllSettingModel> GetSettingsAsync(string lang = null, CancellationToken cancellationToken = default)
         {
             return new AllSettingModel()
             {
                 GlobalSettings = CommonHelper.GetAppSettings(_authConfigurations, CurrentTenant),
-                MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang),
+                MixConfigurations = await _configRepo.GetListAsync(m => m.Specificulture == lang, cancellationToken),
                 Translator = _langRepo.GetListQuery(m => m.Specificulture == lang).ToList()
             };
         }

@@ -35,19 +35,19 @@ namespace Mix.Portal.Controllers
             return searchRequest;
         }
 
-        protected override Task<int> CreateHandlerAsync(MixModuleDataViewModel data)
+        protected override Task<int> CreateHandlerAsync(MixModuleDataViewModel data, CancellationToken cancellationToken = default)
         {
             data.Specificulture = Culture.Specificulture;
             data.MixCultureId = Culture.Id;
-            return base.CreateHandlerAsync(data);
+            return base.CreateHandlerAsync(data, cancellationToken);
         }
         #endregion
 
         [HttpGet]
         [Route("init-form/{moduleId}")]
-        public async Task<ActionResult<MixModuleDataViewModel>> InitByIdAsync(int moduleId)
+        public async Task<ActionResult<MixModuleDataViewModel>> InitByIdAsync(int moduleId, CancellationToken cancellationToken = default)
         {
-            var getModule = await MixModuleContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == moduleId)
+            var getModule = await MixModuleContentViewModel.GetRepository(Uow).GetSingleAsync(m => m.Id == moduleId, cancellationToken)
                 .ConfigureAwait(false);
             if (getModule != null)
             {
@@ -56,7 +56,7 @@ namespace Mix.Portal.Controllers
                     ParentId = getModule.Id,
                     SimpleDataColumns = getModule.SimpleDataColumns
                 };
-                await moduleData.ExpandView();
+                await moduleData.ExpandView(cancellationToken);
                 return Ok(moduleData);
             }
             else

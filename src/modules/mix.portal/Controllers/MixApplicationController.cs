@@ -41,9 +41,9 @@ namespace Mix.Portal.Controllers
         #endregion
 
         #region Overrides
-        protected override async Task<PagingResponseModel<MixApplicationViewModel>> SearchHandler(SearchRequestDto req)
+        protected override async Task<PagingResponseModel<MixApplicationViewModel>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
         {
-            var result = await base.SearchHandler(req);
+            var result = await base.SearchHandler(req, cancellationToken);
             foreach (var item in result.Items)
             {
                 item.DetailUrl = $"{CurrentTenant.PrimaryDomain}/app/{item.BaseRoute}";

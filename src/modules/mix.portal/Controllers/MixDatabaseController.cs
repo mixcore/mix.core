@@ -65,25 +65,25 @@ namespace Mix.Portal.Controllers
 
         #endregion
         #region Overrides
-        protected override async Task UpdateHandler(int id, MixDatabaseViewModel data)
+        protected override async Task UpdateHandler(int id, MixDatabaseViewModel data, CancellationToken cancellationToken)
         {
             try
             {
-                await _mixDbService.BackupDatabase(data.SystemName);
-                await base.UpdateHandler(id, data);
+                await _mixDbService.BackupDatabase(data.SystemName, cancellationToken);
+                await base.UpdateHandler(id, data, cancellationToken);
             }
             catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.ServerError, ex);
             }
         }
-        protected override Task DeleteHandler(Lib.ViewModels.MixDatabaseViewModel data)
+        protected override Task DeleteHandler(Lib.ViewModels.MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             if (data.Type == MixDatabaseType.System)
             {
                 throw new MixException($"Cannot Delete System Database: {data.SystemName}");
             }
-            return base.DeleteHandler(data);
+            return base.DeleteHandler(data, cancellationToken);
         }
         #endregion
 

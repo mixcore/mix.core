@@ -62,11 +62,14 @@ namespace Mix.Lib.Services
 
         public async Task<PagingResponseModel<TView>> Search<TView>(
             SearchDataContentModel searchRequest,
-            string culture = null)
+            string culture = null,
+            CancellationToken cancellationToken = default)
            where TView : ViewModelBase<MixCmsContext, MixDataContent, Guid, TView>
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var _colRepo = MixDatabaseColumnViewModel.GetRepository(_uow);
                 var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
 
@@ -74,7 +77,7 @@ namespace Mix.Lib.Services
                 culture ??= CurrentTenant.Configurations.DefaultCulture;
                 var fields = await _colRepo.GetListQuery(
                     m => m.MixDatabaseId == searchRequest.MixDatabaseId
-                            || m.MixDatabaseName == searchRequest.MixDatabaseName).ToListAsync();
+                            || m.MixDatabaseName == searchRequest.MixDatabaseName, cancellationToken).ToListAsync();
 
                 // Data predicate
                 Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
@@ -136,7 +139,7 @@ namespace Mix.Lib.Services
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
                 }
 
-                result = await _contentRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+                result = await _contentRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
                 return result;
             }
             catch (Exception ex)

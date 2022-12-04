@@ -24,7 +24,7 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task<int> CreateHandlerAsync(MixPagePostAssociationViewModel data)
+        protected override Task<int> CreateHandlerAsync(MixPagePostAssociationViewModel data, CancellationToken cancellationToken = default)
         {
             if (_cmsUOW.DbContext.MixPagePostAssociation.Any(
                 m => m.MixTenantId == CurrentTenant.Id
@@ -33,7 +33,7 @@ namespace Mix.Portal.Controllers
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Entity existed");
             }
-            return base.CreateHandlerAsync(data);
+            return base.CreateHandlerAsync(data, cancellationToken);
         }
         #endregion
 
