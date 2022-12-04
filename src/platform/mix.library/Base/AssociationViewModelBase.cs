@@ -37,9 +37,8 @@ namespace Mix.Lib.Base
 
         #region Overrides
 
-        public override async Task Validate()
+        public override async Task Validate(CancellationToken cancellationToken)
         {
-            await base.Validate();
 
             if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.MixTenantId == MixTenantId && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
             {
@@ -56,6 +55,8 @@ namespace Mix.Lib.Base
                 IsValid = false;
                 Errors.Add(new("Child Id cannot be null"));
             }
+
+            await base.Validate(cancellationToken);
 
         }
         #endregion

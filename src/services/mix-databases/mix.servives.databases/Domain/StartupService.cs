@@ -15,6 +15,7 @@ namespace Mix.Services.Databases.Lib
             services.TryAddScoped<UnitOfWorkInfo<MixServiceDatabaseDbContext>>();
             services.TryAddScoped<MixPermissionService>();
             services.TryAddScoped<MixMetadataService>();
+            services.TryAddScoped<MixUserDataService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixServiceDatabaseDbContext>>();
         }
 

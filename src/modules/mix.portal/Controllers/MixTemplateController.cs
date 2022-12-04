@@ -35,10 +35,7 @@ namespace Mix.Portal.Controllers
                 {
                     return Ok(copyResult);
                 }
-                else
-                {
-                    return BadRequest(copyResult.Errors);
-                }
+                return BadRequest();
             }
             else
             {

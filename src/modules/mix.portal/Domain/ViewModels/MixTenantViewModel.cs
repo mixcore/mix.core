@@ -1,4 +1,6 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿using System.Threading;
+
+namespace Mix.Portal.Domain.ViewModels
 {
     [GeneratePublisher]
     public sealed class MixTenantViewModel
@@ -39,18 +41,15 @@
             Domains = await MixDomainViewModel.GetRepository(UowInfo).GetAllAsync(m => m.MixTenantId == Id, cancellationToken);
         }
 
-        public override async Task Validate()
+        public override async Task Validate(CancellationToken cancellationToken)
         {
-            await base.Validate();
-            if (IsValid)
+            IsValid = IsValid && !Context.MixDomain.Any(m => m.Host == PrimaryDomain && m.MixTenantId != Id);
+            if (!IsValid)
             {
-                IsValid = !Context.MixDomain.Any(m => m.Host == PrimaryDomain && m.MixTenantId != Id);
-                if (!IsValid)
-                {
-                    Errors.Add(new ValidationResult($"{PrimaryDomain} is used, please try another one"));
-                    await HandleErrorsAsync();
-                }
+                Errors.Add(new ValidationResult($"{PrimaryDomain} is used, please try another one"));
+                await HandleErrorsAsync();
             }
+            await base.Validate(cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixTenant parent, CancellationToken cancellationToken = default)
