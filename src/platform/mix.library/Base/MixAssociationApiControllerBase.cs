@@ -29,10 +29,10 @@ namespace Mix.Lib.Base
         #region Routes
 
         [HttpGet("search")]
-        public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchAssociationDto req)
+        public async Task<ActionResult<PagingResponseModel<TView>>> Get([FromQuery] SearchAssociationDto req, CancellationToken cancellationToken = default)
         {
             var searchRequest = BuildSearchByParentRequest(req);
-            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
         }
 
         #endregion

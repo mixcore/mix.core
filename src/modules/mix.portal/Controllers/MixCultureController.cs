@@ -30,12 +30,12 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override async Task<int> CreateHandlerAsync(MixCultureViewModel data)
+        protected override async Task<int> CreateHandlerAsync(MixCultureViewModel data, CancellationToken cancellationToken = default)
         {
-            var result = await base.CreateHandlerAsync(data);
+            var result = await base.CreateHandlerAsync(data, cancellationToken);
             if (result > 0)
             {
-                await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Configurations.DefaultCulture, data.Specificulture);
+                await _cloneCultureService.CloneDefaultCulture(CurrentTenant.Configurations.DefaultCulture, data.Specificulture, cancellationToken);
             }
             return result;
         }

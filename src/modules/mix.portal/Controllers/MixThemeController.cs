@@ -159,18 +159,18 @@ namespace Mix.Portal.Controllers
 
         #region Overrides
 
-        protected override Task<int> CreateHandlerAsync(MixThemeViewModel data)
+        protected override Task<int> CreateHandlerAsync(MixThemeViewModel data, CancellationToken cancellationToken = default)
         {
             data.AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{data.SystemName}";
             data.TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.SystemName}";
-            return base.CreateHandlerAsync(data);
+            return base.CreateHandlerAsync(data, cancellationToken);
         }
 
-        protected override Task UpdateHandler(int id, MixThemeViewModel data)
+        protected override Task UpdateHandler(int id, MixThemeViewModel data, CancellationToken cancellationToken = default)
         {
             data.AssetFolder = $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{data.SystemName}";
             data.TemplateFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.SystemName}";
-            return base.UpdateHandler(id, data);
+            return base.UpdateHandler(id, data, cancellationToken);
         }
 
         protected override PagingResponseModel<MixThemeViewModel> ParseSearchResult(SearchRequestDto req, PagingResponseModel<MixThemeViewModel> result)

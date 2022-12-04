@@ -45,6 +45,8 @@ namespace Mix.RepoDb.ViewModels
 
         public override Task<MixDatabaseColumn> ParseEntity(CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             ColumnConfigurations ??= new();
             Configurations = JsonConvert.SerializeObject(
                 ColumnConfigurations,
@@ -56,8 +58,9 @@ namespace Mix.RepoDb.ViewModels
             return base.ParseEntity(cancellationToken);
         }
 
-        public override void ParseView<TSource>(TSource sourceObject)
+        public override void ParseView<TSource>(TSource sourceObject, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             base.ParseView(sourceObject);
             ColumnConfigurations = Configurations != null
                         ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)!

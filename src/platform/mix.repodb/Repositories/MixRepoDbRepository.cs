@@ -165,10 +165,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<List<dynamic>?> GetAllAsync()
+        public async Task<List<dynamic>?> GetAllAsync(CancellationToken cancellationToken = default)
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
                 return data.ToList();
             }

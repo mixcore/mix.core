@@ -53,9 +53,9 @@ namespace Mix.Lib.ViewModels
             return base.ParseEntity(cancellationToken);
         }
 
-        public override void ParseView<TSource>(TSource sourceObject)
+        public override void ParseView<TSource>(TSource sourceObject, CancellationToken cancellationToken)
         {
-            base.ParseView(sourceObject);
+            base.ParseView(sourceObject, cancellationToken);
             ColumnConfigurations = Configurations != null
                         ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)
                         : new();

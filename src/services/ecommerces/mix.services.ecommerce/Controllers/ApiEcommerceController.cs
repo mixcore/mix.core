@@ -40,48 +40,47 @@ namespace mix.services.ecommerce.Controllers
         [MixAuthorize]
         [HttpGet]
         [Route("my-shopping-cart")]
-        public async Task<ActionResult<OrderViewModel>> MyShoppingOrder()
+        public async Task<ActionResult<OrderViewModel>> MyShoppingOrder(CancellationToken cancellationToken = default)
         {
-            var cart = await _ecommerceService.GetOrCreateShoppingOrder(User, CancellationToken);
+            var cart = await _ecommerceService.GetOrCreateShoppingOrder(User, cancellationToken);
             return Ok(cart);
         }
 
         [MixAuthorize]
         [HttpPost]
         [Route("add-to-cart")]
-        public async Task<ActionResult<OrderViewModel>> AddToCart(CartItemDto item)
+        public async Task<ActionResult<OrderViewModel>> AddToCart(CartItemDto item, CancellationToken cancellationToken = default)
         {
-            var cart = await _ecommerceService.AddToCart(User, item, CancellationToken);
+            var cart = await _ecommerceService.AddToCart(User, item, cancellationToken);
             return Ok(cart);
         }
 
         [MixAuthorize]
         [HttpDelete]
         [Route("remove-from-cart/{postId}")]
-        public async Task<ActionResult> RemoveFromCart(int postId)
+        public async Task<ActionResult> RemoveFromCart(int postId, CancellationToken cancellationToken = default)
         {
-            var cart = await _ecommerceService.RemoveFromCart(User, postId, CancellationToken);
+            var cart = await _ecommerceService.RemoveFromCart(User, postId, cancellationToken);
             return Ok(cart);
         }
 
         [MixAuthorize]
         [HttpGet]
         [Route("payment")]
-        public async Task<ActionResult<string>> Checkout([FromQuery] PaymentGateway? gateway, CancellationToken CancellationToken)
+        public async Task<ActionResult<string>> Checkout([FromQuery] PaymentGateway? gateway, CancellationToken cancellationToken = default)
         {
             if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
             {
                 return BadRequest();
 
             }
-            CancellationToken.ThrowIfCancellationRequested();
-            var url = await _ecommerceService.GetPaymentUrl(User, gateway.Value, CancellationToken);
+            var url = await _ecommerceService.GetPaymentUrl(User, gateway.Value, cancellationToken);
             return !string.IsNullOrEmpty(url) ? Redirect(url) : BadRequest();
         }
 
         [HttpGet]
         [Route("payment-response/{gateway}")]
-        public async Task<ActionResult<string>> PaymentResponse(PaymentGateway? gateway)
+        public async Task<ActionResult<string>> PaymentResponse(PaymentGateway? gateway, CancellationToken cancellationToken = default)
         {
             if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
             {
@@ -89,7 +88,7 @@ namespace mix.services.ecommerce.Controllers
 
             }
             var paymentResponse = JObject.FromObject(QueryHelpers.ParseQuery(Request.QueryString.Value));
-            await _ecommerceService.ProcessPaymentResponse(gateway.Value, paymentResponse, CancellationToken);
+            await _ecommerceService.ProcessPaymentResponse(gateway.Value, paymentResponse, cancellationToken);
             return Ok();
         }
 

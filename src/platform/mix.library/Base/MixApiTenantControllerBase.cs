@@ -19,7 +19,6 @@ namespace Mix.Lib.Base
         protected readonly MixIdentityService MixIdentityService;
         protected readonly MixService MixService;
         protected readonly TranslatorService Translator;
-        protected CancellationToken CancellationToken;
         protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
         protected MixTenantApiControllerBase(
             IHttpContextAccessor httpContextAccessor,

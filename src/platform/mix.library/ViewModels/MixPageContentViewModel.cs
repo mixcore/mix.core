@@ -62,7 +62,7 @@ namespace Mix.Lib.ViewModels
             Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.ParentId == Id));
             Context.MixDataContentAssociation.RemoveRange(Context.MixDataContentAssociation.Where(m => m.ParentType == MixDatabaseParentType.Page && m.IntParentId == Id));
 
-            if (Repository.GetListQuery(m => m.ParentId == ParentId).Count() == 1)
+            if (Repository.GetListQuery(m => m.ParentId == ParentId, cancellationToken).Count() == 1)
             {
                 var pageRepo = MixPageViewModel.GetRepository(UowInfo);
 

@@ -24,10 +24,12 @@ namespace Mix.Portal.Domain.Services
 
         #region Methods
 
-        public async Task CloneDefaultCulture(string srcCulture, string destCulture)
+        public async Task CloneDefaultCulture(string srcCulture, string destCulture, CancellationToken cancellationToken = default)
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 _destCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == destCulture && m.MixTenantId == CurrentTenant.Id);
                 _srcCulture = _cmsUOW.DbContext.MixCulture.FirstOrDefault(m => m.Specificulture == srcCulture && m.MixTenantId == CurrentTenant.Id);
 

@@ -40,14 +40,14 @@ namespace Mix.Portal.Controllers
         #region Routes
 
         [HttpGet("duplicate/{id}")]
-        public async Task<ActionResult<TView>> Duplicate(TPrimaryKey id)
+        public async Task<ActionResult<TView>> Duplicate(TPrimaryKey id, CancellationToken cancellationToken = default)
         {
             var data = await GetById(id);
             if (data != null)
             {
                 data.Id = default;
                 data.ParentId = default;
-                var newId = await CreateHandlerAsync(data);
+                var newId = await CreateHandlerAsync(data, cancellationToken);
                 var result = await GetById(newId);
                 return Ok(result);
             }
@@ -56,30 +56,31 @@ namespace Mix.Portal.Controllers
         #endregion
 
         #region Overrides
-        protected override async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req)
+        protected override async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken)
         {
-            var result = await base.SearchHandler(req);
+            var result = await base.SearchHandler(req, cancellationToken);
             foreach (var item in result.Items)
             {
                 await item.LoadContributorsAsync(ContentType, IdentityService);
             }
             return result;
         }
-        protected override async Task<TPrimaryKey> CreateHandlerAsync(TView data)
+        protected override async Task<TPrimaryKey> CreateHandlerAsync(TView data, CancellationToken cancellationToken = default)
         {
-            var result = await base.CreateHandlerAsync(data);
-            await UpdateContributor(result, true);
+            var result = await base.CreateHandlerAsync(data, cancellationToken);
+            await UpdateContributor(result, true, cancellationToken);
             return result;
         }
 
-        protected override async Task UpdateHandler(TPrimaryKey id, TView data)
+        protected override async Task UpdateHandler(TPrimaryKey id, TView data, CancellationToken cancellationToken)
         {
-            await base.UpdateHandler(id, data);
-            await UpdateContributor(id, false);
+            await base.UpdateHandler(id, data, cancellationToken);
+            await UpdateContributor(id, false, cancellationToken);
         }
 
-        private async Task UpdateContributor(TPrimaryKey id, bool isCreated)
+        private async Task UpdateContributor(TPrimaryKey id, bool isCreated, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             Guid.TryParse(UserManager.GetUserId(HttpContext.User), out var userId);
             Expression<Func<MixContributor, bool>> expression = m => m.UserId == userId && m.ContentType == ContentType;
             expression = expression.AndAlsoIf(Guid.TryParse(id.ToString(), out var guidId), m => m.GuidContentId == guidId);
