@@ -15,6 +15,8 @@ using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
 using Mix.Heart.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Mix.Services.Databases.Lib.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mix.Services.Permission.Controllers
 {
@@ -37,34 +39,23 @@ namespace Mix.Services.Permission.Controllers
 
         #region Routes
 
-        [MixAuthorize(roles: MixRoles.Owner)]
-        [HttpGet("get-by-user/{userId}")]
-        public async Task<ActionResult<List<MixMetadataViewModel>>> GetPermissionByUser(Guid userId)
+        [HttpGet("get-metadata-content/{contentType}/{metadataSeoContent}")]
+        public async Task<ActionResult<List<object>>> GetContentByMetadata(
+            MetadataParentType contentType, 
+            string metadataSeoContent, 
+            [FromQuery] SearchRequestDto req)
         {
-            var metadatas = await _metadataService.GetPermissionAsyncs(userId);
+            var searchRequest = BuildSearchRequest(req);
+            var metadatas = await _metadataService.GetQueryableContentByMetadataSeoContentAsync(metadataSeoContent, contentType, searchRequest);
             return Ok(metadatas);
         }
 
-        [MixAuthorize(roles: $"{MixRoles.Owner},{MixRoles.Administrators}")]
-        [HttpPost("add-user-metadata")]
-        public async Task<ActionResult> AddUserPermission(CreateMetadataLinkDto dto)
+        [HttpPost("create-metadata-association")]
+        public async Task<ActionResult> CreateMetadataContentAssociation(CreateMetadataContentAssociationDto dto)
         {
-            await _metadataService.AddMetadataLink(dto);
+            await _metadataService.CreateMetadataContentAssociation(dto);
             return Ok();
         }
-
-        [HttpGet("get-my-metadatas")]
-        public async Task<ActionResult<List<MixMetadataViewModel>>> GetMyPermissions()
-        {
-            var userId = MixIdentityService.GetClaim(User, MixClaims.Id);
-            if (!string.IsNullOrEmpty(userId))
-            {
-                var metadatas = await _metadataService.GetPermissionAsyncs(Guid.Parse(userId));
-                return Ok(metadatas);
-            }
-            return BadRequest();
-        }
-
 
         #endregion
 

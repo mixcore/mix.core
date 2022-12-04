@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -33,9 +34,8 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Overrides
-        public override async Task Validate()
+        public override async Task Validate(CancellationToken cancellationToken)
         {
-            await base.Validate();
 
             if (Repository.Table.Any(m => !m.Id.Equals(Id) && m.ParentId.Equals(ParentId) && m.ChildId.Equals(ChildId)))
             {
@@ -58,6 +58,7 @@ namespace Mix.Lib.ViewModels
                 Errors.Add(new($"Ivalid relationship: parent Id = {ParentId} - child Id = {ChildId} - Type = {Type}"));
             }
 
+            await base.Validate(cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabaseRelationship parentEntity, CancellationToken cancellationToken = default)

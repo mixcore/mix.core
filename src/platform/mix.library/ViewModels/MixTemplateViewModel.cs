@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -72,9 +73,8 @@ namespace Mix.Lib.ViewModels
             return await base.ParseEntity(cancellationToken);
         }
 
-        public override async Task Validate()
+        public override async Task Validate(CancellationToken cancellationToken)
         {
-            await base.Validate();
             if (IsValid)
             {
                 if (Id == 0)
@@ -93,6 +93,7 @@ namespace Mix.Lib.ViewModels
                     MixThemeName = Context.MixTheme.FirstOrDefault(m => m.Id == MixThemeId)?.SystemName;
                 }
             }
+            await base.Validate(cancellationToken);
         }
 
         #endregion

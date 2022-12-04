@@ -21,11 +21,6 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
         {
             builder.ToTable(MixServicesDatabasesConstants.DatabaseNameMetadata);
             base.Configure(builder);
-            builder.Property(e => e.Status)
-               .IsRequired(false)
-               .HasConversion(new EnumToStringConverter<MetadataParentType>())
-               .HasColumnType($"{Config.String}{Config.SmallLength}")
-               .HasCharSet(Config.CharSet);
         }
     }
 }
