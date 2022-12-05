@@ -12,13 +12,13 @@ namespace Mix.Storage.Lib.Engines.CloudFlare
         public CloudFlareUploader(
             IHttpContextAccessor httpContext,
             IConfiguration configuration,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             HttpService httpService)
-            : base(httpContext, configuration, cmsUOW)
+            : base(httpContext, configuration, cmsUow)
         {
             _httpService = httpService;
             _settings = new();
-            _configuration.Bind("StorageSetting:CloudFlareSetting", _settings);
+            Configuration.Bind("StorageSetting:CloudFlareSetting", _settings);
             _endpoint = string.Format(_settings.EndpointTemplate, _settings.AccountId);
         }
 

@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<AuditLogService>();
             services.TryAddSingleton<MixEndpointService>();
             services.AddHostedService<MixBackgrouTaskPublisher>();
-            services.AddHostedService<MixBackgrouTaskSubscriber>();
+            services.AddHostedService<MixBackgroundTaskSubscriber>();
 
             services.TryAddScoped<MixHeartConfigService>();
             services.TryAddScoped<AuthConfigService>();

@@ -1,8 +1,7 @@
 ﻿namespace Mix.Lib.ViewModels
 {
     public sealed class MixDataViewModel
-        : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel
-            , MixDataContent, MixDataContentViewModel>
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixData, Guid, MixDataViewModel, MixDataContent, MixDataContentViewModel>
     {
         #region Properties
 
@@ -29,8 +28,7 @@
             SaveDataContent = new(lang, cultureId, databaseName, data);
         }
 
-        public MixDataViewModel(MixData entity,
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataViewModel(MixData entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
         }
 
@@ -38,9 +36,9 @@
 
         #region Overrides
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string language = null, int? domainId = null)
         {
-            base.InitDefaultValues(language, cultureId);
+            base.InitDefaultValues(language, domainId);
         }
 
         private void ParseData(JObject data)

@@ -43,10 +43,10 @@ namespace Mix.Lib.ViewModels
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id);
+            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
 
             var relationshipRepo = MixDatabaseRelationshipViewModel.GetRepository(UowInfo);
-            Relationships = await relationshipRepo.GetListAsync(c => c.ParentId == Id);
+            Relationships = await relationshipRepo.GetListAsync(c => c.ParentId == Id, cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)

@@ -8,8 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddMixCors(this IServiceCollection services)
         {
-            var _mixEndpointService = services.GetService<MixEndpointService>();
-            origins = _mixEndpointService.Endpoints
+            var mixEndpointService = services.GetService<MixEndpointService>();
+            origins = mixEndpointService.Endpoints
             .Where(e => !string.IsNullOrEmpty(e))
             .Distinct()
             .ToArray();
@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         builder.AllowAnyOrigin();
                     }
-                    else if (origins.Count() > 0)
+                    else if (origins.Any())
                     {
                         builder.WithOrigins(origins);
                         builder.AllowCredentials();
@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     builder.AllowAnyOrigin();
                 }
-                else if (origins.Count() > 0)
+                else if (origins.Any())
                 {
                     builder.WithOrigins(origins);
                     builder.AllowCredentials();

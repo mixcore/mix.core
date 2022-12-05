@@ -7,9 +7,9 @@ namespace Mix.Lib.Services
         public TranslatorService() : base(MixAppConfigFilePaths.Translator)
         {
         }
-        public T Translate<T>(string name, string culture, T defaultVaule = default)
+        public T Translate<T>(string name, string culture, T defaultValue = default)
         {
-            return GetConfig(culture, name, defaultVaule);
+            return GetConfig(culture, name, defaultValue);
         }
 
         public string TranslateString(string culture, string name, string defaultValue = null)
@@ -17,9 +17,9 @@ namespace Mix.Lib.Services
             return GetConfig(culture, name) ?? defaultValue;
         }
 
-        public static void Reload(MixCmsContext _context = null, IDbContextTransaction _transaction = null)
+        public static void Reload(MixCmsContext context = null, IDbContextTransaction transaction = null)
         {
-            //UnitOfWorkHelper<MixCmsContext>.InitTransaction(_context, _transaction
+            //UnitOfWorkHelper<MixCmsContext>.InitTransaction(context, transaction
             //    , out MixCmsContext context, out IDbContextTransaction transaction, out bool isRoot);
             //try
             //{
@@ -53,7 +53,5 @@ namespace Mix.Lib.Services
             //    }
             //}
         }
-
-
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public sealed class MixConfigurationViewModel
@@ -17,9 +17,7 @@
         {
         }
 
-        public MixConfigurationViewModel(MixConfiguration entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixConfigurationViewModel(MixConfiguration entity, UnitOfWorkInfo uowInfo = null) 
             : base(entity, uowInfo)
         {
         }

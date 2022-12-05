@@ -41,12 +41,12 @@
                 using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
                 using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-                var Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
-                var Values = await valRepo.GetListAsync(m => m.ParentId == Id);
+                var Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cancellationToken);
+                var Values = await valRepo.GetListAsync(m => m.ParentId == Id, cancellationToken);
 
                 Data = MixDataHelper.ParseData(Id, UowInfo);
 
-                await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
+                await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo, cancellationToken: cancellationToken);
             }
         }
 

@@ -112,7 +112,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        protected static class JwtSecurityKey
+        public static class JwtSecurityKey
         {
             public static SymmetricSecurityKey Create(string secret)
             {

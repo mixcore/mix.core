@@ -10,14 +10,14 @@ namespace Mix.Lib.Services
 {
     public class MixThemeImportService
     {
-        private MixRepoDbRepository _repository;
-        private UnitOfWorkInfo _uow;
-        private CancellationTokenSource _cts;
-        private DatabaseService _databaseService;
-        private MixDbService _mixDbService;
+        private readonly MixRepoDbRepository _repository;
+        private readonly UnitOfWorkInfo _uow;
+        private readonly CancellationTokenSource _cts;
+        private readonly DatabaseService _databaseService;
+        private readonly MixDbService _mixDbService;
         private readonly MixCmsContext _context;
         private SiteDataViewModel _siteData;
-        private ISession _session;
+        private readonly ISession _session;
         public MixTenantSystemModel CurrentTenant
         {
             get
@@ -56,7 +56,7 @@ namespace Mix.Lib.Services
             _uow = uow;
             _context = uow.DbContext;
             _cts = new CancellationTokenSource();
-            _session = httpContext.HttpContext.Session;
+            _session = httpContext.HttpContext?.Session;
             _databaseService = databaseService;
             _mixDbService = mixDbService;
             _repository = repository;
@@ -105,7 +105,6 @@ namespace Mix.Lib.Services
         private Dictionary<int, int> dicColumnIds = new Dictionary<int, int>();
 
         #endregion
-
 
         public async Task<SiteDataViewModel> ImportSelectedItemsAsync(SiteDataViewModel siteData)
         {

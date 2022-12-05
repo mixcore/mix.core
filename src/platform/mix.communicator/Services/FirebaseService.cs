@@ -12,8 +12,8 @@ namespace Mix.Communicator.Services
     // Ref: https://firebase.google.com/docs/cloud-messaging/send-message
     public class FirebaseService
     {
-        private IConfiguration _configuration;
-        private FirebaseSettingModel _settings = new FirebaseSettingModel();
+        private readonly IConfiguration _configuration;
+        private readonly FirebaseSettingModel _settings = new FirebaseSettingModel();
         public FirebaseService(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -33,9 +33,9 @@ namespace Mix.Communicator.Services
             }
         }
 
-        public async Task<FirebaseToken> VeriryTokenAsync(string idToken)
+        public async Task<FirebaseToken> VerifyTokenAsync(string idToken)
         {
-            FirebaseToken decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
             return decodedToken;
         }
 

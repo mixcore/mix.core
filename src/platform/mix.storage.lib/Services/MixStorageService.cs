@@ -8,27 +8,27 @@ namespace Mix.Storage.Lib.Services
 {
     public class MixStorageService
     {
-        private IMixUploader _uploader;
+        private readonly IMixUploader _uploader;
         private readonly IConfiguration _configuration;
         private readonly HttpService _httpService;
-        public MixStorageService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW, IConfiguration configuration, HttpService httpService)
+        public MixStorageService(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUow, IConfiguration configuration, HttpService httpService)
         {
             _configuration = configuration;
             _httpService = httpService;
-            _uploader = CreateUploader(httpContext, cmsUOW);
+            _uploader = CreateUploader(httpContext, cmsUow);
         }
 
-        private IMixUploader CreateUploader(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        private IMixUploader CreateUploader(IHttpContextAccessor httpContext, UnitOfWorkInfo<MixCmsContext> cmsUow)
         {
             var providerSetting = _configuration["StorageSetting:Provider"];
             var provider = Enum.Parse<MixStorageProvider>(providerSetting);
             switch (provider)
             {
                 case MixStorageProvider.CLOUDFLARE:
-                    return new CloudFlareUploader(httpContext, _configuration, cmsUOW, _httpService);
+                    return new CloudFlareUploader(httpContext, _configuration, cmsUow, _httpService);
                 case MixStorageProvider.MIX:
                 default:
-                    return new MixUploader(httpContext, _configuration, cmsUOW);
+                    return new MixUploader(httpContext, _configuration, cmsUow);
             }
         }
         #region Methods

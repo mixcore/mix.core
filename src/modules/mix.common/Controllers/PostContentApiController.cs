@@ -3,7 +3,7 @@ using Mix.Common.Domain.ViewModels;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
+using Mix.Lib.ViewModels;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;

@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
-            services.AddUOWs();
+            services.AddUoWs();
             services.AddMixCache();
             services.CustomValidationResponse();
             services.AddHttpClient();
@@ -68,7 +68,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSession();
             services.AddMixCommonServices(executingAssembly, configuration);
             services.AddMixDbContexts();
-            services.AddUOWs();
+            services.AddUoWs();
             services.AddMixCache();
             services.CustomValidationResponse();
             services.AddHttpClient();
@@ -121,7 +121,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseUOWs();
+            app.UseUoWs();
             app.UseMixModuleApps(configuration, isDevelop);
             app.UseMixSwaggerApps(isDevelop, executingAssembly);
             app.ConfigureExceptionHandler();

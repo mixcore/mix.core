@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.UnitOfWork;
-using Mix.Identity.Constants;
-using Mix.Lib.Attributes;
 using Mix.Lib.Base;
 using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
@@ -13,10 +11,7 @@ using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
-using Mix.Heart.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Mix.Services.Databases.Lib.Enums;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Mix.Services.Permission.Controllers
 {

@@ -11,15 +11,12 @@ using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 
-namespace Mix.RepoDb.Sbuscribers
+namespace Mix.RepoDb.Subscribers
 {
     public class MixRepoDbSubscriber : SubscriberBase
     {
-        protected PortalHubClientService _portalHub;
-        private IServiceProvider _servicesProvider;
-        private IServiceScope _servicesScope;
-        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private MixDbService _mixDbService;
+        protected PortalHubClientService PortalHub;
+        private readonly IServiceProvider _servicesProvider;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
@@ -27,39 +24,43 @@ namespace Mix.RepoDb.Sbuscribers
             PortalHubClientService portalHub)
             : base(MixQueueTopics.MixRepoDb, string.Empty, configuration, queueService)
         {
-            _portalHub = portalHub;
+            PortalHub = portalHub;
             _servicesProvider = servicesProvider;
-            _servicesScope = _servicesProvider.CreateScope();
-            _mixDbService = _servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
         }
 
         public override async Task Handler(MessageQueueModel model)
         {
-
-            _cmsUOW = _servicesScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
-            switch (model.Action)
+            using (var servicesScope = _servicesProvider.CreateScope())
             {
-                case MixRepoDbQueueAction.Backup:
-                    await BackupDatabase(model);
-                    break;
-                case MixRepoDbQueueAction.Restore:
-                    await RestoreDatabase(model);
-                    break;
-                case MixRepoDbQueueAction.Migrate:
-                    await MigrateDatabase(model);
-                    break;
-                default:
-                    break;
+                var cmsUow = servicesScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                switch (model.Action)
+                {
+                    case MixRepoDbQueueAction.Backup:
+                        await BackupDatabase(model);
+                        break;
+                    case MixRepoDbQueueAction.Restore:
+                        await RestoreDatabase(model);
+                        break;
+                    case MixRepoDbQueueAction.Migrate:
+                        await MigrateDatabase(model);
+                        break;
+                    default:
+                        break;
+                }
+                await cmsUow.CompleteAsync();
             }
-            await _cmsUOW.CompleteAsync();
         }
 
         private async Task BackupDatabase(MessageQueueModel model)
         {
             try
             {
-                await _mixDbService.BackupDatabase(model.Data);
-                await SendMessage($"{MixRepoDbQueueAction.Backup} {model.Data} Successfully", true);
+                using (var servicesScope = _servicesProvider.CreateScope())
+                {
+                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
+                    await mixDbService.BackupDatabase(model.Data);
+                    await SendMessage($"{MixRepoDbQueueAction.Backup} {model.Data} Successfully", true);
+                }
             }
             catch (Exception ex)
             {
@@ -71,8 +72,12 @@ namespace Mix.RepoDb.Sbuscribers
         {
             try
             {
-                await _mixDbService.RestoreFromLocal(model.Data);
-                await SendMessage($"{MixRepoDbQueueAction.Restore} {model.Data} Successfully", true);
+                using (var servicesScope = _servicesProvider.CreateScope())
+                {
+                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
+                    await mixDbService.RestoreFromLocal(model.Data);
+                    await SendMessage($"{MixRepoDbQueueAction.Restore} {model.Data} Successfully", true);
+                }
             }
             catch (Exception ex)
             {
@@ -84,9 +89,14 @@ namespace Mix.RepoDb.Sbuscribers
         {
             try
             {
-                await _mixDbService.MigrateDatabase(model.Data);
-                string msg = $"{MixRepoDbQueueAction.Migrate} {model.Data} Successfully";
-                await SendMessage(msg, true);
+                using (var servicesScope = _servicesProvider.CreateScope())
+                {
+                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
+                    await mixDbService.MigrateDatabase(model.Data);
+                    string msg = $"{MixRepoDbQueueAction.Migrate} {model.Data} Successfully";
+                    await SendMessage(msg, true);
+                }
+
             }
             catch (Exception ex)
             {
@@ -105,7 +115,7 @@ namespace Mix.RepoDb.Sbuscribers
                 Data = result,
                 Message = ex == null ? message : ex!.Message
             };
-            await _portalHub.SendMessageAsync(msg);
+            await PortalHub.SendMessageAsync(msg);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Mix.Shared.Models;
+﻿using Mix.Shared.Models;
 
 namespace Mix.Shared.Commands
 {
@@ -18,7 +17,5 @@ namespace Mix.Shared.Commands
         public string UserName { get; set; }
         public ParsedRequestModel Request { get; set; }
         public Exception Exception { get; set; }
-
-
     }
 }

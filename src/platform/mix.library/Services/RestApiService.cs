@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Identity.Constants;
 using Mix.Lib.Models.Common;
-using System.Threading;
 
 namespace Mix.Lib.Services
 {
@@ -12,13 +11,13 @@ namespace Mix.Lib.Services
         where TEntity : EntityBase<TPrimaryKey>
         where TView : ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>
     {
-        protected readonly MixIdentityService _mixIdentityService;
-        protected readonly IQueueService<MessageQueueModel> _queueService;
-        protected UnitOfWorkInfo _uow;
-        protected UnitOfWorkInfo _cacheUOW;
-        protected MixCacheService _cacheService;
-        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> _repository;
-        protected readonly TDbContext _context;
+        protected readonly MixIdentityService MixIdentityService;
+        protected readonly IQueueService<MessageQueueModel> QueueService;
+        protected UnitOfWorkInfo Uow;
+        protected UnitOfWorkInfo CacheUow;
+        protected MixCacheService CacheService;
+        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository;
+        protected readonly TDbContext Context;
 
         public RestApiService(
             IHttpContextAccessor httpContextAccessor,
@@ -27,12 +26,12 @@ namespace Mix.Lib.Services
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor)
         {
-            _mixIdentityService = identityService;
-            _uow = uow;
-            _cacheService = new();
-            _queueService = queueService;
-            _context = (TDbContext)uow.ActiveDbContext;
-            _repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(_uow);
+            MixIdentityService = identityService;
+            Uow = uow;
+            CacheService = new();
+            QueueService = queueService;
+            Context = (TDbContext)uow.ActiveDbContext;
+            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
         }
 
         #region Command Handlers
@@ -52,12 +51,12 @@ namespace Mix.Lib.Services
                     PropertyValue = CurrentTenant?.Id
                 });
             }
-            data.SetUowInfo(_uow);
+            data.SetUowInfo(Uow);
             data.CreatedDateTime = DateTime.UtcNow;
-            data.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
+            data.CreatedBy = MixIdentityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username);
             data.ModifiedBy = data.CreatedBy;
             var id = await data.SaveAsync(cancellationToken);
-            _queueService.PushMessage(data, MixRestAction.Post.ToString(), true);
+            QueueService.PushMessage(data, MixRestAction.Post.ToString(), true);
             return id;
         }
 
@@ -69,29 +68,29 @@ namespace Mix.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, "Invalid Id");
             }
-            data.SetUowInfo(_uow);
+            data.SetUowInfo(Uow);
             await data.SaveAsync(cancellationToken);
-            await _cacheService.RemoveCacheAsync(id, typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Put.ToString(), true);
+            await CacheService.RemoveCacheAsync(id, typeof(TView));
+            QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
         public virtual async Task DeleteHandler(TView data, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            data.SetUowInfo(_uow);
+            data.SetUowInfo(Uow);
             await data.DeleteAsync();
-            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView), cancellationToken);
-            _queueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
+            await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView), cancellationToken);
+            QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
 
 
         public virtual async Task PatchHandler(TPrimaryKey id, TView data, IEnumerable<EntityPropertyModel> properties, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            data.SetUowInfo(_uow);
+            data.SetUowInfo(Uow);
             await data.SaveFieldsAsync(properties, cancellationToken);
-            await _cacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
-            _queueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
+            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
         public virtual async Task SaveManyHandler(List<TView> data, CancellationToken cancellationToken = default)
@@ -99,7 +98,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             foreach (var item in data)
             {
-                item.SetUowInfo(_uow);
+                item.SetUowInfo(Uow);
                 await item.SaveAsync(cancellationToken);
             }
         }
@@ -110,7 +109,7 @@ namespace Mix.Lib.Services
         public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await _repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
         }
 
         public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result, CancellationToken cancellationToken = default)
@@ -118,7 +117,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             if (!string.IsNullOrEmpty(req.Columns))
             {
-                _repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
+                Repository.SetSelectedMembers(req.Columns.Replace(" ", string.Empty).Split(','));
             }
 
             if (!string.IsNullOrEmpty(req.Columns))
@@ -126,7 +125,7 @@ namespace Mix.Lib.Services
                 List<TView> objects = new List<TView>();
                 foreach (var item in result.Items)
                 {
-                    objects.Add(ReflectionHelper.GetMembers(item, _repository.SelectedMembers).ToObject<TView>());
+                    objects.Add(ReflectionHelper.GetMembers(item, Repository.SelectedMembers).ToObject<TView>());
                 }
                 return new PagingResponseModel<TView>()
                 {
@@ -153,7 +152,7 @@ namespace Mix.Lib.Services
 
         public virtual async Task<TView> GetById(TPrimaryKey id)
         {
-            return await _repository.GetSingleAsync(id);
+            return await Repository.GetSingleAsync(id);
         }
 
         #endregion

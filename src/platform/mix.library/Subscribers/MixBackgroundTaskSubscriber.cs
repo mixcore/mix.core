@@ -4,17 +4,18 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Subscribers
 {
-    public class MixBackgrouTaskSubscriber : SubscriberBase
+    public class MixBackgroundTaskSubscriber : SubscriberBase
     {
-        protected AuditLogService _auditLogService;
-        private static string topicId = MixQueueTopics.MixBackgroundTasks;
-        public MixBackgrouTaskSubscriber(
+        protected AuditLogService AuditLogService;
+        private const string TopicId = MixQueueTopics.MixBackgroundTasks;
+
+        public MixBackgroundTaskSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             AuditLogService auditLogService)
-            : base(topicId, string.Empty, configuration, queueService)
+            : base(TopicId, string.Empty, configuration, queueService)
         {
-            _auditLogService = auditLogService;
+            AuditLogService = auditLogService;
         }
 
         public override Task Handler(MessageQueueModel model)
@@ -23,7 +24,7 @@ namespace Mix.Lib.Subscribers
             {
                 case MixQueueActions.AuditLog:
                     var cmd = model.ParseData<LogAuditLogCommand>();
-                    _auditLogService.SaveToDatabase(cmd.UserName, cmd.Request, true, null);
+                    AuditLogService.SaveToDatabase(cmd.UserName, cmd.Request, true, null);
                     break;
             }
             return Task.CompletedTask;

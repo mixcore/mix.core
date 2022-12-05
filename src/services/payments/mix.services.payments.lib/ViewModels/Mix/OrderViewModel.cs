@@ -45,7 +45,7 @@ namespace Mix.Services.Payments.Lib.ViewModels.Mix
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            OrderItems = await OrderItemViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderId == Id);
+            OrderItems = await OrderItemViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderId == Id, cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(Order parentEntity, CancellationToken cancellationToken = default)

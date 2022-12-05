@@ -4,7 +4,7 @@ namespace Mix.RepoDb.Entities
 {
     public class BackupDbContext : DbContext
     {
-        private string _cnn;
+        private readonly string _cnn;
         public BackupDbContext(string connectionString)
         {
             _cnn = connectionString;

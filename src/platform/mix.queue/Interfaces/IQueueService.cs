@@ -7,7 +7,7 @@ namespace Mix.Queue.Interfaces
         void PushQueue(T model);
         void PushQueue(string topicId, string action, object data);
 
-        IList<T> ConsumeQueue(int lenght, string topicId);
+        IList<T> ConsumeQueue(int length, string topicId);
 
         bool Any(string topicId);
 

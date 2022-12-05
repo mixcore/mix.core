@@ -1,11 +1,5 @@
 ﻿using Mix.Services.Ecommerce.Lib.Constants;
-using Mix.Services.Ecommerce.Lib.Entities;
 using Mix.Shared.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Ecommerce.Lib.Dtos
 {

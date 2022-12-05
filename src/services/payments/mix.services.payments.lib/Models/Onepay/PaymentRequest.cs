@@ -1,5 +1,4 @@
 ﻿using Mix.Services.Payments.Lib.ViewModels.Mix;
-using System.Net.NetworkInformation;
 
 namespace Mix.Services.Payments.Lib.ViewModels.Onepay.Onepay
 {

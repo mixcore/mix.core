@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddUOWs(this IServiceCollection services)
+        public static IServiceCollection AddUoWs(this IServiceCollection services)
         {
             services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IApplicationBuilder UseUOWs(this IApplicationBuilder app)
+        public static IApplicationBuilder UseUoWs(this IApplicationBuilder app)
         {
             app.UseMiddleware<UnitOfWorkMiddleware>();
             return app;

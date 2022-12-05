@@ -1,5 +1,4 @@
-﻿using Mix.Database.Entities.Cms;
-using Mix.Heart.UnitOfWork;
+﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Services.Payments.Lib.Entities.Onepay;
 using Mix.Services.Payments.Lib.Enums;

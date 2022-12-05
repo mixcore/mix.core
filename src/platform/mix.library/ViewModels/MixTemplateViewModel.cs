@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Threading;
 
 namespace Mix.Lib.ViewModels
 {
@@ -100,13 +99,13 @@ namespace Mix.Lib.ViewModels
 
         #region Expands
 
-        public async Task<MixTemplateViewModel> CopyAsync()
+        public async Task<MixTemplateViewModel> CopyAsync(CancellationToken cancellationToken = default)
         {
-            var result = await Repository.GetSingleAsync(m => m.Id == Id);
+            var result = await Repository.GetSingleAsync(m => m.Id == Id, cancellationToken);
             result.Id = 0;
             result.FileName = $"Copy_{result.FileName}";
             // Not write file to disk
-            result.Id = await result.SaveAsync();
+            result.Id = await result.SaveAsync(cancellationToken);
             return result;
         }
 
