@@ -48,7 +48,7 @@ namespace Mix.Identity.ViewModels
             return base.ParseEntity(cancellationToken);
         }
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string language = null, int? domainId = null)
         {
             Id = Guid.NewGuid();
             CreatedDateTime = DateTime.UtcNow;

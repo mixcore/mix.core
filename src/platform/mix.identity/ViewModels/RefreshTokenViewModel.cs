@@ -45,7 +45,7 @@ namespace Mix.Identity.ViewModels
 
         #region Overrides
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string language = null, int? domainId = null)
         {
             Id = Guid.NewGuid();
             CreatedDateTime = DateTime.UtcNow;

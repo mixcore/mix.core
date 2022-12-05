@@ -1,6 +1,4 @@
-﻿using Mix.Database.Entities.Base;
-
-namespace Mix.Common.Domain.ViewModels
+﻿namespace Mix.Common.Domain.ViewModels
 {
     [GenerateRestApiController(QueryOnly = true)]
     public class MixLanguageContentViewModel

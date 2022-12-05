@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mix.Constant.Constants;
-using Mix.Database.EntityConfigurations.Base;
-using Mix.Database.Extensions;
-using Mix.Database.Services;
-using Mix.Heart.Enums;
-using Mix.Service.Services;
+﻿using Mix.Database.Services;
 using System.Linq.Expressions;
 
 namespace Mix.Database.Extensions

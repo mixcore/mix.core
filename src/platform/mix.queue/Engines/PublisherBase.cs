@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace Mix.Queue.Engines
 {
-    public abstract class PublisherBase : BackgroundService, IHostedService
+    public abstract class PublisherBase : BackgroundService
     {
-        private IQueueService<MessageQueueModel> _queueService;
+        private readonly IQueueService<MessageQueueModel> _queueService;
         private List<IQueuePublisher<MessageQueueModel>> _publishers;
-        private IConfiguration _configuration;
-        private MixMemoryMessageQueue<MessageQueueModel> _queue;
-        private const int MAX_CONSUME_LENGTH = 100;
-        private string _topicId;
+        private readonly IConfiguration _configuration;
+        private readonly MixMemoryMessageQueue<MessageQueueModel> _queue;
+        private const int MaxConsumeLength = 100;
+        private readonly string _topicId;
 
-        public PublisherBase(
+        protected PublisherBase(
             string topicId,
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
@@ -34,14 +34,13 @@ namespace Mix.Queue.Engines
             _topicId = topicId;
         }
 
-
-        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(string topicName,
-            MixMemoryMessageQueue<MessageQueueModel> queue, CancellationToken cancellationToken = default)
+        private List<IQueuePublisher<MessageQueueModel>> CreatePublisher(
+            string topicName,
+            MixMemoryMessageQueue<MessageQueueModel> queue)
         {
             try
             {
-                List<IQueuePublisher<MessageQueueModel>> queuePublishers =
-                    new List<IQueuePublisher<MessageQueueModel>>();
+                var queuePublishers = new List<IQueuePublisher<MessageQueueModel>>();
                 var providerSetting = _configuration["MessageQueueSetting:Provider"];
 
                 var provider = Enum.Parse<MixQueueProvider>(providerSetting);
@@ -92,7 +91,7 @@ namespace Mix.Queue.Engines
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    var inQueueItems = _queueService.ConsumeQueue(MAX_CONSUME_LENGTH, _topicId);
+                    var inQueueItems = _queueService.ConsumeQueue(MaxConsumeLength, _topicId);
 
                     if (inQueueItems.Any() && _publishers != null)
                     {
@@ -105,7 +104,7 @@ namespace Mix.Queue.Engines
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _publishers = CreatePublisher(_topicId, _queue, stoppingToken);
+            _publishers = CreatePublisher(_topicId, _queue);
             return StartMixQueueEngine(stoppingToken);
         }
     }

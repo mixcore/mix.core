@@ -8,34 +8,34 @@ namespace Mix.Storage.Lib.Engines.Base
 {
     public abstract class UploaderBase : IMixUploader
     {
-        protected ISession? _session;
-        protected readonly IConfiguration _configuration;
-        protected UnitOfWorkInfo _cmsUOW;
-        protected MixTenantSystemModel _currentTenant;
+        protected ISession Session;
+        protected readonly IConfiguration Configuration;
+        protected UnitOfWorkInfo CmsUow;
+        private MixTenantSystemModel _currentTenant;
         protected MixTenantSystemModel CurrentTenant
         {
             get
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
         }
 
-        public UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        protected UploaderBase(IHttpContextAccessor httpContextAccessor, IConfiguration configuration, UnitOfWorkInfo<MixCmsContext> cmsUOW)
         {
-            _cmsUOW = cmsUOW;
-            _configuration = configuration;
-            _session = httpContextAccessor?.HttpContext?.Session;
+            CmsUow = cmsUOW;
+            Configuration = configuration;
+            Session = httpContextAccessor?.HttpContext?.Session;
         }
 
         public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
         {
             string filePath = fullname.Substring(0, fullname.LastIndexOf('/'));
             string fileName = fullname.Substring(fullname.LastIndexOf('/') + 1);
-            var media = new MixMediaViewModel(_cmsUOW)
+            var media = new MixMediaViewModel(CmsUow)
             {
                 Id = Guid.NewGuid(),
                 DisplayName = fileName,

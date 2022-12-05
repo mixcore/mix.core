@@ -16,22 +16,22 @@ namespace Mix.Queue.Services
 
         public bool Any(string topicId)
         {
-            var _queue = GetQueue(topicId);
-            return _queue.Any();
+            var queue = GetQueue(topicId);
+            return queue.Any();
         }
 
-        public IList<MessageQueueModel> ConsumeQueue(int lenght, string topicId)
+        public IList<MessageQueueModel> ConsumeQueue(int length, string topicId)
         {
-            var _queue = GetQueue(topicId);
+            var queue = GetQueue(topicId);
             List<MessageQueueModel> result = new();
-            if (!_queue.Any(m => m.TopicId == topicId))
+            if (!queue.Any(m => m.TopicId == topicId))
                 return result;
 
             int i = 1;
 
-            while (i <= lenght && _queue.Any())
+            while (i <= length && queue.Any())
             {
-                _queue.TryDequeue(out MessageQueueModel data);
+                queue.TryDequeue(out MessageQueueModel data);
                 if (data != null)
                     result.Add(data);
                 i++;
@@ -55,10 +55,10 @@ namespace Mix.Queue.Services
 
         public void PushQueue(MessageQueueModel model)
         {
-            var _queue = GetQueue(model.TopicId);
-            if (_queue != null)
+            var queue = GetQueue(model.TopicId);
+            if (queue != null)
             {
-                _queue.Enqueue(model);
+                queue.Enqueue(model);
             }
         }
 

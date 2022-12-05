@@ -13,9 +13,8 @@
         {
         }
 
-        public MixDataContentAssociationViewModel(MixDataContentAssociation entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDataContentAssociationViewModel(MixDataContentAssociation entity, UnitOfWorkInfo uowInfo = null) 
+            : base(entity, uowInfo)
         {
         }
         #endregion
@@ -48,7 +47,7 @@
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             var contentRepo = MixDataContentViewModel.GetRepository(UowInfo);
-            ChildDataContent = await contentRepo.GetSingleAsync(DataContentId);
+            ChildDataContent = await contentRepo.GetSingleAsync(DataContentId, cancellationToken);
         }
         #endregion
 

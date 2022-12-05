@@ -10,9 +10,10 @@ namespace Mix.Lib.Filters
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            var _auditLogService = context.HttpContext.RequestServices.
-            GetService(typeof(AuditLogService)) as AuditLogService;
-            _auditLogService.LogRequest(context.HttpContext);
+            if (context.HttpContext.RequestServices.GetService(typeof(AuditLogService)) is AuditLogService auditLogService)
+            {
+                auditLogService.LogRequest(context.HttpContext);
+            }
         }
 
         public void OnResourceExecuted(ResourceExecutedContext context)

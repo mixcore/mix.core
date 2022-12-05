@@ -1,43 +1,41 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Cms;
-using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Identity.Constants;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.ViewModels;
-using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
+using Mix.Lib.ViewModels;
 
 namespace Mix.Services.Databases.Lib.Services
 {
     public sealed class MixMetadataService : TenantServiceBase
     {
         private readonly MixIdentityService _identityService;
-        private MixServiceDatabaseDbContext _permissionDbContext;
-        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly MixServiceDatabaseDbContext _permissionDbContext;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
+        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
 
         public MixMetadataService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixServiceDatabaseDbContext> uow,
             MixIdentityService identityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW)
+            UnitOfWorkInfo<MixCmsContext> cmsUow)
             : base(httpContextAccessor)
         {
             _uow = uow;
             _permissionDbContext = _uow.DbContext;
             _identityService = identityService;
-            _cmsUOW = cmsUOW;
+            _cmsUow = cmsUow;
         }
 
-        public async Task<List<MixMetadataViewModel>> GetPermissionAsyncs(Guid userId)
+        public async Task<List<MixMetadataViewModel>> GetPermissionAsync(Guid userId)
         {
             var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
             Expression<Func<MixMetadata, bool>> predicate =
@@ -71,7 +69,7 @@ namespace Mix.Services.Databases.Lib.Services
                     case MetadataParentType.MixDatabse:
                         break;
                     case MetadataParentType.Post:
-                        var result = await MixPostContentViewModel.GetRepository(_cmsUOW)
+                        var result = await MixPostContentViewModel.GetRepository(_cmsUow)
                             .GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
                                 && allowIds.Any(n => n == m.Id),
                                 searchRequest.PagingData);

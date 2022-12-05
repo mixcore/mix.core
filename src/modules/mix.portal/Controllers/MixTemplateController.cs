@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI.Common;
 
 namespace Mix.Portal.Controllers
 {

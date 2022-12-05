@@ -17,9 +17,7 @@
         {
         }
 
-        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo = null) 
             : base(entity, uowInfo)
         {
         }
@@ -31,9 +29,9 @@
         #endregion
 
         #region Overrides
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string language = null, int? domainId = null)
         {
-            base.InitDefaultValues(language, cultureId);
+            base.InitDefaultValues(language, domainId);
             if (Id == default)
             {
                 Id = Guid.NewGuid();

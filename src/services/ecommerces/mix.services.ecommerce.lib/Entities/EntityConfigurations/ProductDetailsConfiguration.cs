@@ -1,19 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mix.Constant.Constants;
 using Mix.Constant.Enums;
 using Mix.Database.Base;
 using Mix.Database.Extensions;
 using Mix.Database.Services;
-using Mix.Heart.Enums;
-using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.EntityConfigurations
 {

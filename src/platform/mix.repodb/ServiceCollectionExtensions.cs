@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.RepoDb.Publishers;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Sbuscribers;
 using Mix.RepoDb.Services;
+using Mix.RepoDb.Subscribers;
 using RepoDb;
 using RepoDb.Interfaces;
 

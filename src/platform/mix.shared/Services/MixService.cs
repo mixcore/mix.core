@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Mix.Heart.Enums;
+﻿using Mix.Heart.Enums;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
 
@@ -7,11 +6,11 @@ namespace Mix.Service.Services
 {
     public class MixService
     {
-        public readonly SmtpConfigService _smtpConfigService;
+        public readonly SmtpConfigService SmtpConfigService;
 
         public MixService(SmtpConfigService smtpConfigService)
         {
-            _smtpConfigService = smtpConfigService;
+            SmtpConfigService = smtpConfigService;
         }
 
         public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)

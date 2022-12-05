@@ -9,7 +9,7 @@ namespace Mix.Lib.Services
 {
     public class TenantRoleStore : RoleStore<MixRole, MixCmsAccountContext, Guid, AspNetUserRoles, AspNetRoleClaims>
     {
-        protected IHttpContextAccessor _httpContextAccessor;
+        protected IHttpContextAccessor HttpContextAccessor;
         private MixTenantSystemModel _currentTenant;
         protected MixTenantSystemModel CurrentTenant
         {
@@ -17,7 +17,7 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _httpContextAccessor.HttpContext.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = HttpContextAccessor.HttpContext?.Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
@@ -29,7 +29,7 @@ namespace Mix.Lib.Services
 
             : base(accContext, describer)
         {
-            _httpContextAccessor = httpContextAccessor;
+            HttpContextAccessor = httpContextAccessor;
         }
     }
 }

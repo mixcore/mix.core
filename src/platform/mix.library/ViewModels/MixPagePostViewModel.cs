@@ -1,4 +1,4 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public sealed class MixPagePostAssociationViewModel
         : AssociationViewModelBase<MixCmsContext, MixPagePostAssociation, int, MixPagePostAssociationViewModel>

@@ -111,7 +111,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
             await Domain.SaveAsync();
         }
 
-        public override void InitDefaultValues(string language = null, int? cultureId = null)
+        public override void InitDefaultValues(string language = null, int? domainId = null)
         {
             CreatedDateTime = DateTime.UtcNow;
             Status = MixContentStatus.Published;
