@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +8,7 @@ namespace Mix.Queue.Models
     {
         public string Id { get; set; }
         public List<MixSubscribtionModel> Subscriptions { get; set; } = new();
-        private ConcurrentQueue<MessageQueueModel> Messages = new();
+        private readonly ConcurrentQueue<MessageQueueModel> _messages = new();
 
         public MixSubscribtionModel CreateSubscription(string subscriptionId)
         {
@@ -34,12 +33,12 @@ namespace Mix.Queue.Models
 
         public bool Any()
         {
-            return Messages.Any();
+            return _messages.Any();
         }
 
-        public IList<MessageQueueModel> ConsumeQueue(string subscriptionId, int lenght)
+        public IList<MessageQueueModel> ConsumeQueue(string subscriptionId, int length)
         {
-            List<MessageQueueModel> result = new List<MessageQueueModel>();
+            var result = new List<MessageQueueModel>();
             var subscription = Subscriptions.Find(m => m.Id == subscriptionId);
 
             if (subscription == null)
@@ -48,23 +47,24 @@ namespace Mix.Queue.Models
             }
             subscription.Status = MixQueueMessageStatus.Ack;
 
-            if (!Messages.Any())
+            if (!_messages.Any())
+            {
                 return result;
+            }
 
             int i = 1;
 
 
-            while (i <= lenght && Messages.Any(m => m.TopicId == subscription.TopicId))
+            while (i <= length && _messages.Any(m => m.TopicId == subscription.TopicId))
             {
-                MessageQueueModel data = Messages.First(m => m.TopicId == subscription.TopicId);
+                MessageQueueModel data = _messages.First(m => m.TopicId == subscription.TopicId);
                 data.Subscriptions.Add(subscription);
                 if (data.Subscriptions.Count == Subscriptions.Count)
                 {
-                    Messages.TryDequeue(out MessageQueueModel removeData);
+                    _messages.TryDequeue(out _);
                 }
 
-                if (data != null)
-                    result.Add(data);
+                result.Add(data);
                 i++;
             }
             return result;
@@ -72,7 +72,7 @@ namespace Mix.Queue.Models
 
         public void PushQueue(MessageQueueModel model)
         {
-            Messages.Enqueue(model);
+            _messages.Enqueue(model);
         }
     }
 }
