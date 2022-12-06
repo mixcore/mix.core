@@ -34,7 +34,7 @@ namespace Mix.Lib.ViewModels
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
             MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
-            await LoadAliasAsync();
+            await LoadAliasAsync(cancellationToken);
             await base.ExpandView(cancellationToken);
         }
 
@@ -53,10 +53,10 @@ namespace Mix.Lib.ViewModels
                 Description = Excerpt,
                 MixTenantId = MixTenantId
             };
-            return await parent.SaveAsync();
+            return await parent.SaveAsync(cancellationToken);
         }
 
-        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken)
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
         {
             Context.MixPageModuleAssociation.RemoveRange(Context.MixPageModuleAssociation.Where(m => m.ParentId == Id));
             Context.MixPagePostAssociation.RemoveRange(Context.MixPagePostAssociation.Where(m => m.ParentId == Id));

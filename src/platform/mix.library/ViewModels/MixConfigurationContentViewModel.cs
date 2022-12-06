@@ -1,6 +1,4 @@
-﻿using Mix.Portal.Domain.ViewModels;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public sealed class MixConfigurationContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixConfigurationContent, int, MixConfigurationContentViewModel>

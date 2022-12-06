@@ -1,5 +1,4 @@
 ﻿using Mix.Shared.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Mix.Lib.Models
 {

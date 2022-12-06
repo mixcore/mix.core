@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.RepoDb.Repositories;
+﻿using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;
-using System.Reflection.Emit;
 
 namespace Mix.Common.Domain.ViewModels
 {

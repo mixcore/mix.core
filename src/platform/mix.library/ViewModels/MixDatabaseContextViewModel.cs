@@ -34,7 +34,7 @@
         {
             var dbRepo = MixDatabaseViewModel.GetRepository(UowInfo);
             var associations = Context.MixDatabaseContextDatabaseAssociation.Where(m => m.ParentId == Id).Select(m => m.ChildId);
-            Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id));
+            Databases = await dbRepo.GetListAsync(m => associations.Any(a => a == m.Id), cancellationToken);
         }
 
         protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)

@@ -1,6 +1,4 @@
-﻿using Mix.Portal.Domain.ViewModels;
-
-namespace Mix.Lib.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     public sealed class MixLanguageContentViewModel
         : HaveParentContentViewModelBase<MixCmsContext, MixLanguageContent, int, MixLanguageContentViewModel>
@@ -28,7 +26,7 @@ namespace Mix.Lib.ViewModels
 
         #region Overrides
 
-        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken)
+        public override async Task<int> CreateParentAsync(CancellationToken cancellationToken = default)
         {
             MixLanguageViewModel parent = new(UowInfo)
             {

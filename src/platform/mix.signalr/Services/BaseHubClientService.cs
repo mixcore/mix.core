@@ -10,15 +10,15 @@ namespace Mix.SignalR.Services
 {
     public abstract class BaseHubClientService
     {
-        protected HubConnection connection;
-        protected string hubName;
-        protected string _accessToken;
-        public bool IsStarted => connection != null;
-        protected readonly MixEndpointService _mixEndpointService;
-        public BaseHubClientService(string hub, MixEndpointService mixEndpointService)
+        protected HubConnection Connection;
+        protected string HubName;
+        protected string AccessToken;
+        public bool IsStarted => Connection != null;
+        protected readonly MixEndpointService MixEndpointService;
+        protected BaseHubClientService(string hub, MixEndpointService mixEndpointService)
         {
-            hubName = hub;
-            _mixEndpointService = mixEndpointService;
+            HubName = hub;
+            MixEndpointService = mixEndpointService;
         }
 
         public Task SendMessageAsync(string title, string description, object data, MessageType messageType = MessageType.Info)
@@ -34,16 +34,16 @@ namespace Mix.SignalR.Services
 
         public async Task SendMessageAsync(SignalRMessageModel message)
         {
-            if (connection == null)
+            if (Connection == null)
             {
                 Init();
             }
-            while (connection.State != HubConnectionState.Connected)
+            while (Connection != null && Connection.State != HubConnectionState.Connected)
             {
                 try
                 {
                     await Task.Delay(new Random().Next(0, 5) * 1000);
-                    await connection.StartAsync();
+                    await Connection.StartAsync();
                 }
 
                 catch (Exception ex)
@@ -51,35 +51,35 @@ namespace Mix.SignalR.Services
                     Console.WriteLine(ex);
                 }
             }
-            await connection.InvokeAsync(HubMethods.SendMessage, message);
+            await Connection.InvokeAsync(HubMethods.SendMessage, message);
         }
         public void Init()
         {
-            if (!string.IsNullOrEmpty(_mixEndpointService.Messenger))
+            if (!string.IsNullOrEmpty(MixEndpointService.Messenger))
             {
 
-                string endpoint = $"{_mixEndpointService.Messenger}{hubName}";
-                connection = new HubConnectionBuilder()
+                string endpoint = $"{MixEndpointService.Messenger}{HubName}";
+                Connection = new HubConnectionBuilder()
                    .WithUrl(endpoint, options =>
                    {
-                       options.AccessTokenProvider = () => Task.FromResult(_accessToken);
+                       options.AccessTokenProvider = () => Task.FromResult(AccessToken);
                    })
                    .WithAutomaticReconnect()
                    .Build();
-                connection.Closed += async (error) =>
+                Connection.Closed += async (error) =>
                 {
                     await Task.Delay(new Random().Next(0, 5) * 1000);
-                    await connection.StartAsync();
+                    await Connection.StartAsync();
                 };
 
-                connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
+                Connection.On(HubMethods.ReceiveMethod, (SignalRMessageModel message) =>
                 {
                     this.HandleMessage(message);
                 });
 
-                connection.Reconnecting += error =>
+                Connection.Reconnecting += error =>
                 {
-                    Console.WriteLine(connection.State);
+                    Console.WriteLine(Connection.State);
 
                     // Notify users the connection was lost and the client is reconnecting.
                     // Start queuing or dropping messages.

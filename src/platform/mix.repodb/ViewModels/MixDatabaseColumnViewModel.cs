@@ -33,10 +33,7 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(
-            MixDatabaseColumn entity,
-
-            UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
+        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo? uowInfo = null): base(entity, uowInfo)
         {
         }
         #endregion
@@ -61,7 +58,7 @@ namespace Mix.RepoDb.ViewModels
         public override void ParseView<TSource>(TSource sourceObject, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            base.ParseView(sourceObject);
+            base.ParseView(sourceObject, cancellationToken);
             ColumnConfigurations = Configurations != null
                         ? JsonConvert.DeserializeObject<ColumnConfigurations>(Configurations)!
                         : new();

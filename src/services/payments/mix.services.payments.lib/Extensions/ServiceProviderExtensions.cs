@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
@@ -8,11 +7,6 @@ using Mix.Services.Payments.Lib.Entities.Mix;
 using Mix.Services.Payments.Lib.Entities.Onepay;
 using Mix.Services.Payments.Lib.Services;
 using Mix.Shared.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.UnitOfWork;
-using Mix.Identity.Constants;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
-using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
@@ -12,12 +10,6 @@ using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
-using Mix.Shared.Dtos;
-using Mix.Heart.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Mix.Services.Databases.Lib.Enums;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 
 namespace Mix.Services.Permission.Controllers
 {
@@ -47,7 +39,7 @@ namespace Mix.Services.Permission.Controllers
         public async Task<ActionResult<MixUserDataViewModel>> GetUserData(CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
-            var result = await _userDataService.GetUserData(user.Id, cancellationToken);
+            var result = await _userDataService.GetUserDataAsync(user.Id, cancellationToken);
             return Ok(result);
         }
 

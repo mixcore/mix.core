@@ -14,47 +14,49 @@ namespace Mix.Service.Services
 {
     public class AuditLogService
     {
-        private AuditLogDbContext? _dbContext;
-        private readonly IServiceProvider servicesProvider;
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        private readonly IServiceProvider _servicesProvider;
+        protected readonly IQueueService<MessageQueueModel> QueueService;
         public AuditLogService(IServiceProvider servicesProvider, IQueueService<MessageQueueModel> queueService)
         {
-            this.servicesProvider = servicesProvider;
-            _queueService = queueService;
+            this._servicesProvider = servicesProvider;
+            QueueService = queueService;
         }
         public void SaveToDatabase(string createdBy, ParsedRequestModel request, bool isSucceed, Exception exception)
         {
             try
             {
-                using var scope = servicesProvider.CreateScope();
-                _dbContext = scope.ServiceProvider.GetService<AuditLogDbContext>();
-                if (_dbContext != null)
+                using (var serviceScope = _servicesProvider.CreateScope())
                 {
-                    var pendingMigrations = _dbContext.Database.GetPendingMigrations();
-                    if (pendingMigrations.Count() > 0)
+                    var dbContext = serviceScope.ServiceProvider.GetService<AuditLogDbContext>();
+                    if (dbContext != null)
                     {
-                        _dbContext.Database.Migrate();
-                    }
+                        var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                        if (pendingMigrations.Any())
+                        {
+                            dbContext.Database.Migrate();
+                        }
 
-                    string body = request.Body;
-                    var msg = new AuditLog()
-                    {
-                        Id = Guid.NewGuid(),
-                        Body = body,
-                        CreatedDateTime = DateTime.UtcNow,
-                        RequestIp = request.RequestIp,
-                        Endpoint = request.Endpoint,
-                        Method = request.Method,
-                        CreatedBy = createdBy
-                    };
-                    if (exception != null)
-                    {
-                        msg.Exception = JObject.FromObject(exception).ToString(Newtonsoft.Json.Formatting.None);
+                        string body = request.Body;
+                        var msg = new AuditLog()
+                        {
+                            Id = Guid.NewGuid(),
+                            Body = body,
+                            CreatedDateTime = DateTime.UtcNow,
+                            RequestIp = request.RequestIp,
+                            Endpoint = request.Endpoint,
+                            Method = request.Method,
+                            CreatedBy = createdBy
+                        };
+                        if (exception != null)
+                        {
+                            msg.Exception = JObject.FromObject(exception).ToString(Newtonsoft.Json.Formatting.None);
+                        }
+                        msg.Success = isSucceed;
+                        dbContext.AuditLog.Add(msg);
+                        dbContext.SaveChanges();
                     }
-                    msg.Success = isSucceed;
-                    _dbContext.AuditLog.Add(msg);
-                    _dbContext.SaveChanges();
                 }
+                
             }
             catch (Exception ex)
             {
@@ -75,10 +77,10 @@ namespace Mix.Service.Services
             context.Request.Body.Seek(0, SeekOrigin.Begin);
         }
 
-        public void LogRequest(string? createdBy, ParsedRequestModel request)
+        public void LogRequest(string createdBy, ParsedRequestModel request)
         {
             var cmd = new LogAuditLogCommand(createdBy, request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
+            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
         }
 
         private string GetBody(HttpRequest request)

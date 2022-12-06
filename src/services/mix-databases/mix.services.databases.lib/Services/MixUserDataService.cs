@@ -1,54 +1,38 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Account;
-using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Identity.Constants;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
-using Mix.Portal.Domain.ViewModels;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.ViewModels;
-using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
-using System.Threading;
 
 namespace Mix.Services.Databases.Lib.Services
 {
     public sealed class MixUserDataService : TenantServiceBase
     {
         private readonly TenantUserManager _userManager;
-        private readonly MixIdentityService _identityService;
-        private MixServiceDatabaseDbContext _permissionDbContext;
-        private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        private UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
 
         public MixUserDataService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<MixServiceDatabaseDbContext> uow,
-            MixIdentityService identityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
             TenantUserManager userManager)
             : base(httpContextAccessor)
         {
             _uow = uow;
-            _permissionDbContext = _uow.DbContext;
-            _identityService = identityService;
-            _cmsUOW = cmsUOW;
             _userManager = userManager;
         }
 
-        public async Task<MixUserDataViewModel> GetUserData(Guid userId, CancellationToken cancellationToken = default)
+        public async Task<MixUserDataViewModel> GetUserDataAsync(Guid userId, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var data = await MixUserDataViewModel.GetRepository(_uow).GetSingleAsync(m => m.ParentId == userId);
+            var data = await MixUserDataViewModel.GetRepository(_uow).GetSingleAsync(m => m.ParentId == userId, cancellationToken);
             if (data == null)
             {
                 data = await CreateDefaultUserData(userId, cancellationToken);
@@ -75,7 +59,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var userData = await GetUserData(user.Id);
+            var userData = await GetUserDataAsync(user.Id, cancellationToken);
             if (userData == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
@@ -97,7 +81,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var userData = await GetUserData(user.Id);
+            var userData = await GetUserDataAsync(user.Id, cancellationToken);
             if (userData == null)
             {
                 throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
@@ -112,7 +96,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task UpdateUserAddress(MixContactAddressViewModel address, MixUser? user, CancellationToken cancellationToken)
         {
-            var userData = await GetUserData(user.Id);
+            var userData = await GetUserDataAsync(user.Id, cancellationToken);
             if (address.SysUserDataId != userData.Id)
             {
                 throw new MixException(MixErrorStatus.Badrequest);

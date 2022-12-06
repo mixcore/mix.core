@@ -25,16 +25,16 @@ namespace Mix.Shared.Services
 
         public async Task<string> DownloadAsync(
             string downloadUrl, string folder, string fileName, string extension,
-            IProgress<int> progress, CancellationToken token)
+            IProgress<int> progress, CancellationToken cancellationToken)
         {
             using (var client = _httpClientFactory.CreateClient())
-            using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead).Result)
+            using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken).Result)
             {
                 response.EnsureSuccessStatusCode();
                 //string folder = $"{MixFolders.WebRootPath}/{downloadPath}";
                 string fullPath = $"{folder}/{fileName}{extension}";
                 MixFileHelper.CreateFolderIfNotExist(folder);
-                using (Stream contentStream = await response.Content.ReadAsStreamAsync(),
+                using (Stream contentStream = await response.Content.ReadAsStreamAsync(cancellationToken),
                     fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
                 {
                     var totalRead = 0L;
@@ -45,14 +45,14 @@ namespace Mix.Shared.Services
                     var canReportProgress = total != -1 && progress != null;
                     do
                     {
-                        var read = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                        var read = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
                         if (read == 0)
                         {
                             isMoreToRead = false;
                         }
                         else
                         {
-                            await fileStream.WriteAsync(buffer, 0, read);
+                            await fileStream.WriteAsync(buffer, 0, read, cancellationToken);
 
                             totalRead += read;
                             totalReads += 1;
@@ -84,7 +84,7 @@ namespace Mix.Shared.Services
                 : requestUrl;
             return SendRequestAsync<T>(client => client.GetAsync(requestUrlWithQueryParams), bearerToken, requestHeaders);
         }
-        
+
         public Task<T> GetAsync<T>(
             string requestUrl,
             Dictionary<string, string> queryParams = null,
@@ -161,8 +161,8 @@ namespace Mix.Shared.Services
                     }
                 case "application/x-www-form-urlencoded":
                     var formData = content.GetType()
-     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-          .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .ToDictionary(prop => prop.Name, prop => (string)prop.GetValue(content, null));
                     return new FormUrlEncodedContent(formData);
                 default:
                     return new StringContent(JsonSerializer.Serialize(content, _sharedJsonSerializerOptions), Encoding.UTF8, contentType);

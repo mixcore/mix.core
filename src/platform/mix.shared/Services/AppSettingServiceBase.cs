@@ -5,10 +5,10 @@ namespace Mix.Shared.Services
 {
     public abstract class AppSettingServiceBase<T>
     {
-        protected string filePath;
+        private string _filePath;
         protected string _sectionName;
         public T AppSettings { get; set; }
-        protected string FilePath { get => filePath; set => filePath = value; }
+        protected string FilePath { get => _filePath; set => _filePath = value; }
 
         protected readonly FileSystemWatcher watcher = new();
         protected readonly IConfiguration _configuration;

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Constant.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Database.Base;
 using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
@@ -10,26 +9,25 @@ using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
 using RepoDb.Interfaces;
-using System;
 using System.Dynamic;
 
 namespace Mix.RepoDb.Services
 {
     public class MixDbService : IDisposable
     {
-        private IDatabaseConstants _dbConstants;
-        private MixRepoDbRepository _repository;
-        private MixRepoDbRepository _backupRepository;
+        private readonly IDatabaseConstants _dbConstants;
+        private readonly MixRepoDbRepository _repository;
+        private readonly MixRepoDbRepository _backupRepository;
 
         #region Properties
 
         public ITrace Trace { get; }
 
         public ICache Cache { get; }
-        private UnitOfWorkInfo<MixCmsContext> _uow;
-        private DatabaseService _databaseService;
+        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
+        private readonly DatabaseService _databaseService;
 
-        static string[] _defaultProperties = { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
+        private static readonly string[] DefaultProperties = { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
         #endregion
 
         public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
@@ -139,7 +137,7 @@ namespace Mix.RepoDb.Services
             var result = obj.ToList();
             foreach (KeyValuePair<string, object> kvp in result)
             {
-                if (!_defaultProperties.Any(m => m == kvp.Key) && !selectMembers.Any(m => m == kvp.Key))
+                if (!DefaultProperties.Any(m => m == kvp.Key) && !selectMembers.Any(m => m == kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }
@@ -157,16 +155,16 @@ namespace Mix.RepoDb.Services
         {
             List<string> colSqls = new List<string>();
             string tableName = database.SystemName.ToLower();
-            var backticks = GetBackticks(databaseProvider);
+            var backTicks = GetBackTicks(databaseProvider);
             foreach (var col in database.Columns)
             {
-                colSqls.Add(GenerateColumnSql(col, backticks.open, backticks.close));
+                colSqls.Add(GenerateColumnSql(col, backTicks.open, backTicks.close));
             }
 
-            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls, backticks.open, backticks.close);
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls, backTicks.open, backTicks.close);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backticks.open}{tableName}{backticks.close};");
+                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backTicks.open}{tableName}{backTicks.close};");
                 var result = await repo.ExecuteCommand(commandText);
                 return result >= 0;
             }
@@ -188,7 +186,7 @@ namespace Mix.RepoDb.Services
                 $" {string.Join(",", colSqls.ToArray())})";
         }
 
-        private (string open, string close) GetBackticks(MixDatabaseProvider databaseProvider)
+        private (string open, string close) GetBackTicks(MixDatabaseProvider databaseProvider)
         {
             string backtickOpen =
                 databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "[";

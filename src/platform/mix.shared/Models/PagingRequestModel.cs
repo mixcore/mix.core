@@ -3,22 +3,21 @@ using Mix.Heart.Enums;
 using Mix.Heart.Extensions;
 using Mix.Heart.Models;
 
-
 namespace Mix.Shared.Models
 {
     public class PagingRequestModel : PagingModel
     {
         public int Page { get; set; }
-        protected readonly int _defaultPageSize;
+        protected readonly int DefaultPageSize;
 
         public PagingRequestModel(int defaultPageSize = MixConstants.CONST_DEFAULT_PAGESIZE)
         {
-            _defaultPageSize = defaultPageSize;
+            DefaultPageSize = defaultPageSize;
         }
 
         public PagingRequestModel(HttpRequest request, int defaultPageSize = MixConstants.CONST_DEFAULT_PAGESIZE)
         {
-            _defaultPageSize = defaultPageSize;
+            DefaultPageSize = defaultPageSize;
             request.Query.TryGetValue(MixRequestQueryKeywords.PageSize, out var strPageSize);
             int.TryParse(strPageSize, out int pageSize);
 

@@ -1,15 +1,7 @@
-﻿using Google.Api;
-using Mix.Services.Ecommerce.Lib.Models;
-using Mix.Constant.Constants;
-using Mix.Constant.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
-using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
-using Mix.RepoDb.Repositories;
-using Newtonsoft.Json.Linq;
-using RepoDb;
-using RepoDb.Enumerations;
 using Mix.Services.Ecommerce.Lib.Entities;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
@@ -53,12 +45,12 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Public Method
 
-        public async Task LoadAdditionalDataAsync(UnitOfWorkInfo<EcommerceDbContext> ecommerceUOW, CancellationToken cancellationToken = default)
+        public async Task LoadAdditionalDataAsync(UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (AdditionalData == null)
             {
-                AdditionalData = await ProductDetailsViewModel.GetRepository(ecommerceUOW)
+                AdditionalData = await ProductDetailsViewModel.GetRepository(ecommerceUow)
                     .GetSingleAsync(m => 
                         m.MixTenantId == MixTenantId &&
                         m.ParentId == Id && 

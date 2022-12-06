@@ -5,19 +5,16 @@ namespace Mixcore.Domain.Subscribers
 {
     public sealed class PageContentSubscriber : SubscriberBase
     {
-        static string topicId = typeof(MixPageContentViewModel).FullName;
-        private readonly ILogger<PageContentSubscriber> logger;
-        private readonly MixCacheService cacheService;
+        private static readonly string TopicId = typeof(MixPageContentViewModel).FullName;
+        private readonly MixCacheService _cacheService;
 
         public PageContentSubscriber(
-            ILogger<PageContentSubscriber> logger,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
+            : base(TopicId, MixModuleNames.Mixcore, configuration, queueService)
         {
-            this.logger = logger;
-            this.cacheService = cacheService;
+            _cacheService = cacheService;
         }
 
         public override async Task Handler(MessageQueueModel data)
@@ -40,7 +37,7 @@ namespace Mixcore.Domain.Subscribers
 
         private async Task DeleteCacheAsync(MixPageContentViewModel data)
         {
-            await cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(PageContentViewModel));
+            await _cacheService.RemoveCacheAsync(data.Id.ToString(), typeof(PageContentViewModel));
         }
     }
 }

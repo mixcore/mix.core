@@ -9,8 +9,8 @@ namespace Mix.Storage.Lib.Engines.Mix
         public MixUploader(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW)
-            : base(httpContextAccessor, configuration, cmsUOW)
+            UnitOfWorkInfo<MixCmsContext> cmsUow)
+            : base(httpContextAccessor, configuration, cmsUow)
         {
         }
 
