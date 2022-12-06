@@ -20,12 +20,13 @@ using Newtonsoft.Json;
 using RepoDb;
 using System.Linq.Expressions;
 using Mix.Lib.Models;
+using Mix.Queue.Interfaces;
+using Mix.Queue.Models;
 
 namespace Mix.Account.Controllers
 {
     [Route("api/v2/rest/mix-account/user")]
-    [ApiController]
-    public class MixUserController : Controller
+    public class MixUserController : MixTenantApiControllerBase
     {
         private readonly TenantUserManager _userManager;
         private readonly SignInManager<MixUser> _signInManager;
@@ -42,21 +43,25 @@ namespace Mix.Account.Controllers
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
 
-        protected IHttpContextAccessor HttpContextAccessor;
-        protected ISession Session;
-
-        protected MixTenantSystemModel CurrentTenant => Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
-
         public MixUserController(
-            IHttpContextAccessor httpContextAccessor,
-            TenantUserManager userManager,
+             TenantUserManager userManager,
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             ILogger<MixUserController> logger,
-            MixIdentityService idService, EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext, MixIdentityService mixIdentityService, MixCmsContext cmsContext, MixRepoDbRepository repoDbRepository, EmailService emailService)
+            MixIdentityService idService,
+            EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+            MixCmsAccountContext accContext,
+            MixCmsContext cmsContext,
+            MixRepoDbRepository repoDbRepository,
+            EmailService emailService,
+            IHttpContextAccessor httpContextAccessor, 
+            IConfiguration configuration, 
+            MixService mixService, 
+            TranslatorService translator, 
+            MixIdentityService mixIdentityService, 
+            IQueueService<MessageQueueModel> queueService) 
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            Session = httpContextAccessor.HttpContext.Session;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -168,6 +173,23 @@ namespace Mix.Account.Controllers
             string key = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<RegisterExternalBindingModel>(decryptMsg);
+            var loginResult = await _idService.ExternalLogin(model);
+            return Ok(loginResult);
+        }
+        
+        [Route("login-unsecure")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> LoginUnsecure(LoginViewModel model)
+        {
+            var loginResult = await _idService.LoginAsync(model);
+            return Ok(loginResult);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("external-login-unsecure")]
+        public async Task<ActionResult> ExternalLoginUnsecure(RegisterExternalBindingModel model)
+        {
             var loginResult = await _idService.ExternalLogin(model);
             return Ok(loginResult);
         }

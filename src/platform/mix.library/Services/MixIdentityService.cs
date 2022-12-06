@@ -388,8 +388,8 @@ namespace Mix.Lib.Services
                             UserName = userName,
                             Provider = model.Provider,
                             ProviderKey = verifiedAccessToken.user_id,
-                            Data = model.Data
-                        }, CurrentTenant.Id, CmsUow,
+                            //Data = model.Data
+                        }, CurrentTenant.Id, _cmsUow,
                         cancellationToken);
 
                         return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
