@@ -36,9 +36,9 @@
 
         #region Overrides
 
-        public override void InitDefaultValues(string language = null, int? domainId = null)
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            base.InitDefaultValues(language, domainId);
+            base.InitDefaultValues(language, cultureId);
         }
 
         private void ParseData(JObject data)

@@ -68,11 +68,11 @@ namespace Mix.Lib.Base
             }
         }
 
-        public override void InitDefaultValues(string language = null, int? domainId = null)
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             Status = MixContentStatus.Published;
             Specificulture = language ?? Specificulture;
-            MixCultureId = domainId ?? 1;
+            MixCultureId = cultureId ?? 1;
         }
         #endregion
     }

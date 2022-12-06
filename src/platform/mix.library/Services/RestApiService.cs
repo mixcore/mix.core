@@ -70,7 +70,7 @@ namespace Mix.Lib.Services
             }
             data.SetUowInfo(Uow);
             await data.SaveAsync(cancellationToken);
-            await CacheService.RemoveCacheAsync(id, typeof(TView));
+            await CacheService.RemoveCacheAsync(id, typeof(TView), cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Put.ToString(), true);
         }
 
@@ -78,7 +78,7 @@ namespace Mix.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(Uow);
-            await data.DeleteAsync();
+            await data.DeleteAsync(cancellationToken);
             await CacheService.RemoveCacheAsync(data.Id.ToString(), typeof(TView), cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Delete.ToString(), true);
         }
@@ -89,7 +89,7 @@ namespace Mix.Lib.Services
             cancellationToken.ThrowIfCancellationRequested();
             data.SetUowInfo(Uow);
             await data.SaveFieldsAsync(properties, cancellationToken);
-            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TView));
+            await CacheService.RemoveCacheAsync(id.ToString(), typeof(TView), cancellationToken);
             QueueService.PushMessage(data, MixRestAction.Patch.ToString(), true);
         }
 
@@ -109,7 +109,7 @@ namespace Mix.Lib.Services
         public virtual async Task<PagingResponseModel<TView>> SearchHandler(SearchRequestDto req, SearchQueryModel<TEntity, TPrimaryKey> searchRequest, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
+            return await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
         }
 
         public virtual PagingResponseModel<TView> ParseSearchResult(SearchRequestDto req, PagingResponseModel<TView> result, CancellationToken cancellationToken = default)
