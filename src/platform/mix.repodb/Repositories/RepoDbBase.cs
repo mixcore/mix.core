@@ -12,7 +12,7 @@ namespace Mix.RepoDb.Repositories
     where TDbConnection : DbConnection
     where TEntity : class
     {
-        private AppSetting _settings;
+        private readonly AppSetting _settings;
 
         public RepoDbBase(IOptions<AppSetting> settings,
             ICache cache,

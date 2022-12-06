@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Portal.Domain.ViewModels
 {
     [GeneratePublisher]
     public sealed class MixTenantViewModel

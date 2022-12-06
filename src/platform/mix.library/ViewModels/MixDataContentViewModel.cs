@@ -58,12 +58,12 @@ namespace Mix.Lib.ViewModels
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
-            Values = await valRepo.GetListAsync(m => m.ParentId == Id);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cancellationToken);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cancellationToken);
 
             Data ??= MixDataHelper.ParseData(Id, UowInfo);
 
-            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
+            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo, cancellationToken: cancellationToken);
         }
 
         public override async Task<MixDataContent> ParseEntity(CancellationToken cancellationToken = default)
@@ -86,8 +86,8 @@ namespace Mix.Lib.ViewModels
                 MixDatabaseId = Context.MixDatabase.First(m => m.SystemName == MixDatabaseName)?.Id ?? 0;
             }
 
-            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName);
-            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id);
+            Columns = await colRepo.GetListAsync(m => m.MixDatabaseName == MixDatabaseName, cancellationToken);
+            Values ??= await valRepo.GetListAsync(m => m.ParentId == Id, cancellationToken);
 
             await ParseObjectToValues();
 
@@ -357,7 +357,7 @@ namespace Mix.Lib.ViewModels
                 Description = Excerpt,
 
             };
-            return await parent.SaveAsync();
+            return await parent.SaveAsync(cancellationToken);
         }
 
         #endregion

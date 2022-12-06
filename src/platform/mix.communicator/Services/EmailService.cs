@@ -9,13 +9,13 @@ namespace Mix.Communicator.Services
 {
     public class EmailService
     {
-        private EmailSettingModel _settings { get; set; } = new EmailSettingModel();
+        private EmailSettingModel Settings { get; set; } = new EmailSettingModel();
 
         public EmailService(IConfiguration configuration)
         {
 
             var session = configuration.GetSection(MixAppSettingsSection.Smtp);
-            session.Bind(_settings);
+            session.Bind(Settings);
         }
 
         public void SendMail(string subject, string message, string to, string? from = null)
@@ -23,21 +23,21 @@ namespace Mix.Communicator.Services
             MailMessage mailMessage = new MailMessage
             {
                 IsBodyHtml = true,
-                From = new MailAddress(from ?? _settings.From)
+                From = new MailAddress(from ?? Settings.From)
             };
             mailMessage.To.Add(to);
             mailMessage.Body = message;
             mailMessage.Subject = subject;
             try
             {
-                SmtpClient client = new SmtpClient(_settings.Server)
+                var client = new SmtpClient(Settings.Server)
                 {
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(
-                         _settings.User, _settings.Password
+                         Settings.User, Settings.Password
                         ),
-                    Port = _settings.Port,
-                    EnableSsl = _settings.SSL
+                    Port = Settings.Port,
+                    EnableSsl = Settings.SSL
                 };
 
                 client.Send(mailMessage);

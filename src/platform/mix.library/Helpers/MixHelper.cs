@@ -1,4 +1,3 @@
-using CommandLine;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -11,20 +10,9 @@ namespace Mix.Lib.Helpers
 {
     public sealed class MixHelper
     {
-        public class Options
+        public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
         {
-            [Option('c', "clean", Required = false, HelpText = "Clean installed Mixcore CMS version.")]
-            public bool Clean { get; set; }
-        }
-
-        public static IHostBuilder CreateHostBuilder<Startup>(string[] args)
-            where Startup : class
-        {
-
             var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
-
-            // Mixcore Cli
-            MixCli(args);
 
             // Clone Settings from shared folder
             if (!mixContentFolder.Exists)
@@ -53,69 +41,9 @@ namespace Mix.Lib.Helpers
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
-                    .UseStartup<Startup>();
+                    .UseStartup<TStartup>();
                 });
         }
-
-        public static void MixCli(string[] args)
-        {
-            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
-            var templatesFolder = new DirectoryInfo(MixFolders.TemplatesFolder);
-
-            // Parse Mixcore cli
-            Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
-                   {
-                       // Check if clean before run is required
-                       if (o.Clean)
-                       {
-                           Console.WriteLine($"Clean Arguments: -c {o.Clean}");
-
-                           // Delete existing MixContent folder
-                           Console.WriteLine("Do you want to clean all installed previous Mixcore CMS settings! (y/n):");
-                           string isClean = Console.ReadLine().ToLower();
-
-                           if (mixContentFolder.Exists)
-                           {
-                               if (isClean.Equals("y"))
-                               {
-                                   try
-                                   {
-                                       mixContentFolder.Delete(true);
-                                       Console.WriteLine("Clean MixContent folder completed!");
-                                   }
-                                   catch (IOException ex)
-                                   {
-                                       Console.WriteLine(ex.Message);
-                                   }
-                               }
-                           }
-
-                           if (templatesFolder.Exists)
-                           {
-                               if (isClean.Equals("y"))
-                               {
-                                   try
-                                   {
-                                       templatesFolder.Delete(true);
-                                       Console.WriteLine("Clean Templates folder completed!");
-                                   }
-                                   catch (IOException ex)
-                                   {
-                                       Console.WriteLine(ex.Message);
-                                   }
-                               }
-                           }
-                           Console.WriteLine("Continue to web interface.");
-                       }
-                       else
-                       {
-                           //Console.WriteLine($"Current Arguments: -v {o.Clean}");
-                           Console.WriteLine("There is no cli arg! Continue to web interface.");
-                       }
-                   });
-        }
-
 
         public static bool CopyFolder(string srcPath, string desPath)
         {
@@ -140,9 +68,9 @@ namespace Mix.Lib.Helpers
 
 
         public static bool IsDefaultId<TPrimaryKey>(TPrimaryKey id) =>
-object.Equals(id, default(TPrimaryKey))
-            || (id.GetType() == typeof(Guid) && Guid.Parse(id.ToString()) == Guid.Empty)
-            || (id.GetType() == typeof(int) && int.Parse(id.ToString()) == 0);
+            Equals(id, default(TPrimaryKey))
+            || (id is Guid && Guid.Parse(id.ToString()) == Guid.Empty) 
+            || (id is int && int.Parse(id.ToString()) == 0);
 
         public static string SerializeObject(object obj)
         {

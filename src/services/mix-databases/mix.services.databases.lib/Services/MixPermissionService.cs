@@ -15,8 +15,8 @@ namespace Mix.Services.Databases.Lib.Services
     public sealed class MixPermissionService : TenantServiceBase
     {
         private readonly MixIdentityService _identityService;
-        private MixServiceDatabaseDbContext _permissionDbContext;
-        private UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly MixServiceDatabaseDbContext _permissionDbContext;
+        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
 
         public MixPermissionService(
             IHttpContextAccessor httpContextAccessor,
@@ -29,7 +29,7 @@ namespace Mix.Services.Databases.Lib.Services
             _identityService = identityService;
         }
 
-        public async Task<List<MixPermissionViewModel>> GetPermissionAsyncs(Guid userId)
+        public async Task<List<MixPermissionViewModel>> GetPermissionAsync(Guid userId)
         {
             var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
             Expression<Func<MixPermission, bool>> predicate =

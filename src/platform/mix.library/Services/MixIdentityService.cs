@@ -25,23 +25,23 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService : IMixIdentityService
     {
-        private const string tenantIdFieldName = "MixTenantId";
-        protected readonly UnitOfWorkInfo _accountUow;
-        protected readonly UnitOfWorkInfo _cmsUow;
-        protected readonly MixCacheService _cacheService;
-        protected readonly TenantUserManager _userManager;
-        protected readonly SignInManager<MixUser> _signInManager;
-        protected readonly RoleManager<MixRole> _roleManager;
-        protected readonly AuthConfigService _authConfigService;
-        protected readonly FirebaseService _firebaseService;
-        protected readonly MixService _mixService;
-        protected readonly MixRepoDbRepository _repoDbRepository;
-        protected readonly MixCmsContext _cmsContext;
-        protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> _roleRepo;
-        protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> _refreshTokenRepo;
-        protected readonly DatabaseService _databaseService;
+        private const string TenantIdFieldName = "MixTenantId";
+        protected readonly UnitOfWorkInfo AccountUow;
+        protected readonly UnitOfWorkInfo CmsUow;
+        protected readonly MixCacheService CacheService;
+        protected readonly TenantUserManager UserManager;
+        protected readonly SignInManager<MixUser> SignInManager;
+        protected readonly RoleManager<MixRole> RoleManager;
+        protected readonly AuthConfigService AuthConfigService;
+        protected readonly FirebaseService FirebaseService;
+        protected readonly MixService MixService;
+        protected readonly MixRepoDbRepository RepoDbRepository;
+        protected readonly MixCmsContext CmsContext;
+        protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> RoleRepo;
+        protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> RefreshTokenRepo;
+        protected readonly DatabaseService DatabaseService;
         public List<RoleViewModel> Roles { get; set; }
-        protected ISession _session;
+        protected ISession Session;
         private MixTenantSystemModel _currentTenant;
         public MixTenantSystemModel CurrentTenant
         {
@@ -49,7 +49,7 @@ namespace Mix.Lib.Services
             {
                 if (_currentTenant == null)
                 {
-                    _currentTenant = _session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
+                    _currentTenant = Session.Get<MixTenantSystemModel>(MixRequestQueryKeywords.Tenant);
                 }
                 return _currentTenant;
             }
@@ -60,42 +60,42 @@ namespace Mix.Lib.Services
             SignInManager<MixUser> signInManager,
             RoleManager<MixRole> roleManager,
             AuthConfigService authConfigService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            UnitOfWorkInfo<MixCmsAccountContext> accountUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
             MixService mixService, DatabaseService databaseService)
         {
-            _session = httpContextAccessor.HttpContext.Session;
-            _cmsUow = cmsUOW;
-            _cmsContext = cmsUOW.DbContext;
-            _cacheService = cacheService;
-            _accountUow = accountUOW;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _authConfigService = authConfigService;
-            _roleRepo = RoleViewModel.GetRepository(_accountUow);
-            _refreshTokenRepo = RefreshTokenViewModel.GetRepository(_accountUow);
-            _firebaseService = firebaseService;
-            _repoDbRepository = repoDbRepository;
-            _mixService = mixService;
-            _databaseService = databaseService;
+            Session = httpContextAccessor.HttpContext?.Session;
+            CmsUow = cmsUow;
+            CmsContext = cmsUow.DbContext;
+            CacheService = cacheService;
+            AccountUow = accountUow;
+            UserManager = userManager;
+            SignInManager = signInManager;
+            RoleManager = roleManager;
+            AuthConfigService = authConfigService;
+            RoleRepo = RoleViewModel.GetRepository(AccountUow);
+            RefreshTokenRepo = RefreshTokenViewModel.GetRepository(AccountUow);
+            FirebaseService = firebaseService;
+            RepoDbRepository = repoDbRepository;
+            MixService = mixService;
+            DatabaseService = databaseService;
         }
 
         public virtual async Task<bool> Any(Guid userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await UserManager.FindByIdAsync(userId.ToString());
             return user != null;
         }
 
         public virtual async Task<MixUserViewModel> GetUserAsync(Guid userId)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await UserManager.FindByIdAsync(userId.ToString());
             if (user != null)
             {
-                var userInfo = new MixUserViewModel(user, _cmsUow);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _databaseService);
+                var userInfo = new MixUserViewModel(user, CmsUow);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, DatabaseService);
                 return userInfo;
             }
             return null;
@@ -108,15 +108,15 @@ namespace Mix.Lib.Services
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
             {
-                user = await _userManager.FindByEmailAsync(model.Email);
+                user = await UserManager.FindByEmailAsync(model.Email);
             }
             if (!string.IsNullOrEmpty(model.UserName))
             {
-                user = await _userManager.FindByNameAsync(model.UserName);
+                user = await UserManager.FindByNameAsync(model.UserName);
             }
             if (!string.IsNullOrEmpty(model.PhoneNumber))
             {
-                user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                user = await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
             }
 
             if (user == null)
@@ -124,7 +124,7 @@ namespace Mix.Lib.Services
                 throw new MixException(MixErrorStatus.Badrequest, "Login failed");
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
+            var result = await SignInManager.PasswordSignInAsync(user, model.Password, isPersistent: model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
 
             if (result.IsLockedOut)
             {
@@ -177,11 +177,11 @@ namespace Mix.Lib.Services
             MixUser user = null;
             if (!string.IsNullOrEmpty(model.Email))
             {
-                user = await _userManager.FindByEmailAsync(model.Email);
+                user = await UserManager.FindByEmailAsync(model.Email);
             }
             else if (!string.IsNullOrEmpty(model.PhoneNumber))
             {
-                user = await _userManager.FindByPhoneNumberAsync(model.PhoneNumber);
+                user = await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
             }
 
             if (user != null)
@@ -191,7 +191,7 @@ namespace Mix.Lib.Services
             return default;
         }
 
-        public virtual async Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default)
+        public virtual async Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo cmsUow, CancellationToken cancellationToken = default)
         {
             var user = new MixUser
             {
@@ -203,13 +203,13 @@ namespace Mix.Lib.Services
             };
 
             var createResult = !string.IsNullOrEmpty(model.Password)
-                ? await _userManager.CreateAsync(user, password: model.Password).ConfigureAwait(false)
-                : await _userManager.CreateAsync(user).ConfigureAwait(false);
+                ? await UserManager.CreateAsync(user, password: model.Password).ConfigureAwait(false)
+                : await UserManager.CreateAsync(user).ConfigureAwait(false);
             if (createResult.Succeeded)
             {
                 if (model.Provider.HasValue && !string.IsNullOrEmpty(model.ProviderKey))
                 {
-                    var createLoginResult = await _userManager.AddLoginAsync(
+                    var createLoginResult = await UserManager.AddLoginAsync(
                         user,
                         new UserLoginInfo(model.Provider.ToString(), model.ProviderKey, model.Provider.ToString()));
                     if (!createLoginResult.Succeeded)
@@ -218,10 +218,10 @@ namespace Mix.Lib.Services
                     }
                 }
 
-                await _userManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
-                await _userManager.AddToTenant(user, tenantId);
+                await UserManager.AddToRoleAsync(user, MixRoleEnums.Guest.ToString(), tenantId);
+                await UserManager.AddToTenant(user, tenantId);
 
-                user = await _userManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
+                user = await UserManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
                 await CreateUserData(user, model.Data, cancellationToken);
                 return user;
                 //return await GetAuthData(_cmsContext, user, true, tenantId);
@@ -236,11 +236,11 @@ namespace Mix.Lib.Services
                 if (obj != null)
                 {
                     MixDatabaseViewModel database = await MixDatabaseViewModel
-                        .GetRepository(_cmsUow)
+                        .GetRepository(CmsUow)
                         .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA, cancellationToken);
 
                     var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => string.Equals(c.SystemName, m.Name, StringComparison.OrdinalIgnoreCase))));
-                    int userDataId = await CreateUserInfomation(user, data);
+                    int userDataId = await CreateUserInformation(user, data);
                     foreach (var relation in database.Relationships)
                     {
                         if (obj.ContainsKey(relation.DisplayName))
@@ -259,20 +259,20 @@ namespace Mix.Lib.Services
 
         private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId, CancellationToken cancellationToken = default)
         {
-            _repoDbRepository.InitTableName(databaseName);
+            RepoDbRepository.InitTableName(databaseName);
             foreach (JObject data in nestedData)
             {
-                if (!data.ContainsKey(tenantIdFieldName))
+                if (!data.ContainsKey(TenantIdFieldName))
                 {
-                    data.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
+                    data.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
                 }
                 if (!data.ContainsKey("createdDateTime"))
                 {
                     data.Add(new JProperty("createdDateTime", DateTime.UtcNow));
                 }
 
-                var id = await _repoDbRepository.InsertAsync(data);
-                MixDatabaseAssociationViewModel association = new(_cmsUow)
+                var id = await RepoDbRepository.InsertAsync(data);
+                MixDatabaseAssociationViewModel association = new(CmsUow)
                 {
                     MixTenantId = CurrentTenant.Id,
                     ParentDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
@@ -284,12 +284,12 @@ namespace Mix.Lib.Services
             }
         }
 
-        private async Task<int> CreateUserInfomation(MixUser user, JObject data)
+        private async Task<int> CreateUserInformation(MixUser user, JObject data)
         {
-            _repoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
-            if (!data.ContainsKey(tenantIdFieldName))
+            RepoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
+            if (!data.ContainsKey(TenantIdFieldName))
             {
-                data.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
+                data.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
             }
             if (!data.ContainsKey("createdDateTime"))
             {
@@ -303,7 +303,7 @@ namespace Mix.Lib.Services
             {
                 data.Add(new JProperty("parentType", MixContentType.User.ToString()));
             }
-            return await _repoDbRepository.InsertAsync(data);
+            return await RepoDbRepository.InsertAsync(data);
         }
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
@@ -317,8 +317,8 @@ namespace Mix.Lib.Services
             try
             {
                 var dtIssued = DateTime.UtcNow;
-                var dtExpired = dtIssued.AddMinutes(_authConfigService.AppSettings.AccessTokenExpiration);
-                var dtRefreshTokenExpired = dtIssued.AddMinutes(_authConfigService.AppSettings.RefreshTokenExpiration);
+                var dtExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.AccessTokenExpiration);
+                var dtRefreshTokenExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
                 if (isRemember)
@@ -330,10 +330,10 @@ namespace Mix.Lib.Services
                             Id = refreshToken,
                             Email = user.Email,
                             IssuedUtc = dtIssued,
-                            ClientId = _authConfigService.AppSettings.ClientId,
+                            ClientId = AuthConfigService.AppSettings.ClientId,
                             Username = user.UserName,
                             ExpiresUtc = dtRefreshTokenExpired
-                        }, _accountUow);
+                        }, AccountUow);
 
                     var saveRefreshTokenResult = await vmRefreshToken.SaveAsync(cancellationToken);
                     refreshTokenId = saveRefreshTokenResult;
@@ -343,10 +343,10 @@ namespace Mix.Lib.Services
                 {
                     Info = info,
                     AccessToken = await GenerateTokenAsync(
-                        user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, _authConfigService.AppSettings),
+                        user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
-                    TokenType = _authConfigService.AppSettings.TokenType,
-                    ExpiresIn = _authConfigService.AppSettings.AccessTokenExpiration,
+                    TokenType = AuthConfigService.AppSettings.TokenType,
+                    ExpiresIn = AuthConfigService.AppSettings.AccessTokenExpiration,
                     Issued = dtIssued,
                     Expires = dtExpired,
                     LastUpdateConfiguration = CurrentTenant.Configurations.LastUpdateConfiguration
@@ -362,11 +362,11 @@ namespace Mix.Lib.Services
 
         public virtual async Task<JObject> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default)
         {
-            var verifiedAccessToken = await VerifyExternalAccessTokenAsync(model.Provider, model.ExternalAccessToken, _authConfigService.AppSettings);
+            var verifiedAccessToken = await VerifyExternalAccessTokenAsync(model.Provider, model.ExternalAccessToken, AuthConfigService.AppSettings);
             if (verifiedAccessToken != null)
             {
 
-                var user = await _userManager.FindByLoginAsync(model.Provider.ToString(), verifiedAccessToken.user_id);
+                var user = await UserManager.FindByLoginAsync(model.Provider.ToString(), verifiedAccessToken.user_id);
 
                 // return local token if already register
                 if (user != null)
@@ -389,7 +389,7 @@ namespace Mix.Lib.Services
                             Provider = model.Provider,
                             ProviderKey = verifiedAccessToken.user_id,
                             Data = model.Data
-                        }, CurrentTenant.Id, _cmsUow,
+                        }, CurrentTenant.Id, CmsUow,
                         cancellationToken);
 
                         return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
@@ -406,17 +406,17 @@ namespace Mix.Lib.Services
         public async Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default)
         {
             JObject result = new();
-            var oldToken = await _refreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken, cancellationToken);
+            var oldToken = await RefreshTokenRepo.GetSingleAsync(t => t.Id == refreshTokenDto.RefreshToken, cancellationToken);
             if (oldToken != null)
             {
                 if (oldToken.ExpiresUtc > DateTime.UtcNow)
                 {
 
-                    var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, _authConfigService.AppSettings);
+                    var principle = GetPrincipalFromExpiredToken(refreshTokenDto.AccessToken, AuthConfigService.AppSettings);
                     if (principle != null && oldToken.Username == GetClaim(principle, MixClaims.Username))
                     {
-                        var user = await _userManager.FindByEmailAsync(oldToken.Email);
-                        await _signInManager.SignInAsync(user, true).ConfigureAwait(false);
+                        var user = await UserManager.FindByEmailAsync(oldToken.Email);
+                        await SignInManager.SignInAsync(user, true).ConfigureAwait(false);
 
                         var token = await GetAuthData(user, true, CurrentTenant.Id);
                         if (token != null)
@@ -474,7 +474,7 @@ namespace Mix.Lib.Services
                     verifyTokenEndPoint = string.Format("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token={0}", accessToken);
                     break;
                 case MixExternalLoginProviders.Firebase:
-                    var token = await _firebaseService.VeriryTokenAsync(accessToken);
+                    var token = await FirebaseService.VerifyTokenAsync(accessToken);
                     return new ParsedExternalAccessToken()
                     {
                         app_id = token.TenantId,
@@ -534,7 +534,7 @@ namespace Mix.Lib.Services
             string rsaPublicKey,
             MixAuthenticationConfigurations appConfigs)
         {
-            var userRoles = await _userManager.GetUserRolesAsync(user);
+            var userRoles = await UserManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
 
             foreach (var endpoint in info.Endpoints)
@@ -575,10 +575,10 @@ namespace Mix.Lib.Services
             {
                 var roleName = userRole.Name == MixRoles.SuperAdmin ? userRole.Name : $"{userRole.Name}-{CurrentTenant.Id}";
                 claims.Add(new Claim(ClaimTypes.Role, roleName));
-                var role = await _roleManager.FindByNameAsync(userRole.Name);
+                var role = await RoleManager.FindByNameAsync(userRole.Name);
                 if (role != null)
                 {
-                    var roleClaims = await _roleManager.GetClaimsAsync(role);
+                    var roleClaims = await RoleManager.GetClaimsAsync(role);
                     foreach (Claim roleClaim in roleClaims)
                     {
                         claims.Add(roleClaim);

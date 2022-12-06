@@ -4,14 +4,15 @@ using Mix.Queue.Engines.MixQueue;
 
 namespace Mix.Lib.Publishers
 {
-    public class MixBackgrouTaskPublisher : PublisherBase
+    public class MixBackgroundTaskPublisher : PublisherBase
     {
-        static string topicId = MixQueueTopics.MixBackgroundTasks;
-        public MixBackgrouTaskPublisher(
+        private const string TopicId = MixQueueTopics.MixBackgroundTasks;
+
+        public MixBackgroundTaskPublisher(
             IQueueService<MessageQueueModel> queueService,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueMessage)
-            : base(topicId, queueService, configuration, queueMessage)
+            : base(TopicId, queueService, configuration, queueMessage)
         {
         }
     }

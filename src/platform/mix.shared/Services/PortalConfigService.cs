@@ -8,29 +8,29 @@ namespace Mix.Shared.Services
         /// <summary>
         /// The synchronize root
         /// </summary>
-        protected static readonly object syncRoot = new object();
+        protected static readonly object SyncRoot = new object();
 
         /// <summary>
         /// The instance
         /// </summary>
-        private static PortalConfigService instance;
+        private static PortalConfigService _instance;
 
         public static PortalConfigService Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
-                        if (instance == null)
+                        if (_instance == null)
                         {
-                            instance = new();
+                            _instance = new();
                         }
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
         #endregion

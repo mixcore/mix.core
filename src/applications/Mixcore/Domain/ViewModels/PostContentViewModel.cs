@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Mix.Heart.Helpers;
+﻿using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using RepoDb;
 using RepoDb.Enumerations;

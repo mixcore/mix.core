@@ -15,12 +15,12 @@ namespace Mix.Lib.Services
         private readonly MixRepoDbRepository _repository;
         private SiteDataViewModel _siteData;
         private ExportThemeDto _dto;
-        private MixThemeViewModel _exporTheme;
-        private string tempPath;
-        private string outputPath;
-        private string webPath;
-        private string fileName;
-        private ISession _session;
+        private MixThemeViewModel _exportTheme;
+        private string _tempPath;
+        private string _outputPath;
+        private string _webPath;
+        private string _fileName;
+        private readonly ISession _session;
         public MixTenantSystemModel CurrentTenant
         {
             get
@@ -35,7 +35,7 @@ namespace Mix.Lib.Services
         private MixTenantSystemModel _currentTenant;
         public MixThemeExportService(IHttpContextAccessor httpContext, MixCmsContext context, MixRepoDbRepository repository)
         {
-            _session = httpContext.HttpContext.Session;
+            _session = httpContext.HttpContext?.Session;
             _context = context;
             _themeRepository = MixThemeViewModel.GetRepository(new UnitOfWorkInfo(_context));
             _repository = repository;
@@ -47,16 +47,16 @@ namespace Mix.Lib.Services
         {
             _dto = request;
             _siteData = new();
-            _exporTheme = await _themeRepository.GetSingleAsync(
+            _exportTheme = await _themeRepository.GetSingleAsync(
                 m => m.Id == request.ThemeId);
 
             //path to temporary folder
-            _siteData.ThemeName = _exporTheme.DisplayName;
-            _siteData.ThemeSystemName = _exporTheme.SystemName;
-            fileName = $"{_exporTheme.SystemName}-{Guid.NewGuid()}";
-            webPath = $"{MixFolders.StaticFiles}/Themes/{_exporTheme.SystemName}";
-            tempPath = $"{webPath}/temp";
-            outputPath = webPath;
+            _siteData.ThemeName = _exportTheme.DisplayName;
+            _siteData.ThemeSystemName = _exportTheme.SystemName;
+            _fileName = $"{_exportTheme.SystemName}-{Guid.NewGuid()}";
+            _webPath = $"{MixFolders.StaticFiles}/Themes/{_exportTheme.SystemName}";
+            _tempPath = $"{_webPath}/temp";
+            _outputPath = _webPath;
 
             await ExportSelectedItemsAsync();
 
@@ -71,13 +71,13 @@ namespace Mix.Lib.Services
         private string ZipTheme()
         {
             // Zip to [theme_name].zip ( wwwroot for web path)
-            string filePath = MixFileHelper.ZipFolder(tempPath, outputPath, fileName);
+            string filePath = MixFileHelper.ZipFolder(_tempPath, _outputPath, _fileName);
 
             // Delete temp folder
-            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.AssetFolder}");
-            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.UploadFolder}");
-            MixFileHelper.DeleteFolder($"{outputPath}/{MixThemePackageConstants.SchemaFolder}");
-            return $"{webPath}/{fileName}.zip";
+            MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.AssetFolder}");
+            MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.UploadFolder}");
+            MixFileHelper.DeleteFolder($"{_outputPath}/{MixThemePackageConstants.SchemaFolder}");
+            return $"{_webPath}/{_fileName}.zip";
         }
 
         private void ExportAssets()
@@ -86,12 +86,12 @@ namespace Mix.Lib.Services
             {
                 // Copy current assets files
                 MixFileHelper.CopyFolder(
-                    _exporTheme.AssetFolder,
-                    $"{tempPath}/{MixThemePackageConstants.AssetFolder}");
+                    _exportTheme.AssetFolder,
+                    $"{_tempPath}/{MixThemePackageConstants.AssetFolder}");
                 // Copy current uploads files
                 MixFileHelper.CopyFolder(
                     $"{MixFolders.StaticFiles}/{CurrentTenant.SystemName}/{MixThemePackageConstants.UploadFolder}",
-                    $"{tempPath}/{MixThemePackageConstants.UploadFolder}");
+                    $"{_tempPath}/{MixThemePackageConstants.UploadFolder}");
             }
         }
 
@@ -110,7 +110,7 @@ namespace Mix.Lib.Services
             {
                 Filename = filename,
                 Extension = MixFileExtensions.Json,
-                FileFolder = $"{tempPath}/{MixThemePackageConstants.SchemaFolder}",
+                FileFolder = $"{_tempPath}/{MixThemePackageConstants.SchemaFolder}",
                 Content = content
             };
 

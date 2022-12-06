@@ -9,29 +9,29 @@ namespace Mix.Shared.Services
         /// <summary>
         /// The synchronize root
         /// </summary>
-        protected static readonly object syncRoot = new object();
+        protected static readonly object SyncRoot = new object();
 
         /// <summary>
         /// The instance
         /// </summary>
-        private static GlobalConfigService instance;
+        private static GlobalConfigService _instance;
 
         public static GlobalConfigService Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
-                        if (instance == null)
+                        if (_instance == null)
                         {
-                            instance = new();
+                            _instance = new();
                         }
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
         #endregion
@@ -42,8 +42,8 @@ namespace Mix.Shared.Services
         }
         public new string AesKey
         {
-            get { return Instance.AppSettings.ApiEncryptKey; }
-            set { Instance.AppSettings.ApiEncryptKey = value; }
+            get => Instance.AppSettings.ApiEncryptKey;
+            set => Instance.AppSettings.ApiEncryptKey = value;
         }
         public int ResponseCache => AppSettings.ResponseCache;
         public bool IsInit => AppSettings.IsInit;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
-using Mix.Portal.Domain.ViewModels;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 

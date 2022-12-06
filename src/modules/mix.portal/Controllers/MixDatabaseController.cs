@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Database.Services;
 using Mix.RepoDb.Services;
 using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 

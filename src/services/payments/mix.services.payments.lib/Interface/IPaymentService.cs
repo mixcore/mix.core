@@ -1,5 +1,4 @@
-﻿using Mix.Services.Payments.Lib.Entities.Onepay;
-using Mix.Services.Payments.Lib.Enums;
+﻿using Mix.Services.Payments.Lib.Enums;
 using Mix.Services.Payments.Lib.ViewModels.Mix;
 using Mix.Services.Payments.Lib.ViewModels.Onepay.Onepay;
 using Newtonsoft.Json.Linq;

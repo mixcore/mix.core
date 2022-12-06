@@ -17,9 +17,7 @@
         {
         }
 
-        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixDatabaseAssociationViewModel(MixDatabaseAssociation entity, UnitOfWorkInfo uowInfo = null) 
             : base(entity, uowInfo)
         {
         }

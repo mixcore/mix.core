@@ -4,9 +4,7 @@ using Mix.Constant.Constants;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Extensions;
 using Mix.Database.Services;
-using Mix.Heart.Enums;
 using Mix.Service.Services;
-using System.Linq.Expressions;
 
 namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
 {

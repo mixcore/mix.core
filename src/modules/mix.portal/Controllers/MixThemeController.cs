@@ -6,7 +6,6 @@ using Mix.Shared.Services;
 using Mix.SignalR.Constants;
 using Mix.SignalR.Hubs;
 using System.Text.RegularExpressions;
-using static Mix.Constant.Constants.MixConstants;
 
 namespace Mix.Portal.Controllers
 {

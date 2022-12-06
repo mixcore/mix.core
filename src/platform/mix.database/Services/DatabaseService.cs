@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Mix.Database.Entities;
 using Mix.Database.Entities.Account;
 using Mix.Database.Entities.Quartz;
 using Mix.Heart.Constants;

@@ -15,8 +15,6 @@ using Mix.RepoDb.Models;
 using Mix.Service.Services;
 using Mix.Shared.Dtos;
 using Mix.Shared.Models;
-using Mix.Shared.Models.Configurations;
-using Mix.Shared.Services;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -24,14 +22,13 @@ using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Mix.RepoDb.Repositories
 {
     public class MixRepoDbRepository : IDisposable
     {
         #region Properties
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private IDbConnection _connection;
         private IDbTransaction _dbTransaction;
         public ITrace Trace { get; }
@@ -41,12 +38,12 @@ namespace Mix.RepoDb.Repositories
         public string ConnectionString { get; set; }
         public MixDatabaseProvider DatabaseProvider { get; set; }
         readonly DatabaseService _databaseService;
-        private AppSetting _settings;
+        private readonly AppSetting _settings;
         private string _tableName;
         private bool _isRoot;
         #endregion
 
-        public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUOW)
+        public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUow)
         {
             Cache = cache;
             _settings = new AppSetting()
@@ -56,7 +53,7 @@ namespace Mix.RepoDb.Repositories
             };
             _databaseService = databaseService;
 
-            _cmsUOW = cmsUOW;
+            _cmsUow = cmsUow;
             DatabaseProvider = _databaseService.DatabaseProvider;
             ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
             if (!string.IsNullOrEmpty(ConnectionString))
@@ -170,7 +167,7 @@ namespace Mix.RepoDb.Repositories
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction);
+                var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction, cancellationToken: cancellationToken);
                 return data.ToList();
             }
             catch (Exception ex)
@@ -401,9 +398,9 @@ namespace Mix.RepoDb.Repositories
 
         private void SetDbConnection()
         {
-            _cmsUOW.Begin();
-            _connection = _cmsUOW.DbContext.Database.GetDbConnection();
-            _dbTransaction = _cmsUOW.ActiveTransaction.GetDbTransaction();
+            _cmsUow.Begin();
+            _connection = _cmsUow.DbContext.Database.GetDbConnection();
+            _dbTransaction = _cmsUow.ActiveTransaction.GetDbTransaction();
             _isRoot = false;
             switch (DatabaseProvider)
             {

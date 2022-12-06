@@ -1,3 +1,5 @@
+using Mix.Lib.ViewModels;
+
 namespace Mix.Xunittest.Domain.Tests
 {
     [Collection("Step 3 - Post")]

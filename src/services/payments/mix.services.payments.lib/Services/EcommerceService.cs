@@ -5,7 +5,6 @@ using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
-using Mix.Queue.Engines;
 using Mix.Services.Payments.Lib.Dtos;
 using Mix.Services.Payments.Lib.Entities.Mix;
 using Mix.Services.Payments.Lib.Enums;
@@ -18,7 +17,7 @@ namespace Mix.Services.Payments.Lib.Services
 {
     public class EcommerceService : TenantServiceBase
     {
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<PaymentDbContext> _uow;
         public EcommerceService(
@@ -129,7 +128,7 @@ namespace Mix.Services.Payments.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
-            string returnUrl = $"{HttpContextAccessor.HttpContext.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
+            string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
             var url = await paymentService.GetPaymentUrl(cart, returnUrl,  cancellationToken) ;
             return url;
         }

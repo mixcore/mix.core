@@ -30,10 +30,8 @@ namespace Mix.Lib.ViewModels
         {
         }
 
-        public MixDatabaseColumnViewModel(
-            MixDatabaseColumn entity,
-
-            UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
+        public MixDatabaseColumnViewModel(MixDatabaseColumn entity, UnitOfWorkInfo uowInfo = null) 
+            : base(entity, uowInfo)
         {
         }
         #endregion

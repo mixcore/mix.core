@@ -6,7 +6,7 @@ namespace Mix.Queue.Engines.MixQueue
 {
     public class MixMemoryMessageQueue<T>
     {
-        private List<MixTopicModel> topics = new List<MixTopicModel>();
+        private readonly List<MixTopicModel> _topics = new();
 
         public MixMemoryMessageQueue()
         {
@@ -14,14 +14,14 @@ namespace Mix.Queue.Engines.MixQueue
 
         public MixTopicModel GetTopic(string topicId)
         {
-            if (!topics.Any(m => m.Id == topicId))
+            if (_topics.All(m => m.Id != topicId))
             {
-                topics.Add(new MixTopicModel()
+                _topics.Add(new MixTopicModel()
                 {
                     Id = topicId
                 });
             }
-            return topics.Find(m => m.Id == topicId);
+            return _topics.Find(m => m.Id == topicId);
         }
     }
 }

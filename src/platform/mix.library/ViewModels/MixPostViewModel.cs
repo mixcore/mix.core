@@ -1,9 +1,8 @@
-﻿namespace Mix.Portal.Domain.ViewModels
+﻿namespace Mix.Lib.ViewModels
 {
     [GenerateRestApiController]
     public sealed class MixPostViewModel
-        : SiteDataWithContentViewModelBase
-        <MixCmsContext, MixPost, int, MixPostViewModel, MixPostContent, MixPostContentViewModel>
+        : SiteDataWithContentViewModelBase<MixCmsContext, MixPost, int, MixPostViewModel, MixPostContent, MixPostContentViewModel>
     {
         #region Constructors
 
@@ -11,9 +10,7 @@
         {
         }
 
-        public MixPostViewModel(MixPost entity,
-
-            UnitOfWorkInfo uowInfo = null)
+        public MixPostViewModel(MixPost entity, UnitOfWorkInfo uowInfo = null) 
             : base(entity, uowInfo)
         {
         }

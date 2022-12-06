@@ -9,7 +9,7 @@ namespace Mix.Lib.Services
 {
     public class MixDataService : IDisposable
     {
-        private ISession _session;
+        private readonly ISession _session;
         private MixTenantSystemModel _currentTenant;
         public MixTenantSystemModel CurrentTenant
         {
@@ -28,7 +28,7 @@ namespace Mix.Lib.Services
         {
             _uow = uow;
             _dbContext = uow.DbContext;
-            _session = httpContext.HttpContext.Session;
+            _session = httpContext.HttpContext?.Session;
         }
 
         public void SetUnitOfWork(UnitOfWorkInfo uow)
@@ -46,13 +46,13 @@ namespace Mix.Lib.Services
         {
             try
             {
-                var _associationRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
-                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
+                var associationRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
+                var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
                 Expression<Func<MixDataContentAssociation, bool>> predicate = mbox => false;
                 predicate = predicate.OrIf(request.IntParentId.HasValue, m => m.IntParentId == request.IntParentId.Value);
                 predicate = predicate.OrIf(request.GuidParentId.HasValue, m => m.GuidParentId == request.GuidParentId.Value);
-                var associations = _associationRepo.GetListQuery(predicate);
-                return await _contentRepo.GetAllAsync(m => associations.Any(n => n.DataContentId == m.Id));
+                var associations = associationRepo.GetListQuery(predicate);
+                return await contentRepo.GetAllAsync(m => associations.Any(n => n.DataContentId == m.Id));
             }
             catch (Exception ex)
             {
@@ -70,19 +70,14 @@ namespace Mix.Lib.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var _colRepo = MixDatabaseColumnViewModel.GetRepository(_uow);
-                var _contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
+                var colRepo = MixDatabaseColumnViewModel.GetRepository(_uow);
+                var contentRepo = new Repository<MixCmsContext, MixDataContent, Guid, TView>(_uow);
 
                 var tasks = new List<Task<TView>>();
                 culture ??= CurrentTenant.Configurations.DefaultCulture;
-                var fields = await _colRepo.GetListQuery(
+                var fields = await colRepo.GetListQuery(
                     m => m.MixDatabaseId == searchRequest.MixDatabaseId
-                            || m.MixDatabaseName == searchRequest.MixDatabaseName, cancellationToken).ToListAsync();
-
-                // Data predicate
-                Expression<Func<MixDataContent, bool>> andPredicate = m => m.Specificulture == culture
-                   && (m.MixDatabaseId == searchRequest.MixDatabaseId
-                        || m.MixDatabaseName == searchRequest.MixDatabaseName);
+                            || m.MixDatabaseName == searchRequest.MixDatabaseName, cancellationToken).ToListAsync(cancellationToken: cancellationToken);
 
                 // val predicate
                 Expression<Func<MixDataContentValue, bool>> attrPredicate = m => (m.MixDatabaseId == searchRequest.MixDatabaseId
@@ -139,7 +134,7 @@ namespace Mix.Lib.Services
                     searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => !excludeIds.Any(n => n == m.Id));
                 }
 
-                result = await _contentRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
+                result = await contentRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData, cancellationToken);
                 return result;
             }
             catch (Exception ex)
@@ -179,12 +174,12 @@ namespace Mix.Lib.Services
             Guid dataContentId)
             where TView : ViewModelBase<MixCmsContext, MixDataContentAssociation, Guid, TView>
         {
-            var _assoRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
+            var assoRepo = MixDataContentAssociationViewModel.GetRepository(_uow);
 
             Expression<Func<MixDataContentAssociation, bool>> predicate =
                     model => (model.MixDatabaseId == referenceId)
                     && (model.GuidParentId == dataContentId && model.ParentType == MixDatabaseParentType.MixDatabse);
-            var relatedContents = await _assoRepo.GetListAsync(predicate);
+            var relatedContents = await assoRepo.GetListAsync(predicate);
 
             JArray arr = new();
             foreach (var nav in relatedContents.OrderBy(v => v.Priority))
@@ -195,7 +190,9 @@ namespace Mix.Lib.Services
         }
 
         private static Expression<Func<MixDataContentValue, bool>> GetFilterValueByFields(
-                List<MixDatabaseColumn> columns, List<SearchContentValueModel> fieldQueries, ExpressionMethod? compareKind)
+            List<MixDatabaseColumn> columns, 
+            List<SearchContentValueModel> fieldQueries, 
+            ExpressionMethod? compareKind)
         {
             Expression<Func<MixDataContentValue, bool>> valPredicate = null;
             foreach (var q in fieldQueries)
