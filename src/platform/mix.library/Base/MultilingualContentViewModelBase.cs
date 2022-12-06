@@ -49,11 +49,11 @@ namespace Mix.Lib.Base
             return base.ParseEntity(cancellationToken);
         }
 
-        public override void InitDefaultValues(string language = null, int? domainId = null)
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
-            base.InitDefaultValues(language, domainId);
+            base.InitDefaultValues(language, cultureId);
             Specificulture ??= language;
-            MixCultureId = domainId ?? 1;
+            MixCultureId = cultureId ?? 1;
         }
 
         #endregion

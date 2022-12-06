@@ -19,7 +19,7 @@ namespace Mix.Tenancy.Domain.ViewModels.Init
 
         public int MixTenantId { get; set; }
 
-        public override void InitDefaultValues(string language = null, int? domainId = null)
+        public override void InitDefaultValues(string language = null, int? cultureId = null)
         {
             CreatedDateTime = DateTime.UtcNow;
             Status = MixContentStatus.Published;

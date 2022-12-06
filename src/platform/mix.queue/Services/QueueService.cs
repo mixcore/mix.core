@@ -24,8 +24,10 @@ namespace Mix.Queue.Services
         {
             var queue = GetQueue(topicId);
             List<MessageQueueModel> result = new();
-            if (!queue.Any(m => m.TopicId == topicId))
+            if (queue.All(m => m.TopicId != topicId))
+            {
                 return result;
+            }
 
             int i = 1;
 

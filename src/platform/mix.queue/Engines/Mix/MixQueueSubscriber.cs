@@ -48,7 +48,6 @@ namespace Mix.Queue.Engines.MixQueue
             {
                 while (!cancellationToken.IsCancellationRequested && !Processing)
                 {
-
                     _topic = _queue.GetTopic(_topic.Id);
                     var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
 
