@@ -2,7 +2,7 @@
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
-using Mix.Services.Ecommerce.Lib.Entities;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {

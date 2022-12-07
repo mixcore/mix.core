@@ -1,4 +1,6 @@
-﻿using Mix.Shared.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Services.Ecommerce.Lib.Services;
+using Mix.Shared.Interfaces;
 
 namespace Mix.Services.Ecommerce.Domain
 {
@@ -6,9 +8,9 @@ namespace Mix.Services.Ecommerce.Domain
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMixPayment();
             services.AddMixOnepay();
             services.AddMixEcommerce();
+            services.TryAddScoped<OnepayService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

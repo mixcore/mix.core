@@ -76,17 +76,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{C0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "payments", "payments", "{FD4459B6-FFE7-4E8F-87E4-DAAD888F886C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.payments.onepay", "services\payments\mix.services.payments.onepay\mix.services.payments.onepay.csproj", "{D4E842BC-AE6F-4511-A087-74BB9EF1034A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.payments.lib", "services\payments\mix.services.payments.lib\mix.services.payments.lib.csproj", "{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecommerces", "ecommerces", "{362A9E6F-A253-4D17-B164-C037609DD67B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.services.ecommerce.lib", "services\ecommerces\mix.services.ecommerce.lib\mix.services.ecommerce.lib.csproj", "{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce.lib", "services\ecommerces\mix.services.ecommerce.lib\mix.services.ecommerce.lib.csproj", "{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "mix-databases", "mix-databases", "{9052327F-0A55-43C2-808A-B315D12A1EB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mix.services.databases.lib", "services\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj", "{973AC418-7E56-44F0-83B8-C316565BB0E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.databases.lib", "services\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj", "{973AC418-7E56-44F0-83B8-C316565BB0E5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mix.services.ecommerce", "services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj", "{309813E4-D6E9-4B25-949F-49B808F4DFF7}"
 EndProject
@@ -194,14 +190,6 @@ Global
 		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{728EBD5B-266E-4476-9BDC-37D12194AFE2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4E842BC-AE6F-4511-A087-74BB9EF1034A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9ADA8E1F-F444-472C-914C-9AF2386B2D0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -255,8 +243,6 @@ Global
 		{7CEDC89A-61AF-48D8-91EF-EBE2689901CC} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
 		{C0A05428-767E-46C5-A31F-0D220E41F7C5} = {38F30F45-7DB6-4097-BA85-788ACCCBC5F2}
 		{FD4459B6-FFE7-4E8F-87E4-DAAD888F886C} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
-		{D4E842BC-AE6F-4511-A087-74BB9EF1034A} = {FD4459B6-FFE7-4E8F-87E4-DAAD888F886C}
-		{A58EAEC9-D4E7-4E2A-BCE4-3B96FB73A2AE} = {FD4459B6-FFE7-4E8F-87E4-DAAD888F886C}
 		{362A9E6F-A253-4D17-B164-C037609DD67B} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}
 		{9ADA8E1F-F444-472C-914C-9AF2386B2D0D} = {362A9E6F-A253-4D17-B164-C037609DD67B}
 		{9052327F-0A55-43C2-808A-B315D12A1EB1} = {C0A05428-767E-46C5-A31F-0D220E41F7C5}

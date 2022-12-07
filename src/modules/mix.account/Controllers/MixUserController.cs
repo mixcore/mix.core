@@ -99,7 +99,7 @@ namespace Mix.Account.Controllers
 
         #endregion
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin")]
+        [MixAuthorize]
         [Route("my-tenants")]
         [HttpGet]
         public async Task<ActionResult> MyTenants()
@@ -210,7 +210,7 @@ namespace Mix.Account.Controllers
             return Ok(token);
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [MixAuthorize]
         [HttpGet]
         [Route("my-profile")]
         public async Task<ActionResult<MixUserViewModel>> MyProfile([FromServices] DatabaseService databaseService)
@@ -228,7 +228,7 @@ namespace Mix.Account.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [MixAuthorize(roles: MixRoles.Owner)]
         [Route("details/{id}")]
         public async Task<ActionResult> Details([FromServices] DatabaseService databaseService, string id = null)
         {
@@ -244,7 +244,7 @@ namespace Mix.Account.Controllers
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [MixAuthorize(roles: MixRoles.Owner)]
         [Route("remove-user/{id}")]
         public async Task<ActionResult> Remove(string id)
         {
@@ -276,7 +276,7 @@ namespace Mix.Account.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "SuperAdmin, Owner")]
+        [MixAuthorize(roles: MixRoles.Owner)]
         [Route("user-in-role")]
         public async Task<ActionResult> Details(UserRoleModel model)
         {
@@ -316,7 +316,7 @@ namespace Mix.Account.Controllers
             return BadRequest(errors);
         }
 
-        [MixAuthorize(roles: "SuperAdmin, Owner")]
+        [MixAuthorize(roles: MixRoles.Owner)]
         [HttpGet("list")]
         public virtual async Task<ActionResult<PagingResponseModel<MixUser>>> Get([FromQuery] SearchRequestDto request)
         {
@@ -342,7 +342,7 @@ namespace Mix.Account.Controllers
         }
 
         // POST api/template
-        [MixAuthorize(roles: $"{MixRoles.SuperAdmin}, {MixRoles.Owner}")]
+        [MixAuthorize(roles: MixRoles.Owner)]
         [HttpPost]
         [Route("save")]
         public async Task<ActionResult<MixUserViewModel>> Save(

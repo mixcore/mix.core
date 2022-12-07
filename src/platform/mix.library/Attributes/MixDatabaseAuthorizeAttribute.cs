@@ -1,28 +1,34 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.Api;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
+using System.Data;
 using System.Security.Claims;
 
 namespace Mix.Lib.Attributes
 {
     public class MixDatabaseAuthorizeAttribute : TypeFilterAttribute
     {
-        public MixDatabaseAuthorizeAttribute()
+        public MixDatabaseAuthorizeAttribute(string tableName)
         : base(typeof(DatabaseAuthorizeActionFilter))
         {
+            Arguments = new object[] { tableName };
         }
     }
 
     public class DatabaseAuthorizeActionFilter : IAuthorizationFilter
     {
+        private string _tableName;
         private readonly MixCmsContext _cmsContext;
         protected readonly MixIdentityService _idService;
         private ClaimsPrincipal userPrinciple;
         public DatabaseAuthorizeActionFilter(
+            string tableName,
             MixIdentityService idService,
             MixCmsContext cmsContext)
         {
+            _tableName = tableName;
             _cmsContext = cmsContext;
             _idService = idService;
         }
@@ -30,7 +36,7 @@ namespace Mix.Lib.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             userPrinciple = context.HttpContext.User;
-            var _tableName = context.HttpContext.Request.RouteValues["name"].ToString();
+            _tableName ??= context.HttpContext.Request.RouteValues["name"]?.ToString();
             var database = _cmsContext.MixDatabase.FirstOrDefault(m => m.SystemName == _tableName);
             if (database == null)
             {

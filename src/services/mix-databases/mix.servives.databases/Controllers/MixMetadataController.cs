@@ -12,8 +12,10 @@ using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
 using Mix.Services.Databases.Lib.Enums;
+using Mix.Services.Databases.Lib;
+using Mix.Lib.Attributes;
 
-namespace Mix.Services.Permission.Controllers
+namespace Mix.Services.Databases.Controllers
 {
     [Route("api/v2/rest/mix-services/metadata")]
     public sealed class MixMetadataController :
