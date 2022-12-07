@@ -8,15 +8,15 @@ using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
-using Mix.Services.Payments.Lib.Dtos;
-using Mix.Services.Payments.Lib.Enums;
-using Mix.Services.Payments.Lib.Services;
-using Mix.Services.Payments.Lib.ViewModels.Mix;
+using Mix.Services.Ecommerce.Lib.Dtos;
+using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Services;
+using Mix.Services.Ecommerce.Lib.ViewModels;
 using Newtonsoft.Json.Linq;
 
 namespace mix.services.ecommerce.Controllers
 {
-    [Route("api/ecommerce")]
+    [Route("api/v2/ecommerce")]
     [ApiController]
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
@@ -57,10 +57,10 @@ namespace mix.services.ecommerce.Controllers
 
         [MixAuthorize]
         [HttpDelete]
-        [Route("remove-from-cart/{postId}")]
-        public async Task<ActionResult> RemoveFromCart(int postId, CancellationToken cancellationToken = default)
+        [Route("remove-from-cart/{itemId}")]
+        public async Task<ActionResult> RemoveFromCart(int itemId, CancellationToken cancellationToken = default)
         {
-            var cart = await _ecommerceService.RemoveFromCart(User, postId, cancellationToken);
+            var cart = await _ecommerceService.RemoveFromCart(User, itemId, cancellationToken);
             return Ok(cart);
         }
 

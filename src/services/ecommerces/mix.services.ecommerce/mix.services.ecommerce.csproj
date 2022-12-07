@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\payments\mix.services.payments.lib\mix.services.payments.lib.csproj" />
     <ProjectReference Include="..\mix.services.ecommerce.lib\mix.services.ecommerce.lib.csproj" />
   </ItemGroup>
 

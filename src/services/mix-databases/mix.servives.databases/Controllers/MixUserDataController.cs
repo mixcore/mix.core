@@ -11,9 +11,9 @@ using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 
-namespace Mix.Services.Permission.Controllers
+namespace Mix.Services.Databases.Controllers
 {
-    [Route("api/v2/rest/mix-services/userdata")]
+    [Route("api/v2/rest/mix-services/user-data")]
     public sealed class MixUserDataController :
         MixRestHandlerApiControllerBase<MixUserDataViewModel, MixServiceDatabaseDbContext, MixUserData, int>
     {

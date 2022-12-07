@@ -69,7 +69,6 @@
 		<ProjectReference Include="..\..\modules\mix.tenancy\mix.tenancy.csproj" />
 		<ProjectReference Include="..\..\services\ecommerces\mix.services.ecommerce\mix.services.ecommerce.csproj" />
 		<ProjectReference Include="..\..\services\mix-databases\mix.servives.databases\mix.services.databases.csproj" />
-		<ProjectReference Include="..\..\services\payments\mix.services.payments.onepay\mix.services.payments.onepay.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<EmbeddedResource Include="Views\_ViewImports.cshtml">

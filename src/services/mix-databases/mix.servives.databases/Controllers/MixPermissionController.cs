@@ -16,7 +16,7 @@ using Mix.Shared.Dtos;
 using Mix.Heart.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mix.Services.Permission.Controllers
+namespace Mix.Services.Databases.Controllers
 {
     [Route("api/v2/rest/mix-services/permission")]
     public sealed class MixPermissionController :

@@ -11,6 +11,7 @@ using Mix.RepoDb.Repositories;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Extensions;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 
