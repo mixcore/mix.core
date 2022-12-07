@@ -381,16 +381,19 @@ namespace Mix.Lib.Services
 
                     if (!string.IsNullOrEmpty(userName))
                     {
-                        user = await RegisterAsync(new RegisterViewModel()
-                        {
-                            Email = model.Email,
-                            PhoneNumber = model.PhoneNumber,
-                            UserName = userName,
-                            Provider = model.Provider,
-                            ProviderKey = verifiedAccessToken.user_id,
-                            //Data = model.Data
-                        }, CurrentTenant.Id, _cmsUow,
-                        cancellationToken);
+                        user = await RegisterAsync(
+                            new RegisterViewModel
+                            {
+                                Email = model.Email,
+                                PhoneNumber = model.PhoneNumber,
+                                UserName = userName,
+                                Provider = model.Provider,
+                                ProviderKey = verifiedAccessToken.user_id,
+                                //Data = model.Data
+                            },
+                            CurrentTenant.Id,
+                            CmsUow,
+                            cancellationToken);
 
                         return await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
                     }
@@ -418,7 +421,7 @@ namespace Mix.Lib.Services
                         var user = await UserManager.FindByEmailAsync(oldToken.Email);
                         await SignInManager.SignInAsync(user, true).ConfigureAwait(false);
 
-                        var token = await GetAuthData(user, true, CurrentTenant.Id);
+                        var token = await GetAuthData(user, true, CurrentTenant.Id, cancellationToken);
                         if (token != null)
                         {
                             await oldToken.DeleteAsync(cancellationToken);
