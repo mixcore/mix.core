@@ -36,7 +36,10 @@ namespace Mix.Lib.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             userPrinciple = context.HttpContext.User;
-            _tableName ??= context.HttpContext.Request.RouteValues["name"]?.ToString();
+            if (string.IsNullOrEmpty(_tableName))
+            {
+                _tableName = context.HttpContext.Request.RouteValues["name"]?.ToString();
+            }
             var database = _cmsContext.MixDatabase.FirstOrDefault(m => m.SystemName == _tableName);
             if (database == null)
             {

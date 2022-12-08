@@ -1,6 +1,6 @@
 ﻿namespace Mix.Constant.Constants
 {
-    public class MixRequestQueryKeywords
+    public sealed partial class MixRequestQueryKeywords
     {
         public const string FromDate = "fromDate";
         public const string ToDate = "toData";

@@ -4,6 +4,10 @@ namespace Mix.Services.Databases.Lib.Dtos
 {
     public class CreateMetadataContentAssociationDto
     {
+        public CreateMetadataContentAssociationDto()
+        {
+
+        }
         public int ContentId { get; set; }
         public MetadataParentType  ContentType { get; set; }
         public int MetadataId { get; set; }

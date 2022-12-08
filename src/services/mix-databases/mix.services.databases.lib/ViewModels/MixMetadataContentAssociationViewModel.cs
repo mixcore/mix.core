@@ -15,6 +15,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         public string Image { get; set; }
         public int MixTenantId { get; set; }
 
+        public MixMetadataViewModel Metadata { get; set; }
         #endregion
 
         #region Constructors
@@ -50,6 +51,11 @@ namespace Mix.Services.Databases.Lib.ViewModels
                 Errors.Add(new($"Metadata '{MetadataId} - {ContentType} - {ContentId}' existed"));
             }
             return base.Validate(cancellationToken);
+        }
+
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
+        {
+            Metadata = await MixMetadataViewModel.GetRepository(UowInfo).GetSingleAsync(m => m.Id == MetadataId, cancellationToken);
         }
 
         #endregion

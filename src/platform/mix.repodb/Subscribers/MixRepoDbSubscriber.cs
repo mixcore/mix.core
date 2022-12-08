@@ -7,6 +7,7 @@ using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models;
 using Mix.RepoDb.Services;
+using Mix.Service.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
@@ -17,6 +18,8 @@ namespace Mix.RepoDb.Subscribers
     {
         protected PortalHubClientService PortalHub;
         private readonly IServiceProvider _servicesProvider;
+        private IServiceScope _servicesScope;
+        private MixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
@@ -30,9 +33,11 @@ namespace Mix.RepoDb.Subscribers
 
         public override async Task Handler(MessageQueueModel model)
         {
-            using (var servicesScope = _servicesProvider.CreateScope())
+            try
             {
-                var cmsUow = servicesScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                _servicesScope = _servicesProvider.CreateScope();
+                _mixDbService = _servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
+                var cmsUow = _servicesScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
                 switch (model.Action)
                 {
                     case MixRepoDbQueueAction.Backup:
@@ -49,59 +54,33 @@ namespace Mix.RepoDb.Subscribers
                 }
                 await cmsUow.CompleteAsync();
             }
+            catch (Exception ex)
+            {
+                await SendMessage(model.Action, false, ex);
+            }
+            finally
+            {
+                _servicesScope.Dispose();
+            }
         }
 
         private async Task BackupDatabase(MessageQueueModel model)
         {
-            try
-            {
-                using (var servicesScope = _servicesProvider.CreateScope())
-                {
-                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
-                    await mixDbService.BackupDatabase(model.Data);
-                    await SendMessage($"{MixRepoDbQueueAction.Backup} {model.Data} Successfully", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                await SendMessage(MixRepoDbQueueAction.Backup, false, ex);
-            }
+            await _mixDbService.BackupDatabase(model.Data);
+            await SendMessage($"{MixRepoDbQueueAction.Backup} {model.Data} Successfully", true);
         }
 
         private async Task RestoreDatabase(MessageQueueModel model)
         {
-            try
-            {
-                using (var servicesScope = _servicesProvider.CreateScope())
-                {
-                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
-                    await mixDbService.RestoreFromLocal(model.Data);
-                    await SendMessage($"{MixRepoDbQueueAction.Restore} {model.Data} Successfully", true);
-                }
-            }
-            catch (Exception ex)
-            {
-                await SendMessage(MixRepoDbQueueAction.Restore, false, ex);
-            }
+            await _mixDbService.RestoreFromLocal(model.Data);
+            await SendMessage($"{MixRepoDbQueueAction.Restore} {model.Data} Successfully", true);
         }
 
         private async Task MigrateDatabase(MessageQueueModel model)
         {
-            try
-            {
-                using (var servicesScope = _servicesProvider.CreateScope())
-                {
-                    var mixDbService = servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
-                    await mixDbService.MigrateDatabase(model.Data);
-                    string msg = $"{MixRepoDbQueueAction.Migrate} {model.Data} Successfully";
-                    await SendMessage(msg, true);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                await SendMessage(MixRepoDbQueueAction.Migrate, false, ex);
-            }
+            await _mixDbService.MigrateDatabase(model.Data);
+            string msg = $"{MixRepoDbQueueAction.Migrate} {model.Data} Successfully";
+            await SendMessage(msg, true);
         }
 
         private async Task SendMessage(string message, bool result, Exception? ex = null)

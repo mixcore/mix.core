@@ -12,8 +12,6 @@ using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
 using Mix.Services.Databases.Lib.Enums;
-using Mix.Services.Databases.Lib;
-using Mix.Lib.Attributes;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -38,8 +36,8 @@ namespace Mix.Services.Databases.Controllers
 
         [HttpGet("get-metadata-content/{contentType}/{metadataSeoContent}")]
         public async Task<ActionResult<List<object>>> GetContentByMetadata(
-            MetadataParentType contentType, 
-            string metadataSeoContent, 
+            MetadataParentType contentType,
+            string metadataSeoContent,
             [FromQuery] SearchRequestDto req)
         {
             var searchRequest = BuildSearchRequest(req);
@@ -47,10 +45,31 @@ namespace Mix.Services.Databases.Controllers
             return Ok(metadatas);
         }
 
+        [HttpGet("get-metadata/{contentType}/{contentId}")]
+        public async Task<ActionResult<List<MixMixMetadataContentAsscociationViewModel>>> GetMetadataByContentId([FromQuery] SearchMetadataDto req)
+        {
+            var searchRequest = BuildSearchRequest(req);
+            var metadatas = await _metadataService.GetMetadataByContentId(req.ContentId, req.ContentType, req.MetadataType, searchRequest);
+            return Ok(metadatas);
+        }
+
+        [HttpPost("get-or-create-metadata")]
+        public async Task<ActionResult> CreateMetadata([FromBody] CreateMetadataDto dto, CancellationToken cancellationToken = default)
+        {
+            return Ok(await _metadataService.GetOrCreateMetadata(dto, cancellationToken));
+        }
+
         [HttpPost("create-metadata-association")]
-        public async Task<ActionResult> CreateMetadataContentAssociation(CreateMetadataContentAssociationDto dto)
+        public async Task<ActionResult> CreateMetadataContentAssociation([FromBody]CreateMetadataContentAssociationDto dto)
         {
             await _metadataService.CreateMetadataContentAssociation(dto);
+            return Ok();
+        }
+        
+        [HttpDelete("delete-metadata-association/{id}")]
+        public async Task<ActionResult> DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
+        {
+            await _metadataService.DeleteMetadataContentAssociation(id, cancellationToken);
             return Ok();
         }
 
