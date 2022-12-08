@@ -12,6 +12,9 @@ using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.ViewModels;
 using System.Linq.Expressions;
 using Mix.Lib.ViewModels;
+using Mix.Lib.Models.Common;
+using Mix.Heart.Models;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -57,6 +60,19 @@ namespace Mix.Services.Databases.Lib.Services
             return query;
         }
 
+        public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MetadataParentType? contentType, string metadataType)
+        {
+            var query = from metadata in _uow.DbContext.MixMetadata
+                        join association in _uow.DbContext.MixMetadataContentAssociation
+                        on metadata.Id equals association.MetadataId
+                        where metadata.MixTenantId == CurrentTenant.Id
+                            && (string.IsNullOrEmpty(metadataType) || metadata.Type == metadataType)
+                            && association.ContentId == contentId
+                            && (!contentType.HasValue || association.ContentType == contentType)
+                        select association.Id;
+            return query;
+        }
+
         public async Task<dynamic?> GetQueryableContentByMetadataSeoContentAsync(string metadataSeoContent, MetadataParentType contentType, Mix.Lib.Models.Common.SearchQueryModel<MixMetadata, int> searchRequest)
         {
             var query = GetQueryableContentIdByMetadataSeoContent(metadataSeoContent, contentType);
@@ -85,6 +101,32 @@ namespace Mix.Services.Databases.Lib.Services
             return default;
         }
 
+        public async Task<MixMetadataViewModel> GetOrCreateMetadata(CreateMetadataDto dto, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var metadata = await MixMetadataViewModel.GetRepository(_uow).GetSingleAsync(m => m.Content == dto.Content, cancellationToken);
+            if (metadata == null)
+            {
+                return await CreateMetadata(dto, cancellationToken);
+            }
+            return metadata;
+        }
+
+        public async Task<MixMetadataViewModel> CreateMetadata(CreateMetadataDto dto, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            MixMetadataViewModel metadata = new(_uow)
+            {
+                MixTenantId = CurrentTenant.Id,
+                CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
+            };
+            ReflectionHelper.MapObject(dto, metadata);
+            await metadata.SaveAsync(cancellationToken);
+            return metadata;
+        }
+
         public async Task CreateMetadataContentAssociation(CreateMetadataContentAssociationDto dto, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -96,6 +138,30 @@ namespace Mix.Services.Databases.Lib.Services
             };
             ReflectionHelper.MapObject(dto, association);
             await association.SaveAsync(cancellationToken);
+        }
+
+        public async Task<PagingResponseModel<MixMixMetadataContentAsscociationViewModel>> GetMetadataByContentId(
+            int intContentId,
+            MetadataParentType? contentType,
+            string metadataType, SearchQueryModel<MixMetadata, int> searchRequest)
+        {
+            var query = GetQueryableMetadataByContentId(intContentId, contentType, metadataType);
+            if (query != null)
+            {
+                return await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow)
+                            .GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id && query.Any(n => n == m.Id),
+                                searchRequest.PagingData);
+            }
+            return default;
+        }
+
+        public async Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
+        {
+            var association = await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m=>m.Id== id);
+            if (association != null)
+            {
+                await association.DeleteAsync(cancellationToken);
+            }
         }
     }
 }

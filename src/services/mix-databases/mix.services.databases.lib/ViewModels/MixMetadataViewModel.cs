@@ -36,17 +36,22 @@ namespace Mix.Services.Databases.Lib.ViewModels
 
         public override Task Validate(CancellationToken cancellationToken)
         {
-            if (Context.MixMetadata.Any(m => m.MixTenantId == MixTenantId && m.Id != Id && m.Type == Type && m.Content == m.Content))
+            if (Context.MixMetadata.Any(m => m.MixTenantId == MixTenantId && m.Id != Id && m.Type == Type && m.Content == Content))
             {
                 IsValid = false;
                 Errors.Add(new($"Metadata '{Type} - {Content}' existed"));
+            }
+            if (string.IsNullOrEmpty(Type))
+            {
+                IsValid = false;
+                Errors.Add(new("Type is required"));
             }
             return base.Validate(cancellationToken);
         }
 
         public override Task<MixMetadata> ParseEntity(CancellationToken cancellationToken = default)
         {
-            SeoContent = SeoHelper.GetSEOString(Content);
+            SeoContent ??= SeoHelper.GetSEOString(Content);
             return base.ParseEntity(cancellationToken);
         }
         #endregion
