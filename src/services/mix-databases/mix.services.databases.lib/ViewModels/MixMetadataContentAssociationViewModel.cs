@@ -45,7 +45,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
                     && m.Id != Id 
                     && m.MetadataId == MetadataId
                     && m.ContentType == ContentType 
-                    && m.ContentId == m.ContentId))
+                    && m.ContentId == ContentId))
             {
                 IsValid = false;
                 Errors.Add(new($"Metadata '{MetadataId} - {ContentType} - {ContentId}' existed"));
