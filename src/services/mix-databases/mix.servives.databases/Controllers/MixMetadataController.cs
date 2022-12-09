@@ -12,6 +12,8 @@ using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
 using Mix.Services.Databases.Lib.Enums;
+using Mix.Heart.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -60,12 +62,12 @@ namespace Mix.Services.Databases.Controllers
         }
 
         [HttpPost("create-metadata-association")]
-        public async Task<ActionResult> CreateMetadataContentAssociation([FromBody]CreateMetadataContentAssociationDto dto)
+        public async Task<ActionResult> CreateMetadataContentAssociation([FromBody] CreateMetadataContentAssociationDto dto)
         {
             await _metadataService.CreateMetadataContentAssociation(dto);
             return Ok();
         }
-        
+
         [HttpDelete("delete-metadata-association/{id}")]
         public async Task<ActionResult> DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
         {
@@ -80,6 +82,9 @@ namespace Mix.Services.Databases.Controllers
         protected override SearchQueryModel<MixMetadata, int> BuildSearchRequest(SearchRequestDto req)
         {
             var searchRequest = base.BuildSearchRequest(req);
+            string type = Request.Query["metadataType"].ToString();
+            searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(!string.IsNullOrEmpty(type),
+                m => m.Type == type);
             return searchRequest;
         }
 

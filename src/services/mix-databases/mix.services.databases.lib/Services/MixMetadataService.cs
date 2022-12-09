@@ -105,7 +105,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var metadata = await MixMetadataViewModel.GetRepository(_uow).GetSingleAsync(m => m.Content == dto.Content, cancellationToken);
+            var metadata = await MixMetadataViewModel.GetRepository(_uow).GetSingleAsync(m => m.Content == dto.Content && m.Type == dto.Type, cancellationToken);
             if (metadata == null)
             {
                 return await CreateMetadata(dto, cancellationToken);
