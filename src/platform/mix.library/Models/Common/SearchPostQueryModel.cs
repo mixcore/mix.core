@@ -1,36 +1,32 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RepoDb.Extensions;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Models.Common
 {
     public sealed class SearchPostQueryModel : SearchQueryModel<MixPostContent, int>
     {
-        public SearchPostQueryModel(int tenantId) : base(tenantId)
-        {
-        }
-
         public SearchPostQueryModel(
-            int tenantId,
-            SearchRequestDto request,
             HttpRequest httpRequest,
+            SearchRequestDto request = null,
+            int? tenantId = default,
             Expression<Func<MixPostContent, bool>> andPredicate = null,
             Expression<Func<MixPostContent, bool>> orPredicate = null)
-            : base(tenantId, request, httpRequest, andPredicate, orPredicate)
+            : base(httpRequest, request, tenantId, andPredicate, orPredicate)
         {
-            var strCategories = httpRequest.Query[MixRequestQueryKeywords.Categories].ToString();
-            var strTags = httpRequest.Query[MixRequestQueryKeywords.Tag].ToString();
+            ApplyMetadataFilter(httpRequest);
+        }
 
-            if (!string.IsNullOrEmpty(strCategories))
+        private void ApplyMetadataFilter(HttpRequest httpRequest)
+        {
+            string prefix = "md_";
+            var metadata = httpRequest.Query.Keys.Where(m => m.StartsWith(prefix));
+            foreach (var key in metadata)
             {
-                Categories = strCategories.Split(',', StringSplitOptions.TrimEntries);
-            }
-            if (!string.IsNullOrEmpty(strTags))
-            {
-                Tags = strTags.Split(',', StringSplitOptions.TrimEntries);
+                MetadataQueries.Add(key.Replace(prefix, string.Empty), httpRequest.Query[key].ToString().Split(',', StringSplitOptions.TrimEntries));
             }
         }
 
-        public string[] Categories { get; set; }
-        public string[] Tags { get; set; }
+        public Dictionary<string, string[]> MetadataQueries { get; set; } = new();
     }
 }

@@ -4,13 +4,8 @@ namespace Mix.Lib.Models.Common
 {
     public sealed class SearchDataContentModel : SearchQueryModel<MixDataContent, Guid>
     {
-        public SearchDataContentModel(int tenantId) :
-            base(tenantId)
-        {
-
-        }
-        public SearchDataContentModel(int tenantId, SearchRequestDto req, HttpRequest httpRequest)
-            : base(tenantId, req, httpRequest)
+        public SearchDataContentModel(SearchRequestDto req, HttpRequest httpRequest)
+            : base(httpRequest, req)
         {
             MixDatabaseName = httpRequest.Query[MixRequestQueryKeywords.DatabaseName];
 

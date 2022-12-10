@@ -24,7 +24,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<SmtpConfigService>();
             services.TryAddScoped<IPSecurityConfigService>();
 
-            services.TryAddScoped<MixPostService>();
             services.TryAddScoped<MixDataService>();
 
             services.TryAddScoped<MixService>();

@@ -15,6 +15,10 @@ using Mix.Lib.ViewModels;
 using Mix.Lib.Models.Common;
 using Mix.Heart.Models;
 using Org.BouncyCastle.Asn1.Cms;
+using Mix.Heart.ViewModel;
+using Mix.Heart.Repository;
+using Mix.Heart.Entities;
+using Mix.Shared.Models;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -48,15 +52,15 @@ namespace Mix.Services.Databases.Lib.Services
             return result;
         }
 
-        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(string metadataSeoContent, MetadataParentType contentType)
+        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(string[] metadataSeoContents, MetadataParentType contentType)
         {
             var query = from metadata in _uow.DbContext.MixMetadata
                         join association in _uow.DbContext.MixMetadataContentAssociation
                         on metadata.Id equals association.MetadataId
                         where metadata.MixTenantId == CurrentTenant.Id
-                            && metadata.SeoContent == metadataSeoContent
+                            && metadataSeoContents.Contains(metadata.SeoContent)
                             && association.ContentType == contentType
-                        select association.Id;
+                        select association.ContentId;
             return query;
         }
 
@@ -72,31 +76,23 @@ namespace Mix.Services.Databases.Lib.Services
                         select association.Id;
             return query;
         }
-
-        public async Task<dynamic?> GetQueryableContentByMetadataSeoContentAsync(string metadataSeoContent, MetadataParentType contentType, Mix.Lib.Models.Common.SearchQueryModel<MixMetadata, int> searchRequest)
+        public async Task<PagingResponseModel<TView>?> GetContentByMetadataAsync<TView, TEntity>(
+                string[] metadataSeoContents,
+                MetadataParentType contentType,
+                HttpRequest request)
+            where TView : ViewModelBase<MixCmsContext, MixPostContent, int, TView>
+             where TEntity : EntityBase<int>
         {
-            var query = GetQueryableContentIdByMetadataSeoContent(metadataSeoContent, contentType);
+            SearchQueryModel<TEntity, int> searchRequest = new(request);
+            var query = GetQueryableContentIdByMetadataSeoContent(metadataSeoContents, contentType);
             if (query != null)
             {
                 // TODO: Share dbcontext transaction
                 var allowIds = await query.ToListAsync();
-                switch (contentType)
-                {
-                    case MetadataParentType.MixDatabse:
-                        break;
-                    case MetadataParentType.Post:
-                        var result = await MixPostContentViewModel.GetRepository(_cmsUow)
-                            .GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
+                var repo = new Repository<MixCmsContext, MixPostContent, int, TView>(_cmsUow);
+                return await repo.GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
                                 && allowIds.Any(n => n == m.Id),
                                 searchRequest.PagingData);
-                        return result;
-                    case MetadataParentType.Page:
-                        break;
-                    case MetadataParentType.Module:
-                        break;
-                    default:
-                        break;
-                }
             }
             return default;
         }
@@ -143,21 +139,23 @@ namespace Mix.Services.Databases.Lib.Services
         public async Task<PagingResponseModel<MixMixMetadataContentAsscociationViewModel>> GetMetadataByContentId(
             int intContentId,
             MetadataParentType? contentType,
-            string metadataType, SearchQueryModel<MixMetadata, int> searchRequest)
+            string metadataType, PagingRequestModel pagingData)
         {
             var query = GetQueryableMetadataByContentId(intContentId, contentType, metadataType);
             if (query != null)
             {
                 return await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow)
-                            .GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id && query.Any(n => n == m.Id),
-                                searchRequest.PagingData);
+                            .GetPagingAsync(
+                                m => m.MixTenantId == CurrentTenant.Id 
+                                        && query.Any(n => n == m.Id),
+                                        pagingData);
             }
             return default;
         }
 
         public async Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
         {
-            var association = await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m=>m.Id== id);
+            var association = await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id);
             if (association != null)
             {
                 await association.DeleteAsync(cancellationToken);

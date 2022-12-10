@@ -3,6 +3,7 @@ using Mix.Database.Services;
 using Mix.Heart.Extensions;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
 using System.Linq.Expressions;
@@ -11,6 +12,7 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
+        private readonly MixMetadataService _metadataService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly ILogger<HomeController> _logger;
         public HomeController(
@@ -22,11 +24,13 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow,
-            MixRepoDbRepository repoDbRepository)
+            MixRepoDbRepository repoDbRepository,
+            MixMetadataService metadataService)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
         {
             _logger = logger;
             _repoDbRepository = repoDbRepository;
+            _metadataService = metadataService;
         }
 
         protected override void ValidateRequest()
@@ -77,7 +81,7 @@ namespace Mixcore.Controllers
 
             if (page != null)
             {
-                await page.LoadDataAsync(_repoDbRepository, new(Request)
+                await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
                 {
                     SortBy = MixQueryColumnName.Priority
                 });

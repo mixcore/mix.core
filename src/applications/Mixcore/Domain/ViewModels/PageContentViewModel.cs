@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Models;
 
 namespace Mixcore.Domain.ViewModels
@@ -52,11 +53,11 @@ namespace Mixcore.Domain.ViewModels
 
         #region Public Method
 
-        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, PagingRequestModel pagingModel)
+        public async Task LoadDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService, PagingRequestModel pagingModel)
         {
             await LoadAdditionalDataAsync(mixRepoDbRepository);
-            await LoadModulesAsync(mixRepoDbRepository);
-            await LoadPostsAsync(pagingModel, mixRepoDbRepository);
+            await LoadModulesAsync(mixRepoDbRepository, metadataService);
+            await LoadPostsAsync(pagingModel, mixRepoDbRepository, metadataService);
         }
 
 
@@ -83,7 +84,7 @@ namespace Mixcore.Domain.ViewModels
                 AdditionalData = obj != null ? ReflectionHelper.ParseObject(obj) : null;
             }
         }
-        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository)
+        private async Task LoadModulesAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
             var moduleIds = await Context.MixPageModuleAssociation
                     .AsNoTracking()
@@ -96,16 +97,16 @@ namespace Mixcore.Domain.ViewModels
             var paging = new PagingModel();
             foreach (var item in Modules)
             {
-                await item.LoadData(paging, mixRepoDbRepository);
+                await item.LoadData(paging, mixRepoDbRepository, metadataService);
             }
         }
-        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository)
+        private async Task LoadPostsAsync(PagingRequestModel pagingModel, MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
             Posts = await PagePostAssociationViewModel.GetRepository(UowInfo).GetPagingAsync(m => m.ParentId == Id, pagingModel);
             foreach (var item in Posts.Items)
             {
                 item.SetUowInfo(UowInfo);
-                await item.LoadPost(mixRepoDbRepository);
+                await item.LoadPost(mixRepoDbRepository, metadataService);
             }
         }
 

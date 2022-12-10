@@ -29,7 +29,7 @@ namespace Mix.Portal.Controllers
         protected override async Task<PagingResponseModel<MixDataContentViewModel>> SearchHandler(
             [FromQuery] SearchRequestDto req, CancellationToken cancellationToken = default)
         {
-            SearchDataContentModel searchReq = new SearchDataContentModel(CurrentTenant.Id, req, Request);
+            SearchDataContentModel searchReq = new SearchDataContentModel(req, Request);
             return await _mixDataService.Search<MixDataContentViewModel>(searchReq, Lang, cancellationToken);
         }
 

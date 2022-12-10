@@ -2,6 +2,7 @@
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -15,6 +16,8 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
         private readonly MixRepoDbRepository _repoDbRepository;
+        private readonly MixMetadataService _metadataService;
+
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
@@ -24,7 +27,8 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
-            MixRepoDbRepository repoDbRepository)
+            MixRepoDbRepository repoDbRepository,
+            MixMetadataService metadataService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _context = context;
@@ -34,6 +38,7 @@ namespace Mixcore.Controllers
             _databaseService = databaseService;
             _context = context;
             _repoDbRepository = repoDbRepository;
+            _metadataService = metadataService;
         }
 
         protected override void ValidateRequest()
@@ -81,7 +86,7 @@ namespace Mixcore.Controllers
             if (page == null)
                 return NotFound();
 
-            await page.LoadDataAsync(_repoDbRepository, new(Request)
+            await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
             {
                 SortBy = MixQueryColumnName.Priority
             });

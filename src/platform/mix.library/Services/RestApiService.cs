@@ -147,7 +147,7 @@ namespace Mix.Lib.Services
                 req.PageSize = CurrentTenant.Configurations.MaxPageSize;
             }
 
-            return new SearchQueryModel<TEntity, TPrimaryKey>(CurrentTenant.Id, req, HttpContextAccessor.HttpContext!.Request);
+            return new SearchQueryModel<TEntity, TPrimaryKey>(HttpContextAccessor.HttpContext!.Request, req, CurrentTenant.Id);
         }
 
         public virtual async Task<TView> GetById(TPrimaryKey id)
