@@ -47,6 +47,13 @@ namespace Mix.Lib.Base
             return Ok(result);
         }
 
+        [HttpDelete("remove-cache/{id}")]
+        public async Task<ActionResult> DeleteCache(TPrimaryKey id, [FromServices] MixCacheService cacheService, CancellationToken cancellationToken = default)
+        {
+            await cacheService.RemoveCacheAsync(id, typeof(TEntity), cancellationToken);
+            return Ok();
+        }
+        
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {
