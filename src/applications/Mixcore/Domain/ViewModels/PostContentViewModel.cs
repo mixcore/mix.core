@@ -8,7 +8,6 @@ using RepoDb.Enumerations;
 
 namespace Mixcore.Domain.ViewModels
 {
-    [GenerateRestApiController(QueryOnly = true)]
     public class PostContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase
             <MixCmsContext, MixPostContent, int, PostContentViewModel>

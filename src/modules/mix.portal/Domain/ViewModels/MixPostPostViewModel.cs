@@ -24,6 +24,11 @@
         #endregion
 
         #region Overrides
+
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
+        {
+            Child = await MixPostContentViewModel.GetRepository(UowInfo).GetSingleAsync(m => m.Id == ChildId, cancellationToken);
+        }
         #endregion
 
         #region Expands

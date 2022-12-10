@@ -42,6 +42,7 @@ namespace Mix.Lib.Models.Common
                 ReflectionHelper.MapObject(request, this);
                 PagingData = new PagingRequestModel()
                 {
+                    Page = request.PageIndex + 1,
                     PageIndex = request.PageIndex,
                     PageSize = request.PageSize,
                     SortBy = request.OrderBy,
