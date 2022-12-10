@@ -4,13 +4,8 @@ namespace Mix.Lib.Models.Common
 {
     public sealed class SearchDataContentAssociationModel : SearchQueryModel<MixDataContentAssociation, Guid>
     {
-        public SearchDataContentAssociationModel(int tenantId)
-            : base(tenantId)
-        {
-
-        }
-        public SearchDataContentAssociationModel(int tenantId, SearchRequestDto req, HttpRequest httpRequest)
-            : base(tenantId, req, httpRequest)
+        public SearchDataContentAssociationModel(SearchRequestDto req, HttpRequest httpRequest)
+            : base(httpRequest, req)
         {
             Keyword = req.Keyword;
             FromDate = req.FromDate;
@@ -55,7 +50,7 @@ namespace Mix.Lib.Models.Common
 
         protected override void BuildAndPredicate(SearchRequestDto req, HttpRequest request)
         {
-            SearchDataContentModel searchReq = new SearchDataContentModel(MixTenantId, req, request);
+            SearchDataContentModel searchReq = new SearchDataContentModel(req, request);
             base.BuildAndPredicate(req, request);
             AndPredicate = AndPredicate.AndAlso(m =>
             m.MixDatabaseId == searchReq.MixDatabaseId

@@ -14,6 +14,8 @@ using Mix.Shared.Dtos;
 using Mix.Services.Databases.Lib.Enums;
 using Mix.Heart.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Mix.Lib.ViewModels;
+using Mix.Database.Entities.Cms;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -36,22 +38,12 @@ namespace Mix.Services.Databases.Controllers
 
         #region Routes
 
-        [HttpGet("get-metadata-content/{contentType}/{metadataSeoContent}")]
-        public async Task<ActionResult<List<object>>> GetContentByMetadata(
-            MetadataParentType contentType,
-            string metadataSeoContent,
-            [FromQuery] SearchRequestDto req)
-        {
-            var searchRequest = BuildSearchRequest(req);
-            var metadatas = await _metadataService.GetQueryableContentByMetadataSeoContentAsync(metadataSeoContent, contentType, searchRequest);
-            return Ok(metadatas);
-        }
 
         [HttpGet("get-metadata/{contentType}/{contentId}")]
         public async Task<ActionResult<List<MixMixMetadataContentAsscociationViewModel>>> GetMetadataByContentId([FromQuery] SearchMetadataDto req)
         {
             var searchRequest = BuildSearchRequest(req);
-            var metadatas = await _metadataService.GetMetadataByContentId(req.ContentId, req.ContentType, req.MetadataType, searchRequest);
+            var metadatas = await _metadataService.GetMetadataByContentId(req.ContentId, req.ContentType, req.MetadataType, searchRequest.PagingData);
             return Ok(metadatas);
         }
 

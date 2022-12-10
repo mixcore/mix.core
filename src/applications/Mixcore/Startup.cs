@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
@@ -31,17 +32,15 @@ namespace Mixcore
             services.AddScoped<MixNavigationService>();
 
             // Queue Subscribers
-            services.AddHostedService<ThemeSubscriber>();
-            services.AddHostedService<TemplateSubscriber>();
-            services.AddHostedService<PageContentSubscriber>();
-            services.AddHostedService<TenantSubscriber>();
-            services.AddHostedService<DomainSubscriber>();
+            services.AddMixMvcServices();
 
             services.AddMixAuthorize<MixCmsAccountContext>();
             services.AddMixRoutes();
 
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixOcelot(Configuration);
+
+            services.TryAddScoped<PostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

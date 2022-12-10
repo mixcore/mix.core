@@ -19,8 +19,8 @@ namespace Mix.Lib.Models.Common
         public string Columns { get; set; }
         public string SearchColumns { get; set; }
 
-        public int MixTenantId { get; set; }
-        public PagingRequestModel PagingData { get; set; }
+        public int? MixTenantId { get; set; }
+        public PagingRequestModel PagingData { get; set; } = new PagingRequestModel();
         public Expression<Func<TEntity, bool>> Predicate { get; set; }
 
         protected Expression<Func<TEntity, bool>> AndPredicate { get; set; }
@@ -28,48 +28,43 @@ namespace Mix.Lib.Models.Common
 
         #endregion
 
-        public SearchQueryModel(int tenantId)
-        {
-            MixTenantId = tenantId;
-        }
-
         public SearchQueryModel(
-            int tenantId,
-            HttpRequest request,
-            Expression<Func<TEntity, bool>> andPredicate = null,
-            Expression<Func<TEntity, bool>> orPredicate = null)
-        {
-            MixTenantId = tenantId;
-            AndPredicate = AndPredicate.AndAlso(andPredicate);
-            OrPredicate = orPredicate;
-            Init(request, default);
-        }
-
-        public SearchQueryModel(
-            int tenantId,
-            SearchRequestDto request,
             HttpRequest httpRequest,
+            SearchRequestDto request = null,
+            int? tenantId = default,
             Expression<Func<TEntity, bool>> andPredicate = null,
             Expression<Func<TEntity, bool>> orPredicate = null)
         {
-            MixTenantId = tenantId;
-            ReflectionHelper.MapObject(request, this);
-            PagingData = new PagingRequestModel()
+            Init(httpRequest, tenantId);
+
+            if (request != null)
             {
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortBy = request.OrderBy,
-                SortDirection = request.Direction
-            };
+                ReflectionHelper.MapObject(request, this);
+                PagingData = new PagingRequestModel()
+                {
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
+                    SortBy = request.OrderBy,
+                    SortDirection = request.Direction
+                };
+                BuildAndPredicate(request, httpRequest);
+            }
+            else
+            {
+                PagingData = new(httpRequest);
+            }
+
             OrPredicate = orPredicate;
             AndPredicate = AndPredicate.AndAlso(andPredicate);
-            BuildAndPredicate(request, httpRequest);
+
+
             BuildPredicate();
         }
 
-        private void Init(HttpRequest request, int defaultPageSize = 1000)
+        protected void Init(HttpRequest request, int? tenantId, int defaultPageSize = 1000)
         {
             Culture = request.Query[MixRequestQueryKeywords.Specificulture];
+            MixTenantId = tenantId;
             FromDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.FromDate], out DateTime fromDate)
                 ? fromDate : null;
             ToDate = DateTime.TryParse(request.Query[MixRequestQueryKeywords.ToDate], out DateTime toDate)
@@ -79,9 +74,6 @@ namespace Mix.Lib.Models.Common
             Keyword = request.Query.TryGetValue(MixRequestQueryKeywords.Keyword, out var orderBy)
                 ? orderBy : string.Empty;
             PagingData = new PagingRequestModel(request, defaultPageSize);
-
-            BuildPredicate();
-
         }
 
         private void BuildPredicate()
@@ -105,9 +97,9 @@ namespace Mix.Lib.Models.Common
 
             if (ReflectionHelper.HasProperty(typeof(TEntity), MixRequestQueryKeywords.TenantId))
             {
-                AndPredicate = AndPredicate.AndAlso(
+                AndPredicate = AndPredicate.AndAlsoIf(MixTenantId.HasValue,
                         ReflectionHelper.GetExpression<TEntity>(
-                        MixRequestQueryKeywords.TenantId, MixTenantId, ExpressionMethod.Equal));
+                        MixRequestQueryKeywords.TenantId, MixTenantId.Value, ExpressionMethod.Equal));
             }
 
             if (!string.IsNullOrEmpty(req.SearchColumns) && !string.IsNullOrEmpty(req.Keyword) && req.SearchMethod.HasValue)

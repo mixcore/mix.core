@@ -1,4 +1,6 @@
-﻿namespace Mixcore.Domain.ViewModels
+﻿using Mix.Services.Databases.Lib.Services;
+
+namespace Mixcore.Domain.ViewModels
 {
     public sealed class PagePostAssociationViewModel
         : AssociationViewModelBase<MixCmsContext, MixPagePostAssociation, int, PagePostAssociationViewModel>
@@ -31,10 +33,10 @@
 
         #region Expands
 
-        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository)
+        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
             Post = await PostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
-            await Post.LoadAdditionalDataAsync(mixRepoDbRepository);
+            await Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService);
         }
         #endregion
     }

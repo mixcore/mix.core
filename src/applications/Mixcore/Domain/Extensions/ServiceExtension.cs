@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Converters;
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mixcore.Domain.Subscribers;
+using Newtonsoft.Json.Converters;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -8,6 +10,15 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         #region Ocelot
 
+        public static void AddMixMvcServices(this IServiceCollection services)
+        {
+            services.AddHostedService<ThemeSubscriber>();
+            services.AddHostedService<TemplateSubscriber>();
+            services.AddHostedService<PageContentSubscriber>();
+            services.AddHostedService<TenantSubscriber>();
+            services.AddHostedService<DomainSubscriber>();
+        }
+        
         public static void AddMixOcelot(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddOcelot(configuration);

@@ -469,8 +469,8 @@ namespace Mix.RepoDb.Repositories
                 if (_isRoot && _dbTransaction.Connection != null)
                 {
                     _dbTransaction.Commit();
+                    _connection.Close(); 
                 }
-                _connection.Close();
             }
         }
     }

@@ -2,6 +2,8 @@
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Enums;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -15,6 +17,7 @@ namespace Mixcore.Controllers
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
         private readonly MixRepoDbRepository _repoDbRepository;
+        private readonly MixMetadataService _metadataService;
         public PostController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<HomeController> logger,
@@ -24,7 +27,8 @@ namespace Mixcore.Controllers
             TranslatorService translator,
             DatabaseService databaseService,
             MixCmsContext context,
-            MixRepoDbRepository repoDbRepository)
+            MixRepoDbRepository repoDbRepository,
+            MixMetadataService metadataService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _context = context;
@@ -34,6 +38,7 @@ namespace Mixcore.Controllers
             _databaseService = databaseService;
             _context = context;
             _repoDbRepository = repoDbRepository;
+            _metadataService = metadataService;
         }
 
         protected override void ValidateRequest()
@@ -83,10 +88,8 @@ namespace Mixcore.Controllers
             {
                 return NotFound();
             }
-            if (post.AdditionalData == null)
-            {
-                await post.LoadAdditionalDataAsync(_repoDbRepository);
-            }
+            await post.LoadAdditionalDataAsync(_repoDbRepository, _metadataService);
+            
             ViewData["Title"] = post.SeoTitle;
             ViewData["Description"] = post.SeoDescription;
             ViewData["Keywords"] = post.SeoKeywords;

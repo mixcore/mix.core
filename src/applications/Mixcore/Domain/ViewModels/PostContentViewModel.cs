@@ -1,5 +1,8 @@
-﻿using Mix.Heart.Helpers;
+﻿using Microsoft.Extensions.Hosting;
+using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Enums;
+using Mix.Services.Databases.Lib.Services;
 using RepoDb;
 using RepoDb.Enumerations;
 
@@ -32,6 +35,7 @@ namespace Mixcore.Domain.ViewModels
         public string DetailUrl => $"/post/{Id}/{SeoName}";
 
         public JObject AdditionalData { get; set; }
+        public List<PostMetadata> PostMetadata { get; set; }
         #endregion
 
         #region Overrides
@@ -52,7 +56,7 @@ namespace Mixcore.Domain.ViewModels
                 : default;
         }
 
-        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository)
+        public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
             if (AdditionalData == null)
             {
@@ -88,8 +92,17 @@ namespace Mixcore.Domain.ViewModels
                         AdditionalData.Add(new JProperty(item.DisplayName, JArray.FromObject(arr)));
                     }
                 }
-
             }
+
+            var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
+            PostMetadata = metadata.Items.Select(m => m.Metadata)
+                .GroupBy(m => m.Type)
+                .Select(m => new PostMetadata()
+                {
+                    MetadataType = m.Key,
+                    Data = m.ToList()
+                }).ToList();
+
         }
         #endregion
 
