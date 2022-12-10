@@ -25,10 +25,11 @@ namespace Mixcore.Domain.Services
             return await SearchPosts(new(httpRequest));
         }
 
-        public async Task<PagingResponseModel<PostContentViewModel>> SearchPosts(SearchPostQueryModel searchRequest)
+        public async Task<PagingResponseModel<PostContentViewModel>> SearchPosts(SearchPostQueryModel searchRequest, CancellationToken cancellationToken = default)
         {
             try
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 using var postRepo = new Repository<MixCmsContext, MixPostContent, int, PostContentViewModel>(_uow);
                 searchRequest.Predicate = searchRequest.Predicate.AndAlso(ApplyMetadataQueries(searchRequest));
                 var result = await postRepo.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
