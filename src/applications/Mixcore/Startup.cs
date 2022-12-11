@@ -40,7 +40,7 @@ namespace Mixcore
             // Must app Auth config after Add mixservice to init App config 
             services.AddMixOcelot(Configuration);
 
-            services.TryAddScoped<PostService>();
+            services.TryAddScoped<MixcorePostService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

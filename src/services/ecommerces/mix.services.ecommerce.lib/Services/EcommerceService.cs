@@ -12,6 +12,7 @@ using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
+using Mix.Database.Entities.Cms;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -19,16 +20,19 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
-            IServiceProvider serviceProvider) : base(httpContextAccessor)
+            IServiceProvider serviceProvider,
+            UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
             _serviceProvider = serviceProvider;
+            _cmsUOW = cmsUOW;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -73,8 +77,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
             else
             {
-                var product = await ProductViewModel.GetRepository(_uow).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Id == item.PostId);
-                if (product == null || !product.AdditionalData.Price.HasValue)
+                var product = await ProductDetailsViewModel.GetRepository(_uow).GetSingleAsync(
+                        m => m.MixTenantId == CurrentTenant.Id 
+                            && m.ParentId == item.PostId);
+                if (product == null || !product.Price.HasValue)
                 {
                     throw new MixException(MixErrorStatus.Badrequest, "Invalid Product");
                 }
@@ -83,7 +89,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     OrderId = cart.Id,
                     MixTenantId = CurrentTenant.Id,
-                    Price = product.AdditionalData.Price.Value
+                    Price = product.Price.Value
                 };
                 ReflectionHelper.MapObject(item, orderItem);
                 orderItem.Calculate();

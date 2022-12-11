@@ -10,7 +10,7 @@ using Mix.RepoDb.Repositories;
 
 namespace Mix.Common.Controllers
 {
-    [Route("api/v2/rest/post-content")]
+    [Route("api/v2/rest/common/post-content")]
     [ApiController]
     public class PostContentApiController : MixQueryApiControllerBase<PostContentViewModel, MixCmsContext, MixPostContent, int>
     {

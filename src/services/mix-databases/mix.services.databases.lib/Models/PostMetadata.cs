@@ -1,6 +1,6 @@
 ﻿using Mix.Services.Databases.Lib.ViewModels;
 
-namespace Mixcore.Domain.Models
+namespace Mix.Services.Databases.Lib.Models
 {
     public class PostMetadata
     {

@@ -3,7 +3,7 @@ using Mix.Constant.Constants;
 using Mix.Database.Base;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
-using Mix.Services.Payments.Lib.Entities.Mix;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using RepoDb.Enumerations;
 
 namespace Mix.Services.Ecommerce.Lib.Entities.Mix
@@ -18,7 +18,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         {
         }
 
-        public DbSet<OrderDetail> Order { get; set; }
+        public DbSet<OrderDetail> OrderDetail { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<ProductDetails> ProductDetails { get; set; }
     }
