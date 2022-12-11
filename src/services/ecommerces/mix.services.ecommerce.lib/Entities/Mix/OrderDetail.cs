@@ -1,13 +1,13 @@
 ﻿using Mix.Heart.Entities;
 using Mix.Services.Ecommerce.Lib.Enums;
 
-namespace Mix.Services.Payments.Lib.Entities.Mix
+namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {
     public class OrderDetail : EntityBase<int>
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Currency { get; set; }
+        public string? Title { get; set; }
+        public string? Description { get; set; }
+        public string? Currency { get; set; }
         public PaymentGateway? PaymentGateway { get; set; }
         public double? Total { get; set; }
         public Guid UserId { get; set; }

@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
+    <ProjectReference Include="..\..\mix-databases\mix.services.databases.lib\mix.services.databases.lib.csproj" />
   </ItemGroup>
 
 </Project>

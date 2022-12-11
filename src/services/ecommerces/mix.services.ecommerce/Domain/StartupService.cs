@@ -10,6 +10,7 @@ namespace Mix.Services.Ecommerce.Domain
         {
             services.AddMixOnepay();
             services.AddMixEcommerce();
+            services.TryAddScoped<ProductService>();
             services.TryAddScoped<OnepayService>();
         }
 

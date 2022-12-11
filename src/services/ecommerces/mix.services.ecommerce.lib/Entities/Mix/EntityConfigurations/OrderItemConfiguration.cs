@@ -4,7 +4,7 @@ using Mix.Database.Base;
 using Mix.Database.Services;
 using Mix.Services.Payments.Lib.Constants;
 
-namespace Mix.Services.Payments.Lib.Entities.Mix.EntityConfigurations
+namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {
     public class OrderItemConfiguration : EntityBaseConfiguration<OrderItem, int>
     {

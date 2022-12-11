@@ -6,7 +6,7 @@ using Mix.Database.Services;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Payments.Lib.Constants;
 
-namespace Mix.Services.Payments.Lib.Entities.Mix.EntityConfigurations
+namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
 {
     public class OrderConfiguration : EntityBaseConfiguration<OrderDetail, int>
     {
@@ -17,8 +17,10 @@ namespace Mix.Services.Payments.Lib.Entities.Mix.EntityConfigurations
         {
             builder.ToTable(EcommerceConstants.DataTableNameOrder);
             base.Configure(builder);
+            builder.Property(e => e.Title).IsRequired(false);
+            builder.Property(e => e.Title).IsRequired(false);
             builder.Property(e => e.Currency).IsRequired(false);
-            builder.Property(e => e.Description).IsRequired(false);
+            builder.Property(e => e.Total).IsRequired(false);
 
             builder.Property(e => e.PaymentGateway)
                 .IsRequired(false)

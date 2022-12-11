@@ -2,6 +2,7 @@
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Enums;
+using Mix.Services.Databases.Lib.Models;
 using Mix.Services.Databases.Lib.Services;
 using RepoDb;
 using RepoDb.Enumerations;

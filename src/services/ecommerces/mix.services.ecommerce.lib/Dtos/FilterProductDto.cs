@@ -26,16 +26,5 @@ namespace Mix.Services.Ecommerce.Lib.Dtos
         public double? MinPrice { get; set; }
         public double? MaxPrice { get; set; }
         public string MixDatabaseName { get => MixEcommerceConstants.DatabaseNameProductDetails; }
-        public ProductMetadataDto Metadata { get; set; } = new();
-        public bool IsFilterMetadata => Metadata != null && (Metadata.Interior != null || Metadata.Tile != null || Metadata.Brands != null || Metadata.Decor != null);
-    }
-
-    public class ProductMetadataDto
-    {
-        public string[]? Tile { get; set; }
-        public string[]? Interior { get; set; }
-        public string[]? Lighting { get; set; }
-        public string[]? Decor { get; set; }
-        public string[]? Brands { get; set; }
     }
 }

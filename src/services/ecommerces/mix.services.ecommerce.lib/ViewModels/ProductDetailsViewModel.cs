@@ -14,7 +14,13 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public MixDatabaseParentType ParentType { get; set; }
         public int ParentId { get; set; }
         public double? Price { get; set; }
-        public ProductMetadata Metadata { get; set; } = new();
+        public string? DesignBy { get; set; }
+        public string? Information { get; set; }
+        public string? InformationImage { get; set; }
+        public string? Size { get; set; }
+        public string? SizeImage { get; set; }
+        public string? Document { get; set; }
+        public string? MaintenanceDocument { get; set; }
 
         #endregion
 

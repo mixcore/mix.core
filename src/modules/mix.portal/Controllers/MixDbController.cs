@@ -21,6 +21,7 @@ namespace Mix.Portal.Controllers
         private const string parentIdFieldName = "ParentId";
         private const string childIdFieldName = "ChildId";
         private const string tenantIdFieldName = "MixTenantId";
+        private const string statusFieldName = "Status";
         private UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixRepoDbRepository _repository;
         private readonly MixMemoryCacheService _memoryCache;
@@ -162,6 +163,11 @@ namespace Mix.Portal.Controllers
             if (!obj.ContainsKey(tenantIdFieldName))
             {
                 obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
+            }
+            
+            if (!obj.ContainsKey(statusFieldName))
+            {
+                obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
             }
             var data = await _repository.InsertAsync(obj);
 

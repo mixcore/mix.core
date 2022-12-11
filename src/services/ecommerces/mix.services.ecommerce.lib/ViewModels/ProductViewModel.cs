@@ -1,8 +1,13 @@
-﻿using Mix.Constant.Enums;
+﻿using Microsoft.AspNetCore.Routing;
+using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
+using Mix.Services.Databases.Lib.Enums;
+using Mix.Services.Databases.Lib.Models;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
+using System.Threading;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
@@ -32,6 +37,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public string DetailUrl => $"/post/{Id}/{SeoName}";
 
         public ProductDetailsViewModel AdditionalData { get; set; }
+        public List<PostMetadata> PostMetadata { get; set; }
         #endregion
 
         #region Overrides
@@ -45,19 +51,30 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Public Method
 
-        public async Task LoadAdditionalDataAsync(UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, CancellationToken cancellationToken = default)
+        public async Task LoadAdditionalDataAsync(UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, MixMetadataService metadataService, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             if (AdditionalData == null)
             {
                 AdditionalData = await ProductDetailsViewModel.GetRepository(ecommerceUow)
-                    .GetSingleAsync(m => 
+                    .GetSingleAsync(m =>
                         m.MixTenantId == MixTenantId &&
-                        m.ParentId == Id && 
+                        m.ParentId == Id &&
                         m.ParentType == MixDatabaseParentType.Post,
                         cancellationToken);
 
             }
+
+            var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
+            PostMetadata = metadata.Items.Select(m => m.Metadata)
+                .GroupBy(m => m.Type)
+                .Select(m => new PostMetadata()
+                {
+                    MetadataType = m.Key,
+                    Data = m.ToList()
+                }).ToList();
+
         }
         #endregion
 

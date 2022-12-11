@@ -29,6 +29,10 @@ namespace Mix.Database.Base
                 .UseIncreaseValueIf(typeof(TPrimaryKey) == typeof(int));
 
 
+            builder.Property(e => e.IsDeleted)
+                .HasColumnType(Config.Boolean)
+                .HasDefaultValue(false);
+            
             builder.Property(e => e.CreatedDateTime)
                 .HasColumnType(Config.DateTime);
 
@@ -40,9 +44,6 @@ namespace Mix.Database.Base
 
             builder.Property(e => e.ModifiedBy)
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
-
-            builder.Property(e => e.Priority)
-                .HasColumnType(Config.Integer);
 
             builder.Property(e => e.Priority)
                 .HasColumnType(Config.Integer);

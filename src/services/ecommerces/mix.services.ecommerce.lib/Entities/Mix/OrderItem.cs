@@ -1,6 +1,6 @@
 ﻿using Mix.Heart.Entities;
 
-namespace Mix.Services.Payments.Lib.Entities.Mix
+namespace Mix.Services.Ecommerce.Lib.Entities.Mix
 {
     public class OrderItem : EntityBase<int>
     {

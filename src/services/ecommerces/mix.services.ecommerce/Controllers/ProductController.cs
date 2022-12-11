@@ -4,16 +4,20 @@ using Mix.Heart.Models;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
+using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.RepoDb.Repositories;
 using Mix.Service.Services;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Extensions;
+using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
+using Mix.Shared.Dtos;
 
 namespace mix.services.ecommerce.Controllers
 {
@@ -21,6 +25,8 @@ namespace mix.services.ecommerce.Controllers
     [ApiController]
     public class ProductController : MixQueryApiControllerBase<ProductViewModel, MixCmsContext, MixPostContent, int>
     {
+        private readonly MixMetadataService _metadataService;
+        private readonly ProductService _productService;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         protected MixCacheService CacheService;
         public ProductController(
@@ -31,34 +37,35 @@ namespace mix.services.ecommerce.Controllers
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> uow,
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
-            IQueueService<MessageQueueModel> queueService)
+            IQueueService<MessageQueueModel> queueService,
+            MixMetadataService metadataService,
+            ProductService productService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _ecommerceUow = ecommerceUow;
             CacheService = new();
-        }
-
-
-        [HttpGet("filter")]
-        public async Task<ActionResult<PagingResponseModel<ProductViewModel>>> Filter([FromQuery] FilterProductDto req)
-        {
-            var searchRequest = BuildSearchRequest(req);
-            searchRequest.ApplyProductFilter(req, _ecommerceUow);
-
-            var result = await Repository.GetPagingAsync(searchRequest.Predicate, searchRequest.PagingData);
-            return Ok(ParseSearchResult(req, result));
+            _metadataService = metadataService;
+            _productService = productService;
         }
 
         protected override async Task<ProductViewModel> GetById(int id)
         {
             var result = await base.GetById(id);
-            if (result.AdditionalData == null)
-            {
-                await result.LoadAdditionalDataAsync(_ecommerceUow);
-                await CacheService.SetAsync($"{id}/{typeof(ProductViewModel).FullName}", result, typeof(MixPostContent), "full");
-            }
+            await result.LoadAdditionalDataAsync(_ecommerceUow, _metadataService);
             return result;
         }
 
+        protected override async Task<PagingResponseModel<ProductViewModel>> SearchHandler(SearchRequestDto req, CancellationToken cancellationToken = default)
+        {
+            var searchPostQuery = new SearchPostQueryModel(Request, req, CurrentTenant.Id);
+
+            var result = await _productService.SearchPosts(searchPostQuery, cancellationToken);
+            foreach (var item in result.Items)
+            {
+                await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService);
+            }
+
+            return RestApiService.ParseSearchResult(req, result);
+        }
     }
 }
