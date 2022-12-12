@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Google.Api;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Database.Entities.Account;
+using System.Data;
+using System.Data.Common;
 
 namespace Mix.Lib.Middlewares
 {
@@ -18,12 +23,12 @@ namespace Mix.Lib.Middlewares
             UowInfos.Add(typeof(T));
         }
 
-        public async Task InvokeAsync(
-            HttpContext context,
-            [FromServices] UnitOfWorkInfo<MixCmsContext> cmsUow,
-            [FromServices] UnitOfWorkInfo<MixCmsAccountContext> accountUow,
-            [FromServices] UnitOfWorkInfo<MixCacheDbContext> cacheUow)
+        public async Task InvokeAsync(HttpContext context)
         {
+            // TODO: Cannot share transaction when use Sqlite
+            //Dictionary<string, IDbContextTransaction> dicTransactions = new();
+            //Dictionary<string, DbConnection> dicConnections = new();
+            //await ShareTransaction(context, dicConnections, dicTransactions);
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)
             {
                 await _next.Invoke(context);
@@ -32,15 +37,48 @@ namespace Mix.Lib.Middlewares
             {
                 await _next.Invoke(context);
 
-                await CompleteUow(cmsUow, context.Response.StatusCode);
-                await CompleteUow(accountUow, context.Response.StatusCode);
-                await CompleteUow(cacheUow, context.Response.StatusCode);
-
                 foreach (var uowType in UowInfos)
                 {
                     var uowService = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
                     await CompleteUow(uowService, context.Response.StatusCode);
                 }
+            }
+        }
+
+        private async Task ShareTransaction(HttpContext context,
+            Dictionary<string, DbConnection> dicConnections,
+            Dictionary<string, IDbContextTransaction> dicTransactions)
+        {
+            if (GlobalConfigService.Instance.IsInit)
+            {
+                return;
+            }
+            try
+            {
+                foreach (var uowType in UowInfos)
+                {
+
+                    var uowService = (IUnitOfWorkInfo)context.RequestServices.GetService(uowType);
+                    var cnn = uowService.ActiveDbContext.Database.GetConnectionString();
+                    IDbContextTransaction transaction = dicTransactions.ContainsKey(cnn) ? dicTransactions[cnn] : default;
+                    if (uowService.ActiveTransaction == null && transaction == null)
+                    {
+                        uowService.Begin();
+                        dicConnections[cnn] = uowService.ActiveDbContext.Database.GetDbConnection();
+                        dicTransactions[cnn] = uowService.ActiveTransaction;
+                    }
+                    else
+                    {
+
+                        uowService.ActiveDbContext.Database.SetDbConnection(dicConnections[cnn]);
+                        await uowService.ActiveDbContext.Database.UseTransactionAsync(transaction.GetDbTransaction());
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex, message: "Cannot share connections");
             }
         }
 

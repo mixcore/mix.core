@@ -12,6 +12,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped<UnitOfWorkInfo<MixCmsContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCacheDbContext>>();
             services.TryAddScoped<UnitOfWorkInfo<MixCmsAccountContext>>();
+
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCacheDbContext>>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixCmsAccountContext>>();
+
             return services;
         }
 
