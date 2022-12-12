@@ -21,7 +21,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Properties
-        public new string MixDatabaseName { get; set; } = MixDatabaseNames.PAGE_COLUMN;
+        public new string MixDatabaseName { get; set; }
         public string ClassName { get; set; }
         public int? PageSize { get; set; }
         public MixPageType Type { get; set; }
@@ -33,7 +33,6 @@ namespace Mix.Lib.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            MixDatabaseName ??= MixDatabaseNames.PAGE_COLUMN;
             await LoadAliasAsync(cancellationToken);
             await base.ExpandView(cancellationToken);
         }

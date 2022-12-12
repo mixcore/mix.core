@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
@@ -8,6 +9,7 @@ using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.Models;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
+using Newtonsoft.Json.Linq;
 using System.Threading;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
@@ -37,7 +39,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public string DetailUrl => $"/post/{Id}/{SeoName}";
 
-        public ProductDetailsViewModel AdditionalData { get; set; }
+        public ProductDetailsViewModel ProductDetails { get; set; }
+        public JObject AdditionalData { get; set; }
         public List<PostMetadata> PostMetadata { get; set; }
         #endregion
 
@@ -53,20 +56,24 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         #region Public Method
 
         public async Task LoadAdditionalDataAsync(
-            UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, 
-            MixMetadataService metadataService, 
+            UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
+            MixMetadataService metadataService,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             bool isChanged = false;
-            if (AdditionalData == null)
+            if (ProductDetails == null)
             {
-                AdditionalData = await ProductDetailsViewModel.GetRepository(ecommerceUow)
+                ProductDetails = await ProductDetailsViewModel.GetRepository(ecommerceUow)
                     .GetSingleAsync(m =>
                         m.MixTenantId == MixTenantId &&
                         m.ParentId == Id &&
                         m.ParentType == MixDatabaseParentType.Post,
                         cancellationToken);
+                if (ProductDetails != null)
+                {
+                    AdditionalData = ReflectionHelper.ParseObject(ProductDetails);
+                }
                 isChanged = true;
             }
 
@@ -91,8 +98,14 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         }
         #endregion
 
-        #region Private Methods
+        #region Methods
 
+        public T? Property<T>(string fieldName)
+        {
+            return AdditionalData != null
+                ? AdditionalData.Value<T>(fieldName)
+                : default;
+        }
 
         #endregion
     }
