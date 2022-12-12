@@ -39,7 +39,6 @@
 
         public override Task ExpandView(CancellationToken cancellationToken = default)
         {
-            MixDatabaseName ??= MixDatabaseNames.MODULE_COLUMN;
             return base.ExpandView(cancellationToken);
         }
 

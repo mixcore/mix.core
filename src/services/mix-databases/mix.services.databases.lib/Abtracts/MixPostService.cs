@@ -23,8 +23,8 @@ namespace Mix.Services.Databases.Lib.Abtracts
     public abstract class MixPostServiceBase<TView> : TenantServiceBase
         where TView : ViewModelBase<MixCmsContext, MixPostContent, int, TView>
     {
-        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
-        private readonly MixMetadataService _metadataService;
+        protected readonly UnitOfWorkInfo<MixCmsContext> _uow;
+        protected readonly MixMetadataService _metadataService;
 
         protected MixPostServiceBase(UnitOfWorkInfo<MixCmsContext> uow, MixMetadataService metadataService, IHttpContextAccessor httpContextAccessor)
             :base(httpContextAccessor)
@@ -33,7 +33,7 @@ namespace Mix.Services.Databases.Lib.Abtracts
             _metadataService = metadataService;
         }
 
-        public async Task<List<TView>> GetRelatedPosts(int postId, CancellationToken cancellationToken = default)
+        public virtual async Task<List<TView>> GetRelatedPosts(int postId, CancellationToken cancellationToken = default)
         {
             using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(_uow);
             var relatedIds = from links in _uow.DbContext.MixPostPostAssociation
@@ -43,12 +43,12 @@ namespace Mix.Services.Databases.Lib.Abtracts
             return result;
         }
 
-        public async Task<PagingResponseModel<TView>> Search(HttpRequest httpRequest)
+        public virtual async Task<PagingResponseModel<TView>> Search(HttpRequest httpRequest)
         {
             return await SearchPosts(new(httpRequest));
         }
 
-        public async Task<PagingResponseModel<TView>> SearchPosts(SearchPostQueryModel searchRequest, CancellationToken cancellationToken = default)
+        public virtual async Task<PagingResponseModel<TView>> SearchPosts(SearchPostQueryModel searchRequest, CancellationToken cancellationToken = default)
         {
             try
             {

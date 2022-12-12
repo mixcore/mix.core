@@ -19,13 +19,14 @@ using Mix.Heart.ViewModel;
 using Mix.Heart.Repository;
 using Mix.Heart.Entities;
 using Mix.Shared.Models;
+using Mix.Services.Databases.Lib.Models;
+using Mix.Heart.Extensions;
 
 namespace Mix.Services.Databases.Lib.Services
 {
     public sealed class MixMetadataService : TenantServiceBase
     {
         private readonly MixIdentityService _identityService;
-        private readonly MixServiceDatabaseDbContext _permissionDbContext;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
 
@@ -37,46 +38,26 @@ namespace Mix.Services.Databases.Lib.Services
             : base(httpContextAccessor)
         {
             _uow = uow;
-            _permissionDbContext = _uow.DbContext;
             _identityService = identityService;
             _cmsUow = cmsUow;
         }
 
-        public async Task<List<MixMetadataViewModel>> GetPermissionAsync(Guid userId)
+
+        public async Task<List<PostMetadata>> GetMetadataAsync(string[]? includes = null, string[]? excepts = null)
         {
-            var permissions = _permissionDbContext.UserPermission.Where(m => m.MixTenantId == CurrentTenant.Id && m.UserId == userId);
-            Expression<Func<MixMetadata, bool>> predicate =
-                m => m.MixTenantId == CurrentTenant.Id
-                && permissions.Any(p => p.PermissionId == m.Id);
-            var result = await MixMetadataViewModel.GetRepository(_uow).GetAllAsync(predicate);
-            return result;
+            Expression<Func<MixMetadata, bool>> predicate = m => m.MixTenantId == CurrentTenant.Id;
+            predicate = predicate.AndAlsoIf(includes != null, m => includes!.Contains(m.Type));
+            predicate = predicate.AndAlsoIf(excepts != null, m => !excepts!.Contains(m.Type));
+            var data = await MixMetadataViewModel.GetRepository(_uow).GetAllAsync(predicate);
+            return data.GroupBy(m => m.Type)
+                    .Select(m => new PostMetadata()
+                    {
+                        MetadataType = m.Key!,
+                        Data = m.ToList()
+                    }).ToList();
         }
 
-        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(string[] metadataSeoContents, MetadataParentType contentType)
-        {
-            var query = from metadata in _uow.DbContext.MixMetadata
-                        join association in _uow.DbContext.MixMetadataContentAssociation
-                        on metadata.Id equals association.MetadataId
-                        where metadata.MixTenantId == CurrentTenant.Id
-                            && metadataSeoContents.Contains(metadata.SeoContent)
-                            && association.ContentType == contentType
-                        select association.ContentId;
-            return query;
-        }
-
-        public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MetadataParentType? contentType, string metadataType)
-        {
-            var query = from metadata in _uow.DbContext.MixMetadata
-                        join association in _uow.DbContext.MixMetadataContentAssociation
-                        on metadata.Id equals association.MetadataId
-                        where metadata.MixTenantId == CurrentTenant.Id
-                            && (string.IsNullOrEmpty(metadataType) || metadata.Type == metadataType)
-                            && association.ContentId == contentId
-                            && (!contentType.HasValue || association.ContentType == contentType)
-                        select association.Id;
-            return query;
-        }
-        public async Task<PagingResponseModel<TView>?> GetContentByMetadataAsync<TView, TEntity>(
+        public async Task<PagingResponseModel<TView>?> GetPostByMetadataAsync<TView, TEntity>(
                 string[] metadataSeoContents,
                 MetadataParentType contentType,
                 HttpRequest request)
@@ -146,7 +127,7 @@ namespace Mix.Services.Databases.Lib.Services
             {
                 return await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow)
                             .GetPagingAsync(
-                                m => m.MixTenantId == CurrentTenant.Id 
+                                m => m.MixTenantId == CurrentTenant.Id
                                         && query.Any(n => n == m.Id),
                                         pagingData);
             }
@@ -161,5 +142,34 @@ namespace Mix.Services.Databases.Lib.Services
                 await association.DeleteAsync(cancellationToken);
             }
         }
+
+        #region IQueryables
+
+        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(string[] metadataSeoContents, MetadataParentType contentType)
+        {
+            var query = from metadata in _uow.DbContext.MixMetadata
+                        join association in _uow.DbContext.MixMetadataContentAssociation
+                        on metadata.Id equals association.MetadataId
+                        where metadata.MixTenantId == CurrentTenant.Id
+                            && metadataSeoContents.Contains(metadata.SeoContent)
+                            && association.ContentType == contentType
+                        select association.ContentId;
+            return query;
+        }
+
+        public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MetadataParentType? contentType, string metadataType)
+        {
+            var query = from metadata in _uow.DbContext.MixMetadata
+                        join association in _uow.DbContext.MixMetadataContentAssociation
+                        on metadata.Id equals association.MetadataId
+                        where metadata.MixTenantId == CurrentTenant.Id
+                            && (string.IsNullOrEmpty(metadataType) || metadata.Type == metadataType)
+                            && association.ContentId == contentId
+                            && (!contentType.HasValue || association.ContentType == contentType)
+                        select association.Id;
+            return query;
+        }
+
+        #endregion
     }
 }

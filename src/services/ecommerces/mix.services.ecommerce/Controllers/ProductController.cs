@@ -62,7 +62,7 @@ namespace mix.services.ecommerce.Controllers
             var result = await _productService.SearchPosts(searchPostQuery, cancellationToken);
             foreach (var item in result.Items)
             {
-                if (item.AdditionalData == null)
+                if (item.ProductDetails == null)
                 {
                     await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService);
                 }
