@@ -17,7 +17,7 @@ namespace Mix.Lib.Models.Common
         public DateTime? ToDate { get; set; }
         public MixContentStatus? Status { get; set; }
         public ExpressionMethod? SearchMethod { get; set; }
-        public string[] RequestColumns { get; set; }
+        public string Columns { get; set; }
         public string SearchColumns { get; set; }
 
         public int? MixTenantId { get; set; }
@@ -42,7 +42,6 @@ namespace Mix.Lib.Models.Common
             {
                 ReflectionHelper.MapObject(request, this);
 
-                //RequestColumns = request.Columns.Replace(" ", string.Empty).Split(',', StringSplitOptions.TrimEntries);
                 PagingData = new PagingRequestModel()
                 {
                     Page = request.PageIndex + 1,

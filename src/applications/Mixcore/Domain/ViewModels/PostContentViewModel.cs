@@ -4,6 +4,7 @@ using Mix.RepoDb.Repositories;
 using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.Models;
 using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Ecommerce.Lib.ViewModels;
 using RepoDb;
 using RepoDb.Enumerations;
 
@@ -58,8 +59,10 @@ namespace Mixcore.Domain.ViewModels
 
         public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
+            bool isChanged = false;
             if (AdditionalData == null)
             {
+                isChanged = true;
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
                 mixRepoDbRepository.InitTableName(MixDatabaseName);
                 var obj = await mixRepoDbRepository.GetSingleByParentAsync(MixContentType.Post, Id);
@@ -93,15 +96,25 @@ namespace Mixcore.Domain.ViewModels
                     }
                 }
             }
+            if (PostMetadata == null)
+            {
 
-            var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
-            PostMetadata = metadata.Items.Select(m => m.Metadata)
-                .GroupBy(m => m.Type)
-                .Select(m => new PostMetadata()
-                {
-                    MetadataType = m.Key,
-                    Data = m.ToList()
-                }).ToList();
+                isChanged = true;
+                var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
+                PostMetadata = metadata.Items.Select(m => m.Metadata)
+                    .GroupBy(m => m.Type)
+                    .Select(m => new PostMetadata()
+                    {
+                        MetadataType = m.Key,
+                        Data = m.ToList()
+                    }).ToList();
+            }
+
+            if (isChanged)
+            {
+                var cacheService = new MixCacheService();
+                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent), "full");
+            }
 
         }
         #endregion

@@ -74,6 +74,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             if (currentItem != null)
             {
                 currentItem.Quantity += item.Quantity;
+                currentItem.Calculate();
             }
             else
             {

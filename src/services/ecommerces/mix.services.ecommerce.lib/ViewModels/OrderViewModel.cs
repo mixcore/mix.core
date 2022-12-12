@@ -52,7 +52,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public override Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
         {
-            Recalculate();
+            Calculate();
             return base.ParseEntity(cancellationToken);
         }
 
@@ -79,7 +79,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Methods
 
-        public void Recalculate()
+        public void Calculate()
         {
             Total = OrderItems.Sum(o => o.Total);
         }
