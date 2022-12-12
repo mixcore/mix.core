@@ -182,7 +182,7 @@ namespace Mix.RepoDb.Services
                 $"ModifiedBy {GetColumnType(MixDataType.Text)} NULL, " +
                 $"Priority {GetColumnType(MixDataType.Integer)} NOT NULL, " +
                 $"Status {GetColumnType(MixDataType.Text)} NULL, " +
-                $"IsDeleted {GetColumnType(MixDataType.Boolean)} NULL, " +
+                $"IsDeleted {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
                 $" {string.Join(",", colSqls.ToArray())})";
         }
 

@@ -33,6 +33,16 @@ namespace Mix.Services.Databases.Lib.Abtracts
             _metadataService = metadataService;
         }
 
+        public async Task<List<TView>> GetRelatedPosts(int postId, CancellationToken cancellationToken = default)
+        {
+            using var postRepo = new Repository<MixCmsContext, MixPostContent, int, TView>(_uow);
+            var relatedIds = from links in _uow.DbContext.MixPostPostAssociation
+                             where links.ParentId == postId && links.MixTenantId == CurrentTenant.Id
+                             select links.ChildId;
+            var result = await postRepo.GetListAsync(m => relatedIds.Contains(m.Id), cancellationToken);
+            return result;
+        }
+
         public async Task<PagingResponseModel<TView>> Search(HttpRequest httpRequest)
         {
             return await SearchPosts(new(httpRequest));

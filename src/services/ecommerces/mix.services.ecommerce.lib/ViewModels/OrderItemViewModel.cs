@@ -58,6 +58,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public void Calculate()
         {
+            Price = Context.ProductDetails.SingleOrDefault(m => m.ParentId == PostId)?.Price ?? 0;
             Total = Price * Quantity;
         }
         #endregion

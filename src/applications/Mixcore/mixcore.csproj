@@ -82,9 +82,13 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="Models\Cms\**" />
+		<Content Remove="Models\Cms\**" />
 		<Content Remove="wwwroot\mix-content\**" />
 		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
+		<EmbeddedResource Remove="Models\Cms\**" />
 		<EmbeddedResource Remove="wwwroot\mix-content\**" />
+		<None Remove="Models\Cms\**" />
 		<None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
 	<ItemGroup>

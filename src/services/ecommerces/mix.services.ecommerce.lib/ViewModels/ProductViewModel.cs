@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
+using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Services.Databases.Lib.Enums;
@@ -51,10 +52,13 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         #region Public Method
 
-        public async Task LoadAdditionalDataAsync(UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, MixMetadataService metadataService, CancellationToken cancellationToken = default)
+        public async Task LoadAdditionalDataAsync(
+            UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, 
+            MixMetadataService metadataService, 
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            bool isChanged = false;
             if (AdditionalData == null)
             {
                 AdditionalData = await ProductDetailsViewModel.GetRepository(ecommerceUow)
@@ -63,18 +67,27 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
                         m.ParentId == Id &&
                         m.ParentType == MixDatabaseParentType.Post,
                         cancellationToken);
-
+                isChanged = true;
             }
 
-            var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
-            PostMetadata = metadata.Items.Select(m => m.Metadata)
+            if (PostMetadata == null)
+            {
+                var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
+                PostMetadata = metadata.Items.Select(m => m.Metadata)
                 .GroupBy(m => m.Type)
                 .Select(m => new PostMetadata()
                 {
                     MetadataType = m.Key,
                     Data = m.ToList()
                 }).ToList();
+                isChanged = true;
+            }
 
+            if (isChanged)
+            {
+                var cacheService = new MixCacheService();
+                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent), "full");
+            }
         }
         #endregion
 
