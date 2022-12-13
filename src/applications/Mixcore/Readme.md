@@ -5,19 +5,8 @@
 ## 3. Update ocelot.json.(Ref: https://ocelot.readthedocs.io/en/latest/features/configuration.html). 
 Ex:
 ```
-"Routes": [
-    {
-      "DownstreamPathTemplate": "/api/v2/rest/mix-account/{catchALl}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5002
-        }
-      ],
-      "UpstreamPathTemplate": "/api/v2/rest/mix-account/{catchALl}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
-    },
+{
+  "Routes": [
     {
       "DownstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
       "DownstreamScheme": "https",
@@ -28,9 +17,21 @@ Ex:
         }
       ],
       "UpstreamPathTemplate": "/api/v2/rest/mix-portal/{catchALl}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ]
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Patch", "Delete" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": 1,
+        "Limit": 1000
+      }
     }
-]
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5010"
+  }  
+}
+  
 ```
 ## 4. Remove Config Http2 from appsettings if exist.
 ```

@@ -1,7 +1,7 @@
 {
   "IsInit": true,
   "IsEncryptApi": false,
-  "EnableOcelot": false,
+  "EnableOcelot": true,
   "PortalThemeSettings": null,
   "IsMaintenance": false,
   "IsHttps": false,
