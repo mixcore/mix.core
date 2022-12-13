@@ -12,7 +12,7 @@
 
         string IDatabaseConstants.MaxLength => "(4000)";
 
-        string IDatabaseConstants.DateTime => "timestamp without time zone";
+        string IDatabaseConstants.DateTime => "timestamp with time zone";
 
         string IDatabaseConstants.Guid => "uuid";
 
