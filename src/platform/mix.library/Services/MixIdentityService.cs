@@ -26,6 +26,7 @@ namespace Mix.Lib.Services
     public class MixIdentityService : IMixIdentityService
     {
         private const string TenantIdFieldName = "MixTenantId";
+        private const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
         protected readonly UnitOfWorkInfo AccountUow;
         protected readonly UnitOfWorkInfo CmsUow;
         protected readonly MixCacheService CacheService;
@@ -552,7 +553,7 @@ namespace Mix.Lib.Services
                     CreateClaim(MixClaims.Avatar, info.UserData?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
-                    CreateClaim(MixClaims.ExpireAt, expires.ToString())
+                    CreateClaim(MixClaims.ExpireAt, expires.ToString(datetimeFormat))
                 });
 
             JwtSecurityToken jwtSecurityToken = new(
@@ -600,12 +601,12 @@ namespace Mix.Lib.Services
         {
             return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
-
+        
         public static IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
         }
-
+        
         public static ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
         {
             var tokenValidationParameters = GetValidationParameters(appConfigs, false);
