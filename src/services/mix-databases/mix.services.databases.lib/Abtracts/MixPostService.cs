@@ -27,7 +27,7 @@ namespace Mix.Services.Databases.Lib.Abtracts
         protected readonly MixMetadataService _metadataService;
 
         protected MixPostServiceBase(UnitOfWorkInfo<MixCmsContext> uow, MixMetadataService metadataService, IHttpContextAccessor httpContextAccessor)
-            :base(httpContextAccessor)
+            : base(httpContextAccessor)
         {
             _uow = uow;
             _metadataService = metadataService;
@@ -67,21 +67,22 @@ namespace Mix.Services.Databases.Lib.Abtracts
         private Expression<Func<MixPostContent, bool>> ApplyMetadataQueries(SearchPostQueryModel searchRequest)
         {
             Expression<Func<MixPostContent, bool>> predicate = m => true;
-            if (searchRequest.MetadataQueries.Count == 0)
+            if (searchRequest.AndMetadataQueries.Count == 0 && searchRequest.OrMetadataQueries.Count == 0)
             {
                 return predicate;
             }
 
-            IQueryable<int> allowedIdQuery = default;
-            foreach (var item in searchRequest.MetadataQueries)
+            IQueryable<int>? allowedIdQuery = default;
+            if (searchRequest.OrMetadataQueries.Any())
             {
-                var query = _metadataService.GetQueryableContentIdByMetadataSeoContent(item.Value, MetadataParentType.Post);
-                allowedIdQuery = allowedIdQuery == default ?
-                    query
-                    : allowedIdQuery.Union(query);
+                allowedIdQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MetadataParentType.Post, false);
             }
-            var allowedIds = allowedIdQuery.ToList();
-            predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIds.Contains(m.Id));
+            if (searchRequest.AndMetadataQueries.Any())
+            {
+                var andQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MetadataParentType.Post, true);
+                allowedIdQuery = allowedIdQuery != default ? allowedIdQuery.Where(m => andQuery.Contains(m)) : andQuery;
+            }
+            predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIdQuery!.ToList().Contains(m.Id));
             return predicate;
         }
     }

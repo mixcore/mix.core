@@ -23,10 +23,24 @@ namespace Mix.Lib.Models.Common
             var metadata = httpRequest.Query.Keys.Where(m => m.StartsWith(prefix));
             foreach (var key in metadata)
             {
-                MetadataQueries.Add(key.Replace(prefix, string.Empty), httpRequest.Query[key].ToString().Split(',', StringSplitOptions.TrimEntries));
+                string[] arr = key.Split('_');
+                if (arr.Length == 3)
+                {
+                    string seoContent = arr[2];
+                    var contents = httpRequest.Query[key].ToString().TrimEnd(',').Split(',', StringSplitOptions.TrimEntries);
+                    if (arr[1] == "and")
+                    {
+                        AndMetadataQueries.Add(seoContent, contents);
+                    }
+                    else
+                    {
+                        OrMetadataQueries.Add(seoContent, contents);
+                    }
+                }
             }
         }
 
-        public Dictionary<string, string[]> MetadataQueries { get; set; } = new();
+        public Dictionary<string, string[]> AndMetadataQueries { get; set; } = new();
+        public Dictionary<string, string[]> OrMetadataQueries { get; set; } = new();
     }
 }
