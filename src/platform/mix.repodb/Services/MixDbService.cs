@@ -235,6 +235,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Boolean:
                     return _dbConstants.Boolean;
                 case MixDataType.Json:
+                case MixDataType.Array:
                     return $"{_dbConstants.NString}{_dbConstants.MaxLength}";
                 case MixDataType.Duration:
                 case MixDataType.Custom:
