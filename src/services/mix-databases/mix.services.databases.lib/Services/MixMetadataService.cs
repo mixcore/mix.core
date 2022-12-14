@@ -57,26 +57,26 @@ namespace Mix.Services.Databases.Lib.Services
                     }).ToList();
         }
 
-        public async Task<PagingResponseModel<TView>?> GetPostByMetadataAsync<TView, TEntity>(
-                string[] metadataSeoContents,
-                MetadataParentType contentType,
-                HttpRequest request)
-            where TView : ViewModelBase<MixCmsContext, MixPostContent, int, TView>
-             where TEntity : EntityBase<int>
-        {
-            SearchQueryModel<TEntity, int> searchRequest = new(request);
-            var query = GetQueryableContentIdByMetadataSeoContent(metadataSeoContents, contentType);
-            if (query != null)
-            {
-                // TODO: Share dbcontext transaction
-                var allowIds = await query.ToListAsync();
-                var repo = new Repository<MixCmsContext, MixPostContent, int, TView>(_cmsUow);
-                return await repo.GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
-                                && allowIds.Any(n => n == m.Id),
-                                searchRequest.PagingData);
-            }
-            return default;
-        }
+        //public async Task<PagingResponseModel<TView>?> GetPostByMetadataAsync<TView, TEntity>(
+        //        string[] metadataSeoContents,
+        //        MetadataParentType contentType,
+        //        HttpRequest request)
+        //    where TView : ViewModelBase<MixCmsContext, MixPostContent, int, TView>
+        //     where TEntity : EntityBase<int>
+        //{
+        //    SearchQueryModel<TEntity, int> searchRequest = new(request);
+        //    var query = GetQueryableContentIdByMetadataSeoContent(metadataSeoContents, contentType);
+        //    if (query != null)
+        //    {
+        //        // TODO: Share dbcontext transaction
+        //        var allowIds = await query.ToListAsync();
+        //        var repo = new Repository<MixCmsContext, MixPostContent, int, TView>(_cmsUow);
+        //        return await repo.GetPagingAsync(m => m.MixTenantId == CurrentTenant.Id
+        //                        && allowIds.Any(n => n == m.Id),
+        //                        searchRequest.PagingData);
+        //    }
+        //    return default;
+        //}
 
         public async Task<MixMetadataViewModel> GetOrCreateMetadata(CreateMetadataDto dto, CancellationToken cancellationToken = default)
         {
@@ -145,16 +145,25 @@ namespace Mix.Services.Databases.Lib.Services
 
         #region IQueryables
 
-        public IQueryable<int>? GetQueryableContentIdByMetadataSeoContent(string[] metadataSeoContents, MetadataParentType contentType)
+        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(Dictionary<string, string[]> metadataSeoContents, MetadataParentType contentType, bool isMandatory)
         {
-            var query = from metadata in _uow.DbContext.MixMetadata
+            Expression<Func<MixMetadata, bool>>? predicate = m => isMandatory;
+            foreach (var key in metadataSeoContents.Keys)
+            {
+                predicate = predicate.AndAlsoIf(isMandatory && metadataSeoContents[key].Length > 0,
+                        m => m.Type == key && metadataSeoContents[key].Contains(m.SeoContent));
+                
+                predicate = predicate.OrIf(!isMandatory && metadataSeoContents[key].Length > 0,
+                        m => m.Type == key && metadataSeoContents[key].Contains(m.SeoContent));
+            }
+            var allowMetadata = _uow.DbContext.MixMetadata.Where(predicate);
+
+            var query = from metadata in allowMetadata
                         join association in _uow.DbContext.MixMetadataContentAssociation
                         on metadata.Id equals association.MetadataId
-                        where metadata.MixTenantId == CurrentTenant.Id
-                            && metadataSeoContents.Contains(metadata.SeoContent)
-                            && association.ContentType == contentType
-                        select association.ContentId;
-            return query;
+                        where association.MixTenantId == CurrentTenant.Id && association.ContentType == contentType
+                        select association.ContentId ;
+            return query.Distinct();
         }
 
         public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MetadataParentType? contentType, string metadataType)
