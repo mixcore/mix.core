@@ -92,12 +92,6 @@
 		<None Remove="wwwroot\mix-content\**" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Remove="MixContent\Shared\AppConfigs\databasenesto.json" />
-	</ItemGroup>
-	<ItemGroup>
-	  <None Include="MixContent\Shared\AppConfigs\databasenesto.json" />
-	</ItemGroup>
-	<ItemGroup>
 		<Content Update="wwwroot\mix-app\css\swagger.css">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
