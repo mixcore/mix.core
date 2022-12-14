@@ -15,5 +15,6 @@ namespace Mix.Shared.Dtos
         [Required]
         public string Value { get; set; }
         public MixCompareOperator CompareOperator { get; set; }
+        public bool IsRequired { get; set; }
     }
 }
