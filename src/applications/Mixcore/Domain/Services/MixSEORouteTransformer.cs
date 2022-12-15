@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
 using Mix.Database.Services;
+using Mix.Lib.Services;
 using Mix.Shared.Services;
 
 namespace Mixcore.Domain.Services
@@ -7,11 +8,10 @@ namespace Mixcore.Domain.Services
     // Ref: https://www.strathweb.com/2019/08/dynamic-controller-routing-in-asp-net-core-3-0/
     public sealed class MixSEORouteTransformer : DynamicRouteValueTransformer
     {
-        private readonly DatabaseService _databaseService;
-        public MixSEORouteTransformer(
-            IHttpContextAccessor httpContextAccessor)
+        private readonly MixTenantService _tenantService;
+        public MixSEORouteTransformer(MixTenantService tenantService)
         {
-            _databaseService = new(httpContextAccessor);
+            _tenantService = tenantService;
         }
 
         public override ValueTask<RouteValueDictionary> TransformAsync(
@@ -28,9 +28,14 @@ namespace Mixcore.Domain.Services
 
             var language = (string)values[keys[0]];
             string seoName = string.Empty;
-            if (keys.Count() > 1)
+            if (_tenantService.AllCultures.Any(m => m.Specificulture == language))
             {
                 seoName = string.Join('/', values.Values.Skip(1));
+            }
+            else
+            {
+                language = string.Empty;
+                seoName = string.Join('/', values.Values);
             }
             result["controller"] = "home";
             result["culture"] = language;

@@ -7,6 +7,7 @@ namespace Mix.Lib.Services
     public sealed class MixTenantService
     {
         public List<MixTenantSystemModel> AllTenants { get; set; }
+        public List<MixCulture> AllCultures { get; set; }
         private readonly DatabaseService _databaseService;
 
         public MixTenantService(DatabaseService databaseService)
@@ -25,7 +26,7 @@ namespace Mix.Lib.Services
                     var tenantIds = mixTenants.Select(p => p.Id).ToList();
 
                     var domains = await dbContext.MixDomain.Where(p => tenantIds.Contains(p.MixTenantId)).ToListAsync(cancellationToken);
-                    var cultures = await dbContext.MixCulture.Where(p => tenantIds.Contains(p.MixTenantId)).ToListAsync(cancellationToken);
+                    AllCultures = await dbContext.MixCulture.ToListAsync(cancellationToken);
 
                     var tenants = mixTenants
                         .Select(p => new MixTenantSystemModel
@@ -37,7 +38,7 @@ namespace Mix.Lib.Services
                             DisplayName = p.DisplayName,
                             Configurations = new TenantConfigService(p.SystemName).AppSettings,
                             Domains = domains.Where(d => d.MixTenantId == p.Id).ToList(),
-                            Cultures = cultures.Where(c => c.MixTenantId == p.Id).ToList(),
+                            Cultures = AllCultures.Where(c => c.MixTenantId == p.Id).ToList(),
                         })
                         .ToList();
 

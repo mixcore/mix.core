@@ -102,7 +102,7 @@ namespace Mixcore.Controllers
         }
         private async Task<IActionResult> LoadAlias(string seoName)
         {
-            var alias = await MixUrlAliasViewModel.GetRepository(_uow).GetSingleAsync(m => m.Alias == seoName);
+            var alias = await MixUrlAliasViewModel.GetRepository(_uow).GetSingleAsync(m => m.MixTenantId == CurrentTenant.Id && m.Alias == seoName);
             if (alias != null)
             {
                 switch (alias.Type)
@@ -111,7 +111,10 @@ namespace Mixcore.Controllers
                         var page = await PageContentViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == alias.SourceContentId);
                         if (page != null)
                         {
-                            await page.ExpandView();
+                            await page.LoadDataAsync(_repoDbRepository, _metadataService, new(Request)
+                            {
+                                SortBy = MixQueryColumnName.Priority
+                            });
                             ViewData["Tenant"] = CurrentTenant;
                             ViewData["Title"] = page.SeoTitle;
                             ViewData["Description"] = page.SeoDescription;

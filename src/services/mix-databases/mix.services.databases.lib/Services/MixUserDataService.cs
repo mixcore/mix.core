@@ -104,5 +104,10 @@ namespace Mix.Services.Databases.Lib.Services
 
             await address.SaveAsync(cancellationToken);
         }
+
+        public async Task UpdateProfile(MixUserDataViewModel profile, CancellationToken cancellationToken = default)
+        {
+            await profile.SaveAsync(cancellationToken);
+        }
     }
 }
