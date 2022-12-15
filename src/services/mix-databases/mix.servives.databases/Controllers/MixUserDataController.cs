@@ -42,6 +42,19 @@ namespace Mix.Services.Databases.Controllers
             var result = await _userDataService.GetUserDataAsync(user.Id, cancellationToken);
             return Ok(result);
         }
+        
+        [MixAuthorize]
+        [HttpPut("update-profile")]
+        public async Task<ActionResult<MixUserDataViewModel>> UpdateProfile([FromBody] MixUserDataViewModel profile, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user.Id != profile.ParentId)
+            {
+                return BadRequest();
+            }
+            await base.UpdateHandler(profile.Id, profile, cancellationToken);
+            return Ok();
+        }
 
         [MixAuthorize]
         [HttpPost("add-address")]

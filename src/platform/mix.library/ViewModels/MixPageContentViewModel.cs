@@ -1,7 +1,6 @@
 ﻿
 namespace Mix.Lib.ViewModels
 {
-    [GeneratePublisher]
     public sealed class MixPageContentViewModel
         : ExtraColumnMultilingualSEOContentViewModelBase<MixCmsContext, MixPageContent, int, MixPageContentViewModel>
     {
@@ -73,6 +72,26 @@ namespace Mix.Lib.ViewModels
                 await base.DeleteHandlerAsync(cancellationToken);
             }
 
+        }
+
+        protected override async Task SaveEntityRelationshipAsync(MixPageContent parentEntity, CancellationToken cancellationToken = default)
+        {
+            await SaveAliasAsync(parentEntity, cancellationToken);
+        }
+
+        private async Task SaveAliasAsync(MixPageContent parentEntity, CancellationToken cancellationToken)
+        {
+            if (UrlAliases != null)
+            {
+                foreach (var item in UrlAliases)
+                {
+                    item.SetUowInfo(UowInfo);
+                    item.MixTenantId = MixTenantId;
+                    item.SourceContentId = Id;
+                    item.Type = MixUrlAliasType.Page;
+                    await item.SaveAsync(cancellationToken);
+                }
+            }
         }
         #endregion
     }

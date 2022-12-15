@@ -34,6 +34,12 @@
 
         #region Overrides
 
+        public override Task<MixUrlAlias> ParseEntity(CancellationToken cancellationToken = default)
+        {
+            DisplayName ??= Alias;
+            return base.ParseEntity(cancellationToken);
+        }
+
         #endregion
     }
 }

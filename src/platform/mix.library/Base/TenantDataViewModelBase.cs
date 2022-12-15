@@ -31,7 +31,6 @@ namespace Mix.Lib.Base
         public string Description { get; set; }
 
         public virtual string Image { get; set; }
-        [Required]
         public virtual string DisplayName { get; set; }
         public int MixTenantId { get; set; }
 
