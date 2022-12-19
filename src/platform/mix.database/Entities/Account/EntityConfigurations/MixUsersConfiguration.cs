@@ -11,13 +11,17 @@ namespace Mix.Database.Entities.Account.EntityConfigurations
 
         public override void Configure(EntityTypeBuilder<MixUser> builder)
         {
+            var filterSql = DatabaseService.DatabaseProvider is MixDatabaseProvider.PostgreSQL 
+                ? "(\"NormalizedUserName\" IS NOT NULL)" // PostgreSQL syntax
+                : "(NormalizedUserName IS NOT NULL)";
+
             builder.HasIndex(e => e.NormalizedEmail)
                     .HasDatabaseName("EmailIndex");
 
             builder.HasIndex(e => e.NormalizedUserName)
                 .HasDatabaseName("UserNameIndex")
                 .IsUnique()
-                .HasFilter("(NormalizedUserName IS NOT NULL)");
+                .HasFilter(filterSql);
 
             builder.Property(e => e.Id)
                  .HasDefaultValueSql(Config.GenerateUUID);
