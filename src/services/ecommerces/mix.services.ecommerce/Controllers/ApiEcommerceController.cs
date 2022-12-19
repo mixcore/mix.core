@@ -80,7 +80,7 @@ namespace mix.services.ecommerce.Controllers
 
         [MixAuthorize]
         [HttpGet]
-        [Route("payment")]
+        [Route("checkout")]
         public async Task<ActionResult<string>> Checkout([FromQuery] PaymentGateway? gateway, CancellationToken cancellationToken = default)
         {
             if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
@@ -88,7 +88,7 @@ namespace mix.services.ecommerce.Controllers
                 return BadRequest();
 
             }
-            var url = await _ecommerceService.GetPaymentUrl(User, gateway.Value, cancellationToken);
+            var url = await _ecommerceService.Checkout(User, gateway.Value, cancellationToken);
             return !string.IsNullOrEmpty(url) ? Redirect(url) : BadRequest();
         }
 
