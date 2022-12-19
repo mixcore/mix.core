@@ -27,8 +27,8 @@ namespace Mix.Lib.Services
     {
         private const string TenantIdFieldName = "MixTenantId";
         private const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
-        protected readonly UnitOfWorkInfo AccountUow;
-        protected readonly UnitOfWorkInfo CmsUow;
+        protected readonly UnitOfWorkInfo<MixCmsAccountContext> AccountUow;
+        protected readonly UnitOfWorkInfo<MixCmsContext> CmsUow;
         protected readonly MixCacheService CacheService;
         protected readonly TenantUserManager UserManager;
         protected readonly SignInManager<MixUser> SignInManager;
@@ -38,6 +38,7 @@ namespace Mix.Lib.Services
         protected readonly MixService MixService;
         protected readonly MixRepoDbRepository RepoDbRepository;
         protected readonly MixCmsContext CmsContext;
+        private readonly MixCmsAccountContext _accContext;
         protected readonly Repository<MixCmsAccountContext, MixRole, Guid, RoleViewModel> RoleRepo;
         protected readonly Repository<MixCmsAccountContext, RefreshTokens, Guid, RefreshTokenViewModel> RefreshTokenRepo;
         protected readonly DatabaseService DatabaseService;
@@ -65,7 +66,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService, DatabaseService databaseService)
+            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             CmsUow = cmsUow;
@@ -82,6 +83,7 @@ namespace Mix.Lib.Services
             RepoDbRepository = repoDbRepository;
             MixService = mixService;
             DatabaseService = databaseService;
+            _accContext = accContext;
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -96,7 +98,7 @@ namespace Mix.Lib.Services
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, CmsUow);
-                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, DatabaseService);
+                await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext);
                 return userInfo;
             }
             return null;
