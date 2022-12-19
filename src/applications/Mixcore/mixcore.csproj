@@ -103,4 +103,7 @@
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Domain\Dtos\" />
+	</ItemGroup>
 </Project>

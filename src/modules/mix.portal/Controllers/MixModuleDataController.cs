@@ -29,8 +29,8 @@ namespace Mix.Portal.Controllers
             var searchRequest = base.BuildSearchRequest(request);
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(
-                request.ModuleContentId.HasValue,
-                m => m.ParentId == request.ModuleContentId);
+                request.ModuleId.HasValue,
+                m => m.ParentId == request.ModuleId);
 
             return searchRequest;
         }

@@ -20,12 +20,12 @@ namespace Mix.Lib.Dtos
             Direction = req.Direction;
             Status = req.Status;
 
-            if (int.TryParse(request.Query[MixRequestQueryKeywords.ModuleContentId], out int themeId))
+            if (int.TryParse(request.Query[MixRequestQueryKeywords.ModuleContentId], out int moduleId))
             {
-                ModuleContentId = themeId;
+                this.ModuleId = moduleId;
             }
         }
 
-        public int? ModuleContentId { get; set; }
+        public int? ModuleId { get; set; }
     }
 }

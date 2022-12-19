@@ -73,7 +73,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var currentItem = cart.OrderItems.FirstOrDefault(m => m.PostId == item.PostId);
             if (currentItem != null)
             {
-                currentItem.Quantity += item.Quantity;
+                currentItem.Quantity = item.Quantity;
                 currentItem.Calculate();
             }
             else
