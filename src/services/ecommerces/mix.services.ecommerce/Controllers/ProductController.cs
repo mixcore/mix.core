@@ -21,7 +21,7 @@ using Mix.Shared.Dtos;
 
 namespace mix.services.ecommerce.Controllers
 {
-    [Route("api/v2/rest/product")]
+    [Route("api/v2/rest/ecommerce/product")]
     [ApiController]
     public class ProductController : MixQueryApiControllerBase<ProductViewModel, MixCmsContext, MixPostContent, int>
     {

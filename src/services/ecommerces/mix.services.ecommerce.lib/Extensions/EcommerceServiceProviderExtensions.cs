@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<EcommerceDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
+            services.TryAddScoped<OrderService>();
             services.TryAddScoped<EcommerceService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<EcommerceDbContext>>();
         }
