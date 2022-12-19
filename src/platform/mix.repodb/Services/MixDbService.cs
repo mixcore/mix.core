@@ -15,29 +15,40 @@ namespace Mix.RepoDb.Services
 {
     public class MixDbService : IDisposable
     {
-        private readonly IDatabaseConstants _dbConstants;
+        private readonly IDatabaseConstants _databaseConstant;
         private readonly MixRepoDbRepository _repository;
         private readonly MixRepoDbRepository _backupRepository;
 
         #region Properties
 
-        public ITrace Trace { get; }
-
-        public ICache Cache { get; }
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         private readonly DatabaseService _databaseService;
 
-        private static readonly string[] DefaultProperties = { "Id", "CreatedDateTime", "LastModified", "MixTenantId", "CreatedBy", "ModifiedBy", "Priority", "Status", "IsDeleted" };
+        private static readonly string[] DefaultProperties =
+        {
+            "Id",
+            "CreatedDateTime",
+            "LastModified",
+            "MixTenantId",
+            "CreatedBy",
+            "ModifiedBy",
+            "Priority",
+            "Status",
+            "IsDeleted"
+        };
         #endregion
 
-        public MixDbService(UnitOfWorkInfo<MixCmsContext> uow, DatabaseService databaseService, MixRepoDbRepository repository,
+        public MixDbService(
+            UnitOfWorkInfo<MixCmsContext> uow,
+            DatabaseService databaseService,
+            MixRepoDbRepository repository,
             ICache cache)
         {
             _uow = uow;
             _databaseService = databaseService;
             _repository = repository;
-            _backupRepository = new(cache, databaseService, uow);
-            _dbConstants = _databaseService.DatabaseProvider switch
+            _backupRepository = new MixRepoDbRepository(cache, databaseService, uow);
+            _databaseConstant = _databaseService.DatabaseProvider switch
             {
                 MixDatabaseProvider.SQLSERVER => new SqlServerDatabaseConstants(),
                 MixDatabaseProvider.MySQL => new MySqlDatabaseConstants(),
@@ -97,7 +108,7 @@ namespace Mix.RepoDb.Services
                 await Migrate(database, _backupRepository.DatabaseProvider, _backupRepository);
                 foreach (var item in data)
                 {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
+                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()).ToList());
                 }
                 var result = await _backupRepository.InsertManyAsync(data);
                 return result > 0;
@@ -123,7 +134,7 @@ namespace Mix.RepoDb.Services
             {
                 foreach (var item in data)
                 {
-                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()));
+                    GetMembers(item, database.Columns.Select(c => c.SystemName.ToTitleCase()).ToList());
                 }
                 _repository.InitTableName(database.SystemName);
                 var result = await _repository.InsertManyAsync(data);
@@ -132,12 +143,12 @@ namespace Mix.RepoDb.Services
             return true;
         }
 
-        private void GetMembers(ExpandoObject obj, IEnumerable<string> selectMembers)
+        private void GetMembers(ExpandoObject obj, List<string> selectMembers)
         {
             var result = obj.ToList();
             foreach (KeyValuePair<string, object> kvp in result)
             {
-                if (!DefaultProperties.Any(m => m == kvp.Key) && !selectMembers.Any(m => m == kvp.Key))
+                if (DefaultProperties.All(m => m != kvp.Key) && selectMembers.All(m => m != kvp.Key))
                 {
                     obj!.Remove(kvp.Key, out _);
                 }
@@ -153,27 +164,28 @@ namespace Mix.RepoDb.Services
 
         private async Task<bool> Migrate(MixDatabaseViewModel database, MixDatabaseProvider databaseProvider, MixRepoDbRepository repo)
         {
-            List<string> colSqls = new List<string>();
-            string tableName = database.SystemName.ToLower();
-            var backTicks = GetBackTicks(databaseProvider);
+            var colsSql = new List<string>();
+            var tableName = database.SystemName.ToLower();
+
             foreach (var col in database.Columns)
             {
-                colSqls.Add(GenerateColumnSql(col, backTicks.open, backTicks.close));
+                colsSql.Add(GenerateColumnSql(col));
             }
 
-            var commandText = GetMigrateTableSql(tableName, databaseProvider, colSqls, backTicks.open, backTicks.close);
+            var commandText = GetMigrateTableSql(tableName, databaseProvider, colsSql);
             if (!string.IsNullOrEmpty(commandText))
             {
-                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {backTicks.open}{tableName}{backTicks.close};");
+                await repo.ExecuteCommand($"DROP TABLE IF EXISTS {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose};");
                 var result = await repo.ExecuteCommand(commandText);
                 return result >= 0;
             }
+
             return false;
         }
 
-        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colSqls, string backtickOpen, string backtickClose)
+        private string GetMigrateTableSql(string tableName, MixDatabaseProvider databaseProvider, List<string> colsSql)
         {
-            return $"CREATE TABLE {backtickOpen}{tableName}{backtickClose} " +
+            return $"CREATE TABLE {_databaseConstant.BacktickOpen}{tableName}{_databaseConstant.BacktickClose} " +
                 $"(Id {GetAutoIncreaseIdSyntax(databaseProvider)}, " +
                 $"CreatedDateTime {GetColumnType(MixDataType.DateTime)}, " +
                 $"LastModified {GetColumnType(MixDataType.DateTime)} NULL, " +
@@ -183,16 +195,7 @@ namespace Mix.RepoDb.Services
                 $"Priority {GetColumnType(MixDataType.Integer)} NOT NULL, " +
                 $"Status {GetColumnType(MixDataType.Text)} NULL, " +
                 $"IsDeleted {GetColumnType(MixDataType.Boolean)} NOT NULL, " +
-                $" {string.Join(",", colSqls.ToArray())})";
-        }
-
-        private (string open, string close) GetBackTicks(MixDatabaseProvider databaseProvider)
-        {
-            string backtickOpen =
-                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "[";
-            string backtickClose =
-                databaseProvider == MixDatabaseProvider.MySQL || databaseProvider == MixDatabaseProvider.PostgreSQL ? "`" : "]";
-            return (backtickOpen, backtickClose);
+                $" {string.Join(",", colsSql.ToArray())})";
         }
 
         private string GetAutoIncreaseIdSyntax(MixDatabaseProvider databaseProvider)
@@ -207,12 +210,11 @@ namespace Mix.RepoDb.Services
             };
         }
 
-        private string GenerateColumnSql(MixDatabaseColumnViewModel col, string backtickOpen, string backtickClose)
+        private string GenerateColumnSql(MixDatabaseColumnViewModel col)
         {
-
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
-            return $"{backtickOpen}{col.SystemName.ToTitleCase()}{backtickClose} {colType} {nullable}";
+            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)
@@ -222,21 +224,21 @@ namespace Mix.RepoDb.Services
                 case MixDataType.DateTime:
                 case MixDataType.Date:
                 case MixDataType.Time:
-                    return _dbConstants.DateTime;
+                    return _databaseConstant.DateTime;
                 case MixDataType.Double:
                     return "float";
                 case MixDataType.Reference:
                 case MixDataType.Integer:
-                    return _dbConstants.Integer;
+                    return _databaseConstant.Integer;
                 case MixDataType.Guid:
-                    return _dbConstants.Guid;
+                    return _databaseConstant.Guid;
                 case MixDataType.Html:
-                    return _dbConstants.Text;
+                    return _databaseConstant.Text;
                 case MixDataType.Boolean:
-                    return _dbConstants.Boolean;
+                    return _databaseConstant.Boolean;
                 case MixDataType.Json:
                 case MixDataType.Array:
-                    return $"{_dbConstants.NString}{_dbConstants.MaxLength}";
+                    return $"{_databaseConstant.NString}{_databaseConstant.MaxLength}";
                 case MixDataType.Duration:
                 case MixDataType.Custom:
                 case MixDataType.PhoneNumber:
@@ -255,7 +257,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.TuiEditor:
                 case MixDataType.QRCode:
                 default:
-                    return $"{_dbConstants.NString}({maxLength ?? 250})";
+                    return $"{_databaseConstant.NString}({maxLength ?? 250})";
             }
         }
 
@@ -266,6 +268,5 @@ namespace Mix.RepoDb.Services
             _uow.Dispose();
         }
         #endregion
-
     }
 }

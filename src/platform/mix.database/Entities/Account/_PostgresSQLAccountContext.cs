@@ -11,9 +11,8 @@ namespace Mix.Database.Entities.Account
         /// <summary>
         /// Initializes a new instance of the <see cref="MixCmsAccountContext" /> class.
         /// </summary>
-        /// <param name="options">The options.</param>
-        public PostgresSQLAccountContext(DatabaseService databaseService)
-                    : base(databaseService)
+        /// <param name="databaseService"></param>
+        public PostgresSQLAccountContext(DatabaseService databaseService) : base(databaseService)
         {
         }
     }

@@ -1,39 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mix.Database.Migrations.PostgresSQLAccount
+namespace Mix.Database.Migrations.Account.PostgresSQLAccount
 {
+    /// <inheritdoc />
     public partial class Init : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    NormalizedName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
-                    AllowedOrigin = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
+                    AllowedOrigin = table.Column<string>(type: "text", nullable: true),
                     ApplicationType = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "varchar(250)", nullable: false, collation: "und-x-icu"),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     RefreshTokenLifeTime = table.Column<int>(type: "integer", nullable: false),
-                    Secret = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu")
+                    Secret = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,18 +48,12 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
-                    Avatar = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    NickName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    FirstName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LastName = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    Gender = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    DOB = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsActived = table.Column<bool>(type: "boolean", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ModifiedBy = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     RegisterType = table.Column<string>(type: "varchar(50)", nullable: true, collation: "und-x-icu"),
-                    LockoutEnd = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    LockoutEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     NormalizedUserName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -110,8 +93,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     ClientId = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Email = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     Username = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
-                    ExpiresUtc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    IssuedUtc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    ExpiresUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IssuedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,7 +106,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "uuid", nullable: true),
                     MixRoleId = table.Column<Guid>(type: "uuid", nullable: true),
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -132,11 +114,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
@@ -150,6 +127,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MixUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     MixUserId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     ClaimType = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
@@ -159,16 +137,15 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AspNetUserClaims_MixUsers_MixUserId",
+                        column: x => x.MixUserId,
+                        principalTable: "MixUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AspNetUserClaims_MixUsers_MixUserId1",
                         column: x => x.MixUserId1,
                         principalTable: "MixUsers",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_MixUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "MixUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -177,6 +154,8 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     ProviderKey = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MixUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MixUserId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     ProviderDisplayName = table.Column<string>(type: "varchar(250)", nullable: true, collation: "und-x-icu"),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()")
                 },
@@ -184,11 +163,15 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 {
                     table.PrimaryKey("PK_AspNetUserLogins_1", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_MixUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AspNetUserLogins_MixUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "MixUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_MixUsers_MixUserId1",
+                        column: x => x.MixUserId1,
+                        principalTable: "MixUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -198,28 +181,28 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     RoleId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     MixTenantId = table.Column<int>(type: "int", nullable: false),
-                    AspNetRolesId = table.Column<Guid>(type: "uuid", nullable: true),
-                    MixRoleId = table.Column<Guid>(type: "uuid", nullable: true)
+                    MixRoleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MixUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    MixUserId1 = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId, x.MixTenantId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_AspNetRolesId",
-                        column: x => x.AspNetRolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_MixRoles_MixRoleId",
                         column: x => x.MixRoleId,
                         principalTable: "MixRoles",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_MixUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AspNetUserRoles_MixUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "MixUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_MixUsers_MixUserId1",
+                        column: x => x.MixUserId1,
+                        principalTable: "MixUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -229,23 +212,18 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                     UserId = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     LoginProvider = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
                     Name = table.Column<string>(type: "varchar(50)", nullable: false, collation: "und-x-icu"),
+                    MixUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     Value = table.Column<string>(type: "varchar(4000)", nullable: true, collation: "und-x-icu")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_MixUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AspNetUserTokens_MixUsers_MixUserId",
+                        column: x => x.MixUserId,
                         principalTable: "MixUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_AspNetRolesId",
-                table: "AspNetRoleClaims",
-                column: "AspNetRolesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_MixRoleId",
@@ -258,11 +236,9 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true,
-                filter: "(\"NormalizedName\" IS NOT NULL)");
+                name: "IX_AspNetUserClaims_MixUserId",
+                table: "AspNetUserClaims",
+                column: "MixUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_MixUserId1",
@@ -275,14 +251,19 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_MixUserId",
+                table: "AspNetUserLogins",
+                column: "MixUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_MixUserId1",
+                table: "AspNetUserLogins",
+                column: "MixUserId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_AspNetRolesId",
-                table: "AspNetUserRoles",
-                column: "AspNetRolesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_MixRoleId",
@@ -290,9 +271,24 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "MixRoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_MixUserId",
+                table: "AspNetUserRoles",
+                column: "MixUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_MixUserId1",
+                table: "AspNetUserRoles",
+                column: "MixUserId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserTokens_MixUserId",
+                table: "AspNetUserTokens",
+                column: "MixUserId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -317,6 +313,7 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
                 column: "TenantId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
@@ -342,9 +339,6 @@ namespace Mix.Database.Migrations.PostgresSQLAccount
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "MixRoles");
