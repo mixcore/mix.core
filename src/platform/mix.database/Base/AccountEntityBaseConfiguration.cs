@@ -5,13 +5,13 @@ namespace Mix.Database.Base
     public abstract class AccountEntityBaseConfiguration<T> : IEntityTypeConfiguration<T>
         where T : class
     {
-        protected virtual IDatabaseConstants Config { get; set; }
+        protected IDatabaseConstants Config { get; set; }
 
-        private readonly DatabaseService _databaseService;
+        protected readonly DatabaseService DatabaseService;
 
         protected AccountEntityBaseConfiguration(DatabaseService databaseService)
         {
-            _databaseService = databaseService;
+            DatabaseService = databaseService;
             Config = GetConfig();
         }
 
@@ -22,7 +22,7 @@ namespace Mix.Database.Base
 
         private IDatabaseConstants GetConfig()
         {
-            switch (_databaseService.DatabaseProvider)
+            switch (DatabaseService.DatabaseProvider)
             {
                 case MixDatabaseProvider.SQLSERVER:
                     return new SqlServerDatabaseConstants();
