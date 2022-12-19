@@ -12,12 +12,11 @@ namespace Mix.Database.Services
 {
     public class DatabaseService : ConfigurationServiceBase<DatabaseConfigurations>
     {
-        public MixDatabaseProvider DatabaseProvider { get => AppSettings.DatabaseProvider; }
-        protected IHttpContextAccessor _httpContextAccessor;
-        public DatabaseService(IHttpContextAccessor httpContextAccessor)
-            : base(MixAppConfigFilePaths.Database, true)
+        public MixDatabaseProvider DatabaseProvider => AppSettings.DatabaseProvider;
+        protected IHttpContextAccessor HttpContextAccessor;
+        public DatabaseService(IHttpContextAccessor httpContextAccessor) : base(MixAppConfigFilePaths.Database, true)
         {
-            _httpContextAccessor = httpContextAccessor;
+            HttpContextAccessor = httpContextAccessor;
             AesKey = GlobalConfigService.Instance.AppSettings.ApiEncryptKey;
         }
 
@@ -96,10 +95,10 @@ namespace Mix.Database.Services
         {
             return DatabaseProvider switch
             {
-                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(_httpContextAccessor, this),
-                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(_httpContextAccessor, this),
-                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(_httpContextAccessor, this),
-                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(_httpContextAccessor, this),
+                MixDatabaseProvider.SQLSERVER => new SQLServerQuartzDbContext(HttpContextAccessor, this),
+                MixDatabaseProvider.MySQL => new MySQLQuartzDbContext(HttpContextAccessor, this),
+                MixDatabaseProvider.SQLITE => new SQLiteQuartzDbContext(HttpContextAccessor, this),
+                MixDatabaseProvider.PostgreSQL => new PostgresSQLQuartzDbContext(HttpContextAccessor, this),
                 _ => null,
             };
         }
@@ -150,20 +149,6 @@ namespace Mix.Database.Services
             await cacheCtx.Database.MigrateAsync();
             using var accCtx = GetAccountDbContext();
             await accCtx.Database.MigrateAsync();
-            //var transaction = ctx.Database.BeginTransaction();
-            //var sysDatabasesFile = MixFileRepository.Instance.GetFile("sys_databases", MixFileExtensions.Json, $"{MixFolders.JsonDataFolder}");
-            //var sysDatabases = JObject.Parse(sysDatabasesFile.Content)["data"].ToObject<List<MixDatabaseViewModel>>();
-            //foreach (var db in sysDatabases)
-            //{
-            //    if (!ctx.MixDatabase.Any(m => m.Name == db.Name))
-            //    {
-            //        db.SaveModel(true, ctx, transaction);
-            //    }
-            //}
-            //transaction.Commit();
-            //transaction.Dispose();
-            //var query = ctx.MixConfigurationContent.Where(c => c.ParentId == 1).ToQueryString();
-            //Console.WriteLine(query);
         }
 
         public async Task InitQuartzContextAsync()

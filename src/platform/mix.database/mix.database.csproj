@@ -43,9 +43,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Migrations\Account\PostgresSQLAccount\" />
 		<Folder Include="Migrations\Cms\PostgresqlMixCms\" />
 		<Folder Include="Migrations\Quartz\" />
-		<Folder Include="Repositories\" />
 	</ItemGroup>
 
 	<ItemGroup>
