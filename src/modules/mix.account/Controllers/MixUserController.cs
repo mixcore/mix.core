@@ -221,7 +221,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, databaseService);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
                 return Ok(result);
             }
             return BadRequest();
@@ -237,7 +237,7 @@ namespace Mix.Account.Controllers
             if (user != null)
             {
                 var result = new MixUserViewModel(user, _cmsUOW);
-                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, databaseService);
+                await result.LoadUserDataAsync(CurrentTenant.Id, _repoDbRepository, _accContext);
                 return Ok(result);
             }
             return BadRequest();
