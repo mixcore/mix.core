@@ -117,7 +117,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task<string?> GetPaymentUrl(
+        public async Task<string?> Checkout(
             ClaimsPrincipal principal,
             PaymentGateway gateway,
             CancellationToken cancellationToken = default)
@@ -142,6 +142,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
+
+            cart.OrderStatus = OrderStatus.WaitForPayment;
+            await cart.SaveAsync(cancellationToken);
 
             string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
             var url = await paymentService.GetPaymentUrl(cart, returnUrl, cancellationToken);
