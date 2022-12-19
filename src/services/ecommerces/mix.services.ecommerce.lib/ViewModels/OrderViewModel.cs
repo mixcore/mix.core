@@ -1,11 +1,12 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
+using Mix.Lib.Attributes;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
+    [GenerateRestApiController(Route = "/api/v2/rest/ecommerce/order-details", IsAuthorized = true)]
     public class OrderViewModel : ViewModelBase<EcommerceDbContext, OrderDetail, int, OrderViewModel>
     {
         #region Properties
