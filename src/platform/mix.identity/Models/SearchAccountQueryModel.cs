@@ -50,6 +50,7 @@ namespace Mix.Identity.Models
             Keyword = request.Keyword;
             PagingData = new PagingRequestModel()
             {
+                Page = request.PageIndex + 1,
                 PageIndex = request.PageIndex,
                 PageSize = request.PageSize,
                 SortDirection = request.Direction,
