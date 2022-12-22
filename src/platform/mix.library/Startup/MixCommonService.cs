@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Communicator.Services;
 using Mix.Database.Services;
 using Mix.Lib.Publishers;
 using Mix.Lib.Services;
@@ -30,6 +31,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<MixConfigurationService>();
             services.TryAddScoped<MixCmsService>();
             services.TryAddScoped<TranslatorService>();
+
+            services.TryAddScoped<EmailService>();
+            services.TryAddScoped<MixEdmService>();
             return services;
         }
     }

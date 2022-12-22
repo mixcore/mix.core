@@ -100,7 +100,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.AccessDeniedPath = accessDeniedPath;
                 options.SlidingExpiration = true;
             });
-            services.AddScoped<EmailService>();
+
             // Firebase service must be singleton (only one firebase default instance)
             services.TryAddSingleton<FirebaseService>();
             services.AddScoped<MixIdentityService>();
