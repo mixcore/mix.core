@@ -117,7 +117,7 @@ namespace Mix.Services.Databases.Lib.Services
             await association.SaveAsync(cancellationToken);
         }
 
-        public async Task<PagingResponseModel<MixMixMetadataContentAsscociationViewModel>> GetMetadataByContentId(
+        public async Task<PagingResponseModel<MixMixMetadataContentAsscociationViewModel>?> GetMetadataByContentId(
             int intContentId,
             MetadataParentType? contentType,
             string metadataType, PagingRequestModel pagingData)

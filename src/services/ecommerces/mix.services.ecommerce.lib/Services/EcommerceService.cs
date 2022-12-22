@@ -156,6 +156,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             JObject paymentResponse,
             CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
 
             if (paymentService == null)

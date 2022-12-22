@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Communicator.Models;
 using Mix.Heart.Extensions;
+using Mix.Heart.UnitOfWork;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -48,16 +49,5 @@ namespace Mix.Communicator.Services
             }
         }
 
-        public Task SendMailWithEdmTemplate(string template, JObject data, string subject, string to, string? from = null)
-        {
-            return Task.Run(() =>
-            {
-                foreach (var prop in data.Properties())
-                {
-                    template = template.Replace($"[[{prop.Name.ToTitleCase()}]]", data.Value<string>(prop.Name));
-                }
-                SendMail(subject, template, to, from);
-            });
-        }
     }
 }
