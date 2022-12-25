@@ -17,6 +17,6 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Onepay
         public string vpc_Message { get; set; }
         public string vpc_AdditionData { get; set; }
         public string vpc_SecureHash { get; set; }
-        public PaymentStatus OnepayStatus { get; set; }
+        public OrderStatus OnepayStatus { get; set; }
     }
 }

@@ -55,7 +55,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Onepay.EntityConfigurations
                 .HasColumnType($"{Config.String}{Config.MediumLength}");
             builder.Property(e => e.OnepayStatus)
                 .IsRequired()
-                .HasConversion(new EnumToStringConverter<PaymentStatus>())
+                .HasConversion(new EnumToStringConverter<OrderStatus>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
         }

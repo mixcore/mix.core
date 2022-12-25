@@ -43,7 +43,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return await OrderViewModel.GetRepository(_uow)
                             .GetSingleAsync(
                                 m => m.MixTenantId == CurrentTenant.Id
-                                && m.OrderStatus == OrderStatus.New
+                                && m.OrderStatus == OrderStatus.NEW
                                 && m.UserId == userId,
                                 cancellationToken);
         }
@@ -59,7 +59,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     UserId = user.Id,
                     Title = $"{user.UserName}'s Cart",
-                    OrderStatus = OrderStatus.New,
+                    OrderStatus = OrderStatus.NEW,
                     MixTenantId = CurrentTenant.Id
                 };
                 await cart.SaveAsync(cancellationToken);
@@ -151,12 +151,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
             string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/payment-response?gateway={gateway}";
             var url = await paymentService.GetPaymentUrl(cart, returnUrl, cancellationToken);
             await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(cart), user.Email);
-            cart.OrderStatus = OrderStatus.WaitForPayment;
-            await cart.SaveAsync(cancellationToken);
+            
             return url;
         }
 
-        public async Task ProcessPaymentResponse(
+        public async Task<OrderStatus> ProcessPaymentResponse(
             PaymentGateway gateway,
             JObject paymentResponse,
             CancellationToken cancellationToken = default)
@@ -169,7 +168,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
-            await paymentService.ProcessPaymentResponse(paymentResponse, cancellationToken);
+            return await paymentService.ProcessPaymentResponse(paymentResponse, cancellationToken);
         }
 
     }

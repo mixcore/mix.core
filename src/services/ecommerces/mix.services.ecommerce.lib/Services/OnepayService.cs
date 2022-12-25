@@ -6,6 +6,7 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
+using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Interfaces;
@@ -22,13 +23,15 @@ namespace Mix.Services.Ecommerce.Lib.Services
     public sealed class OnepayService : TenantServiceBase, IPaymentService
     {
         private readonly UnitOfWorkInfo<OnepayDbContext> _cmsUow;
+        private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         private readonly HttpService _httpService;
         private MixOnepayConfigurations Settings { get; set; } = new MixOnepayConfigurations();
-        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow)
+        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow, UnitOfWorkInfo<EcommerceDbContext> ecommerceUow)
             : base(httpContextAccessor)
         {
             _httpService = httpService;
             _cmsUow = cmsUow;
+            _ecommerceUow = ecommerceUow;
 
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Onepay");
             session.Bind(Settings);
@@ -51,7 +54,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.AgainLink = System.Net.WebUtility.UrlEncode(returnUrl);
                 request.vpc_ReturnURL = System.Net.WebUtility.UrlEncode(returnUrl);
 
-                await SaveRequest(request, PaymentStatus.PENDING, cancellationToken);
+                await SaveRequest(request, OrderStatus.PENDING, cancellationToken);
 
                 Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
                 parameters["vpc_SecureHash"] = CreateSHA256Signature(parameters);
@@ -102,14 +105,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return hexHash;
         }
 
-        private async Task SaveResponse(OnepayTransactionResponse response, PaymentStatus paymentStatus, CancellationToken cancellationToken)
+        private async Task SaveResponse(OnepayTransactionResponse response, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = new OnepayTransactionResponseViewModel(response, _cmsUow);
             vm.PaymentStatus = paymentStatus;
             await vm.SaveAsync(cancellationToken);
         }
 
-        private async Task SaveRequest(PaymentRequest request, PaymentStatus paymentStatus, CancellationToken cancellationToken)
+        private async Task SaveRequest(PaymentRequest request, OrderStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = await OnepayTransactionRequestViewModel.GetRepository(_cmsUow).GetSingleAsync(m => m.vpc_OrderInfo == request.vpc_OrderInfo);
             if (vm == null)
@@ -138,33 +141,42 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
         }
 
-        public async Task<PaymentStatus> ProcessPaymentResponse(JObject responseObj, CancellationToken cancellationToken)
+        public async Task<OrderStatus> ProcessPaymentResponse(JObject responseObj, CancellationToken cancellationToken)
         {
-            var response = responseObj.ToObject<OnepayTransactionResponse>();
-            var status = PaymentStatus.PENDING;
-            if (!response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
+            try
             {
-                if (!string.IsNullOrEmpty(response.vpc_SecureHash))
-                {
-                    if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
-                    {
-                        status = PaymentStatus.INVALIDRESPONSE;
-                    }
-                }
-                status = PaymentStatus.PENDING;
-            }
+                cancellationToken.ThrowIfCancellationRequested();
 
-            if (string.IsNullOrEmpty(response.vpc_SecureHash))
-            {
-                status = PaymentStatus.INVALIDRESPONSE;
+                var response = responseObj.ToObject<OnepayTransactionResponse>();
+                var orderDetail = await OrderViewModel.GetRepository(_ecommerceUow).GetSingleAsync(m => m.Id == int.Parse(response.vpc_OrderInfo));
+                if (orderDetail != null && !response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
+                {
+                    if (!string.IsNullOrEmpty(response.vpc_SecureHash))
+                    {
+                        if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
+                        {
+                            orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                        }
+                    }
+                    orderDetail.OrderStatus = OrderStatus.PENDING;
+                }
+
+                if (string.IsNullOrEmpty(response.vpc_SecureHash))
+                {
+                    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                }
+                if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
+                {
+                    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                }
+                await SaveResponse(response, orderDetail.OrderStatus, cancellationToken);
+                await orderDetail.SaveAsync(cancellationToken);
+                return orderDetail.OrderStatus;
             }
-            if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
+            catch(Exception ex)
             {
-                status = PaymentStatus.INVALIDRESPONSE;
+                throw new MixException(MixErrorStatus.Badrequest, ex);
             }
-            status = PaymentStatus.SUCCESS;
-            await SaveResponse(response, status, cancellationToken);
-            return status;
         }
 
     }

@@ -4,5 +4,7 @@
     {
         public const string DataTableNameOrder = "OrderDetail";
         public const string DataTableNameOrderItem = "OrderItem";
+        public const string PaymentSuccessUrl = "/payment-success";
+        public const string PaymentFailUrl = "/payment-fail";
     }
 }
