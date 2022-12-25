@@ -10,10 +10,10 @@ namespace Mixcore.Domain.Subscribers
         private readonly MixTenantService _mixTenantService;
 
         public TenantSubscriber(
+            IServiceProvider serviceProvider, 
             IConfiguration configuration, 
             MixMemoryMessageQueue<MessageQueueModel> queueService, 
-            MixTenantService mixTenantService) 
-            : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
+            MixTenantService mixTenantService) : base(topicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _mixTenantService = mixTenantService;
         }

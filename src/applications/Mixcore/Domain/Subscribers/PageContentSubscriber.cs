@@ -9,10 +9,11 @@ namespace Mixcore.Domain.Subscribers
         private readonly MixCacheService _cacheService;
 
         public PageContentSubscriber(
+            IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             MixCacheService cacheService)
-            : base(TopicId, MixModuleNames.Mixcore, configuration, queueService)
+            : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _cacheService = cacheService;
         }

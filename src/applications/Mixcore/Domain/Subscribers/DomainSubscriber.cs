@@ -9,10 +9,11 @@ namespace Mixcore.Domain.Subscribers
         private readonly MixTenantService _mixTenantService;
         static string topicId = typeof(MixDomainViewModel).FullName;
         public DomainSubscriber(
+            IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             MixTenantService mixTenantService)
-            : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
+            : base(topicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _mixTenantService = mixTenantService;
         }

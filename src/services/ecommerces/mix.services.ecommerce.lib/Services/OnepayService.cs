@@ -47,7 +47,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.vpc_Merchant = Settings.Merchant;
                 request.vpc_AccessCode = Settings.AccessCode;
                 request.vpc_Locale = Settings.Locale;
-                request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();
+                request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
                 request.AgainLink = System.Net.WebUtility.UrlEncode(returnUrl);
                 request.vpc_ReturnURL = System.Net.WebUtility.UrlEncode(returnUrl);
 
@@ -82,18 +82,18 @@ namespace Mix.Services.Ecommerce.Lib.Services
             StringBuilder sb = new StringBuilder();
             foreach (var kvp in parameters)
             {
-                if (kvp.Key.StartsWith("vpc_") || kvp.Key.StartsWith("user_"))
+                if (!string.IsNullOrEmpty(kvp.Value) && (kvp.Key.StartsWith("vpc_") || kvp.Key.StartsWith("user_")))
                     sb.Append(kvp.Key + "=" + kvp.Value + "&");
             }
             // remove trailing & from string
             if (sb.Length > 0)
                 sb.Remove(sb.Length - 1, 1);
-
+            //string tmp = "vpc_AccessCode=6BEB2566&vpc_Amount=2490000&vpc_Command=pay&vpc_Currency=VND&vpc_Locale=vn&vpc_MerchTxnRef=638073070064044677&vpc_Merchant=TESTONEPAY30&vpc_OrderInfo=ebd10af0-2e73-40fc-b975-c05c506d0da6_3&vpc_ReturnURL=https//nesto.tanconstructions.com.au/checkout/Onepay&vpc_TicketNo=172.70.142.147&vpc_Version=2";
             // Create secureHash on string
             string hexHash = "";
             using (HMACSHA256 hasher = new HMACSHA256(convertedHash))
             {
-                byte[] hashValue = hasher.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));
+                byte[] hashValue = hasher.ComputeHash(Encoding.UTF8.GetBytes(sb.ToString()));//(tmp)); //
                 foreach (byte b in hashValue)
                 {
                     hexHash += b.ToString("X2");

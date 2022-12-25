@@ -10,8 +10,9 @@ namespace Mixcore.Domain.Subscribers
 
         public TemplateSubscriber(
             ILogger<TemplateSubscriber> logger,
+            IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             this.logger = logger;
         }

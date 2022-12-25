@@ -7,8 +7,10 @@ namespace Mixcore.Domain.Subscribers
     {
         static string topicId = typeof(MixThemeViewModel).FullName;
         public ThemeSubscriber(
+            IServiceProvider serviceProvider,
             IConfiguration configuration,
-            MixMemoryMessageQueue<MessageQueueModel> queueService) : base(topicId, MixModuleNames.Mixcore, configuration, queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService) 
+            : base(topicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
         }
 

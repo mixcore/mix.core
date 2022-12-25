@@ -86,10 +86,9 @@ namespace mix.services.ecommerce.Controllers
             if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
             {
                 return BadRequest();
-
             }
             var url = await _ecommerceService.Checkout(User, gateway.Value, cancellationToken);
-            return !string.IsNullOrEmpty(url) ? Redirect(url) : BadRequest();
+            return !string.IsNullOrEmpty(url) ? Ok(url) : BadRequest();
         }
 
         [HttpGet]

@@ -17,8 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton<DatabaseService>();
             services.TryAddSingleton<AuditLogService>();
             services.TryAddSingleton<MixEndpointService>();
-            services.AddHostedService<MixBackgroundTaskPublisher>();
-            services.AddHostedService<MixBackgroundTaskSubscriber>();
+           
 
             services.TryAddScoped<MixHeartConfigService>();
             services.TryAddScoped<AuthConfigService>();
@@ -34,6 +33,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddScoped<EmailService>();
             services.TryAddScoped<MixEdmService>();
+
+            services.AddHostedService<MixBackgroundTaskPublisher>();
+            services.AddHostedService<MixBackgroundTaskSubscriber>();
             return services;
         }
     }
