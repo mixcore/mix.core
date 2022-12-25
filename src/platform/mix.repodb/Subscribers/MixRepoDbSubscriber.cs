@@ -17,27 +17,24 @@ namespace Mix.RepoDb.Subscribers
     public class MixRepoDbSubscriber : SubscriberBase
     {
         protected PortalHubClientService PortalHub;
-        private readonly IServiceProvider _servicesProvider;
-        private IServiceScope _servicesScope;
+        
         private MixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
-            IServiceProvider servicesProvider,
+            IServiceProvider serviceProvider,
             PortalHubClientService portalHub)
-            : base(MixQueueTopics.MixRepoDb, string.Empty, configuration, queueService)
+            : base(MixQueueTopics.MixRepoDb, string.Empty, serviceProvider, configuration, queueService)
         {
             PortalHub = portalHub;
-            _servicesProvider = servicesProvider;
         }
 
         public override async Task Handler(MessageQueueModel model)
         {
             try
             {
-                _servicesScope = _servicesProvider.CreateScope();
-                _mixDbService = _servicesScope.ServiceProvider.GetRequiredService<MixDbService>();
-                var cmsUow = _servicesScope.ServiceProvider.GetRequiredService<UnitOfWorkInfo<MixCmsContext>>();
+                _mixDbService = GetScopedService<MixDbService>();
+                var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();
                 switch (model.Action)
                 {
                     case MixRepoDbQueueAction.Backup:
@@ -57,10 +54,6 @@ namespace Mix.RepoDb.Subscribers
             catch (Exception ex)
             {
                 await SendMessage(model.Action, false, ex);
-            }
-            finally
-            {
-                _servicesScope.Dispose();
             }
         }
 

@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 using Mix.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Mix.Communicator.Models;
 
 namespace Mix.Account.Controllers
 {
@@ -408,10 +409,13 @@ namespace Mix.Account.Controllers
             {
                 content = edmTemplate.Content.Replace("[URL]", callbackurl);
             }
-            _emailService.SendMail(
-                    to: user.Email,
-                    subject: "Reset Password",
-                    message: content);
+            EmailMessageModel msg = new()
+            {
+                Subject = "Reset Password",
+                Message = content,
+                To = user.Email
+            };
+            _emailService.SendMail(msg);
 
             return Ok();
         }

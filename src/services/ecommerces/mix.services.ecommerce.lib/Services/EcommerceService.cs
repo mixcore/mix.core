@@ -20,6 +20,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
+        private readonly MixEdmService _edmService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         public EcommerceService(
@@ -27,12 +28,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor)
+            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            MixEdmService edmService) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
             _serviceProvider = serviceProvider;
             _cmsUOW = cmsUOW;
+            _edmService = edmService;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -122,6 +125,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             PaymentGateway gateway,
             CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var user = await _userManager.GetUserAsync(principal);
 
             if (user == null)
@@ -143,11 +148,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
+            string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/payment-response?gateway={gateway}";
+            var url = await paymentService.GetPaymentUrl(cart, returnUrl, cancellationToken);
+            await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(cart), user.Email);
             cart.OrderStatus = OrderStatus.WaitForPayment;
             await cart.SaveAsync(cancellationToken);
-
-            string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/checkout/{gateway}";
-            var url = await paymentService.GetPaymentUrl(cart, returnUrl, cancellationToken);
             return url;
         }
 

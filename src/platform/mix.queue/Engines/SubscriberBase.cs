@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mix.Heart.Exceptions;
 using Mix.Queue.Engines.MixQueue;
@@ -18,9 +19,13 @@ namespace Mix.Queue.Engines
         private readonly MixMemoryMessageQueue<MessageQueueModel> _queueService;
         private readonly string _topicId;
 
+        protected readonly IServiceProvider _servicesProvider;
+        private IServiceScope _serviceScope;
+        protected IServiceScope ServiceScope { get => GetServiceScope(); set { _serviceScope = value; } }
         protected SubscriberBase(
             string topicId,
             string moduleName,
+            IServiceProvider servicesProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService)
         {
@@ -28,6 +33,7 @@ namespace Mix.Queue.Engines
             _queueService = queueService;
             _topicId = topicId;
             _subscriber = CreateSubscriber(_topicId, $"{_topicId}_{moduleName}");
+            _servicesProvider = servicesProvider;
         }
 
         public Task StartAsync(CancellationToken cancellationToken = default)
@@ -86,6 +92,20 @@ namespace Mix.Queue.Engines
             return default;
         }
 
+        protected IServiceScope GetServiceScope()
+        {
+            if (_serviceScope == null)
+            {
+                _serviceScope = _servicesProvider.CreateScope();
+            }
+            return _serviceScope;
+        }
+
+        protected T GetScopedService<T>()
+        {
+            return ServiceScope.ServiceProvider.GetRequiredService<T>();
+        }
+
         public Task MessageHandler(MessageQueueModel data)
         {
             try
@@ -101,6 +121,10 @@ namespace Mix.Queue.Engines
             {
                 Console.WriteLine(ex.Message);
                 return Task.CompletedTask;
+            }
+            finally
+            {
+                _serviceScope?.Dispose();
             }
         }
 

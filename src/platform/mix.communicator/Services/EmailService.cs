@@ -2,6 +2,7 @@
 using Mix.Communicator.Models;
 using Mix.Heart.Extensions;
 using Mix.Heart.UnitOfWork;
+using Mix.Service.Services;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -19,16 +20,16 @@ namespace Mix.Communicator.Services
             session.Bind(Settings);
         }
 
-        public void SendMail(string subject, string message, string to, string? from = null)
+        public async Task SendMail(EmailMessageModel msg)
         {
             MailMessage mailMessage = new MailMessage
             {
                 IsBodyHtml = true,
-                From = new MailAddress(from ?? Settings.From)
+                From = new MailAddress(msg.From ?? Settings.From)
             };
-            mailMessage.To.Add(to);
-            mailMessage.Body = message;
-            mailMessage.Subject = subject;
+            mailMessage.To.Add(msg.To);
+            mailMessage.Body = msg.Message;
+            mailMessage.Subject = msg.Subject;
             try
             {
                 var client = new SmtpClient(Settings.Server)
@@ -41,11 +42,11 @@ namespace Mix.Communicator.Services
                     EnableSsl = Settings.SSL
                 };
 
-                client.Send(mailMessage);
+                await client.SendMailAsync(mailMessage);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                MixService.LogException(e);
             }
         }
 

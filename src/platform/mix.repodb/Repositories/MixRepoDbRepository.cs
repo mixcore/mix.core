@@ -114,6 +114,7 @@ namespace Mix.RepoDb.Repositories
                 Items = data.ToList(),
                 PagingData = new()
                 {
+                    Page = pagingRequest.PageIndex + 1,
                     PageIndex = pagingRequest.PageIndex,
                     PageSize = pagingRequest.PageSize,
                     Total = count,
@@ -469,7 +470,7 @@ namespace Mix.RepoDb.Repositories
                 if (_isRoot && _dbTransaction.Connection != null)
                 {
                     _dbTransaction.Commit();
-                    _connection.Close(); 
+                    _connection.Close();
                 }
             }
         }
