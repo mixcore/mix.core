@@ -14,6 +14,7 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
+using Mix.Services.Payments.Lib.Constants;
 using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 
@@ -93,7 +94,7 @@ namespace mix.services.ecommerce.Controllers
 
         [HttpGet]
         [Route("payment-response/{gateway}")]
-        public async Task<ActionResult<string>> PaymentResponse(PaymentGateway? gateway, CancellationToken cancellationToken = default)
+        public async Task<ActionResult> PaymentResponse(PaymentGateway? gateway, CancellationToken cancellationToken = default)
         {
             if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
             {
@@ -101,8 +102,10 @@ namespace mix.services.ecommerce.Controllers
 
             }
             var paymentResponse = JObject.FromObject(QueryHelpers.ParseQuery(Request.QueryString.Value));
-            await _ecommerceService.ProcessPaymentResponse(gateway.Value, paymentResponse, cancellationToken);
-            return Ok();
+            var result = await _ecommerceService.ProcessPaymentResponse(gateway.Value, paymentResponse, cancellationToken);
+            return result == OrderStatus.SUCCESS 
+                ? Redirect(EcommerceConstants.PaymentSuccessUrl)
+                : Redirect(EcommerceConstants.PaymentFailUrl);
         }
 
         #endregion

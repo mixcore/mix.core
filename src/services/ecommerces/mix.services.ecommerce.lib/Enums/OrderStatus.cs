@@ -2,9 +2,12 @@
 {
     public enum OrderStatus
     {
-        New,
-        WaitForPayment,
-        PaymentSuccess,
-        PaymentFailure
+        NEW,
+        WAITING,
+        SENT,
+        PENDING,
+        SUCCESS,
+        FAILED,
+        INVALIDRESPONSE
     }
 }
