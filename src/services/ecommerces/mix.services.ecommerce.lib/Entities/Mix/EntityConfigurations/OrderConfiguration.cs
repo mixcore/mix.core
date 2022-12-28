@@ -18,7 +18,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             builder.ToTable(EcommerceConstants.DataTableNameOrder);
             base.Configure(builder);
             builder.Property(e => e.Title).IsRequired(false);
-            builder.Property(e => e.Title).IsRequired(false);
+            builder.Property(e => e.Email).IsRequired(false);
             builder.Property(e => e.Currency).IsRequired(false);
             builder.Property(e => e.Total).IsRequired(false);
 
@@ -27,12 +27,18 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
                 .HasConversion(new EnumToStringConverter<PaymentGateway>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
+            builder.Property(e => e.PaymentStatus)
+                .IsRequired(false)
+                .HasConversion(new EnumToStringConverter<PaymentStatus>())
+                .HasColumnType($"{Config.String}{Config.SmallLength}")
+                .HasCharSet(Config.CharSet);
 
             builder.Property(e => e.OrderStatus)
                 .IsRequired()
                 .HasConversion(new EnumToStringConverter<OrderStatus>())
                 .HasColumnType($"{Config.String}{Config.SmallLength}")
                 .HasCharSet(Config.CharSet);
+            
         }
     }
 }

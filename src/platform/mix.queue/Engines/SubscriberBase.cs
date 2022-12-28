@@ -6,6 +6,7 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Queue.Models.QueueSetting;
+using Mix.Service.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -119,13 +120,13 @@ namespace Mix.Queue.Engines
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MixService.LogException(ex);
                 return Task.CompletedTask;
             }
-            finally
-            {
-                _serviceScope?.Dispose();
-            }
+            //finally
+            //{
+            //    _serviceScope?.Dispose();
+            //}
         }
 
         public abstract Task Handler(MessageQueueModel model);
