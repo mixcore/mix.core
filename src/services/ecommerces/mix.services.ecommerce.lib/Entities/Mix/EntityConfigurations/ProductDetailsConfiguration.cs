@@ -20,6 +20,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             base.Configure(builder);
 
             builder.Property(e => e.DesignBy).IsRequired(false);
+            builder.Property(e => e.Thumbnail).IsRequired(false);
             builder.Property(e => e.Information).IsRequired(false);
             builder.Property(e => e.InformationImage).IsRequired(false);
             builder.Property(e => e.Size).IsRequired(false);

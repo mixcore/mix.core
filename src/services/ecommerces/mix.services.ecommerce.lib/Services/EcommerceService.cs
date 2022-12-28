@@ -20,7 +20,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
-        private readonly MixEdmService _edmService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         public EcommerceService(
@@ -28,14 +27,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            MixEdmService edmService) : base(httpContextAccessor)
+            UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
             _serviceProvider = serviceProvider;
             _cmsUOW = cmsUOW;
-            _edmService = edmService;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -60,7 +57,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     UserId = user.Id,
                     Title = $"{user.UserName}'s Cart",
                     OrderStatus = OrderStatus.NEW,
-                    MixTenantId = CurrentTenant.Id
+                    MixTenantId = CurrentTenant.Id,
+                    CreatedBy = user.UserName
                 };
                 await cart.SaveAsync(cancellationToken);
             }
@@ -150,8 +148,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/payment-response?gateway={gateway}";
             var url = await paymentService.GetPaymentUrl(cart, returnUrl, cancellationToken);
-            await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(cart), user.Email);
-            
             return url;
         }
 

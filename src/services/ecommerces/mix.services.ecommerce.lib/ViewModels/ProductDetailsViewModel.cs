@@ -13,6 +13,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public int MixTenantId { get; set; }
         public MixDatabaseParentType ParentType { get; set; }
         public int ParentId { get; set; }
+        public string? Thumbnail { get; set; }
         public double? Price { get; set; }
         public string? DesignBy { get; set; }
         public string? Information { get; set; }

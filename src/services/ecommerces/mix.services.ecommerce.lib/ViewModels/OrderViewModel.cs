@@ -18,6 +18,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public double? Total { get; set; }
         public Guid UserId { get; set; }
         public OrderStatus OrderStatus { get; set; }
+        public PaymentStatus PaymentStatus{ get; set; }
+        public string Email { get; set; }
         public int MixTenantId { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new();

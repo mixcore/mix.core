@@ -48,8 +48,7 @@
         #region Helper
         public string Property(string name)
         {
-            var prop = Data.Property(name)?.Value;
-            return prop?.Value<string>("value");
+            return Data.Property(name)?.Value.ToString();
         }
         #endregion
     }
