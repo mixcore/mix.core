@@ -55,6 +55,10 @@ namespace Mix.RepoDb.Subscribers
             {
                 await SendMessage(model.Action, false, ex);
             }
+            finally
+            {
+                ServiceScope?.Dispose();
+            }
         }
 
         private async Task BackupDatabase(MessageQueueModel model)
