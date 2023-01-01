@@ -33,31 +33,30 @@ namespace Mix.RepoDb.Subscribers
         {
             try
             {
-                _mixDbService = GetScopedService<MixDbService>();
-                var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();
-                switch (model.Action)
+                using (ServiceScope = _servicesProvider.CreateScope())
                 {
-                    case MixRepoDbQueueAction.Backup:
-                        await BackupDatabase(model);
-                        break;
-                    case MixRepoDbQueueAction.Restore:
-                        await RestoreDatabase(model);
-                        break;
-                    case MixRepoDbQueueAction.Migrate:
-                        await MigrateDatabase(model);
-                        break;
-                    default:
-                        break;
+                    _mixDbService = GetScopedService<MixDbService>();
+                    var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();
+                    switch (model.Action)
+                    {
+                        case MixRepoDbQueueAction.Backup:
+                            await BackupDatabase(model);
+                            break;
+                        case MixRepoDbQueueAction.Restore:
+                            await RestoreDatabase(model);
+                            break;
+                        case MixRepoDbQueueAction.Migrate:
+                            await MigrateDatabase(model);
+                            break;
+                        default:
+                            break;
+                    }
+                    await cmsUow.CompleteAsync();
                 }
-                await cmsUow.CompleteAsync();
             }
             catch (Exception ex)
             {
                 await SendMessage(model.Action, false, ex);
-            }
-            finally
-            {
-                ServiceScope?.Dispose();
             }
         }
 

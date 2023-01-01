@@ -22,7 +22,7 @@ namespace Mix.Queue.Engines
 
         protected readonly IServiceProvider _servicesProvider;
         private IServiceScope _serviceScope;
-        protected IServiceScope ServiceScope { get => GetServiceScope(); set { _serviceScope = value; } }
+        protected IServiceScope ServiceScope { get; set ; }
         protected SubscriberBase(
             string topicId,
             string moduleName,
@@ -93,14 +93,14 @@ namespace Mix.Queue.Engines
             return default;
         }
 
-        protected IServiceScope GetServiceScope()
-        {
-            if (_serviceScope == null)
-            {
-                _serviceScope = _servicesProvider.CreateScope();
-            }
-            return _serviceScope;
-        }
+        //protected IServiceScope GetServiceScope()
+        //{
+        //    if (_serviceScope == null)
+        //    {
+        //        _serviceScope = _servicesProvider.CreateScope();
+        //    }
+        //    return _serviceScope;
+        //}
 
         protected T GetScopedService<T>()
         {
@@ -109,24 +109,25 @@ namespace Mix.Queue.Engines
 
         public Task MessageHandler(MessageQueueModel data)
         {
-            try
-            {
-                if (_topicId != data.TopicId)
+            
+                try
                 {
+                    if (_topicId != data.TopicId)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    return Handler(data);
+                }
+                catch (Exception ex)
+                {
+                    MixService.LogException(ex);
                     return Task.CompletedTask;
                 }
-
-                return Handler(data);
-            }
-            catch (Exception ex)
-            {
-                MixService.LogException(ex);
-                return Task.CompletedTask;
-            }
-            //finally
-            //{
-            //    _serviceScope?.Dispose();
-            //}
+                //finally
+                //{
+                //    _serviceScope?.Dispose();
+                //}
         }
 
         public abstract Task Handler(MessageQueueModel model);
