@@ -34,15 +34,17 @@ namespace Mix.Storage.Lib.Engines.Base
         public async Task CreateMedia(string fullname, int tenantId, string? createdBy, CancellationToken cancellationToken = default)
         {
             string filePath = fullname.Substring(0, fullname.LastIndexOf('/'));
+            string fileFolder = filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty);
             string fileName = fullname.Substring(fullname.LastIndexOf('/') + 1);
             var media = new MixMediaViewModel(CmsUow)
             {
                 Id = Guid.NewGuid(),
                 DisplayName = fileName,
                 Status = MixContentStatus.Published,
-                FileFolder = filePath.Replace(CurrentTenant.Configurations.Domain, string.Empty),
+                FileFolder = fileFolder,
                 FileName = fileName.Substring(0, fileName.LastIndexOf('.')),
                 Extension = fileName.Substring(fileName.LastIndexOf('.')),
+                TargetUrl = fullname,
                 CreatedBy = createdBy,
                 MixTenantId = tenantId,
                 CreatedDateTime = DateTime.UtcNow
