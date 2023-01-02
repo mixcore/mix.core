@@ -269,8 +269,7 @@ namespace Mix.RepoDb.Repositories
             }
             catch (Exception ex)
             {
-                MixService.LogException(ex);
-                return default;
+                throw new MixException(MixErrorStatus.Badrequest, ex.Message);
             }
         }
 

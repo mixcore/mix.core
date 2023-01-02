@@ -80,15 +80,15 @@ namespace mix.services.ecommerce.Controllers
         }
 
         [MixAuthorize]
-        [HttpGet]
-        [Route("checkout")]
-        public async Task<ActionResult<string>> Checkout([FromQuery] PaymentGateway? gateway, CancellationToken cancellationToken = default)
+        [HttpPost]
+        [Route("checkout/{gateway}")]
+        public async Task<ActionResult<string>> Checkout(PaymentGateway? gateway, [FromBody] OrderViewModel cart , CancellationToken cancellationToken = default)
         {
-            if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
+            if (gateway == null)
             {
                 return BadRequest();
             }
-            var url = await _ecommerceService.Checkout(User, gateway.Value, cancellationToken);
+            var url = await _ecommerceService.Checkout(User, gateway.Value, cart, cancellationToken);
             return !string.IsNullOrEmpty(url) ? Ok(url) : BadRequest();
         }
 
