@@ -214,7 +214,8 @@ namespace Mix.RepoDb.Services
         {
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
-            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable}";
+            string unique = col.ColumnConfigurations.IsUnique ? "Unique" : "";
+            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable} {unique}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)

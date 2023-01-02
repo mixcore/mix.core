@@ -16,6 +16,10 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             builder.ToTable(EcommerceConstants.DataTableNameOrderItem);
             base.Configure(builder);
             builder.Property(e => e.Currency).IsRequired(false);
+            builder.Property(e => e.Title).IsRequired(false);
+            builder.Property(e => e.Description).IsRequired(false);
+            builder.Property(e => e.Image).IsRequired(false);
+            builder.Property(e => e.ReferenceUrl).IsRequired(false);
         }
     }
 }

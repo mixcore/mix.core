@@ -9,6 +9,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
     public class OrderItemViewModel : ViewModelBase<EcommerceDbContext, OrderItem, int, OrderItemViewModel>
     {
         #region Properties
+        public string Sku { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }
@@ -20,6 +21,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public double Total { get; set; }
         public int OrderId { get; set; }
         public int MixTenantId { get; set; }
+
+        public bool IsActive { get; set; }
 
         #endregion
 
@@ -57,7 +60,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public void Calculate()
         {
-            Price = Context.ProductDetails.SingleOrDefault(m => m.ParentId == PostId)?.Price ?? 0;
+            Price = Context.ProductVariant.SingleOrDefault(m => m.Sku == Sku)?.Price ?? 0;
             Total = Price * Quantity;
         }
         #endregion

@@ -3,5 +3,6 @@
     public class MixEcommerceConstants
     {
         public const string DatabaseNameProductDetails = "ProductDetails";
+        public const string DatabaseNameProductVariant = "ProductVariant";
     }
 }

@@ -21,7 +21,7 @@ namespace Mix.Lib.ViewModels
         #endregion
 
         #region Properties
-        public new string MixDatabaseName { get; set; } = MixDatabaseNames.POST_COLUMN;
+        public new string MixDatabaseName { get; set; }
         public string ClassName { get; set; }
         public string DetailUrl { get; set; }
 

@@ -9,6 +9,7 @@ namespace Mix.Shared.Models
         {
         }
 
+        public bool IsUnique { get; set; }
         public bool IsRequire { get; set; }
         public bool IsEncrypt { get; set; }
         public bool IsSelect { get; set; }

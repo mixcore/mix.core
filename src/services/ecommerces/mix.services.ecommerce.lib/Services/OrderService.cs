@@ -52,7 +52,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     request, 
                     CurrentTenant.Id);
 
-            searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => m.UserId == user.Id);
+            searchRequest.Predicate = searchRequest.Predicate.AndAlso(m => m.UserId == user.Id && m.OrderStatus != OrderStatus.NEW);
             return await OrderViewModel.GetRepository(_uow)
                             .GetPagingAsync(
                                 searchRequest.Predicate,

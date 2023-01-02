@@ -19,14 +19,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
             builder.ToTable(MixEcommerceConstants.DatabaseNameProductDetails);
             base.Configure(builder);
 
-            builder.Property(e => e.DesignBy).IsRequired(false);
             builder.Property(e => e.Thumbnail).IsRequired(false);
-            builder.Property(e => e.Information).IsRequired(false);
-            builder.Property(e => e.InformationImage).IsRequired(false);
-            builder.Property(e => e.Size).IsRequired(false);
-            builder.Property(e => e.SizeImage).IsRequired(false);
-            builder.Property(e => e.Document).IsRequired(false);
-            builder.Property(e => e.MaintenanceDocument).IsRequired(false);
 
             builder.Property(e => e.ParentType)
             .IsRequired()
