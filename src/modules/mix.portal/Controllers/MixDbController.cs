@@ -96,7 +96,7 @@ namespace Mix.Portal.Controllers
                             _repository.InitTableName(item.DestinateDatabaseName);
                             List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
                             var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(item.DisplayName, JArray.FromObject(nestedData)));
+                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
                         }
                     }
                     else

@@ -70,15 +70,6 @@ namespace Mix.Services.Databases.Controllers
 
         #region Overrides
 
-        protected override SearchQueryModel<MixPermission, int> BuildSearchRequest(SearchRequestDto req)
-        {
-            var searchRequest = base.BuildSearchRequest(req);
-            searchRequest.Predicate = searchRequest.Predicate
-                .AndAlsoIf(!string.IsNullOrEmpty(req.Keyword),
-                m => m.Metadata != null && EF.Functions.Like(m.Metadata.Description, $"%{req.Keyword}%"));
-            return searchRequest;
-        }
-
         #endregion
     }
 }

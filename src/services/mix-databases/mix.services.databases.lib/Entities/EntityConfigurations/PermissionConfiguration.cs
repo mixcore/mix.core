@@ -19,7 +19,6 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
             {
                 base.Configure(builder);
                 builder.ToTable(MixDatabaseNames.SYSTEM_PERMISSION);
-                builder.ConfigueJsonColumn(p => p.Metadata, _databaseService);
             }
             catch (Exception ex)
             {

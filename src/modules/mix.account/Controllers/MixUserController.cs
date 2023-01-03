@@ -23,6 +23,10 @@ using Mix.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Communicator.Models;
+using Mix.Services.Databases.Lib.ViewModels;
+using Mix.Services.Databases.Lib.Entities;
+using Microsoft.Extensions.Azure;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Account.Controllers
 {
@@ -39,6 +43,7 @@ namespace Mix.Account.Controllers
         protected readonly MixIdentityService _mixIdentityService;
         private readonly MixRepoDbRepository _repoDbRepository;
         protected UnitOfWorkInfo _accUOW;
+        protected UnitOfWorkInfo<MixServiceDatabaseDbContext> _dbUOW;
         protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
@@ -55,12 +60,13 @@ namespace Mix.Account.Controllers
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
             EmailService emailService,
-            IHttpContextAccessor httpContextAccessor, 
-            IConfiguration configuration, 
-            MixService mixService, 
-            TranslatorService translator, 
-            MixIdentityService mixIdentityService, 
-            IQueueService<MessageQueueModel> queueService) 
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
+            MixService mixService,
+            TranslatorService translator,
+            MixIdentityService mixIdentityService,
+            IQueueService<MessageQueueModel> queueService,
+            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUOW)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _userManager = userManager;
@@ -79,6 +85,7 @@ namespace Mix.Account.Controllers
 
             _repoDbRepository = repoDbRepository;
             _emailService = emailService;
+            _dbUOW = dbUOW;
         }
 
         #region Overrides
@@ -163,7 +170,11 @@ namespace Mix.Account.Controllers
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
-            return Ok(loginResult);
+            var roles = await _userManager.GetRolesAsync(loginResult.Item1);
+            var result = loginResult.Item2;
+            var portalMenus = await MixPortalMenuViewModel.GetRepository(_dbUOW).GetAllAsync(m => roles.Contains(m.Role));
+            result.Add(new JProperty("portalMenus", ReflectionHelper.ParseArray(portalMenus)));
+            return Ok(result);
         }
 
         [Route("external-login")]
@@ -177,7 +188,7 @@ namespace Mix.Account.Controllers
             var loginResult = await _idService.ExternalLogin(model);
             return Ok(loginResult);
         }
-        
+
         [Route("login-unsecure")]
         [HttpPost]
         [AllowAnonymous]
@@ -279,7 +290,7 @@ namespace Mix.Account.Controllers
         [HttpPost]
         [MixAuthorize(roles: MixRoles.Owner)]
         [Route("user-in-role")]
-        public async Task<ActionResult> Details(UserRoleModel model)
+        public async Task<ActionResult> Details([FromBody] UserRoleModel model)
         {
             var role = await _roleManager.FindByIdAsync(model.RoleId);
             List<string> errors = new List<string>();
