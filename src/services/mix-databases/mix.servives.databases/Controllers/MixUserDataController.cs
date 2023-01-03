@@ -58,7 +58,7 @@ namespace Mix.Services.Databases.Controllers
 
         [MixAuthorize]
         [HttpPost("add-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress(CreateUserAddressDto dto, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress([FromBody] CreateUserAddressDto dto, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
             var result = await _userDataService.CreateUserAddress(dto, user, cancellationToken);
