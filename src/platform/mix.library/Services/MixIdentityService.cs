@@ -104,7 +104,7 @@ namespace Mix.Lib.Services
             return null;
         }
 
-        public virtual async Task<JObject> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default)
+        public virtual async Task<Tuple<MixUser, JObject>> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default)
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
@@ -136,7 +136,7 @@ namespace Mix.Lib.Services
 
             if (result.Succeeded)
             {
-                return await GetAuthData(user, model.RememberMe, CurrentTenant.Id, cancellationToken);
+                return Tuple.Create(user, await GetAuthData(user, model.RememberMe, CurrentTenant.Id, cancellationToken));
             }
             else
             {

@@ -8,7 +8,6 @@ namespace Mix.Services.Databases.Lib.Entities
         public string Type { get; set; }
         public string Icon { get; set; }
         public int MixTenantId { get; set; }
-        public Metadata Metadata { get; set; }
     }
 
     public sealed class Metadata
