@@ -60,7 +60,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public void Calculate()
         {
-            Price = Context.ProductVariant.SingleOrDefault(m => m.Sku == Sku)?.Price ?? 0;
+            Price = IsActive ? Context.ProductVariant.SingleOrDefault(m => m.Sku == Sku)?.Price ?? 0 : 0;
             Total = Price * Quantity;
         }
         #endregion
