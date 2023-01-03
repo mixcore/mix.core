@@ -71,6 +71,15 @@ namespace mix.services.ecommerce.Controllers
         }
 
         [MixAuthorize]
+        [HttpPost]
+        [Route("selected-cart-item")]
+        public async Task<ActionResult<OrderViewModel>> SelectedCartItem(CartItemDto item, CancellationToken cancellationToken = default)
+        {
+            var cart = await _ecommerceService.UpdateSelectedCartItem(User, item, cancellationToken);
+            return Ok(cart);
+        }
+
+        [MixAuthorize]
         [HttpDelete]
         [Route("remove-from-cart/{itemId}")]
         public async Task<ActionResult> RemoveFromCart(int itemId, CancellationToken cancellationToken = default)
