@@ -103,6 +103,31 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
+        public async Task<OrderItemViewModel> UpdateSelectedCartItem(
+            ClaimsPrincipal principal,
+            CartItemDto item,
+            CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.GetUserAsync(principal);
+            var cart = await GetShoppingOrder(user.Id, cancellationToken);
+            if (cart == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Cart");
+            }
+
+            var currentItem = cart.OrderItems.FirstOrDefault(m => m.Sku == item.Sku);
+            if (currentItem == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Cart Item");
+            }
+
+            currentItem.IsActive = item.IsActive;
+            currentItem.Calculate();
+
+            await cart.SaveAsync(cancellationToken);
+            return cart;
+        }
+
         public async Task<OrderViewModel> RemoveFromCart(
             ClaimsPrincipal principal,
             int itemId,
