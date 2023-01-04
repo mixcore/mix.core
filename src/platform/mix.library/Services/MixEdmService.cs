@@ -36,8 +36,7 @@ namespace Mix.Lib.Services
             var template = await GetEdmTemplate(templateName);
             if (template == null)
             {
-                MixService.LogError("Edm Template nout found:", templateName);
-                return;
+                throw new MixException(MixErrorStatus.Badrequest, $"Edm {templateName} not found");
             }
 
             foreach (var prop in data.Properties().ToList())

@@ -347,6 +347,7 @@ namespace Mix.Lib.Services
                 var token = new AccessTokenViewModel()
                 {
                     Info = info,
+                    EmailConfirmed = user.EmailConfirmed,
                     IsActive = user.IsActived,
                     AccessToken = await GenerateTokenAsync(
                         user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),

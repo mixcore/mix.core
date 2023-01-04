@@ -48,6 +48,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
         public async Task<OrderViewModel> GetOrCreateShoppingOrder(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(principal);
+            if (user == null)
+            {
+                throw new MixException(MixErrorStatus.UnAuthorized);
+            }
             var cart = await GetShoppingOrder(user.Id, cancellationToken);
 
             if (cart == null)
@@ -167,7 +171,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"user's cart cannot be null");
             }
-            
+
             if (myCart.Id != checkoutCart.Id)
             {
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid Cart");

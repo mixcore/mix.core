@@ -43,7 +43,11 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddIdentity<MixUser, MixRole>(options =>
             {
                 options.Password = pOpt;
-                options.User = new UserOptions() { RequireUniqueEmail = false };
+                options.User = new UserOptions()
+                {
+                    RequireUniqueEmail = authConfigurations.RequireUniqueEmail
+                };
+                options.SignIn.RequireConfirmedEmail = authConfigurations.RequireConfirmedEmail;
             })
             .AddUserStore<TenantUserStore>()
             .AddRoleStore<TenantRoleStore>()
@@ -51,8 +55,8 @@ namespace Microsoft.Extensions.DependencyInjection
             .AddRoleManager<TenantRoleManager>()
             .AddEntityFrameworkStores<TDbContext>()
             .AddDefaultTokenProviders();
+            
             services.AddAuthorization();
-
             services.AddAuthentication(
                     opts =>
                     {

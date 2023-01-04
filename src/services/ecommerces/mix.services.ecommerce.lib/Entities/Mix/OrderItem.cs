@@ -12,6 +12,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public string? Currency { get; set; }
         public int PostId { get; set; }
         public double? Price { get; set; }
+        public bool? IsActive { get; set; }
         public double? Percent { get; set; }
         public int Quantity { get; set; }
         public double Total { get; set; }

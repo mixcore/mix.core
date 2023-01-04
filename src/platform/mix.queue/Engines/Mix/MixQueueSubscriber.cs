@@ -50,13 +50,12 @@ namespace Mix.Queue.Engines.MixQueue
                 {
                     _topic = _queue.GetTopic(_topic.Id);
                     var inQueueItems = _topic.ConsumeQueue(_subscriptionId, 10);
-
-                    if (inQueueItems.Any())
+                    Processing = true;
+                    foreach (var msg in inQueueItems)
                     {
-                        Processing = true;
-                        await _messageHandler.Invoke(inQueueItems[0]);
-                        Processing = false;
+                        await _messageHandler.Invoke(msg);
                     }
+                    Processing = false;
                     await Task.Delay(1000, cancellationToken);
                 }
             }, cancellationToken);
