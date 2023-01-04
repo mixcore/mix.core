@@ -17,6 +17,7 @@
         public DateTime Expires { get; set; }
 
         public bool IsActive { get; set; }
+        public bool EmailConfirmed { get; set; }
         public string DeviceId { get; set; }
 
         public MixUserViewModel Info { get; set; }

@@ -27,6 +27,10 @@ using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Services.Databases.Lib.Entities;
 using Microsoft.Extensions.Azure;
 using Newtonsoft.Json.Linq;
+using FirebaseAdmin.Messaging;
+using Mix.Shared.Models.Configurations;
+using Google.Rpc;
+using System.Web;
 
 namespace Mix.Account.Controllers
 {
@@ -39,6 +43,7 @@ namespace Mix.Account.Controllers
         private readonly ILogger<MixUserController> _logger;
         private readonly MixIdentityService _idService;
         private readonly EmailService _emailService;
+        private readonly MixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         protected readonly MixIdentityService _mixIdentityService;
         private readonly MixRepoDbRepository _repoDbRepository;
@@ -48,6 +53,7 @@ namespace Mix.Account.Controllers
         private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
         private readonly EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> _refreshTokenRepo;
+        private readonly AuthConfigService _authConfigService;
 
         public MixUserController(
              TenantUserManager userManager,
@@ -66,7 +72,9 @@ namespace Mix.Account.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUOW)
+            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUOW,
+            AuthConfigService authConfigService,
+            MixEdmService edmService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _userManager = userManager;
@@ -86,6 +94,8 @@ namespace Mix.Account.Controllers
             _repoDbRepository = repoDbRepository;
             _emailService = emailService;
             _dbUOW = dbUOW;
+            _authConfigService = authConfigService;
+            _edmService = edmService;
         }
 
         #region Overrides
@@ -128,12 +138,51 @@ namespace Mix.Account.Controllers
             var result = _idService.GetAuthData(user, true, CurrentTenant.Id);
             if (result != null)
             {
+                if (_authConfigService.AppSettings.RequireConfirmedEmail)
+                {
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var confirmationLink = $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
+
+                    var data = new JObject(new JProperty("Url", confirmationLink));
+                    await _edmService.SendMailWithEdmTemplate("Email Confirmation", "ActiveEmail", data, user.Email);
+                }
                 return Ok(result);
             }
             else
             {
                 return BadRequest();
             }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resend-confirm-email/{id}")]
+        public async Task<ActionResult> ResendConfirmEmail(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id).ConfigureAwait(false);
+            if (user != null && !user.EmailConfirmed)
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = $"{_authConfigService.AppSettings.ConfirmedEmailUrl}?token={HttpUtility.UrlEncode(token)}&email={user.Email}";
+                var data = new JObject(new JProperty("Url", confirmationLink));
+                await _edmService.SendMailWithEdmTemplate("Email Confirmation", "ActiveEmail", data, user.Email);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return View("Error");
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            string redirectUrl = result.Succeeded ? _authConfigService.AppSettings.ConfirmedEmailUrlSuccess
+                : $"{_authConfigService.AppSettings.ConfirmedEmailUrlFail}?error={result.Errors.First().Description}";
+            return Redirect(redirectUrl);
         }
 
         [Route("Logout")]

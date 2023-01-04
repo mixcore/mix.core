@@ -15,6 +15,12 @@
         public string Issuer { get; set; }
         public string Issuers { get; set; }
         public string Audiences { get; set; }
+        public bool RequireUniqueEmail { get; set; }
+        public bool RequireConfirmedEmail { get; set; }
+        public string ConfirmedEmailUrl { get; set; }
+        public string ConfirmedEmailUrlSuccess { get; set; }
+        public string ConfirmedEmailUrlFail { get; set; }
+        public int TokenLifespan { get; set; } = 3;
         public ExternalLogin Facebook { get; set; } = new ExternalLogin();
         public ExternalLogin Google { get; set; } = new ExternalLogin();
         public ExternalLogin Microsoft { get; set; } = new ExternalLogin();
