@@ -17,7 +17,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         public string? Gender { get; set; }
         public int MixTenantId { get; set; }
 
-        public List<MixContactAddressViewModel>? Addresses { get; set; }
+        public List<MixContactAddressViewModel>? Addresses { get; set; } = new();
         #endregion
         #region Contructors
         public MixUserDataViewModel()
@@ -56,7 +56,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
 
         private async Task SaveAddresses(MixUserData parentEntity, CancellationToken cancellationToken)
         {
-            if (Addresses!= null)
+            if (Addresses != null)
             {
                 foreach (var item in Addresses)
                 {

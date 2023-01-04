@@ -92,6 +92,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 var orderItem = new OrderItemViewModel(_uow)
                 {
                     OrderId = cart.Id,
+                    IsActive = true,
                     MixTenantId = CurrentTenant.Id,
                     Price = product.Price.Value
                 };
@@ -103,7 +104,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
-        public async Task<OrderItemViewModel> UpdateSelectedCartItem(
+        public async Task<OrderViewModel> UpdateSelectedCartItem(
             ClaimsPrincipal principal,
             CartItemDto item,
             CancellationToken cancellationToken = default)

@@ -40,7 +40,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            SubMenus = await Repository.GetAllAsync(m=>m.PortalMenuId == Id, cancellationToken);
+            SubMenus = await GetRepository(UowInfo).GetAllAsync(m=>m.PortalMenuId == Id, cancellationToken);
         }
 
         #endregion
