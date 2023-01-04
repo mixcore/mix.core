@@ -49,7 +49,8 @@ namespace Mix.Services.Databases.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _userManager.GetUserName(HttpContextAccessor.HttpContext!.User),
                 ParentId = userId,
-                ParentType = MixDatabaseParentType.User
+                ParentType = MixDatabaseParentType.User,
+                Addresses = new()
             };
             await data.SaveAsync(cancellationToken);
             return data;

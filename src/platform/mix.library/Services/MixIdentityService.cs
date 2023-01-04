@@ -116,6 +116,8 @@ namespace Mix.Lib.Services
             if (!string.IsNullOrEmpty(model.UserName))
             {
                 user = await UserManager.FindByNameAsync(model.UserName);
+                user ??= await UserManager.FindByEmailAsync(model.UserName);
+                user ??= await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
             }
             if (!string.IsNullOrEmpty(model.PhoneNumber))
             {
@@ -345,6 +347,7 @@ namespace Mix.Lib.Services
                 var token = new AccessTokenViewModel()
                 {
                     Info = info,
+                    IsActive = user.IsActived,
                     AccessToken = await GenerateTokenAsync(
                         user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
