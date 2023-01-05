@@ -22,7 +22,7 @@ namespace Mix.Lib.Interfaces
         Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default);
         string GetClaim(ClaimsPrincipal User, string claimType);
         Task<JObject> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default);
-        Task<Tuple<MixUser, JObject>> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default);
+        Task<JObject> LoginAsync(LoginViewModel model, CancellationToken cancellationToken = default);
         Task<MixUser> RegisterAsync(RegisterViewModel model, int tenantId, UnitOfWorkInfo _cmsUOW, CancellationToken cancellationToken = default);
         Task<JObject> RenewTokenAsync(RenewTokenDto refreshTokenDto, CancellationToken cancellationToken = default);
         Task<ParsedExternalAccessToken> VerifyExternalAccessTokenAsync(MixExternalLoginProviders provider, string accessToken, MixAuthenticationConfigurations appConfigs);

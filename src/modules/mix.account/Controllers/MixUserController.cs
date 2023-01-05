@@ -219,11 +219,14 @@ namespace Mix.Account.Controllers
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
-            var roles = await _userManager.GetRolesAsync(loginResult.Item1);
-            var result = loginResult.Item2;
-            var portalMenus = await MixPortalMenuViewModel.GetRepository(_dbUOW).GetAllAsync(m => roles.Contains(m.Role));
-            result.Add(new JProperty("portalMenus", ReflectionHelper.ParseArray(portalMenus)));
-            return Ok(result);
+            if (loginResult != null && !GlobalConfigService.Instance.IsInit)
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                var roles = await _userManager.GetRolesAsync(user);
+                var portalMenus = await MixPortalMenuViewModel.GetRepository(_dbUOW).GetAllAsync(m => roles.Contains(m.Role));
+                loginResult.Add(new JProperty("portalMenus", ReflectionHelper.ParseArray(portalMenus)));
+            }
+            return Ok(loginResult);
         }
 
         [Route("external-login")]
