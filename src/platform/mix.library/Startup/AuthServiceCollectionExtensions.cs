@@ -47,7 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     RequireUniqueEmail = authConfigurations.RequireUniqueEmail
                 };
-                options.SignIn.RequireConfirmedEmail = authConfigurations.RequireConfirmedEmail;
+                //options.SignIn.RequireConfirmedEmail = authConfigurations.RequireConfirmedEmail;
             })
             .AddUserStore<TenantUserStore>()
             .AddRoleStore<TenantRoleStore>()
