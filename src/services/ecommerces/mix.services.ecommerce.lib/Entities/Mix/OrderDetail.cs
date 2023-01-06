@@ -14,6 +14,9 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public OrderStatus OrderStatus { get; set; }
         public PaymentStatus? PaymentStatus { get; set; }
         public string Email { get; set; }
+        public string? ShippingAddress { get; set; }
+        public string? PaymentRequest { get; set; }
+        public string? PaymentResponse { get; set; }
         public int MixTenantId { get; set; }
     }
 }

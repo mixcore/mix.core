@@ -16,7 +16,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public double? Percent { get; set; }
         public int Quantity { get; set; }
         public double Total { get; set; }
-        public int OrderId { get; set; }
+        public int OrderDetailId { get; set; }
         public int MixTenantId { get; set; }
     }
 }

@@ -8,7 +8,8 @@ namespace Mix.Services.Ecommerce.Lib.Interfaces
     public interface IPaymentService
     {
         string CreateSHA256Signature(Dictionary<string, string> parameters);
-        Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl, CancellationToken cancellationToken);
+        JObject GetPaymentRequest(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken);
+        Task<string?> GetPaymentUrl(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken);
         Task<OrderStatus> ProcessPaymentResponse(JObject response, CancellationToken cancellationToken);
         Task<PaymentQueryResponse> Query(PaymentQueryRequest request, CancellationToken cancellationToken);
     }

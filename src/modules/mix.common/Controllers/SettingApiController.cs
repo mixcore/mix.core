@@ -136,6 +136,7 @@ namespace Mix.Common.Controllers
                 MixAppConfigEnums.Ocelot => MixAppConfigFilePaths.Ocelot,
                 MixAppConfigEnums.Queue => MixAppConfigFilePaths.Queue,
                 MixAppConfigEnums.Storage => MixAppConfigFilePaths.Storage,
+                MixAppConfigEnums.Payments => MixAppConfigFilePaths.Payments,
                 _ => string.Empty
             };
         }

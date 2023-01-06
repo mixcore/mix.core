@@ -165,12 +165,12 @@ namespace Mix.Portal.Controllers
             {
                 obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
             }
-            
+
             if (!obj.ContainsKey(statusFieldName))
             {
                 obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
             }
-            
+
             if (!obj.ContainsKey(isDeletedFieldName))
             {
                 obj.Add(new JProperty(isDeletedFieldName, false));
@@ -233,6 +233,10 @@ namespace Mix.Portal.Controllers
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
                     queries.Add(new(parentIdFieldName, request.ParentId));
+                }
+                else if (!string.IsNullOrEmpty(request.ParentName))
+                {
+                    queries.Add(new($"{request.ParentName}Id", request.ParentId));
                 }
                 else
                 {

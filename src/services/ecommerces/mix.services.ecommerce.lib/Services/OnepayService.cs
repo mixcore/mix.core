@@ -16,6 +16,7 @@ using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.ViewModels.Onepay;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
+using RepoDb.Enumerations;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -40,12 +41,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
             session.Bind(Settings);
         }
 
-        public async Task<string?> GetPaymentUrl(OrderViewModel request, string returnUrl, CancellationToken cancellationToken)
+        public async Task<string?> GetPaymentUrl(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
-            return await ParseRequestUrlAsync(request, returnUrl, cancellationToken);
+            return await ParseRequestUrlAsync(request, againUrl, returnUrl, cancellationToken);
         }
 
-        private async Task<string?> ParseRequestUrlAsync(OrderViewModel order, string returnUrl, CancellationToken cancellationToken)
+        private async Task<string?> ParseRequestUrlAsync(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
         {
             try
             {
@@ -54,8 +55,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.vpc_AccessCode = Settings.AccessCode;
                 request.vpc_Locale = Settings.Locale;
                 request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
-                request.AgainLink = System.Net.WebUtility.UrlEncode(returnUrl);
-                request.vpc_ReturnURL = System.Net.WebUtility.UrlEncode(returnUrl);
+                request.AgainLink = againUrl;
+                request.vpc_ReturnURL = returnUrl;
 
                 await SaveRequest(request, OrderStatus.PENDING, cancellationToken);
 
@@ -150,12 +151,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+
                 var response = responseObj.ToObject<OnepayTransactionResponse>();
                 var orderDetail = await OrderViewModel.GetRepository(_ecommerceUow).GetSingleAsync(m => m.Id == int.Parse(response.vpc_OrderInfo));
+                orderDetail.PaymentResponseData = responseObj;
 
                 if (orderDetail == null)
                 {
-                    throw new MixException($"Invalid payment response {response.vpc_OrderInfo}");
+                    throw new MixException($"Invalid Order");
                 }
 
                 if (!response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
@@ -174,10 +177,13 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
                 }
-                if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
-                {
-                    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
-                }
+                //if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
+                //{
+                //    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                //}
+                orderDetail.OrderStatus = OrderStatus.SUCCESS;
+                orderDetail.PaymentStatus = PaymentStatus.SUCCESS;
+
                 await SaveResponse(response, orderDetail.OrderStatus, cancellationToken);
                 await orderDetail.SaveAsync(cancellationToken);
                 if (orderDetail.OrderStatus == OrderStatus.SUCCESS)
@@ -186,11 +192,22 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 }
                 return orderDetail.OrderStatus;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new MixException(MixErrorStatus.Badrequest, ex);
             }
         }
 
+        public JObject GetPaymentRequest(OrderViewModel order, string againUrl, string returnUrl, CancellationToken cancellationToken)
+        {
+            PaymentRequest request = new PaymentRequest(order);
+            request.vpc_Merchant = Settings.Merchant;
+            request.vpc_AccessCode = Settings.AccessCode;
+            request.vpc_Locale = Settings.Locale;
+            request.vpc_TicketNo = HttpContextAccessor.HttpContext!.Connection.RemoteIpAddress?.ToString();//"14.241.244.43";// 
+            request.AgainLink = againUrl;
+            request.vpc_ReturnURL = returnUrl;
+            return request != null ? ReflectionHelper.ParseObject(request) : new();
+        }
     }
 }

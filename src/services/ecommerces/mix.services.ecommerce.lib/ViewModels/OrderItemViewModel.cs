@@ -19,7 +19,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public double Price { get; set; }
         public int Quantity { get; set; }
         public double Total { get; set; }
-        public int OrderId { get; set; }
+        public int OrderDetailId { get; set; }
         public int MixTenantId { get; set; }
 
         public bool IsActive { get; set; }
@@ -60,8 +60,8 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public void Calculate()
         {
-            Price = IsActive ? Context.ProductVariant.SingleOrDefault(m => m.Sku == Sku)?.Price ?? 0 : 0;
-            Total = Price * Quantity;
+            Price = Context.ProductVariant.SingleOrDefault(m => m.Sku == Sku)?.Price ?? 0;
+            Total = IsActive ? Price * Quantity : 0;
         }
         #endregion
     }
