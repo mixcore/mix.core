@@ -27,15 +27,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private readonly UnitOfWorkInfo<OnepayDbContext> _cmsUow;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         private readonly HttpService _httpService;
-        private readonly MixEdmService _edmService;
         private MixOnepayConfigurations Settings { get; set; } = new MixOnepayConfigurations();
-        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow, UnitOfWorkInfo<EcommerceDbContext> ecommerceUow, MixEdmService edmService)
+        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow, 
+            UnitOfWorkInfo<EcommerceDbContext> ecommerceUow)
             : base(httpContextAccessor)
         {
             _httpService = httpService;
             _cmsUow = cmsUow;
             _ecommerceUow = ecommerceUow;
-            _edmService = edmService;
 
             var session = configuration.GetSection(MixAppSettingsSection.Payments).GetSection("Onepay");
             session.Bind(Settings);
@@ -58,7 +57,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 request.AgainLink = againUrl;
                 request.vpc_ReturnURL = returnUrl;
 
-                await SaveRequest(request, OrderStatus.PENDING, cancellationToken);
+                await SaveRequest(request, OrderStatus.WAITING_FOR_PAYMENT, cancellationToken);
 
                 Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(request);
                 parameters["vpc_SecureHash"] = CreateSHA256Signature(parameters);
@@ -95,7 +94,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
             // remove trailing & from string
             if (sb.Length > 0)
                 sb.Remove(sb.Length - 1, 1);
-            //string tmp = "vpc_AccessCode=6BEB2566&vpc_Amount=2490000&vpc_Command=pay&vpc_Currency=VND&vpc_Locale=vn&vpc_MerchTxnRef=638073070064044677&vpc_Merchant=TESTONEPAY30&vpc_OrderInfo=ebd10af0-2e73-40fc-b975-c05c506d0da6_3&vpc_ReturnURL=https//nesto.tanconstructions.com.au/checkout/Onepay&vpc_TicketNo=172.70.142.147&vpc_Version=2";
             // Create secureHash on string
             string hexHash = "";
             using (HMACSHA256 hasher = new HMACSHA256(convertedHash))
@@ -145,7 +143,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
         }
 
-        public async Task<OrderStatus> ProcessPaymentResponse(JObject responseObj, CancellationToken cancellationToken)
+        public async Task<PaymentStatus> ProcessPaymentResponse(OrderViewModel orderDetail, JObject responseObj, CancellationToken cancellationToken)
         {
             try
             {
@@ -153,13 +151,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
 
                 var response = responseObj.ToObject<OnepayTransactionResponse>();
-                var orderDetail = await OrderViewModel.GetRepository(_ecommerceUow).GetSingleAsync(m => m.Id == int.Parse(response.vpc_OrderInfo));
-                orderDetail.PaymentResponseData = responseObj;
-
-                if (orderDetail == null)
-                {
-                    throw new MixException($"Invalid Order");
-                }
+                var paymentStatus = PaymentStatus.SUCCESS;
 
                 if (!response.vpc_TxnResponseCode.Equals("0") && !string.IsNullOrEmpty(response.vpc_Message))
                 {
@@ -167,30 +159,24 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     {
                         if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
                         {
-                            orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                            paymentStatus = PaymentStatus.INVALIDRESPONSE;
                         }
                     }
-                    orderDetail.OrderStatus = OrderStatus.PENDING;
+                    paymentStatus = PaymentStatus.PENDING;
                 }
 
                 if (string.IsNullOrEmpty(response.vpc_SecureHash))
                 {
-                    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                    paymentStatus = PaymentStatus.INVALIDRESPONSE;
                 }
                 //if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
                 //{
                 //    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
                 //}
-                orderDetail.OrderStatus = OrderStatus.SUCCESS;
-                orderDetail.PaymentStatus = PaymentStatus.SUCCESS;
 
                 await SaveResponse(response, orderDetail.OrderStatus, cancellationToken);
-                await orderDetail.SaveAsync(cancellationToken);
-                if (orderDetail.OrderStatus == OrderStatus.SUCCESS)
-                {
-                    await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(orderDetail), orderDetail.Email);
-                }
-                return orderDetail.OrderStatus;
+                
+                return paymentStatus;
             }
             catch (Exception ex)
             {

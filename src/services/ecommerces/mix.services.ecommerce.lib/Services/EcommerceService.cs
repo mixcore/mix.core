@@ -16,6 +16,7 @@ using Mix.Database.Entities.Cms;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Constant.Constants;
 using Microsoft.Extensions.Configuration;
+using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -26,13 +27,15 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
+        private readonly MixEdmService _edmService;
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW) : base(httpContextAccessor)
+            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            MixEdmService edmService) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
@@ -41,6 +44,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
+            _edmService = edmService;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -214,7 +218,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             checkoutCart.SetUowInfo(_uow);
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
-            checkoutCart.OrderStatus = OrderStatus.WAITING;
+            checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             checkoutCart.Calculate();
         }
@@ -238,7 +242,15 @@ namespace Mix.Services.Ecommerce.Lib.Services
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
-            return await paymentService.ProcessPaymentResponse(paymentResponse, cancellationToken);
+            order.PaymentResponseData = paymentResponse;
+            order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
+            if (order.PaymentStatus == PaymentStatus.SUCCESS)
+            {
+                order.OrderStatus = OrderStatus.PAID;
+                await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(order), order.Email);
+            }
+            await order.SaveAsync(cancellationToken);
+            return order.OrderStatus;
         }
 
     }

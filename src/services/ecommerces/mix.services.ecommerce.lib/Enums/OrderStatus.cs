@@ -3,11 +3,11 @@
     public enum OrderStatus
     {
         NEW,
-        WAITING,
-        SENT,
-        PENDING,
+        WAITING_FOR_PAYMENT,
+        PAID,
+        SHIPPING,
         SUCCESS,
-        FAILED,
-        INVALIDRESPONSE
+        PAYMENT_FAILED,
+        SHIPPING_FAILED
     }
 }
