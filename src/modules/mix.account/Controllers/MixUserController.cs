@@ -222,6 +222,8 @@ namespace Mix.Account.Controllers
             if (loginResult != null && !GlobalConfigService.Instance.IsInit)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
+                user ??= await _userManager.FindByEmailAsync(model.UserName);
+                user ??= await _userManager.FindByPhoneNumberAsync(model.UserName);
                 var roles = await _userManager.GetRolesAsync(user);
                 var portalMenus = await MixPortalMenuViewModel.GetRepository(_dbUOW).GetAllAsync(m => roles.Contains(m.Role));
                 loginResult.Add(new JProperty("portalMenus", ReflectionHelper.ParseArray(portalMenus)));

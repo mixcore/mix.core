@@ -10,7 +10,7 @@ namespace Mix.Services.Ecommerce.Lib.Interfaces
         string CreateSHA256Signature(Dictionary<string, string> parameters);
         JObject GetPaymentRequest(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken);
         Task<string?> GetPaymentUrl(OrderViewModel request, string againUrl, string returnUrl, CancellationToken cancellationToken);
-        Task<OrderStatus> ProcessPaymentResponse(JObject response, CancellationToken cancellationToken);
+        Task<PaymentStatus> ProcessPaymentResponse(OrderViewModel orderDetail, JObject response, CancellationToken cancellationToken);
         Task<PaymentQueryResponse> Query(PaymentQueryRequest request, CancellationToken cancellationToken);
     }
 }

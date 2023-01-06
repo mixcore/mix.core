@@ -113,13 +113,13 @@ namespace Mix.Lib.Services
             {
                 user = await UserManager.FindByEmailAsync(model.Email);
             }
-            if (!string.IsNullOrEmpty(model.UserName))
+            if (user == null && !string.IsNullOrEmpty(model.UserName))
             {
                 user = await UserManager.FindByNameAsync(model.UserName);
                 user ??= await UserManager.FindByEmailAsync(model.UserName);
                 user ??= await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
             }
-            if (!string.IsNullOrEmpty(model.PhoneNumber))
+            if (user == null && !string.IsNullOrEmpty(model.PhoneNumber))
             {
                 user = await UserManager.FindByPhoneNumberAsync(model.PhoneNumber);
             }
@@ -607,12 +607,12 @@ namespace Mix.Lib.Services
         {
             return string.Join(',', User.Claims.Where(c => c.Type == claimType).Select(m => m.Value));
         }
-        
+
         public static IEnumerable<string> GetClaims(ClaimsPrincipal User, string claimType)
         {
             return User.Claims.Where(c => c.Type == claimType).Select(c => c.Value);
         }
-        
+
         public static ClaimsPrincipal GetPrincipalFromExpiredToken(string token, MixAuthenticationConfigurations appConfigs)
         {
             var tokenValidationParameters = GetValidationParameters(appConfigs, false);

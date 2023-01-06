@@ -122,7 +122,7 @@ namespace mix.services.ecommerce.Controllers
             
             var result = await _ecommerceService.ProcessPaymentResponse(orderId, paymentResponse, cancellationToken);
             string url =
-            result == OrderStatus.SUCCESS
+            result == OrderStatus.PAID
                 ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderId}"
                 : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderId}";
             return Redirect(url);
