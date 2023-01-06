@@ -14,6 +14,7 @@
         Queue,
         Storage,
         Smtp,
-        Endpoint
+        Endpoint,
+        Payments
     }
 }

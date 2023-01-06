@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
@@ -12,11 +13,13 @@ using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Payments.Lib.Constants;
 using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
+using System.Web;
 
 namespace mix.services.ecommerce.Controllers
 {
@@ -24,12 +27,14 @@ namespace mix.services.ecommerce.Controllers
     [ApiController]
     public class ApiEcommerceController : MixTenantApiControllerBase
     {
+        private readonly PaymentConfigurationModel _paymentConfiguration = new();
         private readonly EcommerceService _ecommerceService;
         private readonly OrderService _orderService;
         protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         public ApiEcommerceController(
             IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration, MixService mixService,
+            IConfiguration configuration, 
+            MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
@@ -39,6 +44,8 @@ namespace mix.services.ecommerce.Controllers
             _ecommerceService = ecommerceService;
             _cmsUOW = cmsUOW;
             _orderService = orderService;
+            var session = configuration.GetSection(MixAppSettingsSection.Payments);
+            session.Bind(_paymentConfiguration);
         }
 
         #region Routes
@@ -51,7 +58,7 @@ namespace mix.services.ecommerce.Controllers
             var cart = await _ecommerceService.GetOrCreateShoppingOrder(User, cancellationToken);
             return Ok(cart);
         }
-        
+
         [MixAuthorize]
         [HttpGet]
         [Route("my-orders")]
@@ -91,30 +98,34 @@ namespace mix.services.ecommerce.Controllers
         [MixAuthorize]
         [HttpPost]
         [Route("checkout/{gateway}")]
-        public async Task<ActionResult<string>> Checkout(PaymentGateway? gateway, [FromBody] OrderViewModel cart , CancellationToken cancellationToken = default)
+        public async Task<ActionResult<JObject>> Checkout(PaymentGateway? gateway, [FromBody] OrderViewModel cart, CancellationToken cancellationToken = default)
         {
             if (gateway == null)
             {
                 return BadRequest();
             }
             var url = await _ecommerceService.Checkout(User, gateway.Value, cart, cancellationToken);
-            return !string.IsNullOrEmpty(url) ? Ok(url) : BadRequest();
+            return !string.IsNullOrEmpty(url) ? Ok(new JObject(new JProperty("url", url))) : BadRequest();
         }
 
         [HttpGet]
-        [Route("payment-response/{gateway}")]
-        public async Task<ActionResult> PaymentResponse(PaymentGateway? gateway, CancellationToken cancellationToken = default)
+        [Route("payment-response/{orderId}")]
+        public async Task<ActionResult> PaymentResponse(int orderId, CancellationToken cancellationToken = default)
         {
-            if (gateway == null || string.IsNullOrEmpty(Request.QueryString.Value))
+            if (string.IsNullOrEmpty(Request.QueryString.Value))
             {
                 return BadRequest();
 
             }
-            var paymentResponse = JObject.FromObject(QueryHelpers.ParseQuery(Request.QueryString.Value));
-            var result = await _ecommerceService.ProcessPaymentResponse(gateway.Value, paymentResponse, cancellationToken);
-            return result == OrderStatus.SUCCESS 
-                ? Redirect(EcommerceConstants.PaymentSuccessUrl)
-                : Redirect(EcommerceConstants.PaymentFailUrl);
+            var query = HttpUtility.ParseQueryString(Request.QueryString.Value);
+            var paymentResponse = JObject.FromObject(query!.AllKeys.ToDictionary(k => k, k => query[k]));
+            
+            var result = await _ecommerceService.ProcessPaymentResponse(orderId, paymentResponse, cancellationToken);
+            string url =
+            result == OrderStatus.SUCCESS
+                ? $"{_paymentConfiguration.Urls.PaymentSuccessUrl}?id={orderId}"
+                : $"{_paymentConfiguration.Urls.PaymentFailUrl}?id={orderId}";
+            return Redirect(url);
         }
 
         #endregion

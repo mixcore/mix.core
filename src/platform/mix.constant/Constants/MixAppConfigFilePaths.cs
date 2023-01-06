@@ -24,5 +24,6 @@
         public const string Ocelot = "MixContent/Shared/AppConfigs/ocelot";
         public const string Storage = "MixContent/Shared/AppConfigs/storage";
         public const string Queue = "MixContent/Shared/AppConfigs/queue";
+        public const string Payments = "MixContent/Shared/AppConfigs/payments";
     }
 }

@@ -1,8 +1,11 @@
-﻿using Mix.Heart.UnitOfWork;
+﻿using Mix.Heart.Helpers;
+using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Attributes;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
@@ -18,8 +21,16 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         public double? Total { get; set; }
         public Guid UserId { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public PaymentStatus PaymentStatus{ get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         public string Email { get; set; }
+
+        public string? ShippingAddress { get; set; }
+        public string? PaymentRequest { get; set; }
+        public string? PaymentResponse { get; set; }
+
+        public OrderAddress Address { get; set; }
+        public JObject PaymentRequestData { get; set; }
+        public JObject PaymentResponseData { get; set; }
         public int MixTenantId { get; set; }
 
         public List<OrderItemViewModel> OrderItems { get; set; } = new();
@@ -47,16 +58,26 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         #endregion
 
         #region Overrides
-
+        
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            OrderItems = await OrderItemViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderId == Id, cancellationToken);
+            OrderItems = await OrderItemViewModel.GetRepository(UowInfo).GetListAsync(m => m.MixTenantId == MixTenantId && m.OrderDetailId == Id, cancellationToken);
+            Address = !string.IsNullOrEmpty(ShippingAddress) ? JObject.Parse(ShippingAddress).ToObject<OrderAddress>() : new();
+            PaymentRequestData = !string.IsNullOrEmpty(PaymentRequest) ? JObject.Parse(PaymentRequest) : new();
+            PaymentResponseData = !string.IsNullOrEmpty(PaymentResponse) ? JObject.Parse(PaymentResponse) : new();
         }
 
-        public override Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
+        public override async Task<OrderDetail> ParseEntity(CancellationToken cancellationToken = default)
         {
             Calculate();
-            return base.ParseEntity(cancellationToken);
+            var result = await base.ParseEntity(cancellationToken);
+            if (Address != null)
+            {
+                result.ShippingAddress = ReflectionHelper.ParseObject(Address)?.ToString(Formatting.None);
+            }
+            result.PaymentRequest = PaymentRequestData?.ToString(Formatting.None);
+            result.PaymentResponse = PaymentResponseData?.ToString(Formatting.None);
+            return result;
         }
 
         protected override async Task SaveEntityRelationshipAsync(OrderDetail parentEntity, CancellationToken cancellationToken = default)
@@ -64,7 +85,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
             foreach (var item in OrderItems)
             {
                 item.SetUowInfo(UowInfo);
-                item.OrderId = parentEntity.Id;
+                item.OrderDetailId = parentEntity.Id;
                 await item.SaveAsync(cancellationToken);
             }
         }
@@ -88,5 +109,16 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
         }
 
         #endregion
+    }
+
+    public class OrderAddress
+    {
+        public string? Name { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string? Street { get; set; }
+        public string? District { get; set; }
+        public string? City { get; set; }
+        public string? Province { get; set; }
     }
 }

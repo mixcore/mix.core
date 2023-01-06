@@ -13,6 +13,9 @@ using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
 using Mix.Database.Entities.Cms;
+using Mix.Services.Ecommerce.Lib.Models;
+using Mix.Constant.Constants;
+using Microsoft.Extensions.Configuration;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
@@ -22,8 +25,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private readonly TenantUserManager _userManager;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
+        private readonly PaymentConfigurationModel _paymentConfiguration = new();
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
@@ -33,6 +38,9 @@ namespace Mix.Services.Ecommerce.Lib.Services
             _userManager = userManager;
             _serviceProvider = serviceProvider;
             _cmsUOW = cmsUOW;
+
+            var session = configuration.GetSection(MixAppSettingsSection.Payments);
+            session.Bind(_paymentConfiguration);
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -59,7 +67,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 cart = new OrderViewModel(_uow)
                 {
                     UserId = user.Id,
-                    Title = $"{user.UserName}'s Cart",
+                    Title = $"{user.UserName} Cart",
                     Email = user.Email,
                     OrderStatus = OrderStatus.NEW,
                     MixTenantId = CurrentTenant.Id,
@@ -95,7 +103,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
                 var orderItem = new OrderItemViewModel(_uow)
                 {
-                    OrderId = cart.Id,
+                    OrderDetailId = cart.Id,
                     IsActive = true,
                     MixTenantId = CurrentTenant.Id,
                     Price = product.Price.Value
@@ -177,6 +185,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.Badrequest, $"Invalid Cart");
             }
 
+            checkoutCart.PaymentGateway = gateway;
             FilterCheckoutCart(checkoutCart, myCart);
 
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
@@ -186,8 +195,12 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
             }
 
-            string returnUrl = $"{HttpContextAccessor.HttpContext?.Request.Scheme}//{CurrentTenant.PrimaryDomain}/payment-response?gateway={gateway}";
-            var url = await paymentService.GetPaymentUrl(checkoutCart, returnUrl, cancellationToken);
+            string returnUrl = $"{_paymentConfiguration.Urls.PaymentResponseUrl}/{checkoutCart.Id}";
+            string againUrl = $"{_paymentConfiguration.Urls.PaymentCartUrl}/{checkoutCart.Id}";
+            var request = paymentService.GetPaymentRequest(checkoutCart, againUrl, returnUrl, cancellationToken);
+            var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
+
+            checkoutCart.PaymentRequestData = request;
             await checkoutCart.SaveAsync();
             await myCart.SaveAsync();
             return url;
@@ -200,24 +213,30 @@ namespace Mix.Services.Ecommerce.Lib.Services
             myCart.Calculate();
 
             checkoutCart.SetUowInfo(_uow);
-            checkoutCart.Id = 0;
+            checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
             checkoutCart.OrderStatus = OrderStatus.WAITING;
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             checkoutCart.Calculate();
         }
 
         public async Task<OrderStatus> ProcessPaymentResponse(
-            PaymentGateway gateway,
+            int orderId,
             JObject paymentResponse,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
+            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId);
+            if (order == null)
+            {
+                throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");
+            }
+
+            var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, order.PaymentGateway!.Value);
 
             if (paymentService == null)
             {
-                throw new MixException(MixErrorStatus.ServerError, $"Not Implement {gateway} payment");
+                throw new MixException(MixErrorStatus.ServerError, $"Not Implement {order.PaymentGateway} payment");
             }
             return await paymentService.ProcessPaymentResponse(paymentResponse, cancellationToken);
         }
