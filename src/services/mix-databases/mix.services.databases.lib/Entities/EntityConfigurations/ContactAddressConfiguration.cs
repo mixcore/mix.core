@@ -23,8 +23,8 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
                 .IsRequired(false);
             builder.Property(e => e.District)
                 .IsRequired(false);
-            builder.Property(e => e.Note)
-                .IsRequired(false);
+            builder.Property(e => e.Ward).IsRequired(false);
+            builder.Property(e => e.Note).IsRequired(false);
         }
     }
 }

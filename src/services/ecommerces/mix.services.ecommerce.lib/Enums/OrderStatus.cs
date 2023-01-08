@@ -4,6 +4,7 @@
     {
         NEW,
         WAITING_FOR_PAYMENT,
+        CANCELED,
         PAID,
         SHIPPING,
         SUCCESS,

@@ -73,6 +73,14 @@ namespace Mix.Portal.Controllers
 
             return Ok(result);
         }
+        
+        [HttpPost("filter")]
+        public async Task<ActionResult<PagingResponseModel<JObject>>> Filter([FromBody] SearchMixDbRequestDto req)
+        {
+            var result = await SearchHandler(req);
+
+            return Ok(result);
+        }
 
 
         [HttpGet("{id}")]
@@ -246,6 +254,16 @@ namespace Mix.Portal.Controllers
                     queries.Add(new(idFieldName, Operation.In, allowsIds));
                 }
             }
+
+            if (request.Queries != null)
+            {
+                foreach (var query in request.Queries)
+                {
+                    Operation op = ParseOperator(query.CompareOperator);
+                    queries.Add(new(query.FieldName, op, query.Value));
+                }
+            }
+
             var result = await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
             var items = new List<JObject>();
             foreach (var item in result.Items)
@@ -253,6 +271,36 @@ namespace Mix.Portal.Controllers
                 items.Add(ReflectionHelper.ParseObject(item));
             }
             return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
+        }
+        private Operation ParseOperator(MixCompareOperator compareOperator)
+        {
+            switch (compareOperator)
+            {
+                case MixCompareOperator.Equal:
+                    return Operation.Equal;
+                case MixCompareOperator.Like:
+                    return Operation.Like;
+                case MixCompareOperator.NotEqual:
+                    return Operation.NotEqual;
+                case MixCompareOperator.Contain:
+                    return Operation.In;
+                case MixCompareOperator.NotContain:
+                    return Operation.NotIn;
+                case MixCompareOperator.InRange:
+                    return Operation.In;
+                case MixCompareOperator.NotInRange:
+                    return Operation.NotIn;
+                case MixCompareOperator.GreaterThanOrEqual:
+                    return Operation.GreaterThanOrEqual;
+                case MixCompareOperator.GreaterThan:
+                    return Operation.GreaterThan;
+                case MixCompareOperator.LessThanOrEqual:
+                    return Operation.LessThanOrEqual;
+                case MixCompareOperator.LessThan:
+                    return Operation.LessThan;
+                default:
+                    return Operation.Equal;
+            }
         }
 
         private IEnumerable<QueryField> BuildSearchPredicate(SearchMixDbRequestDto req)

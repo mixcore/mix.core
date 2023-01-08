@@ -54,10 +54,10 @@ namespace Mix.Lib.Services
             }
         }
 
-        public T GetConfig<T>(string name, string culture, T defaultValue = default)
+        public string GetConfig(string name, string culture, string defaultValue = default)
         {
             var config = Configs?.FirstOrDefault(m => m.Specificulture == culture && m.SystemName == name);
-            return config != null ? config.GetValue<T>() : defaultValue;
+            return config != null ? config.Content : defaultValue;
         }
     }
 }

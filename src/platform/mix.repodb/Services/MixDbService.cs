@@ -8,6 +8,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
+using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using System.Dynamic;
 
@@ -23,6 +24,15 @@ namespace Mix.RepoDb.Services
 
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         private readonly DatabaseService _databaseService;
+
+        private const string createdDateFieldName = "CreatedDateTime";
+        private const string priorityFieldName = "Priority";
+        private const string idFieldName = "Id";
+        private const string parentIdFieldName = "ParentId";
+        private const string childIdFieldName = "ChildId";
+        private const string tenantIdFieldName = "MixTenantId";
+        private const string statusFieldName = "Status";
+        private const string isDeletedFieldName = "IsDeleted";
 
         private static readonly string[] DefaultProperties =
         {
@@ -59,6 +69,43 @@ namespace Mix.RepoDb.Services
         }
 
         #region Methods
+
+        #region CRUD
+        //public Task<int> CreateData(string tableName, JObject data)
+        //{
+        //    _repository.InitTableName(tableName);
+        //    JObject obj = new JObject();
+        //    foreach (var pr in data.Properties())
+        //    {
+        //        obj.Add(new JProperty(pr.Name.ToTitleCase(), pr.Value));
+        //    }
+        //    if (!obj.ContainsKey(createdDateFieldName))
+        //    {
+        //        obj.Add(new JProperty(createdDateFieldName, DateTime.UtcNow));
+        //    }
+        //    if (!obj.ContainsKey(priorityFieldName))
+        //    {
+        //        obj.Add(new JProperty(priorityFieldName, 0));
+        //    }
+        //    if (!obj.ContainsKey(tenantIdFieldName))
+        //    {
+        //        obj.Add(new JProperty(tenantIdFieldName, CurrentTenant.Id));
+        //    }
+
+        //    if (!obj.ContainsKey(statusFieldName))
+        //    {
+        //        obj.Add(new JProperty(statusFieldName, MixContentStatus.Published.ToString()));
+        //    }
+
+        //    if (!obj.ContainsKey(isDeletedFieldName))
+        //    {
+        //        obj.Add(new JProperty(isDeletedFieldName, false));
+        //    }
+        //    return await _repository.InsertAsync(obj);
+        //}
+
+
+        #endregion
 
         // TODO: check why need to restart application to load new database schema for Repo Db Context !important
         public async Task<bool> MigrateDatabase(string name)

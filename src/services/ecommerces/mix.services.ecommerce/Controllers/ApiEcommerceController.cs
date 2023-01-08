@@ -62,10 +62,28 @@ namespace mix.services.ecommerce.Controllers
         [MixAuthorize]
         [HttpGet]
         [Route("my-orders")]
-        public async Task<ActionResult<OrderViewModel>> GetMyOrders([FromQuery] SearchRequestDto request, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<OrderViewModel>> GetMyOrders([FromQuery] FilterOrderDto request, CancellationToken cancellationToken = default)
         {
             var cart = await _orderService.GetUserOrders(User, request, cancellationToken);
             return Ok(cart);
+        }
+        
+        [MixAuthorize]
+        [HttpGet]
+        [Route("my-orders/{id}")]
+        public async Task<ActionResult<OrderViewModel>> GetMyOrders(int id, CancellationToken cancellationToken = default)
+        {
+            var order = await _orderService.GetUserOrder(User, id, cancellationToken);
+            return Ok(order);
+        }
+        
+        [MixAuthorize]
+        [HttpGet]
+        [Route("cancel-order/{id}")]
+        public async Task<ActionResult<OrderViewModel>> CancelOrder(int id, CancellationToken cancellationToken = default)
+        {
+            await _orderService.CancelOrder(User, id, cancellationToken);
+            return Ok();
         }
 
         [MixAuthorize]

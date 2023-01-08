@@ -52,6 +52,11 @@ namespace Mix.Services.Databases.Controllers
             {
                 return BadRequest();
             }
+            if (!string.IsNullOrEmpty(profile.Email))
+            {
+                user.Email = profile.Email;
+                await _userManager.UpdateAsync(user);
+            }
             await base.UpdateHandler(profile.Id, profile, cancellationToken);
             return Ok();
         }
