@@ -14,7 +14,7 @@ namespace Mix.Lib.Services
         {
             return $"{domain}/" +
                 $"{MixFolders.SiteContentAssetsFolder}/" +
-                $"{_configService.GetConfig<string>(MixConfigurationNames.ThemeFolder, culture)}";
+                $"{_configService.GetConfig(MixConfigurationNames.ThemeFolder, culture)}";
         }
     }
 }

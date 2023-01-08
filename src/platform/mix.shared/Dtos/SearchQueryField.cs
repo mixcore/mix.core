@@ -4,6 +4,10 @@ namespace Mix.Shared.Dtos
 {
     public class SearchQueryField
     {
+        public SearchQueryField()
+        {
+
+        }
         public SearchQueryField(string fieldName, string value, MixCompareOperator compareOperation = MixCompareOperator.Equal)
         {
             FieldName = fieldName;

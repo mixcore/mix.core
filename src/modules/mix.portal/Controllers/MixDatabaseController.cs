@@ -68,7 +68,7 @@ namespace Mix.Portal.Controllers
         {
             try
             {
-                await _mixDbService.BackupDatabase(data.SystemName, cancellationToken);
+                //await _mixDbService.BackupDatabase(data.SystemName, cancellationToken);
                 await base.UpdateHandler(id, data, cancellationToken);
             }
             catch (Exception ex)

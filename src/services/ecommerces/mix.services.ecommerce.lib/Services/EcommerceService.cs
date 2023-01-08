@@ -75,7 +75,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
                     Email = user.Email,
                     OrderStatus = OrderStatus.NEW,
                     MixTenantId = CurrentTenant.Id,
-                    CreatedBy = user.UserName
+                    CreatedBy = user.UserName,
+                    LastModified = DateTime.UtcNow
                 };
                 await cart.SaveAsync(cancellationToken);
             }
@@ -190,6 +191,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
 
             checkoutCart.PaymentGateway = gateway;
+            checkoutCart.Email ??= user!.Email;
             FilterCheckoutCart(checkoutCart, myCart);
 
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
@@ -218,6 +220,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             checkoutCart.SetUowInfo(_uow);
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
+            checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             checkoutCart.Calculate();
@@ -244,10 +247,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
             }
             order.PaymentResponseData = paymentResponse;
             order.PaymentStatus = await paymentService.ProcessPaymentResponse(order, paymentResponse, cancellationToken);
+            order.LastModified = DateTime.UtcNow;
             if (order.PaymentStatus == PaymentStatus.SUCCESS)
             {
                 order.OrderStatus = OrderStatus.PAID;
-                await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(order), order.Email);
+                if (!string.IsNullOrEmpty(order.Email))
+                {
+                    await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(order), order.Email);
+                }
             }
             await order.SaveAsync(cancellationToken);
             return order.OrderStatus;

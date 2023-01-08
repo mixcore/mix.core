@@ -31,6 +31,7 @@ using FirebaseAdmin.Messaging;
 using Mix.Shared.Models.Configurations;
 using Google.Rpc;
 using System.Web;
+using Mix.Identity.Models.ManageViewModels;
 
 namespace Mix.Account.Controllers
 {
@@ -504,6 +505,16 @@ namespace Mix.Account.Controllers
             }
 
             return Ok();
+        }
+
+        [MixAuthorize]
+        [HttpPost]
+        [Route("change-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ChangePasswordViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            return result.Succeeded ? Ok() : BadRequest(result.Errors.Select(m => m.Description).ToList());
         }
         #region Helpers
 

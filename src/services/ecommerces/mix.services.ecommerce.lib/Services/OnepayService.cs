@@ -28,7 +28,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         private readonly HttpService _httpService;
         private MixOnepayConfigurations Settings { get; set; } = new MixOnepayConfigurations();
-        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow, 
+        public OnepayService(IHttpContextAccessor httpContextAccessor, HttpService httpService, IConfiguration configuration, UnitOfWorkInfo<OnepayDbContext> cmsUow,
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow)
             : base(httpContextAccessor)
         {
@@ -88,7 +88,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             StringBuilder sb = new StringBuilder();
             foreach (var kvp in parameters)
             {
-                if (!string.IsNullOrEmpty(kvp.Value) && (kvp.Key.StartsWith("vpc_") || kvp.Key.StartsWith("user_")))
+                if (!string.IsNullOrEmpty(kvp.Value) && kvp.Key != "vpc_SecureHash" && (kvp.Key.StartsWith("vpc_") || kvp.Key.StartsWith("user_")))
                     sb.Append(kvp.Key + "=" + kvp.Value + "&");
             }
             // remove trailing & from string
@@ -107,7 +107,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return hexHash;
         }
 
-        private async Task SaveResponse(OnepayTransactionResponse response, OrderStatus paymentStatus, CancellationToken cancellationToken)
+        private async Task SaveResponse(OnepayTransactionResponse response, PaymentStatus paymentStatus, CancellationToken cancellationToken)
         {
             var vm = new OnepayTransactionResponseViewModel(response, _cmsUow);
             vm.PaymentStatus = paymentStatus;
@@ -169,13 +169,15 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     paymentStatus = PaymentStatus.INVALIDRESPONSE;
                 }
-                //if (!Settings.SecureHashKey.Equals(response.vpc_SecureHash))
+                Dictionary<string, string> parameters = ReflectionHelper.ConverObjectToDictinary(response);
+                var secureHashKey = CreateSHA256Signature(parameters);
+                //if (!secureHashKey.Equals(response.vpc_SecureHash, StringComparison.OrdinalIgnoreCase))
                 //{
-                //    orderDetail.OrderStatus = OrderStatus.INVALIDRESPONSE;
+                //    orderDetail.OrderStatus = OrderStatus.PAYMENT_FAILED;
                 //}
 
-                await SaveResponse(response, orderDetail.OrderStatus, cancellationToken);
-                
+                await SaveResponse(response, paymentStatus, cancellationToken);
+
                 return paymentStatus;
             }
             catch (Exception ex)
