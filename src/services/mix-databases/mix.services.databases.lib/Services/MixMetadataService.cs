@@ -108,7 +108,7 @@ namespace Mix.Services.Databases.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            MixMixMetadataContentAsscociationViewModel association = new(_uow)
+            MixMetadataContentAsscociationViewModel association = new(_uow)
             {
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _identityService.GetClaim(HttpContextAccessor.HttpContext!.User, MixClaims.Username)
@@ -116,8 +116,8 @@ namespace Mix.Services.Databases.Lib.Services
             ReflectionHelper.MapObject(dto, association);
             await association.SaveAsync(cancellationToken);
         }
-
-        public async Task<PagingResponseModel<MixMixMetadataContentAsscociationViewModel>?> GetMetadataByContentId(
+        
+        public async Task<PagingResponseModel<MixMetadataContentAsscociationViewModel>?> GetMetadataByContentId(
             int intContentId,
             MetadataParentType? contentType,
             string metadataType, PagingRequestModel pagingData)
@@ -125,7 +125,7 @@ namespace Mix.Services.Databases.Lib.Services
             var query = GetQueryableMetadataByContentId(intContentId, contentType, metadataType);
             if (query != null)
             {
-                return await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow)
+                return await MixMetadataContentAsscociationViewModel.GetRepository(_uow)
                             .GetPagingAsync(
                                 m => m.MixTenantId == CurrentTenant.Id
                                         && query.Any(n => n == m.Id),
@@ -136,7 +136,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task DeleteMetadataContentAssociation(int id, CancellationToken cancellationToken = default)
         {
-            var association = await MixMixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id);
+            var association = await MixMetadataContentAsscociationViewModel.GetRepository(_uow).GetSingleAsync(m => m.Id == id);
             if (association != null)
             {
                 await association.DeleteAsync(cancellationToken);

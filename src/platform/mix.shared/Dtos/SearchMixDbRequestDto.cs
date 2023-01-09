@@ -25,6 +25,7 @@ namespace Mix.Shared.Dtos
                 ParentId = parentId;
             }
         }
+        public bool LoadNestedData { get; set; }
         public List<SearchQueryField>? Queries { get; set; } = new();
         public int? ParentId { get; set; }
         public string ParentName { get; set; } = default;

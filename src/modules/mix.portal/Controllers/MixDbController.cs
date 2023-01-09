@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Azure.Amqp.Framing;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
@@ -73,7 +74,7 @@ namespace Mix.Portal.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPost("filter")]
         public async Task<ActionResult<PagingResponseModel<JObject>>> Filter([FromBody] SearchMixDbRequestDto req)
         {
@@ -263,12 +264,41 @@ namespace Mix.Portal.Controllers
                     queries.Add(new(query.FieldName, op, query.Value));
                 }
             }
+            var paging = new PagingRequestModel()
+            {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                SortBy = request.OrderBy,
+                SortDirection = request.Direction
+            };
 
-            var result = await _repository.GetPagingAsync(queries, new PagingRequestModel(Request));
+            var result = await _repository.GetPagingAsync(queries, paging);
+
             var items = new List<JObject>();
+            var database = await GetMixDatabase();
+
             foreach (var item in result.Items)
             {
-                items.Add(ReflectionHelper.ParseObject(item));
+                var data = ReflectionHelper.ParseObject(item);
+                if (request.LoadNestedData)
+                {
+                    foreach (var rel in database.Relationships)
+                    {
+                        var id = data.Value<int>("id");
+
+                        List<QueryField> nestedQueries = GetAssociatoinQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
+                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
+                        if (associations.Count > 0)
+                        {
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            _repository.InitTableName(rel.DestinateDatabaseName);
+                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            var nestedData = await _repository.GetListByAsync(query);
+                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+                        }
+                    }
+                }
+                items.Add(data);
             }
             return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
         }
