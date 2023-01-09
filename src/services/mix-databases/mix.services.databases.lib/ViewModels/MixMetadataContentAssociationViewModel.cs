@@ -5,7 +5,7 @@ using Mix.Services.Databases.Lib.Enums;
 
 namespace Mix.Services.Databases.Lib.ViewModels
 {
-    public class MixMixMetadataContentAsscociationViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixMetadataContentAssociation, int, MixMixMetadataContentAsscociationViewModel>
+    public class MixMetadataContentAsscociationViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixMetadataContentAssociation, int, MixMetadataContentAsscociationViewModel>
     {
         #region Properties
         public MetadataParentType? ContentType { get; set; }
@@ -19,19 +19,19 @@ namespace Mix.Services.Databases.Lib.ViewModels
         #endregion
 
         #region Constructors
-        public MixMixMetadataContentAsscociationViewModel()
+        public MixMetadataContentAsscociationViewModel()
         {
         }
 
-        public MixMixMetadataContentAsscociationViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixMetadataContentAsscociationViewModel(MixServiceDatabaseDbContext context) : base(context)
         {
         }
 
-        public MixMixMetadataContentAsscociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
+        public MixMetadataContentAsscociationViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
         }
 
-        public MixMixMetadataContentAsscociationViewModel(MixMetadataContentAssociation entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
+        public MixMetadataContentAsscociationViewModel(MixMetadataContentAssociation entity, UnitOfWorkInfo uowInfo) : base(entity, uowInfo)
         {
         }
         #endregion

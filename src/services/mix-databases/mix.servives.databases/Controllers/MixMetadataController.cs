@@ -40,7 +40,7 @@ namespace Mix.Services.Databases.Controllers
 
 
         [HttpGet("get-metadata/{contentType}/{contentId}")]
-        public async Task<ActionResult<List<MixMixMetadataContentAsscociationViewModel>>> GetMetadataByContentId([FromQuery] SearchMetadataDto req)
+        public async Task<ActionResult<List<MixMetadataContentAsscociationViewModel>>> GetMetadataByContentId([FromQuery] SearchMetadataDto req)
         {
             var searchRequest = BuildSearchRequest(req);
             var metadatas = await _metadataService.GetMetadataByContentId(req.ContentId, req.ContentType, req.MetadataType, searchRequest.PagingData);
