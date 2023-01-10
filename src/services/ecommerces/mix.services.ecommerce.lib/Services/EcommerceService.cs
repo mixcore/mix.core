@@ -192,7 +192,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             checkoutCart.PaymentGateway = gateway;
             checkoutCart.Email ??= user!.Email;
-            FilterCheckoutCart(checkoutCart, myCart);
+            await FilterCheckoutCartAsync(checkoutCart, myCart);
 
             var paymentService = PaymentServiceFactory.GetPaymentService(_serviceProvider, gateway);
 
@@ -209,13 +209,31 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.PaymentRequestData = request;
             await checkoutCart.SaveAsync();
             await myCart.SaveAsync();
+            await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
             return url;
         }
 
-        private void FilterCheckoutCart(OrderViewModel checkoutCart, OrderViewModel myCart)
+        private async Task FilterCheckoutCartAsync(OrderViewModel checkoutCart, OrderViewModel myCart)
         {
             myCart.SetUowInfo(_uow);
             myCart.OrderItems = checkoutCart.OrderItems.Where(m => !m.IsActive).ToList();
+            var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
+
+            var orderProducts = _uow.DbContext.ProductVariant.Where(m => skus.Contains(m.Sku));
+            if (orderProducts.Count(m => m.Inventory == 0) > 0)
+            {
+                var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => m.Sku).ToList();
+                string msg = $"{string.Join(',', soldOutProducts)} sold out";
+                throw new MixException(MixErrorStatus.Badrequest, msg);
+            }
+
+            foreach (var item in orderProducts)
+            {
+                item.Inventory -= 1;
+                item.Sold += 1;
+            }
+            await _uow.DbContext.SaveChangesAsync();
+
             myCart.Calculate();
 
             checkoutCart.SetUowInfo(_uow);
@@ -255,10 +273,28 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 {
                     await _edmService.SendMailWithEdmTemplate("Payment Success", "PaymentSuccess", JObject.FromObject(order), order.Email);
                 }
+                await LogAction(order.Id, OrderTrackingAction.PAID);
+            }
+            else
+            {
+                await LogAction(order.Id, OrderTrackingAction.PAYMENT_FAILED);
             }
             await order.SaveAsync(cancellationToken);
             return order.OrderStatus;
         }
+
+        public async Task LogAction(int orderId, OrderTrackingAction action, string? note = "")
+        {
+            OrderTrackingViewModel log = new(_uow)
+            {
+                OrderDetailId = orderId,
+                Action = action,
+                Note = note,
+                MixTenantId = CurrentTenant.Id
+            };
+            await log.SaveAsync();
+        }
+
 
     }
 }

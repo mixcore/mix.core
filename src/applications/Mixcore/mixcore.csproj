@@ -99,5 +99,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Domain\Dtos\" />
+	  <Folder Include="Domain\Helpers\" />
 	</ItemGroup>
 </Project>

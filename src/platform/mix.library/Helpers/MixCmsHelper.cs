@@ -1,0 +1,108 @@
+﻿using ClosedXML.Excel;
+using System.Data;
+using System.Text.RegularExpressions;
+
+namespace Mix.Lib.Helpers
+{
+    public class MixCmsHelper
+    {
+        public static string FormatPrice(double? price, string oldPrice = "0")
+        {
+            string strPrice = price?.ToString();
+            if (string.IsNullOrEmpty(strPrice))
+            {
+                return "0";
+            }
+            string s1 = strPrice.Replace(",", string.Empty);
+            if (CheckIsPrice(s1))
+            {
+                Regex rgx = new Regex("(\\d+)(\\d{3})");
+                while (rgx.IsMatch(s1))
+                {
+                    s1 = rgx.Replace(s1, "$1" + "," + "$2");
+                }
+                return s1;
+            }
+            return oldPrice;
+        }
+        public static bool CheckIsPrice(string number)
+        {
+            if (number == null)
+            {
+                return false;
+            }
+            number = number.Replace(",", "");
+            return double.TryParse(number, out _);
+        }
+
+        public static FileModel ExportJObjectToExcel(List<JObject> lstData, string sheetName, string folderPath, string fileName, List<string> headers = null)
+        {
+            try
+            {
+                var repositoryResponse = new FileModel()
+                {
+                    FileFolder = folderPath,
+                    Filename = fileName,
+                    Extension = ".xlsx"
+                };
+                if (lstData.Count > 0)
+                {
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add(sheetName);
+                        var currentRow = 1;
+                        var currentCol = 1;
+                        string filename = repositoryResponse.Filename + repositoryResponse.Extension;
+                        if (headers == null)
+                        {
+                            IEnumerable<JProperty> enumerable = lstData[0].Properties();
+                            foreach (JProperty item in enumerable)
+                            {
+                                worksheet.Cell(currentRow, currentCol).Value = item.Name;
+                                currentCol++;
+                            }
+                        }
+                        else
+                        {
+                            foreach (string header in headers)
+                            {
+                                worksheet.Cell(currentRow, currentCol).Value = header;
+                                currentCol++;
+                            }
+                        }
+
+                        foreach (JObject lstDatum in lstData)
+                        {
+
+                            currentRow++;
+                            currentCol = 1;
+                            foreach (JProperty item2 in lstDatum.Properties())
+                            {
+                                if (lstDatum.TryGetValue(item2.Name, StringComparison.OrdinalIgnoreCase, out var token))
+                                {
+                                    worksheet.Cell(currentRow, currentCol).Value = token.ToString();
+                                }
+                                currentCol++;
+                            }
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            var content = stream.ToArray();
+                            MixFileHelper.SaveFileBytes(folderPath, filename, content);
+                            return repositoryResponse;
+                        }
+                    }
+                }
+
+                throw new MixException(MixErrorStatus.Badrequest, "Can not export data of empty list");
+            }
+            catch (Exception ex)
+            {
+                throw new MixException(MixErrorStatus.ServerError, ex);
+            }
+        }
+
+    }
+}

@@ -14,8 +14,8 @@
         public const string JsonDataFolder = "MixContent/Shared/Json";
         public const string MixCacheFolder = "MixContent/cache";
         public const string MixLogsFolder = "MixContent/logs";
-        public const string ExportFolder = "mix-content/exports";
-        public const string ImportFolder = "mix-content/imports/themes";
+        public const string ExportFolder = "MixContent/StaticFiles/exports";
+        public const string ImportFolder = "MixContent/StaticFiles/imports/themes";
         public const string UploadsFolder = "Uploads";
         public const string SiteContentAssetsFolder = "MixContent/Assets";
         public const string SharedConfigurationFolder = "../../shared/MixContent";
