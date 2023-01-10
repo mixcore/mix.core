@@ -8,6 +8,7 @@ using Mix.Shared.Models;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
+using System.Reflection;
 
 namespace Mix.Portal.Controllers
 {
@@ -66,7 +67,7 @@ namespace Mix.Portal.Controllers
         }
 
         #endregion
-
+        
         [HttpGet]
         public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchMixDbRequestDto req)
         {
@@ -81,6 +82,16 @@ namespace Mix.Portal.Controllers
             var result = await SearchHandler(req);
 
             return Ok(result);
+        }
+        
+        [HttpPost("export")]
+        public async Task<ActionResult<FileModel>> Export([FromBody] SearchMixDbRequestDto req)
+        {
+            var result = await SearchHandler(req);
+            string filename = $"{_tableName}_{DateTime.UtcNow.ToString("dd-MM-yyyy-hh-mm-ss")}";
+            string exportPath = $"{MixFolders.ExportFolder}/mix-db/{_tableName}/";
+            var file = MixCmsHelper.ExportJObjectToExcel(result.Items.ToList(), _tableName, exportPath, filename, null);
+            return Ok(file);
         }
 
 
