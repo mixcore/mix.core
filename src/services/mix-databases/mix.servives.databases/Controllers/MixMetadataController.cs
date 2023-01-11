@@ -34,6 +34,7 @@ namespace Mix.Services.Databases.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _metadataService = metadataService;
+            Repository.IsCache = false;
         }
 
         #region Routes

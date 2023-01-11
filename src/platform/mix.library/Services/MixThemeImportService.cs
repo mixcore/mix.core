@@ -94,7 +94,7 @@ namespace Mix.Lib.Services
             if (themeFile != null)
             {
                 var templateAsset = MixHelper.GetFileModel(themeFile, MixFolders.ThemePackage);
-                MixFileHelper.SaveFile(themeFile, MixFolders.ThemePackage);
+                templateAsset.Filename = MixFileHelper.SaveFile(themeFile, MixFolders.ThemePackage);
                 MixFileHelper.UnZipFile(templateAsset.FullPath, MixFolders.ThemePackage);
             }
             else

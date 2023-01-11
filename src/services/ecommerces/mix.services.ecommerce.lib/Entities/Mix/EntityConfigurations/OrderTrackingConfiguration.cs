@@ -15,7 +15,7 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<OrderTracking> builder)
         {
-            builder.ToTable(EcommerceConstants.DataTableNameOrder);
+            builder.ToTable(EcommerceConstants.DataTableNameOrderTracking);
             base.Configure(builder);
             builder.Property(e => e.Note).IsRequired(false);
             builder.Property(e => e.Action)
