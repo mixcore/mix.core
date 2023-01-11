@@ -213,7 +213,7 @@ namespace Mix.Lib.Services
         private async Task ImportPosts()
         {
             await ImportEntitiesAsync(_siteData.Posts, _dicPostIds);
-            await ImportContentDataAsync(_siteData.PostContents, _dicPostContentIds, _dicPostIds);
+            await ImportSEOContentDataAsync(_siteData.PostContents, _dicPostContentIds, _dicPostIds);
         }
 
         private async Task ImportModules()
@@ -299,6 +299,14 @@ namespace Mix.Lib.Services
                 item.CreatedBy = _siteData.CreatedBy;
                 item.CreatedDateTime = DateTime.UtcNow;
                 item.MixCultureId = _currentCulture.Id;
+                if (item.TemplateId.HasValue)
+                {
+                    item.TemplateId = _dicTemplateIds[item.TemplateId.Value];
+                }
+                if (item.LayoutId.HasValue)
+                {
+                    item.LayoutId = _dicTemplateIds[item.LayoutId.Value];
+                }
                 item.Specificulture = _currentCulture.Specificulture;
                 item.MixTenantId = CurrentTenant.Id;
                 item.ParentId = _dicPageIds[item.ParentId];
@@ -323,6 +331,10 @@ namespace Mix.Lib.Services
                     item.Id = 0;
                     item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = CurrentTenant.Id;
+                    if (item.TemplateId.HasValue)
+                    {
+                        item.TemplateId = _dicTemplateIds[item.TemplateId.Value];
+                    }
                     item.ParentId = _dicModuleIds[item.ParentId];
                     item.Specificulture = _siteData.Specificulture;
                     item.CreatedDateTime = DateTime.UtcNow;
@@ -527,6 +539,36 @@ namespace Mix.Lib.Services
                 {
                     var oldId = item.Id;
                     item.Id = 0;
+                    item.CreatedBy = _siteData.CreatedBy;
+                    item.MixTenantId = CurrentTenant.Id;
+                    item.ParentId = parentDic[item.ParentId];
+                    item.MixCultureId = _currentCulture.Id;
+                    item.Specificulture = _currentCulture.Specificulture;
+                    item.CreatedDateTime = DateTime.UtcNow;
+                    _context.Entry(item).State = EntityState.Added;
+                    await _context.SaveChangesAsync(_cts.Token);
+                    dic.Add(oldId, item.Id);
+                }
+            }
+        }
+
+        private async Task ImportSEOContentDataAsync<T>(List<T> data, Dictionary<int, int> dic, Dictionary<int, int> parentDic)
+           where T : MultilingualSEOContentBase<int>
+        {
+            if (data.Count > 0)
+            {
+                foreach (var item in data)
+                {
+                    var oldId = item.Id;
+                    item.Id = 0;
+                    if (item.TemplateId.HasValue)
+                    {
+                        item.TemplateId = _dicTemplateIds[item.TemplateId.Value];
+                    }
+                    if (item.LayoutId.HasValue)
+                    {
+                        item.LayoutId = _dicTemplateIds[item.LayoutId.Value];
+                    }
                     item.CreatedBy = _siteData.CreatedBy;
                     item.MixTenantId = CurrentTenant.Id;
                     item.ParentId = parentDic[item.ParentId];

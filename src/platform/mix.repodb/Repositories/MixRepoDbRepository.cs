@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.Azure.Amqp.Framing;
+using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -182,10 +183,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                if (_connection.State != ConnectionState.Open)
-                {
-                    _connection.Open();
-                }
+                BeginTransaction();
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new List<QueryField>() {
@@ -202,10 +200,13 @@ namespace Mix.RepoDb.Repositories
                 return default;
             }
         }
+
+       
         public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
         {
             try
             {
+                BeginTransaction();
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new List<QueryField>() {
@@ -229,6 +230,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
+                BeginTransaction();
                 return (await _connection.QueryAsync<dynamic>(
                     _tableName,
                     new
@@ -246,11 +248,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int> InsertAsync(JObject entity,
-            IDbTransaction? transaction = null)
+        public async Task<int> InsertAsync(JObject entity)
         {
             try
             {
+                BeginTransaction();
                 JObject obj = new JObject();
                 foreach (var pr in entity.Properties())
                 {
@@ -273,11 +275,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<int?> InsertManyAsync(List<dynamic> entities,
-            IDbTransaction? transaction = null)
+        public async Task<int?> InsertManyAsync(List<dynamic> entities)
         {
             try
             {
+                BeginTransaction();
                 var result = await _connection.InsertAllAsync(
                         _tableName,
                         entities: entities,
@@ -293,11 +295,11 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public async Task<object?> UpdateAsync(JObject entity,
-            IDbTransaction? transaction = null)
+        public async Task<object?> UpdateAsync(JObject entity)
         {
             try
             {
+                BeginTransaction();
                 if (_connection.Exists(_tableName, new { Id = entity.Value<int>("Id") }, transaction: _dbTransaction))
                 {
                     object obj = entity.ToObject<Dictionary<string, object>>()!;
@@ -319,6 +321,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
+                BeginTransaction();
                 if (_connection.Exists(_tableName, new { Id = id }, transaction: _dbTransaction))
                 {
                     return await _connection.DeleteAsync(_tableName, id,
@@ -339,6 +342,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
+                BeginTransaction();
                 if (_connection.Exists(_tableName, queries, transaction: _dbTransaction))
                 {
                     return await _connection.DeleteAsync(_tableName, queries,
@@ -358,6 +362,16 @@ namespace Mix.RepoDb.Repositories
         #endregion
 
         #region private
+        private void BeginTransaction()
+        {
+            if (_connection != null && _isRoot && DatabaseProvider == MixDatabaseProvider.SQLITE && _connection.State != ConnectionState.Open)
+            {
+                _connection.Open();
+                _dbTransaction = _connection.BeginTransaction();
+            }
+        }
+
+
         private IEnumerable<QueryField>? ParseQuery(JObject query)
         {
             List<QueryField>? result = null;
@@ -398,41 +412,48 @@ namespace Mix.RepoDb.Repositories
 
         private void SetDbConnection()
         {
-            _cmsUow.Begin();
-            _connection = _cmsUow.DbContext.Database.GetDbConnection();
-            _dbTransaction = _cmsUow.ActiveTransaction.GetDbTransaction();
-            _isRoot = false;
-            switch (DatabaseProvider)
+            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
             {
-                case MixDatabaseProvider.SQLSERVER:
-                    GlobalConfiguration.Setup().UseSqlServer();
-                    break;
-                case MixDatabaseProvider.MySQL:
-                    GlobalConfiguration.Setup().UseMySqlConnector();
-                    break;
-                case MixDatabaseProvider.PostgreSQL:
-                    GlobalConfiguration.Setup().UsePostgreSql();
-                    break;
-                case MixDatabaseProvider.SQLITE:
-                    GlobalConfiguration.Setup().UseSqlite();
-                    break;
-                default:
-                    GlobalConfiguration.Setup().UseSqlite();
-                    break;
+                _cmsUow.Begin();
+                _connection = _cmsUow.DbContext.Database.GetDbConnection();
+                _dbTransaction = _cmsUow.ActiveTransaction.GetDbTransaction();
+                _isRoot = false;
+
+                switch (DatabaseProvider)
+                {
+                    case MixDatabaseProvider.SQLSERVER:
+                        GlobalConfiguration.Setup().UseSqlServer();
+                        break;
+                    case MixDatabaseProvider.MySQL:
+                        GlobalConfiguration.Setup().UseMySqlConnector();
+                        break;
+                    case MixDatabaseProvider.PostgreSQL:
+                        GlobalConfiguration.Setup().UsePostgreSql();
+                        break;
+                    case MixDatabaseProvider.SQLITE:
+                        GlobalConfiguration.Setup().UseSqlite();
+                        break;
+                    default:
+                        GlobalConfiguration.Setup().UseSqlite();
+                        break;
+                }
             }
         }
 
         public IDbConnection CreateConnection(bool isRoot = false)
         {
+            if (_connection != null)
+            {
+                return _connection;
+            }
+
             _isRoot = isRoot;
             var connectionType = GetDbConnectionType(DatabaseProvider);
 
-            if (_isRoot)
+            if (_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE)
             {
                 _connection = Activator.CreateInstance(connectionType) as IDbConnection;
                 _connection!.ConnectionString = ConnectionString;
-                _connection.Open();
-                _dbTransaction = _connection.BeginTransaction();
             }
             else
             {
