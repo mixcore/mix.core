@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
+using System.Threading;
 
 namespace Mix.Lib.Base
 {
@@ -50,10 +51,16 @@ namespace Mix.Lib.Base
         [HttpDelete("remove-cache/{id}")]
         public async Task<ActionResult> DeleteCache(TPrimaryKey id, [FromServices] MixCacheService cacheService, CancellationToken cancellationToken = default)
         {
-            await cacheService.RemoveCacheAsync(id, typeof(TEntity), cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            await RemoveCacheHandler(cacheService,id);
             return Ok();
         }
-        
+
+        private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
+        {
+            await cacheService.RemoveCacheAsync(id, typeof(TEntity));
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(TPrimaryKey id)
         {

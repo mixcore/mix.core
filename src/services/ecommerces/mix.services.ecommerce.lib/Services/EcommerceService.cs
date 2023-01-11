@@ -83,6 +83,52 @@ namespace Mix.Services.Ecommerce.Lib.Services
             return cart;
         }
 
+        public async Task UpdateOrderStatus(int orderId, OrderStatus orderStatus, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId, cancellationToken);
+            if (order == null)
+            {
+                throw new MixException(MixErrorStatus.NotFound);
+            }
+
+            switch (orderStatus)
+            {
+                case OrderStatus.NEW:
+                    break;
+                case OrderStatus.WAITING_FOR_PAYMENT:
+                    await LogAction(orderId, OrderTrackingAction.CHECKOUT);
+                    break;
+                case OrderStatus.CANCELED:
+                    await LogAction(orderId, OrderTrackingAction.CANCELED);
+                    break;
+                case OrderStatus.PAID:
+                    await LogAction(orderId, OrderTrackingAction.PAID);
+                    break;
+                case OrderStatus.SHIPPING:
+                    if (order.PaymentStatus != PaymentStatus.SUCCESS)
+                    {
+                        throw new MixException(MixErrorStatus.Badrequest, "Cannot ship unpaid order");
+                    }
+                    order.OrderStatus = orderStatus;
+                    await order.SaveAsync(cancellationToken);
+                    await LogAction(orderId, OrderTrackingAction.SHIPPING);
+                    break;
+                case OrderStatus.SUCCESS:
+                    await LogAction(orderId, OrderTrackingAction.SUCCESS);
+                    break;
+                case OrderStatus.PAYMENT_FAILED:
+                    break;
+                case OrderStatus.SHIPPING_FAILED:
+                    break;
+                default:
+                    break;
+            }
+            order.OrderStatus = orderStatus;
+            await order.SaveAsync(cancellationToken);
+        }
+
         public async Task<OrderViewModel> AddToCart(
             ClaimsPrincipal principal,
             CartItemDto item,
@@ -241,6 +287,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
             checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
+            checkoutCart.CreatedDateTime = DateTime.UtcNow;
             checkoutCart.Calculate();
         }
 

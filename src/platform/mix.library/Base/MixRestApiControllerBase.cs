@@ -29,9 +29,10 @@ namespace Mix.Lib.Base
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             Context = (TDbContext)uow.ActiveDbContext;
-            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
             Uow = uow;
             Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
+            RestApiService = new(httpContextAccessor, mixIdentityService, uow, queueService);
+            RestApiService.Repository = Repository;
         }
 
         #region Command Handlers
@@ -66,6 +67,11 @@ namespace Mix.Lib.Base
             cancellationToken.ThrowIfCancellationRequested();
             return RestApiService.SaveManyHandler(data, cancellationToken);
         }
+        private async Task RemoveCacheHandler(MixCacheService cacheService, TPrimaryKey id)
+        {
+            await cacheService.RemoveCacheAsync(id, typeof(TEntity));
+        }
+
 
         #endregion
 

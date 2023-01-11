@@ -9,7 +9,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
-    [GenerateRestApiController(Route = "/api/v2/rest/ecommerce/order-details", IsAuthorized = true)]
     public class OrderViewModel : ViewModelBase<EcommerceDbContext, OrderDetail, int, OrderViewModel>
     {
         #region Properties

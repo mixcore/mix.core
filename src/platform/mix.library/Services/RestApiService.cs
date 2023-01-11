@@ -16,7 +16,7 @@ namespace Mix.Lib.Services
         protected UnitOfWorkInfo Uow;
         protected UnitOfWorkInfo CacheUow;
         protected MixCacheService CacheService;
-        protected readonly Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository;
+        public Repository<TDbContext, TEntity, TPrimaryKey, TView> Repository { get; set; }
         protected readonly TDbContext Context;
 
         public RestApiService(
@@ -31,7 +31,7 @@ namespace Mix.Lib.Services
             CacheService = new();
             QueueService = queueService;
             Context = (TDbContext)uow.ActiveDbContext;
-            Repository = ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
+            Repository ??= ViewModelBase<TDbContext, TEntity, TPrimaryKey, TView>.GetRepository(Uow);
         }
 
         #region Command Handlers

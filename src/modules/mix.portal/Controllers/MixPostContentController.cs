@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Constant.Constants;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 
@@ -6,7 +7,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-post-content")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
+    [MixAuthorize(MixRoles.Owner)]
     public class MixPostContentController
         : MixBaseContentController<MixPostContentViewModel, MixPostContent, int>
     {
@@ -22,7 +23,7 @@ namespace Mix.Portal.Controllers
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository)
-            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator, 
+            : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator,
                   mixIdentityService, cmsUOW, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;

@@ -30,6 +30,7 @@ namespace Mix.Services.Databases.Controllers
         {
             _userDataService = metadataService;
             _userManager = userManager;
+            Repository.IsCache = false;
         }
 
         #region Routes

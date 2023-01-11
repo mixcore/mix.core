@@ -33,6 +33,7 @@ namespace Mix.Services.Databases.Controllers
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _permissionService = permissionService;
+            Repository.IsCache = false;
         }
 
         #region Routes
