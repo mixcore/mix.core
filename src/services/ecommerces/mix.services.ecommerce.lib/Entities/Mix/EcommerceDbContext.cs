@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Constant.Constants;
 using Mix.Database.Base;
+using Mix.Database.Entities.Cms;
 using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
@@ -23,5 +24,6 @@ namespace Mix.Services.Ecommerce.Lib.Entities.Mix
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<ProductDetails> ProductDetails { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
+        public DbSet<MixDatabaseAssociation> MixDatabaseAssociation { get; set; }
     }
 }

@@ -73,7 +73,7 @@ namespace Mix.Services.Databases.Controllers
         
         [MixAuthorize]
         [HttpPut("update-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress(MixContactAddressViewModel address, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress([FromBody] MixContactAddressViewModel address, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(User);
             await _userDataService.UpdateUserAddress(address, user, cancellationToken);

@@ -17,10 +17,13 @@ using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Constant.Constants;
 using Microsoft.Extensions.Configuration;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
+using Mix.Lib.ViewModels;
+using Mix.Services.Payments.Lib.Constants;
+using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
-    public class EcommerceService : TenantServiceBase
+    public sealed class EcommerceService : TenantServiceBase
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
@@ -28,6 +31,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
         private readonly MixEdmService _edmService;
+        private MixCacheService _cacheService;
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -35,7 +39,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            MixEdmService edmService) : base(httpContextAccessor)
+            MixEdmService edmService,
+            MixCacheService cacheService) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
@@ -45,6 +50,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
             _edmService = edmService;
+            _cacheService = cacheService;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
@@ -201,10 +207,10 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var currentItem = cart.OrderItems.FirstOrDefault(m => m.Id == itemId);
             if (currentItem != null)
             {
-                cart.OrderItems.Remove(currentItem);
+                currentItem.SetUowInfo(_uow);
                 await currentItem.DeleteAsync(cancellationToken);
+                cart.OrderItems.Remove(currentItem);
             }
-            cart.OrderItems.Remove(currentItem);
             await cart.SaveAsync(cancellationToken);
             return cart;
         }
@@ -263,14 +269,14 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             myCart.SetUowInfo(_uow);
             myCart.OrderItems = checkoutCart.OrderItems.Where(m => !m.IsActive).ToList();
+            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
             var skus = checkoutCart.OrderItems.Select(m => m.Sku).ToList();
 
             var orderProducts = _uow.DbContext.ProductVariant.Where(m => skus.Contains(m.Sku));
             if (orderProducts.Count(m => m.Inventory == 0) > 0)
             {
-                var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => m.Sku).ToList();
-                string msg = $"{string.Join(',', soldOutProducts)} sold out";
-                throw new MixException(MixErrorStatus.Badrequest, msg);
+                var soldOutProducts = orderProducts.Where(m => m.Inventory == 0).Select(m => $"{m.Sku} sold out").ToArray();
+                throw new MixException(MixErrorStatus.Badrequest, soldOutProducts);
             }
 
             foreach (var item in orderProducts)
@@ -278,7 +284,6 @@ namespace Mix.Services.Ecommerce.Lib.Services
                 item.Inventory -= 1;
                 item.Sold += 1;
             }
-            await _uow.DbContext.SaveChangesAsync();
 
             myCart.Calculate();
 
@@ -286,9 +291,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
-            checkoutCart.OrderItems = checkoutCart.OrderItems.Where(m => m.IsActive).ToList();
+            
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
             checkoutCart.Calculate();
+
+            await _uow.DbContext.SaveChangesAsync();
         }
 
         public async Task<OrderStatus> ProcessPaymentResponse(

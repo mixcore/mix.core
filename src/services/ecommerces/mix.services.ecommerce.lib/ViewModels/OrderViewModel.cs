@@ -41,10 +41,12 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public OrderViewModel()
         {
+            IsCache = false;
         }
 
         public OrderViewModel(EcommerceDbContext context) : base(context)
         {
+            IsCache = false;
         }
 
         public OrderViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
@@ -53,6 +55,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public OrderViewModel(OrderDetail entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
+            IsCache = false;
         }
 
         #endregion

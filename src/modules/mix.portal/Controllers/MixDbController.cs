@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Amqp.Framing;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.Heart.Repository;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models;
 using RepoDb;
@@ -67,7 +68,7 @@ namespace Mix.Portal.Controllers
         }
 
         #endregion
-        
+
         [HttpGet]
         public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchMixDbRequestDto req)
         {
@@ -83,7 +84,7 @@ namespace Mix.Portal.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPost("export")]
         public async Task<ActionResult<FileModel>> Export([FromBody] SearchMixDbRequestDto req)
         {
@@ -226,6 +227,27 @@ namespace Mix.Portal.Controllers
             return BadRequest();
         }
 
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, [FromBody] JObject fields)
+        {
+            var data = await _repository.GetSingleAsync(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            JObject obj = ReflectionHelper.ParseObject(data);
+            foreach (var prop in fields.Properties())
+            {
+                if (obj.ContainsKey(prop.Name))
+                {
+                    obj[prop.Name] = prop.Value;
+                }
+            }
+            await _repository.UpdateAsync(obj);
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<object>> Delete(int id)
         {
@@ -253,10 +275,6 @@ namespace Mix.Portal.Controllers
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
                     queries.Add(new(parentIdFieldName, request.ParentId));
-                }
-                else if (!string.IsNullOrEmpty(request.ParentName))
-                {
-                    queries.Add(new($"{request.ParentName}Id", request.ParentId));
                 }
                 else
                 {
