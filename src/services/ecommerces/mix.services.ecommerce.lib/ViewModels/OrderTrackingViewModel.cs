@@ -22,18 +22,22 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
         public OrderTrackingViewModel()
         {
+            IsCache = false;
         }
 
         public OrderTrackingViewModel(EcommerceDbContext context) : base(context)
         {
+            IsCache = false;
         }
 
         public OrderTrackingViewModel(UnitOfWorkInfo unitOfWorkInfo) : base(unitOfWorkInfo)
         {
+            IsCache = false;
         }
 
         public OrderTrackingViewModel(OrderTracking entity, UnitOfWorkInfo uowInfo = null) : base(entity, uowInfo)
         {
+            IsCache = false;
         }
 
         #endregion

@@ -48,7 +48,6 @@ namespace Mix.Lib.Base
 
 
         [HttpGet("default")]
-        [HttpGet($"default/{MixRequestQueryKeywords.Specificulture}")]
         public ActionResult<TView> GetDefault()
         {
             var result = (TView)Activator.CreateInstance(typeof(TView), Uow);

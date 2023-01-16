@@ -54,7 +54,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
 
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count == 0, m => m.UserId == user.Id && m.OrderStatus != OrderStatus.NEW);
             searchRequest.Predicate = searchRequest.Predicate.AndAlsoIf(request.Statuses.Count > 0, m => m.UserId == user.Id && request.Statuses.Contains(m.OrderStatus));
-            return await OrderViewModel.GetRepository(_uow, false)
+            return await OrderViewModel.GetRepository(_uow)
                             .GetPagingAsync(
                                 searchRequest.Predicate,
                                 searchRequest.PagingData,
