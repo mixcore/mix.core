@@ -27,7 +27,8 @@ namespace Mix.Shared.Services
             if (settings != null)
             {
                 settings.Content = new JObject(new JProperty(_sectionName, JObject.FromObject(AppSettings))).ToString();
-                return !string.IsNullOrEmpty(MixFileHelper.SaveFile(settings));
+                var saveResult = MixFileHelper.SaveFile(settings);
+                return saveResult != null;
             }
             else
             {

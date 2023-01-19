@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Mix.Heart.Models;
 using Mix.Storage.Lib.Engines.Base;
 
 namespace Mix.Storage.Lib.Engines.Mix
@@ -18,10 +19,10 @@ namespace Mix.Storage.Lib.Engines.Mix
         {
             string? result = null;
             file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
-            var fileName = MixFileHelper.SaveFile(file);
-            if (!string.IsNullOrEmpty(fileName))
+            var saveResult = MixFileHelper.SaveFile(file);
+            if (saveResult != null)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{saveResult.Filename}.{saveResult.Extension}";
             }
 
             return Task.FromResult(result);
@@ -35,12 +36,11 @@ namespace Mix.Storage.Lib.Engines.Mix
                 folder = GetUploadFolder(file.FileName, folder, createdBy);
             }
 
-            var fileName = MixFileHelper.SaveFile(file, folder);
-            if (!string.IsNullOrEmpty(fileName))
+            var saveResult = MixFileHelper.SaveFile(file, folder);
+            if (saveResult != null)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{saveResult.Filename}.{saveResult.Extension}";
             }
-
             return Task.FromResult(result);
         }
 
