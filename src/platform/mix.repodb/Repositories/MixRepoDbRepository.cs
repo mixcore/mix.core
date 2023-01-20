@@ -38,10 +38,9 @@ namespace Mix.RepoDb.Repositories
 
         public string ConnectionString { get; set; }
         public MixDatabaseProvider DatabaseProvider { get; set; }
-        readonly DatabaseService _databaseService;
         private readonly AppSetting _settings;
         private string _tableName;
-        private bool _isRoot;
+        private bool _isRoot = true;
         #endregion
 
         public MixRepoDbRepository(ICache cache, DatabaseService databaseService, UnitOfWorkInfo<MixCmsContext> cmsUow)
@@ -52,16 +51,28 @@ namespace Mix.RepoDb.Repositories
                 CacheItemExpiration = 10,
                 CommandTimeout = 1000
             };
-            _databaseService = databaseService;
 
             _cmsUow = cmsUow;
-            DatabaseProvider = _databaseService.DatabaseProvider;
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
-            if (!string.IsNullOrEmpty(ConnectionString))
+            DatabaseProvider = databaseService.DatabaseProvider;
+            ConnectionString = databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
+            InitializeRepoDb();
+            CreateConnection();
+        }
+        
+        public MixRepoDbRepository(ICache cache, MixDatabaseProvider databaseProvider, string connectionString, UnitOfWorkInfo<MixCmsContext> cmsUow)
+        {
+            Cache = cache;
+            _settings = new AppSetting()
             {
-                InitializeRepoDb();
-                CreateConnection();
-            }
+                CacheItemExpiration = 10,
+                CommandTimeout = 1000
+            };
+
+            _cmsUow = cmsUow;
+            DatabaseProvider = databaseProvider;
+            ConnectionString = connectionString;
+            InitializeRepoDb();
+            CreateConnection();
         }
 
 
@@ -69,8 +80,7 @@ namespace Mix.RepoDb.Repositories
         public void InitTableName(string tableName)
         {
             _tableName = tableName.ToLower();
-            ConnectionString = _databaseService.GetConnectionString(MixConstants.CONST_MIXDB_CONNECTION);
-            DatabaseProvider = _databaseService.DatabaseProvider;
+            InitializeRepoDb();
             CreateConnection();
         }
 
@@ -80,7 +90,7 @@ namespace Mix.RepoDb.Repositories
             ConnectionString = connectionString;
             _tableName = tableName;
             InitializeRepoDb();
-            CreateConnection(true);
+            CreateConnection(true, true);
         }
 
 
@@ -88,11 +98,7 @@ namespace Mix.RepoDb.Repositories
         {
             try
             {
-                if (_connection.State == ConnectionState.Closed)
-                {
-                    _connection.Open();
-
-                }
+                BeginTransaction();
                 return _connection.ExecuteNonQueryAsync(commandSql, transaction: _dbTransaction);
             }
             catch (Exception ex)
@@ -169,6 +175,7 @@ namespace Mix.RepoDb.Repositories
             try
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                BeginTransaction();
                 var data = await _connection.QueryAllAsync(_tableName, null, null, commandTimeout: _settings.CommandTimeout, transaction: _dbTransaction, cancellationToken: cancellationToken);
                 return data.ToList();
             }
@@ -364,7 +371,7 @@ namespace Mix.RepoDb.Repositories
         #region private
         private void BeginTransaction()
         {
-            if (_connection != null && _isRoot && DatabaseProvider == MixDatabaseProvider.SQLITE && _connection.State != ConnectionState.Open)
+            if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
                 _dbTransaction = _connection.BeginTransaction();
@@ -440,9 +447,9 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
-        public IDbConnection CreateConnection(bool isRoot = false)
+        public IDbConnection CreateConnection(bool isRoot = false, bool isRenew = false)
         {
-            if (_connection != null)
+            if (!isRenew && _connection != null)
             {
                 return _connection;
             }

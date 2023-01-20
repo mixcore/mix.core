@@ -18,10 +18,10 @@ namespace Mix.Storage.Lib.Engines.Mix
         {
             string? result = null;
             file.FileFolder = GetUploadFolder(file.Extension, file.FolderName, createdBy);
-            var fileName = MixFileHelper.SaveFile(file);
-            if (!string.IsNullOrEmpty(fileName))
+            var fileModel = MixFileHelper.SaveFile(file);
+            if (fileModel != null)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{file.FileFolder}/{fileModel.Filename}{fileModel.Extension}";
             }
 
             return Task.FromResult(result);
@@ -35,10 +35,10 @@ namespace Mix.Storage.Lib.Engines.Mix
                 folder = GetUploadFolder(file.FileName, folder, createdBy);
             }
 
-            var fileName = MixFileHelper.SaveFile(file, folder);
-            if (!string.IsNullOrEmpty(fileName))
+            var fileModel = MixFileHelper.SaveFile(file, folder);
+            if (fileModel != null)
             {
-                result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileName}";
+                result = $"{CurrentTenant.Configurations.Domain}/{folder}/{fileModel.Filename}{fileModel.Extension}";
             }
 
             return Task.FromResult(result);

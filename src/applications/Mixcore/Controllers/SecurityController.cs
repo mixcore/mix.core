@@ -16,24 +16,27 @@ namespace Mixcore.Controllers
         private readonly TenantUserManager _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly MixIdentityService _idService;
+        private readonly MixEndpointService _mixEndpointService;
         private readonly MixCmsContext _cmsContext;
         public SecurityController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
             MixCmsService mixCmsService,
-            IPSecurityConfigService ipSecurityConfigService,            
+            IPSecurityConfigService ipSecurityConfigService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,
             MixIdentityService idService,
             TenantUserManager userManager,
-            MixCmsContext cmsContext)
-            : base(httpContextAccessor, mixService,  mixCmsService, ipSecurityConfigService)
+            MixCmsContext cmsContext,
+            MixEndpointService mixEndpointService)
+            : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _signInManager = signInManager;
             _logger = logger;
             _idService = idService;
             _userManager = userManager;
             _cmsContext = cmsContext;
+            _mixEndpointService = mixEndpointService;
         }
 
         [HttpGet]
@@ -53,13 +56,16 @@ namespace Mixcore.Controllers
         [Route("security/external-login")]
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult<JObject> ExternalLogin(string provider, string returnUrl = null)
+        public ActionResult<JObject> ExternalLogin([FromForm] string returnUrl, [FromForm] MixExternalLoginProviders provider)
         {
             // Request a redirect to the external login provider.
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= _mixEndpointService.DefaultDomain;
+            returnUrl = returnUrl.Contains(_mixEndpointService.DefaultDomain) || returnUrl.StartsWith("http")
+                                ? returnUrl
+                                : $"{_mixEndpointService.DefaultDomain.TrimEnd('/')}/{returnUrl.TrimStart('/')}";
             var redirectUrl = $"/security/external-login-result?returnUrl={returnUrl}";
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return new ChallengeResult(provider, properties);
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider.ToString(), redirectUrl);
+            return new ChallengeResult(provider.ToString(), properties);
         }
 
         [Route("security/external-login-result")]
