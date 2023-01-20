@@ -92,25 +92,7 @@
       ]
     },
     {
-      "title": "Categories",
-      "path": "#",
-      "icon": "mi mi-Label",
-      "svg": "tabler-icon-inbox.svg",
-      "subMenus": [
-        {
-          "title": "Create New",
-          "icon": "mi mi-Add",
-          "path": "/admin/mix-database-data/create?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default"
-        },
-        {
-          "path": "/admin/mix-database-data/list?mixDatabaseName=sysCategory&mixDatabaseTitle=Category&dataId=default&isGroup=true",
-          "title": "List",
-          "icon": "mi mi-List"
-        }
-      ]
-    },
-    {
-      "title": "Tags",
+      "title": "Metadata",
       "path": "#",
       "icon": "mi mi-Tag",
       "svg": "tabler-icon-tag.svg",
@@ -118,10 +100,10 @@
         {
           "title": "Create New",
           "icon": "mi mi-Add",
-          "path": "/admin/mix-database-data/create?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default"
+          "path": "/admin/mix-database-data/create?mixDatabaseName=metadata&mixDatabaseTitle=Metadata"
         },
         {
-          "path": "/admin/mix-database-data/list?mixDatabaseName=sysTag&mixDatabaseTitle=Tag&dataId=default&isGroup=true",
+          "path": "/admin/mix-database-data/list?mixDatabaseName=Metadata&mixDatabaseTitle=Metadata&isGroup=true",
           "title": "List",
           "icon": "mi mi-List"
         }
