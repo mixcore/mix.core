@@ -86,14 +86,14 @@ namespace Mix.Storage.Controllers
                     folder = $"{MixFolders.StaticFiles}/{MixFolders.UploadsFolder}/{folder.TrimStart('/').TrimEnd('/')}";
                 }
                 var result = MixFileHelper.SaveFile(file, folder);
-                if (!string.IsNullOrEmpty(result))
+                if (result != null)
                 {
-                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");
+                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result.Filename}{result.Extension}");
                 }
             }
             return BadRequest();
         }
-        
+
         // POST api/values
         /// <summary>
         /// Uploads the image.
@@ -114,9 +114,9 @@ namespace Mix.Storage.Controllers
                 }
                 var result = MixFileHelper.SaveFile(file, folder);
                 MixFileHelper.UnZipFile($"{folder}/{result}", folder);
-                if (!string.IsNullOrEmpty(result))
+                if (result != null)
                 {
-                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result}");
+                    return Ok($"{CurrentTenant.Configurations.Domain}/{folder}/{result.Filename}{result.Extension}");
                 }
             }
             return BadRequest();
