@@ -78,10 +78,10 @@ namespace Mix.Portal.Controllers
         }
         protected override Task DeleteHandler(Lib.ViewModels.MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
-            if (data.Type == MixDatabaseType.System)
-            {
-                throw new MixException($"Cannot Delete System Database: {data.SystemName}");
-            }
+            //if (data.Type == MixDatabaseType.System)
+            //{
+            //    throw new MixException($"Cannot Delete System Database: {data.SystemName}");
+            //}
             return base.DeleteHandler(data, cancellationToken);
         }
         #endregion

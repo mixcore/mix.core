@@ -406,14 +406,15 @@ namespace Mix.Lib.Services
                     continue;
                 }
                 var oldId = item.Id;
-                item.Id = 0;
-                item.CreatedBy = _siteData.CreatedBy;
-                item.CreatedDateTime = DateTime.UtcNow;
-                item.MixDatabaseId = database.Id;
-                item.MixDatabaseName = database.SystemName;
-                _context.MixDatabaseColumn.Add(item);
+                var obj = ReflectionHelper.CloneObject(item);
+                obj.Id = 0;
+                obj.CreatedBy = _siteData.CreatedBy;
+                obj.CreatedDateTime = DateTime.UtcNow;
+                obj.MixDatabaseId = database.Id;
+                obj.MixDatabaseName = database.SystemName;
+                _context.MixDatabaseColumn.Add(obj);
                 await _context.SaveChangesAsync(_cts.Token);
-                _dicColumnIds.Add(oldId, item.Id);
+                _dicColumnIds.Add(oldId, obj.Id);
             }
         }
 
