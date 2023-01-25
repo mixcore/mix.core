@@ -6,6 +6,7 @@
 
 ## Online Run & Build
 Click the button below to start a new development environment:
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/mixcore/mix.core/tree/develop)
 
 ## UI Screenshots 
@@ -157,6 +158,15 @@ Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/bl
 
 ![Alt](https://repobeats.axiom.co/api/embed/4ec425735bae424c69c063f2bac106c3107b6db4.svg "Repobeats analytics image")
 =======
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mixcore/mix.core&type=Date)](https://star-history.com/#mixcore/mix.core&Date)
+
+## Contributors Wall
+<a href="https://github.com/mixcore/mix.core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mixcore/mix.core" />
+</a>
 
 ## How to contribute
 
