@@ -168,6 +168,10 @@ Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/bl
 
 [![Star History Chart](https://api.star-history.com/svg?repos=mixcore/mix.core&type=Date)](https://star-history.com/#mixcore/mix.core&Date)
 
+## Contributors Wall
+<a href="https://github.com/mixcore/mix.core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mixcore/mix.core" />
+</a>
 
 ## How to contribute
 
