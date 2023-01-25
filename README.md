@@ -163,6 +163,12 @@ Mixcore CMS is licensed under the **[MIT](https://github.com/mixcore/mix.core/bl
 ![Alt](https://repobeats.axiom.co/api/embed/4ec425735bae424c69c063f2bac106c3107b6db4.svg "Repobeats analytics image")
 =======
 
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=mixcore/mix.core&type=Date)](https://star-history.com/#mixcore/mix.core&Date)
+
+
 ## How to contribute
 
 Fork this repo to your GitHub account, clone it locally and try to follow
