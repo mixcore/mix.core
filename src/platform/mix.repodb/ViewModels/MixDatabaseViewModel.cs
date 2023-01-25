@@ -6,16 +6,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Mix.RepoDb.ViewModels
 {
-    public class MixDatabaseViewModel
+    public sealed class MixDatabaseViewModel
         : TenantDataViewModelBase<MixCmsContext, MixDatabase, int, MixDatabaseViewModel>
     {
         #region Properties
         [Required]
-        public virtual string SystemName { get; set; }
+        public string SystemName { get; set; }
 
         public MixDatabaseType Type { get; set; } = MixDatabaseType.Service;
+        public string ReadPermissions { get; set; }
+        public string CreatePermissions { get; set; }
+        public string UpdatePermissions { get; set; }
+        public string DeletePermissions { get; set; }
+        public bool SelfManaged { get; set; }
 
         public List<MixDatabaseColumnViewModel> Columns { get; set; } = new();
+        public List<MixDatabaseRelationshipViewModel> Relationships { get; set; } = new();
         #endregion
 
         #region Constructors
@@ -29,7 +35,8 @@ namespace Mix.RepoDb.ViewModels
         {
         }
 
-        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo? uowInfo = null) : base(entity, uowInfo)
+        public MixDatabaseViewModel(MixDatabase entity, UnitOfWorkInfo uowInfo = null)
+            : base(entity, uowInfo)
         {
         }
 
@@ -38,14 +45,41 @@ namespace Mix.RepoDb.ViewModels
         #region Overrides
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
-            Columns = await colRepo.GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
+            Columns = await MixDatabaseColumnViewModel.GetRepository(UowInfo).GetListAsync(c => c.MixDatabaseId == Id, cancellationToken);
+            Relationships = await MixDatabaseRelationshipViewModel.GetRepository(UowInfo).GetListAsync(c => c.ParentId == Id, cancellationToken);
         }
 
         protected override async Task SaveEntityRelationshipAsync(MixDatabase parentEntity, CancellationToken cancellationToken = default)
         {
             if (Columns != null)
             {
+                if ((Type == MixDatabaseType.AdditionalData || Type == MixDatabaseType.GuidAdditionalData))
+                {
+                    if (!Columns.Any(m => m.SystemName == "parentId"))
+                    {
+
+                        Columns.Add(new()
+                        {
+                            DisplayName = "Parent Id",
+                            SystemName = "parentId",
+                            DataType = Type == MixDatabaseType.AdditionalData ? MixDataType.Reference : MixDataType.Guid
+                        });
+                    }
+                    if (!Columns.Any(m => m.SystemName == "parentType"))
+                    {
+                        Columns.Add(new()
+                        {
+                            DisplayName = "Parent Type",
+                            SystemName = "parentType",
+                            DataType = MixDataType.Text,
+                            ColumnConfigurations = new()
+                            {
+                                MaxLength = 20
+                            }
+                        });
+                    }
+                }
+
                 foreach (var item in Columns)
                 {
                     item.SetUowInfo(UowInfo);
@@ -54,6 +88,32 @@ namespace Mix.RepoDb.ViewModels
                     await item.SaveAsync(cancellationToken);
                 }
             }
+
+            if (Relationships != null)
+            {
+                foreach (var item in Relationships)
+                {
+                    item.SetUowInfo(UowInfo);
+                    item.ParentId = parentEntity.Id;
+                    item.SourceDatabaseName = parentEntity.SystemName;
+                    await item.SaveAsync(cancellationToken);
+                }
+            }
+        }
+
+        protected override async Task DeleteHandlerAsync(CancellationToken cancellationToken = default)
+        {
+            // Exception: This MySqlConnection is already in use. See https://fl.vu/mysql-conn-reuse when delete nested entity using Repository
+            //await MixDataContentValueViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
+            //await MixDataViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
+            //await MixDatabaseColumnViewModel.GetRepository(UowInfo).DeleteManyAsync(m => m.MixDatabaseId == Id);
+            foreach (var col in Columns)
+            {
+                col.SetUowInfo(UowInfo);
+                await col.DeleteAsync(cancellationToken);
+            }
+
+            await base.DeleteHandlerAsync(cancellationToken);
         }
 
         #endregion

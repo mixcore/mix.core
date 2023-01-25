@@ -9,7 +9,7 @@ namespace Mix.Account
 
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            return MixHelper.CreateHostBuilder<Startup>(args);
+            return MixCmsHelper.CreateHostBuilder<Startup>(args);
         }
     }
 }

@@ -83,15 +83,23 @@
 		</EmbeddedResource>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Remove="logs\**" />
+		<Compile Remove="MixContent\cache\**" />
 		<Compile Remove="MixContent\Templates\**" />
 		<Compile Remove="Models\Cms\**" />
+		<Content Remove="logs\**" />
+		<Content Remove="MixContent\cache\**" />
 		<Content Remove="MixContent\Templates\**" />
 		<Content Remove="Models\Cms\**" />
 		<Content Remove="wwwroot\mix-content\**" />
 		<EmbeddedResource Remove="..\..\shared\MixContent\**" />
+		<EmbeddedResource Remove="logs\**" />
+		<EmbeddedResource Remove="MixContent\cache\**" />
 		<EmbeddedResource Remove="MixContent\Templates\**" />
 		<EmbeddedResource Remove="Models\Cms\**" />
 		<EmbeddedResource Remove="wwwroot\mix-content\**" />
+		<None Remove="logs\**" />
+		<None Remove="MixContent\cache\**" />
 		<None Remove="MixContent\Templates\**" />
 		<None Remove="Models\Cms\**" />
 		<None Remove="wwwroot\mix-content\**" />

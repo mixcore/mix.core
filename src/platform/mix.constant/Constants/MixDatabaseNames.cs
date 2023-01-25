@@ -10,6 +10,7 @@
         public const string SYSTEM_CATEGORY = "sysCategory";
         public const string SYSTEM_TAG = "sysTag";
         public const string SYSTEM_USER_DATA = "sysUserData";
+        public const string PORTAL_MENU = "PortalMenu";
         public const string SYSTEM_ENDPOINT = "sysEndpoint";
         public const string SYSTEM_PERMISSION = "sysPermission";
         public const string SYSTEM_PERMISSION_ENDPOINT = "sysPermissionEndpoint";

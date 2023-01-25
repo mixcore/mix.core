@@ -4,6 +4,7 @@ using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Lib.Models;
 using Mix.Lib.ViewModels;
+using Mix.Shared.Helpers;
 
 namespace Mix.Tenancy.Domain.Services
 {

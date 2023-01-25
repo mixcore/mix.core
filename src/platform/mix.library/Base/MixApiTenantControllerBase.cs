@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
-using Mix.Lib.Extensions;
 using Mix.Lib.Models;
 using Mix.Lib.Services;
+using Mix.Shared.Extensions;
 
 namespace Mix.Lib.Base
 {
