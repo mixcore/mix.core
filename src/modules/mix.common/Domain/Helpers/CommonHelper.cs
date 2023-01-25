@@ -1,5 +1,6 @@
 ﻿using Mix.Common.Models;
 using Mix.Lib.Models;
+using Mix.Service.Models;
 using Mix.Shared.Models.Configurations;
 using Mix.Shared.Services;
 

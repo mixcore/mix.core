@@ -14,4 +14,8 @@
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

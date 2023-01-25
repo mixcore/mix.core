@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\mix.database\mix.database.csproj" />
     <ProjectReference Include="..\mix.queue\mix.queue.csproj" />
+    <ProjectReference Include="..\mix.service\mix.service.csproj" />
     <ProjectReference Include="..\mix.signalr\mix.signalr.csproj" />
   </ItemGroup>
 

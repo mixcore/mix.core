@@ -1,0 +1,28 @@
+// case where behavior is responsive, or with a marker class
+@mixin media-breakpoint-down-or($breakpoint, $name) {
+  #{unquote($name)} {
+    @content;
+  }
+
+  @include media-breakpoint-down($breakpoint) {
+    @content;
+  }
+}
+
+// case where behavior is responsive, or with a marker class
+@mixin media-breakpoint-up-or($breakpoint, $name) {
+  #{unquote($name)} {
+    @content;
+  }
+
+  @include media-breakpoint-up($breakpoint) {
+    @content;
+  }
+}
+
+// Name of the previous breakpoint, or null
+
+@function breakpoint-previous($name, $breakpoints: $grid-breakpoints, $breakpoint-names: map-keys($breakpoints)) {
+  $n: index($breakpoint-names, $name);
+  @return if($n > 1, nth($breakpoint-names, $n - 1), null);
+}

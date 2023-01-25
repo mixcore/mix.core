@@ -40,6 +40,9 @@
 		<Using Include="Mix.Constant.Enums" />
 		<Using Include="Mix.Shared.Dtos" />
 		<Using Include="Mix.Service.Services" />
+		<Using Include="Mix.Service.Models" />
+		<Using Include="Mix.Shared.Extensions" />
+		<Using Include="Mix.Shared.Helpers" />
 
 	</ItemGroup>
 	<ItemGroup>

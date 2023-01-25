@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Extensions;
+using Mix.Shared.Extensions;
 using Mix.Lib.Services;
 using Mix.Lib.ViewModels;
 using Mix.Quartz.Services;

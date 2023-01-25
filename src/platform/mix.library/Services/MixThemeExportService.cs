@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
-using Mix.Lib.Extensions;
 using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;

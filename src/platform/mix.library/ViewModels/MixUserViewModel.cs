@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Identity.Models.AccountViewModels;
@@ -32,6 +33,7 @@ namespace Mix.Lib.ViewModels
         public JObject UserData { get; set; }
 
         public List<AspNetUserRoles> Roles { get; set; }
+        public JArray PortalMenus { get; set; }
 
         public List<string> Endpoints { get; set; } = new();
 
@@ -44,6 +46,7 @@ namespace Mix.Lib.ViewModels
         public ChangePasswordViewModel ChangePassword { get; set; }
         [JsonIgnore]
         private UnitOfWorkInfo<MixCmsContext> _cmsUow { get; }
+
 
         #endregion Change Password
 
@@ -109,14 +112,24 @@ namespace Mix.Lib.ViewModels
                                 where ur.UserId == Id && ur.MixTenantId == tenantId
                                 select ur;
                     Roles = await roles.ToListAsync();
-
-
                 }
                 catch (Exception ex)
                 {
                     MixService.LogException(ex);
                 }
             }
+        }
+
+        public async Task LoadUserPortalMenus(IEnumerable<string> roles, int tenantId, MixRepoDbRepository repoDbRepository)
+        {
+            repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
+            var menus = await repoDbRepository.GetListByAsync(
+                    new List<SearchQueryField>()
+                    {
+                                new SearchQueryField("Role", $"({string.Join(',', roles.Select(m=> $"'{m}'").ToArray())})", MixCompareOperator.InRange)
+                    }
+                );
+            PortalMenus = ReflectionHelper.ParseArray(menus);
         }
 
         //public async Task LoadUserEndpointsAsync(int tenantId, MixRepoDbRepository repoDbRepository)

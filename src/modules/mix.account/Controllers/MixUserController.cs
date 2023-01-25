@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -12,24 +11,18 @@ using Mix.Identity.Domain.Models;
 using Mix.Identity.Dtos;
 using Mix.Identity.Models;
 using Mix.Identity.Models.AccountViewModels;
-using Mix.Lib.Extensions;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 using Newtonsoft.Json;
 using RepoDb;
 using System.Linq.Expressions;
-using Mix.Lib.Models;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Communicator.Models;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Services.Databases.Lib.Entities;
-using Microsoft.Extensions.Azure;
 using Newtonsoft.Json.Linq;
-using FirebaseAdmin.Messaging;
-using Mix.Shared.Models.Configurations;
-using Google.Rpc;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 
@@ -220,15 +213,6 @@ namespace Mix.Account.Controllers
             string decryptMsg = AesEncryptionHelper.DecryptString(requestDto.Message, key);
             var model = JsonConvert.DeserializeObject<LoginViewModel>(decryptMsg);
             var loginResult = await _idService.LoginAsync(model);
-            if (loginResult != null && !GlobalConfigService.Instance.IsInit)
-            {
-                var user = await _userManager.FindByNameAsync(model.UserName);
-                user ??= await _userManager.FindByEmailAsync(model.UserName);
-                user ??= await _userManager.FindByPhoneNumberAsync(model.UserName);
-                var roles = await _userManager.GetRolesAsync(user);
-                var portalMenus = await MixPortalMenuViewModel.GetRepository(_dbUOW).GetAllAsync(m => roles.Contains(m.Role));
-                loginResult.Add(new JProperty("portalMenus", ReflectionHelper.ParseArray(portalMenus)));
-            }
             return Ok(loginResult);
         }
 

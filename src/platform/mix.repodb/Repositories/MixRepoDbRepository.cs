@@ -141,9 +141,19 @@ namespace Mix.RepoDb.Repositories
             List<QueryField> queries = new();
             foreach (var item in searchQueryFields)
             {
-                queries.Add(new QueryField(item.FieldName, item.Value));
+                Operation op = ParseMixOperator(item.CompareOperator);
+                queries.Add(new QueryField(item.FieldName, op, item.Value));
             }
             return queries;
+        }
+
+        private Operation ParseMixOperator(MixCompareOperator compareOperator)
+        {
+            return compareOperator switch
+            {
+                MixCompareOperator.InRange => Operation.In,
+                _ => Operation.Equal
+            };
         }
 
         public async Task<List<dynamic>?> GetListByAsync(List<QueryField> queryFields, string? fields = null)
@@ -197,6 +207,25 @@ namespace Mix.RepoDb.Repositories
                     new QueryField("ParentType", parentType.ToString()),
                     new QueryField("ParentId", parentId.ToString())
                     },
+                    commandTimeout: _settings.CommandTimeout,
+                    transaction: _dbTransaction,
+                    trace: Trace))?.SingleOrDefault();
+            }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                return default;
+            }
+        }
+        
+        public async Task<dynamic?> GetSingleByAsync(List<QueryField> queries)
+        {
+            try
+            {
+                BeginTransaction();
+                return (await _connection.QueryAsync<dynamic>(
+                    _tableName,
+                    queries,
                     commandTimeout: _settings.CommandTimeout,
                     transaction: _dbTransaction,
                     trace: Trace))?.SingleOrDefault();

@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Filters;
-    using Mix.Lib.Extensions;
     using System;
     using System.Threading.Tasks;
 

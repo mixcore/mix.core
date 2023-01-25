@@ -1,11 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using FirebaseAdmin.Auth;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Azure.Amqp.Framing;
+using Microsoft.Extensions.Azure;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
 using Mix.Heart.Repository;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.Services;
 using Mix.Shared.Models;
+using Org.BouncyCastle.Ocsp;
 using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
@@ -18,6 +23,7 @@ namespace Mix.Portal.Controllers
     [ApiController]
     public class MixDbController : MixTenantApiControllerBase
     {
+        private const string createdByFieldName = "CreatedBy";
         private const string createdDateFieldName = "CreatedDateTime";
         private const string priorityFieldName = "Priority";
         private const string idFieldName = "Id";
@@ -33,6 +39,8 @@ namespace Mix.Portal.Controllers
         private readonly MixCmsContext _context;
         private string _tableName;
         private MixDatabaseViewModel _database;
+        private readonly MixIdentityService _idService;
+        private readonly MixDbService _mixDbService;
         private static string _associationTableName = nameof(MixDatabaseAssociation);
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
@@ -46,7 +54,9 @@ namespace Mix.Portal.Controllers
             MixMemoryCacheService memoryCache,
             UnitOfWorkInfo<MixCmsContext> cmsUOW,
             ICache cache,
-            DatabaseService databaseService)
+            DatabaseService databaseService,
+            MixIdentityService idService,
+            MixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _context = context;
@@ -55,7 +65,8 @@ namespace Mix.Portal.Controllers
             _associationRepository.InitTableName(_associationTableName);
             _cmsUOW = cmsUOW;
             _memoryCache = memoryCache;
-
+            _idService = idService;
+            _mixDbService = mixDbService;
         }
 
         #region Overrides
@@ -68,6 +79,22 @@ namespace Mix.Portal.Controllers
         }
 
         #endregion
+
+        [HttpGet("my-data")]
+        public async Task<ActionResult<PagingResponseModel<JObject>>> MyData([FromQuery] SearchMixDbRequestDto req)
+        {
+            string username = _idService.GetClaim(User, MixClaims.Username);
+            PagingResponseModel<JObject> result = await _mixDbService.GetMyData(_tableName, req, username);
+            return Ok(result);
+        }
+
+        [HttpGet("my-data/{id}")]
+        public async Task<ActionResult<JObject>> GetMyDataById(int id, [FromQuery] bool loadNestedData)
+        {
+            string username = _idService.GetClaim(User, MixClaims.Username);
+            JObject result = await _mixDbService.GetMyDataById(_tableName, username, id, loadNestedData);
+            return Ok(result);
+        }
 
         [HttpGet]
         public async Task<ActionResult<PagingResponseModel<JObject>>> Get([FromQuery] SearchMixDbRequestDto req)
@@ -99,35 +126,8 @@ namespace Mix.Portal.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<JObject>> GetSingle(int id, [FromQuery] bool loadNestedData)
         {
-            var obj = await _repository.GetSingleAsync(id);
-            if (obj != null)
-            {
-                var data = ReflectionHelper.ParseObject(obj);
-                var database = await GetMixDatabase();
-                foreach (var item in database.Relationships)
-                {
-                    if (loadNestedData)
-                    {
-
-                        List<QueryField> queries = GetAssociatoinQueries(item.SourceDatabaseName, item.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(queries);
-                        if (associations.Count > 0)
-                        {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
-                            _repository.InitTableName(item.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(item.DisplayName, ReflectionHelper.ParseArray(nestedData)));
-                        }
-                    }
-                    else
-                    {
-                        data.Add(new JProperty($"{item.DisplayName}Url", $"{CurrentTenant.Configurations.Domain}/api/v2/rest/mix-portal/mix-db/{item.DestinateDatabaseName}?ParentId={id}&ParentName={item.SourceDatabaseName}"));
-                    }
-                }
-                return Ok(data);
-            }
-            throw new MixException(MixErrorStatus.NotFound, id);
+            var result = await _mixDbService.GetById(_tableName, id, loadNestedData);
+            return result != default ? Ok(result) : NotFound(id);
         }
 
         [HttpGet("get-by-parent/{parentType}/{parentId}")]
@@ -268,6 +268,54 @@ namespace Mix.Portal.Controllers
 
         private async Task<PagingResponseModel<JObject>> SearchHandler(SearchMixDbRequestDto request)
         {
+            IEnumerable<QueryField> queries = await BuildSearchQueryAsync(request);
+            var paging = new PagingRequestModel()
+            {
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
+                SortBy = request.OrderBy,
+                SortDirection = request.Direction
+            };
+
+            return await GetResult(queries, paging, request.LoadNestedData);
+        }
+
+
+        private async Task<PagingResponseModel<JObject>> GetResult(IEnumerable<QueryField> queries, PagingRequestModel paging, bool loadNestedData)
+        {
+            var result = await _repository.GetPagingAsync(queries, paging);
+
+            var items = new List<JObject>();
+            var database = await GetMixDatabase();
+
+            foreach (var item in result.Items)
+            {
+                var data = ReflectionHelper.ParseObject(item);
+                if (loadNestedData)
+                {
+                    foreach (var rel in database.Relationships)
+                    {
+                        var id = data.Value<int>("id");
+
+                        List<QueryField> nestedQueries = GetAssociatoinQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
+                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
+                        if (associations.Count > 0)
+                        {
+                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
+                            _repository.InitTableName(rel.DestinateDatabaseName);
+                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
+                            var nestedData = await _repository.GetListByAsync(query);
+                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
+                        }
+                    }
+                }
+                items.Add(data);
+            }
+            return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
+        }
+
+        private async Task<List<QueryField>> BuildSearchQueryAsync(SearchMixDbRequestDto request)
+        {
             var queries = BuildSearchPredicate(request).ToList();
             if (request.ParentId.HasValue)
             {
@@ -293,44 +341,9 @@ namespace Mix.Portal.Controllers
                     queries.Add(new(query.FieldName, op, query.Value));
                 }
             }
-            var paging = new PagingRequestModel()
-            {
-                PageIndex = request.PageIndex,
-                PageSize = request.PageSize,
-                SortBy = request.OrderBy,
-                SortDirection = request.Direction
-            };
-
-            var result = await _repository.GetPagingAsync(queries, paging);
-
-            var items = new List<JObject>();
-            var database = await GetMixDatabase();
-
-            foreach (var item in result.Items)
-            {
-                var data = ReflectionHelper.ParseObject(item);
-                if (request.LoadNestedData)
-                {
-                    foreach (var rel in database.Relationships)
-                    {
-                        var id = data.Value<int>("id");
-
-                        List<QueryField> nestedQueries = GetAssociatoinQueries(rel.SourceDatabaseName, rel.DestinateDatabaseName, id);
-                        var associations = await _associationRepository.GetListByAsync(nestedQueries);
-                        if (associations.Count > 0)
-                        {
-                            var nestedIds = JArray.FromObject(associations).Select(m => m.Value<int>(childIdFieldName)).ToList();
-                            _repository.InitTableName(rel.DestinateDatabaseName);
-                            List<QueryField> query = new() { new(idFieldName, Operation.In, nestedIds) };
-                            var nestedData = await _repository.GetListByAsync(query);
-                            data.Add(new JProperty(rel.DisplayName, ReflectionHelper.ParseArray(nestedData)));
-                        }
-                    }
-                }
-                items.Add(data);
-            }
-            return new PagingResponseModel<JObject> { Items = items, PagingData = result.PagingData };
+            return queries;
         }
+
         private Operation ParseOperator(MixCompareOperator compareOperator)
         {
             switch (compareOperator)
@@ -408,12 +421,6 @@ namespace Mix.Portal.Controllers
                 _ => Operation.Equal
             };
         }
-
-        private ActionResult<PagingResponseModel<JObject>> ParseSearchResult(SearchRequestDto req, PagingResponseModel<JObject> result)
-        {
-            throw new NotImplementedException();
-        }
-
 
         #endregion
 

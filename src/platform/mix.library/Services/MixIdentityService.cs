@@ -10,7 +10,6 @@ using Mix.Identity.Dtos;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
-using Mix.Lib.Extensions;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
@@ -98,7 +97,10 @@ namespace Mix.Lib.Services
             if (user != null)
             {
                 var userInfo = new MixUserViewModel(user, CmsUow);
+                var roles = await UserManager.GetRolesAsync(user);
                 await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext);
+                await userInfo.LoadUserPortalMenus(roles, CurrentTenant.Id, RepoDbRepository);
+
                 return userInfo;
             }
             return null;

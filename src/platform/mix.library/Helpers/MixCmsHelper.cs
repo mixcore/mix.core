@@ -1,4 +1,7 @@
 ﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System.Data;
 using System.Text.RegularExpressions;
 
@@ -6,6 +9,41 @@ namespace Mix.Lib.Helpers
 {
     public class MixCmsHelper
     {
+        public static IHostBuilder CreateHostBuilder<TStartup>(string[] args) where TStartup : class
+        {
+            var mixContentFolder = new DirectoryInfo(MixFolders.MixContentFolder);
+
+            // Clone Settings from shared folder
+            if (!mixContentFolder.Exists)
+            {
+                MixHelper.CopyFolder(MixFolders.SharedConfigurationFolder, MixFolders.MixContentFolder);
+                Console.WriteLine("Clone Settings from shared folder completed.");
+            }
+            return Host.CreateDefaultBuilder(args)
+            .UseContentRoot(Directory.GetCurrentDirectory())
+               .ConfigureAppConfiguration((hostingContext, config) =>
+               {
+                   config
+                       .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                       .AddJsonFile("appsettings.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/azure.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/ocelot.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/storage.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
+                       .AddEnvironmentVariables();
+               })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder
+                    .UseStartup<TStartup>();
+                });
+        }
+
         public static string FormatPrice(double? price, string oldPrice = "0")
         {
             string strPrice = price?.ToString();

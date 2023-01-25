@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Mix.Lib.Extensions;
 using Mix.Lib.Models;
 
 namespace Mix.Lib.Services
