@@ -102,6 +102,8 @@ namespace Mix.Portal.Controllers
             };
 
             await _importService.DownloadThemeAsync(theme, progress, _httpService);
+            GlobalConfigService.Instance.AppSettings.InitStatus = InitStep.SelectTheme;
+            GlobalConfigService.Instance.SaveSettings();
             return Ok();
         }
 
