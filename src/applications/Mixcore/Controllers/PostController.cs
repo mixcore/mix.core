@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Mix.Database.Services;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
+using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Services;
@@ -13,6 +16,7 @@ namespace Mixcore.Controllers
     {
         protected UnitOfWorkInfo _uow;
         protected readonly MixCmsContext _context;
+        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _dbUow;
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
@@ -28,7 +32,8 @@ namespace Mixcore.Controllers
             DatabaseService databaseService,
             MixCmsContext context,
             MixRepoDbRepository repoDbRepository,
-            MixMetadataService metadataService)
+            MixMetadataService metadataService,
+            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUow)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _context = context;
@@ -39,6 +44,8 @@ namespace Mixcore.Controllers
             _context = context;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
+            _dbUow = dbUow;
+            _repoDbRepository.SetDbConnection(_dbUow);
         }
 
         protected override void ValidateRequest()

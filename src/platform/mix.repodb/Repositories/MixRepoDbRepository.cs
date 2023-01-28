@@ -23,6 +23,7 @@ using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
+using System.Data.Common;
 
 namespace Mix.RepoDb.Repositories
 {
@@ -58,7 +59,7 @@ namespace Mix.RepoDb.Repositories
             InitializeRepoDb();
             CreateConnection();
         }
-        
+
         public MixRepoDbRepository(ICache cache, MixDatabaseProvider databaseProvider, string connectionString, UnitOfWorkInfo<MixCmsContext> cmsUow)
         {
             Cache = cache;
@@ -216,8 +217,12 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
+            finally
+            {
+                CompleteTransaction();
+            }
         }
-        
+
         public async Task<dynamic?> GetSingleByAsync(List<QueryField> queries)
         {
             try
@@ -235,9 +240,13 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
+            finally
+            {
+                CompleteTransaction();
+            }
         }
 
-       
+
         public async Task<dynamic?> GetListByParentAsync(MixContentType parentType, object parentId)
         {
             try
@@ -257,6 +266,10 @@ namespace Mix.RepoDb.Repositories
             {
                 MixService.LogException(ex);
                 return default;
+            }
+            finally
+            {
+                CompleteTransaction();
             }
         }
 
@@ -281,6 +294,10 @@ namespace Mix.RepoDb.Repositories
             {
                 MixService.LogException(ex);
                 return default;
+            }
+            finally
+            {
+                CompleteTransaction();
             }
         }
 
@@ -309,6 +326,10 @@ namespace Mix.RepoDb.Repositories
             {
                 throw new MixException(MixErrorStatus.Badrequest, ex.Message);
             }
+            finally
+            {
+                CompleteTransaction();
+            }
         }
 
         public async Task<int?> InsertManyAsync(List<dynamic> entities)
@@ -328,6 +349,10 @@ namespace Mix.RepoDb.Repositories
             {
                 MixService.LogException(ex);
                 return default;
+            }
+            finally
+            {
+                CompleteTransaction();
             }
         }
 
@@ -351,6 +376,10 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
+            finally
+            {
+                CompleteTransaction();
+            }
         }
 
         public async Task<int> DeleteAsync(int id)
@@ -372,6 +401,10 @@ namespace Mix.RepoDb.Repositories
                 MixService.LogException(ex);
                 return default;
             }
+            finally
+            {
+                CompleteTransaction();
+            }
         }
 
         public async Task<int> DeleteAsync(List<QueryField> queries)
@@ -392,6 +425,10 @@ namespace Mix.RepoDb.Repositories
             {
                 MixService.LogException(ex);
                 return default;
+            }
+            finally
+            {
+                CompleteTransaction();
             }
         }
 
@@ -476,6 +513,22 @@ namespace Mix.RepoDb.Repositories
             }
         }
 
+        public void SetDbConnection(UnitOfWorkInfo dbUow)
+        {
+            if (_connection != null)
+            {
+                _connection.Close();
+                _connection.Dispose();
+            }
+
+            _connection = dbUow.ActiveDbContext.Database.GetDbConnection();
+            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
+            {
+                _dbTransaction = dbUow.ActiveTransaction.GetDbTransaction();
+                _isRoot = false;
+            }
+        }
+
         public IDbConnection CreateConnection(bool isRoot = false, bool isRenew = false)
         {
             if (!isRenew && _connection != null)
@@ -518,7 +571,13 @@ namespace Mix.RepoDb.Repositories
 
 
         #endregion
-
+        public void CompleteTransaction()
+        {
+            if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
+            {
+                _dbTransaction.Commit();
+            }
+        }
         public void Dispose()
         {
             if (_connection != null)

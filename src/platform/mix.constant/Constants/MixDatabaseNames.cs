@@ -7,6 +7,7 @@
         public const string MODULE_COLUMN = "sysModuleColumn";
         public const string NAVIGATION = "sysNavigation";
         public const string MENU_ITEM = "sysMenuItem";
+        public const string METADATA = "Metadata";
         public const string SYSTEM_CATEGORY = "sysCategory";
         public const string SYSTEM_TAG = "sysTag";
         public const string SYSTEM_USER_DATA = "sysUserData";

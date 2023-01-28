@@ -27,6 +27,7 @@ namespace Mix.Shared.Services
             string downloadUrl, string folder, string fileName, string extension,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             using (var client = _httpClientFactory.CreateClient())
             using (HttpResponseMessage response = client.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken).Result)
             {
