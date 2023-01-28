@@ -8,16 +8,16 @@ namespace Mix.Shared.Dtos
         {
 
         }
-        public SearchQueryField(string fieldName, string value, MixCompareOperator compareOperation = MixCompareOperator.Equal)
+        public SearchQueryField(string fieldName, object value, MixCompareOperator compareOperation = MixCompareOperator.Equal)
         {
             FieldName = fieldName;
-            Value = value.ToString();
+            Value = value;
             CompareOperator = compareOperation;
         }
         [Required]
         public string FieldName { get; set; }
         [Required]
-        public string Value { get; set; }
+        public object Value { get; set; }
         public MixCompareOperator CompareOperator { get; set; }
         public bool IsRequired { get; set; }
     }
