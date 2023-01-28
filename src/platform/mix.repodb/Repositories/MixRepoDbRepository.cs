@@ -523,7 +523,7 @@ namespace Mix.RepoDb.Repositories
         {
             if (_connection != null)
             {
-                if (_isRoot && _dbTransaction.Connection != null)
+                if ((_isRoot || DatabaseProvider == MixDatabaseProvider.SQLITE) && _dbTransaction?.Connection != null)
                 {
                     _dbTransaction.Commit();
                 }

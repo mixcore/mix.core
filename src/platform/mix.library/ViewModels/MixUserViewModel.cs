@@ -120,13 +120,13 @@ namespace Mix.Lib.ViewModels
             }
         }
 
-        public async Task LoadUserPortalMenus(IEnumerable<string> roles, int tenantId, MixRepoDbRepository repoDbRepository)
+        public async Task LoadUserPortalMenus(string[] roles, int tenantId, MixRepoDbRepository repoDbRepository)
         {
             repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
             var menus = await repoDbRepository.GetListByAsync(
                     new List<SearchQueryField>()
                     {
-                                new SearchQueryField("Role", $"({string.Join(',', roles.Select(m=> $"'{m}'").ToArray())})", MixCompareOperator.InRange)
+                                new SearchQueryField("Role", roles, MixCompareOperator.InRange)
                     }
                 );
             PortalMenus = ReflectionHelper.ParseArray(menus);

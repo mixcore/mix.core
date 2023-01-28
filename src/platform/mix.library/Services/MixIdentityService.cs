@@ -99,7 +99,7 @@ namespace Mix.Lib.Services
                 var userInfo = new MixUserViewModel(user, CmsUow);
                 var roles = await UserManager.GetRolesAsync(user);
                 await userInfo.LoadUserDataAsync(CurrentTenant.Id, RepoDbRepository, _accContext);
-                await userInfo.LoadUserPortalMenus(roles, CurrentTenant.Id, RepoDbRepository);
+                await userInfo.LoadUserPortalMenus(roles.ToArray(), CurrentTenant.Id, RepoDbRepository);
 
                 return userInfo;
             }
