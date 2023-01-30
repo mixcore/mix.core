@@ -450,8 +450,9 @@ namespace Mix.Portal.Controllers
 
         private async Task<MixDatabaseViewModel> GetMixDatabase()
         {
+            string name = $"{typeof(MixDatabaseViewModel).FullName}_{_tableName}";
             return await _memoryCache.TryGetValueAsync(
-                _tableName,
+                name,
                 cache =>
                 {
                     cache.SlidingExpiration = TimeSpan.FromSeconds(20);
