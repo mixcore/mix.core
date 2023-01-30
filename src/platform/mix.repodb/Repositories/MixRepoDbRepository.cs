@@ -515,15 +515,18 @@ namespace Mix.RepoDb.Repositories
 
         public void SetDbConnection(UnitOfWorkInfo dbUow)
         {
-            if (_connection != null)
+            
+            if (DatabaseProvider == MixDatabaseProvider.SQLITE)
             {
-                _connection.Close();
-                _connection.Dispose();
-            }
 
-            _connection = dbUow.ActiveDbContext.Database.GetDbConnection();
-            if (DatabaseProvider != MixDatabaseProvider.SQLITE)
-            {
+                dbUow.Begin();
+                if (_connection != null)
+                {
+                    _connection.Close();
+                    _connection.Dispose();
+                }
+
+                _connection = dbUow.ActiveDbContext.Database.GetDbConnection();
                 _dbTransaction = dbUow.ActiveTransaction.GetDbTransaction();
                 _isRoot = false;
             }

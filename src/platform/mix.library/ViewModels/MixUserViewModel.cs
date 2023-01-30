@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
+using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.RepoDb.Repositories;
@@ -122,14 +123,24 @@ namespace Mix.Lib.ViewModels
 
         public async Task LoadUserPortalMenus(string[] roles, int tenantId, MixRepoDbRepository repoDbRepository)
         {
-            repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
-            var menus = await repoDbRepository.GetListByAsync(
-                    new List<SearchQueryField>()
-                    {
+            try
+            {
+                if (!roles.Contains(MixRoles.SuperAdmin))
+                {
+                    repoDbRepository.InitTableName(MixDatabaseNames.PORTAL_MENU);
+                    var menus = await repoDbRepository.GetListByAsync(
+                            new List<SearchQueryField>()
+                            {
                                 new SearchQueryField("Role", roles, MixCompareOperator.InRange)
-                    }
-                );
-            PortalMenus = ReflectionHelper.ParseArray(menus);
+                            }
+                        );
+                    PortalMenus = ReflectionHelper.ParseArray(menus);
+                }
+            }
+            catch (Exception ex)
+            {
+                PortalMenus = new();
+            }
         }
 
         //public async Task LoadUserEndpointsAsync(int tenantId, MixRepoDbRepository repoDbRepository)
