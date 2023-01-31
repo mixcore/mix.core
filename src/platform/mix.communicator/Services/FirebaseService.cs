@@ -12,13 +12,10 @@ namespace Mix.Communicator.Services
     // Ref: https://firebase.google.com/docs/cloud-messaging/send-message
     public class FirebaseService
     {
-        private readonly IConfiguration _configuration;
         private readonly FirebaseSettingModel _settings = new FirebaseSettingModel();
         public FirebaseService(IConfiguration configuration)
         {
-            _configuration = configuration;
-            var session = _configuration.GetSection(MixAppSettingsSection.GoogleFirebase);
-            session.Bind(_settings);
+            configuration.GetSection(MixAppSettingsSection.GoogleFirebase).Bind(_settings);
             if (!string.IsNullOrEmpty(_settings.Filename))
             {
 

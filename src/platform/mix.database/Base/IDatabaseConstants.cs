@@ -10,6 +10,7 @@
         public string DateTime { get; }
         public string Guid { get; }
         public string Integer { get; }
+        public string Long { get; }
         public string String { get; }
         public string NString { get; }
         public string Boolean { get; }

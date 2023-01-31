@@ -24,8 +24,8 @@ namespace Mix.Lib.Services
 {
     public class MixIdentityService : IMixIdentityService
     {
-        private const string TenantIdFieldName = "MixTenantId";
-        private const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
+        protected const string TenantIdFieldName = "MixTenantId";
+        protected const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
         protected readonly UnitOfWorkInfo<MixCmsAccountContext> AccountUow;
         protected readonly UnitOfWorkInfo<MixCmsContext> CmsUow;
         protected readonly MixCacheService CacheService;
@@ -155,7 +155,7 @@ namespace Mix.Lib.Services
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
             var userInfo = await GetUserAsync(user.Id);
-            var token = await GenerateAccessTokenAsync(user, userInfo, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
+            var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
             if (token != null)
             {
                 var data = ReflectionHelper.ParseObject(token);
@@ -315,7 +315,6 @@ namespace Mix.Lib.Services
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
             MixUser user,
-            MixUserViewModel info,
             bool isRemember,
             string aesKey,
             string rsaPublicKey,
@@ -328,6 +327,7 @@ namespace Mix.Lib.Services
                 var dtRefreshTokenExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
+                var userInfo = new MixUserViewModel(user, CmsUow);
                 if (isRemember)
                 {
                     refreshToken = Guid.NewGuid();
@@ -348,11 +348,11 @@ namespace Mix.Lib.Services
 
                 var token = new AccessTokenViewModel()
                 {
-                    Info = info,
+                    Info = userInfo,
                     EmailConfirmed = user.EmailConfirmed,
                     IsActive = user.IsActived,
                     AccessToken = await GenerateTokenAsync(
-                        user, info, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
+                        user, userInfo, dtExpired, refreshToken.ToString(), aesKey, rsaPublicKey, AuthConfigService.AppSettings),
                     RefreshToken = refreshTokenId,
                     TokenType = AuthConfigService.AppSettings.TokenType,
                     ExpiresIn = AuthConfigService.AppSettings.AccessTokenExpiration,
@@ -575,7 +575,7 @@ namespace Mix.Lib.Services
         }
 
 
-        private async Task<List<Claim>> GetClaimsAsync(MixUser user, IList<MixRole> userRoles)
+        protected async Task<List<Claim>> GetClaimsAsync(MixUser user, IList<MixRole> userRoles)
         {
             List<Claim> claims = new();
             foreach (var claim in user.Claims)

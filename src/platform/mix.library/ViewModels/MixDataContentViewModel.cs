@@ -214,6 +214,11 @@ namespace Mix.Lib.ViewModels
                         item.IntegerValue = property.Value<int?>();
                         item.StringValue = property.Value<string>();
                         break;
+                        
+                    case MixDataType.Long:
+                        item.LongValue = property.Value<int?>();
+                        item.StringValue = property.Value<string>();
+                        break;
 
                     case MixDataType.Reference:
                         item.StringValue = property.Value<string>();

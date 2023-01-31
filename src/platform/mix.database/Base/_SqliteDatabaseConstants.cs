@@ -18,6 +18,8 @@
 
         string IDatabaseConstants.Integer => "integer";
 
+        string IDatabaseConstants.Long => "BigInt";
+
         string IDatabaseConstants.String => "varchar";
 
         string IDatabaseConstants.NString => "varchar";

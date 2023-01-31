@@ -2,6 +2,7 @@
 {
     public class MySqlDatabaseConstants : IDatabaseConstants
     {
+
         string IDatabaseConstants.DatabaseCollation => "utf8_unicode_ci";
 
         string IDatabaseConstants.CharSet => "utf8";
@@ -17,6 +18,7 @@
         string IDatabaseConstants.Guid => "varchar(255)";
 
         string IDatabaseConstants.Integer => "int";
+        string IDatabaseConstants.Long => "BigInt";
 
         string IDatabaseConstants.String => "varchar";
 

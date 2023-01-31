@@ -253,6 +253,28 @@ namespace Mix.Lib.Services
                                         break;
                                 }
                                 break;
+                            case MixDataType.Long:
+                                switch (q.SearchMethod)
+                                {
+                                    case ExpressionMethod.Equal:
+                                        andPredicate = m => m.LongValue == (int)q.Value;
+                                        break;
+                                    case ExpressionMethod.LessThan:
+                                        andPredicate = m => (int)q.Value < m.LongValue;
+                                        break;
+                                    case ExpressionMethod.GreaterThan:
+                                        andPredicate = m => (int)q.Value > m.LongValue;
+                                        break;
+                                    case ExpressionMethod.LessThanOrEqual:
+                                        andPredicate = m => (int)q.Value >= m.LongValue;
+                                        break;
+                                    case ExpressionMethod.GreaterThanOrEqual:
+                                        andPredicate = m => (int)q.Value >= m.LongValue;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                break;
                             case MixDataType.Double:
                                 switch (q.SearchMethod)
                                 {

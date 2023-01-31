@@ -14,6 +14,7 @@ namespace Mix.Lib.ViewModels
         public DateTime? DateTimeValue { get; set; }
         public double? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }
+        public long? LongValue { get; set; }
         public string StringValue { get; set; }
         public string EncryptValue { get; set; }
         public string EncryptKey { get; set; }
@@ -120,6 +121,9 @@ namespace Mix.Lib.ViewModels
 
                 case MixDataType.Integer:
                     return (new JProperty(MixDatabaseColumnName, IntegerValue ?? 0));
+                    
+                case MixDataType.Long:
+                    return (new JProperty(MixDatabaseColumnName, LongValue ?? 0));
 
                 case MixDataType.Reference:
                     return (new JProperty(MixDatabaseColumnName, new JArray()));
