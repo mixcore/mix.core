@@ -58,6 +58,9 @@ namespace Mix.Lib.Helpers
 
                 case MixDataType.Integer:
                     return (new JProperty(item.MixDatabaseColumnName, item.IntegerValue ?? 0));
+                
+                case MixDataType.Long:
+                    return (new JProperty(item.MixDatabaseColumnName, item.LongValue ?? 0));
 
                 case MixDataType.Reference:
                     return (new JProperty(item.MixDatabaseColumnName, new JArray()));
@@ -166,6 +169,11 @@ namespace Mix.Lib.Helpers
 
                     case MixDataType.Integer:
                         item.IntegerValue = property.Value<int?>();
+                        item.StringValue = property.Value<string>();
+                        break;
+
+                    case MixDataType.Long:
+                        item.LongValue = property.Value<long?>();
                         item.StringValue = property.Value<string>();
                         break;
 

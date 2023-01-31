@@ -17,6 +17,7 @@
         string IDatabaseConstants.Guid => "uuid";
 
         string IDatabaseConstants.Integer => "int";
+        string IDatabaseConstants.Long => "BigInt";
 
         string IDatabaseConstants.String => "varchar";
 

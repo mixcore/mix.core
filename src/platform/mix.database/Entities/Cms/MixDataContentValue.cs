@@ -9,6 +9,7 @@
         public DateTime? DateTimeValue { get; set; }
         public double? DoubleValue { get; set; }
         public int? IntegerValue { get; set; }
+        public long? LongValue { get; set; }
         public string StringValue { get; set; }
         public string EncryptValue { get; set; }
         public string EncryptKey { get; set; }

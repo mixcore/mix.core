@@ -568,6 +568,8 @@ namespace Mix.RepoDb.Services
                 case MixDataType.Reference:
                 case MixDataType.Integer:
                     return _databaseConstant.Integer;
+                case MixDataType.Long:
+                    return _databaseConstant.Long;
                 case MixDataType.Guid:
                     return _databaseConstant.Guid;
                 case MixDataType.Html:

@@ -32,6 +32,7 @@ namespace Mix.Lib.Helpers
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/queue.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/mix_heart.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/authentication.json", true, true)
+                       .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_credential.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/google_firebase.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/smtp.json", true, true)
                        .AddJsonFile($"{MixAppConfigFilePaths.Shared}/AppConfigs/payments.json", true, true)
