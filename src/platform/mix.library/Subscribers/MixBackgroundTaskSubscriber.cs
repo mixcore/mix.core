@@ -47,21 +47,22 @@ namespace Mix.Lib.Subscribers
 
         private async Task SendMail(MessageQueueModel model)
         {
-            using (ServiceScope = _servicesProvider.CreateScope())
+            try
             {
-                try
+                using (ServiceScope = _servicesProvider.CreateScope())
                 {
                     var msg = model.ParseData<EmailMessageModel>();
                     var emailService = GetScopedService<EmailService>();
                     await emailService.SendMail(msg);
                     await SendMessage($"Sent Email {msg.Subject} to {msg.To}", true);
                 }
-                catch (Exception ex)
-                {
-                    MixService.LogException(ex);
-                    await SendMessage($"Error {model.Action}: {model.Data}", false, ex);
-                }
             }
+            catch (Exception ex)
+            {
+                MixService.LogException(ex);
+                await SendMessage($"Error {model.Action}: {model.Data}", false, ex);
+            }
+
         }
 
         private async Task SendMessage(string message, bool result, Exception? ex = null)
