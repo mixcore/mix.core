@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Routing;
-using Mix.Constant.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Helpers;
 using Mix.Heart.Services;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
-using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.Models;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
-using System.Threading;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {
@@ -79,7 +76,7 @@ namespace Mix.Services.Ecommerce.Lib.ViewModels
 
             if (PostMetadata == null)
             {
-                var metadata = await metadataService.GetMetadataByContentId(Id, MetadataParentType.Post, string.Empty, new());
+                var metadata = await metadataService.GetMetadataByContentId(Id, MixContentType.Post, string.Empty, new());
                 PostMetadata = metadata.Items.Select(m => m.Metadata)
                 .GroupBy(m => m.Type)
                 .Select(m => new PostMetadata()

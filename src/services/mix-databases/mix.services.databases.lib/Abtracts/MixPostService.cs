@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Constant.Enums;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
@@ -9,14 +10,8 @@ using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Lib.Base;
 using Mix.Lib.Models.Common;
-using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Databases.Lib.Abtracts
 {
@@ -75,11 +70,11 @@ namespace Mix.Services.Databases.Lib.Abtracts
             IQueryable<int>? allowedIdQuery = default;
             if (searchRequest.OrMetadataQueries.Any())
             {
-                allowedIdQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MetadataParentType.Post, false);
+                allowedIdQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.OrMetadataQueries, MixContentType.Post, false);
             }
             if (searchRequest.AndMetadataQueries.Any())
             {
-                var andQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MetadataParentType.Post, true);
+                var andQuery = _metadataService.GetQueryableContentIdByMetadataSeoContent(searchRequest.AndMetadataQueries, MixContentType.Post, true);
                 allowedIdQuery = allowedIdQuery != default ? allowedIdQuery.Where(m => andQuery.Contains(m)) : andQuery;
             }
             predicate = predicate.AndAlsoIf(allowedIdQuery != null, m => allowedIdQuery!.ToList().Contains(m.Id));

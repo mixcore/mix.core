@@ -1,11 +1,10 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Lib.Helpers;
-using Mix.Services.Databases.Lib.Entities;
+using Mix.Shared.Helpers;
 
-namespace Mix.Services.Databases.Lib.ViewModels
+namespace Mix.Mixdb.ViewModels
 {
-    public class MixMetadataViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixMetadata, int, MixMetadataViewModel>
+    public class MixMetadataViewModel : ViewModelBase<MixDbDbContext, MixMetadata, int, MixMetadataViewModel>
     {
         #region Properties
         public string? Type { get; set; }
@@ -19,7 +18,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         {
         }
 
-        public MixMetadataViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixMetadataViewModel(MixDbDbContext context) : base(context)
         {
         }
 

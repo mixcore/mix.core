@@ -4,7 +4,7 @@ using Mix.Constant.Constants;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 
-namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
+namespace Mix.Mixdb.Entities.EntityConfigurations
 {
     public class PermissionEndpointConfiguration : EntityBaseConfiguration<MixPermissionEndpoint, int>
     {

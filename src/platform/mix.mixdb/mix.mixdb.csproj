@@ -4,13 +4,13 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RootNamespace>Mix.Services.Databases.Lib</RootNamespace>
+		<RootNamespace>Mix.Mixdb</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
-		<ProjectReference Include="..\..\..\platform\mix.mixdb\mix.mixdb.csproj" />
+		<ProjectReference Include="..\mix.database\mix.database.csproj" />
 		<Using Include="Mix.Mixdb.Entities"/>
+		<Using Include="Mix.Mixdb.Entities" />
 	</ItemGroup>
 
 </Project>

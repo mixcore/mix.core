@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Mix.Mixdb.ViewModels;
 using Mix.Constant.Enums;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Enums;
@@ -49,8 +50,7 @@ namespace Mix.Services.Databases.Lib.Services
                 MixTenantId = CurrentTenant.Id,
                 CreatedBy = _userManager.GetUserName(HttpContextAccessor.HttpContext!.User),
                 ParentId = userId,
-                ParentType = MixDatabaseParentType.User,
-                Addresses = new()
+                ParentType = MixDatabaseParentType.User
             };
             await data.SaveAsync(cancellationToken);
             return data;
@@ -74,25 +74,7 @@ namespace Mix.Services.Databases.Lib.Services
             };
             ReflectionHelper.MapObject(dto, address);
             await address.SaveAsync(cancellationToken);
-            userData.Addresses.Add(address);
             return userData;
-        }
-
-        public async Task DeleteUserAddress(int addressId, MixUser user, CancellationToken cancellationToken = default)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var userData = await GetUserDataAsync(user.Id, cancellationToken);
-            if (userData == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
-            }
-            var address = userData.Addresses.SingleOrDefault(a => a.Id == addressId);
-            if (address == null)
-            {
-                throw new MixException(MixErrorStatus.Badrequest, "Address not existed");
-            }
-            await address.DeleteAsync(cancellationToken);
         }
 
         public async Task UpdateUserAddress(MixContactAddressViewModel address, MixUser? user, CancellationToken cancellationToken)

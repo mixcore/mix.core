@@ -1,6 +1,6 @@
-﻿namespace Mix.Services.Databases.Lib
+﻿namespace Mix.Mixdb
 {
-    public sealed class MixServicesDatabasesConstants
+    public sealed class MixDbDatabaseNames
     {
         public const string DatabaseNameMetadata = "Metadata";
         public const string DatabaseNameMedia = "SysMedia";

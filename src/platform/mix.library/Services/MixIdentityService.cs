@@ -12,6 +12,8 @@ using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.ViewModels;
 using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
+using Mix.Mixdb.Entities;
+using Mix.Mixdb.ViewModels;
 using Mix.RepoDb.Repositories;
 using Mix.Shared.Models.Configurations;
 using Newtonsoft.Json;
@@ -28,6 +30,7 @@ namespace Mix.Lib.Services
         protected const string datetimeFormat = "yyyy-MM-ddTHH:mm:ss.FFFZ";
         protected readonly UnitOfWorkInfo<MixCmsAccountContext> AccountUow;
         protected readonly UnitOfWorkInfo<MixCmsContext> CmsUow;
+        protected readonly UnitOfWorkInfo<MixDbDbContext> MixdbUow;
         protected readonly MixCacheService CacheService;
         protected readonly TenantUserManager UserManager;
         protected readonly SignInManager<MixUser> SignInManager;
@@ -65,7 +68,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext)
+            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext, UnitOfWorkInfo<MixDbDbContext> mixdbUow)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             CmsUow = cmsUow;
@@ -83,6 +86,7 @@ namespace Mix.Lib.Services
             MixService = mixService;
             DatabaseService = databaseService;
             _accContext = accContext;
+            MixdbUow = mixdbUow;
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -154,7 +158,6 @@ namespace Mix.Lib.Services
             var rsaKeys = RSAEncryptionHelper.GenerateKeys();
             var aesKey = GlobalConfigService.Instance.AesKey;  //AesEncryptionHelper.GenerateCombinedKeys();
 
-            var userInfo = await GetUserAsync(user.Id);
             var token = await GenerateAccessTokenAsync(user, rememberMe, aesKey, rsaKeys[MixConstants.CONST_RSA_PUBLIC_KEY], cancellationToken);
             if (token != null)
             {
@@ -229,88 +232,41 @@ namespace Mix.Lib.Services
                 await UserManager.AddToTenant(user, tenantId);
 
                 user = await UserManager.FindByNameAsync(model.UserName).ConfigureAwait(false);
-                await CreateUserData(user, model.Data, cancellationToken);
+                await GetOrCreateUserData(user, cancellationToken);
                 return user;
                 //return await GetAuthData(_cmsContext, user, true, tenantId);
             }
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public virtual async Task CreateUserData(MixUser user, JObject obj, CancellationToken cancellationToken = default)
+        public async Task<MixUserDataViewModel> GetOrCreateUserData(MixUser user, CancellationToken cancellationToken = default)
         {
             try
             {
-                if (obj != null)
+                var userData = await MixUserDataViewModel.GetRepository(MixdbUow).GetSingleAsync(m => m.ParentId == user.Id);
+                if (userData == null)
                 {
-                    MixDatabaseViewModel database = await MixDatabaseViewModel
-                        .GetRepository(CmsUow)
-                        .GetSingleAsync(m => m.SystemName == MixDatabaseNames.SYSTEM_USER_DATA, cancellationToken);
-
-                    var data = new JObject(obj.Properties().Where(m => database.Columns.Any(c => string.Equals(c.SystemName, m.Name, StringComparison.OrdinalIgnoreCase))));
-                    int userDataId = await CreateUserInformation(user, data);
-                    foreach (var relation in database.Relationships)
+                    userData = new(MixdbUow)
                     {
-                        if (obj.ContainsKey(relation.DisplayName))
-                        {
-                            var nestedData = obj.Value<JArray>(relation.DisplayName);
-                            await CreateNestedData(relation.DestinateDatabaseName, nestedData, userDataId, cancellationToken);
-                        }
-                    }
+                        ParentId = user.Id,
+                        ParentType = MixDatabaseParentType.User
+                    };
+                    await userData.SaveAsync(cancellationToken);
                 }
+                return userData;
             }
             catch (Exception ex)
             {
                 MixService.LogException(ex);
-            }
-        }
-
-        private async Task CreateNestedData(string databaseName, JArray nestedData, int userDataId, CancellationToken cancellationToken = default)
-        {
-            RepoDbRepository.InitTableName(databaseName);
-            foreach (JObject data in nestedData)
-            {
-                if (!data.ContainsKey(TenantIdFieldName))
+                return new MixUserDataViewModel()
                 {
-                    data.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
-                }
-                if (!data.ContainsKey("createdDateTime"))
-                {
-                    data.Add(new JProperty("createdDateTime", DateTime.UtcNow));
-                }
-
-                var id = await RepoDbRepository.InsertAsync(data);
-                MixDatabaseAssociationViewModel association = new(CmsUow)
-                {
-                    MixTenantId = CurrentTenant.Id,
-                    ParentDatabaseName = MixDatabaseNames.SYSTEM_USER_DATA,
-                    ChildDatabaseName = databaseName,
-                    ParentId = userDataId,
-                    ChildId = id,
+                    ParentId = user.Id,
+                    ParentType = MixDatabaseParentType.User,
+                    Username = user.UserName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
                 };
-                await association.SaveAsync(cancellationToken);
             }
-        }
-
-        private async Task<int> CreateUserInformation(MixUser user, JObject data)
-        {
-            RepoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
-            if (!data.ContainsKey(TenantIdFieldName))
-            {
-                data.Add(new JProperty(TenantIdFieldName, CurrentTenant.Id));
-            }
-            if (!data.ContainsKey("createdDateTime"))
-            {
-                data.Add(new JProperty("createdDateTime", DateTime.UtcNow));
-            }
-            if (!data.ContainsKey("parentId"))
-            {
-                data.Add(new JProperty("parentId", user.Id));
-            }
-            if (!data.ContainsKey("parentType"))
-            {
-                data.Add(new JProperty("parentType", MixContentType.User.ToString()));
-            }
-            return await RepoDbRepository.InsertAsync(data);
         }
 
         public async Task<AccessTokenViewModel> GenerateAccessTokenAsync(
@@ -327,7 +283,7 @@ namespace Mix.Lib.Services
                 var dtRefreshTokenExpired = dtIssued.AddMinutes(AuthConfigService.AppSettings.RefreshTokenExpiration);
                 var refreshTokenId = Guid.Empty;
                 var refreshToken = Guid.Empty;
-                var userInfo = new MixUserViewModel(user, CmsUow);
+                var userInfo = await GetOrCreateUserData(user, cancellationToken);
                 if (isRemember)
                 {
                     refreshToken = Guid.NewGuid();
@@ -539,7 +495,7 @@ namespace Mix.Lib.Services
 
         public async Task<string> GenerateTokenAsync(
             MixUser user,
-            MixUserViewModel info,
+            MixUserDataViewModel info,
             DateTime expires,
             string refreshToken,
             string aesKey,
@@ -551,14 +507,14 @@ namespace Mix.Lib.Services
 
             foreach (var endpoint in info.Endpoints)
             {
-                claims.Add(CreateClaim(MixClaims.Endpoints, endpoint));
+                claims.Add(CreateClaim(MixClaims.Endpoints, endpoint.Value<string>()));
             }
             claims.AddRange(new[]
                 {
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.UserData?.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info.Avatar ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString(datetimeFormat))

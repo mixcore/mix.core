@@ -1,11 +1,11 @@
-﻿using Mix.Heart.Entities;
-using Mix.Services.Databases.Lib.Enums;
+﻿using Mix.Constant.Enums;
+using Mix.Heart.Entities;
 
-namespace Mix.Services.Databases.Lib.Entities
+namespace Mix.Mixdb.Entities
 {
     public class MixMetadataContentAssociation : EntityBase<int>
     {
-        public MetadataParentType? ContentType { get; set; }
+        public MixContentType? ContentType { get; set; }
         public int ContentId { get; set; }
         public int MetadataId { get; set; }
         public string Description { get; set; }

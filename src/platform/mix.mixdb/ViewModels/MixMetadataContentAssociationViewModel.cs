@@ -1,14 +1,14 @@
-﻿using Mix.Heart.UnitOfWork;
+﻿using Mix.Constant.Enums;
+using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.Enums;
+using Mix.Mixdb.Entities;
 
-namespace Mix.Services.Databases.Lib.ViewModels
+namespace Mix.Mixdb.ViewModels
 {
-    public class MixMetadataContentAsscociationViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixMetadataContentAssociation, int, MixMetadataContentAsscociationViewModel>
+    public class MixMetadataContentAsscociationViewModel : ViewModelBase<MixDbDbContext, MixMetadataContentAssociation, int, MixMetadataContentAsscociationViewModel>
     {
         #region Properties
-        public MetadataParentType? ContentType { get; set; }
+        public MixContentType? ContentType { get; set; }
         public int ContentId { get; set; }
         public int MetadataId { get; set; }
         public string Description { get; set; }
@@ -23,7 +23,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         {
         }
 
-        public MixMetadataContentAsscociationViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixMetadataContentAsscociationViewModel(MixDbDbContext context) : base(context)
         {
         }
 
@@ -41,10 +41,10 @@ namespace Mix.Services.Databases.Lib.ViewModels
         public override Task Validate(CancellationToken cancellationToken)
         {
             if (Context.MixMetadataContentAssociation.Any(
-                m => m.MixTenantId == MixTenantId 
-                    && m.Id != Id 
+                m => m.MixTenantId == MixTenantId
+                    && m.Id != Id
                     && m.MetadataId == MetadataId
-                    && m.ContentType == ContentType 
+                    && m.ContentType == ContentType
                     && m.ContentId == ContentId))
             {
                 IsValid = false;

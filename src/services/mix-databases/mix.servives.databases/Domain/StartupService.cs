@@ -11,11 +11,14 @@ namespace Mix.Services.Databases.Lib
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.TryAddScoped<MixDbDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
             services.TryAddScoped<MixServiceDatabaseDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixServiceDatabaseDbContext>>();
             services.TryAddScoped<MixPermissionService>();
             services.TryAddScoped<MixMetadataService>();
             services.TryAddScoped<MixUserDataService>();
+            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixDbDbContext>>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixServiceDatabaseDbContext>>();
         }
 

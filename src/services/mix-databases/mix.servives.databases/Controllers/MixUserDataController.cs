@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Mixdb.ViewModels;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
@@ -15,7 +16,7 @@ namespace Mix.Services.Databases.Controllers
 {
     [Route("api/v2/rest/mix-services/user-data")]
     public sealed class MixUserDataController :
-        MixRestHandlerApiControllerBase<MixUserDataViewModel, MixServiceDatabaseDbContext, MixUserData, int>
+        MixRestHandlerApiControllerBase<MixUserDataViewModel, MixDbDbContext, MixUserData, int>
     {
         private readonly TenantUserManager _userManager;
         private readonly MixUserDataService _userDataService;
@@ -25,7 +26,7 @@ namespace Mix.Services.Databases.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow, IQueueService<MessageQueueModel> queueService, MixUserDataService metadataService, TenantUserManager userManager)
+            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixUserDataService metadataService, TenantUserManager userManager)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _userDataService = metadataService;
@@ -61,34 +62,6 @@ namespace Mix.Services.Databases.Controllers
             await base.UpdateHandler(profile.Id, profile, cancellationToken);
             return Ok();
         }
-
-        [MixAuthorize]
-        [HttpPost("add-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress([FromBody] CreateUserAddressDto dto, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var result = await _userDataService.CreateUserAddress(dto, user, cancellationToken);
-            return Ok(result);
-        }
-        
-        [MixAuthorize]
-        [HttpPut("update-address")]
-        public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress([FromBody] MixContactAddressViewModel address, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            await _userDataService.UpdateUserAddress(address, user, cancellationToken);
-            return Ok();
-        }
-        
-        [MixAuthorize]
-        [HttpDelete("delete-address/{addressId}")]
-        public async Task<ActionResult> DeleteUserAddress(int addressId, CancellationToken cancellationToken = default)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            await _userDataService.DeleteUserAddress(addressId, user, cancellationToken);
-            return Ok();
-        }
-        
         #endregion
 
         #region Overrides
