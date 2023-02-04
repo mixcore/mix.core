@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Interfaces;
 
@@ -10,6 +11,7 @@ namespace Mix.Services.Ecommerce.Domain
         {
             services.AddMixOnepay();
             services.AddMixEcommerce();
+            services.TryAddScoped<MixMetadataService>();
             services.TryAddScoped<ProductService>();
             services.TryAddScoped<OnepayService>();
         }

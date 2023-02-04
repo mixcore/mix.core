@@ -12,6 +12,7 @@ using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Extensions;
 using Mix.Lib.Services;
+using Mix.Mixdb.Entities;
 using System.Text;
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -107,6 +108,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Firebase service must be singleton (only one firebase default instance)
             services.TryAddSingleton<FirebaseService>();
+            services.TryAddScoped<MixDbDbContext>();
+            services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
             services.AddScoped<MixIdentityService>();
             return services;
         }
