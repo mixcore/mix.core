@@ -8,9 +8,7 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
-using Mix.Services.Databases.Lib.ViewModels;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -60,6 +58,33 @@ namespace Mix.Services.Databases.Controllers
                 await _userManager.UpdateAsync(user);
             }
             await base.UpdateHandler(profile.Id, profile, cancellationToken);
+            return Ok();
+        }
+
+        [MixAuthorize]
+        [HttpPost("add-address")]
+        public async Task<ActionResult<MixUserDataViewModel>> AddUserAddress([FromBody] CreateUserAddressDto dto, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var result = await _userDataService.CreateUserAddress(dto, user, cancellationToken);
+            return Ok(result);
+        }
+
+        [MixAuthorize]
+        [HttpPut("update-address")]
+        public async Task<ActionResult<MixUserDataViewModel>> UpdateUserAddress([FromBody] MixContactAddressViewModel address, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            await _userDataService.UpdateUserAddress(address, user, cancellationToken);
+            return Ok();
+        }
+
+        [MixAuthorize]
+        [HttpDelete("delete-address/{addressId}")]
+        public async Task<ActionResult> DeleteUserAddress(int addressId, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            await _userDataService.DeleteUserAddress(addressId, user, cancellationToken);
             return Ok();
         }
         #endregion

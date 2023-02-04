@@ -10,7 +10,11 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\platform\mix.library\mix.library.csproj" />
 		<ProjectReference Include="..\..\..\platform\mix.mixdb\mix.mixdb.csproj" />
-		<Using Include="Mix.Mixdb.Entities"/>
+		<Using Include="Mix.Mixdb.Entities" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ViewModels\" />
 	</ItemGroup>
 
 </Project>

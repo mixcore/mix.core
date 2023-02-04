@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Lib.Services;
+using Mix.Mixdb.Entities;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Services;
 
@@ -13,7 +13,7 @@ namespace Mixcore.Controllers
     {
         protected UnitOfWorkInfo _uow;
         protected readonly MixCmsContext _context;
-        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _dbUow;
+        private readonly UnitOfWorkInfo<MixDbDbContext> _dbUow;
         private readonly ILogger<HomeController> _logger;
         private readonly TranslatorService _translator;
         private readonly DatabaseService _databaseService;
@@ -30,7 +30,7 @@ namespace Mixcore.Controllers
             MixCmsContext context,
             MixRepoDbRepository repoDbRepository,
             MixMetadataService metadataService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUow)
+            UnitOfWorkInfo<MixDbDbContext> dbUow)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             _context = context;

@@ -7,8 +7,6 @@ using Mix.Identity.Constants;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.ViewModels;
 using System.Linq.Expressions;
 
 namespace Mix.Services.Databases.Lib.Services
@@ -16,12 +14,12 @@ namespace Mix.Services.Databases.Lib.Services
     public sealed class MixPermissionService : TenantServiceBase
     {
         private readonly MixIdentityService _identityService;
-        private readonly MixServiceDatabaseDbContext _permissionDbContext;
-        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly MixDbDbContext _permissionDbContext;
+        private readonly UnitOfWorkInfo<MixDbDbContext> _uow;
 
         public MixPermissionService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow,
+            UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService)
             : base(httpContextAccessor)
         {

@@ -25,5 +25,6 @@ namespace Mix.Mixdb.Entities
         public DbSet<MixPermissionEndpoint> PermissionEndpoint { get; set; }
         public DbSet<MixUserPermission> UserPermission { get; set; }
         public DbSet<MixUserData> MixUserData { get; set; }
+        public DbSet<MixContactAddress> MixContactAddress { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 using Mix.Mixdb;
 
-namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
+namespace Mix.Mixdb.Entities.EntityConfigurations
 {
     public class ContactAddressConfiguration : EntityBaseConfiguration<MixContactAddress, int>
     {
@@ -25,7 +25,6 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
             builder.Property(e => e.District)
                 .IsRequired(false);
             builder.Property(e => e.Ward).IsRequired(false);
-            builder.Property(e => e.Note).IsRequired(false);
         }
     }
 }

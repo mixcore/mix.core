@@ -9,19 +9,17 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.ViewModels;
 
 namespace Mix.Services.Databases.Lib.Services
 {
     public sealed class MixUserDataService : TenantServiceBase
     {
         private readonly TenantUserManager _userManager;
-        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly UnitOfWorkInfo<MixDbDbContext> _uow;
 
         public MixUserDataService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow,
+            UnitOfWorkInfo<MixDbDbContext> uow,
             TenantUserManager userManager)
             : base(httpContextAccessor)
         {
@@ -55,6 +53,24 @@ namespace Mix.Services.Databases.Lib.Services
             await data.SaveAsync(cancellationToken);
             return data;
         }
+
+        public async Task DeleteUserAddress(int addressId, MixUser user, CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var userData = await GetUserDataAsync(user.Id, cancellationToken);
+            if (userData == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "User Data not existed");
+            }
+            var address = userData.Addresses.SingleOrDefault(a => a.Id == addressId);
+            if (address == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Address not existed");
+            }
+            await address.DeleteAsync(cancellationToken);
+        }
+
 
         public async Task<MixUserDataViewModel> CreateUserAddress(CreateUserAddressDto dto, MixUser user, CancellationToken cancellationToken = default)
         {

@@ -20,11 +20,10 @@ using System.Linq.Expressions;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Communicator.Models;
-using Mix.Services.Databases.Lib.ViewModels;
-using Mix.Services.Databases.Lib.Entities;
 using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
+using Mix.Mixdb.Entities;
 
 namespace Mix.Account.Controllers
 {
@@ -42,7 +41,7 @@ namespace Mix.Account.Controllers
         protected readonly MixIdentityService _mixIdentityService;
         private readonly MixRepoDbRepository _repoDbRepository;
         protected UnitOfWorkInfo _accUOW;
-        protected UnitOfWorkInfo<MixServiceDatabaseDbContext> _dbUOW;
+        protected UnitOfWorkInfo<MixDbDbContext> _dbUOW;
         protected UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly MixCmsAccountContext _accContext;
         private readonly MixCmsContext _cmsContext;
@@ -66,7 +65,7 @@ namespace Mix.Account.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> dbUOW,
+            UnitOfWorkInfo<MixDbDbContext> dbUOW,
             AuthConfigService authConfigService,
             MixEdmService edmService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
