@@ -57,7 +57,7 @@ namespace Mixcore.Domain.ViewModels
         public async Task LoadAdditionalDataAsync(MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
         {
             bool isChanged = false;
-            if (AdditionalData == null)
+            if (AdditionalData == null && !string.IsNullOrEmpty(MixDatabaseName))
             {
                 isChanged = true;
                 var relationships = Context.MixDatabaseRelationship.Where(m => m.SourceDatabaseName == MixDatabaseName).ToList();
