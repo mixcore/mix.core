@@ -1,15 +1,11 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Services.Databases.Lib.Entities;
 
-namespace Mix.Services.Databases.Lib.ViewModels
+namespace Mix.Mixdb.ViewModels
 {
-    public class MixContactAddressViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixContactAddress, int, MixContactAddressViewModel>
+    public class MixContactAddressViewModel : ViewModelBase<MixDbDbContext, MixContactAddress, int, MixContactAddressViewModel>
     {
         #region Properties
-        public string? Name { get; set; }
-        public string? Phone { get; set; }
-        public string? Email { get; set; }
         public bool IsDefault { get; set; }
         public string? Street { get; set; }
         public string? District { get; set; }
@@ -26,7 +22,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         {
         }
 
-        public MixContactAddressViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixContactAddressViewModel(MixDbDbContext context) : base(context)
         {
         }
 

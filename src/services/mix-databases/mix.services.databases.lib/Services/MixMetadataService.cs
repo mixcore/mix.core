@@ -7,8 +7,6 @@ using Mix.Identity.Constants;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.ViewModels;
 using System.Linq.Expressions;
 using Mix.Heart.Models;
 using Mix.Shared.Models;
@@ -23,11 +21,11 @@ namespace Mix.Services.Databases.Lib.Services
     {
         private readonly MixIdentityService _identityService;
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
-        private readonly UnitOfWorkInfo<MixServiceDatabaseDbContext> _uow;
+        private readonly UnitOfWorkInfo<MixDbDbContext> _uow;
 
         public MixMetadataService(
             IHttpContextAccessor httpContextAccessor,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow,
+            UnitOfWorkInfo<MixDbDbContext> uow,
             MixIdentityService identityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow)
             : base(httpContextAccessor)

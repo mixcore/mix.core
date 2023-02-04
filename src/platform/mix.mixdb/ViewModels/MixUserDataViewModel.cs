@@ -22,6 +22,7 @@ namespace Mix.Mixdb.ViewModels
         public int MixTenantId { get; set; }
 
         public JArray Endpoints { get; set; } = new();
+        public List<MixContactAddressViewModel>? Addresses { get; set; } = new();
 
         #endregion
         #region Contructors
@@ -43,12 +44,41 @@ namespace Mix.Mixdb.ViewModels
         #endregion
         #region Overrides
 
+        public override async Task ExpandView(CancellationToken cancellationToken = default)
+        {
+            Addresses = await MixContactAddressViewModel.GetRepository(UowInfo)
+                        .GetListAsync(m => m.SysUserDataId == Id && m.MixTenantId == MixTenantId);
+        }
+
+        protected override async Task SaveEntityRelationshipAsync(MixUserData parentEntity, CancellationToken cancellationToken = default)
+        {
+            await SaveAddresses(parentEntity, cancellationToken);
+        }
+
 
         #endregion
 
         #region Methods
 
-       
+        private async Task SaveAddresses(MixUserData parentEntity, CancellationToken cancellationToken)
+        {
+            if (Addresses != null)
+            {
+                foreach (var item in Addresses)
+                {
+                    item.SetUowInfo(UowInfo);
+                    item.SysUserDataId = parentEntity.Id;
+                    await item.SaveAsync(cancellationToken);
+                }
+            }
+        }
+
+
+        #endregion
+
+        #region Methods
+
+
 
         #endregion
     }
