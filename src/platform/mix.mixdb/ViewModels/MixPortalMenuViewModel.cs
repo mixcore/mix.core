@@ -1,10 +1,9 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Services.Databases.Lib.Entities;
 
-namespace Mix.Services.Databases.Lib.ViewModels
+namespace Mix.Mixdb.ViewModels
 {
-    public class MixPortalMenuViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixPortalMenu, int, MixPortalMenuViewModel>
+    public class MixPortalMenuViewModel : ViewModelBase<MixDbDbContext, MixPortalMenu, int, MixPortalMenuViewModel>
     {
         #region Properties
         public string? Title { get; set; }
@@ -23,7 +22,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         {
         }
 
-        public MixPortalMenuViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixPortalMenuViewModel(MixDbDbContext context) : base(context)
         {
         }
 
@@ -40,7 +39,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
 
         public override async Task ExpandView(CancellationToken cancellationToken = default)
         {
-            SubMenus = await GetRepository(UowInfo).GetAllAsync(m=>m.PortalMenuId == Id, cancellationToken);
+            SubMenus = await GetRepository(UowInfo).GetAllAsync(m => m.PortalMenuId == Id, cancellationToken);
         }
 
         #endregion

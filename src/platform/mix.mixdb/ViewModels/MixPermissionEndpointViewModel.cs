@@ -1,10 +1,9 @@
 ﻿using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
-using Mix.Services.Databases.Lib.Entities;
 
-namespace Mix.Services.Databases.Lib.ViewModels
+namespace Mix.Mixdb.ViewModels
 {
-    public class MixPermissionEndpointViewModel : ViewModelBase<MixServiceDatabaseDbContext, MixPermissionEndpoint, int, MixPermissionEndpointViewModel>
+    public class MixPermissionEndpointViewModel : ViewModelBase<MixDbDbContext, MixPermissionEndpoint, int, MixPermissionEndpointViewModel>
     {
         #region Properties
         public string Title { get; set; }
@@ -19,7 +18,7 @@ namespace Mix.Services.Databases.Lib.ViewModels
         {
         }
 
-        public MixPermissionEndpointViewModel(MixServiceDatabaseDbContext context) : base(context)
+        public MixPermissionEndpointViewModel(MixDbDbContext context) : base(context)
         {
         }
 

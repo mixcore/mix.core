@@ -4,7 +4,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace Mix.Lib.Helpers
+namespace Mix.Shared.Helpers
 {
     /// <summary>
     /// SEO Helper
@@ -82,7 +82,7 @@ namespace Mix.Lib.Helpers
 
             string strFormD = text.Normalize(System.Text.NormalizationForm.FormD);
 
-            return regex.Replace(strFormD, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
+            return regex.Replace(strFormD, string.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D');
         }
 
         #endregion convert tieng viet ko dau

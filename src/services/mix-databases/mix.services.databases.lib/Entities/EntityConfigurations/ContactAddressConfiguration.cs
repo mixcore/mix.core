@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
+using Mix.Mixdb;
 
 namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
 {
@@ -12,7 +13,7 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixContactAddress> builder)
         {
-            builder.ToTable(MixServicesDatabasesConstants.DatabaseNameContactAddress);
+            builder.ToTable(MixDbDatabaseNames.DatabaseNameContactAddress);
             base.Configure(builder);
 
             builder.Property(e => e.Street)

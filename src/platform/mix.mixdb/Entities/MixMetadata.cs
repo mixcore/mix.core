@@ -1,8 +1,8 @@
 ﻿using Mix.Heart.Entities;
 
-namespace Mix.Services.Databases.Lib.Entities
+namespace Mix.Mixdb.Entities
 {
-    public class MixMetadata: EntityBase<int>
+    public class MixMetadata : EntityBase<int>
     {
         public string? Type { get; set; }
         public string Content { get; set; }

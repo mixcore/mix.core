@@ -11,17 +11,14 @@ using Mix.Services.Databases.Lib.Entities;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
-using Mix.Services.Databases.Lib.Enums;
 using Mix.Heart.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Mix.Lib.ViewModels;
-using Mix.Database.Entities.Cms;
+using Mix.Mixdb.ViewModels;
 
 namespace Mix.Services.Databases.Controllers
 {
     [Route("api/v2/rest/mix-services/metadata")]
     public sealed class MixMetadataController :
-        MixRestfulApiControllerBase<MixMetadataViewModel, MixServiceDatabaseDbContext, MixMetadata, int>
+        MixRestfulApiControllerBase<MixMetadataViewModel, MixDbDbContext, MixMetadata, int>
     {
         private readonly MixMetadataService _metadataService;
         public MixMetadataController(
@@ -30,7 +27,7 @@ namespace Mix.Services.Databases.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow, IQueueService<MessageQueueModel> queueService, MixMetadataService metadataService)
+            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixMetadataService metadataService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _metadataService = metadataService;

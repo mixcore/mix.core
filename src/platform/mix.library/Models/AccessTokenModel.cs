@@ -1,4 +1,6 @@
-﻿namespace Mix.Lib.Models
+﻿using Mix.Mixdb.ViewModels;
+
+namespace Mix.Lib.Models
 {
     public sealed class AccessTokenViewModel
     {
@@ -20,7 +22,7 @@
         public bool EmailConfirmed { get; set; }
         public string DeviceId { get; set; }
 
-        public MixUserViewModel Info { get; set; }
+        public MixUserDataViewModel Info { get; set; }
 
         public List<string> Roles { get; set; }
 

@@ -6,7 +6,7 @@ using Mix.Database.Extensions;
 using Mix.Database.Services;
 using Mix.Service.Services;
 
-namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
+namespace Mix.Mixdb.Entities.EntityConfigurations
 {
     public class PermissionConfiguration : EntityBaseConfiguration<MixPermission, int>
     {

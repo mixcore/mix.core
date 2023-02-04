@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mix.Constant.Enums;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
-using Mix.Services.Databases.Lib.Enums;
 
-namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
+namespace Mix.Mixdb.Entities.EntityConfigurations
 {
     public class MetadataContentAssociationConfiguration : EntityBaseConfiguration<MixMetadataContentAssociation, int>
     {
@@ -14,11 +14,11 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMetadataContentAssociation> builder)
         {
-            builder.ToTable(MixServicesDatabasesConstants.DatabaseNameMetadataContentAssociation);
+            builder.ToTable(MixDbDatabaseNames.DatabaseNameMetadataContentAssociation);
             base.Configure(builder);
             builder.Property(e => e.ContentType)
                .IsRequired(false)
-               .HasConversion(new EnumToStringConverter<MetadataParentType>())
+               .HasConversion(new EnumToStringConverter<MixContentType>())
                .HasColumnType($"{Config.String}{Config.SmallLength}")
                .HasCharSet(Config.CharSet);
         }

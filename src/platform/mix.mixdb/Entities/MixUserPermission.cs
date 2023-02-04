@@ -1,6 +1,6 @@
 ﻿using Mix.Heart.Entities;
 
-namespace Mix.Services.Databases.Lib.Entities
+namespace Mix.Mixdb.Entities
 {
     public sealed class MixUserPermission : EntityBase<int>
     {

@@ -1,10 +1,5 @@
-﻿using Mix.Services.Databases.Lib.Enums;
+﻿using Mix.Constant.Enums;
 using Mix.Shared.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Databases.Lib.Dtos
 {
@@ -17,7 +12,7 @@ namespace Mix.Services.Databases.Lib.Dtos
         #region Properties
 
         public int ContentId { get; set; }
-        public MetadataParentType? ContentType { get; set; }
+        public MixContentType? ContentType { get; set; }
         public string MetadataType { get; set; }
 
         #endregion

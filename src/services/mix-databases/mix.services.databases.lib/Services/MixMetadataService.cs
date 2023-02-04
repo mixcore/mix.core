@@ -8,19 +8,14 @@ using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Databases.Lib.Dtos;
 using Mix.Services.Databases.Lib.Entities;
-using Mix.Services.Databases.Lib.Enums;
 using Mix.Services.Databases.Lib.ViewModels;
 using System.Linq.Expressions;
-using Mix.Lib.ViewModels;
-using Mix.Lib.Models.Common;
 using Mix.Heart.Models;
-using Org.BouncyCastle.Asn1.Cms;
-using Mix.Heart.ViewModel;
-using Mix.Heart.Repository;
-using Mix.Heart.Entities;
 using Mix.Shared.Models;
 using Mix.Services.Databases.Lib.Models;
 using Mix.Heart.Extensions;
+using Mix.Mixdb.ViewModels;
+using Mix.Constant.Enums;
 
 namespace Mix.Services.Databases.Lib.Services
 {
@@ -119,7 +114,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         public async Task<PagingResponseModel<MixMetadataContentAsscociationViewModel>?> GetMetadataByContentId(
             int intContentId,
-            MetadataParentType? contentType,
+            MixContentType? contentType,
             string metadataType, PagingRequestModel pagingData)
         {
             var query = GetQueryableMetadataByContentId(intContentId, contentType, metadataType);
@@ -145,7 +140,7 @@ namespace Mix.Services.Databases.Lib.Services
 
         #region IQueryables
 
-        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(Dictionary<string, string[]> metadataSeoContents, MetadataParentType contentType, bool isMandatory)
+        public IQueryable<int> GetQueryableContentIdByMetadataSeoContent(Dictionary<string, string[]> metadataSeoContents, MixContentType contentType, bool isMandatory)
         {
             //Expression<Func<MixMetadata, bool>>? predicate = m => isMandatory;
             IQueryable<int> query = null;
@@ -182,7 +177,7 @@ namespace Mix.Services.Databases.Lib.Services
             return query.Distinct();
         }
 
-        public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MetadataParentType? contentType, string metadataType)
+        public IQueryable<int>? GetQueryableMetadataByContentId(int contentId, MixContentType? contentType, string metadataType)
         {
             var query = from metadata in _uow.DbContext.MixMetadata
                         join association in _uow.DbContext.MixMetadataContentAssociation

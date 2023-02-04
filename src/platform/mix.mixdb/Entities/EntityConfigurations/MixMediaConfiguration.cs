@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mix.Database.EntityConfigurations.Base;
 using Mix.Database.Services;
 
-namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
+namespace Mix.Mixdb.Entities.EntityConfigurations
 {
     public class MixMediaConfiguration : EntityBaseConfiguration<MixMedia, int>
     {
@@ -12,7 +12,7 @@ namespace Mix.Services.Databases.Lib.Entities.EntityConfigurations
         }
         public override void Configure(EntityTypeBuilder<MixMedia> builder)
         {
-            builder.ToTable(MixServicesDatabasesConstants.DatabaseNameMedia);
+            builder.ToTable(MixDbDatabaseNames.DatabaseNameMedia);
             base.Configure(builder);
         }
     }

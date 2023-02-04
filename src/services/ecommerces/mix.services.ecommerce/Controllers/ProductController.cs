@@ -19,7 +19,7 @@ using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Shared.Dtos;
 
-namespace mix.services.ecommerce.Controllers
+namespace Mix.services.ecommerce.Controllers
 {
     [Route("api/v2/rest/ecommerce/product")]
     [ApiController]

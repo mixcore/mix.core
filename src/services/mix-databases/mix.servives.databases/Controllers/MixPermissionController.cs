@@ -15,12 +15,13 @@ using Mix.Services.Databases.Lib.ViewModels;
 using Mix.Shared.Dtos;
 using Mix.Heart.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Mix.Mixdb.ViewModels;
 
 namespace Mix.Services.Databases.Controllers
 {
     [Route("api/v2/rest/mix-services/permission")]
     public sealed class MixPermissionController :
-        MixRestfulApiControllerBase<MixPermissionViewModel, MixServiceDatabaseDbContext, MixPermission, int>
+        MixRestfulApiControllerBase<MixPermissionViewModel, MixDbDbContext, MixPermission, int>
     {
         private readonly MixPermissionService _permissionService;
         public MixPermissionController(
@@ -29,7 +30,7 @@ namespace Mix.Services.Databases.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixServiceDatabaseDbContext> uow, IQueueService<MessageQueueModel> queueService, MixPermissionService permissionService)
+            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixPermissionService permissionService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _permissionService = permissionService;
