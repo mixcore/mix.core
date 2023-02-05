@@ -1,12 +1,14 @@
-﻿using Mix.Queue.Interfaces;
+﻿using Mix.MixQuartz.Jobs;
+using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
 using Newtonsoft.Json.Linq;
+using Quartz;
 using System;
 using System.Threading.Tasks;
 
-namespace Mix.MixQuartz.Jobs
+namespace Mix.Scheduler.Jobs
 {
     public class SendPortalMessageJob : MixJobBase
     {
