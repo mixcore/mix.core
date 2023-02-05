@@ -94,6 +94,7 @@
         Guid,
         Reference,
         QRCode,
+        BarCode,
         Tag,
         Json,
         Array
