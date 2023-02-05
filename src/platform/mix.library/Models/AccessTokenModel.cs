@@ -22,7 +22,7 @@ namespace Mix.Lib.Models
         public bool EmailConfirmed { get; set; }
         public string DeviceId { get; set; }
 
-        public MixUserDataViewModel Info { get; set; }
+        public JObject Info { get; set; }
 
         public List<string> Roles { get; set; }
 

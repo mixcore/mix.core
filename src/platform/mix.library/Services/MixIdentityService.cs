@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using Mix.Communicator.Services;
 using Mix.Database.Entities.Account;
 using Mix.Database.Services;
@@ -239,33 +240,37 @@ namespace Mix.Lib.Services
             throw new MixException(MixErrorStatus.Badrequest, createResult.Errors.First().Description);
         }
 
-        public async Task<MixUserDataViewModel> GetOrCreateUserData(MixUser user, CancellationToken cancellationToken = default)
+        public async Task<JObject> GetOrCreateUserData(MixUser user, CancellationToken cancellationToken = default)
         {
             try
             {
-                var userData = await MixUserDataViewModel.GetRepository(MixdbUow).GetSingleAsync(m => m.ParentId == user.Id);
-                if (userData == null)
+                RepoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
+                var u = await RepoDbRepository.GetSingleByParentAsync(MixContentType.User, user.Id);
+                if (u == null)
                 {
-                    userData = new(MixdbUow)
+                    u = new
                     {
                         ParentId = user.Id,
-                        ParentType = MixDatabaseParentType.User
+                        ParentType = MixDatabaseParentType.User,
+                        Username = user.UserName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber
                     };
-                    await userData.SaveAsync(cancellationToken);
+                    await RepoDbRepository.InsertAsync(ReflectionHelper.ParseObject(u));
                 }
-                return userData;
+                return JObject.FromObject(u);
             }
             catch (Exception ex)
             {
                 MixService.LogException(ex);
-                return new MixUserDataViewModel()
+                return ReflectionHelper.ParseObject(new
                 {
                     ParentId = user.Id,
                     ParentType = MixDatabaseParentType.User,
                     Username = user.UserName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber
-                };
+                });
             }
         }
 
@@ -495,7 +500,7 @@ namespace Mix.Lib.Services
 
         public async Task<string> GenerateTokenAsync(
             MixUser user,
-            MixUserDataViewModel info,
+            JObject info,
             DateTime expires,
             string refreshToken,
             string aesKey,
@@ -504,17 +509,20 @@ namespace Mix.Lib.Services
         {
             var userRoles = await UserManager.GetUserRolesAsync(user);
             List<Claim> claims = await GetClaimsAsync(user, userRoles);
-
-            foreach (var endpoint in info.Endpoints)
+            if (info.ContainsKey("endpoints"))
             {
-                claims.Add(CreateClaim(MixClaims.Endpoints, endpoint.Value<string>()));
+                var endpoints = info.Values<JArray>("endpoints");
+                foreach (var endpoint in endpoints)
+                {
+                    claims.Add(CreateClaim(MixClaims.Endpoints, endpoint.Value<string>()));
+                }
             }
             claims.AddRange(new[]
                 {
                     CreateClaim(MixClaims.Id, user.Id.ToString()),
                     CreateClaim(MixClaims.Username, user.UserName),
                     CreateClaim(MixClaims.RefreshToken, refreshToken),
-                    CreateClaim(MixClaims.Avatar, info.Avatar ?? MixConstants.CONST_DEFAULT_AVATAR),
+                    CreateClaim(MixClaims.Avatar, info.Value<string>("avatar") ?? MixConstants.CONST_DEFAULT_AVATAR),
                     CreateClaim(MixClaims.AESKey, aesKey),
                     CreateClaim(MixClaims.RSAPublicKey, rsaPublicKey),
                     CreateClaim(MixClaims.ExpireAt, expires.ToString(datetimeFormat))
