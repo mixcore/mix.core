@@ -13,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddMixRepoDb(this IServiceCollection services)
         {
             services.AddScoped<ICache, MemoryCache>();
+            services.TryAddScoped<MixDbDataService>();
             services.TryAddScoped<MixDbService>();
             services.TryAddScoped<MixRepoDbRepository>();
             services.AddHostedService<MixRepoDbPublisher>();

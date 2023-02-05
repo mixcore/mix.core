@@ -16,6 +16,7 @@ using Mix.Lib.Models;
 using Mix.Mixdb.Entities;
 using Mix.Mixdb.ViewModels;
 using Mix.RepoDb.Repositories;
+using Mix.RepoDb.Services;
 using Mix.Shared.Models.Configurations;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -39,6 +40,7 @@ namespace Mix.Lib.Services
         protected readonly AuthConfigService AuthConfigService;
         protected readonly FirebaseService FirebaseService;
         protected readonly MixService MixService;
+        protected readonly MixDbDataService MixDbDataService;
         protected readonly MixRepoDbRepository RepoDbRepository;
         protected readonly MixCmsContext CmsContext;
         private readonly MixCmsAccountContext _accContext;
@@ -69,7 +71,7 @@ namespace Mix.Lib.Services
             UnitOfWorkInfo<MixCmsAccountContext> accountUow,
             MixCacheService cacheService,
             FirebaseService firebaseService, MixRepoDbRepository repoDbRepository,
-            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext, UnitOfWorkInfo<MixDbDbContext> mixdbUow)
+            MixService mixService, DatabaseService databaseService, MixCmsAccountContext accContext, UnitOfWorkInfo<MixDbDbContext> mixdbUow, MixDbDataService mixDbDataService)
         {
             Session = httpContextAccessor.HttpContext?.Session;
             CmsUow = cmsUow;
@@ -88,6 +90,7 @@ namespace Mix.Lib.Services
             DatabaseService = databaseService;
             _accContext = accContext;
             MixdbUow = mixdbUow;
+            MixDbDataService = mixDbDataService;
         }
 
         public virtual async Task<bool> Any(Guid userId)
@@ -244,21 +247,21 @@ namespace Mix.Lib.Services
         {
             try
             {
-                RepoDbRepository.InitTableName(MixDatabaseNames.SYSTEM_USER_DATA);
-                var u = await RepoDbRepository.GetSingleByParentAsync(MixContentType.User, user.Id);
+                var u = await MixDbDataService.GetSingleByParent(MixDatabaseNames.SYSTEM_USER_DATA, MixContentType.User, user.Id, true);
                 if (u == null)
                 {
-                    u = new
+                    u = new JObject()
                     {
-                        ParentId = user.Id,
-                        ParentType = MixDatabaseParentType.User,
-                        Username = user.UserName,
-                        Email = user.Email,
-                        PhoneNumber = user.PhoneNumber
+                        new JProperty("ParentId", user.Id),
+                        new JProperty("ParentType", MixContentType.User.ToString()),
+                        new JProperty("Username", user.UserName),
+                        new JProperty("Email", user.Email),
+                        new JProperty("PhoneNumber", user.PhoneNumber),
+
                     };
-                    await RepoDbRepository.InsertAsync(ReflectionHelper.ParseObject(u));
+                    await MixDbDataService.CreateData(MixDatabaseNames.SYSTEM_USER_DATA, u);
                 }
-                return JObject.FromObject(u);
+                return u;
             }
             catch (Exception ex)
             {
