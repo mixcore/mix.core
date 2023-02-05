@@ -19,7 +19,7 @@ namespace Mix.Lib.Interfaces
         Claim CreateClaim(string type, string value);
         Task<JObject> ExternalLogin(RegisterExternalBindingModel model, CancellationToken cancellationToken = default);
         Task<AccessTokenViewModel> GenerateAccessTokenAsync(MixUser user, bool isRemember, string aesKey, string rsaPublicKey, CancellationToken cancellationToken = default);
-        Task<string> GenerateTokenAsync(MixUser user, MixUserDataViewModel info, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey, MixAuthenticationConfigurations appConfigs);
+        Task<string> GenerateTokenAsync(MixUser user, JObject info, DateTime expires, string refreshToken, string aesKey, string rsaPublicKey, MixAuthenticationConfigurations appConfigs);
         Task<JObject> GetAuthData(MixUser user, bool rememberMe, int tenantId, CancellationToken cancellationToken = default);
         string GetClaim(ClaimsPrincipal User, string claimType);
         Task<JObject> GetTokenAsync(GetTokenModel model, CancellationToken cancellationToken = default);
