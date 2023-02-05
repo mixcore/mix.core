@@ -596,6 +596,7 @@ namespace Mix.RepoDb.Services
                 case MixDataType.VideoYoutube:
                 case MixDataType.TuiEditor:
                 case MixDataType.QRCode:
+                case MixDataType.BarCode:
                 default:
                     return $"{_databaseConstant.NString}({maxLength ?? 250})";
             }
