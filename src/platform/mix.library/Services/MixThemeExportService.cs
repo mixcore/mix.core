@@ -335,7 +335,11 @@ namespace Mix.Lib.Services
                     .Where(m => m.MixThemeId == _dto.ThemeId)
                     .AsNoTracking()
                     .ToListAsync();
-                _siteData.Templates.ForEach(m => m.Content = m.Content.Replace($"/{_siteData.ThemeName}", "/[THEME_NAME]"));
+                foreach (var item in _siteData.Templates)
+                {
+                    item.Content = item.Content.Replace($"/{_siteData.ThemeSystemName}", "/[THEME_NAME]");
+                    item.FileFolder = item.FileFolder.Replace($"/{_siteData.ThemeSystemName}", "/[THEME_NAME]");
+                }
             }
         }
 
