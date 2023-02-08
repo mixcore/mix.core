@@ -48,6 +48,9 @@ namespace Mix.RepoDb.Subscribers
                         case MixRepoDbQueueAction.Migrate:
                             await MigrateDatabase(model);
                             break;
+                        case MixRepoDbQueueAction.Update:
+                            await UpdateDatabase(model);
+                            break;
                         default:
                             break;
                     }
@@ -76,6 +79,15 @@ namespace Mix.RepoDb.Subscribers
         {
             await _mixDbService.MigrateDatabase(model.Data);
             string msg = $"{MixRepoDbQueueAction.Migrate} {model.Data} Successfully";
+            await SendMessage(msg, true);
+        }
+        
+        private async Task UpdateDatabase(MessageQueueModel model)
+        {
+            await _mixDbService.BackupDatabase(model.Data);
+            await _mixDbService.MigrateDatabase(model.Data);
+            await _mixDbService.RestoreFromLocal(model.Data);
+            string msg = $"{MixRepoDbQueueAction.Update} {model.Data} Successfully";
             await SendMessage(msg, true);
         }
 
