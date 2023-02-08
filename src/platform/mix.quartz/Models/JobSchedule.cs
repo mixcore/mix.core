@@ -7,12 +7,13 @@ namespace Mix.MixQuartz.Models
     {
         public JobSchedule()
         {
-
         }
+
         public JobSchedule(Type jobType)
         {
             JobName = jobType.FullName;
             Name ??= $"{JobName}.trigger";
+            JobType = jobType;
         }
 
         public JobSchedule(ITrigger trigger, TriggerState state)
@@ -42,5 +43,6 @@ namespace Mix.MixQuartz.Models
         public int? Interval { get; set; }
         public MixIntevalType? IntervalType { get; set; }
         public int? RepeatCount { get; set; }
+        public Type JobType { get; set; }
     }
 }
