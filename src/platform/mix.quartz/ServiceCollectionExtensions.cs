@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Mix.Quartz.Models;
 using Mix.Quartz.Services;
+using Mix.Shared;
 using System.Linq;
 using System.Reflection;
 
@@ -19,20 +20,25 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void AddSchedulerJobs(this IServiceCollection services)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var mixJobs = assembly
-                .GetExportedTypes()
-                .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
-            var applyGenericMethod = typeof(ServiceCollectionServiceExtensions)
-                .GetMethods()
-                .First(m => m.IsGenericMethodDefinition
-                    && m.Name == nameof(ServiceCollectionServiceExtensions.AddSingleton)
-                    && m.GetGenericArguments().Length == 2
-                    );
-            foreach (var job in mixJobs)
+            var assemblies = MixAssemblyFinder.GetMixAssemblies();
+
+            foreach (var assembly in assemblies)
             {
-                MethodInfo generic = applyGenericMethod.MakeGenericMethod(typeof(MixJobBase), job);
-                generic.Invoke(null, new object[] { services });
+                var mixJobs = assembly
+                    .GetExportedTypes()
+                    .Where(m => m.BaseType == typeof(MixJobBase));
+
+                var method = typeof(ServiceCollectionServiceExtensions)
+                    .GetMethods()
+                    .First(m => m.IsGenericMethodDefinition
+                        && m.Name == nameof(ServiceCollectionServiceExtensions.AddSingleton)
+                        && m.GetGenericArguments().Length == 2);
+
+                foreach (var job in mixJobs)
+                {
+                    MethodInfo generic = method.MakeGenericMethod(typeof(MixJobBase), job);
+                    generic.Invoke(null, new object[] { services });
+                }
             }
         }
 
