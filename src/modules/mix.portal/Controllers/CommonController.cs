@@ -50,7 +50,7 @@ namespace Mix.Portal.Controllers
 
 
 
-        public async Task<JArray?> LoadUserPortalMenus(string[] roles)
+        private async Task<JArray?> LoadUserPortalMenus(string[] roles)
         {
             try
             {

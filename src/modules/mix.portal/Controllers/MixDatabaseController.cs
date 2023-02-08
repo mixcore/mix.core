@@ -6,7 +6,7 @@ namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-database")]
     [ApiController]
-    [MixAuthorize($"{MixRoles.SuperAdmin},{MixRoles.Owner}")]
+    
     public class MixDatabaseController
         : MixRestfulApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
@@ -27,7 +27,7 @@ namespace Mix.Portal.Controllers
         }
 
         #region Routes
-
+        [AllowAnonymous]
         [HttpGet("get-by-name/{name}")]
         public async Task<ActionResult<MixDatabaseViewModel>> GetByName(string name)
         {
@@ -37,6 +37,7 @@ namespace Mix.Portal.Controllers
             return NotFound();
         }
 
+        [MixAuthorize(MixRoles.Owner)]
         [HttpGet("migrate/{name}")]
         public async Task<ActionResult> Migrate(string name)
         {
@@ -46,6 +47,7 @@ namespace Mix.Portal.Controllers
             return result ? Ok() : BadRequest();
         }
 
+        [MixAuthorize(MixRoles.Owner)]
         [HttpGet("backup/{name}")]
         public ActionResult Backup(string name)
         {
@@ -54,10 +56,20 @@ namespace Mix.Portal.Controllers
             return Ok();
         }
 
+        [MixAuthorize(MixRoles.Owner)]
         [HttpGet("restore/{name}")]
         public ActionResult RestoreAsync(string name)
         {
             var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Restore, name);
+            QueueService.PushQueue(msg);
+            return Ok();
+        }
+        
+        [MixAuthorize(MixRoles.Owner)]
+        [HttpGet("update/{name}")]
+        public ActionResult UpdateAsync(string name)
+        {
+            var msg = new MessageQueueModel(MixQueueTopics.MixRepoDb, MixRepoDbQueueAction.Update, name);
             QueueService.PushQueue(msg);
             return Ok();
         }
