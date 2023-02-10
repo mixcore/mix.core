@@ -3,42 +3,43 @@ using Mix.Database.Services;
 using Mix.Heart.Enums;
 using Mix.MixQuartz.Extensions;
 using Mix.Quartz.Constants;
+using Mix.Shared;
 using Newtonsoft.Json.Linq;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Mix.Quartz.Services
 {
-    public class QuartzService
+    public class QuartzService : IQuartzService
     {
+        private readonly DatabaseService _databaseService;
         public IScheduler Scheduler;
-        protected IHttpContextAccessor _httpContextAccessor;
         public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccessor = httpContextAccessor;
+            _databaseService = new DatabaseService(httpContextAccessor);
             LoadScheduler().GetAwaiter().GetResult();
             Scheduler.JobFactory = jobFactory;
         }
 
         public async Task LoadScheduler()
         {
-            DatabaseService databaseService = new(_httpContextAccessor);
-            string cnn = databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
+            var connectionString = _databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
 
-            if (string.IsNullOrEmpty(cnn))
+            if (string.IsNullOrEmpty(connectionString))
             {
                 Scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             }
             else
             {
-                await databaseService.InitQuartzContextAsync();
-                string dbProvider = GetQuartzDbProvider(databaseService.DatabaseProvider);
+                await _databaseService.InitQuartzContextAsync();
+                string dbProvider = GetDbProvider(_databaseService.DatabaseProvider);
                 // TODO: use database for quartz
                 var config = SchedulerBuilder.Create();
                 config.UsePersistentStore(store =>
@@ -46,31 +47,19 @@ namespace Mix.Quartz.Services
                     // it's generally recommended to stick with
                     // string property keys and values when serializing
                     store.UseProperties = true;
-                    store.UseGenericDatabase(dbProvider, db =>
-                        db.ConnectionString = cnn
-                    );
-
+                    store.UseGenericDatabase(dbProvider, db => db.ConnectionString = connectionString);
                     store.UseJsonSerializer();
                 });
+
                 ISchedulerFactory schedulerFactory = config.Build();
                 Scheduler = await schedulerFactory.GetScheduler();
             }
         }
 
-        public async Task<bool> CheckExist(string triggerName)
+        public async Task<bool> CheckExist(string triggerName, CancellationToken cancellationToken = default)
         {
-            return await Scheduler.CheckExists(new TriggerKey(triggerName));
+            return await Scheduler.CheckExists(new TriggerKey(triggerName), cancellationToken);
         }
-
-        private string GetQuartzDbProvider(MixDatabaseProvider databaseProvider)
-        => databaseProvider switch
-        {
-            MixDatabaseProvider.SQLSERVER => QuartzDbProviders.SqlServer,
-            MixDatabaseProvider.MySQL => QuartzDbProviders.MySql,
-            MixDatabaseProvider.PostgreSQL => QuartzDbProviders.PostgresSql,
-            MixDatabaseProvider.SQLITE => QuartzDbProviders.SQLite,
-            _ => throw new NotImplementedException(),
-        };
 
         public Task PauseTrigger(string id, CancellationToken cancellationToken = default)
         {
@@ -120,7 +109,89 @@ namespace Mix.Quartz.Services
             return await Scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup(), cancellationToken);
         }
 
-        public IJobDetail CreateJob(Type jobType)
+        public Task Start(CancellationToken cancellationToken = default)
+        {
+            return Scheduler.Start(cancellationToken);
+        }
+
+        public Task Shutdown(CancellationToken cancellationToken = default)
+        {
+            return Scheduler?.Shutdown(cancellationToken);
+        }
+
+        public async Task ScheduleJob(MixJobBase jobSchedule, CancellationToken cancellationToken = default)
+        {
+            var schedule = new JobSchedule(jobSchedule.JobType);
+            await ScheduleJob(schedule, cancellationToken);
+        }
+
+        public Task ScheduleJob<T>(JobSchedule schedule, CancellationToken cancellationToken = default) where T : MixJobBase
+        {
+            if (schedule != null)
+            {
+                schedule.JobName = typeof(T).FullName;
+                return ScheduleJob(schedule, cancellationToken);
+            }
+            return Task.CompletedTask;
+        }
+
+        public async Task ScheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                schedule.Name ??= $"{schedule.JobName}.trigger";
+                var triggerKey = new TriggerKey(schedule.Name);
+                var existed = await Scheduler.CheckExists(triggerKey, cancellationToken);
+                if (existed)
+                {
+                    throw new Exception($"Trigger: {triggerKey.Name} existed");
+                }
+
+                var jobType = GetJobType(schedule.JobName);
+                if (jobType == null)
+                {
+                    throw new Exception($"No type found {schedule.JobName}");
+                }
+
+                var jobKey = new JobKey(jobType.FullName);
+                var job = await GetJob(jobType.FullName, cancellationToken);
+                if (job == null)
+                {
+                    var trigger = CreateTrigger(schedule);
+                    job = CreateJob(jobType);
+                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
+                }
+                else
+                {
+                    var trigger = CreateTrigger(schedule, job);
+                    await Scheduler.ScheduleJob(trigger, cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogException(ex);
+            }
+        }
+
+        public async Task RescheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
+        {
+            if (schedule != null)
+            {
+                var newTrigger = CreateTrigger(schedule);
+                await Scheduler.RescheduleJob(newTrigger.Key, newTrigger, cancellationToken);
+            }
+        }
+
+        private string GetDbProvider(MixDatabaseProvider databaseProvider) => databaseProvider switch
+        {
+            MixDatabaseProvider.SQLSERVER => QuartzDbProviders.SqlServer,
+            MixDatabaseProvider.MySQL => QuartzDbProviders.MySql,
+            MixDatabaseProvider.PostgreSQL => QuartzDbProviders.PostgresSql,
+            MixDatabaseProvider.SQLITE => QuartzDbProviders.SQLite,
+            _ => throw new NotImplementedException(),
+        };
+
+        private IJobDetail CreateJob(Type jobType)
         {
             return JobBuilder
                 .Create(jobType)
@@ -129,7 +200,7 @@ namespace Mix.Quartz.Services
                 .Build();
         }
 
-        public ITrigger CreateTrigger(JobSchedule schedule, IJobDetail job = null)
+        private ITrigger CreateTrigger(JobSchedule schedule, IJobDetail job = null)
         {
             schedule.Name ??= $"{schedule.JobName}.trigger";
             return TriggerBuilder
@@ -146,79 +217,23 @@ namespace Mix.Quartz.Services
                 .Build();
         }
 
-        public Task Start(CancellationToken cancellationToken = default)
+        private Type GetJobType(string jobName)
         {
-            return Scheduler.Start(cancellationToken);
-        }
-
-        public Task Shutdown(CancellationToken cancellationToken = default)
-        {
-            return Scheduler?.Shutdown(cancellationToken);
-        }
-
-        public async Task ScheduleJob(MixJobBase jobSchedule, CancellationToken cancellationToken = default)
-        {
-            var schedule = new JobSchedule(jobSchedule.JobType);
-            await ScheduleJob(schedule);
-        }
-        public Task ScheduleJob<T>(JobSchedule schedule, CancellationToken cancellationToken = default)
-            where T : MixJobBase
-        {
-            if (schedule != null)
+            var assemblies = MixAssemblyFinder.GetMixAssemblies();
+            Type jobType = null;
+            foreach (var assembly in assemblies)
             {
-                schedule.JobName = typeof(T).FullName;
-                return ScheduleJob(schedule, cancellationToken);
-            }
-            return Task.CompletedTask;
-        }
-
-        public async Task ScheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                schedule.Name ??= $"{schedule.JobName}.trigger";
-                var triggerKey = new TriggerKey(schedule.Name);
-                var existed = await Scheduler.CheckExists(triggerKey);
-                if (existed)
+                jobType = assembly.GetExportedTypes().FirstOrDefault(p => p.FullName == jobName);
+                if (jobType != null)
                 {
-                    LogException(message: $"Trigger: {triggerKey.Name} existed");
+                    break;
                 }
-
-
-                var jobType = Assembly.GetAssembly(typeof(MixJobBase)).GetType(schedule.JobName);
-                var jobKey = new JobKey(jobType.FullName);
-                var job = await GetJob(jobType.FullName, cancellationToken);
-                if (job == null)
-                {
-                    var trigger = CreateTrigger(schedule);
-                    job = CreateJob(jobType);
-                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
-                }
-                else
-                {
-                    var trigger = CreateTrigger(schedule, job);
-                    await Scheduler.ScheduleJob(trigger);
-                }
-
-
             }
-            catch (Exception ex)
-            {
-                LogException(ex);
-            }
+
+            return jobType;
         }
 
-
-        public async Task ResheduleJob(JobSchedule schedule, CancellationToken cancellationToken = default)
-        {
-            if (schedule != null)
-            {
-                var newTrigger = CreateTrigger(schedule);
-                await Scheduler.RescheduleJob(newTrigger.Key, newTrigger, cancellationToken);
-            }
-        }
-
-        public static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
+        private static void LogException(Exception ex = null, MixErrorStatus? status = null, string message = null)
         {
             string fullPath = $"{Environment.CurrentDirectory}/logs/{DateTime.Now:dd-MM-yyyy}";
             if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))

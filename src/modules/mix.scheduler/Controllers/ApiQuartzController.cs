@@ -14,8 +14,8 @@ namespace Mix.Scheduler.Controllers
     [ApiController]
     public class ApiQuartzController : ControllerBase
     {
-        private readonly QuartzService _service;
-        public ApiQuartzController(QuartzService service)
+        private readonly IQuartzService _service;
+        public ApiQuartzController(IQuartzService service)
         {
             _service = service;
         }
@@ -66,7 +66,7 @@ namespace Mix.Scheduler.Controllers
         [HttpPost("reschedule")]
         public async Task<ActionResult> Reschedule([FromBody] JobSchedule schedule)
         {
-            await _service.ResheduleJob(schedule);
+            await _service.RescheduleJob(schedule);
             return Ok();
         }
 

@@ -24,7 +24,8 @@ namespace Mix.Scheduler.Jobs
             {
                 StartAt = DateTime.Now,
                 Interval = 5,
-                IntervalType = MixIntevalType.Second
+                IntervalType = MixIntevalType.Second,
+                RepeatCount = 5
             };
         }
 

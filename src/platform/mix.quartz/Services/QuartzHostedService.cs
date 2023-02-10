@@ -9,10 +9,10 @@ namespace Mix.Quartz.Services
     public class QuartzHostedService : IHostedService
     {
         private readonly IEnumerable<MixJobBase> _jobSchedules;
-        private readonly QuartzService _service;
+        private readonly IQuartzService _service;
 
         public QuartzHostedService(
-            IEnumerable<MixJobBase> jobSchedules, QuartzService scheduler)
+            IEnumerable<MixJobBase> jobSchedules, IQuartzService scheduler)
         {
             _jobSchedules = jobSchedules;
             _service = scheduler;

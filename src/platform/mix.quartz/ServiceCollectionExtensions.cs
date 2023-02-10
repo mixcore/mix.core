@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddSchedulerJobs();
             services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<QuartzService>();
+            services.AddSingleton<IQuartzService, QuartzService>();
             services.AddHostedService<QuartzHostedService>();
             return services;
         }
