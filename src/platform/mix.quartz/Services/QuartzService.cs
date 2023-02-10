@@ -21,6 +21,7 @@ namespace Mix.Quartz.Services
     {
         private readonly DatabaseService _databaseService;
         public IScheduler Scheduler;
+
         public QuartzService(IJobFactory jobFactory, IHttpContextAccessor httpContextAccessor)
         {
             _databaseService = new DatabaseService(httpContextAccessor);
@@ -31,7 +32,6 @@ namespace Mix.Quartz.Services
         public async Task LoadScheduler()
         {
             var connectionString = _databaseService.GetConnectionString(MixConstants.CONST_QUARTZ_CONNECTION);
-
             if (string.IsNullOrEmpty(connectionString))
             {
                 Scheduler = await StdSchedulerFactory.GetDefaultScheduler();
@@ -39,15 +39,14 @@ namespace Mix.Quartz.Services
             else
             {
                 await _databaseService.InitQuartzContextAsync();
-                string dbProvider = GetDbProvider(_databaseService.DatabaseProvider);
-                // TODO: use database for quartz
+                var provider = FindDbProvider(_databaseService.DatabaseProvider);
                 var config = SchedulerBuilder.Create();
                 config.UsePersistentStore(store =>
                 {
                     // it's generally recommended to stick with
                     // string property keys and values when serializing
                     store.UseProperties = true;
-                    store.UseGenericDatabase(dbProvider, db => db.ConnectionString = connectionString);
+                    store.UseGenericDatabase(provider, db => db.ConnectionString = connectionString);
                     store.UseJsonSerializer();
                 });
 
@@ -147,7 +146,7 @@ namespace Mix.Quartz.Services
                     throw new Exception($"Trigger: {triggerKey.Name} existed");
                 }
 
-                var jobType = GetJobType(schedule.JobName);
+                var jobType = FindJobType(schedule.JobName);
                 if (jobType == null)
                 {
                     throw new Exception($"No type found {schedule.JobName}");
@@ -182,7 +181,7 @@ namespace Mix.Quartz.Services
             }
         }
 
-        private string GetDbProvider(MixDatabaseProvider databaseProvider) => databaseProvider switch
+        private string FindDbProvider(MixDatabaseProvider databaseProvider) => databaseProvider switch
         {
             MixDatabaseProvider.SQLSERVER => QuartzDbProviders.SqlServer,
             MixDatabaseProvider.MySQL => QuartzDbProviders.MySql,
@@ -217,7 +216,7 @@ namespace Mix.Quartz.Services
                 .Build();
         }
 
-        private Type GetJobType(string jobName)
+        private Type FindJobType(string jobName)
         {
             var assemblies = MixAssemblyFinder.GetMixAssemblies();
             Type jobType = null;

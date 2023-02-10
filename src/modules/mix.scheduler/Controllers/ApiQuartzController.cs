@@ -73,9 +73,11 @@ namespace Mix.Scheduler.Controllers
         [HttpGet("job")]
         public ActionResult GetJobs()
         {
-            var mixJobs = Assembly.GetAssembly(typeof(MixJobBase))
+            var mixJobs = Assembly
+                .GetExecutingAssembly()
                 .GetExportedTypes()
-                .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
+                .Where(m => m.BaseType == typeof(MixJobBase));
+
             return Ok(mixJobs.Select(m => m.FullName));
         }
 
