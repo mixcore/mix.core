@@ -552,7 +552,8 @@ namespace Mix.RepoDb.Services
             string colType = GetColumnType(col.DataType, col.ColumnConfigurations.MaxLength);
             string nullable = col.ColumnConfigurations.IsRequire ? "NOT NUll" : "NULL";
             string unique = col.ColumnConfigurations.IsUnique ? "Unique" : "";
-            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable} {unique}";
+            string defaultValue = !string.IsNullOrEmpty(col.DefaultValue) ? $"DEFAULT '{col.DefaultValue}'" : string.Empty;
+            return $"{_databaseConstant.BacktickOpen}{col.SystemName.ToTitleCase()}{_databaseConstant.BacktickClose} {colType} {nullable} {unique} {defaultValue}";
         }
 
         private string GetColumnType(MixDataType dataType, int? maxLength = null)

@@ -320,16 +320,24 @@ namespace Mix.Portal.Controllers
             if (request.ParentId.HasValue)
             {
                 _database = await MixDatabaseViewModel.GetRepository(_cmsUOW).GetSingleAsync(m => m.SystemName == _tableName);
+                
                 if (_database.Type == MixDatabaseType.AdditionalData || _database.Type == MixDatabaseType.GuidAdditionalData)
                 {
                     queries.Add(new(parentIdFieldName, request.ParentId));
                 }
                 else
                 {
-                    var allowsIds = _cmsUOW.DbContext.MixDatabaseAssociation
-                            .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
-                            .Select(m => m.ChildId).ToList();
-                    queries.Add(new(idFieldName, Operation.In, allowsIds));
+                    if (!string.IsNullOrEmpty(request.ParentName))
+                    {
+                        queries.Add(new($"{request.ParentName}Id", request.ParentId));
+                    }
+                    else
+                    {
+                        var allowsIds = _cmsUOW.DbContext.MixDatabaseAssociation
+                                .Where(m => m.ParentDatabaseName == request.ParentName && m.ParentId == request.ParentId.Value && m.ChildDatabaseName == _tableName)
+                                .Select(m => m.ChildId).ToList();
+                        queries.Add(new(idFieldName, Operation.In, allowsIds));
+                    }
                 }
             }
 

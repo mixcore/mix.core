@@ -21,7 +21,7 @@ using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 using System.Web;
 
-namespace Mix.services.ecommerce.Controllers
+namespace Mix.Services.ecommerce.Controllers
 {
     [Route("api/v2/ecommerce")]
     [ApiController]
