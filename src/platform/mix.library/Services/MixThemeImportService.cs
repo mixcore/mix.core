@@ -9,7 +9,7 @@ namespace Mix.Lib.Services
     public class MixThemeImportService
     {
         private readonly MixRepoDbRepository _repository;
-        private readonly UnitOfWorkInfo _uow;
+        private readonly UnitOfWorkInfo<MixCmsContext> _uow;
         private readonly CancellationTokenSource _cts;
         private readonly DatabaseService _databaseService;
         private readonly MixDbService _mixDbService;
@@ -79,10 +79,11 @@ namespace Mix.Lib.Services
         }
 
 
-        public SiteDataViewModel LoadSchema()
+        public async Task<SiteDataViewModel> LoadSchema()
         {
             var strSchema = MixFileHelper.GetFile(MixThemePackageConstants.SchemaFilename, MixFileExtensions.Json, $"{MixFolders.ThemePackage}/{MixThemePackageConstants.SchemaFolder}");
             var siteStructures = JObject.Parse(strSchema.Content).ToObject<SiteDataViewModel>();
+            await ValidateSiteData(siteStructures);
             return siteStructures;
         }
 
@@ -604,6 +605,16 @@ namespace Mix.Lib.Services
         }
         #endregion
 
+        public async Task ValidateSiteData(SiteDataViewModel siteData)
+        {
+            var dbNames = siteData.MixDatabases.Select(m=>m.SystemName).ToList();
+            var existedDbNameErrors = await _uow.DbContext.MixDatabase
+                                        .Where(m => dbNames.Contains(m.SystemName))
+                                        .Select(m=> m.SystemName)
+                                        .ToListAsync();
+            siteData.InvalidDatabaseNames.AddRange(existedDbNameErrors);
+            siteData.IsValid = !siteData.Errors.Any();
+        }
         #endregion Import
     }
 }

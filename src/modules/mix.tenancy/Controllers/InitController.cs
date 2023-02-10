@@ -168,9 +168,9 @@ namespace Mix.Tenancy.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("load-theme")]
-        public ActionResult<SiteDataViewModel> LoadThemeAsync()
+        public async Task<ActionResult<SiteDataViewModel>> LoadThemeAsync()
         {
-            var data = _importService.LoadSchema();
+            var data = await _importService.LoadSchema();
             return Ok(data);
         }
 
