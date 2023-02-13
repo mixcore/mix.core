@@ -24,7 +24,7 @@ namespace Mix.Tenancy.Controllers
         private readonly MixEndpointService _mixEndpointService;
         private readonly MixTenantService _mixTenantService;
         private readonly InitCmsService _initCmsService;
-        private readonly QuartzService _quartzService;
+        private readonly IQuartzService _quartzService;
         private readonly MixThemeImportService _importService;
         private readonly MixConfigurationService _configService;
         private readonly HttpService _httpService;
@@ -41,7 +41,7 @@ namespace Mix.Tenancy.Controllers
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixThemeImportService importService,
-            QuartzService quartzService,
+            IQuartzService quartzService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext = null,
             MixTenantService mixTenantService = null,

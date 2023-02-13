@@ -2,7 +2,7 @@
 {
     public class QuartzSettingModel
     {
-        public string DbProvier { get; set; }
+        public string DbProvider { get; set; }
         public string ConnectionString { get; set; }
     }
 }
