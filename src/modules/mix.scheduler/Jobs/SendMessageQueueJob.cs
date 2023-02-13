@@ -1,9 +1,9 @@
-﻿using Mix.MixQuartz.Jobs;
-using Mix.Queue.Interfaces;
+﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Quartz;
 using System;
 using System.Threading.Tasks;
+using Mix.Quartz.Jobs;
 
 namespace Mix.Scheduler.Jobs
 {
@@ -11,7 +11,7 @@ namespace Mix.Scheduler.Jobs
     {
         public SendMessageQueueJob(
             IQueueService<MessageQueueModel> queueService,
-            IServiceProvider provider) : base(provider, queueService)
+            IServiceProvider serviceProvider) : base(serviceProvider, queueService)
         {
         }
 
@@ -26,7 +26,7 @@ namespace Mix.Scheduler.Jobs
                 Data = objData
             };
 
-            _queueService.PushQueue(msg);
+            QueueService.PushQueue(msg);
 
             return Task.CompletedTask;
         }

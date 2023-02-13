@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 
 namespace Mix.Quartz.Services
 {
@@ -21,7 +23,7 @@ namespace Mix.Quartz.Services
         {
             foreach (var jobSchedule in _jobSchedules)
             {
-                if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name))
+                if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name, cancellationToken))
                 {
                     jobSchedule.JobName = typeof(JobSchedule).FullName;
                     await _service.ScheduleJob(jobSchedule, cancellationToken);
