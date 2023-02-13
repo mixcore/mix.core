@@ -1,12 +1,12 @@
-﻿using Mix.MixQuartz.Enums;
-using Mix.MixQuartz.Jobs;
-using Mix.MixQuartz.Models;
-using Mix.Queue.Interfaces;
+﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Services;
 using Quartz;
 using System;
 using System.Threading.Tasks;
+using Mix.Quartz.Enums;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 
 namespace Mix.Scheduler.Jobs
 {
@@ -15,16 +15,16 @@ namespace Mix.Scheduler.Jobs
         private readonly HttpService _httpService;
         public KeepPoolAliveJob(
             HttpService httpService,
-            IServiceProvider provider,
+            IServiceProvider serviceProvider,
             IQueueService<MessageQueueModel> queueService)
-            : base(provider, queueService)
+            : base(serviceProvider, queueService)
         {
             _httpService = httpService;
             Schedule = new JobSchedule(GetType())
             {
                 StartAt = DateTime.Now,
                 Interval = 5,
-                IntervalType = MixIntevalType.Second,
+                IntervalType = MixIntervalType.Second,
                 RepeatCount = 5
             };
         }

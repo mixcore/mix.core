@@ -1,25 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mix.Queue.Interfaces;
+﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Shared.Commands;
 using Mix.Shared.Models;
 using System;
 using System.Threading.Tasks;
+using Mix.Quartz.Models;
 
-namespace Mix.MixQuartz.Jobs
+namespace Mix.Quartz.Jobs
 {
     public abstract class MixJobBase : IJob
     {
-        protected readonly IServiceProvider _provider;
-        protected readonly IQueueService<MessageQueueModel> _queueService;
+        protected readonly IServiceProvider ServiceProvider;
+        protected readonly IQueueService<MessageQueueModel> QueueService;
         protected MixJobBase(
-            IServiceProvider provider,
+            IServiceProvider serviceProvider,
             IQueueService<MessageQueueModel> queueService)
         {
-            _provider = provider;
+            ServiceProvider = serviceProvider;
             JobType = GetType();
             JobName = JobType.FullName;
-            _queueService = queueService;
+            QueueService = queueService;
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -40,7 +40,7 @@ namespace Mix.MixQuartz.Jobs
         {
             var request = new ParsedRequestModel("localhost", JobName, "Quartz", context.Trigger.JobDataMap.GetString("data"));
             var cmd = new LogAuditLogCommand(JobName, request);
-            _queueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
+            QueueService.PushQueue(MixQueueTopics.MixBackgroundTasks, MixQueueActions.AuditLog, cmd);
 
         }
 

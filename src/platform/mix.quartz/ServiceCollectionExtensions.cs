@@ -4,6 +4,7 @@ using Mix.Quartz.Services;
 using Mix.Shared;
 using System.Linq;
 using System.Reflection;
+using Mix.Quartz.Jobs;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
