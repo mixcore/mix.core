@@ -1,16 +1,17 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
+using Quartz;
 using System;
 using System.Threading.Tasks;
+using Mix.Quartz.Jobs;
 
-namespace Mix.MixQuartz.Jobs
+namespace Mix.Scheduler.Jobs
 {
     public class PublishScheduledPostsJob : MixJobBase
     {
         public PublishScheduledPostsJob(
-            IServiceProvider provider,
-            IQueueService<MessageQueueModel> queueService)
-            : base(provider, queueService, true)
+            IServiceProvider serviceProvider,
+            IQueueService<MessageQueueModel> queueService) : base(serviceProvider, queueService)
         {
         }
 

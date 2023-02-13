@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Mix.Lib;
+using Mix.Shared;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Services;
 using System.Reflection;
@@ -13,7 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static partial class ServiceCollectionExtensions
     {
-        public static List<Assembly> MixAssemblies { get => GetMixAssemblies(); }
+        public static List<Assembly> MixAssemblies
+        {
+            get => MixAssemblyFinder.GetMixAssemblies();
+        }
 
         #region Services
 
@@ -220,15 +225,6 @@ namespace Microsoft.Extensions.DependencyInjection
             return types;
         }
 
-        private static List<Assembly> GetMixAssemblies()
-        {
-            var assemblies = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll")
-                                .Where(x => AssemblyName.GetAssemblyName(x).FullName.StartsWith("mix"))
-                                .Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)));
-            return assemblies.ToList();
-        }
-
         #endregion
-
     }
 }
