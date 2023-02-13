@@ -1,13 +1,7 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using Mix.Database.Entities.Cms;
+﻿using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Heart.ViewModel;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mix.Services.Ecommerce.Lib.ViewModels
 {

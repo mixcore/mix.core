@@ -1,11 +1,5 @@
-﻿using Google.Api;
-using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using Mix.Communicator.Models;
-using Mix.Communicator.Services;
-using MySqlX.XDevAPI.Relational;
-using System.Net.WebSockets;
 
 namespace Mix.Lib.Services
 {

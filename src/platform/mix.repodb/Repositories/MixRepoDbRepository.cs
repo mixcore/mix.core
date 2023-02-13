@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Amqp.Framing;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -23,7 +22,6 @@ using RepoDb;
 using RepoDb.Enumerations;
 using RepoDb.Interfaces;
 using System.Data;
-using System.Data.Common;
 
 namespace Mix.RepoDb.Repositories
 {

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Mix.Lib.Dtos;
-using Mix.Lib.Models;
 using Mix.RepoDb.Repositories;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Services
 {
-    public class MixThemeExportService
+    public class MixThemeExportService : IMixThemeExportService
     {
         private readonly Repository<MixCmsContext, MixTheme, int, MixThemeViewModel> _themeRepository;
         private readonly MixCmsContext _context;

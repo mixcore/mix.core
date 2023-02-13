@@ -1,6 +1,4 @@
-﻿using Mix.Mixdb.ViewModels;
-
-namespace Mix.Lib.Models
+﻿namespace Mix.Lib.Models
 {
     public sealed class AccessTokenViewModel
     {

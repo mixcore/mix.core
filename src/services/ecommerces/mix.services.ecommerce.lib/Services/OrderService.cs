@@ -1,22 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
-using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
-using Mix.Services.Ecommerce.Lib.Providers;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using Newtonsoft.Json.Linq;
 using System.Security.Claims;
-using Mix.Database.Entities.Cms;
 using Mix.Lib.Models.Common;
 using Mix.Heart.Models;
 using Mix.Heart.Extensions;
-using Mix.Shared.Dtos;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {

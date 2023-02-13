@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mix.Communicator.Models
+﻿namespace Mix.Communicator.Models
 {
     public sealed class EmailMessageModel
     {

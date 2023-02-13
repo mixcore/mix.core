@@ -23,9 +23,9 @@ namespace Mix.Tenancy.Controllers
     {
         private readonly MixEndpointService _mixEndpointService;
         private readonly MixTenantService _mixTenantService;
-        private readonly InitCmsService _initCmsService;
+        private readonly IInitCmsService _initCmsService;
         private readonly IQuartzService _quartzService;
-        private readonly MixThemeImportService _importService;
+        private readonly IMixThemeImportService _importService;
         private readonly MixConfigurationService _configService;
         private readonly HttpService _httpService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
@@ -37,10 +37,10 @@ namespace Mix.Tenancy.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            InitCmsService initCmsService,
+            IInitCmsService initCmsService,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
-            MixThemeImportService importService,
+            IMixThemeImportService importService,
             IQuartzService quartzService,
             HttpService httpService,
             IHubContext<MixThemeHub> hubContext = null,

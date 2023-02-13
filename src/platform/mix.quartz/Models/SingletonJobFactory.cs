@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
-using Mix.Quartz.Jobs;
 
 namespace Mix.Quartz.Models
 {

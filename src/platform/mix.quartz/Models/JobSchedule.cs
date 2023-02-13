@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mix.Quartz.Enums;
 
 namespace Mix.Quartz.Models
 {

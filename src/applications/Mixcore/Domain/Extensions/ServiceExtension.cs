@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mixcore.Domain.Subscribers;
+﻿using Mixcore.Domain.Subscribers;
 using Newtonsoft.Json.Converters;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;

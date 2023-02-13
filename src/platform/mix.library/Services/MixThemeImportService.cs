@@ -6,7 +6,7 @@ using Mix.RepoDb.Services;
 
 namespace Mix.Lib.Services
 {
-    public class MixThemeImportService
+    public class MixThemeImportService : IMixThemeImportService
     {
         private readonly MixRepoDbRepository _repository;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
@@ -477,7 +477,7 @@ namespace Mix.Lib.Services
 
         #region Generic
 
-        private async Task ImportGuidDatasAsync<T>(List<T> data)
+        private async Task ImportGuidDataAsync<T>(List<T> data)
             where T : EntityBase<Guid>
         {
             if (data.Count > 0)
@@ -605,12 +605,12 @@ namespace Mix.Lib.Services
         }
         #endregion
 
-        public async Task ValidateSiteData(SiteDataViewModel siteData)
+        private async Task ValidateSiteData(SiteDataViewModel siteData)
         {
-            var dbNames = siteData.MixDatabases.Select(m=>m.SystemName).ToList();
+            var dbNames = siteData.MixDatabases.Select(m => m.SystemName).ToList();
             var existedDbNameErrors = await _uow.DbContext.MixDatabase
                                         .Where(m => dbNames.Contains(m.SystemName))
-                                        .Select(m=> m.SystemName)
+                                        .Select(m => m.SystemName)
                                         .ToListAsync();
             siteData.InvalidDatabaseNames.AddRange(existedDbNameErrors);
             siteData.IsValid = !siteData.Errors.Any();

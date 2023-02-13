@@ -1,21 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using Mix.Heart.UnitOfWork;
-using Mix.Lib.Middlewares;
 using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Interfaces;
 
-namespace Mix.Services.Databases.Lib
+namespace Mix.Services.Ecommerce
 {
     public class StartupService : IStartupService
     {
         public void AddServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddScoped<MixDbDbContext>();
-            services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.TryAddScoped<MixPermissionService>();
+            services.AddMixOnepay();
+            services.AddMixEcommerce();
             services.TryAddScoped<MixMetadataService>();
-            services.TryAddScoped<MixUserDataService>();
-            UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixDbDbContext>>();
+            services.TryAddScoped<ProductService>();
+            services.TryAddScoped<OnepayService>();
         }
 
         public void UseApps(IApplicationBuilder app, IConfiguration configuration, bool isDevelop)

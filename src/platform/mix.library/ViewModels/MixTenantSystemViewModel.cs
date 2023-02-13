@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mix.Lib.Models;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.ViewModels

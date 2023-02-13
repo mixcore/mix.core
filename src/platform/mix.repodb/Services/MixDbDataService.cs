@@ -8,7 +8,6 @@ using Mix.Heart.Helpers;
 using Mix.Heart.Models;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
-using Mix.RepoDb.Entities;
 using Mix.RepoDb.Repositories;
 using Mix.RepoDb.ViewModels;
 using Mix.Service.Services;
@@ -17,15 +16,8 @@ using Mix.Shared.Models;
 using Newtonsoft.Json.Linq;
 using RepoDb.Interfaces;
 using RepoDb;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RepoDb.Enumerations;
 using Mix.Heart.Extensions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Mix.RepoDb.Services
 {

@@ -40,7 +40,7 @@ namespace Mix.Portal.Controllers
             data.InitDomain();
             data.CloneCulture(Culture);
             var tenantId = await base.CreateHandlerAsync(data, cancellationToken);
-            await Uow.CompleteAsync();
+            await Uow.CompleteAsync(cancellationToken);
             var user = await _userManager.FindByIdAsync(MixIdentityService.GetClaim(User, MixClaims.Id));
             await _userManager.AddToRoleAsync(user, MixRoleEnums.Owner.ToString(), tenantId);
             await _userManager.AddToTenant(user, tenantId);
@@ -72,10 +72,10 @@ namespace Mix.Portal.Controllers
             await base.DeleteHandler(data, cancellationToken);
 
             // Complete and close CMS context transaction (SignalR cannot open parallel context).
-            await Uow.CompleteAsync();
+            await Uow.CompleteAsync(cancellationToken);
 
             // Reload tenants after deleting the tenant.
-            await _mixTenantService.Reload();
+            await _mixTenantService.Reload(cancellationToken);
 
             await DeleteTenantAccount(data.Id, cancellationToken);
         }
@@ -91,10 +91,8 @@ namespace Mix.Portal.Controllers
             {
                 _accContext.Entry(item).State = EntityState.Deleted;
             }
-            await _accContext.SaveChangesAsync();
+            await _accContext.SaveChangesAsync(cancellationToken);
         }
         #endregion
-
-
     }
 }

@@ -47,14 +47,9 @@
             using var colRepo = MixDatabaseColumnViewModel.GetRepository(UowInfo);
             using var valRepo = MixDataContentValueViewModel.GetRepository(UowInfo);
 
-            Values = await valRepo.GetListAsync(m => m.ParentId == Id);
-
-            if (Data == null)
-            {
-                Data = MixDataHelper.ParseData(Id, UowInfo);
-            }
-
-            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo);
+            Values = await valRepo.GetListAsync(m => m.ParentId == Id, cancellationToken);
+            Data ??= MixDataHelper.ParseData(Id, UowInfo);
+            await Data.LoadAllReferenceDataAsync(Id, MixDatabaseName, UowInfo, cancellationToken: cancellationToken);
         }
 
         #endregion

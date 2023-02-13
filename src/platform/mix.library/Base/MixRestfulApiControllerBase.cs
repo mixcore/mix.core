@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Mix.Lib.Dtos;
 using Mix.Lib.Services;
-using System.Threading;
 
 namespace Mix.Lib.Base
 {

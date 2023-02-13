@@ -2,7 +2,7 @@
 using Mix.Shared.Interfaces;
 using Mix.Tenancy.Domain.Services;
 
-namespace Mix.Tenancy.Domain
+namespace Mix.Tenancy
 {
     public class StartupService : IStartupService
     {
@@ -15,10 +15,10 @@ namespace Mix.Tenancy.Domain
             services.AddScoped<EntityRepository<MixCmsContext, MixModule, int>>();
 
 
-            services.AddScoped<InitCmsService>();
-            services.AddScoped<ImportSiteService>();
-            services.AddScoped<MixThemeExportService>();
-            services.AddScoped<MixThemeImportService>();
+            services.AddScoped<IInitCmsService, InitCmsService>();
+            services.AddScoped<IImportSiteService, ImportSiteService>();
+            services.AddScoped<IMixThemeExportService, MixThemeExportService>();
+            services.AddScoped<IMixThemeImportService, MixThemeImportService>();
 
 
             if (GlobalConfigService.Instance.InitStatus == InitStep.Blank)

@@ -9,19 +9,19 @@ namespace Mix.Portal.Controllers
         : MixRestfulApiControllerBase<MixConfigurationContentViewModel, MixCmsContext, MixConfigurationContent, int>
     {
         private readonly MixConfigurationService _configService;
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         public MixConfigurationController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             MixConfigurationService configService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
-            _cmsUOW = cmsUOW;
+            _cmsUow = cmsUow;
             _configService = configService;
         }
 
@@ -30,22 +30,20 @@ namespace Mix.Portal.Controllers
         protected override async Task<int> CreateHandlerAsync(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             var result = await base.CreateHandlerAsync(data, cancellationToken);
-            await _configService.Reload(_cmsUOW);
+            await _configService.Reload(_cmsUow);
             return result;
         }
         protected override async Task UpdateHandler(int id, MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             await base.UpdateHandler(id, data, cancellationToken);
-            await _configService.Reload(_cmsUOW);
+            await _configService.Reload(_cmsUow);
         }
 
         protected override async Task DeleteHandler(MixConfigurationContentViewModel data, CancellationToken cancellationToken = default)
         {
             await base.DeleteHandler(data, cancellationToken);
-            await _configService.Reload(_cmsUOW);
+            await _configService.Reload(_cmsUow);
         }
         #endregion
-
-
     }
 }

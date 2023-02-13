@@ -16,9 +16,6 @@ using Mix.Database.Entities.Cms;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Constant.Constants;
 using Microsoft.Extensions.Configuration;
-using Mix.Services.Ecommerce.Lib.Entities.Onepay;
-using Mix.Lib.ViewModels;
-using Mix.Services.Payments.Lib.Constants;
 using Mix.Heart.Services;
 
 namespace Mix.Services.Ecommerce.Lib.Services

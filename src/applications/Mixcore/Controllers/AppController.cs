@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Lib.Services;
-using Mix.RepoDb.Repositories;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -9,31 +8,23 @@ namespace Mixcore.Controllers
     [Route("app")]
     public class AppController : MixControllerBase
     {
-        protected UnitOfWorkInfo _uow;
-        protected readonly MixCmsContext _context;
-        private readonly ILogger<HomeController> _logger;
-        private readonly TranslatorService _translator;
+        protected UnitOfWorkInfo Uow;
+        protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
-        private readonly MixRepoDbRepository _repoDbRepository;
+
         public AppController(
             IHttpContextAccessor httpContextAccessor,
-            ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             MixCmsService mixCmsService,
-            TranslatorService translator,
             DatabaseService databaseService,
-            MixCmsContext context,
-            MixRepoDbRepository repoDbRepository)
+            MixCmsContext cmsContext)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
-            _context = context;
-            _uow = new(_context);
-            _logger = logger;
-            _translator = translator;
+            CmsContext = cmsContext;
+            Uow = new(CmsContext);
             _databaseService = databaseService;
-            _context = context;
-            _repoDbRepository = repoDbRepository;
+            CmsContext = cmsContext;
         }
 
         protected override void ValidateRequest()
@@ -76,7 +67,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> App(string baseRoute)
         {
             // Home App
-            var pageRepo = ApplicationViewModel.GetRepository(_uow);
+            var pageRepo = ApplicationViewModel.GetRepository(Uow);
             var page = await pageRepo.GetSingleAsync(m => m.BaseRoute == baseRoute && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();
@@ -88,7 +79,6 @@ namespace Mixcore.Controllers
             return View(page);
         }
     }
-
 
     #endregion
 }
