@@ -9,8 +9,9 @@ namespace Mix.Scheduler.Jobs
 {
     public class SendMessageQueueJob : MixJobBase
     {
-        public SendMessageQueueJob(IQueueService<MessageQueueModel> queueService, IServiceProvider provider)
-            : base(provider, queueService)
+        public SendMessageQueueJob(
+            IQueueService<MessageQueueModel> queueService,
+            IServiceProvider provider) : base(provider, queueService)
         {
         }
 
