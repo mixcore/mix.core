@@ -6,7 +6,6 @@ using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Base;
-using Mix.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
 using Mix.Services.Ecommerce.Lib.Enums;
@@ -16,7 +15,6 @@ using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.ViewModels.Onepay;
 using Mix.Shared.Services;
 using Newtonsoft.Json.Linq;
-using RepoDb.Enumerations;
 using System.Security.Cryptography;
 using System.Text;
 

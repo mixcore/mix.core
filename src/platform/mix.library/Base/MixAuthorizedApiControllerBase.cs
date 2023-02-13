@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Mix.Lib.Models;
 using Mix.Lib.Services;
 
 namespace Mix.Lib.Base

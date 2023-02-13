@@ -1,10 +1,6 @@
-﻿using Google.Api;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Mix.Database.Entities.Account;
-using System.Data;
 using System.Data.Common;
 
 namespace Mix.Lib.Middlewares

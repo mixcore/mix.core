@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
-using Mix.Lib.Models;
 
 namespace Mix.Lib.Services
 {

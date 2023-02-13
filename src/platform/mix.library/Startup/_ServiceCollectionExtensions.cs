@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
-using Mix.Lib;
 using Mix.Shared;
 using Mix.Shared.Interfaces;
 using Mix.SignalR.Services;

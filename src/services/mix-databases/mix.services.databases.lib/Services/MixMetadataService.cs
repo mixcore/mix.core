@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;

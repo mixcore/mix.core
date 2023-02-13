@@ -7,7 +7,6 @@ using Mix.Queue.Engines.MixQueue;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
-using System;
 
 namespace Mix.Lib.Subscribers
 {
@@ -49,7 +48,7 @@ namespace Mix.Lib.Subscribers
         {
             try
             {
-                using (ServiceScope = _servicesProvider.CreateScope())
+                using (ServiceScope = ServicesProvider.CreateScope())
                 {
                     var msg = model.ParseData<EmailMessageModel>();
                     var emailService = GetScopedService<EmailService>();

@@ -7,10 +7,9 @@ namespace Mixcore.Domain.Bases
 {
     public class MvcBaseController : MixControllerBase
     {
-        protected UnitOfWorkInfo<MixCmsContext> _uow;
-        protected readonly MixCmsContext _context;
-        protected readonly TranslatorService _translator;
-        protected readonly DatabaseService _databaseService;
+        protected UnitOfWorkInfo<MixCmsContext> Uow;
+        protected readonly TranslatorService Translator;
+        protected readonly DatabaseService DatabaseService;
         public MvcBaseController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
@@ -20,9 +19,9 @@ namespace Mixcore.Domain.Bases
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow) : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
-            _translator = translator;
-            _databaseService = databaseService;
-            _uow = uow;
+            Translator = translator;
+            DatabaseService = databaseService;
+            Uow = uow;
         }
 
         protected override void ValidateRequest()
@@ -33,7 +32,7 @@ namespace Mixcore.Domain.Bases
             if (GlobalConfigService.Instance.AppSettings.IsInit)
             {
                 IsValid = false;
-                if (string.IsNullOrEmpty(_databaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
+                if (string.IsNullOrEmpty(DatabaseService.GetConnectionString(MixConstants.CONST_CMS_CONNECTION)))
                 {
                     RedirectUrl = "Init";
                 }
@@ -49,7 +48,7 @@ namespace Mixcore.Domain.Bases
         protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            var pageRepo = PageContentViewModel.GetRepository(_uow);
+            var pageRepo = PageContentViewModel.GetRepository(Uow);
             var page = await pageRepo.GetSingleAsync(pageId);
             ViewData["Title"] = page.SeoTitle;
             ViewData["Description"] = page.SeoDescription;

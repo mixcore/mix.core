@@ -1,6 +1,4 @@
-﻿using Mix.Lib.Models;
-
-namespace Mix.Lib.Services
+﻿namespace Mix.Lib.Services
 {
     public class TenantConfigService : ConfigurationServiceBase<TenantConfigurationModel>
     {

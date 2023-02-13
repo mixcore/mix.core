@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Mix.Quartz.Jobs;
-using Mix.Quartz.Models;
 
 namespace Mix.Quartz.Services
 {

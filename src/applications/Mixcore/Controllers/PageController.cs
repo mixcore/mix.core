@@ -10,33 +10,27 @@ namespace Mixcore.Controllers
     [Route("{controller}")]
     public class PageController : MixControllerBase
     {
-        protected UnitOfWorkInfo _uow;
-        protected readonly MixCmsContext _context;
-        private readonly ILogger<HomeController> _logger;
-        private readonly TranslatorService _translator;
+        protected UnitOfWorkInfo Uow;
+        protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixRepoDbRepository _repoDbRepository;
         private readonly MixMetadataService _metadataService;
 
         public PageController(
             IHttpContextAccessor httpContextAccessor,
-            ILogger<HomeController> logger,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
             MixCmsService mixCmsService,
-            TranslatorService translator,
             DatabaseService databaseService,
-            MixCmsContext context,
+            MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
             MixMetadataService metadataService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
-            _context = context;
-            _uow = new(_context);
-            _logger = logger;
-            _translator = translator;
+            CmsContext = cmsContext;
+            Uow = new(CmsContext);
             _databaseService = databaseService;
-            _context = context;
+            CmsContext = cmsContext;
             _repoDbRepository = repoDbRepository;
             _metadataService = metadataService;
         }
@@ -81,7 +75,7 @@ namespace Mixcore.Controllers
         protected async Task<IActionResult> Page(int pageId, string keyword = null)
         {
             // Home Page
-            var pageRepo = PageContentViewModel.GetRepository(_uow);
+            var pageRepo = PageContentViewModel.GetRepository(Uow);
             var page = await pageRepo.GetSingleAsync(m => m.Id == pageId && m.MixTenantId == CurrentTenant.Id);
             if (page == null)
                 return NotFound();

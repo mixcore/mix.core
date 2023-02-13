@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Mix.Database.Entities.Account;
 using Mix.Shared.Services;
-using Mixcore.Domain.Subscribers;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;

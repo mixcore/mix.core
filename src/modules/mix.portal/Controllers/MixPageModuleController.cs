@@ -7,7 +7,7 @@ namespace Mix.Portal.Controllers
     public class MixPageModuleController
         : MixAssociationApiControllerBase<MixPageModuleViewModel, MixCmsContext, MixPageModuleAssociation>
     {
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
 
         public MixPageModuleController(
             IHttpContextAccessor httpContextAccessor,
@@ -15,18 +15,18 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
-            _cmsUOW = cmsUOW;
+            _cmsUow = cmsUow;
         }
 
         #region Overrides
 
         protected override Task<int> CreateHandlerAsync(MixPageModuleViewModel data, CancellationToken cancellationToken = default)
         {
-            if (_cmsUOW.DbContext.MixPageModuleAssociation.Any(
+            if (_cmsUow.DbContext.MixPageModuleAssociation.Any(
                 m => m.MixTenantId == CurrentTenant.Id
                 && m.ParentId == data.ParentId
                 && m.ChildId == data.ChildId))
@@ -36,7 +36,5 @@ namespace Mix.Portal.Controllers
             return base.CreateHandlerAsync(data, cancellationToken);
         }
         #endregion
-
-
     }
 }

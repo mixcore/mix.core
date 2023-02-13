@@ -1,0 +1,15 @@
+﻿using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Models;
+using Mix.Tenancy.Domain.Dtos;
+
+namespace Mix.Tenancy.Domain.Services
+{
+    public interface IInitCmsService
+    {
+        public Task InitDbContext(InitCmsDto model);
+
+        public Task InitTenantAsync(InitCmsDto model);
+
+        public Task<AccessTokenViewModel> InitAccountAsync(RegisterViewModel model);
+    }
+}

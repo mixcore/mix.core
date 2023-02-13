@@ -1,23 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Mix.Constant.Constants;
 using Mix.Database.Entities.Cms;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Attributes;
 using Mix.Lib.Base;
-using Mix.Lib.Models.Common;
 using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
-using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Services.Ecommerce.Lib.ViewModels;
-using Mix.Services.Payments.Lib.Constants;
-using Mix.Shared.Dtos;
 using Newtonsoft.Json.Linq;
 using System.Web;
 

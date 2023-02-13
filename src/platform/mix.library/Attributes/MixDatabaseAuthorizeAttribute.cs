@@ -1,9 +1,7 @@
-﻿using Google.Api;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Identity.Constants;
 using Mix.Lib.Services;
-using System.Data;
 using System.Security.Claims;
 
 namespace Mix.Lib.Attributes

@@ -7,7 +7,6 @@ using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models;
 using Mix.RepoDb.Services;
-using Mix.Service.Services;
 using Mix.SignalR.Enums;
 using Mix.SignalR.Models;
 using Mix.SignalR.Services;
@@ -33,7 +32,7 @@ namespace Mix.RepoDb.Subscribers
         {
             try
             {
-                using (ServiceScope = _servicesProvider.CreateScope())
+                using (ServiceScope = ServicesProvider.CreateScope())
                 {
                     _mixDbService = GetScopedService<MixDbService>();
                     var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();

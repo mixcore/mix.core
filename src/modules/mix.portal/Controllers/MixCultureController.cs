@@ -9,7 +9,7 @@ namespace Mix.Portal.Controllers
     public class MixCultureController
         : MixRestfulApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
     {
-        private CloneCultureService _cloneCultureService;
+        private readonly CloneCultureService _cloneCultureService;
         public MixCultureController(
             CloneCultureService cloneCultureService,
             IHttpContextAccessor httpContextAccessor,
@@ -17,9 +17,9 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _cloneCultureService = cloneCultureService;
         }

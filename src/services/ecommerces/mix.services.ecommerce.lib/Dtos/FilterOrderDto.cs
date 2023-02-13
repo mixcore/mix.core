@@ -1,8 +1,6 @@
 ﻿using Mix.Heart.Enums;
-using Mix.Services.Ecommerce.Lib.Constants;
 using Mix.Services.Ecommerce.Lib.Enums;
 using Mix.Shared.Dtos;
-using Org.BouncyCastle.Ocsp;
 
 namespace Mix.Services.Ecommerce.Lib.Dtos
 {

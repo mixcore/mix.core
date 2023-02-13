@@ -14,9 +14,9 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
         }
 
@@ -36,10 +36,8 @@ namespace Mix.Portal.Controllers
                 }
                 return BadRequest();
             }
-            else
-            {
-                return NotFound();
-            }
+
+            return NotFound();
         }
         #endregion
 
@@ -52,7 +50,7 @@ namespace Mix.Portal.Controllers
             return result;
         }
 
-        protected override Task<int> CreateHandlerAsync(MixTemplateViewModel data, CancellationToken cancellationToken)
+        protected override Task<int> CreateHandlerAsync(MixTemplateViewModel data, CancellationToken cancellationToken = default)
         {
             data.FileFolder = $"{MixFolders.TemplatesFolder}/{CurrentTenant.SystemName}/{data.MixThemeName}/{data.FolderType}";
             return base.CreateHandlerAsync(data, cancellationToken);

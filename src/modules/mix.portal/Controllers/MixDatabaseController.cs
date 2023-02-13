@@ -1,29 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.RepoDb.Services;
-using ApplicationLifetime = Microsoft.Extensions.Hosting.IHostApplicationLifetime;
 
 namespace Mix.Portal.Controllers
 {
     [Route("api/v2/rest/mix-portal/mix-database")]
     [ApiController]
-    
+
     public class MixDatabaseController
-        : MixRestfulApiControllerBase<Lib.ViewModels.MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
+        : MixRestfulApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
-        private readonly ApplicationLifetime _applicationLifetime;
-        private MixDbService _mixDbService;
+        private readonly MixDbService _mixDbService;
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService, ApplicationLifetime applicationLifetime)
-            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUOW, queueService)
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
+            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService)
+            : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _mixDbService = mixDbService;
-            _applicationLifetime = applicationLifetime;
         }
 
         #region Routes
@@ -64,7 +61,7 @@ namespace Mix.Portal.Controllers
             QueueService.PushQueue(msg);
             return Ok();
         }
-        
+
         [MixAuthorize(MixRoles.Owner)]
         [HttpGet("update/{name}")]
         public ActionResult UpdateAsync(string name)
@@ -76,7 +73,7 @@ namespace Mix.Portal.Controllers
 
         #endregion
         #region Overrides
-        protected override async Task UpdateHandler(int id, MixDatabaseViewModel data, CancellationToken cancellationToken)
+        protected override async Task UpdateHandler(int id, MixDatabaseViewModel data, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -97,7 +94,5 @@ namespace Mix.Portal.Controllers
             return base.DeleteHandler(data, cancellationToken);
         }
         #endregion
-
-
     }
 }

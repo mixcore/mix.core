@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Constant.Constants;
 using Mix.Heart.Helpers;
 using Mix.RepoDb.Repositories;
 
@@ -20,11 +19,11 @@ namespace Mix.Portal.Controllers
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository mixRepoDbRepository)
             : base(MixContentType.Post, identityService, userManager, httpContextAccessor, configuration, mixService, translator,
-                  mixIdentityService, cmsUOW, queueService)
+                  mixIdentityService, cmsUow, queueService)
         {
             _mixRepoDbRepository = mixRepoDbRepository;
         }
@@ -60,6 +59,5 @@ namespace Mix.Portal.Controllers
         #region Overrides
 
         #endregion
-
     }
 }

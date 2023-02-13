@@ -12,18 +12,23 @@ namespace Mix.Portal.Domain.Services
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly ThemeService _themeService;
-        private MixIdentityService _mixIdentityService;
+        private readonly MixIdentityService _mixIdentityService;
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
-        private readonly MixThemeImportService _importService;
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
-        public MixApplicationService(IHttpContextAccessor httpContextAccessor, UnitOfWorkInfo<MixCmsContext> cmsUOW, IHubContext<MixThemeHub> hubContext, HttpService httpService, MixThemeImportService importService, MixIdentityService mixIdentityService, ThemeService themeService, IQueueService<MessageQueueModel> queueService)
+        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
+        public MixApplicationService(
+            IHttpContextAccessor httpContextAccessor, 
+            UnitOfWorkInfo<MixCmsContext> cmsUow, 
+            IHubContext<MixThemeHub> hubContext, 
+            HttpService httpService, 
+            MixIdentityService mixIdentityService, 
+            ThemeService themeService, 
+            IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor)
         {
-            _cmsUOW = cmsUOW;
+            _cmsUow = cmsUow;
             _hubContext = hubContext;
             _httpService = httpService;
-            _importService = importService;
             _mixIdentityService = mixIdentityService;
             _themeService = themeService;
             _queueService = queueService;
@@ -36,12 +41,12 @@ namespace Mix.Portal.Domain.Services
             var template = await CreateTemplate(name, appFolder, app.BaseRoute);
             if (template != null)
             {
-                app.SetUowInfo(_cmsUOW);
+                app.SetUowInfo(_cmsUow);
                 app.BaseRoute ??= name;
                 app.BaseHref = appFolder;
                 app.MixTenantId = CurrentTenant.Id;
                 app.TemplateId = template.Id;
-                app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username);
+                app.CreatedBy = _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext?.User, MixClaims.Username);
                 await app.SaveAsync();
                 return app;
             }
@@ -64,7 +69,7 @@ namespace Mix.Portal.Domain.Services
                         .Replace("options['baseHref']", $"'{appFolder}'");
 
                     var activeTheme = await _themeService.GetActiveTheme();
-                    MixTemplateViewModel template = new(_cmsUOW)
+                    MixTemplateViewModel template = new(_cmsUow)
                     {
                         MixThemeId = activeTheme.Id,
                         FileName = name,
@@ -122,15 +127,15 @@ namespace Mix.Portal.Domain.Services
         #region Helpers
         public async Task AlertAsync<T>(IClientProxy clients, string action, int status, T message)
         {
-            var address = HttpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
+            var address = HttpContextAccessor.HttpContext?.Request.Headers["X-Forwarded-For"];
             if (string.IsNullOrEmpty(address))
             {
-                address = HttpContextAccessor.HttpContext.Request.Host.Value;
+                address = HttpContextAccessor.HttpContext?.Request.Host.Value;
             }
             var logMsg = new JObject()
                 {
                     new JProperty("created_at", DateTime.UtcNow),
-                    new JProperty("id",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.Id.ToString()),
+                    new JProperty("id",  HttpContextAccessor.HttpContext?.Request.HttpContext.Connection.Id.ToString()),
                     new JProperty("address", address),
                     new JProperty("ip_address",  HttpContextAccessor.HttpContext.Request.HttpContext.Connection.RemoteIpAddress.ToString()),
                     new JProperty("user", _mixIdentityService.GetClaim(HttpContextAccessor.HttpContext.User, MixClaims.Username)),

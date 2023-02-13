@@ -17,7 +17,7 @@ namespace Mixcore.Controllers
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly MixIdentityService _idService;
         private readonly MixEndpointService _mixEndpointService;
-        private readonly MixCmsContext _cmsContext;
+
         public SecurityController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
@@ -27,7 +27,6 @@ namespace Mixcore.Controllers
             ILogger<ExternalLoginModel> logger,
             MixIdentityService idService,
             TenantUserManager userManager,
-            MixCmsContext cmsContext,
             MixEndpointService mixEndpointService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
@@ -35,7 +34,6 @@ namespace Mixcore.Controllers
             _logger = logger;
             _idService = idService;
             _userManager = userManager;
-            _cmsContext = cmsContext;
             _mixEndpointService = mixEndpointService;
         }
 

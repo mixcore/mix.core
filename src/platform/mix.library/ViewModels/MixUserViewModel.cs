@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
-using Mix.Database.Services;
 using Mix.Identity.Constants;
 using Mix.Identity.Models.AccountViewModels;
 using Mix.Identity.Models.ManageViewModels;
