@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mix.MixQuartz.Models
+namespace Mix.Quartz.Models
 {
     public class MixJobModel
     {

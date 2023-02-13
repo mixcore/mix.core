@@ -1,10 +1,12 @@
 using Mix.Heart.Helpers;
 using System;
 using System.Collections.Generic;
+using Mix.Quartz.Enums;
+using Mix.Quartz.Models;
 
-namespace Mix.MixQuartz.Extensions
+namespace Mix.Quartz.Extensions
 {
-    public static class ITriggerConfiguratorExtensions
+    public static class TriggerConfiguratorExtensions
     {
         public static TriggerBuilder StartNowIf(this TriggerBuilder trigger, bool condition)
         {
@@ -13,22 +15,22 @@ namespace Mix.MixQuartz.Extensions
 
         public static TriggerBuilder StartAtIfHaveValue(this TriggerBuilder trigger, bool condition, DateTime? startAt)
         {
-            return condition ? trigger.StartAt(startAt.Value) : trigger;
+            return condition && startAt != null ? trigger.StartAt(startAt.Value) : trigger;
         }
 
-        public static TriggerBuilder UsingJobDataIf(this TriggerBuilder trigger, bool condition, IDictionary<string, object> dicJobData)
+        public static TriggerBuilder UsingJobDataIf(this TriggerBuilder trigger, bool condition, IDictionary<string, object> dictJobData)
         {
-            if (dicJobData != null)
+            if (dictJobData != null)
             {
-                foreach (var key in dicJobData.Keys)
+                foreach (var key in dictJobData.Keys)
                 {
-                    if (dicJobData[key] is not string)
+                    if (dictJobData[key] is not string)
                     {
-                        dicJobData[key] = ReflectionHelper.ParseObject(dicJobData[key]).ToString();
+                        dictJobData[key] = ReflectionHelper.ParseObject(dictJobData[key]).ToString();
                     }
                 }
             }
-            return condition ? trigger.UsingJobData(new(dicJobData)) : trigger;
+            return condition && dictJobData != null ? trigger.UsingJobData(new JobDataMap(dictJobData)) : trigger;
         }
 
         public static TriggerBuilder ForJobIf(this TriggerBuilder trigger, bool condition, IJobDetail job)
@@ -61,19 +63,19 @@ namespace Mix.MixQuartz.Extensions
                 var calendarSchedule = CalendarIntervalScheduleBuilder.Create();
                 switch (schedule.IntervalType)
                 {
-                    case MixIntevalType.Second:
+                    case MixIntervalType.Second:
                         return trigger.WithSimpleSchedule(x => x.WithIntervalInSeconds(schedule.Interval.Value).Repeat(schedule.RepeatCount));
-                    case MixIntevalType.Minute:
+                    case MixIntervalType.Minute:
                         return trigger.WithSimpleSchedule(x => x.WithIntervalInMinutes(schedule.Interval.Value).Repeat(schedule.RepeatCount));
-                    case MixIntevalType.Hour:
+                    case MixIntervalType.Hour:
                         return trigger.WithSimpleSchedule(x => x.WithIntervalInHours(schedule.Interval.Value).Repeat(schedule.RepeatCount));
-                    case MixIntevalType.Day:
+                    case MixIntervalType.Day:
                         return trigger.WithSchedule(calendarSchedule.WithIntervalInDays(schedule.Interval.Value));
-                    case MixIntevalType.Week:
+                    case MixIntervalType.Week:
                         return trigger.WithSchedule(calendarSchedule.WithIntervalInWeeks(schedule.Interval.Value));
-                    case MixIntevalType.Month:
+                    case MixIntervalType.Month:
                         return trigger.WithSchedule(calendarSchedule.WithIntervalInMonths(schedule.Interval.Value));
-                    case MixIntevalType.Year:
+                    case MixIntervalType.Year:
                         return trigger.WithSchedule(calendarSchedule.WithIntervalInYears(schedule.Interval.Value));
                     default:
                         return trigger;

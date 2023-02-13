@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mix.Quartz.Enums;
 
-namespace Mix.MixQuartz.Models
+namespace Mix.Quartz.Models
 {
     public class JobSchedule
     {
         public JobSchedule()
         {
-
         }
+
         public JobSchedule(Type jobType)
         {
             JobName = jobType.FullName;
-            Name ??= $"{JobName}.trigger";
+            Name = $"{JobName}.trigger";
+            JobType = jobType;
         }
 
         public JobSchedule(ITrigger trigger, TriggerState state)
@@ -40,7 +42,8 @@ namespace Mix.MixQuartz.Models
         public DateTime? EndAt { get; set; }
         public bool IsStartNow { get; set; }
         public int? Interval { get; set; }
-        public MixIntevalType? IntervalType { get; set; }
+        public MixIntervalType? IntervalType { get; set; }
         public int? RepeatCount { get; set; }
+        public Type JobType { get; set; }
     }
 }

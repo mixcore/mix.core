@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 
 namespace Mix.Quartz.Services
 {
@@ -9,22 +11,19 @@ namespace Mix.Quartz.Services
     public class QuartzHostedService : IHostedService
     {
         private readonly IEnumerable<MixJobBase> _jobSchedules;
-        private readonly QuartzService _service;
+        private readonly IQuartzService _service;
 
-        public QuartzHostedService(
-            IEnumerable<MixJobBase> jobSchedules, QuartzService scheduler)
+        public QuartzHostedService(IEnumerable<MixJobBase> jobSchedules, IQuartzService scheduler)
         {
             _jobSchedules = jobSchedules;
             _service = scheduler;
         }
 
-
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
-
             foreach (var jobSchedule in _jobSchedules)
             {
-                if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name))
+                if (jobSchedule.Schedule != null && !await _service.CheckExist(jobSchedule.Schedule.Name, cancellationToken))
                 {
                     jobSchedule.JobName = typeof(JobSchedule).FullName;
                     await _service.ScheduleJob(jobSchedule, cancellationToken);
