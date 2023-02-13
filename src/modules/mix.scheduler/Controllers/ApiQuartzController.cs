@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Heart.Helpers;
-using Mix.MixQuartz.Jobs;
-using Mix.MixQuartz.Models;
 using Mix.Quartz.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 
 namespace Mix.Scheduler.Controllers
 {
@@ -14,8 +14,8 @@ namespace Mix.Scheduler.Controllers
     [ApiController]
     public class ApiQuartzController : ControllerBase
     {
-        private readonly QuartzService _service;
-        public ApiQuartzController(QuartzService service)
+        private readonly IQuartzService _service;
+        public ApiQuartzController(IQuartzService service)
         {
             _service = service;
         }
@@ -66,16 +66,18 @@ namespace Mix.Scheduler.Controllers
         [HttpPost("reschedule")]
         public async Task<ActionResult> Reschedule([FromBody] JobSchedule schedule)
         {
-            await _service.ResheduleJob(schedule);
+            await _service.RescheduleJob(schedule);
             return Ok();
         }
 
         [HttpGet("job")]
         public ActionResult GetJobs()
         {
-            var mixJobs = Assembly.GetAssembly(typeof(MixJobBase))
+            var mixJobs = Assembly
+                .GetExecutingAssembly()
                 .GetExportedTypes()
-                .Where(m => m.BaseType.Name == typeof(MixJobBase).Name);
+                .Where(m => m.BaseType == typeof(MixJobBase));
+
             return Ok(mixJobs.Select(m => m.FullName));
         }
 

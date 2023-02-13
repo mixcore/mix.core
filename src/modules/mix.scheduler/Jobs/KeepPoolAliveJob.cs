@@ -1,50 +1,52 @@
 ﻿using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
-using Mix.Service.Services;
 using Mix.Shared.Services;
+using Quartz;
 using System;
 using System.Threading.Tasks;
+using Mix.Quartz.Enums;
+using Mix.Quartz.Jobs;
+using Mix.Quartz.Models;
 
-namespace Mix.MixQuartz.Jobs
+namespace Mix.Scheduler.Jobs
 {
     public class KeepPoolAliveJob : MixJobBase
     {
         private readonly HttpService _httpService;
         public KeepPoolAliveJob(
             HttpService httpService,
-            IServiceProvider provider,
+            IServiceProvider serviceProvider,
             IQueueService<MessageQueueModel> queueService)
-            : base(provider, queueService)
+            : base(serviceProvider, queueService)
         {
             _httpService = httpService;
             Schedule = new JobSchedule(GetType())
             {
                 StartAt = DateTime.Now,
                 Interval = 5,
-                IntervalType = Enums.MixIntevalType.Second
+                IntervalType = MixIntervalType.Second,
+                RepeatCount = 5
             };
         }
 
         public override async Task ExecuteHandler(IJobExecutionContext context)
         {
-            try
+            string domain = context.Trigger.JobDataMap.GetString("domain");
+            if (!string.IsNullOrEmpty(domain))
             {
-                string domain = context.Trigger.JobDataMap.GetString("domain");
-                if (!string.IsNullOrEmpty(domain))
+                try
                 {
-
                     var now = DateTime.UtcNow;
                     var ping = await _httpService.GetStringAsync($"{domain.TrimEnd('/')}/api/v2/rest/shared/ping");
 
                     Console.WriteLine($"Ping at {now}: {(DateTime.Parse(ping) - now).TotalMilliseconds}");
-
                 }
-                Console.WriteLine(DateTime.UtcNow);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Cannot Ping: " + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                MixService.LogException(ex);
-            }
+            Console.WriteLine(DateTime.UtcNow);
         }
     }
 }

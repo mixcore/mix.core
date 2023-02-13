@@ -1,6 +1,6 @@
-﻿namespace Mix.MixQuartz.Enums
+﻿namespace Mix.Quartz.Enums
 {
-    public enum MixIntevalType
+    public enum MixIntervalType
     {
         Second,
         Minute,
