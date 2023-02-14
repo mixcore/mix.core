@@ -4,6 +4,7 @@ using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Mix.Services.Ecommerce.Lib.Entities.Onepay;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Services;
 using Mix.Shared.Services;
 
@@ -15,8 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.TryAddScoped<EcommerceDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<EcommerceDbContext>>();
-            services.TryAddScoped<OrderService>();
-            services.TryAddScoped<EcommerceService>();
+            services.TryAddScoped<IOrderService, OrderService>();
+            services.TryAddScoped<IEcommerceService, EcommerceService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<EcommerceDbContext>>();
         }
         public static void AddMixOnepay(this IServiceCollection services)

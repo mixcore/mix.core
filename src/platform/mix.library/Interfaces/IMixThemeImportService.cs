@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Mix.Lib.Services
+namespace Mix.Lib.Interfaces
 {
     public interface IMixThemeImportService
     {

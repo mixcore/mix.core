@@ -1,6 +1,6 @@
 ﻿using Mix.Tenancy.Domain.ViewModels;
 
-namespace Mix.Tenancy.Domain.Services
+namespace Mix.Tenancy.Domain.Interfaces
 {
     public interface IImportSiteService
     {

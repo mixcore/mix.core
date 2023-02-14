@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Mix.Constant.Constants;
 using Mix.Identity.Constants;
+using Mix.Service.Interfaces;
 using Mix.Service.Services;
 using Mix.Shared.Models;
 using Mix.SignalR.Constants;
@@ -12,11 +13,11 @@ namespace Mix.SignalR.Hubs
 {
     public abstract class BaseSignalRHub : Hub
     {
-        protected AuditLogService _auditLogService;
+        protected IAuditLogService AuditLogService;
 
-        protected BaseSignalRHub(AuditLogService auditLogService)
+        protected BaseSignalRHub(IAuditLogService auditLogService)
         {
-            _auditLogService = auditLogService;
+            AuditLogService = auditLogService;
         }
 
         public static Dictionary<string, List<HubUserModel>> Rooms = new Dictionary<string, List<HubUserModel>>();
@@ -32,7 +33,7 @@ namespace Mix.SignalR.Hubs
 
         private void LogMessage(SignalRMessageModel message)
         {
-            _auditLogService.LogRequest(Context.User?.Identity?.Name, new ParsedRequestModel()
+            AuditLogService.LogRequest(Context.User?.Identity?.Name, new ParsedRequestModel()
             {
                 RequestIp = GetIPAddress(),
                 Endpoint = GetType().Name,

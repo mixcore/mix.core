@@ -1,4 +1,5 @@
-﻿using Mix.Tenancy.Domain.ViewModels;
+﻿using Mix.Tenancy.Domain.Interfaces;
+using Mix.Tenancy.Domain.ViewModels;
 
 namespace Mix.Tenancy.Domain.Services
 {

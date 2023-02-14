@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mix.Quartz.Services
+namespace Mix.Quartz.Interfaces
 {
     public interface IQuartzService
     {

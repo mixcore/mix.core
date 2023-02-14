@@ -6,13 +6,13 @@ namespace Mixcore.Domain.Subscribers
 {
     public sealed class DomainSubscriber : SubscriberBase
     {
-        private readonly MixTenantService _mixTenantService;
+        private readonly IMixTenantService _mixTenantService;
         private static readonly string TopicId = typeof(MixDomainViewModel).FullName;
         public DomainSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
-            MixTenantService mixTenantService)
+            IMixTenantService mixTenantService)
             : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _mixTenantService = mixTenantService;

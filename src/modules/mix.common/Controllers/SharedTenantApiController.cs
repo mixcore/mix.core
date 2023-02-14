@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Mix.Common.Domain.Helpers;
 using Mix.Common.Domain.ViewModels;
 using Mix.Common.Models;

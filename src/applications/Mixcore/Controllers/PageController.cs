@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
-using Mix.Lib.Services;
+using Mix.Lib.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
 
 namespace Mixcore.Controllers
@@ -14,17 +14,17 @@ namespace Mixcore.Controllers
         protected readonly MixCmsContext CmsContext;
         private readonly DatabaseService _databaseService;
         private readonly MixRepoDbRepository _repoDbRepository;
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
 
         public PageController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             DatabaseService databaseService,
             MixCmsContext cmsContext,
             MixRepoDbRepository repoDbRepository,
-            MixMetadataService metadataService)
+            IMixMetadataService metadataService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)
         {
             CmsContext = cmsContext;

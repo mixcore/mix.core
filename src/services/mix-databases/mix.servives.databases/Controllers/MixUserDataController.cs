@@ -8,7 +8,7 @@ using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
 using Mix.Services.Databases.Lib.Dtos;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mix.Services.Databases.Controllers
 {
@@ -17,14 +17,17 @@ namespace Mix.Services.Databases.Controllers
         MixRestHandlerApiControllerBase<MixUserDataViewModel, MixDbDbContext, MixUserData, int>
     {
         private readonly TenantUserManager _userManager;
-        private readonly MixUserDataService _userDataService;
+        private readonly IMixUserDataService _userDataService;
         public MixUserDataController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
-            UnitOfWorkInfo<MixDbDbContext> uow, IQueueService<MessageQueueModel> queueService, MixUserDataService metadataService, TenantUserManager userManager)
+            UnitOfWorkInfo<MixDbDbContext> uow, 
+            IQueueService<MessageQueueModel> queueService, 
+            IMixUserDataService metadataService, 
+            TenantUserManager userManager)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _userDataService = metadataService;

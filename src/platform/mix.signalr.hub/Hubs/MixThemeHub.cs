@@ -1,10 +1,10 @@
-﻿using Mix.Service.Services;
+﻿using Mix.Service.Interfaces;
 
 namespace Mix.SignalR.Hubs
 {
     public class MixThemeHub : BaseSignalRHub
     {
-        public MixThemeHub(AuditLogService auditLogService) : base(auditLogService)
+        public MixThemeHub(IAuditLogService auditLogService) : base(auditLogService)
         {
         }
     }

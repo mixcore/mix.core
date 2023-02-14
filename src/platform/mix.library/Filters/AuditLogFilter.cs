@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Mix.Service.Interfaces;
 
 namespace Mix.Lib.Filters
 {
@@ -10,7 +11,7 @@ namespace Mix.Lib.Filters
 
         public void OnResourceExecuting(ResourceExecutingContext context)
         {
-            if (context.HttpContext.RequestServices.GetService(typeof(AuditLogService)) is AuditLogService auditLogService)
+            if (context.HttpContext.RequestServices.GetService(typeof(IAuditLogService)) is IAuditLogService auditLogService)
             {
                 auditLogService.LogRequest(context.HttpContext);
             }

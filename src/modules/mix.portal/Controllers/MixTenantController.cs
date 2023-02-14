@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Mix.Database.Entities.Account;
 using Mix.Heart.Helpers;
 using Mix.Identity.Enums;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -15,7 +16,7 @@ namespace Mix.Portal.Controllers
     {
         private readonly TenantUserManager _userManager;
         private readonly MixCmsAccountContext _accContext;
-        private readonly MixTenantService _mixTenantService;
+        private readonly IMixTenantService _mixTenantService;
         public MixTenantController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -26,7 +27,7 @@ namespace Mix.Portal.Controllers
             MixCmsAccountContext accContext,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService,
-            MixTenantService mixTenantService)
+            IMixTenantService mixTenantService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _userManager = userManager;

@@ -1,10 +1,10 @@
-﻿using Mix.Service.Services;
+﻿using Mix.Service.Interfaces;
 
 namespace Mix.SignalR.Hubs
 {
     public class EditFileHub : BaseSignalRHub
     {
-        public EditFileHub(AuditLogService auditLogService) : base(auditLogService)
+        public EditFileHub(IAuditLogService auditLogService) : base(auditLogService)
         {
         }
     }

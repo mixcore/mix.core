@@ -9,9 +9,9 @@ using Mix.Lib.Services;
 using Mix.Queue.Interfaces;
 using Mix.Queue.Models;
 using Mix.Service.Services;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
-using Mix.Services.Ecommerce.Lib.Services;
+using Mix.Services.Ecommerce.Lib.Interfaces;
 using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Shared.Dtos;
 
@@ -21,8 +21,8 @@ namespace Mix.Services.ecommerce.Controllers
     [ApiController]
     public class ProductController : MixQueryApiControllerBase<ProductViewModel, MixCmsContext, MixPostContent, int>
     {
-        private readonly MixMetadataService _metadataService;
-        private readonly ProductService _productService;
+        private readonly IMixMetadataService _metadataService;
+        private readonly IProductService _productService;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _ecommerceUow;
         protected MixCacheService CacheService;
         public ProductController(
@@ -34,8 +34,8 @@ namespace Mix.Services.ecommerce.Controllers
             UnitOfWorkInfo<MixCmsContext> uow,
             UnitOfWorkInfo<EcommerceDbContext> ecommerceUow,
             IQueueService<MessageQueueModel> queueService,
-            MixMetadataService metadataService,
-            ProductService productService)
+            IMixMetadataService metadataService,
+            IProductService productService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, uow, queueService)
         {
             _ecommerceUow = ecommerceUow;
@@ -60,7 +60,7 @@ namespace Mix.Services.ecommerce.Controllers
             {
                 if (item.ProductDetails == null)
                 {
-                    await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService);
+                    await item.LoadAdditionalDataAsync(_ecommerceUow, _metadataService, cancellationToken);
                 }
             }
 

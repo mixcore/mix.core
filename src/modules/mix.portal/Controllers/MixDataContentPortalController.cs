@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -8,14 +9,14 @@ namespace Mix.Portal.Controllers
     public class MixDataContentPortalController
         : MixRestfulApiControllerBase<MixDataContentViewModel, MixCmsContext, MixDataContent, Guid>
     {
-        private readonly MixDataService _mixDataService;
+        private readonly IMixDataService _mixDataService;
 
         public MixDataContentPortalController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            MixDataService mixDataService,
+            IMixDataService mixDataService,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)

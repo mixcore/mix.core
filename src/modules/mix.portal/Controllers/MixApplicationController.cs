@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Portal.Domain.Services;
+using Mix.Portal.Domain.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -27,7 +27,7 @@ namespace Mix.Portal.Controllers
 
         [HttpPost]
         [Route("install")]
-        public async Task<ActionResult<MixApplicationViewModel>> Install([FromBody] MixApplicationViewModel app, [FromServices] MixApplicationService applicationService)
+        public async Task<ActionResult<MixApplicationViewModel>> Install([FromBody] MixApplicationViewModel app, [FromServices] IMixApplicationService applicationService)
         {
             if (_cmsContext.MixApplication.Any(m => m.MixTenantId == CurrentTenant.Id && m.BaseRoute == app.BaseRoute && m.Id != app.Id))
             {

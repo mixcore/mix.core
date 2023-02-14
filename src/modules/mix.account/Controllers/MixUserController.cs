@@ -24,6 +24,7 @@ using Newtonsoft.Json.Linq;
 using System.Web;
 using Mix.Identity.Models.ManageViewModels;
 using Mix.Mixdb.Entities;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Account.Controllers
 {
@@ -35,7 +36,7 @@ namespace Mix.Account.Controllers
         private readonly RoleManager<MixRole> _roleManager;
         private readonly MixIdentityService _idService;
         private readonly EmailService _emailService;
-        private readonly MixEdmService _edmService;
+        private readonly IMixEdmService _edmService;
         private readonly EntityRepository<MixCmsAccountContext, MixUser, Guid> _repository;
         private readonly MixRepoDbRepository _repoDbRepository;
         protected readonly MixIdentityService _mixIdentityService;
@@ -48,23 +49,23 @@ namespace Mix.Account.Controllers
 
         public MixUserController(
              TenantUserManager userManager,
-            SignInManager<MixUser> signInManager,
-            RoleManager<MixRole> roleManager,
-            MixIdentityService idService,
-            EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
-            MixCmsAccountContext accContext,
-            MixCmsContext cmsContext,
-            MixRepoDbRepository repoDbRepository,
-            EmailService emailService,
-            IHttpContextAccessor httpContextAccessor,
-            IConfiguration configuration,
-            MixService mixService,
-            TranslatorService translator,
-            MixIdentityService mixIdentityService,
-            IQueueService<MessageQueueModel> queueService,
-            UnitOfWorkInfo<MixDbDbContext> mixDbUow,
-            AuthConfigService authConfigService,
-            MixEdmService edmService)
+             SignInManager<MixUser> signInManager,
+             RoleManager<MixRole> roleManager,
+             MixIdentityService idService,
+             EntityRepository<MixCmsAccountContext, RefreshTokens, Guid> refreshTokenRepo,
+             MixCmsAccountContext accContext,
+             MixCmsContext cmsContext,
+             MixRepoDbRepository repoDbRepository,
+             EmailService emailService,
+             IHttpContextAccessor httpContextAccessor,
+             IConfiguration configuration,
+             MixService mixService,
+             TranslatorService translator,
+             MixIdentityService mixIdentityService,
+             IQueueService<MessageQueueModel> queueService,
+             UnitOfWorkInfo<MixDbDbContext> mixDbUow, 
+             AuthConfigService authConfigService, 
+             IMixEdmService edmService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
             _userManager = userManager;

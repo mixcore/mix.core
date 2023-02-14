@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 
@@ -14,7 +15,7 @@ namespace Mixcore.Domain.Bases
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow) : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)

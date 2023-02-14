@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
+using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
@@ -8,10 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace Mix.Portal.Domain.Services
 {
-    public sealed class MixApplicationService : TenantServiceBase
+    public sealed class MixApplicationService : TenantServiceBase, IMixApplicationService
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
-        private readonly ThemeService _themeService;
+        private readonly IThemeService _themeService;
         private readonly MixIdentityService _mixIdentityService;
         private readonly IHubContext<MixThemeHub> _hubContext;
         private readonly HttpService _httpService;
@@ -21,8 +22,8 @@ namespace Mix.Portal.Domain.Services
             UnitOfWorkInfo<MixCmsContext> cmsUow, 
             IHubContext<MixThemeHub> hubContext, 
             HttpService httpService, 
-            MixIdentityService mixIdentityService, 
-            ThemeService themeService, 
+            MixIdentityService mixIdentityService,
+            IThemeService themeService, 
             IQueueService<MessageQueueModel> queueService)
             : base(httpContextAccessor)
         {

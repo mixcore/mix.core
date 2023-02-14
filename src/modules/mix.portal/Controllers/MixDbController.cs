@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Mix.Database.Services;
 using Mix.Heart.Helpers;
+using Mix.RepoDb.Interfaces;
 using Mix.RepoDb.Repositories;
-using Mix.RepoDb.Services;
+using Mix.Service.Interfaces;
 using Mix.Shared.Models;
 using RepoDb;
 using RepoDb.Enumerations;
@@ -27,36 +28,34 @@ namespace Mix.Portal.Controllers
         private const string IsDeletedFieldName = "IsDeleted";
         private readonly UnitOfWorkInfo<MixCmsContext> _cmsUow;
         private readonly MixRepoDbRepository _repository;
-        private readonly MixMemoryCacheService _memoryCache;
+        private readonly IMixMemoryCacheService _memoryCache;
         private readonly MixRepoDbRepository _associationRepository;
-        private readonly MixCmsContext _context;
         private string _tableName;
         private MixDatabaseViewModel _database;
         private readonly MixIdentityService _idService;
-        private readonly MixDbService _mixDbService;
-        private static string _associationTableName = nameof(MixDatabaseAssociation);
+        private readonly IMixDbService _mixDbService;
+        private const string AssociationTableName = nameof(MixDatabaseAssociation);
+
         public MixDbController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
-            MixCmsContext context,
             MixService mixService,
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             IQueueService<MessageQueueModel> queueService,
             MixRepoDbRepository repository,
-            MixMemoryCacheService memoryCache,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
+            IMixMemoryCacheService memoryCache,
+            UnitOfWorkInfo<MixCmsContext> cmsUow,
             ICache cache,
             DatabaseService databaseService,
             MixIdentityService idService,
-            MixDbService mixDbService)
+            IMixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, queueService)
         {
-            _context = context;
             _repository = repository;
-            _associationRepository = new(cache, databaseService, cmsUOW);
-            _associationRepository.InitTableName(_associationTableName);
-            _cmsUow = cmsUOW;
+            _associationRepository = new(cache, databaseService, cmsUow);
+            _associationRepository.InitTableName(AssociationTableName);
+            _cmsUow = cmsUow;
             _memoryCache = memoryCache;
             _idService = idService;
             _mixDbService = mixDbService;
@@ -253,7 +252,7 @@ namespace Mix.Portal.Controllers
             //await _associationRepository.DeleteManyAsync(associationPredicate);
             var childAssociationsQueries = GetAssociationQueries(parentDatabaseName: _tableName, parentId: id);
             var parentAssociationsQueries = GetAssociationQueries(childDatabaseName: _tableName, childId: id);
-            _repository.InitTableName(_associationTableName);
+            _repository.InitTableName(AssociationTableName);
             await _repository.DeleteAsync(childAssociationsQueries);
             await _repository.DeleteAsync(parentAssociationsQueries);
             return data > 0 ? Ok() : NotFound();

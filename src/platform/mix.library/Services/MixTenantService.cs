@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mix.Database.Services;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixTenantService
+    public sealed class MixTenantService : IMixTenantService
     {
-        public List<MixTenantSystemModel> AllTenants { get; set; }
-        public List<MixCulture> AllCultures { get; set; }
         private readonly DatabaseService _databaseService;
+
+        public List<MixTenantSystemModel> AllTenants { get; set; }
+
+        public List<MixCulture> AllCultures { get; set; }
 
         public MixTenantService(DatabaseService databaseService)
         {

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models.Common;
 using System.Linq.Expressions;
 
 namespace Mix.Lib.Services
 {
-    public class MixDataService : IDisposable
+    public class MixDataService : IDisposable, IMixDataService
     {
         private readonly ISession _session;
         private MixTenantSystemModel _currentTenant;

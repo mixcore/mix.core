@@ -3,7 +3,6 @@ using Mix.Heart.Enums;
 using Mix.Heart.Exceptions;
 using Mix.Heart.Helpers;
 using Mix.Heart.UnitOfWork;
-using Mix.Lib.Base;
 using Mix.Lib.Services;
 using Mix.Services.Ecommerce.Lib.Dtos;
 using Mix.Services.Ecommerce.Lib.Enums;
@@ -12,52 +11,48 @@ using Mix.Services.Ecommerce.Lib.ViewModels;
 using Mix.Services.Ecommerce.Lib.Entities.Mix;
 using Newtonsoft.Json.Linq;
 using System.Security.Claims;
-using Mix.Database.Entities.Cms;
 using Mix.Services.Ecommerce.Lib.Models;
 using Mix.Constant.Constants;
 using Microsoft.Extensions.Configuration;
-using Mix.Heart.Services;
+using Mix.Service.Services;
+using Mix.Services.Ecommerce.Lib.Interfaces;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Services.Ecommerce.Lib.Services
 {
-    public sealed class EcommerceService : TenantServiceBase
+    public sealed class EcommerceService : TenantServiceBase, IEcommerceService
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly TenantUserManager _userManager;
-        private readonly UnitOfWorkInfo<MixCmsContext> _cmsUOW;
         private readonly UnitOfWorkInfo<EcommerceDbContext> _uow;
         private readonly PaymentConfigurationModel _paymentConfiguration = new();
-        private readonly MixEdmService _edmService;
-        private MixCacheService _cacheService;
+        private readonly IMixEdmService _edmService;
         public EcommerceService(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             UnitOfWorkInfo<EcommerceDbContext> uow,
             TenantUserManager userManager,
             IServiceProvider serviceProvider,
-            UnitOfWorkInfo<MixCmsContext> cmsUOW,
-            MixEdmService edmService,
-            MixCacheService cacheService) : base(httpContextAccessor)
+            IMixEdmService edmService) : base(httpContextAccessor)
         {
             _uow = uow;
             _userManager = userManager;
             _serviceProvider = serviceProvider;
-            _cmsUOW = cmsUOW;
 
             var session = configuration.GetSection(MixAppSettingsSection.Payments);
             session.Bind(_paymentConfiguration);
             _edmService = edmService;
-            _cacheService = cacheService;
         }
 
         public async Task<OrderViewModel?> GetShoppingOrder(Guid userId, CancellationToken cancellationToken = default)
         {
-            return await OrderViewModel.GetRepository(_uow)
-                            .GetSingleAsync(
-                                m => m.MixTenantId == CurrentTenant.Id
-                                && m.OrderStatus == OrderStatus.NEW
-                                && m.UserId == userId,
-                                cancellationToken);
+            return await OrderViewModel
+                .GetRepository(_uow)
+                .GetSingleAsync(
+                    m => m.MixTenantId == CurrentTenant.Id
+                         && m.OrderStatus == OrderStatus.NEW
+                         && m.UserId == userId,
+                    cancellationToken);
         }
 
         public async Task<OrderViewModel> GetOrCreateShoppingOrder(ClaimsPrincipal principal, CancellationToken cancellationToken = default)
@@ -147,8 +142,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             else
             {
                 var product = await ProductVariantViewModel.GetRepository(_uow).GetSingleAsync(
-                        m => m.MixTenantId == CurrentTenant.Id
-                            && m.Sku == item.Sku);
+                    m => m.MixTenantId == CurrentTenant.Id && m.Sku == item.Sku,
+                    cancellationToken);
 
                 if (product == null || !product.Price.HasValue)
                 {
@@ -176,6 +171,11 @@ namespace Mix.Services.Ecommerce.Lib.Services
             CancellationToken cancellationToken = default)
         {
             var user = await _userManager.GetUserAsync(principal);
+            if (user == null)
+            {
+                throw new MixException(MixErrorStatus.Badrequest, "Invalid Cart");
+            }
+
             var cart = await GetShoppingOrder(user.Id, cancellationToken);
             if (cart == null)
             {
@@ -256,8 +256,8 @@ namespace Mix.Services.Ecommerce.Lib.Services
             var url = await paymentService.GetPaymentUrl(checkoutCart, againUrl, returnUrl, cancellationToken);
 
             checkoutCart.PaymentRequestData = request;
-            await checkoutCart.SaveAsync();
-            await myCart.SaveAsync();
+            await checkoutCart.SaveAsync(cancellationToken);
+            await myCart.SaveAsync(cancellationToken);
             await LogAction(checkoutCart.Id, OrderTrackingAction.CHECKOUT);
             return url;
         }
@@ -288,7 +288,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
             checkoutCart.Id = _uow.DbContext.OrderDetail.Max(m => m.Id) + 1;
             checkoutCart.LastModified = DateTime.UtcNow;
             checkoutCart.OrderStatus = OrderStatus.WAITING_FOR_PAYMENT;
-            
+
             checkoutCart.CreatedDateTime = DateTime.UtcNow;
             checkoutCart.Calculate();
 
@@ -302,7 +302,7 @@ namespace Mix.Services.Ecommerce.Lib.Services
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId);
+            var order = await OrderViewModel.GetRepository(_uow).GetSingleAsync(orderId, cancellationToken);
             if (order == null)
             {
                 throw new MixException(MixErrorStatus.ServerError, $"Invalid Order");

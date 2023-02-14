@@ -6,23 +6,23 @@ using Mix.Heart.UnitOfWork;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
 using Mix.Queue.Models;
-using Mix.RepoDb.Services;
+using Mix.RepoDb.Interfaces;
 using Mix.SignalR.Enums;
+using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using Mix.SignalR.Services;
 
 namespace Mix.RepoDb.Subscribers
 {
     public class MixRepoDbSubscriber : SubscriberBase
     {
-        protected PortalHubClientService PortalHub;
+        protected IPortalHubClientService PortalHub;
         
-        private MixDbService _mixDbService;
+        private IMixDbService _mixDbService;
         public MixRepoDbSubscriber(
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
             IServiceProvider serviceProvider,
-            PortalHubClientService portalHub)
+            IPortalHubClientService portalHub)
             : base(MixQueueTopics.MixRepoDb, string.Empty, serviceProvider, configuration, queueService)
         {
             PortalHub = portalHub;
@@ -34,7 +34,7 @@ namespace Mix.RepoDb.Subscribers
             {
                 using (ServiceScope = ServicesProvider.CreateScope())
                 {
-                    _mixDbService = GetScopedService<MixDbService>();
+                    _mixDbService = GetScopedService<IMixDbService>();
                     var cmsUow = GetScopedService<UnitOfWorkInfo<MixCmsContext>>();
                     switch (model.Action)
                     {

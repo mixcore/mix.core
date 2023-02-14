@@ -1,4 +1,4 @@
-﻿using Mix.Services.Databases.Lib.Services;
+﻿using Mix.Services.Databases.Lib.Interfaces;
 
 namespace Mixcore.Domain.ViewModels
 {
@@ -33,7 +33,7 @@ namespace Mixcore.Domain.ViewModels
 
         #region Expands
 
-        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, MixMetadataService metadataService)
+        public async Task LoadPost(Mix.RepoDb.Repositories.MixRepoDbRepository mixRepoDbRepository, IMixMetadataService metadataService)
         {
             Post = await PostContentViewModel.GetRepository(UowInfo).GetSingleAsync(ChildId);
             await Post.LoadAdditionalDataAsync(mixRepoDbRepository, metadataService);

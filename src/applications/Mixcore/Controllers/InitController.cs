@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Mix.Lib.Services;
+using Mix.Lib.Interfaces;
 using Mix.Shared.Services;
 using Mixcore.Domain.Constants;
 
@@ -11,7 +11,7 @@ namespace Mixcore.Controllers
         public InitController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService,
             MixEndpointService mixEndpointService)
             : base(httpContextAccessor, mixService, mixCmsService, ipSecurityConfigService)

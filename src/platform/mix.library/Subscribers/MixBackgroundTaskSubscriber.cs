@@ -4,24 +4,25 @@ using Mix.Communicator.Models;
 using Mix.Communicator.Services;
 using Mix.Queue.Engines;
 using Mix.Queue.Engines.MixQueue;
+using Mix.Service.Interfaces;
 using Mix.SignalR.Enums;
+using Mix.SignalR.Interfaces;
 using Mix.SignalR.Models;
-using Mix.SignalR.Services;
 
 namespace Mix.Lib.Subscribers
 {
     public class MixBackgroundTaskSubscriber : SubscriberBase
     {
-        protected PortalHubClientService PortalHub;
-        protected AuditLogService AuditLogService;
+        protected IPortalHubClientService PortalHub;
+        protected IAuditLogService AuditLogService;
         private const string TopicId = MixQueueTopics.MixBackgroundTasks;
 
         public MixBackgroundTaskSubscriber(
             IServiceProvider serviceProvider,
             IConfiguration configuration,
             MixMemoryMessageQueue<MessageQueueModel> queueService,
-            AuditLogService auditLogService,
-            PortalHubClientService portalHub)
+            IAuditLogService auditLogService,
+            IPortalHubClientService portalHub)
             : base(TopicId, string.Empty, serviceProvider, configuration, queueService)
         {
             AuditLogService = auditLogService;

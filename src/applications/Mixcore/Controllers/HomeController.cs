@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Services;
 using Mix.Heart.Extensions;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.RepoDb.Repositories;
-using Mix.Services.Databases.Lib.Services;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Shared.Services;
 using Mixcore.Domain.Bases;
 using System.Linq.Expressions;
@@ -12,19 +13,19 @@ namespace Mixcore.Controllers
 {
     public class HomeController : MvcBaseController
     {
-        private readonly MixMetadataService _metadataService;
+        private readonly IMixMetadataService _metadataService;
         private readonly MixRepoDbRepository _repoDbRepository;
 
         public HomeController(
             IHttpContextAccessor httpContextAccessor,
             IPSecurityConfigService ipSecurityConfigService,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             TranslatorService translator,
             DatabaseService databaseService,
             UnitOfWorkInfo<MixCmsContext> uow,
             MixRepoDbRepository repoDbRepository,
-            MixMetadataService metadataService)
+            IMixMetadataService metadataService)
             : base(httpContextAccessor, ipSecurityConfigService, mixService, mixCmsService, translator, databaseService, uow)
         {
             _repoDbRepository = repoDbRepository;

@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Mix.Communicator.Models;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Lib.Services
 {
-    public sealed class MixEdmService : TenantServiceBase
+    public sealed class MixEdmService : TenantServiceBase, IMixEdmService
     {
         private readonly IQueueService<MessageQueueModel> _queueService;
         private readonly UnitOfWorkInfo<MixCmsContext> _uow;
