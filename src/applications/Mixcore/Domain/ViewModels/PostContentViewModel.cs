@@ -110,7 +110,7 @@ namespace Mixcore.Domain.ViewModels
             if (isChanged)
             {
                 var cacheService = new MixCacheService();
-                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent), "full");
+                await cacheService.SetAsync($"{Id}/{GetType().FullName}", this, typeof(MixPostContent).FullName, "full");
             }
 
         }
