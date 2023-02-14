@@ -52,8 +52,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="Domain\Services\IImportSiteService.cs" />
-		<Compile Include="Domain\Services\IInitCmsService.cs" />
 		<Compile Include="Domain\Services\ImportSiteService.cs" />
 		<Compile Include="Domain\Services\InitCmsService.cs" />
 		<Compile Include="Domain\ViewModels\Init\InitDomainViewModel.cs" />

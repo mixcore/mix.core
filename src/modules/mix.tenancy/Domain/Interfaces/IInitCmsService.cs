@@ -2,7 +2,7 @@
 using Mix.Lib.Models;
 using Mix.Tenancy.Domain.Dtos;
 
-namespace Mix.Tenancy.Domain.Services
+namespace Mix.Tenancy.Domain.Interfaces
 {
     public interface IInitCmsService
     {

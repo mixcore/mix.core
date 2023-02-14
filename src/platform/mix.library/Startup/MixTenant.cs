@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Middlewares;
 using Mix.Lib.Services;
 
@@ -9,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddMixTenant(this IServiceCollection services)
         {
-            services.TryAddSingleton<MixTenantService>();
+            services.TryAddSingleton<IMixTenantService, MixTenantService>();
             return services;
         }
         public static IApplicationBuilder UseMixTenant(this IApplicationBuilder app)

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Mix.Service.Interfaces;
 
 namespace Mix.Service.Services
 {
-    public class MixMemoryCacheService
+    public class MixMemoryCacheService : IMixMemoryCacheService
     {
         public MemoryCache Cache { get; } = new MemoryCache(
             new MemoryCacheOptions

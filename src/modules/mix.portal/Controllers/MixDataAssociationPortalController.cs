@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mix.Lib.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -13,7 +14,7 @@ namespace Mix.Portal.Controllers
             IConfiguration configuration,
             MixService mixService,
             TranslatorService translator,
-            MixDataService mixDataService,
+            IMixDataService mixDataService,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
             IQueueService<MessageQueueModel> queueService)

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.Portal.Domain.Services;
+using Mix.Portal.Domain.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -9,9 +9,9 @@ namespace Mix.Portal.Controllers
     public class MixCultureController
         : MixRestfulApiControllerBase<MixCultureViewModel, MixCmsContext, MixCulture, int>
     {
-        private readonly CloneCultureService _cloneCultureService;
+        private readonly ICloneCultureService _cloneCultureService;
         public MixCultureController(
-            CloneCultureService cloneCultureService,
+            ICloneCultureService cloneCultureService,
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
             MixService mixService,

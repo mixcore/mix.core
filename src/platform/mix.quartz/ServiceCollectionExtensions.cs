@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Mix.Quartz.Interfaces;
 using Mix.Quartz.Services;
 using Mix.Shared;
 using System.Linq;

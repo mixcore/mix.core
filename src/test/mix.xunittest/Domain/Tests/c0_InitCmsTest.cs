@@ -1,6 +1,6 @@
 
 using Mix.Tenancy.Domain.Dtos;
-using Mix.Tenancy.Domain.Services;
+using Mix.Tenancy.Domain.Interfaces;
 
 namespace Mix.Xunittest.Domain.Tests
 {

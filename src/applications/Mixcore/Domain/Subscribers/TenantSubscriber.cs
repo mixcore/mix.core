@@ -7,13 +7,13 @@ namespace Mixcore.Domain.Subscribers
     public sealed class TenantSubscriber : SubscriberBase
     {
         private static readonly string TopicId = typeof(MixTenantSystemViewModel).FullName;
-        private readonly MixTenantService _mixTenantService;
+        private readonly IMixTenantService _mixTenantService;
 
         public TenantSubscriber(
             IServiceProvider serviceProvider, 
             IConfiguration configuration, 
-            MixMemoryMessageQueue<MessageQueueModel> queueService, 
-            MixTenantService mixTenantService) : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
+            MixMemoryMessageQueue<MessageQueueModel> queueService,
+            IMixTenantService mixTenantService) : base(TopicId, MixModuleNames.Mixcore, serviceProvider, configuration, queueService)
         {
             _mixTenantService = mixTenantService;
         }

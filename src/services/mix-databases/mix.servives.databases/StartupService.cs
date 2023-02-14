@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using Mix.Heart.UnitOfWork;
 using Mix.Lib.Middlewares;
+using Mix.Services.Databases.Lib.Interfaces;
 using Mix.Services.Databases.Lib.Services;
 using Mix.Shared.Interfaces;
 
@@ -12,9 +13,9 @@ namespace Mix.Services.Databases
         {
             services.TryAddScoped<MixDbDbContext>();
             services.TryAddScoped<UnitOfWorkInfo<MixDbDbContext>>();
-            services.TryAddScoped<MixPermissionService>();
-            services.TryAddScoped<MixMetadataService>();
-            services.TryAddScoped<MixUserDataService>();
+            services.TryAddScoped<IMixPermissionService, MixPermissionService>();
+            services.TryAddScoped<IMixMetadataService, MixMetadataService>();
+            services.TryAddScoped<IMixUserDataService, MixUserDataService>();
             UnitOfWorkMiddleware.AddUnitOfWork<UnitOfWorkInfo<MixDbDbContext>>();
         }
 

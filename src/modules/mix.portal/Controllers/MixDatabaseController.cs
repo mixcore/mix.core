@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Mix.RepoDb.Services;
+using Mix.RepoDb.Interfaces;
 
 namespace Mix.Portal.Controllers
 {
@@ -9,7 +9,7 @@ namespace Mix.Portal.Controllers
     public class MixDatabaseController
         : MixRestfulApiControllerBase<MixDatabaseViewModel, MixCmsContext, MixDatabase, int>
     {
-        private readonly MixDbService _mixDbService;
+        private readonly IMixDbService _mixDbService;
         public MixDatabaseController(
             IHttpContextAccessor httpContextAccessor,
             IConfiguration configuration,
@@ -17,7 +17,8 @@ namespace Mix.Portal.Controllers
             TranslatorService translator,
             MixIdentityService mixIdentityService,
             UnitOfWorkInfo<MixCmsContext> cmsUow,
-            IQueueService<MessageQueueModel> queueService, MixDbService mixDbService)
+            IQueueService<MessageQueueModel> queueService, 
+            IMixDbService mixDbService)
             : base(httpContextAccessor, configuration, mixService, translator, mixIdentityService, cmsUow, queueService)
         {
             _mixDbService = mixDbService;

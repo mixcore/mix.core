@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Mix.Database.Entities.Account;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Services;
 using Mix.Shared.Services;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace Mixcore.Controllers
         public SecurityController(
             IHttpContextAccessor httpContextAccessor,
             MixService mixService,
-            MixCmsService mixCmsService,
+            IMixCmsService mixCmsService,
             IPSecurityConfigService ipSecurityConfigService,
             SignInManager<MixUser> signInManager,
             ILogger<ExternalLoginModel> logger,

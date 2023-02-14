@@ -4,17 +4,19 @@ using Mix.Database.Entities.Account;
 using Mix.Database.Services;
 using Mix.Identity.Enums;
 using Mix.Identity.Models.AccountViewModels;
+using Mix.Lib.Interfaces;
 using Mix.Lib.Models;
 using Mix.Lib.Services;
 using Mix.Shared.Helpers;
 using Mix.Tenancy.Domain.Dtos;
+using Mix.Tenancy.Domain.Interfaces;
 using Mix.Tenancy.Domain.ViewModels.Init;
 
 namespace Mix.Tenancy.Domain.Services
 {
     public class InitCmsService : IInitCmsService
     {
-        private readonly MixTenantService _mixTenantService;
+        private readonly IMixTenantService _mixTenantService;
         private readonly MixIdentityService _identityService;
         private readonly TenantUserManager _userManager;
         private readonly RoleManager<MixRole> _roleManager;
@@ -27,7 +29,9 @@ namespace Mix.Tenancy.Domain.Services
             MixIdentityService identityService,
             DatabaseService databaseService,
             RoleManager<MixRole> roleManager,
-            UnitOfWorkInfo<MixCmsContext> cmsUow, MixDataService mixDataService, MixTenantService mixTenantService)
+            UnitOfWorkInfo<MixCmsContext> cmsUow, 
+            IMixDataService mixDataService,
+            IMixTenantService mixTenantService)
         {
             _userManager = userManager;
             _identityService = identityService;

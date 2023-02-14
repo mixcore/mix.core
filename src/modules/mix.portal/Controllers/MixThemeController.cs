@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Mix.Heart.Constants;
-using Mix.Portal.Domain.Services;
+using Mix.Lib.Interfaces;
+using Mix.Portal.Domain.Interfaces;
 using Mix.Shared.Helpers;
 using Mix.Shared.Services;
 using Mix.SignalR.Constants;
@@ -110,7 +111,7 @@ namespace Mix.Portal.Controllers
 
         [HttpPost]
         [Route("install-portal")]
-        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme, [FromServices] ThemeService themeService)
+        public async Task<ActionResult<string>> InstallPortal([FromBody] JObject theme, [FromServices] IThemeService themeService)
         {
             var progress = new Progress<int>();
             var percent = 0;
