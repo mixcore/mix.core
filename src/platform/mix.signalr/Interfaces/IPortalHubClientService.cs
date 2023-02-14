@@ -1,6 +1,6 @@
 ﻿namespace Mix.SignalR.Interfaces
 {
-    public interface IPortalHubClientService: IHubClientService
+    public interface IPortalHubClientService : IHubClientService
     {
     }
 }
