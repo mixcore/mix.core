@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\mix.quartz\mix.quartz.csproj" />
 		<ProjectReference Include="..\mix.shared\mix.shared.csproj" />
 	</ItemGroup>
 
